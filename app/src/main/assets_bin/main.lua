@@ -466,7 +466,7 @@ function onKeyUp(KeyCode,event)
   if TouchingKey then
     TouchingKey=false
     if KeyCode==KeyEvent.KEYCODE_BACK then--返回键事件
-      if drawerOpened and screenConfigDecoder.device~="phone" then--没有打开键盘且已打开侧滑，且设备为手机
+      if drawerOpened and screenConfigDecoder.device=="phone" then--没有打开键盘且已打开侧滑，且设备为手机
         if NowDirectory then
           if OpenedProject then--已打开项目
             refresh(NowDirectory.getParentFile(),true)--返回上一个路径
@@ -832,7 +832,7 @@ if notSafeModeEnable then
       local relativeCaretY=view.getCaretY()-view.getScrollY()
       local x=event.getX()
       local y=event.getY()
-      local magnifierX=event.getRawX()
+      local magnifierX=x
       local magnifierY=relativeCaretY-view.getTextSize()/2+math.dp2int(2)
       local isNearChar
 
@@ -842,6 +842,7 @@ if notSafeModeEnable then
           clickingLuaEitorEvent={x=x,y=y}
           if isNearChar then
             magnifier.show(magnifierX,magnifierY)
+            --print(magnifierX,magnifierY,x,y)
             showingMagnifier=true
             if not(magnifierUpdateTi.isRun()) then
               magnifierUpdateTi.start()

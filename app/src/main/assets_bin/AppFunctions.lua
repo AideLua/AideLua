@@ -233,7 +233,6 @@ function refreshPathsTab(path)
     tabTag.path=content[2]
 
     local view=tab.view
-    view.setGravity(Gravity.CENTER|Gravity.LEFT)
     local textView=view.getChildAt(1)
     tabTag.textView=textView
     textView
@@ -710,6 +709,7 @@ function initFileTabView(tab,tabTag)
   local view=tab.view
   tabTag.view=view
   view.setPadding(math.dp2int(8),math.dp2int(4),math.dp2int(8),math.dp2int(4))
+  view.setGravity(Gravity.LEFT)
   TooltipCompat.setTooltipText(view,tabTag.shortFilePath)
   local imageView=view.getChildAt(0)
   local textView=view.getChildAt(1)
