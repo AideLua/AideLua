@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_undo"
+        android:icon="@drawable/ic_undo"
+        app:showAsAction="always"
+        android:title="@string/undo"/>
+    <item
+        android:id="@+id/menu_redo"
+        android:icon="@drawable/ic_redo"
+        app:showAsAction="always"
+        android:title="@string/redo"/>
+    <item
+        android:id="@+id/menu_run"
+        android:icon="@drawable/ic_play_outline"
+        app:showAsAction="always"
+        android:title="@string/run"/>
+    <item
+        android:id="@+id/menu_bin_run"
+        android:icon="@drawable/ic_package_variant"
+        app:showAsAction="@integer/Jesse205_menu_showAsAction_600dp"
+        android:title="@string/project_bin_run"/>
+    
+    <!--文件 子菜单-->
+    <item
+        android:id="@+id/subMenu_file"
+        app:showAsAction="@integer/Jesse205_menu_showAsAction_800dp"
+        android:title="@string/file_popup" >
+        <menu>
+            <item
+                android:id="@+id/menu_file_save"
+                android:title="@string/save"/>
+            <item
+                android:id="@+id/menu_file_close"
+                android:title="@string/file_close"/>
+        </menu>
+    </item>
+    
+    <!--项目 子菜单-->
+    <item
+        android:id="@+id/subMenu_project"
+        app:showAsAction="@integer/Jesse205_menu_showAsAction_800dp"
+        android:title="@string/project_popup">
+        <menu>
+            <item
+                android:id="@+id/menu_bin"
+                android:title="@string/project_bin"/>
+            
+            <item
+                android:id="@+id/menu_project_close"
+                android:title="@string/project_close"/>
+        </menu>
+    </item>
+    
+    <!--代码 子菜单-->
+    <item
+        android:id="@+id/subMenu_code"
+        app:showAsAction="@integer/Jesse205_menu_showAsAction_600dp"
+        android:title="@string/code_popup">
+        <menu>
+            <item
+                android:id="@+id/menu_code_format"
+                android:title="@string/format"/>
+            <item
+                android:id="@+id/menu_code_checkImport"
+                android:title="@string/check_import"/>
+            <item
+                android:id="@+id/menu_code_checkCode"
+                android:title="@string/checkCode"/>
+            
+        </menu>
+    </item>
+    
+
+    <!--工具 子菜单-->
+    <item
+        android:id="@+id/subMenu_tools"
+        app:showAsAction="@integer/Jesse205_menu_showAsAction_600dp"
+        android:title="@string/tools_popup">
+        <menu>
+            <item
+                android:id="@+id/menu_tools_layoutHelper"
+                android:title="@string/layoutHelper"/>
+            <item
+                android:id="@+id/menu_tools_javaApiViewer"
+                android:title="@string/javaApiViewer"/>
+            <item
+                android:id="@+id/menu_tools_javaApiViewer_windmill"
+                android:title="@string/javaApiViewer_windmill"/>
+            <item
+                android:id="@+id/menu_tools_httpDebugging_windmill"
+                android:title="@string/httpDebugging_windmill"/>
+            <item
+                android:id="@+id/menu_tools_luaManual_windmill"
+                android:title="@string/luaManual_windmill"/>
+            <item
+                android:id="@+id/menu_tools_manual"
+                android:title="@string/manual"/>
+        </menu>
+    </item>
+    
+    <!--更多 子菜单-->
+    <item
+        android:id="@+id/subMenu_more"
+        app:showAsAction="@integer/Jesse205_menu_showAsAction_800dp"
+        android:title="@string/more_popup">
+        <menu>
+            <item
+                android:id="@+id/menu_more_openNewWindow"
+                android:title="@string/window_openNew"/>
+            <item
+                android:id="@+id/menu_more_settings"
+                android:title="@string/settings"/>
+            <item
+                android:id="@+id/menu_more_about"
+                android:title="@string/Jesse205_about"/>
+        </menu>
+    </item>
+
+</menu>

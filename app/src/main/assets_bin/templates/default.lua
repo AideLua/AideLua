@@ -1,0 +1,9 @@
+appTheme="@style/AppTheme"
+appName="MyApplication"
+appPackageName="com.aidelua.myapplication"
+am_application={}
+am_application_bottom={}
+appDependencies={}
+appInclude={}
+androidX=true
+appIcon="@mipmap/ic_launcher"

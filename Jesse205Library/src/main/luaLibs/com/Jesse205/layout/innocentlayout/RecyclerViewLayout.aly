@@ -1,0 +1,13 @@
+{
+  CoordinatorLayout;
+  layout_height="fill";
+  layout_width="fill";
+  id="mainLay";
+  {
+    RecyclerView;
+    layout_height="fill";
+    layout_width="fill";
+    id="recyclerView";
+    layout_gravity="top|center";
+  };
+}

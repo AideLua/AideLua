@@ -1,0 +1,16 @@
+{
+  --[[
+  {--用户协议
+    icon=R.drawable.ic_shield_account_outline;
+    title=R.string.Jesse205_userAgreement,
+    name="UserAgreement",
+    date="xxxx年xx月xx日",
+  },
+  {--隐私政策
+    icon=R.drawable.ic_file_lock_outline;
+    title=R.string.Jesse205_privacyPolicy,
+    name="PrivacyPolicy",
+    date="xxxx年xx月xx日",
+  },
+]]
+}

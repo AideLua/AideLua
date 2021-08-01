@@ -1,0 +1,29 @@
+{
+  {
+    name="Aide Lua",
+    message="依赖 Aide 的一款 Lua 编辑器",
+    url="https://gitee.com/Jesse205/AideLua",
+  },
+  {
+    name="Androlua",
+    message="Lua5.3.3 for android pro",
+    url="https://github.com/nirenr/AndroLua_pro",
+  },
+  {
+    name="Material Components for Android",
+    license="Apache-2.0 License",
+    message="Modular and customizable Material Design UI components for Android",
+    url="https://github.com/material-components/material-components-android",
+  },
+  {
+    name="Glide",
+    message="An image loading and caching library for Android focused on smooth scrolling",
+    license="BSD, part MIT and Apache 2.0.",
+    url="https://github.com/bumptech/glide"
+  },
+  {
+    name="JavaCompile",
+    message="这是一款运行在Android 平台的Java编译器，它可以在你的设备上运行编译简单的Java程序，并且采用了树状结构目录，层次清晰明了。",
+    url="https://github.com/xiaoyvyv/JavaCompile"
+  },
+}

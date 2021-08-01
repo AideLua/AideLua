@@ -1,0 +1,271 @@
+<?xml version='1.0' encoding='utf-8'?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.Jesse205.aidelua">
+
+    <!-- 发送短信 -->
+    <uses-permission android:name="android.permission.SEND_SMS"/>
+
+    <!-- 读取通话状态和移动网络信息 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+    <!-- WRITE_SMS -->
+    <uses-permission android:name="android.permission.WRITE_SMS"/>
+
+    <!-- 查看 WLAN 状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+
+    <!-- 更改 WLAN 状态 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+
+    <!-- 访问蓝牙设置 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+
+    <!-- 修改系统设置 -->
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+
+    <!-- BATTERY_STATS -->
+    <uses-permission android:name="android.permission.BATTERY_STATS"/>
+
+    <!-- CLEAR_APP_CACHE -->
+    <uses-permission android:name="android.permission.CLEAR_APP_CACHE"/>
+
+    <!-- 计算应用存储空间 -->
+    <uses-permission android:name="android.permission.GET_PACKAGE_SIZE"/>
+
+    <!-- 在其他应用之上显示内容 -->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
+    <!-- 关闭其他应用 -->
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES"/>
+
+    <!-- 查看网络连接 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!-- 更改网络连接性 -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+
+    <!-- 完全的网络访问权限 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- 修改或删除 SD 卡中的内容 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <!-- MANAGE_EXTERNAL_STORAGE -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+
+    <!-- 访问大致位置信息（使用网络进行定位） -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+
+    <!-- 访问确切位置信息（使用 GPS 和网络进行定位） -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+
+    <!-- 安装快捷方式 -->
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+
+    <!-- 控制振动 -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+
+    <!-- READ_LOGS -->
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+
+    <!-- 防止手机休眠 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <!-- 拍摄照片和录制视频 -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <!-- READ_FRAME_BUFFER -->
+    <uses-permission android:name="android.permission.READ_FRAME_BUFFER"/>
+
+    <!-- 直接下载文件而不显示通知 -->
+    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION"/>
+
+    <!-- 设置壁纸 -->
+    <uses-permission android:name="android.permission.SET_WALLPAPER"/>
+
+    <!-- 录制音频 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
+    <!-- 请求安装文件包 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+
+    <!-- 接听来电 -->
+    <uses-permission android:name="android.permission.ANSWER_PHONE_CALLS"/>
+
+    <!-- 运行前台服务 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <!-- 读取存储卡中的内容 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <!-- 展开/收拢状态栏 -->
+    <uses-permission android:name="android.permission.EXPAND_STATUS_BAR"/>
+
+    <!-- 更改您的音频设置 -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
+
+    <!-- 读取日历 -->
+    <uses-permission android:name="android.permission.READ_CALENDAR"/>
+
+    <!-- 读取同步设置 -->
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+
+    <!-- 设置闹钟 -->
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+
+    <!-- 卸载快捷方式 -->
+    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"/>
+
+    <!-- 使用指纹硬件 -->
+    <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
+
+    <!-- 使用生物特征硬件 -->
+    <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
+
+    <!-- 新建/修改/删除联系人 -->
+    <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+
+    <!-- 新建/修改/删除通话记录 -->
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG"/>
+
+    <!-- 新建/修改/删除日历 -->
+    <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
+
+    <application
+        android:largeHeap="true"
+        android:name="com.androlua.LuaApplication"
+        android:persistent="true"
+        android:resizeableActivity="true"
+        android:supportsPictureInPicture="true"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
+        android:theme="@style/Theme.Jesse205.DayNight">
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false"/>
+
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="4"/>
+
+        <meta-data
+            android:name="BaiduMobAd_STAT_ID"
+            android:value="f323e9abd1"/>
+
+        <meta-data
+            android:name="BaiduMobAd_EXCEPTION_LOG"
+            android:value="true"/>
+
+        <activity
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:name="com.androlua.Main"/>
+
+        <activity
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:label="@string/app_name"
+            android:name="com.androlua.LuaActivity">
+            <intent-filter>
+                <action 
+                    android:name="android.intent.action.VIEW" />
+                <action 
+                    android:name="android.intent.action.EDIT" />
+                <category 
+                    android:name="android.intent.category.DEFAULT" />
+                <category 
+                    android:name="android.intent.category.BROWSABLE" />
+                <data android:mimeType="application/lua" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:host="*" />
+            </intent-filter>
+            <intent-filter>
+                <action 
+                    android:name="android.intent.action.VIEW" />
+                <category 
+                    android:name="android.intent.category.DEFAULT" />
+                <category 
+                    android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="text/*" />
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.lua" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:documentLaunchMode="intoExisting"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:excludeFromRecents="false"
+            android:label="@string/app_name"
+            android:name="com.androlua.LuaActivityX">
+            <intent-filter>
+                <action 
+                    android:name="android.intent.action.VIEW" />
+                <action 
+                    android:name="android.intent.action.EDIT" />
+                <category 
+                    android:name="android.intent.category.DEFAULT" />
+                <category 
+                    android:name="android.intent.category.BROWSABLE" />
+                <data android:mimeType="application/lua" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:host="*" />
+            </intent-filter>
+            <intent-filter>
+                <action 
+                    android:name="android.intent.action.VIEW" />
+                <category 
+                    android:name="android.intent.category.DEFAULT" />
+                <category 
+                    android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="text/*" />
+                <data android:host="*" />
+                <data android:pathPattern=".*\\.lua" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:name="com.androlua.Welcome">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name="com.nirenr.screencapture.ScreenCaptureActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
+
+        <service
+            android:enabled="true"
+            android:name="com.androlua.LuaService"/>
+
+        <provider
+            android:authorities="com.Jesse205.aidelua2"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            android:name="android.content.FileProvider">
+
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/androlua_filepaths"/>
+
+        </provider>
+    </application>
+</manifest>

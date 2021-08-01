@@ -1,0 +1,83 @@
+{
+  {--界面
+    SettingsLayUtil.TITLE;
+    title=R.string.Jesse205_ui;
+  };
+  {
+    SettingsLayUtil.ITEM_NOSUMMARY;
+    icon=R.drawable.ic_tshirt_crew_outline;
+    title=R.string.Jesse205_themePicker;
+    key="theme_picker";
+    newPage=true;
+  };
+  {
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_theme_light_dark;
+    title=R.string.Jesse205_darkActionBar;
+    key="theme_darkactionbar";
+  };
+  {
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_animation_play_outline;
+    title=R.string.settings_ui_richAnim;
+    key="richAnim";
+  };
+
+  {--编辑器
+    SettingsLayUtil.TITLE;
+    title=R.string.editor;
+  };
+  {
+    SettingsLayUtil.ITEM_SWITCH;
+    icon=R.drawable.ic_tooltip_minus_outline;
+    title=R.string.settings_editor_highlight_Jesse205Library;
+    key="Jesse205Lib_Highlight";
+    summary=R.string.settings_editor_highlight_Jesse205Library_summary;
+  };
+  {
+    SettingsLayUtil.ITEM_SWITCH;
+    icon=R.drawable.ic_tooltip_minus_outline;
+    title=R.string.settings_editor_highlight_androidx;
+    key="AndroidX_Highlight";
+    summary=R.string.settings_editor_highlight_androidx_summary;
+  };
+  {
+    SettingsLayUtil.ITEM_SWITCH;
+    icon=R.drawable.ic_magnify;
+    title=R.string.settings_editor_magnify;
+    key="editor_magnify";
+    summary=R.string.settings_editor_magnify_summary;
+  };
+  {
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_symbol;
+    title=R.string.settings_editor_symbolNar;
+    key="editor_symbolBar";
+  };
+
+
+  {--标签栏
+    SettingsLayUtil.TITLE;
+    title=R.string.tab;
+  };
+  {
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_file_eye_outline;
+    title=R.string.settings_tab_icon;
+    key="tab_icon";
+  };
+
+
+  {--软件
+    SettingsLayUtil.TITLE;
+    title=R.string.Jesse205_app;
+  };
+  {
+    SettingsLayUtil.ITEM;
+    icon=R.drawable.ic_information_outline;
+    title=R.string.Jesse205_about;
+    summary=formatResStr(R.string.Jesse205_nowVersion_full,{PackInfo.versionName,PackInfo.versionCode});
+    key="about";
+    newPage=true;
+  };
+}
