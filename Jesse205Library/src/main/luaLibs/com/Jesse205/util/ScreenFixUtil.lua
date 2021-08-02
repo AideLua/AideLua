@@ -1,7 +1,7 @@
 local ScreenFixUtil={}
 
 local ScreenConfigDecoder={
-  device=nil,
+  device="phone",
 }
 ScreenFixUtil.ScreenConfigDecoder=ScreenConfigDecoder
 setmetatable(ScreenConfigDecoder,ScreenConfigDecoder)
@@ -35,6 +35,7 @@ local function setLayoutManagersSpanCount(layoutManagers,count)
     end
   end
 end
+ScreenFixUtil.setLayoutManagersSpanCount=setLayoutManagersSpanCount
 
 local function setLayoutsOrientation(lays,orientation)
   if lays then
@@ -43,6 +44,7 @@ local function setLayoutsOrientation(lays,orientation)
     end
   end
 end
+ScreenFixUtil.setLayoutsOrientation=setLayoutsOrientation
 
 local function setLayoutsSize(lays,height,width)
   if lays then
@@ -58,6 +60,8 @@ local function setLayoutsSize(lays,height,width)
     end
   end
 end
+ScreenFixUtil.setLayoutsSize=setLayoutsSize
+
 
 local function setGridViewsNumColumns(gridViews,columns)
   if gridViews then
@@ -66,6 +70,8 @@ local function setGridViewsNumColumns(gridViews,columns)
     end
   end
 end
+ScreenFixUtil.setGridViewsNumColumns=setGridViewsNumColumns
+
 
 function ScreenConfigDecoder.decodeConfiguration(self,config)
   local smallestScreenWidthDp=config.smallestScreenWidthDp--最小宽度（dp）
@@ -163,11 +169,33 @@ function ScreenConfigDecoder.decodeConfiguration(self,config)
     end
   end
 
+  self:decodeMenus(screenWidthDp)
 
   if device~=oldDevice then--设备类型切换时
     self.device=device
     if onDeviceChanged then
       onDeviceChanged(device,oldDevice)
+    end
+  end
+
+
+end
+
+function ScreenConfigDecoder.decodeMenus(self,screenWidthDp)
+  local events=self.events
+  local menus=events.menus
+  if menus then
+    if not(MenuItemCompat) then
+      import "androidx.core.view.MenuItemCompat"
+    end
+    for showWidthDp,content in pairs(menus) do
+      for index,content in ipairs(content) do
+        if showWidthDp<=screenWidthDp then
+          MenuItemCompat.setShowAsAction(content, MenuItemCompat.SHOW_AS_ACTION_ALWAYS)
+         else
+          MenuItemCompat.setShowAsAction(content, MenuItemCompat.SHOW_AS_ACTION_NEVER)
+        end
+      end
     end
   end
 end

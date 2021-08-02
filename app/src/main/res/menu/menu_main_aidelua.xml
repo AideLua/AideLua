@@ -44,7 +44,7 @@
         android:title="@string/project_popup">
         <menu>
             <item
-                android:id="@+id/menu_bin"
+                android:id="@+id/menu_project_bin"
                 android:title="@string/project_bin"/>
             
             <item

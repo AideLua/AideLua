@@ -229,16 +229,28 @@ function onCreateOptionsMenu(menu)
   --获取一下Menu
   closeFileMenu=menu.findItem(R.id.menu_file_close)
   saveFileMenu=menu.findItem(R.id.menu_file_save)
-  binMenu=menu.findItem(R.id.menu_bin)
+  binMenu=menu.findItem(R.id.menu_project_bin)
   binRunMenu=menu.findItem(R.id.menu_bin_run)
   closeProjectMenu=menu.findItem(R.id.menu_project_close)
   formatMenu=menu.findItem(R.id.menu_code_format)
+  
+  codeMenu=menu.findItem(R.id.subMenu_code)
+  toolsMenu=menu.findItem(R.id.subMenu_tools)
+  fileMenu=menu.findItem(R.id.subMenu_file)
+  projectMenu=menu.findItem(R.id.subMenu_project)
+  moreMenu=menu.findItem(R.id.subMenu_more)
 
   --菜单组
   StateByFileAndEditorMenus={saveFileMenu}
   StateByFileMenus={closeFileMenu}
   StateByEditorMenus={formatMenu}
   StateByProjectMenus={binMenu,closeProjectMenu,binRunMenu}
+  
+  screenConfigDecoder.events.menus={--自动刷新菜单显示
+    [600]={binRunMenu,codeMenu,toolsMenu},
+    [800]={fileMenu,projectMenu,moreMenu},
+  }
+
   LoadedMenu=true
   refreshMenusState()--刷新Menu状态
 end
@@ -265,7 +277,7 @@ function onOptionsItemSelected(item)
     if succeed then
       ReBuildTool(NowProjectDirectory.getPath(),true)
     end
-   elseif id==Rid.menu_bin then--二次打包
+   elseif id==Rid.menu_project_bin then--二次打包
     local succeed
     if OpenedFile and IsEdtor then
       succeed=saveFile()
@@ -897,9 +909,9 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
       drawerOpened=true
       drawerChild.setVisibility(View.VISIBLE)
     end
-  end
+  end,
 })
-screenConfigDecoder.device="phone"--默认为手机
+--screenConfigDecoder.device="phone"--默认为手机
 
 onConfigurationChanged(activity.getResources().getConfiguration())
 

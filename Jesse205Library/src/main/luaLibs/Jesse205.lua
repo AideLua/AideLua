@@ -1,7 +1,7 @@
 local Jesse205={}
 _G.Jesse205=Jesse205
-Jesse205._VERSION="8.3.2(Pro)"
-Jesse205._VERSIONCODE=83299
+Jesse205._VERSION="8.3.3(Pro)"
+Jesse205._VERSIONCODE=83399
 Jesse205._ENV=_ENV
 local APIS={
   --一些标识
