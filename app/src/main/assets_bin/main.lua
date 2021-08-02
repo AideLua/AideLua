@@ -490,7 +490,7 @@ end
 
 --onConfigurationChanged(activity.getResources().getConfiguration())
 
-drawerOpened=false--drawer.isDrawerOpen(Gravity.LEFT)
+drawerOpened=drawer.isDrawerOpen(Gravity.LEFT)
 drawer.addDrawerListener(DrawerLayout.DrawerListener({
   onDrawerSlide=function(view,slideOffset)
     if screenConfigDecoder.device=="phone" then

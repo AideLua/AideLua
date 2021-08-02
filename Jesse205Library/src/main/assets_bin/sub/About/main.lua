@@ -6,7 +6,7 @@ import "com.Jesse205.app.ImageDialogBuilder"
 import "appAboutInfo"
 import "agreements"
 
-local screenConfigDecoder,actionBar,Landscape,data,PackInfo,adp,layoutManager,Glide
+local screenConfigDecoder,actionBar,Landscape,data,PackInfo,adp,layoutManager,Glide,topCardItems
 activity.setTitle(R.string.Jesse205_about)
 activity.setContentView(loadlayout("layout",_ENV))
 actionBar=activity.getSupportActionBar()
@@ -73,8 +73,14 @@ function onConfigurationChanged(config)
     LastActionBarElevation=0
     topCard.setElevation(0)
     Landscape=true
+    local linearParams=appIconGroup.getLayoutParams()
+    linearParams.width=math.dp2int(192)
+    appIconGroup.setLayoutParams(linearParams)
    else
     Landscape=false
+    local linearParams=appIconGroup.getLayoutParams()
+    linearParams.width=-1
+    appIconGroup.setLayoutParams(linearParams)
   end
   if screenConfigDecoder.device=="pc" then
     local linearParams=topCard.getLayoutParams()
@@ -86,10 +92,12 @@ function onConfigurationChanged(config)
   end
 end
 
+topCardItems={}
 --插入大软件图标
 for index,content in ipairs(appInfo) do
   local ids={}
   appIconGroup.addView(loadlayout("iconItem",ids,LinearLayoutCompat))
+  table.insert(topCardItems,ids.mainIconLay)
   local icon,iconView=content.icon,ids.icon
   if type(icon)=="number" then
     iconView.setImageResource(icon)

@@ -150,7 +150,7 @@ function buildkeys()--整合keys
   return keys
 end
 
-function newProject(keys,AndroluaVersion,BaseTemplateConfig,projectPath,BaseTemplateDirPath,BaseTemplatePath,OpenedSLibs,OpenedJarLibs,OpenedCLibs)
+function newProject(keys,AndroluaVersion,BaseTemplateConfig,projectPath,TemplatesDir,BaseTemplateDirPath,BaseTemplatePath,OpenedSLibs,OpenedJarLibs,OpenedCLibs)
   require "import"
   import "java.io.File"
   import "java.io.FileInputStream"
@@ -271,23 +271,15 @@ function newProject(keys,AndroluaVersion,BaseTemplateConfig,projectPath,BaseTemp
   end
 
   this.update(activity.getString(R.string.project_create_write))
+
+  local keysTableFormater=assert(loadfile(TemplatesDir.."/keysTableFormater.lua"))()
   for index,content in ipairs(formatFilesList) do
     local path=projectPath.."/"..content
     --print(path)
     local fileContent=io.open(path):read("*a")
     for key,content in pairs(keys) do
       if type(content)=="table" then
-        if #content==0 then
-          content=""
-         else
-          if key=="appDependencies" then
-            content="\n    "..table.concat(content,"\n    ")
-           elseif key=="appInclude" then
-            content="\""..table.concat(content,"\",\"").."\","
-           elseif key=="am_application" or key=="am_application_bottom" then
-            content="\n"..table.concat(content,"\n\n").."\n"
-          end
-        end
+        content=keysTableFormater(key,content)
       end
       fileContent=fileContent:gsub("{{"..key.."}}",tostring(content))
     end
@@ -468,7 +460,7 @@ creativeButton.onClick=function()
   end
 
   showLoadingDia(nil,R.string.creating)
-  activity.newTask(newProject,update,callback).execute({keys,AndroluaVersion,BaseTemplateConfig,projectPath,BaseTemplateDirPath,BaseTemplatePath,OpenedSLibs,OpenedJarLibs,OpenedCLibs})
+  activity.newTask(newProject,update,callback).execute({keys,AndroluaVersion,BaseTemplateConfig,projectPath,TemplatesDir,BaseTemplateDirPath,BaseTemplatePath,OpenedSLibs,OpenedJarLibs,OpenedCLibs})
 end
 
 androidXSwitchParent.onClick=function()

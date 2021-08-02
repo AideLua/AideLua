@@ -2,7 +2,7 @@
   LinearLayoutCompat;
   layout_weight=1;
   layout_width="fill";
-  layout_height="fill";
+  --layout_height="fill";
   id="mainIconLay",
   {
     LinearLayoutCompat;

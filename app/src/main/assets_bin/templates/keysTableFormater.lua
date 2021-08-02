@@ -5,11 +5,14 @@ local function keysTableFormater(key,content)
    else
     if key=="appDependencies" then
       content="\n    "..table.concat(content,"\n    ")
-     elseif key=="appInclude" then
+     elseif key=="appIncludeLua" then
       content="\""..table.concat(content,"\",\"").."\","
+     elseif key=="appInclude" then
+      content=",'"..table.concat(content,"','").."'"
      elseif key=="am_application" or key=="am_application_bottom" then
       content="\n"..table.concat(content,"\n\n").."\n"
     end
   end
+  return content
 end
 return keysTableFormater

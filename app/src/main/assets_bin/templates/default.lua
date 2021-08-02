@@ -4,6 +4,7 @@ appPackageName="com.aidelua.myapplication"
 am_application={}
 am_application_bottom={}
 appDependencies={}
+appIncludeLua={}
 appInclude={}
 androidX=true
 appIcon="@mipmap/ic_launcher"

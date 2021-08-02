@@ -26,13 +26,20 @@
         layout_height="fill";
         --layout_marginLeft="16dp";
         {
-          LinearLayoutCompat;
-          gravity="center";
+          ScrollView;
           layout_width="fill";
           layout_height="fill";
-          layout_margin="8dp";
-          id="appIconGroup";
+          fillViewport=true;
+          {
+            LinearLayoutCompat;
+            gravity="center|top";
+            layout_width="fill";
+            layout_height="fill";
+            padding="8dp";
+            id="appIconGroup";
+          };
         };
+
       };
     };
     {

@@ -1,7 +1,8 @@
 应用名：appName
 包名：appPackageName
-附加Library（config.lua）：appInclude
+附加Library（config.lua）：appIncludeLua
 附加Library（build.gradle）：appDependencies
+附加Library（settings.gradle）：appInclude
 编译Lua：compileLua
 AndroidX开关：androidX
 app默认主题（xml）：appTheme

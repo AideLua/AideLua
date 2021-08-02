@@ -148,10 +148,18 @@ function ScreenConfigDecoder.decodeConfiguration(self,config)
   end
 
   if listViews then
-    if screenWidthDp>768 then
-      setLayoutsSize(listViews,nil,math.dp2int(768))
+    if device=="phone" then
+      if screenWidthDp>704 then
+        setLayoutsSize(listViews,nil,math.dp2int(704))
+       else
+        setLayoutsSize(listViews,nil,-1)
+      end
      else
-      setLayoutsSize(listViews,nil,-1)
+      if screenWidthDp>800 then
+        setLayoutsSize(listViews,nil,math.dp2int(800))
+       else
+        setLayoutsSize(listViews,nil,-1)
+      end
     end
   end
 

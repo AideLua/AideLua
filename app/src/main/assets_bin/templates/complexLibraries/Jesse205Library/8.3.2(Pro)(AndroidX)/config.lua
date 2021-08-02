@@ -1,7 +1,8 @@
 name="Jesse205库"
 keys={
   appTheme="@style/Theme.Jesse205.DayNight",
-  appInclude={"project:Jesse205Library"},
+  appIncludeLua={"project:Jesse205Library"},
+  appInclude={":Jesse205Library"},
   appDependencies={"api project(':Jesse205Library')"},
 }
 

@@ -709,7 +709,7 @@ function initFileTabView(tab,tabTag)
   local view=tab.view
   tabTag.view=view
   view.setPadding(math.dp2int(8),math.dp2int(4),math.dp2int(8),math.dp2int(4))
-  view.setGravity(Gravity.LEFT)
+  view.setGravity(Gravity.LEFT|Gravity.CENTER)
   TooltipCompat.setTooltipText(view,tabTag.shortFilePath)
   local imageView=view.getChildAt(0)
   local textView=view.getChildAt(1)
@@ -1190,7 +1190,7 @@ function startWindmillActivity(toolName)
     activity.startActivity(intent)
   end)
   if not(success) then
-    openUri("https://www.coolapk.com/apk/com.agyer.windmill")
+    openUrl("https://www.coolapk.com/apk/com.agyer.windmill")
   end
 end
 
