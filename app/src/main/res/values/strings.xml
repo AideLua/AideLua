@@ -34,6 +34,9 @@
     <string name="httpDebugging_windmill">Http debugging (Windmill)</string>
     <string name="luaManual_windmill">Lua manual (Windmill)</string>
     <string name="manual">User manual</string>
+    <string name="commentedCode">Commented code</string>
+    <string name="uncommentedCode">Uncomment code</string>
+    <string name="logCat">Log Cat</string>
     
     <string name="exit_toast">Press again to exit the program.</string>
     <string name="res_references">Reference resources</string>

@@ -1,4 +1,4 @@
-name="Baidu Mtj"
+name="百度移动统计"
 keys={
   am_application={[[        <meta-data
             android:name="android.max_aspect"

@@ -9,4 +9,5 @@ format={
   "app/src/main/AndroidManifest.xml",
   "app/src/main/res/values/strings.xml",
   "app/src/main/assets_bin/init.lua",
+  "app/src/main/assets_bin/main.lua",
 }

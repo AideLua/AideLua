@@ -31,6 +31,7 @@ EditorUtil.TextFileType2EditorType={
   txt="LuaEditor",
   gradle="LuaEditor",
   bat="LuaEditor",
+  json="LuaEditor",
 }
 
 EditorUtil.TextFileType2EditorLanguage={

@@ -89,6 +89,9 @@
                 android:id="@+id/menu_tools_javaApiViewer_windmill"
                 android:title="@string/javaApiViewer_windmill"/>
             <item
+                android:id="@+id/menu_tools_logCat"
+                android:title="@string/logCat"/>
+            <item
                 android:id="@+id/menu_tools_httpDebugging_windmill"
                 android:title="@string/httpDebugging_windmill"/>
             <item

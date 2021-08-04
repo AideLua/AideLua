@@ -103,8 +103,8 @@ editorFunc={
       NowEditor.redo()
     end
   end,
-  run=function()
-    local code
+  run=function(path)
+    local code,projectMainFile
     if IsEdtor then
       code=NowEditor.text
     end
@@ -122,8 +122,8 @@ editorFunc={
       if configFile.isFile() then--如果有文件
         if succeed then--保存成功
           local config=ReBuildTool.getConfigByFilePath(configPath)
-          local projectMainPath=ReBuildTool.getMainProjectDirByConfig(projectPath,config).."/assets_bin/main.lua"
-          local projectMainFile=File(projectMainPath)
+          local projectMainPath=path or ReBuildTool.getMainProjectDirByConfig(projectPath,config).."/assets_bin/main.lua"
+          projectMainFile=File(projectMainPath)
 
           if config.packageName then--如果可以使用另一个他自己打开就是用他自己，不能的话使用IDE
             local success,err=pcall(function()
@@ -147,9 +147,32 @@ editorFunc={
         showSnackBar(R.string.save_failed)
       end
      else
-      runLuaFile(nil,code)
+      if path then
+        projectMainFile=File(path)
+      end
+      runLuaFile(projectMainFile,code)
     end
   end,
+  commented=function(view)
+    view=view or NowEditor
+    local selectedText=view.getSelectedText()
+    if #selectedText~=0 then
+      if NowFileType=="lua" or NowFileType=="aly" or not(NowFileType) then--Lua类型
+        if selectedText:find("\n") then
+          local equals=""
+          while selectedText:find("]"..equals.."]") do
+            equals=equals.."="
+          end
+          view.paste("--["..equals.."["..selectedText.."]"..equals.."]")
+         else
+          view.paste("--"..selectedText.."")
+        end
+       else
+        showSnackBar(R.string.file_not_supported)
+
+      end
+    end
+  end
 }
 shortPath=ProjectUtil.shortPath
 
@@ -264,6 +287,9 @@ local loadingFiles=false--正在加载文件列表
 function refresh(file,upFile,force)
   --recyclerView
   if force or not(loadingFiles) then--既不是强制加载，也没有正在加载
+    if file and ProjectUtil.isSelfFile(file,NowDirectory or ProjectsFile) then
+      NowDirectoryFilesList={}
+    end
     file=file or NowDirectory or ProjectsFile--增强兼容性
     swipeRefresh.setRefreshing(true)
     loadingFiles=true--正在加载列表
@@ -286,7 +312,6 @@ function refresh(file,upFile,force)
         end
       end
     end
-    NowDirectoryFilesList={}
     activity.newTask(function(NowDirectory,ProjectsPath)
       require "import"
       import "java.util.ArrayList"
@@ -361,270 +386,7 @@ function refresh(file,upFile,force)
   end
 end
 
---[==[
-local loadingFiles=false
-function refresh(file,upFile,force)
-  if force or not(loadingFiles) then
-    if NowDirectory then
-      local nowDirectoryPath=NowDirectory.getPath()
 
-      if upFile then
-        FilesListScroll[nowDirectoryPath]=nil
-       else
-        local pos=listView.getFirstVisiblePosition()
-        local listViewFirstChild=listView.getChildAt(0)
-        local scroll=0
-        if listViewFirstChild then
-          scroll=listViewFirstChild.getTop()
-        end
-
-        if pos==0 and scroll>=0 then
-          FilesListScroll[nowDirectoryPath]=nil
-         else
-          FilesListScroll[nowDirectoryPath]={pos,scroll}
-        end
-      end
-    end
-    loadingFiles=true
-    swipeRefresh.setRefreshing(true)
-    activity.newTask(function(NowDirectory,NowProjectDirectory,fileMoreMenu,color,FileColor)
-      require "import"
-      notLoadTheme=true
-      import "Jesse205"
-      import "ProjectUtil"
-      import "ReBuildTool"
-
-      --保存一下变量方便调用
-      local ProjectsPath=ProjectUtil.ProjectsPath
-      --FileIcons=ProjectUtil.FileIcons
-      local getProjectIconForAdapter=ProjectUtil.getProjectIconForAdapter
-      local getFileIconResIdByType=ProjectUtil.getFileIconResIdByType
-      local getFileTypeByName=ProjectUtil.getFileTypeByName
-      local getIconAlphaByHideFile=ProjectUtil.getIconAlphaByHideFile
-      local getFolderIconForAdapterByName=ProjectUtil.getFolderIconForAdapterByName
-      local NowDirectoryPath
-      if NowDirectory then
-        NowDirectoryPath=NowDirectory.getPath()
-       else
-        NowDirectoryPath=ProjectsPath
-      end
-      local NowDirectoryName=NowDirectory.getName()
-
-      local unknow=activity.getString(R.string.unknown)
-
-      local datas={}--空data适配器的data
-      local fileList
-      fileList=NowDirectory.listFiles()--获取文件列表
-      if fileList then
-        fileList=luajava.astable(fileList)--转换为LuaTable
-       else
-        fileList={}
-      end
-      if ProjectsPath==NowDirectoryPath then--如果当前路径为工程路径时
-
-        --按时间排序
-        table.sort(fileList,function(a,b)
-          return a.lastModified()<b.lastModified()
-        end)
-
-        --新建工程项目
-        table.insert(datas,{
-          __type=2,
-          icon={
-            imageResource=R.drawable.ic_plus,
-            colorFilter=color.colorAccent;
-          },
-          title={
-            text=activity.getString(R.string.project_create),
-            textColor=color.textColorPrimary
-          },
-          upFile=false,
-          action="createProject"
-        })
-
-        for index,content in ipairs(fileList) do
-          local contentPath=content.getPath()
-          local aideluaDir=contentPath.."/.aidelua"
-          if content.isDirectory() and File(aideluaDir).isDirectory() then
-            local config=ReBuildTool.getConfigByFilePath(aideluaDir.."/config.lua")
-            table.insert(datas,{
-              __type=1,
-              icon=getProjectIconForAdapter(contentPath,config),
-              title={
-                text=config.appName or unknow,
-                textColor=color.textColorPrimary
-              },
-              message=config.packageName or unknow,
-              file=content,
-              upFile=false,
-              action="openProject"})
-          end
-        end
-
-       else--不是工程路径
-
-        --按名称排序
-        table.sort(fileList,function(a,b)
-          return string.upper(a.getName())<string.upper(b.getName())
-        end)
-
-
-        local parentFile=NowDirectory.getParentFile()
-        table.insert(datas,{
-          __type=4,
-          icon={
-            imageResource=R.drawable.ic_folder_outline,
-            alpha=1,
-            colorFilter=FileColor.folder,
-            --colorFilter=0xFFFBC02D;
-          },
-          title={
-            text="..",
-            textColor=color.textColorPrimary,
-          },
-          --message=parentFile.getPath():match(ProjectsPath.."/(.+)"),
-          file=parentFile,
-          action="openFolder",
-          button={
-            iconResource=R.drawable.ic_dots_vertical,
-            tag={onClick=fileMoreMenu},
-            --tooltip=R.string.more,
-          },
-          highLightCard={cardBackgroundColor=0},
-          upFile=true,
-        })
-
-        --添加文件夹
-        for index,content in ipairs(fileList) do
-          if content.isDirectory() then
-            local name=content.getName()
-            table.insert(datas,{
-              __type=3,
-              icon={
-                imageResource=getFolderIconForAdapterByName(name),
-                alpha=getIconAlphaByHideFile(name),
-                colorFilter=FileColor.folder,
-                --colorFilter=0xFFFBC02D;
-              },
-              title={
-                text=name,
-                textColor=color.textColorPrimary
-              },
-              file=content,
-              action="openFolder",
-              highLightCard={cardBackgroundColor=0},
-              upFile=false,
-            })
-          end
-        end
-
-        --添加文件
-        local isResDir=NowDirectoryName~="values" and not(NowDirectoryName:find("values%-")) and ProjectUtil.shortPath(NowDirectoryPath,true):find(".-/src/.-/res/")
-        for index,content in ipairs(fileList) do
-          if content.isFile() then
-            local name=content.getName()
-            local path=content.getPath()
-            local fileType=getFileTypeByName(name)
-            local upperFileType
-            if fileType then
-              upperFileType=string.upper(fileType)
-            end
-            --[[
-            local highLightBgColor
-            local textColor
-            if NowFilePath==path then
-              highLightBgColor=color.rippleColorAccent
-              textColor=color.colorAccent
-             else
-              highLightBgColor=0
-              textColor=color.textColorPrimary
-            end]]
-            local data={
-              __type=3,
-              icon={
-                imageResource=getFileIconResIdByType(fileType),
-                alpha=getIconAlphaByHideFile(name),
-                --colorFilter=0xFFFBC02D;
-                colorFilter=FileColor[upperFileType or "normal"] or FileColor.normal,
-              },
-              title={
-                text=name,
-                textColor=color.textColorPrimary
-              },
-              file=content,
-              action="openFile",
-              fileType=fileType,
-              isResFile=isResDir,
-              highLightCard={cardBackgroundColor=0},
-              upFile=false,
-            }
-            table.insert(datas,data)
-          end
-        end
-      end
-      return datas,NowDirectory
-    end,
-    function(datas,NowDirectory)
-      datas=luajava.astable(datas)
-
-      _G.NowDirectory=NowDirectory
-      --_G.NowFileShowData=NowFileShowData
-      local nowPath=NowDirectory.getPath()
-      --local shortedPath=
-      adp.clear()
-      adp.addAll(datas)
-      table.clear(FilesDataList)
-
-      local nowFilePath
-      if NowFile then
-        nowFilePath=NowFile.getPath()
-      end
-      for index,content in ipairs(datas)
-        local file=content.file
-        if file then
-          local filePath=file.getPath()
-          FilesDataList[filePath]=content
-          if filePath==nowFilePath then
-            --=content
-            setActiveFileItem(content)
-          end
-        end
-      end
-
-
-
-      --local actionBar=activity.getSupportActionBar()
-      if OpenedProject then
-        --[[
-        if drawer.isDrawerOpen(Gravity.LEFT) then
-          actionBar.setSubtitle(shortPath(nowPath))
-         elseif OpenedFile then
-          actionBar.setSubtitle(shortPath(NowFile.getPath()))
-         else
-          actionBar.setSubtitle(nil)
-        end]]
-        if nowPath==ProjectsPath then
-          closeProject()
-        end
-       else
-        actionBar.setSubtitle(R.string.project_no_open)
-      end
-      refreshPathsTab(shortPath(nowPath,true,ProjectsPath))
-      swipeRefresh.setRefreshing(false)
-      loadingFiles=false
-      adp.notifyDataSetChanged()
-
-      local scroll=FilesListScroll[NowDirectory.getPath()]
-      --print(dump(FilesListScroll),NowDirectory.getPath(),scroll)
-      if scroll then
-        listView.setSelectionFromTop(scroll[1],scroll[2])
-      end
-
-    end).execute({file or NowDirectory or ProjectsFile,NowProjectDirectory or "",fileMoreMenu,theme.color,FileColor})
-  end
-end
-
-]==]
 
 function runLuaFile(file,code)
   if file and file.isFile() then
@@ -1003,7 +765,9 @@ function openProject(projectDirectory,file)
   for index,content in pairs(openFiles) do
     if content and content.isFile() then
       nowDirectory=content.getParentFile()
-      NowDirectory=nowDirectory
+      if not(NowDirectory) then
+        NowDirectory=nowDirectory
+      end
       refresh(nowDirectory)
       openFile(content)
       break
@@ -1043,7 +807,7 @@ function closeProject()
 
   --删掉一些变量
   NowProjectDirectory=nil
-  NowDirectory=ProjectsFile
+  --NowDirectory=ProjectsFile
   --NowDirectoryFilesList={}
 
   OpenedProject=false
@@ -1115,6 +879,10 @@ function onEditorSelectionChangedListener(view,status,start,end_)
       onCreateActionMode=function(mode,menu)
         _clipboardActionMode=mode
         mode.setTitle(android.R.string.selectTextMode)
+
+        local inflater=mode.getMenuInflater()
+        inflater.inflate(R.menu.menu_editor,menu)
+        --[[
         local array=activity.getTheme().obtainStyledAttributes({
           android.R.attr.actionModeSelectAllDrawable,
           android.R.attr.actionModeCutDrawable,
@@ -1138,22 +906,21 @@ function onEditorSelectionChangedListener(view,status,start,end_)
         .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
         .setIcon(array.getResourceId(3,0))
 
-        array.recycle()
+        array.recycle()]]
         return true
       end,
       onActionItemClicked=function(mode,item)
-        switch (item.getItemId()) do
-         case 0 then
-          view.selectAll();
-         case 1 then
-          view.cut();
-          mode.finish();
-         case 2 then
-          view.copy();
-          mode.finish();
-         case 3 then
-          view.paste();
-          mode.finish();
+        local id=item.getItemId()
+        if id==R.id.menu_selectAll then
+          view.selectAll()
+         elseif id==R.id.menu_cut then
+          view.cut()
+         elseif id==R.id.menu_copy then
+          view.copy()
+         elseif id==R.id.menu_paste then
+          view.paste()
+         elseif id==R.id.menu_code_commented then
+          editorFunc.commented(view)
         end
         return false;
       end,
@@ -1209,4 +976,17 @@ function refreshSymbolBar(state)
    else
     bottomAppBar.setVisibility(View.GONE)
   end
+end
+
+function checkSharedActivity(name,update)
+  local sdActivityPath=AppPath.LuaExtDir.."/"..name
+  local sdActivityDir=File(sdActivityPath)
+  local exists=sdActivityDir.exists()
+  if not(exists) or update then
+    if exists then
+      LuaUtil.rmDir(sdActivityDir)
+    end
+    LuaUtil.copyDir(File(activity.getLuaDir("sub/"..name)),sdActivityDir)
+  end
+  return sdActivityPath.."/main.lua"
 end

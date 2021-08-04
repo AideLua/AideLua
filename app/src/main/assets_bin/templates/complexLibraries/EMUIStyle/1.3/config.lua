@@ -3,7 +3,8 @@ keys={
   am_application={[[        <meta-data
             android:name="hwc-theme"
             android:value="androidhwext:style/Theme.Emui" />]],},
-  appIcon="@drawable/ic_launcher"
+  appIcon="@drawable/ic_launcher",
+  defaultImport={"EMUIStyle"},
 }
 delete={
   "app/src/main/res/drawable",

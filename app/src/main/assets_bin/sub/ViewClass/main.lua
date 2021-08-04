@@ -13,10 +13,10 @@ import "com.google.android.material.textfield.*"
 
 import "item"
 
-ClassString=...
-LoadSucceed,Class=pcall(luajava.bindClass,ClassString)
+local classString=...
+LoadSucceed,class=pcall(luajava.bindClass,classString)
 
-if not(LoadSucceed) or not(Class) then
+if not(LoadSucceed) or not(class) then
   activity.result({R.string.javaApiViewer_notFindClass})
   return
 end
@@ -69,8 +69,8 @@ activity.setContentView(loadlayout("layout"))
 actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true)
 --actionBar.setElevation(0)
-local classDir,className=ClassString:match("(.+)%.(.+)")
-actionBar.setTitle(className or ClassString)--设置标题
+local classDir,className=classString:match("(.+)%.(.+)")
+actionBar.setTitle(className or classString)--设置标题
 actionBar.setSubtitle(("Located at \"%s\""):format(classDir))
 
 
@@ -165,7 +165,7 @@ end
 
 
 local addedParents={}
-local nowParent=Class
+local nowParent=class
 while nowParent do
   local className=nowParent.getName()
   nowParent=nowParent.getSuperclass()--父类
@@ -184,7 +184,7 @@ while nowParent do
 end
 
 
-constructors=luajava.astable(Class.getConstructors())--构建
+constructors=luajava.astable(class.getConstructors())--构建
 for index,content in ipairs(constructors) do
   content=shortString(tostring(content))
   local info,method=content:match("(.+) .+[%.$](.+%(.-%))")
@@ -192,7 +192,7 @@ for index,content in ipairs(constructors) do
   AllNum=AllNum+1
 end
 
-allMethods=Class.getMethods()--方法
+allMethods=class.getMethods()--方法
 for item=0,#allMethods-1 do
   local methodInfo=shortString(tostring(allMethods[item]))
   local info,method=methodInfo:match("(.+) .*%.(.-%..-%(.-%))")
@@ -206,7 +206,7 @@ for item=0,#allMethods-1 do
   end
 end
 
-fields=Class.getFields()--字段
+fields=class.getFields()--字段
 for index,content in ipairs(luajava.astable(fields)) do
   content=shortString(tostring(content))
   local info,name,shortname=tostring(content):match("(.+) .+[%.$](.-%.(.+))")

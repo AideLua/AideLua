@@ -12,6 +12,7 @@ ProjectUtil.FileIcons={--各种文件的图标
   luac=R.drawable.ic_language_lua,
   aly=R.drawable.ic_language_lua,
   xml=R.drawable.ic_xml,
+  json=R.drawable.ic_code_json,
   java=R.drawable.ic_language_java,
   html=R.drawable.ic_language_html5,
   htm=R.drawable.ic_language_html5,
@@ -50,7 +51,7 @@ ProjectUtil.FolderIconsByName={
   keys=R.drawable.ic_folder_key_outline,
 }
 
-ProjectUtil.TextFileType={"lua","aly","html","xml","java","py","pyw","txt","gradle","bat"}
+ProjectUtil.TextFileType={"lua","aly","html","xml","java","py","pyw","txt","gradle","bat","json"}
 ProjectUtil.CallCodeFileType={lua=true,aly=true,java=true,py=true,pyw=true}
 
 ProjectUtil.HideFiles={
@@ -89,7 +90,7 @@ function ProjectUtil.shortPath(path,max,basePath)
     if max==true then
       return relPath
     end
-    
+
     local len=utf8.len(relPath)
     if len>(max or 15) then
       return "..."..utf8.sub(relPath,len-(max or 15)+1,len)
@@ -156,7 +157,10 @@ end
 
 
 function ProjectUtil.getFileTypeByName(name)
-  return name:match(".+%.(.+)")
+  local _type=name:match(".+%.(.+)")
+  if _type then
+    return string.lower(_type)
+  end
 end
 
 

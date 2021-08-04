@@ -8,3 +8,4 @@ appIncludeLua={}
 appInclude={}
 androidX=true
 appIcon="@mipmap/ic_launcher"
+defaultImport={}

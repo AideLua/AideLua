@@ -89,7 +89,7 @@ function addChoiceChip(title,group,identification)
     id=title;
     checkable=true;
     checkedIconResource=R.drawable.ic_mtrl_chip_checked_black;
-    checkedIconVisible=false;
+    --checkedIconVisible=false;
   },{})
   group.addView(chip)
   if activity.getSharedData("newproject_"..identification)==title then
@@ -273,13 +273,20 @@ function newProject(keys,AndroluaVersion,BaseTemplateConfig,projectPath,Template
   this.update(activity.getString(R.string.project_create_write))
 
   local keysTableFormater=assert(loadfile(TemplatesDir.."/keysTableFormater.lua"))()
+  local keysTableFormatTemp={}
   for index,content in ipairs(formatFilesList) do
     local path=projectPath.."/"..content
     --print(path)
     local fileContent=io.open(path):read("*a")
     for key,content in pairs(keys) do
       if type(content)=="table" then
-        content=keysTableFormater(key,content)
+        local tempContent=keysTableFormatTemp[key]
+        if not(tempContent) then
+          content=keysTableFormater(key,content)
+          keysTableFormatTemp[key]=content
+         else
+          content=tempContent
+        end
       end
       fileContent=fileContent:gsub("{{"..key.."}}",tostring(content))
     end

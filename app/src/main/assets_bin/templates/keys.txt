@@ -8,3 +8,4 @@ AndroidX开关：androidX
 app默认主题（xml）：appTheme
 application下代码：am_application
 默认icon路径：appIcon
+默认导入：defaultImport

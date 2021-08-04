@@ -132,12 +132,14 @@ FilesColor={
   JAR=0xffe64a19,
   ZIP=0xFF795548,
   HTML=0xffff5722,
+  JSON=0xffffa000,
 }
 FilesColor.JPG=FilesColor.PNG
 FilesColor["7Z"]=FilesColor.ZIP
 FilesColor.tar=FilesColor.ZIP
 FilesColor.RAR=FilesColor.ZIP
 FilesColor.SVG=FilesColor.XML
+--FilesColor.JSON=FilesColor.XML
 
 lastBackTime=0
 
@@ -233,7 +235,7 @@ function onCreateOptionsMenu(menu)
   binRunMenu=menu.findItem(R.id.menu_bin_run)
   closeProjectMenu=menu.findItem(R.id.menu_project_close)
   formatMenu=menu.findItem(R.id.menu_code_format)
-  
+
   codeMenu=menu.findItem(R.id.subMenu_code)
   toolsMenu=menu.findItem(R.id.subMenu_tools)
   fileMenu=menu.findItem(R.id.subMenu_file)
@@ -245,7 +247,7 @@ function onCreateOptionsMenu(menu)
   StateByFileMenus={closeFileMenu}
   StateByEditorMenus={formatMenu}
   StateByProjectMenus={binMenu,closeProjectMenu,binRunMenu}
-  
+
   screenConfigDecoder.events.menus={--自动刷新菜单显示
     [600]={binRunMenu,codeMenu,toolsMenu},
     [800]={fileMenu,projectMenu,moreMenu},
@@ -314,6 +316,14 @@ function onOptionsItemSelected(item)
     newSubActivity("JavaApi")
    elseif id==Rid.menu_tools_javaApiViewer_windmill then--JavaAPI浏览器
     startWindmillActivity("Java API")
+   elseif id==Rid.menu_tools_logCat then--日志猫
+    --newSubActivity("LogCat")
+    --editorFunc.run(sdLogCatPath)
+    if OpenedProject then
+      editorFunc.run(checkSharedActivity("LogCat"))
+     else
+      newSubActivity("LogCat")
+    end
    elseif id==Rid.menu_tools_httpDebugging_windmill then--Http 调试
     startWindmillActivity("Http 调试")
    elseif id==Rid.menu_tools_luaManual_windmill then--Lua 手册
@@ -452,7 +462,6 @@ function onResult(name,action,content)
     .setMessage(activity.getString(R.string.project_create_tip))
     .setPositiveButton(android.R.string.ok,nil)
     .show()
-
    else
     showSnackBar(action)
   end
@@ -465,7 +474,7 @@ function onPause()
 end
 
 function onDestroy()
-  if magnifierUpdateTi.isRun() then
+  if magnifierUpdateTi and magnifierUpdateTi.isRun() then
     magnifierUpdateTi.stop()
   end
 end
@@ -498,6 +507,10 @@ function onKeyUp(KeyCode,event)
       end
     end
   end
+end
+
+function onVersionChanged()
+  checkSharedActivity("LogCat",true)
 end
 
 --onConfigurationChanged(activity.getResources().getConfiguration())
