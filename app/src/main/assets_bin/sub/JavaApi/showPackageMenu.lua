@@ -6,8 +6,13 @@ local function showPackageMenu(name,view,mainLay)
   local copyClassPathMenu=menu.findItem(R.id.menu_copy_classPath)
   local copyClassPath2Menu=menu.findItem(R.id.menu_copy_classPath2)
   local copyImportMenu=menu.findItem(R.id.menu_copy_import)
-  copyNameMenu.title=name:match(".+[%.$](.+)")
+  print(name)
+  local notSinglename=toboolean(name:find(".+%..+"))
+  if notSinglename then
+    copyNameMenu.title=name:match(".+[%.$](.+)")
+  end
   copyClassPathMenu.title=name
+  copyNameMenu.setVisible(notSinglename)
   copyClassPath2Menu.title="L"..name:gsub("%.","/")..";"
   copyImportMenu.title=getImportCode(name)
   pop.show()
