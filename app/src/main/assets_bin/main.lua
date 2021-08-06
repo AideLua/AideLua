@@ -360,7 +360,7 @@ function onKeyShortcut(keyCode,event)
      elseif keyCode==KeyEvent.KEYCODE_R then
       editorFunc.run()
       return true
-     elseif keyCode==KeyEvent.KEYCODE_U then
+     elseif keyCode==KeyEvent.KEYCODE_Z then
       editorFunc.undo()
       return true
      elseif keyCode==KeyEvent.KEYCODE_F then
