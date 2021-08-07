@@ -152,9 +152,10 @@ function MyLuaEditor(context)
     onKeyShortcut=function(super,keyCode,event)
       onKeyShortcut(keyCode,event)
     end,
+  --[[
     onKeyPreIme=function(super,keyCode,event)
       print("ime",keyCode,event)
-    end
+    end]]
   })
 end
 

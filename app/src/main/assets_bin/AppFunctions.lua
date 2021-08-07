@@ -154,50 +154,54 @@ editorFunc={
     end
   end,
   commented=function(view)
-    view=view or NowEditor
-    local selectedText=view.getSelectedText()
-    if #selectedText~=0 then
-      if NowFileType=="lua" or NowFileType=="aly" or not(NowFileType) then--Lua类型
-        if selectedText:find("\n") then
-          local equals=""
-          while selectedText:find("]"..equals.."]") do
-            equals=equals.."="
+    if IsEdtor then
+      view=view or NowEditor
+      local selectedText=view.getSelectedText()
+      if #selectedText~=0 then
+        if NowFileType=="lua" or NowFileType=="aly" or not(NowFileType) then--Lua类型
+          if selectedText:find("\n") then
+            local equals=""
+            while selectedText:find("]"..equals.."]") do
+              equals=equals.."="
+            end
+            view.paste("--["..equals.."["..selectedText.."]"..equals.."]")
+           else
+            view.paste("--"..selectedText.."")
           end
-          view.paste("--["..equals.."["..selectedText.."]"..equals.."]")
          else
-          view.paste("--"..selectedText.."")
-        end
-       else
-        showSnackBar(R.string.file_not_supported)
+          showSnackBar(R.string.file_not_supported)
 
+        end
       end
     end
   end,
   search=function()
-    local ids
-    local idx=0
-    ids=SearchActionMode({
-      onEditorAction=function(view,actionId,event)
-        if event then
-          NowEditor.findNext(view.text)
-        end
-      end,
-      onTextChanged=function(text)
-        application.set("editor_search_text",text)
-      end,
-      onActionItemClicked=function(mode,item)
-        local title=item.title
-        if title==activity.getString(R.string.abc_searchview_description_search) then
-          NowEditor.findNext(ids.searchEdit.text)
-        end
-      end,
-      onDestroyActionMode=function(mode)
-      end,
-    })
-    local searchContent=application.get("editor_search_text")
-    if searchContent then
-      ids.searchEdit.text=searchContent
-      ids.searchEdit.setSelection(utf8.len(tostring(searchContent)))
+    if IsEdtor then
+      local ids
+      local idx=0
+      ids=SearchActionMode({
+        onEditorAction=function(view,actionId,event)
+          if event then
+            NowEditor.findNext(view.text)
+          end
+        end,
+        onTextChanged=function(text)
+          application.set("editor_search_text",text)
+        end,
+        onActionItemClicked=function(mode,item)
+          local title=item.title
+          if title==activity.getString(R.string.abc_searchview_description_search) then
+            NowEditor.findNext(ids.searchEdit.text)
+          end
+        end,
+        onDestroyActionMode=function(mode)
+        end,
+      })
+      local searchContent=application.get("editor_search_text")
+      if searchContent then
+        ids.searchEdit.text=searchContent
+        ids.searchEdit.setSelection(utf8.len(tostring(searchContent)))
+      end
     end
   end
 }
