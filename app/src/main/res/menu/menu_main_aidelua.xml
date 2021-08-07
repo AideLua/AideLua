@@ -63,6 +63,9 @@
                 android:id="@+id/menu_code_format"
                 android:title="@string/format"/>
             <item
+                android:id="@+id/menu_code_search"
+                android:title="@string/abc_searchview_description_search"/>
+            <item
                 android:id="@+id/menu_code_checkImport"
                 android:title="@string/check_import"/>
             <item

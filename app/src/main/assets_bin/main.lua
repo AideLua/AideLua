@@ -44,6 +44,7 @@ import "com.google.android.material.tabs.TabLayout"
 import "com.nwdxlgzs.view.photoview.PhotoView"
 import "com.pixplicity.sharp.Sharp"
 
+import "com.Jesse205.app.actionmode.SearchActionMode"
 import "com.Jesse205.util.FileUtil"
 import "com.Jesse205.util.ScreenFixUtil"
 
@@ -145,7 +146,16 @@ lastBackTime=0
 
 SDK_INT=Build.VERSION.SDK_INT
 
-StatService.start(this)
+function MyLuaEditor(context)
+  local lastX=0
+  return luajava.override(LuaEditor,{
+    onKeyShortcut=function(super,keyCode,event)
+      print(keyCode,event)
+      return super(keyCode,event)
+    end,
+  })
+end
+
 activity.setTitle(R.string.app_name)
 activity.setContentView(loadlayout("layout"))
 actionBar=activity.getSupportActionBar()
@@ -234,7 +244,6 @@ function onCreateOptionsMenu(menu)
   binMenu=menu.findItem(R.id.menu_project_bin)
   binRunMenu=menu.findItem(R.id.menu_bin_run)
   closeProjectMenu=menu.findItem(R.id.menu_project_close)
-  formatMenu=menu.findItem(R.id.menu_code_format)
 
   codeMenu=menu.findItem(R.id.subMenu_code)
   toolsMenu=menu.findItem(R.id.subMenu_tools)
@@ -245,7 +254,7 @@ function onCreateOptionsMenu(menu)
   --菜单组
   StateByFileAndEditorMenus={saveFileMenu}
   StateByFileMenus={closeFileMenu}
-  StateByEditorMenus={formatMenu}
+  StateByEditorMenus={codeMenu}
   StateByProjectMenus={binMenu,closeProjectMenu,binRunMenu}
 
   screenConfigDecoder.events.menus={--自动刷新菜单显示
@@ -298,6 +307,8 @@ function onOptionsItemSelected(item)
     editorFunc.closeFile()
    elseif id==Rid.menu_code_format then--格式化
     editorFunc.format()
+   elseif id==Rid.menu_code_search then
+    editorFunc.search()
    elseif id==Rid.menu_code_checkImport then--检查导入
     local packageName=activity.getPackageName()
     if OpenedProject then--打开了工程
@@ -354,6 +365,9 @@ function onKeyShortcut(keyCode,event)
      elseif keyCode==KeyEvent.KEYCODE_S then
       editorFunc.save()
       return true
+     elseif keyCode==KeyEvent.KEYCODE_L then
+      editorFunc.search()
+      return true
      elseif keyCode==KeyEvent.KEYCODE_E then
       editorFunc.check()
       return true
@@ -369,6 +383,7 @@ function onKeyShortcut(keyCode,event)
     end
   end
 end
+
 
 function onConfigurationChanged(config)
   screenConfigDecoder:decodeConfiguration(config)

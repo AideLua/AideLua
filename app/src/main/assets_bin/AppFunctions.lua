@@ -172,6 +172,33 @@ editorFunc={
 
       end
     end
+  end,
+  search=function()
+    local ids
+    local idx=0
+    ids=SearchActionMode({
+      onEditorAction=function(view,actionId,event)
+        if event then
+          NowEditor.findNext(view.text)
+        end
+      end,
+      onTextChanged=function(text)
+        application.set("editor_search_text",text)
+      end,
+      onActionItemClicked=function(mode,item)
+        local title=item.title
+        if title==activity.getString(R.string.abc_searchview_description_search) then
+          NowEditor.findNext(ids.searchEdit.text)
+        end
+      end,
+      onDestroyActionMode=function(mode)
+      end,
+    })
+    local searchContent=application.get("editor_search_text")
+    if searchContent then
+      ids.searchEdit.text=searchContent
+      ids.searchEdit.setSelection(utf8.len(tostring(searchContent)))
+    end
   end
 }
 shortPath=ProjectUtil.shortPath

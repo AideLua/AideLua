@@ -49,7 +49,7 @@
         id="luaEditorProgressBar";
       };
       {
-        LuaEditor;
+        MyLuaEditor;
         layout_height="fill";
         id="luaEditor";
         layout_width="fill";
