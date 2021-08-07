@@ -150,7 +150,7 @@ function MyLuaEditor(context)
   local lastX=0
   return luajava.override(LuaEditor,{
     onKeyShortcut=function(super,keyCode,event)
-      onKeyShortcut(keyCode,event)
+      return onKeyShortcut(keyCode,event)
     end,
   --[[
     onKeyPreIme=function(super,keyCode,event)
