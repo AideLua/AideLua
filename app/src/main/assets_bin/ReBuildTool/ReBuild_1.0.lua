@@ -29,11 +29,15 @@ function buildProject(ProjectPath,MainConfig,BuildTool,install)
   local AssetsFile=File(AssetsPath)
   local LibraryPath=TempPath.."/lua"
   local LibraryFile=File(LibraryPath)
-  local AppPathList={BinPath.."/app.apk",
+  local AppPathList={
+    BinPath.."/app.apk",
     BinPath.."/app-debug.apk",
+    BinPath.."/app-release.apk",
     BuildPath.."/outputs/apk/debug/app.apk",
+    BuildPath.."/outputs/apk/debug/app-release.apk",
     BuildPath.."/outputs/apk/debug/app-debug.apk",
-    AppPath.Sdcard.."/Android/data/com.aide.ui/cache/apk/app.apk"}
+    AppPath.Sdcard.."/Android/data/com.aide.ui/cache/apk/app.apk",
+  }
   local AppPath
   local AppFile
   local RePackedApkPath=BinPath.."/app_aidelua.apk"--重新打包后的apk路径

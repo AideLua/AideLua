@@ -152,13 +152,6 @@ function MyLuaEditor(context)
     onKeyShortcut=function(super,keyCode,event)
       return onKeyShortcut(keyCode,event)
     end,
-
-    onKeyPreIme=function(super,keyCode,event)
-      local filteredMetaState = event.getMetaState() & ~KeyEvent.META_CTRL_MASK;
-      if (KeyEvent.metaStateHasNoModifiers(filteredMetaState)) then
-        print("ime",keyCode,event)
-      end
-    end
   })
 end
 

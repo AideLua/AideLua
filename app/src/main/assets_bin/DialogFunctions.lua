@@ -115,7 +115,7 @@ function renameDialog(file)--重命名对话框
     xpcall(function()
       local err
       local newName=edit.text
-      if newName=="" then--文件夹名不能为空
+      if newName=="" then--文件名不能为空
         editLay
         .setError(cannotBeEmptyStr)
         .setErrorEnabled(true)
@@ -128,13 +128,13 @@ function renameDialog(file)--重命名对话框
       os.rename(oldFilePath, newFilePath)
       local tabTag=FilesTabList[lowerOldFilePath]
       if tabTag then
-        local tab=tag.tab
+        local tab=tabTag.tab
         local newFile=File(newFilePath)
         local fileType=ProjectUtil.getFileTypeByName(newName)
-        if string.lower(NowFile.getPath())==string.lower(newFilePath) then
-          NowFile=newFile
-          NowFileType=fileType
-        end
+        --if string.lower(NowFile.getPath())~=string.lower(newFilePath) then
+        NowFile=newFile
+        NowFileType=fileType
+        --end
         FilesTabList[string.lower(newFilePath)]=tabTag
         FilesTabList[lowerOldFilePath]=nil
         tabTag.fileType=fileType

@@ -3,7 +3,7 @@ import "Jesse205"
 import "console"
 import "loadlayout3"
 --activity.setTitle('XML转换器')
-cm=activity.getSystemService(Context.CLIPBOARD_SERVICE)
+--cm=activity.getSystemService(Context.CLIPBOARD_SERVICE)
 
 t={
   LinearLayout;
@@ -83,10 +83,14 @@ function xml2table(xml)
   return (xml)
 end
 
-dlg=AppCompatDialog(activity,activity.getThemeResId())
+dlg=luajava.override(AppCompatDialog,{
+  onMenuItemSelected=function(super,id,item)
+    dlg.dismiss()
+end},activity,R.style.Theme_MaterialComponents_Light)
 dlg.setTitle("布局表预览")
 dlg_actionBar=dlg.getSupportActionBar()
 dlg_actionBar.setElevation(0)
+dlg_actionBar.setDisplayHomeAsUpEnabled(true)
 --[[
 dlg_actionBar.setDisplayHomeAsUpEnabled(true)
 dlg.onOptionsItemSelected=function(item)
@@ -101,12 +105,12 @@ end
 function show(s)
   local oldThemeId=activity.getThemeResId()
   activity.setTheme(R.style.Theme_MaterialComponents_Light)
-  dlg.setContentView(loadlayout3(loadstring("return "..s)(),{}))
+  dlg.setContentView(loadlayout(loadstring("return "..s)(),{}))
   activity.setTheme(oldThemeId)
   local dia=dlg.show()
-  print(dia)
-  parentPanel=dia.findViewById(R.id.action_bar_root)
-  print(parentPanel)
+  --print(dia)
+  --parentPanel=dia.findViewById(R.id.action_bar_root)
+  --print(parentPanel)
 end
 
 function click()
@@ -128,14 +132,17 @@ end
 function click4()
   layout.main=loadstring("return "..edit.text)()
   activity.setContentView(loadlayout2(layout.main,{}))
-  dlg2.hide()
+  dlg2.dismiss()
 end
 
 
-dlg2=AppCompatDialog(activity,activity.getThemeResId())
+dlg2=luajava.override(AppCompatDialog,{
+  onMenuItemSelected=function(super,id,item)
+    dlg2.dismiss()
+end},activity,activity.getThemeResId())
 dlg2_actionBar=dlg2.getSupportActionBar()
 dlg2_actionBar.setElevation(0)
---dlg2_actionBar.setDisplayHomeAsUpEnabled(true)
+dlg2_actionBar.setDisplayHomeAsUpEnabled(true)
 
 dlg2.setTitle("编辑代码")
 dlg2.getWindow().setSoftInputMode(0x10)
@@ -144,6 +151,7 @@ dlg2.setContentView(loadlayout(t))
 edit.onScrollChange=function(view,l,t,oldl,oldt)
   MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,dlg2_actionBar)
 end
+
 function editlayout(text)
   edit.text=text
   edit.format()

@@ -540,6 +540,7 @@ for k,v in ipairs(ns) do
 end
 
 el=ExpandableListView(activity)
+el.setDividerHeight(0)
 el.setAdapter(mAdapter)
 add_dlg.setContentView(el)
 

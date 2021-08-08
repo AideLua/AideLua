@@ -2,6 +2,7 @@ require "import"
 pcall(function()
   import "Jesse205"
 end)
+
 isSupportActivity=activity.getClass().getSuperclass().getName()=="androidx.appcompat.app.AppCompatActivity"
 if not(Jesse205) then
   import "android.app.*"
@@ -9,7 +10,7 @@ if not(Jesse205) then
   import "android.widget.*"
   import "android.view.*"
   import "android.content.*"
- if isSupportActivity then
+  if isSupportActivity then
     activity.setTheme(R.style.Theme_MaterialComponents)
    else
     activity.setTheme(android.R.style.Theme_Material)
