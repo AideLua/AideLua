@@ -809,23 +809,27 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
   onDeviceChanged=function(device,oldDevice)
     print(device,oldDevice)
     if device=="phone" then--切换为手机时
-      pcall(function()
-        largeDrawerLay.removeView(drawerChild)
-        largeMainLay.removeView(mainEditorLay)
+      largeDrawerLay.removeView(drawerChild)
+      largeMainLay.removeView(mainEditorLay)
+      task(500,function()
+        --print(mainEditorLay.parent)
         drawer.addView(mainEditorLay)
         drawer.addView(drawerChild)
+        local linearParams=drawerChild.getLayoutParams()
+        linearParams.gravity=Gravity.LEFT
+        drawerChild.setLayoutParams(linearParams)
       end)
       largeMainLay.setVisibility(View.GONE)
       drawer.setVisibility(View.VISIBLE)
       drawerOpened=false
       drawerChild.setVisibility(View.VISIBLE)
      elseif oldDevice=="phone" then--切换为平板或电脑时
-      pcall(function()
-        drawer.removeView(mainEditorLay)
-        drawer.removeView(drawerChild)
-        largeDrawerLay.addView(drawerChild)
-        largeMainLay.addView(mainEditorLay)
-      end)
+      print(mainEditorLay.parent)
+      drawer.removeView(mainEditorLay)
+      drawer.removeView(drawerChild)
+      largeDrawerLay.addView(drawerChild)
+      largeMainLay.addView(mainEditorLay)
+
       largeMainLay.setVisibility(View.VISIBLE)
       drawer.setVisibility(View.GONE)
       drawerOpened=true
