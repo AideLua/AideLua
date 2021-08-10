@@ -8,8 +8,8 @@ android {
         applicationId "com.Jesse205.aidelua2"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 29099
-        versionName "2.9.0"
+        versionCode 30099
+        versionName "3.0.0"
     }
 
     buildTypes {

@@ -7,38 +7,52 @@
     LinearLayoutCompat;
     layout_height="fill";
     layout_width="fill";
-    orientation="vertical";
+    --orientation="vertical";
+    id="mainLay2";
     {
-      AutoToolbarLayout;
+      LinearLayoutCompat;
+      layout_height="fill";
       layout_width="fill";
-      id="appBarLayout";
-    };
-    {
-      ProgressBar;
-      id="progressBar";
-      style="?android:attr/progressBarStyleHorizontal";
-      paddingTop="-8dp";
-      paddingBottom="-8dp";
-      --indeterminate=true;
-      layout_width="fill";
-      layout_height="2dp";
-    };
-    {
-      MyPageView;
-      id="pageView";
+      orientation="vertical";
       layout_weight=1;
-      layout_width="fill";
+      {
+        AutoToolbarLayout;
+        layout_width="fill";
+        id="appBarLayout";
+      };
+      {
+        ProgressBar;
+        id="progressBar";
+        style="?android:attr/progressBarStyleHorizontal";
+        paddingTop="-8dp";
+        paddingBottom="-8dp";
+        --indeterminate=true;
+        layout_width="fill";
+        layout_height="2dp";
+      };
+      {
+        MyPageView;
+        id="pageView";
+        layout_height="fill";
+        layout_width="fill";
+      };
     };
     {
       CardView;
-      layout_height="64dp";
-      layout_width="fill";
+      --layout_height="64dp";
+      --layout_width="fill";
       elevation="8dp";
       radius=0;
       layoutTransition=LayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+      id="buttonBar";
+      backgroundColor=theme.color.windowBackground;
       {
         MaterialButton_TextButton;
-        layout_gravity="left|center";
+        --layout_gravity="left|center";
+        layout_height="48dp";
+        layout_width="64dp";
+        padding="8dp";
+        layout_margin="8dp";
         layout_marginLeft="16dp";
         layout_marginRight="16dp";
         id="previousButton";
@@ -46,7 +60,11 @@
       };
       {
         MaterialButton;
-        layout_gravity="right|center";
+        --layout_gravity="right|center";
+        layout_height="48dp";
+        layout_width="64dp";
+        padding="8dp";
+        layout_margin="8dp";
         layout_marginLeft="16dp";
         layout_marginRight="16dp";
         id="nextButton";

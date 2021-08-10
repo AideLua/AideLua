@@ -1,2 +1,2 @@
-appname="Aide Lua 2"
+appname="Aide Lua"
 --theme="Theme_DeviceDefault_Light"

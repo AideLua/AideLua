@@ -16,6 +16,7 @@ function buildTitlebar(icon,text)
     layout_width="fill";
     radius=0;
     id="topCard";
+    backgroundColor=theme.color.windowBackground;
     {
       LinearLayout;
       layout_width="fill";
@@ -65,10 +66,9 @@ function MyPageView()
   })
 end
 
-import "pages.welcomePage"
+--import "pages.welcomePage"
 import "pages.agreementPage"
 import "pages.permissionPage"
-import "pages.donePage"
 
 activity.setTitle(R.string.Jesse205_welcome)
 activity.setContentView(loadlayout("layout"))
@@ -79,11 +79,16 @@ actionBar=activity.getSupportActionBar()
 --actionBar.setDisplayHomeAsUpEnabled(true)
 
 ScreenFixContent={
-  layoutManagers={}
+  layoutManagers={},
+  orientation={
+    identical={mainLay2},
+    --different={buttonBar},
+  },
+  fillParentViews={buttonBar},
 }
 
-NowPage=welcomePage
-pages={welcomePage}
+--NowPage=welcomePage
+pages={}
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()
@@ -94,6 +99,26 @@ end
 
 function onConfigurationChanged(config)
   screenConfigDecoder:decodeConfiguration(config)
+  if config.orientation==Configuration.ORIENTATION_LANDSCAPE then--横屏时
+    local linearParams=previousButton.getLayoutParams()
+    linearParams.gravity=Gravity.TOP|Gravity.CENTER
+    previousButton.setLayoutParams(linearParams)
+    local linearParams=nextButton.getLayoutParams()
+    linearParams.gravity=Gravity.BOTTOM|Gravity.CENTER
+    nextButton.setLayoutParams(linearParams)
+   else
+    local linearParams=previousButton.getLayoutParams()
+    linearParams.gravity=Gravity.LEFT|Gravity.CENTER
+    previousButton.setLayoutParams(linearParams)
+    local linearParams=nextButton.getLayoutParams()
+    linearParams.gravity=Gravity.RIGHT|Gravity.CENTER
+    nextButton.setLayoutParams(linearParams)
+  end
+  for index,content in ipairs(pages) do
+    if content.onConfigurationChanged then
+      content:onConfigurationChanged(config)
+    end
+  end
 end
 
 function onKeyUp(KeyCode,event)
@@ -111,7 +136,7 @@ for index,content in ipairs(agreements) do
 end
 
 table.insert(pages,permissionPage)
-table.insert(pages,donePage)
+NowPage=pages[1]
 
 maxPage=table.size(pages)
 progressBar.setMax((maxPage)*1000)

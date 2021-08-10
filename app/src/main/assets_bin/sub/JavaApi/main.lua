@@ -1,5 +1,6 @@
 require "import"
 import "Jesse205"
+import "com.Jesse205.adapter.MyLuaAdapter"
 import "com.Jesse205.layout.MySearchLayout"
 
 import "getImportCode"

@@ -9,6 +9,7 @@ import "com.google.android.material.tabs.*"
 import "com.google.android.material.appbar.AppBarLayout"
 import "com.google.android.material.textfield.*"
 
+import "com.Jesse205.adapter.MyLuaAdapter"
 --import "SpannableStringUtil"
 
 import "item"
@@ -125,7 +126,7 @@ end
 
 --adp=ArrayAdapter(activity,android.R.layout.simple_list_item_1)
 datas={}
-adp=LuaAdapter(activity,datas,item)
+adp=MyLuaAdapter(activity,datas,item)
 listView.setAdapter(adp)
 listView.onItemClick=function(id,v,zero,one)
   local name=datas[one].name

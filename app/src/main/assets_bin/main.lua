@@ -44,6 +44,7 @@ import "com.google.android.material.tabs.TabLayout"
 import "com.nwdxlgzs.view.photoview.PhotoView"
 import "com.pixplicity.sharp.Sharp"
 
+import "com.Jesse205.layout.MyEditDialogLayout"
 import "com.Jesse205.app.actionmode.SearchActionMode"
 import "com.Jesse205.util.FileUtil"
 import "com.Jesse205.util.ScreenFixUtil"
@@ -583,122 +584,6 @@ if notSafeModeEnable then
   })
 end
 
---[[
-adp=MyLuaMultiAdapter(activity,DirDatas,item)
-listView.Adapter=adp
---文件点击
-listView.onItemClick=function(id,v,zero,one)
-  local data=DirDatas[one]
-  local file=data.file
-  local action=data.action
-  switch action do
-   case "createProject" then
-    CreateProject()
-   case "openProject" then
-    openProject(file)
-   case "openFolder" then
-    refresh(file,data.upFile)
-   case "openFile" then
-    local succeed,_,inThirdPartySoftware=openFile(file)
-    if succeed and not(inThirdPartySoftware) then
-      drawer.closeDrawer(Gravity.LEFT)
-    end
-  end
-  --binProject(data.file.getPath())
-end
---文件长按
-listView.onItemLongClick=function(id,v,zero,one)
-  local data=DirDatas[one]
-  local file=data.file
-  local title=data.title.text
-
-  if file and title~=".." then
-    local Rid=R.id
-
-    local parentFile,parentName
-    local action=data.action
-    local fileName=file.getName()
-    local fileType=data.fileType
-    local isFile=file.isFile()
-    local filePath=file.getPath()
-    local fileRelativePath
-    if OpenedProject then
-      fileRelativePath=ProjectUtil.shortPath(filePath,true,NowProjectDirectory.getPath())
-    end
-    local pop=PopupMenu(activity,v)
-    local menu=pop.Menu
-    if OpenedProject and fileType and ProjectUtil.CallCodeFileType[fileType] then--已经打开了项目并且文件类型受支持
-      local inLibDir,inLibDirIndex
-      for index,content in ipairs(LibsRelativePathMatch) do
-        inLibDir=fileRelativePath:match(content)
-        inLibDirIndex=index
-        if inLibDir then
-          break
-        end
-      end
-      if inLibDir then--是库目录
-        pop.inflate(R.menu.menu_javaapi_item_package)
-        local callFilePath=inLibDir:gsub("/",".")
-        local noTypeFileName=fileName:match("(.+)%.")--没有扩展名的文件名
-
-        local copyNameMenu=menu.findItem(R.id.menu_copy_className)
-        local copyClassPathMenu=menu.findItem(R.id.menu_copy_classPath)
-        local copyClassPath2Menu=menu.findItem(R.id.menu_copy_classPath2)
-        local copyImportMenu=menu.findItem(R.id.menu_copy_import)
-        copyNameMenu.title=noTypeFileName
-        copyImportMenu.title=getImportCode(callFilePath)
-        copyClassPathMenu.setVisible(callFilePath~=noTypeFileName)
-        copyClassPath2Menu.setVisible(inLibDirIndex==3)--smali仅在java目录下支持
-        if callFilePath~=noTypeFileName then--有重复的时候
-          copyClassPathMenu.title=callFilePath
-        end
-        if inLibDirIndex==3 then
-          copyClassPath2Menu.title="L"..inLibDir..";"
-        end
-      end
-    end
-    pop.inflate(R.menu.menu_main_file)
-    --local reNameMenu=menu.findItem(R.id.menu_rename)
-    --local deleteMenu=menu.findItem(R.id.menu_delete)
-    local openInNewWindowMenu=menu.findItem(Rid.menu_openInNewWindow)--新窗口打开
-    local referencesMenu=menu.findItem(Rid.menu_references)--引用资源
-    local renameMenu=menu.findItem(Rid.menu_rename)--重命名
-
-    --reNameMenu.setVisible(not(isUpFile))
-    openInNewWindowMenu.setVisible(isFile or data.action=="openProject")
-    referencesMenu.setVisible(toboolean(data.isResFile))
-    renameMenu.setVisible(OpenedFile)
-
-    if data.isResFile then--是资源文件
-      parentFile=file.getParentFile()
-      parentName=parentFile.getName()
-    end
-
-    pop.show()
-    pop.onMenuItemClick=function(item)
-      local id=item.getItemId()
-      if id==Rid.menu_delete then--删除
-        deleteFileDialog(title,file)
-       elseif id==Rid.menu_rename then--重命名
-        renameDialog(file)
-       elseif id==Rid.menu_openInNewWindow then--新窗口打开
-        if OpenedProject then--已打开项目
-          activity.newActivity("main",{NowProjectDirectory,file.getPath()},true)
-         else--未打开项目
-          activity.newActivity("main",{file.getPath()},true)
-        end
-       elseif id==Rid.menu_references then--引用资源
-        NowEditor.paste(("R.%s.%s"):format(parentName:match("(.-)%-")or parentName,fileName:match("(.+)%.")or fileName))
-        drawer.closeDrawer(Gravity.LEFT)
-        elseif id==R.id.menu_copy_import or id==R.id.menu_copy_classPath2 or id==R.id.menu_copy_classPath or id==R.id.menu_copy_className then
-        MyToast.copyText(item.title)
-      end
-    end
-    return true
-  end
-end
-]]
-
 task(500,function()
   if safeModeEnable then
     appBarLayout.setElevation(0)
@@ -788,12 +673,16 @@ if notSafeModeEnable then
           lang.a(package,methods)
         end
       end
-      local Lexer=luajava.bindClass("b.b.a.b.k")
-      local lang=Lexer.e()
+      --local Lexer=luajava.bindClass("b.b.a.b.k")
+      --local lang=Lexer.e()
+
+      local Lexer=luajava.bindClass("b.b.a.b.m")
+      local lang=Lexer.c()
 
       local names=application.get("editorBaseList")
       if not(names) then
-        names=lang.g()--获取现在的names
+        --names=lang.g()--获取现在的names
+        names=lang.c()--获取现在的names
         application.set("editorBaseList",names)
       end
       names=luajava.astable(names)
@@ -829,7 +718,8 @@ if notSafeModeEnable then
         end
         addPackages(lang,{"string","utf8","math","theme","Jesse205","AppPath","MyToast"})
       end
-      lang.B(names)--设置成新的names
+      --lang.B(names)--设置成新的names
+      lang.b(names)--设置成新的names
       return true
     end,
     function(success)
@@ -917,22 +807,27 @@ refreshSymbolBar(oldEditorSymbolBar)
 
 screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
   onDeviceChanged=function(device,oldDevice)
+    print(device,oldDevice)
     if device=="phone" then--切换为手机时
-      largeDrawerLay.removeView(drawerChild)
-      largeMainLay.removeView(mainEditorLay)
+      pcall(function()
+        largeDrawerLay.removeView(drawerChild)
+        largeMainLay.removeView(mainEditorLay)
+        drawer.addView(mainEditorLay)
+        drawer.addView(drawerChild)
+      end)
       largeMainLay.setVisibility(View.GONE)
-      drawer.addView(mainEditorLay)
-      drawer.addView(drawerChild)
       drawer.setVisibility(View.VISIBLE)
       drawerOpened=false
       drawerChild.setVisibility(View.VISIBLE)
      elseif oldDevice=="phone" then--切换为平板或电脑时
-      drawer.removeView(mainEditorLay)
-      drawer.removeView(drawerChild)
-      drawer.setVisibility(View.GONE)
-      largeDrawerLay.addView(drawerChild)
-      largeMainLay.addView(mainEditorLay)
+      pcall(function()
+        drawer.removeView(mainEditorLay)
+        drawer.removeView(drawerChild)
+        largeDrawerLay.addView(drawerChild)
+        largeMainLay.addView(mainEditorLay)
+      end)
       largeMainLay.setVisibility(View.VISIBLE)
+      drawer.setVisibility(View.GONE)
       drawerOpened=true
       drawerChild.setVisibility(View.VISIBLE)
     end

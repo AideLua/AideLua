@@ -1,9 +1,0 @@
-{
-  title=R.string.Jesse205_allReady;
-  layout={
-    LinearLayoutCompat;
-    layout_width="fill";
-    layout_height="fill";
-    buildTitlebar(R.drawable.ic_check_circle_outline,R.string.Jesse205_allReady_tips);
-  },
-}

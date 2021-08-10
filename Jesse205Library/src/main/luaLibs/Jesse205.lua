@@ -1,7 +1,7 @@
 local Jesse205={}
 _G.Jesse205=Jesse205
-Jesse205._VERSION="8.3.3(Pro)"
-Jesse205._VERSIONCODE=83399
+Jesse205._VERSION="9.0.0(Pro)"
+Jesse205._VERSIONCODE=90099
 Jesse205._ENV=_ENV
 local APIS={
   --一些标识
@@ -179,7 +179,7 @@ import "java.io.FileInputStream"
 import "java.io.FileOutputStream"
 
 
-import "com.Jesse205.adapter.*"--导入Adapter
+--import "com.Jesse205.adapter.*"--导入Adapter
 
 import "com.lua.custrecycleradapter.AdapterCreator"--导入LuaCustRecyclerAdapter及相关类
 import "com.lua.custrecycleradapter.LuaCustRecyclerAdapter"
@@ -204,7 +204,7 @@ import "com.Jesse205.widget.StyleWidget"
 
 --导入各种布局表
 import "com.Jesse205.layout.MyTextInputLayout"
-import "com.Jesse205.layout.MyEditDialogLayout"
+--import "com.Jesse205.layout.MyEditDialogLayout"
 --import "com.Jesse205.layout.MySearchLayout"
 
 import "com.bumptech.glide.Glide"--导入Glide
@@ -228,7 +228,7 @@ function openInBrowser(url)
   local viewIntent = Intent("android.intent.action.VIEW",Uri.parse(url))
   activity.startActivity(viewIntent)
 end
-openUrl=openInBrowser
+openUrl=openInBrowser--通常情况下，应用不自带内置浏览器
 
 --相对路径转绝对路径
 --[[

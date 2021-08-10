@@ -8,8 +8,8 @@ android {
         //applicationId "com.androlua"
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 1099
-        versionName "1.0(5.0.16)"
+        versionCode 1599
+        versionName "1.5(5.0.10)"
     }
     buildTypes {
         release {

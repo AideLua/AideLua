@@ -19,6 +19,9 @@ import "androidx.slidingpanelayout.widget.SlidingPaneLayout"
 import "androidx.swiperefreshlayout.widget.SwipeRefreshLayout"
 import "androidx.viewpager.widget.ViewPager"
 import "android.util.*"
+
+import "com.Jesse205.layout.MyEditDialogLayout"
+
 import "loadlayout2"
 require "xml2table"
 import "layout"
