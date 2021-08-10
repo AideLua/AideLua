@@ -823,7 +823,7 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
         linearParams.gravity=Gravity.LEFT
         drawerChild.setLayoutParams(linearParams)
         if drawerOpened then
-          task(10,function()
+          task(50,function()
             drawer.openDrawer(Gravity.LEFT)
           end)
         end
