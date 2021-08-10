@@ -339,6 +339,8 @@ function onOptionsItemSelected(item)
     startWindmillActivity("Http 调试")
    elseif id==Rid.menu_tools_luaManual_windmill then--Lua 手册
     startWindmillActivity("手册")
+   elseif id==Rid.menu_tools_manual then--Lua 手册
+    openUrl("https://gitee.com/Jesse205/AideLua/blob/master/README.md")
    elseif id==Rid.menu_more_settings then--设置
     newSubActivity("Settings")
    elseif id==Rid.menu_more_about then--关于
@@ -807,7 +809,6 @@ refreshSymbolBar(oldEditorSymbolBar)
 
 screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
   onDeviceChanged=function(device,oldDevice)
-    print(device,oldDevice)
     if device=="phone" then--切换为手机时
       largeDrawerLay.removeView(drawerChild)
       largeMainLay.removeView(mainEditorLay)
@@ -824,7 +825,6 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
       drawerOpened=false
       drawerChild.setVisibility(View.VISIBLE)
      elseif oldDevice=="phone" then--切换为平板或电脑时
-      print(mainEditorLay.parent)
       drawer.removeView(mainEditorLay)
       drawer.removeView(drawerChild)
       largeDrawerLay.addView(drawerChild)

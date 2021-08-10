@@ -6,6 +6,9 @@ appInfo={
     message="依赖Aide的一款Lua编辑器",
     icon=R.mipmap.ic_launcher,
     --typeface=ResourcesCompat.getFont(activity,R.font.app),
+    click=function()
+      openUrl("https://gitee.com/Jesse205/AideLua")
+    end,
   },
   {
     name=R.string.windmill,

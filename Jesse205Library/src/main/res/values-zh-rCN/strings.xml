@@ -40,6 +40,8 @@
     <string name="Jesse205_theme_default">深海蓝</string>
     <string name="Jesse205_theme_red">中国红</string>
     <string name="Jesse205_theme_teal">水鸭绿</string>
+    <string name="Jesse205_theme_orange">极客橙</string>
+    <string name="Jesse205_theme_pink">舒适粉</string>
     <string name="Jesse205_theme_dark">无限黑</string>
     
 </resources>

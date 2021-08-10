@@ -66,7 +66,7 @@ resources=context.getResources()--当前resources
 
 if activity then
   window=activity.getWindow()
-  elseif notLoadTheme==nil then
+ elseif notLoadTheme==nil then
   notLoadTheme=true
 end
 
@@ -100,6 +100,8 @@ end
 local theme={
   color={
     Ripple={},
+    Light={},
+    Dark={},
     ActionBar={},
   },
   number={
@@ -117,14 +119,24 @@ import "android.os.Build"
 if not(notLoadTheme) then
   local color=theme.color
   local ripple=color.Ripple
+  local light=color.Light
+  local dark=color.Dark
   local number=theme.number
-  local colors={"White","Red","Yellow","Black",
-    "Blue","Green","Pink","Grey"}--所有Jesse205Library内置颜色
-  local dimens={"padWidth","pcWidth"}
+  local colors={"White","Red","Orange","Black",
+    "Blue","Green","Pink","Grey"}--Jesse205Library内置的所有颜色
   for index,content in ipairs(colors) do
     color[content]=resources.getColor(R.color["Jesse205_"..content])
     ripple[content]=resources.getColor(R.color["Jesse205_"..content.."_Ripple"])
   end
+  local colors={"Pink"}--Jesse205Library内置的所有明亮颜色
+  for index,content in ipairs(colors) do
+    light[content]=resources.getColor(R.color["Jesse205_"..content.."_Light"])
+  end
+  local colors={"White","Red","Orange","Pink"}--Jesse205Library内置的所有黑暗颜色
+  for index,content in ipairs(colors) do
+    dark[content]=resources.getColor(R.color["Jesse205_"..content.."_Dark"])
+  end
+  local dimens={"padWidth","pcWidth"}
   for index,content in ipairs(dimens) do
     number[content]=resources.getDimension(R.dimen["Jesse205_"..content])
   end

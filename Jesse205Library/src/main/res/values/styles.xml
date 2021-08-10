@@ -216,10 +216,30 @@
     </style>
     <style name="Theme.Jesse205.Teal.DarkActionBar" parent="Theme.Jesse205.DarkActionBar">
         <item name="colorPrimary">@color/Jesse205_Green</item>
+        <item name="colorAccent">@color/Jesse205_Pink_Dark</item>
+        <item name="rippleColorAccent">@color/Jesse205_Pink_Dark_Ripple</item>
+    </style>
+
+    <style name="Theme.Jesse205.Orange" parent="Theme.Jesse205">
+        <item name="colorAccent">@color/Jesse205_Orange</item>
+        <item name="rippleColorAccent">@color/Jesse205_Orange_Ripple</item>
+    </style>
+    <style name="Theme.Jesse205.Orange.DarkActionBar" parent="Theme.Jesse205.DarkActionBar">
+        <item name="colorPrimary">@color/Jesse205_Orange_Dark</item>
+        <item name="colorAccent">@color/Jesse205_Orange</item>
+        <item name="rippleColorAccent">@color/Jesse205_Orange_Ripple</item>
+    </style>
+    
+    <style name="Theme.Jesse205.Pink" parent="Theme.Jesse205">
         <item name="colorAccent">@color/Jesse205_Pink</item>
         <item name="rippleColorAccent">@color/Jesse205_Pink_Ripple</item>
     </style>
-
+    <style name="Theme.Jesse205.Pink.DarkActionBar" parent="Theme.Jesse205.DarkActionBar">
+        <!--<item name="actionBarStyle">@style/Widget.Jesse205.Red.ActionBar</item>-->
+        <item name="colorPrimary">@color/Jesse205_Pink_Light</item>
+        <item name="colorAccent">@color/Jesse205_Pink</item>
+        <item name="rippleColorAccent">@color/Jesse205_Pink_Ripple</item>
+    </style>
 
     <style name="Theme.Jesse205.Dark" parent="Base.Theme.Jesse205.Dark"/>
     <style name="Theme.Jesse205.Dark.DarkActionBar" parent="Theme.Jesse205.Dark"/>

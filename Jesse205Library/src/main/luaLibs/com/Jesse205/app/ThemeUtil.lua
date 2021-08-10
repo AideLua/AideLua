@@ -13,18 +13,33 @@ ThemeUtil.APPTHEMES={
       preview=0xff4477e0,
     },
   },
-  {--新年红
-    name="Red",
-    show={
-      name=R.string.Jesse205_theme_red,
-      preview=0xfff44336,
-    },
-  },
+
   {--水鸭绿
     name="Teal",
     show={
       name=R.string.Jesse205_theme_teal,
       preview=0xff009688,
+    },
+  },
+  {--极客橙
+    name="Orange",
+    show={
+      name=R.string.Jesse205_theme_orange,
+      preview=0xFFFFA000,
+    },
+  },
+  {--舒适粉
+    name="Pink",
+    show={
+      name=R.string.Jesse205_theme_pink,
+      preview=0xFFFF4081,
+    },
+  },
+  {--新年红
+    name="Red",
+    show={
+      name=R.string.Jesse205_theme_red,
+      preview=0xfff44336,
     },
   },
   {--无限黑

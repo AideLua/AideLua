@@ -39,6 +39,8 @@
     <string name="Jesse205_theme_default">Blue</string>
     <string name="Jesse205_theme_red">Red</string>
     <string name="Jesse205_theme_teal">Teal</string>
+    <string name="Jesse205_theme_orange">Orange</string>
+    <string name="Jesse205_theme_pink">Pink</string>
     <string name="Jesse205_theme_dark">Dark</string>
     
 </resources>
