@@ -533,6 +533,9 @@ end
 --onConfigurationChanged(activity.getResources().getConfiguration())
 
 drawerOpened=drawer.isDrawerOpen(Gravity.LEFT)
+if drawerOpened==false then
+  drawerOpened=nil
+end
 drawer.addDrawerListener(DrawerLayout.DrawerListener({
   onDrawerSlide=function(view,slideOffset)
     if screenConfigDecoder.device=="phone" then
@@ -819,10 +822,17 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
         local linearParams=drawerChild.getLayoutParams()
         linearParams.gravity=Gravity.LEFT
         drawerChild.setLayoutParams(linearParams)
+        if drawerOpened then
+          task(10,function()
+            drawer.openDrawer(Gravity.LEFT)
+          end)
+        end
       end)
       largeMainLay.setVisibility(View.GONE)
       drawer.setVisibility(View.VISIBLE)
-      drawerOpened=false
+      if drawerOpened==nil then
+        drawerOpened=false
+      end
       drawerChild.setVisibility(View.VISIBLE)
      elseif oldDevice=="phone" then--切换为平板或电脑时
       drawer.removeView(mainEditorLay)
@@ -832,12 +842,18 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
 
       largeMainLay.setVisibility(View.VISIBLE)
       drawer.setVisibility(View.GONE)
-      drawerOpened=true
-      drawerChild.setVisibility(View.VISIBLE)
+      if drawerOpened or drawerOpened==nil then
+        drawerOpened=true
+        drawerChild.setVisibility(View.VISIBLE)
+       else
+        drawerChild.setVisibility(View.GONE)
+      end
     end
   end,
 })
 --screenConfigDecoder.device="phone"--默认为手机
 
 onConfigurationChanged(activity.getResources().getConfiguration())
-
+if drawerOpened==nil then
+  drawerOpened=false
+end
