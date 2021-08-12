@@ -65,10 +65,12 @@
     <string name="file_close">Close file</string>
     
     <string name="directory">Folder</string>
+    <string name="directory_go_popup">Open Directory...</string>
     <string name="directory_create">Create folder</string>
     <string name="directory_name">Folder name</string>
     
     <string name="project">Project</string>
+    <string name="project_root">Project root</string>
     <string name="project_popup">Project...</string>
     <string name="project_bin_run">Pack and run</string>
     <string name="project_bin">Second package</string>

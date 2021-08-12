@@ -41,7 +41,7 @@ local function onLongClick(view)
 
     local pop=PopupMenu(activity,view)
     local menu=pop.Menu
-    if OpenedProject and fileType and ProjectUtil.CallCodeFileType[fileType] then--已经打开了项目并且文件类型受支持
+    if OpenedProject and fileType and LibsRelativePathType[fileType] then--已经打开了项目并且文件类型受支持
 
       local inLibDir,inLibDirIndex=data.inLibDir,data.inLibDirIndex
       if not(inLibDir) then
@@ -63,14 +63,17 @@ local function onLongClick(view)
         local copyClassPathMenu=menu.findItem(R.id.menu_copy_classPath)
         local copyClassPath2Menu=menu.findItem(R.id.menu_copy_classPath2)
         local copyImportMenu=menu.findItem(R.id.menu_copy_import)
-        copyNameMenu.title=noTypeFileName
         copyImportMenu.title=getImportCode(callFilePath)
+        copyNameMenu.setVisible(fileType~="so")
         copyClassPathMenu.setVisible(callFilePath~=noTypeFileName)
-        copyClassPath2Menu.setVisible(inLibDirIndex==3)--smali仅在java目录下支持
+        copyClassPath2Menu.setVisible(fileType=="java")--smali仅在java目录下支持
+        if fileType~="so" then
+          copyNameMenu.title=noTypeFileName
+        end
         if callFilePath~=noTypeFileName then--有重复的时候
           copyClassPathMenu.title=callFilePath
         end
-        if inLibDirIndex==3 then
+        if fileType=="java" then
           copyClassPath2Menu.title="L"..inLibDir..";"
         end
       end
@@ -116,16 +119,45 @@ local function onLongClick(view)
 end
 
 local function fileMoreMenuClick(view)
+  local nowLibName,fileRelativePath,nowPrjDirName
+  if openProject then
+    fileRelativePath=ProjectUtil.shortPath(NowDirectory.getPath(),true,NowProjectDirectory.getPath())
+
+    if fileRelativePath:find("/") then
+      nowLibName=fileRelativePath:match("(.-)/.+")
+     elseif #fileRelativePath~=0 then
+      nowLibName=fileRelativePath
+     else
+      nowLibName="app"
+    end
+    nowPrjDirName=NowProjectDirectory.getName()
+  end
+
   local pop=PopupMenu(activity,view)
   local menu=pop.Menu
   pop.inflate(R.menu.menu_main_file_upfile)
   pop.show()
   pop.onMenuItemClick=function(item)
     local id=item.getItemId()
-    if id==R.id.menu_createFile then
+    local Rid=R.id
+    if id==Rid.menu_createFile then
       CreateFile(NowDirectory)
-     elseif id==R.id.menu_createDir then
+     elseif id==Rid.menu_createDir then
       createDirsDialog(NowDirectory)
+     else
+      if openProject then
+        if id==Rid.menu_openDir_assets then
+          refresh(File(("%s/%s/%s/src/main/assets_bin"):format(ProjectsPath,nowPrjDirName,nowLibName)))
+         elseif id==Rid.menu_openDir_java then
+          refresh(File(("%s/%s/%s/src/main/java"):format(ProjectsPath,nowPrjDirName,nowLibName)))
+         elseif id==Rid.menu_openDir_lua then
+          refresh(File(("%s/%s/%s/src/main/luaLibs"):format(ProjectsPath,nowPrjDirName,nowLibName)))
+         elseif id==Rid.menu_openDir_res then
+          refresh(File(("%s/%s/%s/src/main/res"):format(ProjectsPath,nowPrjDirName,nowLibName)))
+         elseif id==Rid.menu_openDir_projectRoot then
+          refresh(NowProjectDirectory)
+        end
+      end
     end
   end
 end
@@ -262,9 +294,10 @@ return function(data,item)
           if type(iconUrl)=="number" then
             iconView.setImageResource(iconUrl)
            else
-            Glide.with(this)
-            .load(iconUrl)
-            .into(iconView)
+            local options=RequestOptions()
+            options.skipMemoryCache(true)--跳过内存缓存
+            options.diskCacheStrategy(DiskCacheStrategy.NONE)--不缓冲disk硬盘中
+            Glide.with(activity).load(iconUrl).apply(options).into(iconView)
           end
           tag.title.setText(config.appName or unknowString)
           tag.message.setText(config.packageName or unknowString)

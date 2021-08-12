@@ -71,8 +71,16 @@ ProjectUtil.HideFiles={
 ProjectUtil.LibsRelativePathMatch={
   "^.-/src/main/assets_bin/(.+)%.",
   "^.-/src/main/luaLibs/(.+)%.",
+  "^.-/src/main/jniLibs/.-/lib(.+)%.so",
   "^.-/src/main/java/(.+)%.",
   "^.-/src/main/assets/(.+)%.",
+}
+ProjectUtil.LibsRelativePathType={
+  java=true,
+  so=true,
+  lua=true,
+  luac=true,
+  aly=true,
 }
 
 function ProjectUtil.shortPath(path,max,basePath)

@@ -4,6 +4,7 @@ keys={
   appIncludeLua={"project:Jesse205Library"},
   appInclude={":Jesse205Library"},
   appDependencies={"api project(':Jesse205Library')"},
+  appIcon="@mipmap/ic_launcher"
 }
 
 delete={

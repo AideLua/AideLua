@@ -7,5 +7,6 @@ appDependencies={}
 appIncludeLua={}
 appInclude={}
 androidX=true
-appIcon="@mipmap/ic_launcher"
+compileLua=true
+appIcon="@drawable/ic_launcher"
 defaultImport={}

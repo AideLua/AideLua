@@ -3,8 +3,8 @@ local ThemeUtil={}
 local context=activity or service
 local theme=_G.theme
 local SDK_INT=Build.VERSION.SDK_INT
-local onColorChangedListeners={}
-local selectableItemBackgroundBorderless
+--local onColorChangedListeners={}
+--local selectableItemBackgroundBorderless
 ThemeUtil.APPTHEMES={
   {--深海蓝
     name="Default",
@@ -59,6 +59,7 @@ for index,content in ipairs(ThemeUtil.APPTHEMES)
   Name2AppTheme[content.name]=content
 end
 
+--监听颜色变化，没毛用
 --[[
 function ThemeUtil.callOnColorChangedListener(colorName,color)
   local listeners=onColorChangedListeners[colorName]
@@ -92,19 +93,19 @@ ThemeUtil.isSysNightMode=isSysNightMode
 function ThemeUtil.refreshThemeColor()
   local array = context.getTheme().obtainStyledAttributes({
     android.R.attr.textColorTertiary,
-    android.R.attr.textColorPrimary,
+    android.R.attr.textColorPrimary,--普通文字色（黑白）
     android.R.attr.colorPrimary,
     android.R.attr.colorPrimaryDark,
-    android.R.attr.colorAccent,
-    android.R.attr.navigationBarColor,
-    android.R.attr.statusBarColor,
+    android.R.attr.colorAccent,--强调色
+    android.R.attr.navigationBarColor,--导航栏颜色
+    android.R.attr.statusBarColor,--状态栏颜色
     android.R.attr.colorButtonNormal,
-    android.R.attr.windowBackground,
+    android.R.attr.windowBackground,--背景颜色
     android.R.attr.textColorSecondary,
-    R.attr.rippleColorPrimary,
-    R.attr.rippleColorAccent,
-    R.attr.floatingActionButtonBackgroundColor,
-    R.attr.colorBackgroundFloating,
+    R.attr.rippleColorPrimary,--普通波纹（黑白）
+    R.attr.rippleColorAccent,--强调波纹
+    R.attr.floatingActionButtonBackgroundColor,--悬浮按钮背景
+    R.attr.colorBackgroundFloating,--悬浮的背景
     --R.attr.titleTextColor,
     --R.attr.subtitleTextColor,
   })
@@ -232,25 +233,31 @@ ThemeUtil.getAppTheme=getAppTheme
 
 --刷新UI
 function ThemeUtil.refreshUI()
-  local themeKey=getAppTheme()
-  local appTheme=Name2AppTheme[themeKey]
-  if isSysNightMode() then
-    themeKey="Dark"
+  local themeKey,appTheme
+  if isSysNightMode() then--系统是暗色模式
+    themeKey="Dark"--强制启动暗色模式
     appTheme=Name2AppTheme[themeKey]
-   elseif not(appTheme) then
-    themeKey="Default"
-    appTheme=Name2AppTheme[themeKey]
-    setAppTheme(themeKey)
+   else
+    themeKey=getAppTheme()--获取当前设置的主题
+    appTheme=Name2AppTheme[themeKey]--获取主题配置
+    if not(appTheme) then--主图里面没有，可能是废除了这个主题
+      themeKey="Default"
+      appTheme=Name2AppTheme[themeKey]
+      setAppTheme(themeKey)--自动设置会默认
+    end
   end
+
+  --构建用的主题名字
   local themeString=("Theme_%s_%s"):format(getSharedData("theme_type"),themeKey)
-  if getSharedData("theme_darkactionbar") then
+  if getSharedData("theme_darkactionbar") then--如果是暗色ActionBar
     themeString=themeString.."_DarkActionBar"
   end
-  if useCustomAppToolbar then
+  if useCustomAppToolbar then--使用自定义的ToolBar
     themeString=themeString.."_NoActionBar"
   end
-  activity.setTheme(R.style[themeString])
-  themeString=nil
+
+  activity.setTheme(R.style[themeString])--设置主题
+  themeString=nil--回收主题名字
 
   ThemeUtil.NowAppTheme=appTheme
   local systemUiVisibility=0
@@ -259,10 +266,11 @@ function ThemeUtil.refreshUI()
   end
   local colorList=theme.color
 
-  local actionBar=context.getSupportActionBar()
-  --local customElevation=getSharedData("customElevation")
-  if actionBar then
-    actionBar.setElevation(0)--关闭ActionBar阴影
+  if not(useCustomAppToolbar) then
+    local actionBar=context.getSupportActionBar()
+    if actionBar then
+      actionBar.setElevation(0)--关闭ActionBar阴影
+    end
   end
 
   ThemeUtil.refreshThemeColor()--刷新一下颜色

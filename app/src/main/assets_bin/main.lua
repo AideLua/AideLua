@@ -38,9 +38,10 @@ import "androidx.drawerlayout.widget.DrawerLayout"
 --import "com.google.android.material.navigation.NavigationView"
 import "com.google.android.material.tabs.TabLayout"
 
---import "com.mythoi.androluaj.editor.LuaEditorX"
---import "com.Jesse205.aidelua.MyCodeEditor"
---import "com.Jesse205.aidelua2.JavaEditor"
+import "com.bumptech.glide.request.RequestOptions"
+import "com.bumptech.glide.load.engine.DiskCacheStrategy"
+--import "com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions"
+
 import "com.nwdxlgzs.view.photoview.PhotoView"
 import "com.pixplicity.sharp.Sharp"
 
@@ -78,6 +79,7 @@ SdPath=ProjectUtil.SdPath--内部存储路径
 ProjectsPath=ProjectUtil.ProjectsPath--所有项目路径
 ProjectsFile=ProjectUtil.ProjectsFile
 LibsRelativePathMatch=ProjectUtil.LibsRelativePathMatch
+LibsRelativePathType=ProjectUtil.LibsRelativePathType
 
 --TemplatesPath=activity.getLuaDir("templates")--模版路径
 --LibrariesPath=activity.getLuaDir("libraries")--库路径

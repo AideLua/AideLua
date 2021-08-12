@@ -317,7 +317,7 @@ end
 local loadingFiles=false--正在加载文件列表
 function refresh(file,upFile,force)
   --recyclerView
-  if force or not(loadingFiles) then--既不是强制加载，也没有正在加载
+  if force or not(loadingFiles) then--强制加载或者没有正在加载
     if file and ProjectUtil.isSelfFile(file,NowDirectory or ProjectsFile) then
       NowDirectoryFilesList={}
     end
@@ -592,7 +592,11 @@ function openFile(file,reOpen,line)
      elseif fileType=="png" or fileType=="jpg" or fileType=="gif" then
       succeeded=true
       EditorUtil.switchEditor("PhotoView")--将编辑器切换为Lua编辑器
-      Glide.with(activity).load(filePath).into(NowEditor)
+      
+      local options=RequestOptions()
+      options.skipMemoryCache(true)--跳过内存缓存
+      options.diskCacheStrategy(DiskCacheStrategy.NONE)--不缓冲disk硬盘中
+      Glide.with(activity).load(filePath).apply(options).into(NowEditor)
       appBarLayout.setElevation(0)
 
      elseif fileType=="svg" then

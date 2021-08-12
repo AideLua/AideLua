@@ -12,4 +12,3 @@ permissionInformation={
     permissions={"android.permission.READ_PHONE_STATE"};
   },
 }
-welcomeMessage="我是一款依赖 Aide 的 Lua 编辑器"

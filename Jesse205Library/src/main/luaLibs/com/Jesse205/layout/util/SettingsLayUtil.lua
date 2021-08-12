@@ -1,4 +1,5 @@
 local SettingsLayUtil={}
+import "com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions"
 
 SettingsLayUtil.TITLE=1
 SettingsLayUtil.ITEM=2
@@ -341,6 +342,7 @@ function SettingsLayUtil.newAdapter(data,onItemClick)
          else
           Glide.with(activity)
           .load(icon)
+          .transition(DrawableTransitionOptions.withCrossFade())
           .into(iconView)
         end
       end

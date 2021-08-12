@@ -64,10 +64,12 @@
     <string name="file_close">关闭文件</string>
     
     <string name="directory">文件夹</string>
+    <string name="directory_go_popup">打开目录...</string>
     <string name="directory_create">新建文件夹</string>
     <string name="directory_name">文件夹名</string>
     
     <string name="project">项目</string>
+    <string name="project_root">项目根目录</string>
     <string name="project_popup">项目...</string>
     <string name="project_bin_run">打包运行</string>
     <string name="project_bin">二次打包</string>

@@ -1,11 +1,9 @@
---import "androidx.core.content.res.ResourcesCompat"
 
 appInfo={
   {
     name=R.string.app_name,
     message="依赖Aide的一款Lua编辑器",
     icon=R.mipmap.ic_launcher,
-    --typeface=ResourcesCompat.getFont(activity,R.font.app),
     click=function()
       openUrl("https://gitee.com/Jesse205/AideLua")
     end,
@@ -36,10 +34,6 @@ developers={
 openSourceLicenses=true
 
 qqGroups={
-  {
-    name="Edde 后台管理交流群",
-    id=586351981,
-  },
   {
     name="Aide Lua Bug测试群",
     id=680850455,
