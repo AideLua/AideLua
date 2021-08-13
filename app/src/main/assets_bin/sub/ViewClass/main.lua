@@ -131,7 +131,7 @@ listView.setAdapter(adp)
 listView.onItemClick=function(id,v,zero,one)
   local name=datas[one].name
   if NowPage==1 then
-    if name~=ClassString then
+    if name~=classString then
       newActivity("main",{name})
     end
     --[[
