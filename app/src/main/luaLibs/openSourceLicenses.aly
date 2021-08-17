@@ -21,9 +21,15 @@
     license="BSD, part MIT and Apache 2.0.",
     url="https://github.com/bumptech/glide"
   },
+--[[
   {
     name="JavaCompile",
     message="这是一款运行在Android 平台的Java编译器，它可以在你的设备上运行编译简单的Java程序，并且采用了树状结构目录，层次清晰明了。",
     url="https://github.com/xiaoyvyv/JavaCompile"
+  },]]
+  {
+    name="CodeEditor",
+    message="A cool and optimized code editor on Android platform with good performance and nice features.",
+    url="https://github.com/Rosemoe/CodeEditor"
   },
 }

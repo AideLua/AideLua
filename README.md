@@ -1,4 +1,5 @@
 # Aide Lua
+[![QQ](https://img.shields.io/badge/Join-QQ_Group-ff69b4)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
 ![icon](https://gitee.com/Jesse205/AideLua/raw/master/ic_cover-aidelua.png)
 
 ## 简介
@@ -19,13 +20,11 @@ Aide Lua 是一款依赖 Aide 的 Lua 编辑器
 [视频教程](https://b23.tv/nvVHoa)
 
 ### 一、配置AIDE
-  1.
+  1. 进入“设置-高级设置-工程相关”
 
-  2.
+  2. 关闭“启用alert调试文件”，打开“重定义Apk构建路径”
 
-  3.
-
-  4.
+  3. 重启AIDE
 
 ### 二、初次打包
   1. 在AideLua点击新建项目，在填写与选择完成后点击“新建”
@@ -44,6 +43,8 @@ Aide Lua 是一款依赖 Aide 的 Lua 编辑器
   3. AIDE最好关闭adrt调试文件
 
   4. 不是必须用AIDE编译，只不过用AIDE编译会更好一些
+
+## [引用的开源](https://gitee.com/Jesse205/AideLua/blob/master/app/src/main/luaLibs/openSourceLicenses.aly)
 
 ## 高级玩法
 .aidelua/config.lua用法

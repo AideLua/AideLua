@@ -179,22 +179,46 @@ editorFunc={
     if IsEdtor then
       local ids
       local idx=0
+      Searching=true
+      if NowEditorType=="CodeEditor" then
+        NowEditor.mStartedActionMode=1
+      end
       ids=SearchActionMode({
         onEditorAction=function(view,actionId,event)
           if event then
-            NowEditor.findNext(view.text)
+            if NowEditorType=="CodeEditor" then
+              NowEditor.getSearcher().search(text)
+              NowEditor.getSearcher().gotoNext()
+             else
+              NowEditor.findNext(text)
+            end
           end
         end,
         onTextChanged=function(text)
           application.set("editor_search_text",text)
+
+          if NowEditorType=="CodeEditor" then
+            NowEditor.getSearcher().search(tostring(text))
+          end
         end,
         onActionItemClicked=function(mode,item)
           local title=item.title
           if title==activity.getString(R.string.abc_searchview_description_search) then
-            NowEditor.findNext(ids.searchEdit.text)
+            local text=ids.searchEdit.text
+            if NowEditorType=="CodeEditor" then
+              NowEditor.getSearcher().search(text)
+              NowEditor.getSearcher().gotoNext()
+             else
+              NowEditor.findNext(text)
+            end
           end
         end,
         onDestroyActionMode=function(mode)
+          Searching=false
+          if NowEditorType=="CodeEditor" then
+            NowEditor.mStartedActionMode=0
+            NowEditor.getSearcher().stopSearch()
+          end
         end,
       })
       local searchContent=application.get("editor_search_text")
@@ -437,7 +461,12 @@ end
 
 --符号栏按钮点击时输入符号
 function psButtonClick(view)
-  NowEditor.paste(view.text)
+  if NowEditorType=="CodeEditor" then
+   showSnackBar("Editor not supported")
+--NowEditor.mConnection.commitText(view.text, 0)
+   else
+    NowEditor.paste(view.text)
+  end
 end
 
 --初始化符号栏按钮
@@ -576,7 +605,9 @@ function openFile(file,reOpen,line)
             NowEditor.setText(code)
             --listenFile(filePath)
           end
-          NowEditor.setSelection(line or activity.getSharedData("Selection"..file.getPath()) or 0)
+          if NowEditorType=="LuaEditor" then
+            NowEditor.setSelection(line or activity.getSharedData("Selection"..file.getPath()) or 0)
+          end
           local scroll=getSharedData("Scroll"..file.getPath())
           if scroll then
             NowEditor.setScrollY(scroll)
@@ -592,7 +623,7 @@ function openFile(file,reOpen,line)
      elseif fileType=="png" or fileType=="jpg" or fileType=="gif" then
       succeeded=true
       EditorUtil.switchEditor("PhotoView")--将编辑器切换为Lua编辑器
-      
+
       local options=RequestOptions()
       options.skipMemoryCache(true)--跳过内存缓存
       options.diskCacheStrategy(DiskCacheStrategy.NONE)--不缓冲disk硬盘中
@@ -693,7 +724,9 @@ function saveFile()
         if ioFile then
           ioFile:write(NowEditor.text)--写入文件
           ioFile:close()--关闭文件
-          setSharedData("Selection"..file.getPath(),NowEditor.getSelectionEnd())--保存光标位置
+          if NowEditorType=="LuaEditor" then
+            setSharedData("Selection"..file.getPath(),NowEditor.getSelectionEnd())--保存光标位置
+          end
           setSharedData("Scroll"..file.getPath(),NowEditor.getScrollY())--保存光标位置
           succeeded=true--已成功
          else--不存在文件
@@ -908,7 +941,7 @@ end
 
 local _clipboardActionMode=nil
 function onEditorSelectionChangedListener(view,status,start,end_)
-  if not(_clipboardActionMode) and status then
+  if not(_clipboardActionMode) and status and not(Searching) then
     local actionMode=luajava.new(ActionMode.Callback,
     {
       onCreateActionMode=function(mode,menu)
@@ -1013,6 +1046,7 @@ function refreshSymbolBar(state)
   end
 end
 
+--公共Activity
 function checkSharedActivity(name,update)
   local sdActivityPath=AppPath.LuaExtDir.."/"..name
   local sdActivityDir=File(sdActivityPath)
@@ -1024,4 +1058,14 @@ function checkSharedActivity(name,update)
     LuaUtil.copyDir(File(activity.getLuaDir("sub/"..name)),sdActivityDir)
   end
   return sdActivityPath.."/main.lua"
+end
+
+function editor2my(CodeEditor)
+  return function(context)
+    return luajava.override(CodeEditor,{
+      onKeyShortcut=function(super,keyCode,event)
+        return onKeyShortcut(keyCode,event)
+      end,
+    })
+  end
 end

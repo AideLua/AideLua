@@ -44,6 +44,9 @@ import "com.bumptech.glide.load.engine.DiskCacheStrategy"
 
 import "com.nwdxlgzs.view.photoview.PhotoView"
 import "com.pixplicity.sharp.Sharp"
+import "io.github.rosemoe.editor.widget.CodeEditor"
+import "io.github.rosemoe.editor.widget.schemes.SchemeDarcula"
+import "io.github.rosemoe.editor.widget.schemes.SchemeGitHub"
 
 import "com.Jesse205.layout.MyEditDialogLayout"
 import "com.Jesse205.app.actionmode.SearchActionMode"
@@ -85,6 +88,8 @@ LibsRelativePathType=ProjectUtil.LibsRelativePathType
 --LibrariesPath=activity.getLuaDir("libraries")--库路径
 
 --ProjectsPathLength=utf8.len(ProjectsPath)
+Searching=false
+
 NowFile=nil--已打开文件
 NowFileShowData=nil
 NowFileType=nil
@@ -149,14 +154,10 @@ lastBackTime=0
 
 SDK_INT=Build.VERSION.SDK_INT
 
-function MyLuaEditor(context)
-  local lastX=0
-  return luajava.override(LuaEditor,{
-    onKeyShortcut=function(super,keyCode,event)
-      return onKeyShortcut(keyCode,event)
-    end,
-  })
-end
+
+MyLuaEditor=editor2my(LuaEditor)
+MyCodeEditor=editor2my(CodeEditor)
+
 
 activity.setTitle(R.string.app_name)
 activity.setContentView(loadlayout("layout"))
@@ -166,14 +167,17 @@ actionBar.setDisplayHomeAsUpEnabled(true)
 
 EditorUtil.IsEditors={
   LuaEditor=true,
+  CodeEditor=true,
   PhotoView=false,
 }
 EditorUtil.Editors={
   LuaEditor=luaEditor,
+  CodeEditor=codeEditor,
   PhotoView=photoView,
 }
 EditorUtil.EditorsGroup={
   LuaEditor=luaEditorParent,
+  CodeEditor=codeEditorParent,
   PhotoView=photoViewParent,
 }
 EditorUtil.switchEditor("LuaEditor")
@@ -751,10 +755,10 @@ if notSafeModeEnable then
       content.onScrollChange=function(view,l,t,oldl,oldt)
         MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,appBarLayout)
       end
-      content.OnSelectionChangedListener=function(status,start,end_)
-        onEditorSelectionChangedListener(content,status,start,end_)
-      end
     end
+  end
+  luaEditor.OnSelectionChangedListener=function(status,start,end_)
+    onEditorSelectionChangedListener(luaEditor,status,start,end_)
   end
 
   --LuaEditor放大镜
@@ -809,6 +813,17 @@ if notSafeModeEnable then
   luaEditorParent.removeView(luaEditorProgressBar)
 end
 
+if ThemeUtil.NowAppTheme.night then
+  codeEditor.setColorScheme(SchemeDarcula())
+ else
+  codeEditor.setColorScheme(SchemeGitHub())
+end
+local fontFile=File(LuaApplication.getInstance().getLuaExtDir("fonts"), "default.ttf")
+if fontFile.exists() then
+  codeEditor.setTypefaceText(Typeface.createFromFile(fontFile))
+  else
+  codeEditor.setTypefaceText(Typeface.MONOSPACE)
+end
 
 refreshSymbolBar(oldEditorSymbolBar)
 
@@ -854,6 +869,9 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
   end,
 })
 --screenConfigDecoder.device="phone"--默认为手机
+
+
+
 
 onConfigurationChanged(activity.getResources().getConfiguration())
 if drawerOpened==nil then
