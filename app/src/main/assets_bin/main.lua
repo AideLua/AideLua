@@ -673,13 +673,15 @@ if notSafeModeEnable then
            elseif packageType=="userdata" then
             local inserted={}
             local class=packageTable.getClass()
-            for index,content in ipairs(luajava.astable(class.getMethods())) do
-              local name=content.getName()
-              if not(inserted[name]) then
-                inserted[name]=true
-                table.insert(methods,name)
+            pcall(function()
+              for index,content in ipairs(luajava.astable(class.getMethods())) do
+                local name=content.getName()
+                if not(inserted[name]) then
+                  inserted[name]=true
+                  table.insert(methods,name)
+                end
               end
-            end
+            end)
           end
           lang.a(package,methods)
         end
@@ -821,7 +823,7 @@ end
 local fontFile=File(LuaApplication.getInstance().getLuaExtDir("fonts"), "default.ttf")
 if fontFile.exists() then
   codeEditor.setTypefaceText(Typeface.createFromFile(fontFile))
-  else
+ else
   codeEditor.setTypefaceText(Typeface.MONOSPACE)
 end
 
