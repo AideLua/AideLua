@@ -287,7 +287,7 @@ return function(data,item)
           data.fileName=fileName
          else
           local config=ReBuildTool.getConfigByProjectDir(filePath)
-          data.aideluaDir=aideluaDir
+          --data.aideluaDir=aideluaDir
           data.config=config
           local iconView=tag.icon
           local iconUrl=getProjectIconForGlide(filePath,config)

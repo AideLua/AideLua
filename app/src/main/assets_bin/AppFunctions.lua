@@ -462,8 +462,8 @@ end
 --符号栏按钮点击时输入符号
 function psButtonClick(view)
   if NowEditorType=="CodeEditor" then
-   showSnackBar("Editor not supported")
---NowEditor.mConnection.commitText(view.text, 0)
+    showSnackBar("Editor not supported")
+    --NowEditor.mConnection.commitText(view.text, 0)
    else
     NowEditor.paste(view.text)
   end
@@ -842,10 +842,7 @@ function openProject(projectDirectory,file)
     end
   end
 
-  AppName=activity.getString(R.string.unknown)
-  if configFile.isFile() then
-    AppName=config.appName
-  end
+  AppName=config.appname or activity.getString(R.string.unknown)
 
   --弹出提示
   --showSnackBar(formatResStr(R.string.project_open_toast,{appName}))
@@ -1048,7 +1045,7 @@ end
 
 --公共Activity
 function checkSharedActivity(name,update)
-  local sdActivityPath=AppPath.LuaExtDir.."/"..name
+  local sdActivityPath=AppPath.LuaSharedDir.."/activities/"..name
   local sdActivityDir=File(sdActivityPath)
   local exists=sdActivityDir.exists()
   if not(exists) or update then
