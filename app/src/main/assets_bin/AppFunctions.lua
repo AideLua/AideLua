@@ -67,7 +67,7 @@ editorFunc={
   end,
   format=function()
     if IsEdtor then
-      if (NowFileType=="lua" or NowFileType=="aly") then
+      if (NowFileType=="lua" or NowFileType=="aly" or not(NowFileType)) then
         NowEditor.format()
         return true
         --[[

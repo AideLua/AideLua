@@ -301,7 +301,7 @@ return function(data,item)
           end
           tag.title.setText(config.appName or unknowString)
           tag.message.setText(config.packageName or unknowString)
-          data.title=config.appName
+          data.title=config.appName or unknowString
           data.action="openProject"
         end
       end

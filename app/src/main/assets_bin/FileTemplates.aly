@@ -8,7 +8,7 @@ import "android.os.*"
 import "android.widget.*"
 import "android.view.*"
 
---activity.setTitle('AndroLua+')
+--activity.setTitle("Aide Lua")
 activity.setTheme(R.style.AppTheme)
 activity.setContentView(loadlayout("layout"))
 actionBar=activity.getActionBar()
@@ -39,7 +39,7 @@ import "android.view.*"
 
 import "androidx.coordinatorlayout.widget.CoordinatorLayout"
 
---activity.setTitle('AndroLua+')
+--activity.setTitle("Aide Lua")
 --activity.setTheme(R.style.AppTheme)
 activity.setContentView(loadlayout("layout"))
 actionBar=activity.getSupportActionBar()
