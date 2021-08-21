@@ -842,13 +842,10 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
       largeMainLay.removeView(mainEditorLay)
       drawer.addView(mainEditorLay)
       drawer.addView(drawerChild)
-      largeDrawerLay.setLayoutTransition(LDLayoutTransition)
-      largeMainLay.setLayoutTransition(LMLlayoutTransition)
 
       local linearParams=drawerChild.getLayoutParams()
       linearParams.gravity=Gravity.LEFT
       drawerChild.setLayoutParams(linearParams)
-      largeMainLay.setLayoutTransition(LMLlayoutTransition)
 
       if drawerOpened then
         task(50,function()
@@ -861,6 +858,9 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
         drawerOpened=false
       end
       drawerChild.setVisibility(View.VISIBLE)
+
+      largeDrawerLay.setLayoutTransition(LDLayoutTransition)
+      largeMainLay.setLayoutTransition(LMLlayoutTransition)
      elseif oldDevice=="phone" then--切换为平板或电脑时
       local LDLayoutTransition,LMLlayoutTransition=largeDrawerLay.getLayoutTransition(),largeMainLay.getLayoutTransition()
       largeDrawerLay.setLayoutTransition(nil)
@@ -879,6 +879,9 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
        else
         drawerChild.setVisibility(View.GONE)
       end
+
+      largeDrawerLay.setLayoutTransition(LDLayoutTransition)
+      largeMainLay.setLayoutTransition(LMLlayoutTransition)
     end
   end,
 })
