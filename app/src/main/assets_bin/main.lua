@@ -832,21 +832,27 @@ refreshSymbolBar(oldEditorSymbolBar)
 screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
   onDeviceChanged=function(device,oldDevice)
     if device=="phone" then--切换为手机时
+      local LDLayoutTransition,LMLlayoutTransition=largeDrawerLay.getLayoutTransition(),largeMainLay.getLayoutTransition()
+      largeDrawerLay.setLayoutTransition(nil)
+      largeMainLay.setLayoutTransition(nil)
+
       largeDrawerLay.removeView(drawerChild)
       largeMainLay.removeView(mainEditorLay)
-      task(500,function()
-        --print(mainEditorLay.parent)
-        drawer.addView(mainEditorLay)
-        drawer.addView(drawerChild)
-        local linearParams=drawerChild.getLayoutParams()
-        linearParams.gravity=Gravity.LEFT
-        drawerChild.setLayoutParams(linearParams)
-        if drawerOpened then
-          task(50,function()
-            drawer.openDrawer(Gravity.LEFT)
-          end)
-        end
-      end)
+      drawer.addView(mainEditorLay)
+      drawer.addView(drawerChild)
+      largeDrawerLay.setLayoutTransition(LDLayoutTransition)
+      largeMainLay.setLayoutTransition(LMLlayoutTransition)
+
+      local linearParams=drawerChild.getLayoutParams()
+      linearParams.gravity=Gravity.LEFT
+      drawerChild.setLayoutParams(linearParams)
+      largeMainLay.setLayoutTransition(LMLlayoutTransition)
+
+      if drawerOpened then
+        task(50,function()
+          drawer.openDrawer(Gravity.LEFT)
+        end)
+      end
       largeMainLay.setVisibility(View.GONE)
       drawer.setVisibility(View.VISIBLE)
       if drawerOpened==nil then
@@ -854,6 +860,10 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
       end
       drawerChild.setVisibility(View.VISIBLE)
      elseif oldDevice=="phone" then--切换为平板或电脑时
+      local LDLayoutTransition,LMLlayoutTransition=largeDrawerLay.getLayoutTransition(),largeMainLay.getLayoutTransition()
+      largeDrawerLay.setLayoutTransition(nil)
+      largeMainLay.setLayoutTransition(nil)
+
       drawer.removeView(mainEditorLay)
       drawer.removeView(drawerChild)
       largeDrawerLay.addView(drawerChild)
