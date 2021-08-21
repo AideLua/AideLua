@@ -436,11 +436,11 @@ function onResume()
     or oldDarkActionBar~=getSharedData("theme_darkactionbar")
     or oldRichAnim~=getSharedData("richAnim")
     then
+    activity.finish()
     local intent=Intent(activity,Main)
     activity.startActivity(intent)
     local aRanim=android.R.anim
     activity.overridePendingTransition(aRanim.fade_in,aRanim.fade_out)
-    activity.finish()
     return
   end
   if magnifier then--刷新放大镜状态

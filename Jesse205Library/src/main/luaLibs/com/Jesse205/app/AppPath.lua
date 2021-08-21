@@ -12,7 +12,7 @@ AppPath.Sdcard=Environment.getExternalStorageDirectory().getPath()--在SD卡中�
 AppPath.Temp=context.getLuaExtDir("temp")--临时目录
 
 local function getSelfPublicPath(value)
-  return Environment.getExternalStoragePublicDirectory(value).getPath().."/"..appName
+  return Environment.getExternalStoragePublicDirectory(value).getPath().."/Edde software/"..appName
 end
 
 AppPath.Downloads=getSelfPublicPath(Environment.DIRECTORY_DOWNLOADS)
@@ -23,6 +23,7 @@ AppPath.Music=getSelfPublicPath(Environment.DIRECTORY_MUSIC)
 
 AppPath.LuaDir=context.getLuaDir()
 AppPath.LuaExtDir=context.getLuaExtDir()
+AppPath.LuaSharedDir=AppPath.Downloads.."/.shared"
 AppPath.AppSdcardDataDir=AppPath.LuaExtDir
 
 return AppPath

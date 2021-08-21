@@ -842,7 +842,7 @@ function openProject(projectDirectory,file)
     end
   end
 
-  AppName=config.appname or activity.getString(R.string.unknown)
+  AppName=config.appName or activity.getString(R.string.unknown)
 
   --弹出提示
   --showSnackBar(formatResStr(R.string.project_open_toast,{appName}))
