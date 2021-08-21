@@ -437,7 +437,9 @@ function onResume()
     or oldRichAnim~=getSharedData("richAnim")
     then
     local aRanim=android.R.anim
-    newActivity("main",aRanim.fade_in,aRanim.fade_out)
+    --newActivity("main",aRanim.fade_in,aRanim.fade_out)
+    local intent=Intent(activity,Main)
+    activity.startActivity(intent)
     activity.finish()
     return
   end

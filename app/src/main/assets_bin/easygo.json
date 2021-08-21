@@ -15,10 +15,6 @@
                         "to": "*"
                     },
                     {
-                        "from": "com.androlua.LuaActivity",
-                        "to": "*"
-                    },
-                    {
                         "from": "com.androlua.LuaActivityX",
                         "to": "*"
                     }
