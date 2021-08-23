@@ -117,6 +117,7 @@
     elevation="4dp";
     radius=0;
     layout_height="40dp";
+    layoutTransition=newLayoutTransition();
     {
       HorizontalScrollView;
       horizontalScrollBarEnabled=false;
@@ -132,6 +133,5 @@
         id="ps_bar";
       };
     };
-
   };
 };

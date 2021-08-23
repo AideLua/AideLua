@@ -4,7 +4,7 @@ function string.split(self,str)
   local strLen=#str
   return function()
     local i=self:find(str,idx)
-    if idx>=length then
+    if idx>length then
       return nil
     end
     if i==nil then

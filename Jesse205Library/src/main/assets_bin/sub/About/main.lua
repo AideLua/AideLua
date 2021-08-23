@@ -244,6 +244,7 @@ recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
     end
   end
 })
+
 recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
   onGlobalLayout=function()
     if activity.isFinishing() then

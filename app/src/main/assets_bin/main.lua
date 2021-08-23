@@ -1,7 +1,7 @@
 require "import"
 initApp=true
 --useCustomAppToolbar=true
-import "Jesse205"
+require "Jesse205"
 import "agreements"
 
 welcomeAgain=not(getSharedData("welcome"))
@@ -644,8 +644,7 @@ pathsTabLay.addOnTabSelectedListener(TabLayout.OnTabSelectedListener({
 }))
 
 
-
---application.set("luaeditor_initialized",false)--强制初始化编辑器
+--}application.set("luaeditor_initialized",false)--强制初始化编辑器
 --设置编辑器
 if notSafeModeEnable then
   safeModeText.setVisibility(View.GONE)
@@ -656,11 +655,11 @@ if notSafeModeEnable then
     activity.newTask(function()
       require "import"
       notLoadTheme=true
-      import "Jesse205"
+      require "Jesse205"
       import "androidApis.editor.androluaApis"
       import "androidApis.editor.systemApis"
       import "androidApis.editor.androidxApis"
-      import "EditorKeyWords"
+      require "EditorKeyWords"--关键字
 
       local namesCheck={}
 
@@ -727,7 +726,14 @@ if notSafeModeEnable then
       addPackages(lang,{"activity","application","LuaUtil","android","R"})
 
       if activity.getSharedData("Jesse205Lib_Highlight") then--添加杰西205库
-        for index,content in ipairs(Jesse205.APIS) do
+        import "Jesse205Apis"
+        for index,content in ipairs(Jesse205Apis) do
+          if not(namesCheck[content]) then
+            table.insert(names,content)
+            namesCheck[content]=true
+          end
+        end
+        for index,content in ipairs(StyleWidget.types) do
           if not(namesCheck[content]) then
             table.insert(names,content)
             namesCheck[content]=true

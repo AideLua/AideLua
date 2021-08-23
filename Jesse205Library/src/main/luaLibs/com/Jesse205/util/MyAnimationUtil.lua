@@ -85,14 +85,14 @@ end
 ]]
 MyAnimationUtil.ActionBar={}
 function MyAnimationUtil.ActionBar.openElevation(actionBar)
-  ObjectAnimator.ofFloat(actionBar or MyAnimationUtil.actionBar, "elevation", {theme.number.actionBarElevation})
+  return ObjectAnimator.ofFloat(actionBar or MyAnimationUtil.actionBar, "elevation", {theme.number.actionBarElevation})
   .setDuration(200)
   .setInterpolator(DecelerateInterpolator())
   .start()
 end
 
 function MyAnimationUtil.ActionBar.closeElevation(actionBar)
-  ObjectAnimator.ofFloat(actionBar or MyAnimationUtil.actionBar, "elevation", {0})
+  return ObjectAnimator.ofFloat(actionBar or MyAnimationUtil.actionBar, "elevation", {0})
   .setDuration(200)
   .setInterpolator(AccelerateInterpolator())
   .start()

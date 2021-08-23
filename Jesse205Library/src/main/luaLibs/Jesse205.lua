@@ -1,67 +1,8 @@
 local Jesse205={}
 _G.Jesse205=Jesse205
-Jesse205._VERSION="9.0.5(Pro)"
-Jesse205._VERSIONCODE=90599
+Jesse205._VERSION="9.0.6(Pro)"
+Jesse205._VERSIONCODE=90699
 Jesse205._ENV=_ENV
-local APIS={
-  --一些标识
-  "initApp",
-  "notLoadTheme",
-  "useCustomAppToolbar",
-  "resources",
-  "application",
-  "inputMethodService",
-  "notLoadTheme",
-  "darkStatusBar",
-  "darkNavigationBar",
-  "window",
-  "safeModeEnable",
-  "notSafeModeEnable",
-  "decorView",
-
-  "ThemeUtil",
-  "theme",
-  "formatResStr",
-  "autoSetToolTip",
-  "showLoadingDia",
-  "closeLoadingDia",
-  "getNowLoadingDia",
-  "showErrorDialog",
-  "toboolean",
-  "rel2AbsPath",
-  "copyText",
-  "newSubActivity",
-  "isDarkColor",
-  "openInBrowser",
-  "openUrl",
-
-  "AppPath",
-  "ThemeUtil",
-  "EditDialogBuilder",
-  "ImageDialogBuilder",
-  "NetErrorStr",
-  "MyToast",
-  "AutoToolbarLayout",
-  "AutoCollapsingToolbarLayout",
-  "SettingsLayUtil",
-  "Jesse205",
-
-  "MyTextInputLayout",
-  "MyTitleEditLayout",
-  "MyEditDialogLayout",
-  "MyTipLayout",
-  "MySearchLayout",
-  "MyAnimationUtil",
-  "MyStyleUtil",
-
-  "MyLuaMultiAdapter",
-  "MyLuaAdapter",
-  "LuaCustRecyclerAdapter",
-  "LuaCustRecyclerHolder",
-  "AdapterCreator",
-
-}
-Jesse205.APIS=APIS
 
 require "import"--导入import
 local context=activity or service--当前context
@@ -69,7 +10,7 @@ resources=context.getResources()--当前resources
 
 if activity then
   window=activity.getWindow()
- elseif notLoadTheme==nil then
+ else--没有activity不加载主题
   notLoadTheme=true
 end
 
@@ -84,7 +25,6 @@ local activity2luaApi={
   "getSharedData","setSharedData",
 }
 for index,content in ipairs(activity2luaApi) do
-  table.insert(APIS,content)--向APIS添加名称
   _G[content]=function(...)
     return context[content](...)
   end
@@ -323,20 +263,17 @@ function getNowLoadingDia()
   return loadingDia
 end
 
-function showErrorDialog(title,err)
+function showDialog(title,err)
   return AlertDialog.Builder(context)
   .setTitle(title)
   .setMessage(err)
   .setPositiveButton(android.R.string.ok,nil)
   .show()
 end
+showErrorDialog=showDialog
 
-for index,content in ipairs(StyleWidget.types) do
-  table.insert(APIS,content)
-end
 
 --导入共享代码
 import "AppSharedCode"
-
 
 return Jesse205
