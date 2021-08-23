@@ -22,107 +22,63 @@ function deleteFileDialog(name,file)
 end
 
 function createDirsDialog(nowDir)--创建文件夹对话框
-  local ids={}
-  local dia=AlertDialog.Builder(this)
-  .setTitle(R.string.directory_create)
-  .setView(MyEditDialogLayout.load(nil,ids))
-  .setPositiveButton(R.string.create,nil)
-  .setNegativeButton(android.R.string.no,nil)
-  .show()
-
-  local edit,editLay=ids.edit,ids.editLay
-  edit.requestFocus()--输入框取得焦点
-  editLay.setHint(activity.getString(R.string.directory_name))
-  edit.addTextChangedListener({
-    onTextChanged=function(text,start,before,count)
-      text=tostring(text)
-      if text=="" then--文件夹名不能为空
-        editLay
-        .setError(cannotBeEmptyStr)
-        .setErrorEnabled(true)
-        return
-      end
-      editLay.setErrorEnabled(false)
+  local builder
+  builder=EditDialogBuilder(activity)
+  :setTitle(R.string.directory_create)
+  :setHint(R.string.directory_name)
+  :setAllowNull(false)
+  :setPositiveButton(R.string.create,function(dialog,text)
+    local editLay=builder.ids.editLay
+    local err
+    local fileName=text
+    local filePath=rel2AbsPath(fileName,nowDir.getPath())
+    local file=File(filePath)
+    if file.exists() then--文件不能存在
+      editLay
+      .setError(existsStr)
+      .setErrorEnabled(true)
+      return true
     end
-  })
-  local function create()
-    local editLay=ids.editLay
-    local edit=ids.edit
-
+    editLay.setErrorEnabled(false)
     xpcall(function()
-      local err
-      local fileName=edit.text
-      if fileName=="" then--文件夹名不能为空
-        editLay
-        .setError(cannotBeEmptyStr)
-        .setErrorEnabled(true)
-        return
-      end
-      local filePath=rel2AbsPath(fileName,nowDir.getPath())
-      local file=File(filePath)
-      if file.exists() then--文件不能存在
-        editLay
-        .setError(existsStr)
-        .setErrorEnabled(true)
-        return
-      end
-      editLay.setErrorEnabled(false)
       file.mkdirs()
       showSnackBar(R.string.create_success)
       refresh(nowDir)
-      dia.dismiss()
+      dialog.dismiss()
     end,
     function(err)
       showErrorDialog(R.string.create_failed,err)
+      return true
     end)
-  end
-  dia.getButton(AlertDialog.BUTTON_POSITIVE).onClick=create
-  ids.edit.onEditorAction=create
+  end,true,true)
+  :setNegativeButton(android.R.string.no,nil)
+  builder:show()
 end
 
 function renameDialog(file)--重命名对话框
-  local ids={}
-  local dia=AlertDialog.Builder(this)
-  .setTitle(R.string.rename)
-  .setView(MyEditDialogLayout.load(nil,ids))
-  .setPositiveButton(R.string.rename,nil)
-  .setNegativeButton(android.R.string.no,nil)
-  .show()
-
-  local edit,editLay=ids.edit,ids.editLay
-  edit.requestFocus()--输入框取得焦点
   local fileName=file.getName()
   local parentFile=file.getParentFile()
 
-  editLay.setHint(activity.getString(R.string.name))
-  edit.addTextChangedListener({
-    onTextChanged=function(text,start,before,count)
-      text=tostring(text)
-      if text=="" then--文件名不能为空
-        editLay
-        .setError(cannotBeEmptyStr)
-        .setErrorEnabled(true)
-        return
-      end
-      editLay.setErrorEnabled(false)
+  local builder
+  builder=EditDialogBuilder(activity)
+  :setTitle(R.string.rename)
+  :setText(fileName)
+  :setHint(R.string.name)
+  :setAllowNull(false)
+  :setPositiveButton(R.string.rename,function(dialog,text)
+    local editLay=builder.ids.editLay
+    local err
+    local newName=text
+    local newFilePath=rel2AbsPath(newName,parentFile.getPath())
+    local newFile=File(newFilePath)
+    if newFile.exists() then--文件不能存在
+      editLay
+      .setError(existsStr)
+      .setErrorEnabled(true)
+      return true
     end
-  })
-
-  local function rename()
-    local editLay=ids.editLay
-    local edit=ids.edit
-
+    editLay.setErrorEnabled(false)
     xpcall(function()
-      local err
-      local newName=edit.text
-      if newName=="" then--文件名不能为空
-        editLay
-        .setError(cannotBeEmptyStr)
-        .setErrorEnabled(true)
-        return
-      end
-      editLay.setErrorEnabled(false)
-      local newFilePath=rel2AbsPath(newName,parentFile.getPath())
       local oldFilePath=file.getPath()
       local lowerOldFilePath=string.lower(oldFilePath)
       os.rename(oldFilePath, newFilePath)
@@ -149,18 +105,18 @@ function renameDialog(file)--重命名对话框
 
       showSnackBar(R.string.rename_success)
       refresh(parentFile)
-      dia.dismiss()
     end,
     function(err)
       showErrorDialog(R.string.rename_fail,err)
+      return true
     end)
-  end
-  dia.getButton(AlertDialog.BUTTON_POSITIVE).onClick=rename
-  edit.onEditorAction=rename
-  edit.text=fileName
+  end,true,true)
+  :setNegativeButton(android.R.string.no,nil)
+  builder:show()
   local _,splitEnd=utf8.find(fileName,".+%.")
   if splitEnd then
     splitEnd=splitEnd-1
   end
-  edit.setSelection(0,splitEnd or utf8.len(fileName))
+  builder.ids.edit.setSelection(0,splitEnd or utf8.len(fileName))
+
 end

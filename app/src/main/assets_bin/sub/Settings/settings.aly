@@ -74,6 +74,17 @@
   };
   {
     SettingsLayUtil.ITEM;
+    icon=R.drawable.ic_folder_cog_outline;
+    title=R.string.projects_path;
+    key="projectsDir";
+    summary=getSharedData("projectsDir");
+    action="editString";
+    hint=R.string.projects_path;
+    helperText=R.string.settings_needRestart;
+    allowNull=false;
+  };
+  {
+    SettingsLayUtil.ITEM;
     icon=R.drawable.ic_information_outline;
     title=R.string.Jesse205_about;
     summary=formatResStr(R.string.Jesse205_nowVersion_full,{PackInfo.versionName,PackInfo.versionCode});

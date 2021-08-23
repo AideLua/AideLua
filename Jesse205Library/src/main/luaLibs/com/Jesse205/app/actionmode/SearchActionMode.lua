@@ -2,7 +2,7 @@ import "android.view.inputmethod.InputMethodManager"
 import "com.Jesse205.layout.MyTitleEditLayout"
 return function(config)
   local config=config or {}
-  local inputMethodService=activity.getSystemService(Context.INPUT_METHOD_SERVICE)
+  --local inputMethodService=activity.getSystemService(Context.INPUT_METHOD_SERVICE)
   local ids={}
   local actionMode=luajava.new(ActionMode.Callback,
   {

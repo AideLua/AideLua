@@ -2,7 +2,7 @@ require "import"
 import "Jesse205"
 
 import "com.Jesse205.layout.util.SettingsLayUtil"
-import "com.Jesse205.app.ImageDialogBuilder"
+import "com.Jesse205.app.dialog.ImageDialogBuilder"
 import "appAboutInfo"
 import "agreements"
 

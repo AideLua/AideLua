@@ -95,6 +95,7 @@
     <string name="project_appSubtitle_380dp">Prj: %1$s</string>
     <string name="project_appSubtitle_390dp">Project: %1$s</string>
     <string name="project_close">Close project</string>
+    <string name="projects_path">Projects path</string>
     
     <string name="binpoject_loading">Packing...</string>
     <string name="binpoject_creating_variables">Creating variables</string>
@@ -145,6 +146,7 @@
     <string name="settings_editor_magnify_summary">Only valid for Android 9 and above</string>
     <string name="settings_editor_symbolNar">Symbol bar</string>
     <string name="settings_tab_icon">File icon</string>
+    <string name="settings_needRestart">Restart and take effect after modification</string>
     
     <string name="window_openNew">Open a new window</string>
     <string name="window_openInNewWindow">Open in a new window</string>

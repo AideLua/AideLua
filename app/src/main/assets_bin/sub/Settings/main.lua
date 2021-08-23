@@ -3,6 +3,7 @@ import "Jesse205"
 
 import "com.Jesse205.layout.util.SettingsLayUtil"
 import "com.Jesse205.layout.innocentlayout.RecyclerViewLayout"
+import "com.Jesse205.app.dialog.EditDialogBuilder"
 
 PackInfo=activity.PackageManager.getPackageInfo(activity.getPackageName(),64)
 
@@ -54,6 +55,10 @@ function onItemClick(view,views,key,data)
     newSubActivity("About")
    elseif key=="theme_darkactionbar" then
     reloadActivity(view)
+   else
+    if data.action=="editString" then
+      EditDialogBuilder.settingDialog(adp,views,key,data)
+    end
   end
 end
 

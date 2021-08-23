@@ -10,7 +10,7 @@ BaseTemplateConfig=getConfigFromFile(BaseTemplateDirPath.."/config.lua")
 
 NotAllowStr={"/","\\",":","*","\"","<",">","|","?","%."}--不允许出现的文字
 
-ProjectsPath=AppPath.Sdcard.."/AppProjects"
+ProjectsPath=getSharedData("projectsDir")
 AndroluaVersion=nil
 --[[
 OpenedCLibs=getSharedData("newproject_openedCLibs") or {}

@@ -44,7 +44,7 @@ EditorUtil.TextFileType2EditorLanguage={
   --lua=LuaLanguage.getInstance(),
   --aly=LuaLanguage.getInstance(),
   --xml=LanguageXML.getInstance(),
- 
+
   html=HTMLLanguage(),
   xml=JavaLanguage(),
   py=PythonLanguage(),
@@ -52,7 +52,8 @@ EditorUtil.TextFileType2EditorLanguage={
   java=JavaLanguage(),
   txt=EmptyLanguage(),
   gradle=EmptyLanguage(),
-  bat=EmptyLanguage()
+  bat=EmptyLanguage(),
+  html=HTMLLanguage(),
 }
 
 function EditorUtil.switchEditor(editorType,language)
@@ -67,7 +68,7 @@ function EditorUtil.switchEditor(editorType,language)
       if language then
         xpcall(function()
           if editorType=="CodeEditor" then
-          editor.setEditorLanguage(language)
+            editor.setEditorLanguage(language)
           end
         end,
         function(err)

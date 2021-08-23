@@ -103,7 +103,7 @@ end
 local function buildProject_callback(success,apkPath,projectDir,install)
   closeLoadingDia()
   if success==true then
-    local shortApkPath=activity.getString(R.string.project).."/"..ProjectUtil.shortPath(apkPath,true,projectDir)--转换成相对路径
+    local shortApkPath=activity.getString(R.string.project)..ProjectUtil.shortPath(apkPath,true,projectDir)--转换成相对路径
     if install then
       activity.installApk(apkPath)
       showSnackBar(formatResStr(R.string.binpoject_state_succeed,{shortApkPath}))

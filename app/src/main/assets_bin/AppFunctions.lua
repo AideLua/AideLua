@@ -128,7 +128,7 @@ editorFunc={
           if config.packageName then--如果可以使用另一个他自己打开就是用他自己，不能的话使用IDE
             local success,err=pcall(function()
               local intent=Intent(Intent.ACTION_VIEW,Uri.parse(projectMainPath))
-              local componentName=ComponentName(config.packageName,"com.androlua.LuaActivity")
+              local componentName=ComponentName(config.packageName,config.debugActivity or "com.androlua.LuaActivity")
               intent.setComponent(componentName)
               activity.startActivity(intent)
             end)
@@ -296,10 +296,17 @@ end
 
 function refreshPathsTab(path)
   local pathNames={}
-  local rootPath=ProjectsPath
+  local rootPath
+  if String(path).startsWith("/") then
+    rootPath="/"
+   else
+    rootPath=ProjectsPath
+  end
   for name in string.split(path,"/") do
-    rootPath=rootPath.."/"..name
-    table.insert(pathNames,{name,rootPath})
+    if name~="" then
+      rootPath=rootPath.."/"..name
+      table.insert(pathNames,{name,rootPath})
+    end
   end
   local maxTab=table.maxn(pathNames)
   local scrolled=pathsTabLay.getScrollX()
@@ -346,6 +353,9 @@ function refresh(file,upFile,force)
       NowDirectoryFilesList={}
     end
     file=file or NowDirectory or ProjectsFile--增强兼容性
+    if file.getPath()=="/" then
+      file=ProjectsFile
+    end
     swipeRefresh.setRefreshing(true)
     loadingFiles=true--正在加载列表
 
@@ -420,7 +430,7 @@ function refresh(file,upFile,force)
           closeProject()
          else
           pathsTabLay.setVisibility(View.VISIBLE)
-          refreshPathsTab(shortPath(nowPath,true,ProjectsPath))
+          refreshPathsTab(shortPath(nowPath,true,ProjectsPath.."/"))
         end
       end
 
@@ -657,7 +667,7 @@ function openFile(file,reOpen,line)
       end
       --setActiveFileItem(FilesDataList[filePath],true)--设置文件列表高亮
 
-      local shortFilePath=shortPath(file.getPath(),true,ProjectsPath)
+      local shortFilePath=shortPath(file.getPath(),true,ProjectsPath.."/")
 
       refreshMenusState()
       setSharedData("openedfilepath_"..NowProjectDirectory.getName(),file.getPath())--保存已打开文件路径
@@ -816,7 +826,7 @@ function openProject(projectDirectory,file)
   local configFile=File(configPath)
   local config=ReBuildTool.getConfigByFilePath(configPath)
   local mainFolder=ReBuildTool.getMainProjectDirByConfig(projectPath,config)
-  local openedFilePath=getSharedData("openedfilepath_"..projectDirectory.getName())
+  local openedFilePath=getSharedData("openedfilepath_"..projectPath)
   local openedFileFile
   if openedFilePath then
     openedFileFile=File(openedFilePath)

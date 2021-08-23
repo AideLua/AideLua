@@ -50,6 +50,7 @@ import "io.github.rosemoe.editor.widget.schemes.SchemeGitHub"
 
 import "com.Jesse205.layout.MyEditDialogLayout"
 import "com.Jesse205.app.actionmode.SearchActionMode"
+import "com.Jesse205.app.dialog.EditDialogBuilder"
 import "com.Jesse205.util.FileUtil"
 import "com.Jesse205.util.ScreenFixUtil"
 
@@ -435,6 +436,7 @@ function onResume()
     or oldTheme~=ThemeUtil.getAppTheme()
     or oldDarkActionBar~=getSharedData("theme_darkactionbar")
     or oldRichAnim~=getSharedData("richAnim")
+    or ProjectsPath~=getSharedData("projectsDir")
     then
     activity.finish()
     local intent=Intent(activity,Main)

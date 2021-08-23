@@ -1,7 +1,7 @@
 local Jesse205={}
 _G.Jesse205=Jesse205
-Jesse205._VERSION="9.0.1(Pro)"
-Jesse205._VERSIONCODE=90199
+Jesse205._VERSION="9.0.3(Pro)"
+Jesse205._VERSIONCODE=90399
 Jesse205._ENV=_ENV
 local APIS={
   --一些标识
@@ -10,6 +10,7 @@ local APIS={
   "useCustomAppToolbar",
   "resources",
   "application",
+  "inputMethodService",
   "notLoadTheme",
   "darkStatusBar",
   "darkNavigationBar",
@@ -36,6 +37,8 @@ local APIS={
 
   "AppPath",
   "ThemeUtil",
+  "EditDialogBuilder",
+  "ImageDialogBuilder",
   "NetErrorStr",
   "MyToast",
   "AutoToolbarLayout",
@@ -153,6 +156,7 @@ import "android.widget.*"
 import "android.app.*"
 import "android.os.*"
 import "android.view.*"
+import "android.view.inputmethod.InputMethodManager"
 --import "android.content.*"
 --import "android.graphics.*"
 
@@ -223,6 +227,8 @@ import "com.bumptech.glide.Glide"--导入Glide
 pcall(function()
   import "com.baidu.mobstat.StatService"--百度移动统计
 end)
+
+inputMethodService=activity.getSystemService(Context.INPUT_METHOD_SERVICE)
 
 --复制文字
 function copyText(text)

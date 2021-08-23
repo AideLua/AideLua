@@ -1,4 +1,5 @@
 import "android.os.Build"
+import "android.os.Environment"
 local SDK_INT=Build.VERSION.SDK_INT
 if getSharedData("richAnim")==nil then
   if SDK_INT>=28 then
@@ -29,4 +30,8 @@ end
 
 if getSharedData("newproject_AndroluaVersion")==nil then
   setSharedData("newproject_AndroluaVersion","1.0(5.0.16)")
+end
+
+if getSharedData("projectsDir")==nil then
+  setSharedData("projectsDir",Environment.getExternalStorageDirectory().getPath().."/AppProjects")
 end

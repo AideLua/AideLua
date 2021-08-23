@@ -4,7 +4,7 @@ import "Jesse205"
 import "ReBuildTool"
 
 ProjectUtil.SdPath=AppPath.Sdcard
-ProjectUtil.ProjectsPath=ProjectUtil.SdPath.."/AppProjects"--所有项目路径
+ProjectUtil.ProjectsPath=getSharedData("projectsDir")--所有项目路径
 ProjectUtil.ProjectsFile=File(ProjectUtil.ProjectsPath)
 
 ProjectUtil.FileIcons={--各种文件的图标
@@ -92,7 +92,7 @@ function ProjectUtil.shortPath(path,max,basePath)
 
     local projectPath
     if basePath then
-      projectPath=string.sub(path,string.len(basePath)+2)
+      projectPath=string.sub(path,string.len(basePath)+1)
     end
     local relPath=(projectPath or path)
     if max==true then

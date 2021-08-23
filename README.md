@@ -54,6 +54,7 @@ Aide Lua 是一款依赖 Aide 的 Lua 编辑器
 | tool.version | string | "1.1" | "1.0" | 二次打包工具的版本号 |
 | appName | string | / | / | 应用名（仅供AideLua显示） |
 | packageName | string | / | / | 应用包名（仅供AideLua显示和更好的调试） |
+| debugActivity | string | / | "com.androlua.LuaActivity" | 调试的Activity名(不是标签)（仅供AideLua更好的调试） |
 | include | table | {"project:app",[...]"project:androlua"} | / | 要编译lua的库，第一个为主程序 |
 | main (已废除) | string | "app" | "app" | 主程序（仅1.0版本） |
 | compileLua | boolean | true | true | 编译Lua |

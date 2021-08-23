@@ -92,6 +92,7 @@
     <string name="project_appSubtitle_380dp">项目: %1$s</string>
     <string name="project_appSubtitle_390dp">项目: %1$s</string>
     <string name="project_close">关闭项目</string>
+    <string name="projects_path">项目路径</string>
     
     <string name="binpoject_loading">正在打包...</string>
     <string name="binpoject_creating_variables">正在创建变量</string>
@@ -142,6 +143,7 @@
     <string name="settings_editor_magnify_summary">仅支持安卓9及以上</string>
     <string name="settings_editor_symbolNar">符号栏</string>
     <string name="settings_tab_icon">文件图标</string>
+    <string name="settings_needRestart">修改后重启生效</string>
     
     <string name="window_openNew">打开新窗口</string>
     <string name="window_openInNewWindow">在新窗口打开</string>
