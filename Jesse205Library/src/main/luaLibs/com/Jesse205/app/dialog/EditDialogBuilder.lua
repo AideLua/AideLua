@@ -151,6 +151,7 @@ function EditDialogBuilder:show()
   end
   if text then
     edit.setText(text)
+    edit.setSelection(utf8.len(text))
   end
   if hint then
     if type(hint)=="number" then
