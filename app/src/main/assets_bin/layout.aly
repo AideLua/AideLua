@@ -29,6 +29,7 @@
       radius=0;
       elevation="8dp";
       layoutTransition=newLayoutTransition();
+      backgroundColor=0;
     };
   };
 };
