@@ -4,8 +4,18 @@ import "Jesse205"
 import "ReBuildTool"
 
 ProjectUtil.SdPath=AppPath.Sdcard
-ProjectUtil.ProjectsPath=getSharedData("projectsDir")--所有项目路径
-ProjectUtil.ProjectsFile=File(ProjectUtil.ProjectsPath)
+
+xpcall(function()--防呆设计
+  ProjectUtil.ProjectsPath=getSharedData("projectsDir")--所有项目路径
+  ProjectUtil.ProjectsFile=File(ProjectUtil.ProjectsPath)
+  ProjectUtil.ProjectsPath=ProjectUtil.ProjectsFile.getPath()--修复一下路径
+end,
+function()--手贱乱输造成报错
+  ProjectUtil.ProjectsPath=ProjectUtil.SdPath.."/AppProjects"
+  ProjectUtil.ProjectsFile=File(ProjectUtil.ProjectsPath)
+  setSharedData("projectsDir",ProjectUtil.ProjectsFile)
+  MyToast("项目路径出错，已为您恢复默认设置")
+end)
 
 ProjectUtil.FileIcons={--各种文件的图标
   lua=R.drawable.ic_language_lua,

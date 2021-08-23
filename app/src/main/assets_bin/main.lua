@@ -436,7 +436,7 @@ function onResume()
     or oldTheme~=ThemeUtil.getAppTheme()
     or oldDarkActionBar~=getSharedData("theme_darkactionbar")
     or oldRichAnim~=getSharedData("richAnim")
-    or ProjectsPath~=getSharedData("projectsDir")
+    or ProjectsPath~=File(getSharedData("projectsDir")).getPath()
     then
     activity.finish()
     local intent=Intent(activity,Main)

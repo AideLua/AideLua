@@ -4,53 +4,25 @@ local cannotBeEmptyStr=activity.getString(R.string.edit_error_cannotBeEmpty)
 local existsStr=activity.getString(R.string.file_exists)
 
 local function createFileInfoDialog(config,nowDir)--文件名填写对话框
-  local ids={}
-  local dia=AlertDialog.Builder(this)
-  .setTitle(formatResStr(R.string.project_create_withName,{config.name}))
-  .setView(MyEditDialogLayout.load(nil,ids))
-  .setPositiveButton(R.string.create,nil)
-  .setNegativeButton(android.R.string.no,nil)
-  .show()
-  local edit,editLay=ids.edit,ids.editLay
-  edit.requestFocus()--输入框取得焦点
-  editLay.setHint(activity.getString(R.string.file_name))
-  edit.addTextChangedListener({
-    onTextChanged=function(text,start,before,count)
-      text=tostring(text)
-      if text=="" then--文件名不能为空
-        editLay
-        .setError(cannotBeEmptyStr)
-        .setErrorEnabled(true)
-        return
-      end
-      editLay.setErrorEnabled(false)
+  local builder
+  builder=EditDialogBuilder(activity)
+  :setTitle(formatResStr(R.string.project_create_withName,{config.name}))
+  :setHint(R.string.directory_name)
+  :setAllowNull(false)
+  :setPositiveButton(R.string.create,function(dialog,text)
+    local editLay=builder.ids.editLay
+    local errorState
+    local fileName=text
+    local filePath=rel2AbsPath(fileName,nowDir.getPath())
+    local file=File(filePath)
+    if file.exists() then--文件不能存在
+      editLay
+      .setError(existsStr)
+      .setErrorEnabled(true)
+      return true
     end
-  })
-  local function create()
-    local editLay=ids.editLay
-    local edit=ids.edit
-
+    editLay.setErrorEnabled(false)
     xpcall(function()
-      local err
-      local fileName=edit.text
-      if not(fileName:find("%.")) then
-        fileName=fileName.."."..config.fileType
-      end
-      if edit.text=="" then--文件名不能为空
-        editLay
-        .setError(cannotBeEmptyStr)
-        .setErrorEnabled(true)
-        return
-      end
-      local filePath=rel2AbsPath(fileName,nowDir.getPath())
-      local file=File(filePath)
-      fileName=file.getName()
-      if file.exists() then--文件不能存在
-        editLay
-        .setError(existsStr)
-        .setErrorEnabled(true)
-        return
-      end
       local moduleName=fileName:match("(.+)%.") or fileName
       local shoredModuleName=moduleName:gsub("%.","_"):gsub("%[",""):gsub("%]",""):gsub("%:","_")
       if table.find(LuaReservedCharacters,shoredModuleName) then
@@ -64,14 +36,17 @@ local function createFileInfoDialog(config,nowDir)--文件名填写对话框
       editLay.setErrorEnabled(false)
       openFile(file)
       refresh(nowDir)
-      dia.dismiss()
     end,
     function(err)
       showErrorDialog(R.string.create_failed,err)
+      errorState=true
     end)
-  end
-  dia.getButton(AlertDialog.BUTTON_POSITIVE).onClick=create
-  ids.edit.onEditorAction=create
+    if errorState then
+      return true
+    end
+  end,true,true)
+  :setNegativeButton(android.R.string.no,nil)
+  builder:show()
 end
 
 local function createFileDialog(nowDir)--模版选择对话框

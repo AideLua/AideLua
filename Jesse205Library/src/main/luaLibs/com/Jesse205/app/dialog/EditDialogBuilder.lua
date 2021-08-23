@@ -8,6 +8,7 @@ EditDialogBuilder.allowNull=true
 function EditDialogBuilder.__call(self,context)
   self=table.clone(self)
   self.context=context
+  self.checkNullButtons={}
   return self
 end
 
@@ -57,7 +58,7 @@ local function setButton(self,text,func,defaultFunc,checkNull,buttonType)
       end
     end
   end
-  self[buttonType]={text,onClick}
+  self[buttonType]={text,onClick,checkNull}
   if defaultFunc then
     self.defaultFunc=onClick
   end
@@ -79,7 +80,7 @@ end
 function EditDialogBuilder:show()
   local ids={}
   self.ids=ids
-  local context=self.context
+  local context,checkNullButtons=self.context,self.checkNullButtons
   local positiveButton,neutralButton,negativeButton=self.positiveButton,self.neutralButton,self.negativeButton
   local text,hint,helperText=self.text,self.hint,self.helperText
   local defaultFunc=self.defaultFunc
@@ -97,15 +98,43 @@ function EditDialogBuilder:show()
     dialogBuilder.setNegativeButton(negativeButton[1],nil)
   end
   local dialog=dialogBuilder.show()
+  local textState=toboolean(text==nil or text=="")
 
-  if positiveButton and positiveButton[2] then--设置点击事件
-    dialog.getButton(AlertDialog.BUTTON_POSITIVE).onClick=positiveButton[2]
+  if positiveButton then--设置点击事件
+    local button=dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+    if positiveButton[2] then
+      button.onClick=positiveButton[2]
+    end
+    if positiveButton[3] then
+      table.insert(checkNullButtons,button)
+      if textState then
+        button.setEnabled(false)
+      end
+    end
   end
-  if neutralButton and neutralButton[2] then
-    dialog.getButton(AlertDialog.BUTTON_NEUTRAL).onClick=neutralButton[2]
+  if neutralButton then
+    local button=dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
+    if neutralButton[2] then
+      button.onClick=neutralButton[2]
+    end
+    if neutralButton[3] then
+      table.insert(checkNullButtons,button)
+      if textState then
+        button.setEnabled(false)
+      end
+    end
   end
-  if negativeButton and negativeButton[2] then
-    dialog.getButton(AlertDialog.BUTTON_NEGATIVE).onClick=negativeButton[2]
+  if negativeButton then
+    local button=dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
+    if negativeButton[2] then
+      button.onClick=negativeButton[2]
+    end
+    if negativeButton[3] then
+      table.insert(checkNullButtons,button)
+      if textState then
+        button.setEnabled(false)
+      end
+    end
   end
 
   self.dialog=dialog
@@ -133,16 +162,26 @@ function EditDialogBuilder:show()
     edit.onEditorAction=defaultFunc
   end
   if not(self.allowNull) then
+    local oldErrorEnabled=textState
     edit.addTextChangedListener({
       onTextChanged=function(text,start,before,count)
         text=tostring(text)
-        if text=="" then--文件夹名不能为空
+        if text=="" and not(oldErrorEnabled) then--文件夹名不能为空
           editLay
           .setError(cannotBeEmptyStr)
           .setErrorEnabled(true)
+          oldErrorEnabled=true
+          for index,content in ipairs(checkNullButtons) do
+            content.setEnabled(false)
+          end
           return
+         elseif oldErrorEnabled then
+          editLay.setErrorEnabled(false)
+          oldErrorEnabled=false
+          for index,content in ipairs(checkNullButtons) do
+            content.setEnabled(true)
+          end
         end
-        editLay.setErrorEnabled(false)
       end
     })
   end

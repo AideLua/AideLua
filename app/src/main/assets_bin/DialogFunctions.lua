@@ -29,7 +29,7 @@ function createDirsDialog(nowDir)--创建文件夹对话框
   :setAllowNull(false)
   :setPositiveButton(R.string.create,function(dialog,text)
     local editLay=builder.ids.editLay
-    local err
+    local errorState
     local fileName=text
     local filePath=rel2AbsPath(fileName,nowDir.getPath())
     local file=File(filePath)
@@ -48,8 +48,12 @@ function createDirsDialog(nowDir)--创建文件夹对话框
     end,
     function(err)
       showErrorDialog(R.string.create_failed,err)
+      errorState=true
       return true
     end)
+    if errorState then
+      return true
+    end
   end,true,true)
   :setNegativeButton(android.R.string.no,nil)
   builder:show()
@@ -67,7 +71,7 @@ function renameDialog(file)--重命名对话框
   :setAllowNull(false)
   :setPositiveButton(R.string.rename,function(dialog,text)
     local editLay=builder.ids.editLay
-    local err
+    local errorState
     local newName=text
     local newFilePath=rel2AbsPath(newName,parentFile.getPath())
     local newFile=File(newFilePath)
@@ -108,8 +112,12 @@ function renameDialog(file)--重命名对话框
     end,
     function(err)
       showErrorDialog(R.string.rename_fail,err)
+      errorState=true
       return true
     end)
+    if errorState then
+      return true
+    end
   end,true,true)
   :setNegativeButton(android.R.string.no,nil)
   builder:show()
