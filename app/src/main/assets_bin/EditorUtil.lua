@@ -54,6 +54,7 @@ EditorUtil.TextFileType2EditorLanguage={
   gradle=EmptyLanguage(),
   bat=EmptyLanguage(),
   html=HTMLLanguage(),
+  json=HTMLLanguage(),
 }
 
 function EditorUtil.switchEditor(editorType,language)

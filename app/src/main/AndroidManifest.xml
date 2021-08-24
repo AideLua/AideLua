@@ -45,10 +45,8 @@
     <application
         android:largeHeap="true"
         android:name="com.androlua.LuaApplication"
-        android:persistent="true"
         android:resizeableActivity="true"
         android:supportsPictureInPicture="true"
-        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:usesCleartextTraffic="true"
@@ -183,6 +181,7 @@
         <activity
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize|stateHidden"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|navigation|screenLayout|fontScale|smallestScreenSize|keyboardHidden|orientation|screenSize"
             android:name="com.androlua.Welcome">
 
             <intent-filter>

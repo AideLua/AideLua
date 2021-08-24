@@ -605,13 +605,13 @@ function openFile(file,reOpen,line)
           if OpenedFile then
             isSelfFile=ProjectUtil.isSelfFile(file,NowFile)
           end
-
-          if isSelfFile then--重复打开文件
+          local editorType=EditorUtil.TextFileType2EditorType[fileType]
+          if isSelfFile and editorType~="CodeEditor" then--重复打开文件
             if code~=NowEditor.text then
               NowEditor.setText(code,true)--打开文件并且保留历史记录
             end
            else--新的打开
-            EditorUtil.switchEditor(EditorUtil.TextFileType2EditorType[fileType],EditorUtil.TextFileType2EditorLanguage[fileType])--将编辑器切换为Lua编辑器
+            EditorUtil.switchEditor(editorType,EditorUtil.TextFileType2EditorLanguage[fileType])--将编辑器切换为Lua编辑器
             NowEditor.setText(code)
             --listenFile(filePath)
           end
