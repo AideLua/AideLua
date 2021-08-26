@@ -13,6 +13,10 @@ local function createFileInfoDialog(config,nowDir)--文件名填写对话框
     local editLay=builder.ids.editLay
     local errorState
     local fileName=text
+    local fileType=config.fileType
+    if fileType then
+      fileName=fileName.."."..fileType
+    end
     local filePath=rel2AbsPath(fileName,nowDir.getPath())
     local file=File(filePath)
     if file.exists() then--文件不能存在

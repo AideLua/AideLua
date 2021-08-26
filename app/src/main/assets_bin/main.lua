@@ -628,6 +628,7 @@ filesTabLay.addOnTabSelectedListener(TabLayout.OnTabSelectedListener({
   onTabUnselected=function(tab)
   end
 }))
+filesTabLay.onTouch=onFileTabLayTouch
 
 pathsTabLay.addOnTabSelectedListener(TabLayout.OnTabSelectedListener({
   onTabSelected=function(tab)

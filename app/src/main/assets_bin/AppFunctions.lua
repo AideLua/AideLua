@@ -37,9 +37,7 @@ editorFunc={
   end,
   closeFile=function()
     if OpenedFile then
-      local filePath=string.lower(NowFile.getPath())
-      local tab=FilesTabList[filePath].tab
-      closeFileAndTab(tab)
+      closeFileAndTabByPath(string.lower(NowFile.getPath()))
     end
   end,
   check=function(b)
@@ -330,7 +328,7 @@ function refreshPathsTab(path)
       if safeModeEnable then
         tab.select()
        else
-        task(10,function()
+        task(1,function()
           tab.select()
         end)--选中Tab
       end
@@ -537,11 +535,76 @@ function refreshMenusState()
   end
 end
 
+function onFileTabLongClick(view)
+  local tag=view.tag
+  NowTabTouchTag=tag
+  tag.onLongTouch=true
+end
+
+local moveCloseheight=activity.getHeight()/4
+function onFileTabTouch(view,event)
+  local tag=view.tag
+  local action=event.getAction()
+  --print(action)
+  --local view=view
+  if action==MotionEvent.ACTION_DOWN then
+    tag.downY=event.getRawY()
+
+   else
+    if not(tag.onLongTouch) then
+      return
+    end
+    local downY=tag.downY
+    local moveY=event.getRawY()-downY
+    if action==MotionEvent.ACTION_MOVE then
+      --print("test",tointeger(moveY),tointeger(event.getY()))
+      if moveY>0 and moveY<moveCloseheight then
+        view.setRotationX(moveY/moveCloseheight*-90)
+       elseif moveY>=moveCloseheight then
+        view.setRotationX(-90)
+      end
+     elseif action==MotionEvent.ACTION_UP then
+      NowTabTouchTag=nil
+      tag.onLongTouch=false
+      if moveY>moveCloseheight then
+        closeFileAndTab(tag.tab)
+        view.setRotationX(0)
+        if OpenedFile then
+          local tabConfig=FilesTabList[string.lower(NowFile.getPath())]
+          if tabConfig then
+            local tab=tabConfig.tab
+            task(1,function()
+            tab.select()
+            end)
+          end
+        end
+       else
+        ObjectAnimator.ofFloat(view, "rotationX", {0})
+        .setDuration(200)
+        .setInterpolator(DecelerateInterpolator())
+        .start()
+      end
+    end
+  end
+end
+
+function onFileTabLayTouch(view,event)
+  local tag=NowTabTouchTag
+  if tag==nil or not(tag.onLongTouch) then
+    return
+  end
+  onFileTabTouch(tag.view,event)
+  return true
+end
+
 function initFileTabView(tab,tabTag)
   local view=tab.view
   tabTag.view=view
   view.setPadding(math.dp2int(8),math.dp2int(4),math.dp2int(8),math.dp2int(4))
   view.setGravity(Gravity.LEFT|Gravity.CENTER)
+  view.tag=tabTag
+  view.onTouch=onFileTabTouch
+  view.onLongClick=onFileTabLongClick
   TooltipCompat.setTooltipText(view,tabTag.shortFilePath)
   local imageView=view.getChildAt(0)
   local textView=view.getChildAt(1)
@@ -670,7 +733,7 @@ function openFile(file,reOpen,line)
       local shortFilePath=shortPath(file.getPath(),true,ProjectsPath.."/")
 
       refreshMenusState()
-      setSharedData("openedfilepath_"..NowProjectDirectory.getName(),file.getPath())--保存已打开文件路径
+      setSharedData("openedfilepath_"..NowProjectDirectory.getPath(),file.getPath())--保存已打开文件路径
 
       --[[if not(keepOpenDrawer) and not(reOpen) then
         drawer.closeDrawer(Gravity.LEFT)
