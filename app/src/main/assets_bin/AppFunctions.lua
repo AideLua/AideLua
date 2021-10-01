@@ -574,7 +574,7 @@ function onFileTabTouch(view,event)
           if tabConfig then
             local tab=tabConfig.tab
             task(1,function()
-            tab.select()
+              tab.select()
             end)
           end
         end
@@ -1118,7 +1118,7 @@ end
 
 --公共Activity
 function checkSharedActivity(name,update)
-  local sdActivityPath=AppPath.LuaSharedDir.."/activities/"..name
+  local sdActivityPath=AppPath.LuaSharedDir.."/activities/"..name.."/main.lua"
   local sdActivityDir=File(sdActivityPath)
   local exists=sdActivityDir.exists()
   if not(exists) or update then
@@ -1126,6 +1126,7 @@ function checkSharedActivity(name,update)
       LuaUtil.rmDir(sdActivityDir)
     end
     LuaUtil.copyDir(File(activity.getLuaDir("sub/"..name)),sdActivityDir)
+    print(true)
   end
   return sdActivityPath.."/main.lua"
 end
