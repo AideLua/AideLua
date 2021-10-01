@@ -538,7 +538,7 @@ function onKeyUp(KeyCode,event)
 end
 
 function onVersionChanged()
-  checkSharedActivity("LogCat",true)
+  checkUpdateSharedActivity("LogCat")
 end
 
 --onConfigurationChanged(activity.getResources().getConfiguration())

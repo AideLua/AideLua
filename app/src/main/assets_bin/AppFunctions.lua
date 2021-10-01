@@ -1117,19 +1117,36 @@ function refreshSymbolBar(state)
 end
 
 --公共Activity
-function checkSharedActivity(name,update)
-  local sdActivityPath=AppPath.LuaSharedDir.."/activities/"..name.."/main.lua"
+function updateSharedActivity(name,sdActivityDir)
+  LuaUtil.copyDir(File(activity.getLuaDir("sub/"..name)),sdActivityDir)
+end
+
+function checkUpdateSharedActivity(name)
+  local sdActivityPath=AppPath.LuaSharedDir.."/activities/"..name
   local sdActivityDir=File(sdActivityPath)
   local exists=sdActivityDir.exists()
-  if not(exists) or update then
+  if exists then
+    LuaUtil.rmDir(sdActivityDir)
+    updateSharedActivity(name,sdActivityDir)
+  end
+end
+
+function checkSharedActivity(name,update)
+  local sdActivityPath=AppPath.LuaSharedDir.."/activities/"..name
+  local sdActivityMainPath=sdActivityPath.."/main.lua"
+  local sdActivityDir=File(sdActivityPath)
+  local sdActivityMainDir=File(sdActivityMainPath)
+  local exists=sdActivityDir.exists()
+  local mainExists=sdActivityMainDir.exists()
+  if update or not(mainExists) then
     if exists then
       LuaUtil.rmDir(sdActivityDir)
     end
-    LuaUtil.copyDir(File(activity.getLuaDir("sub/"..name)),sdActivityDir)
-    print(true)
+    updateSharedActivity(name,sdActivityDir)
   end
-  return sdActivityPath.."/main.lua"
+  return sdActivityMainPath
 end
+
 
 function editor2my(CodeEditor)
   return function(context)
