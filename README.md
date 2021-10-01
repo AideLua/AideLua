@@ -60,5 +60,5 @@ Aide Lua 是一款依赖 Aide 的 Lua 编辑器
 | compileLua | boolean | true | true | 编译Lua |
 | icon | table/string | {[...]} | / (智能判断) | 项目图标配置（仅供AideLua显示，相对路径为项目路径） |
 | icon.day | string | "ic_launcher-aidelua.png" | / (智能判断) | 亮色模式图标 |
-| icon.night | string | "ic_launcher_night-aidelua.png" | / (智能判断) | 亮色模式图标 |
+| icon.night | string | "ic_launcher_night-aidelua.png" | / (智能判断) | 深色模式图标 |
 
