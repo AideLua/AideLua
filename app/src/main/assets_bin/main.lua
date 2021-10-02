@@ -646,7 +646,7 @@ pathsTabLay.addOnTabSelectedListener(TabLayout.OnTabSelectedListener({
 }))
 
 
---}application.set("luaeditor_initialized",false)--强制初始化编辑器
+--application.set("luaeditor_initialized",false)--强制初始化编辑器
 --设置编辑器
 if notSafeModeEnable then
   safeModeText.setVisibility(View.GONE)
@@ -861,6 +861,7 @@ luaEditorPencilEdit.onFocusChange=function(view,hasFocus)
     view.setSelection(1)
   end
 end
+luaEditorPencilEdit.setBackground(nil)
 
 if ThemeUtil.NowAppTheme.night then
   codeEditor.setColorScheme(SchemeDarcula())
