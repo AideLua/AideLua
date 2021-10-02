@@ -119,18 +119,17 @@ local function onLongClick(view)
 end
 
 local function fileMoreMenuClick(view)
-  local nowLibName,fileRelativePath,nowPrjDirName
+  local nowLibName,fileRelativePath,nowPrjDirPath
   if openProject then
-    fileRelativePath=ProjectUtil.shortPath(NowDirectory.getPath(),true,NowProjectDirectory.getPath())
-
+    nowPrjDirPath=NowProjectDirectory.getPath()
+    fileRelativePath=ProjectUtil.shortPath(NowDirectory.getPath(),true,nowPrjDirPath.."/")
     if fileRelativePath:find("/") then
-      nowLibName=fileRelativePath:match("(.-)/.+")
+      nowLibName=fileRelativePath:match("(.-)/")
      elseif #fileRelativePath~=0 then
       nowLibName=fileRelativePath
      else
       nowLibName="app"
     end
-    nowPrjDirName=NowProjectDirectory.getName()
   end
 
   local pop=PopupMenu(activity,view)
@@ -147,13 +146,13 @@ local function fileMoreMenuClick(view)
      else
       if openProject then
         if id==Rid.menu_openDir_assets then
-          refresh(File(("%s/%s/%s/src/main/assets_bin"):format(ProjectsPath,nowPrjDirName,nowLibName)))
+          refresh(File(("%s/%s/src/main/assets_bin"):format(nowPrjDirPath,nowLibName)))
          elseif id==Rid.menu_openDir_java then
-          refresh(File(("%s/%s/%s/src/main/java"):format(ProjectsPath,nowPrjDirName,nowLibName)))
+          refresh(File(("%s/%s/src/main/java"):format(nowPrjDirPath,nowLibName)))
          elseif id==Rid.menu_openDir_lua then
-          refresh(File(("%s/%s/%s/src/main/luaLibs"):format(ProjectsPath,nowPrjDirName,nowLibName)))
+          refresh(File(("%s/%s/src/main/luaLibs"):format(nowPrjDirPath,nowLibName)))
          elseif id==Rid.menu_openDir_res then
-          refresh(File(("%s/%s/%s/src/main/res"):format(ProjectsPath,nowPrjDirName,nowLibName)))
+          refresh(File(("%s/%s/src/main/res"):format(nowPrjDirPath,nowLibName)))
          elseif id==Rid.menu_openDir_projectRoot then
           refresh(NowProjectDirectory)
         end

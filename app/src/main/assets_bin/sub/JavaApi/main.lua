@@ -102,6 +102,18 @@ function searchItem(text)
   end).execute({tostring(text),application})
 end
 
+function checkTextError(text,searchLay)
+  local success,err=pcall(string.find,"",text)
+  if success then
+    searchLay.setErrorEnabled(false)
+    return false
+   else
+    searchLay
+    .setError(err)
+    .setErrorEnabled(true)
+    return true
+  end
+end
 
 datas={}
 adp=MyLuaAdapter(activity,datas,item)
@@ -120,13 +132,24 @@ listView.onScroll=function(view,firstVisibleItem,visibleItemCount,totalItemCount
 end
 
 searchButton.onClick=function()
-  searchItem(searchEdit.text)
+  local text=searchEdit.text
+  if checkTextError(text,searchLay) then
+    return
+  end
+  searchItem(text)
 end
 
 searchEdit.onEditorAction=function(view,i,keyEvent)
   if searchButton.clickable then
-    searchItem(view.text)
+    local text=view.text
+    if checkTextError(text,searchLay) then
+      return true
+    end
+    searchItem(text)
   end
   return true
 end
 
+searchEdit.addTextChangedListener({onTextChanged=function(text)
+    checkTextError(tostring(text),searchLay)
+end})

@@ -38,15 +38,25 @@
     id="editorGroup";
     --visibility=View.GONE;
     {
-      LinearLayoutCompat;
+      FrameLayout;
       layout_height="fill";
       layout_width="fill";
-      gravity="center";
+      --gravity="center";
       layoutTransition=newLayoutTransition();
       id="luaEditorParent";
       {
         ProgressBar;
         id="luaEditorProgressBar";
+        layout_gravity="center";
+      };
+      {
+        EditText;
+        layout_width="fill";
+        layout_height="fill";
+        id="luaEditorPencilEdit";
+        gravity="top|left";
+        text=" ";
+        textSize=0;
       };
       {
         MyLuaEditor;

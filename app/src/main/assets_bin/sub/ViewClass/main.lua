@@ -90,18 +90,31 @@ function onOptionsItemSelected(item)
     ids=SearchActionMode({
       onEditorAction=function(view,actionId,event)
         if event then
-          searchItem(view.text)
+          local text=view.text
+          if checkTextError(text,view) then
+            return
+          end
+          searchItem(text)
         end
       end,
       onTextChanged=function(text)
+        text=tostring(text)
+        if checkTextError(text,ids.searchEdit) then
+          return
+        end
         if AllNum<=500 then
-          searchItem(tostring(text))
+          searchItem(text)
         end
       end,
       onActionItemClicked=function(mode,item)
         local title=item.title
         if title==activity.getString(R.string.abc_searchview_description_search) then
-          searchItem(tostring(ids.searchEdit.text))
+          local searchEdit=ids.searchEdit
+          local text=tostring(searchEdit.text)
+          if checkTextError(text,searchEdit) then
+            return
+          end
+          searchItem(text)
         end
       end,
       onDestroyActionMode=function(mode)
@@ -110,6 +123,17 @@ function onOptionsItemSelected(item)
         end
       end,
     })
+  end
+end
+
+function checkTextError(text,searchEdit)
+  local success,err=pcall(string.find,"",text)
+  if success then
+    searchEdit.setError(nil)
+    return false
+   else
+    searchEdit.setError(err)
+    return true
   end
 end
 

@@ -651,6 +651,7 @@ pathsTabLay.addOnTabSelectedListener(TabLayout.OnTabSelectedListener({
 if notSafeModeEnable then
   safeModeText.setVisibility(View.GONE)
   if not(application.get("luaeditor_initialized")) then--编辑器未初始化
+    luaEditorParent.removeView(luaEditorPencilEdit)
     luaEditorParent.removeView(luaEditor)
     local editorText=luaEditor.text
     luaEditor.text=""
@@ -753,6 +754,7 @@ if notSafeModeEnable then
       if editorText~="" then
         luaEditor.text=editorText
       end
+      luaEditorParent.addView(luaEditorPencilEdit)
       luaEditorParent.addView(luaEditor)
       luaEditorParent.removeView(luaEditorProgressBar)--移除进度条
       application.set("luaeditor_initialized",success)
@@ -825,6 +827,39 @@ if notSafeModeEnable then
  else
   safeModeText.setForeground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary))
   luaEditorParent.removeView(luaEditorProgressBar)
+end
+
+cnString2EnString={
+  {"（","("},
+  {"）",")"},
+  {"［","["},
+  {"］","]"},
+  {"＇","'"},
+  {"＂","\""},
+}
+luaEditorPencilEdit.addTextChangedListener({
+  onTextChanged=function(text,start,before,count)
+    text=tostring(text)
+    if text~=" " then
+      if text=="" then
+       else
+        local newText=text:match(" (.+)")
+        for index,content in ipairs(cnString2EnString)
+          newText=newText:gsub(content[1],content[2])
+        end
+        luaEditor.paste(newText)
+        --print(newText)
+      end
+      luaEditorPencilEdit.text=" "
+      luaEditorPencilEdit.setSelection(1)
+      luaEditor.requestFocus()
+    end
+  end
+})
+luaEditorPencilEdit.onFocusChange=function(view,hasFocus)
+  if hasFocus then
+    view.setSelection(1)
+  end
 end
 
 if ThemeUtil.NowAppTheme.night then
@@ -903,4 +938,13 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
 onConfigurationChanged(activity.getResources().getConfiguration())
 if drawerOpened==nil then
   drawerOpened=false
+end
+
+local nowYear=os.date("%Y")
+local nowDate=os.date("%m-%d")
+if nowDate=="11-25" then
+  if getSharedData("festival_11-25")~=nowYear then
+    MyToast.showToast("Father And Mother I Love You")
+    setSharedData("festival_11-25",nowYear)
+  end
 end

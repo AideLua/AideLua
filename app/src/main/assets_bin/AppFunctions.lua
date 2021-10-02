@@ -1135,9 +1135,9 @@ function checkSharedActivity(name,update)
   local sdActivityPath=AppPath.LuaSharedDir.."/activities/"..name
   local sdActivityMainPath=sdActivityPath.."/main.lua"
   local sdActivityDir=File(sdActivityPath)
-  local sdActivityMainDir=File(sdActivityMainPath)
+  local sdActivityMainFile=File(sdActivityMainPath)
   local exists=sdActivityDir.exists()
-  local mainExists=sdActivityMainDir.exists()
+  local mainExists=sdActivityMainFile.isFile()
   if update or not(mainExists) then
     if exists then
       LuaUtil.rmDir(sdActivityDir)
@@ -1152,6 +1152,12 @@ function editor2my(CodeEditor)
   return function(context)
     return luajava.override(CodeEditor,{
       onKeyShortcut=function(super,keyCode,event)
+        local filteredMetaState = event.getMetaState() & ~KeyEvent.META_CTRL_MASK;
+        if (KeyEvent.metaStateHasNoModifiers(filteredMetaState)) then
+          if keyCode==KeyEvent.KEYCODE_C or keyCode==KeyEvent.KEYCODE_V or keyCode==KeyEvent.KEYCODE_X or keyCode==KeyEvent.KEYCODE_A then
+            return super(keyCode,event)
+          end
+        end
         return onKeyShortcut(keyCode,event)
       end,
     })
