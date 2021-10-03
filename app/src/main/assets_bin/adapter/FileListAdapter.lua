@@ -122,16 +122,15 @@ local function fileMoreMenuClick(view)
   local nowLibName,fileRelativePath,nowPrjDirPath
   if openProject then
     nowPrjDirPath=NowProjectDirectory.getPath()
-    fileRelativePath=ProjectUtil.shortPath(NowDirectory.getPath(),true,nowPrjDirPath.."/")
-    if fileRelativePath:find("/") then
-      nowLibName=fileRelativePath:match("(.-)/")
+    fileRelativePath=ProjectUtil.shortPath(NowDirectory.getPath(),true,nowPrjDirPath)
+    if fileRelativePath:find("/.-/") then
+      nowLibName=fileRelativePath:match("/(.-)/")
      elseif #fileRelativePath~=0 then
-      nowLibName=fileRelativePath
+      nowLibName=fileRelativePath:match("/(.+)")
      else
       nowLibName="app"
     end
   end
-
   local pop=PopupMenu(activity,view)
   local menu=pop.Menu
   pop.inflate(R.menu.menu_main_file_upfile)
