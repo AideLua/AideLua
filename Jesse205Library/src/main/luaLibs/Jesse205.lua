@@ -1,7 +1,7 @@
 local Jesse205={}
 _G.Jesse205=Jesse205
-Jesse205._VERSION="9.0.6(Pro)"
-Jesse205._VERSIONCODE=90699
+Jesse205._VERSION="10.0.0(Pro)"
+Jesse205._VERSIONCODE=100099
 Jesse205._ENV=_ENV
 
 require "import"--导入import

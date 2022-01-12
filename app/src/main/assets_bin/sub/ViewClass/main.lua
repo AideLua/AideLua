@@ -220,7 +220,13 @@ end
 allMethods=class.getMethods()--方法
 for item=0,#allMethods-1 do
   local methodInfo=shortString(tostring(allMethods[item]))
-  local info,method=methodInfo:match("(.+) .*%.(.-%..-%(.-%))")
+  local info,method,throws=methodInfo:match("(.+) (.-%)) ?(.*)")
+  if method:find("%..-%..-%(") then
+    method=method:match(".+%.(.-%..-%(.-%))")
+  end
+  if throws then
+    info=info.."\n"..throws
+  end
   table.insert(MethodsList,{name=method,summary=info})
   local throws=methodInfo:match("throws (.+)")
   local event=method:match("setOn(%a+)Listener")--事件
