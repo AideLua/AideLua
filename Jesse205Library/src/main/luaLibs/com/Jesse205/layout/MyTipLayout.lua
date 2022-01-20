@@ -28,9 +28,9 @@ MyTipLayout.layout={
   };
 }
 
-MyTipLayout.insertTable=insertTable
+--MyTipLayout.insertTable=insertTable
 
-function MyTipLayout.Builder(config)
+function MyTipLayout.Builder(config)--返回布局表
   local layout=table.clone(MyTipLayout.layout)
   if config then
     MyTextInputLayout.insertTable(layout,config)
@@ -38,7 +38,7 @@ function MyTipLayout.Builder(config)
   return layout
 end
 
-function MyTipLayout.load(config,...)
+function MyTipLayout.load(config,...)--返回视图
   return loadlayout(MyTextInputLayout.Builder(config),...)
 end
 return MyTipLayout

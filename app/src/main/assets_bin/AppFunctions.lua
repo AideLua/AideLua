@@ -354,7 +354,13 @@ function refresh(file,upFile,force)
     if file.getPath()=="/" then
       file=ProjectsFile
     end
-    swipeRefresh.setRefreshing(true)
+    Handler().postDelayed(Runnable({
+      run=function()
+        if loadingFiles then
+          swipeRefresh.setRefreshing(true)
+        end
+      end
+    }),100)
     loadingFiles=true--正在加载列表
 
     if NowDirectory then
@@ -421,6 +427,8 @@ function refresh(file,upFile,force)
       return ArrayList(newList),NowDirectory
     end,
     function(filesList,NowDirectory)
+      NowFilePosition=nil
+      table.clear(FilesPositions)
       _G.NowDirectory=NowDirectory
       local nowPath=NowDirectory.getPath()
       if OpenedProject then
@@ -461,9 +469,9 @@ end
 
 function showSnackBar(text)
   if drawerOpened then
-    MyToast(text,mainLay)
+    return MyToast(text,mainLay)
    else
-    MyToast(text,editorGroup)
+    return MyToast(text,editorGroup)
   end
 end
 
@@ -725,8 +733,19 @@ function openFile(file,reOpen,line)
       NowFile=file
       NowFileType=fileType
       OpenedFile=true--标记为已经打开了文件
+      --[[
       if not(loadingFiles) then
         adp.notifyDataSetChanged()
+      end]]
+      if not(loadingFiles) then
+        if NowFilePosition then
+          adp.notifyItemChanged(NowFilePosition)
+        end
+        local newFilePosition=FilesPositions[filePath]
+        NowFilePosition=newFilePosition
+        if newFilePosition then
+          adp.notifyItemChanged(newFilePosition)
+        end
       end
       --setActiveFileItem(FilesDataList[filePath],true)--设置文件列表高亮
 
@@ -1163,3 +1182,4 @@ function editor2my(CodeEditor)
     })
   end
 end
+

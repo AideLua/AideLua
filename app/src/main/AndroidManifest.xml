@@ -75,14 +75,14 @@
         
 
         <activity
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:name="com.Jesse205.superlua.Main"/>
 
         <activity
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:label="@string/app_name"
             android:name="com.Jesse205.superlua.LuaActivity">
@@ -116,7 +116,7 @@
         </activity>
 
         <activity
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize"
             android:documentLaunchMode="intoExisting"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:excludeFromRecents="false"
@@ -154,6 +154,7 @@
         <activity
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize|stateHidden"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|navigation|screenLayout|fontScale|smallestScreenSize|keyboardHidden|orientation|screenSize"
             android:name="com.androlua.Welcome2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -162,14 +163,14 @@
         </activity>
         
         <activity
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:name="com.androlua.Main"/>
 
         <activity
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:label="@string/app_name"
             android:name="com.androlua.LuaActivity">
@@ -217,7 +218,7 @@
         </activity>
 
         <activity
-            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize"
             android:documentLaunchMode="intoExisting"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:excludeFromRecents="false"

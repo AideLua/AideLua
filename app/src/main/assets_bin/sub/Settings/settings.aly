@@ -15,6 +15,7 @@
     icon=R.drawable.ic_theme_light_dark;
     title=R.string.Jesse205_darkActionBar;
     key="theme_darkactionbar";
+    --enabled=false;
   };
   {
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
@@ -22,6 +23,13 @@
     title=R.string.settings_ui_richAnim;
     key="richAnim";
   };
+--[[
+  {
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_animation_play_outline;
+    title="测试禁止";
+    key="test";
+  };]]
 
   {--编辑器
     SettingsLayUtil.TITLE;

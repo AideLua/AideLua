@@ -131,6 +131,28 @@ function onKeyUp(KeyCode,event)
   end
 end
 
+function refreshBottomBarState()
+  local config=activity.getResources().getConfiguration()
+  local isLandscape=config.orientation==Configuration.ORIENTATION_LANDSCAPE
+  if previousButton.getVisibility()==View.GONE and nextButton.getVisibility()==View.GONE then
+    local linearParams=buttonBar.getLayoutParams()
+    if isLandscape then
+      linearParams.width=0
+     else
+      linearParams.height=0
+    end
+    buttonBar.setLayoutParams(linearParams)
+   else
+    local linearParams=buttonBar.getLayoutParams()
+    if isLandscape then
+      linearParams.width=-2
+     else
+      linearParams.height=-2
+    end
+    buttonBar.setLayoutParams(linearParams)
+  end
+end
+
 for index,content in ipairs(agreements) do
   table.insert(pages,agreementPage(content.title,content.icon,content.name,content.date))
 end
@@ -159,17 +181,17 @@ pageView.setOnPageChangeListener(PageView.OnPageChangeListener{
   onPageChange=function(view,page)
     local nowPage=pages[page+1]
     NowPage=nowPage
+    if page+1==maxPage then
+      nextButton.setText(R.string.Jesse205_step_finish)
+     else
+      nextButton.setText(R.string.Jesse205_step_next)
+    end
     if page==0 then
       previousButton.setClickable(false)
       previousButton.setVisibility(View.GONE)
      else
       previousButton.setClickable(true)
       previousButton.setVisibility(View.VISIBLE)
-    end
-    if page+1==maxPage then
-      nextButton.setText(R.string.Jesse205_step_finish)
-     else
-      nextButton.setText(R.string.Jesse205_step_next)
     end
     if nowPage.allowNext==false then
       nextButton.setClickable(false)
@@ -178,6 +200,7 @@ pageView.setOnPageChangeListener(PageView.OnPageChangeListener{
       nextButton.setClickable(true)
       nextButton.setVisibility(View.VISIBLE)
     end
+    refreshBottomBarState()
     actionBar.setTitle(nowPage.title)
   end
 })

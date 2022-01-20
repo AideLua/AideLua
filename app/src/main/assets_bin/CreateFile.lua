@@ -14,7 +14,7 @@ local function createFileInfoDialog(config,nowDir)--文件名填写对话框
     local errorState
     local fileName=text
     local fileType=config.fileType
-    if fileType then
+    if fileType and not(fileName:find("%.")) then
       fileName=fileName.."."..fileType
     end
     local filePath=rel2AbsPath(fileName,nowDir.getPath())

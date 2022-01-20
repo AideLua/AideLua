@@ -5,7 +5,6 @@ initApp=true
 
 require "Jesse205"
 import "agreements"
-
 welcomeAgain=not(getSharedData("welcome"))
 if not(welcomeAgain) then
   for index,content in ipairs(agreements) do
@@ -73,10 +72,13 @@ import "item"
 
 import "adapter.FileListAdapter"
 
+--申请存储权限
+PermissionUtil.smartRequestPermission({"android.permission.WRITE_EXTERNAL_STORAGE","android.permission.READ_EXTERNAL_STORAGE"})
 
 safeModeEnable=File("/sdcard/aidelua_safemode").exists()
 notSafeModeEnable=not(safeModeEnable)
 application.set("safeModeEnable",safeModeEnable)
+
 
 subWindow_ProjectPath,subWindow_FilePath=...
 
@@ -98,6 +100,8 @@ NowFileShowData=nil
 NowFileType=nil
 NowDirectory=nil--已打开文件夹
 NowDirectoryFilesList={}
+NowFilePosition=nil--当前文件在文件列表中位置
+FilesPositions={}
 
 NowProjectDirectory=nil--项目根路径
 OpenedProject=false--是否打开了工程
@@ -164,7 +168,7 @@ MyCodeEditor=editor2my(CodeEditor)
 
 activity.setTitle(R.string.app_name)
 activity.setContentView(loadlayout("layout"))
-actionBar=activity.getSupportActionBar()
+--actionBar=activity.getSupportActionBar()
 actionBar.setTitle(R.string.app_name)
 actionBar.setDisplayHomeAsUpEnabled(true)
 
@@ -222,7 +226,7 @@ function onCreate(savedInstanceState)
   if openedProject=="nil" then
     openedProject=nil
   end
-  if openedProject and openedProject~=ProjectsPath and not(savedInstanceState) then
+  if openedProject and openedProject~=ProjectsPath then
     --print(openedProject,type(openedProject))
     local projectDirectory=File(tostring(openedProject))
     if projectDirectory.isDirectory() then
@@ -434,17 +438,21 @@ function onResume()
     reload=true
     application.set("luaeditor_initialized",false)
   end
+  local isNotSysNightMode=not(ThemeUtil.isSysNightMode())
   if reload
-    or oldTheme~=ThemeUtil.getAppTheme()
-    or oldDarkActionBar~=getSharedData("theme_darkactionbar")
+    or (oldTheme~=ThemeUtil.getAppTheme() and isNotSysNightMode)
+    or (oldDarkActionBar~=getSharedData("theme_darkactionbar") and isNotSysNightMode)
     or oldRichAnim~=getSharedData("richAnim")
     or ProjectsPath~=File(getSharedData("projectsDir")).getPath()
     then
+    --[[
     activity.finish()
     local intent=Intent(activity,Main)
     activity.startActivity(intent)
     local aRanim=android.R.anim
     activity.overridePendingTransition(aRanim.fade_in,aRanim.fade_out)
+    ]]
+    activity.recreate()
     return
   end
   if magnifier then--刷新放大镜状态
@@ -486,11 +494,12 @@ end
 function onResult(name,action,content)
   if action=="project_created_successfully" then
     showSnackBar(R.string.create_success)
-    AlertDialog.Builder(this)
-    .setTitle(activity.getString(R.string.reminder))
-    .setMessage(activity.getString(R.string.project_create_tip))
-    .setPositiveButton(android.R.string.ok,nil)
-    .show()
+    .setAction(R.string.open,function()
+      if OpenedProject then--已打开项目
+        closeProject()
+      end
+      openProject(File(content))
+    end)
    else
     showSnackBar(action)
   end

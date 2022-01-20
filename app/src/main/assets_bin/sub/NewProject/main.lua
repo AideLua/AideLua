@@ -292,19 +292,19 @@ function newProject(keys,AndroluaVersion,BaseTemplateConfig,projectPath,Template
     end
     io.open(path,"w"):write(fileContent):close()
   end
-  return true
+  return true,projectPath
 end
 
 function update(message)
   showLoadingDia(message)
 end
 
-function callback(success)
+function callback(success,projectPath)
   closeLoadingDia()
   if success then
-    activity.result({"project_created_successfully"})
+    activity.result({"project_created_successfully",projectPath})
    else
-    AlertDialog.Builder(this)
+    AlertDialog.Builder(activity)
     .setTitle(activity.getString(R.string.project_create_failed))
     .setMessage(activity.getString(R.string.unknowError))
     .setPositiveButton(android.R.string.ok,nil)
@@ -465,9 +465,16 @@ creativeButton.onClick=function()
     MyToast("请选择一个AndroLua版本")
     return
   end
+  AlertDialog.Builder(this)
+  .setTitle(activity.getString(R.string.reminder))
+  .setMessage(activity.getString(R.string.project_create_tip))
+  .setPositiveButton(R.string.create,function()
+    showLoadingDia(nil,R.string.creating)
+    activity.newTask(newProject,update,callback).execute({keys,AndroluaVersion,BaseTemplateConfig,projectPath,TemplatesDir,BaseTemplateDirPath,BaseTemplatePath,OpenedSLibs,OpenedJarLibs,OpenedCLibs})
+  end)
+  .setNegativeButton(android.R.string.no,nil)
+  .show()
 
-  showLoadingDia(nil,R.string.creating)
-  activity.newTask(newProject,update,callback).execute({keys,AndroluaVersion,BaseTemplateConfig,projectPath,TemplatesDir,BaseTemplateDirPath,BaseTemplatePath,OpenedSLibs,OpenedJarLibs,OpenedCLibs})
 end
 
 androidXSwitchParent.onClick=function()

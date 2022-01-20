@@ -13,7 +13,7 @@ appInfo={
     message="为极客和程序员等打造，重认手机上的工具",
     icon=R.drawable.ic_windmill,
     click=function()
-      openUrl("http://www.agyer.com/")
+      openUrl("https://www.coolapk.com/apk/com.agyer.windmill")
     end,
   },
 }

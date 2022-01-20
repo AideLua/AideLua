@@ -1,8 +1,9 @@
 local Jesse205={}
 _G.Jesse205=Jesse205
-Jesse205._VERSION="10.0.0(Pro)"
-Jesse205._VERSIONCODE=100099
+Jesse205._VERSION="10.0.0(Pro)"--库版本名
+Jesse205._VERSIONCODE=100099--库版本号
 Jesse205._ENV=_ENV
+Jesse205.themeType="Jesse205"--主题类型
 
 require "import"--导入import
 local context=activity or service--当前context
@@ -58,7 +59,7 @@ import "android.view.View"--加载主题要用
 import "android.os.Build"
 
 --加载主题
---一定要在get某东西（ActionBar等）必须先把主题搞定
+--在get某东西（ActionBar等）前必须把主题搞定
 if not(notLoadTheme) then
   local color=theme.color
   local ripple=color.Ripple
@@ -83,7 +84,7 @@ if not(notLoadTheme) then
   for index,content in ipairs(dimens) do
     number[content]=resources.getDimension(R.dimen["Jesse205_"..content])
   end
-  import "com.Jesse205.app.ThemeUtil"--主题优先加载
+  import "com.Jesse205.app.ThemeUtil"
   ThemeUtil.refreshUI()
 end
 
@@ -106,6 +107,8 @@ import "android.graphics.Color"
 import "android.graphics.Typeface"
 import "android.graphics.drawable.GradientDrawable"
 
+import "androidx.core.content.ContextCompat"
+
 import "androidx.coordinatorlayout.widget.CoordinatorLayout"
 import "androidx.swiperefreshlayout.widget.SwipeRefreshLayout"
 import "androidx.cardview.widget.CardView"
@@ -120,6 +123,7 @@ import "android.content.Intent"
 import "android.content.Context"
 import "android.content.res.Configuration"--各种信息
 import "android.content.res.ColorStateList"
+import "android.content.pm.PackageManager"
 
 --导入常用的Material类
 import "com.google.android.material.tabs.TabLayout"
@@ -143,6 +147,7 @@ import "com.lua.custrecycleradapter.LuaCustRecyclerHolder"
 
 import "com.androlua.LuaUtil"
 
+import "com.Jesse205.app.PermissionUtil"
 import "com.Jesse205.lua.math"--导入更强大的math
 import "com.Jesse205.lua.string"--导入更强大的string
 
@@ -240,7 +245,7 @@ cancelable：是否可以取消
 local loadingDia
 function showLoadingDia(message,title,cancelable)
   if not(loadingDia) then
-    loadingDia=ProgressDialog(this)
+    loadingDia=ProgressDialog(context)
     loadingDia.setProgressStyle(ProgressDialog.STYLE_SPINNER)--进度条类型
     loadingDia.setTitle(title or context.getString(R.string.Jesse205_loading))--标题
     loadingDia.setCancelable(cancelable or false)--是否可以取消
@@ -271,6 +276,8 @@ function showDialog(title,err)
   .show()
 end
 showErrorDialog=showDialog
+
+
 
 
 --导入共享代码

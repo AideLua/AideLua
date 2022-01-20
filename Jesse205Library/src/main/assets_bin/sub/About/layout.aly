@@ -30,6 +30,7 @@
           layout_width="fill";
           layout_height="fill";
           fillViewport=true;
+          id="appIconGroupScrollView";
           {
             LinearLayoutCompat;
             gravity="center|top";

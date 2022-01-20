@@ -7,10 +7,12 @@ return function(title,icon,name,date)
       layout_height="fill";
       orientation="vertical";
       buildTitlebar(icon,title);
+      layoutTransition=LayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
       {
         ScrollView;
         layout_height="fill";
         layout_width="fill";
+        layout_weight="1";
         id="scrollView";
         {
           LinearLayoutCompat;
@@ -27,16 +29,16 @@ return function(title,icon,name,date)
             textColor=theme.color.textColorPrimary;
             --movementMethod=LinkMovementMethod.getInstance();
           };
-
         };
-        {
-          AppCompatCheckBox;
-          text=formatResStr(R.string.Jesse205_agreement_checkBox,{string.lower(activity.getString(title))});
-          id="checkBox";
-          layout_width="fill";
-          --layout_height="56dp";
-          padding="16dp";
-        };
+      };
+      {
+        AppCompatCheckBox;
+        text=formatResStr(R.string.Jesse205_agreement_checkBox,{string.lower(activity.getString(title))});
+        id="checkBox";
+        layout_width="fill";
+        layout_height="48dp";
+        layout_marginRight="16dp";
+        layout_marginLeft="16dp";
       };
     },
     onInitLayout=function(self)
@@ -66,6 +68,7 @@ return function(title,icon,name,date)
         nextButton.setVisibility(View.GONE)
         setSharedData(name,nil)
       end
+      refreshBottomBarState()
     end,
   }
 end

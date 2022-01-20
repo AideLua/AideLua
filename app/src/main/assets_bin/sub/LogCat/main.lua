@@ -2,8 +2,20 @@ require "import"
 pcall(function()
   import "Jesse205"
 end)
+isSupportActivity=false
 
-isSupportActivity=activity.getClass().getSuperclass().getName()=="androidx.appcompat.app.AppCompatActivity"
+--判断是不是AndroidX的类
+nowParent=activity.getClass()
+while nowParent do
+  local className=nowParent.getName()
+  if className=="androidx.appcompat.app.AppCompatActivity" then
+    isSupportActivity=true
+    break
+  end
+  nowParent=nowParent.getSuperclass()--父类
+end
+nowParent=nil
+
 if not(Jesse205) then
   import "android.app.*"
   import "android.os.*"

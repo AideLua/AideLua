@@ -282,6 +282,14 @@ local itemsLay={
 }
 SettingsLayUtil.itemsLay=itemsLay
 
+local function setAlpha(views,alpha)
+  for index,content in pairs(views) do
+    if content then
+    content.setAlpha(alpha)
+    end
+  end
+end
+
 function SettingsLayUtil.newAdapter(data,onItemClick)
   return LuaCustRecyclerAdapter(AdapterCreator({
     getItemCount=function()
@@ -320,23 +328,29 @@ function SettingsLayUtil.newAdapter(data,onItemClick)
 
     onBindViewHolder=function(holder,position)
       local data=data[position+1]
-      local tag=holder.view.getTag()
+      local layoutView=holder.view
+      local tag=layoutView.getTag()
       tag._data=data
+      --datum
       --tag.key=data.key
       local title=data.title
       local icon=data.icon
       local summary=data.summary
+      local enabled=data.enabled
+      --View
+      local titleView=tag.title
+      local summaryView=tag.summary
       local statusView=tag.status
       local rightIconView=tag.rightIcon
       local iconView=tag.icon
 
-      if title then
-        tag.title.text=title
+      if title and titleView then
+        titleView.text=title
       end
-      if summary then
-        tag.summary.text=summary
+      if summary and summaryView then
+        summaryView.text=summary
       end
-      if icon then
+      if icon and iconView then
         if type(icon)=="number" then
           iconView.setImageResource(icon)
          else
@@ -344,6 +358,19 @@ function SettingsLayUtil.newAdapter(data,onItemClick)
           .load(icon)
           .transition(DrawableTransitionOptions.withCrossFade())
           .into(iconView)
+        end
+      end
+      if enabled==false then
+        setAlpha({titleView,summaryView,iconView,rightIconView},0.5)
+        layoutView.setEnabled(false)
+        if statusView then
+          statusView.setEnabled(false)
+        end
+       else
+        setAlpha({titleView,summaryView,iconView,rightIconView},1)
+        layoutView.setEnabled(true)
+        if statusView then
+          statusView.setEnabled(true)
         end
       end
       if statusView then

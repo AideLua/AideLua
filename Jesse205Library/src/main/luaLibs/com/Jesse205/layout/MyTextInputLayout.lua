@@ -12,12 +12,12 @@ MyTextInputLayout.layout={
   };
 }
 
-MyTextInputLayout.insertTable=insertTable
+--MyTextInputLayout.insertTable=insertTable
 
 function MyTextInputLayout.Builder(config)
   local layout=table.clone(MyTextInputLayout.layout)
   if config then
-    MyTextInputLayout.insertTable(layout,config)
+    insertTable(layout,config)
   end
   return layout
 end

@@ -1,4 +1,4 @@
-androluaVersions={"1.5(5.0.10)","1.0(5.0.16)"}--所有androlua版本号
+androluaVersions={"1.5(5.0.10)(armeabi-v7a)","1.0(5.0.16)(arm64-v8a)"}--所有androlua版本号
 appVersions={"2.1"}--所有app版本号
 format={
   "settings.gradle",

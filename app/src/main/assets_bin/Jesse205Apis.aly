@@ -13,7 +13,7 @@
   "newSubActivity","isDarkColor","openInBrowser","openUrl",
 
   "AppPath","ThemeUtil","EditDialogBuilder","ImageDialogBuilder",
-  "NetErrorStr","MyToast","AutoToolbarLayout",
+  "NetErrorStr","MyToast","AutoToolbarLayout","PermissionUtil",
   "AutoCollapsingToolbarLayout","SettingsLayUtil","Jesse205",
 
   --自定义View或者Util

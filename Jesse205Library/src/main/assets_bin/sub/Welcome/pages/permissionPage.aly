@@ -16,7 +16,7 @@
   onInitLayout=function(self)
     local recyclerView=self.recyclerView
     local function onItemClick(view,views,key,data)
-      activity.requestPermissions(String(data.permissions),0)
+      PermissionUtil.request(data.permissions)
     end
     table.insert(permissionInformation,{
       icon=R.drawable.ic_check_all,

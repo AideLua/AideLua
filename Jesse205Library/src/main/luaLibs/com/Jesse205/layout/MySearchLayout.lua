@@ -41,7 +41,7 @@ MySearchLayout.layout={
   };
 }
 
-function MySearchLayout.Builder(config)
+function MySearchLayout.Builder(config)--返回布局表
   --ids=ids or {}
   local layout=table.clone(MySearchLayout.layout)
   if config then
@@ -51,7 +51,7 @@ function MySearchLayout.Builder(config)
   return layout
 end
 
-function MySearchLayout.load(config,...)
+function MySearchLayout.load(config,...)--返回视图
   return loadlayout(MySearchLayout.Builder(config),...)
 end
 return MySearchLayout

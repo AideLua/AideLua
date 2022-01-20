@@ -248,7 +248,7 @@ function ThemeUtil.refreshUI()
   end
 
   --构建用的主题名字
-  local themeString=("Theme_%s_%s"):format(getSharedData("theme_type"),themeKey)
+  local themeString=("Theme_%s_%s"):format(Jesse205.themeType,themeKey)
   if getSharedData("theme_darkactionbar") then--如果是暗色ActionBar
     themeString=themeString.."_DarkActionBar"
   end
@@ -268,6 +268,7 @@ function ThemeUtil.refreshUI()
 
   if not(useCustomAppToolbar) then
     local actionBar=context.getSupportActionBar()
+    _G.actionBar=actionBar
     if actionBar then
       actionBar.setElevation(0)--关闭ActionBar阴影
     end

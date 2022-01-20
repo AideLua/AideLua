@@ -98,7 +98,7 @@ for index,content in ipairs(appInfo) do
   local ids={}
   appIconGroup.addView(loadlayout("iconItem",ids,LinearLayoutCompat))
   table.insert(topCardItems,ids.mainIconLay)
-  local icon,iconView=content.icon,ids.icon
+  local icon,iconView,nameView=content.icon,ids.icon,ids.name
   if type(icon)=="number" then
     iconView.setImageResource(icon)
    else
@@ -106,7 +106,7 @@ for index,content in ipairs(appInfo) do
     .load(icon)
     .into(iconView)
   end
-  ids.name.setText(content.name)
+  nameView.setText(content.name)
   ids.message.setText(content.message)
   if content.click then
     ids.mainIconLay.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary))
@@ -117,6 +117,9 @@ for index,content in ipairs(appInfo) do
     pain.setTypeface(content.typeface)
    else
     pain.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
+  end
+  if content.nameColor then
+    nameView.setTextColor(content.nameColor)
   end
   ids=nil
 end

@@ -1,5 +1,12 @@
 {
-  --[[
+  {--第三方信息共享清单
+    icon=R.drawable.ic_shield_sync_outline;
+    title=R.string.Jesse205_tisl,
+    name="TISL",
+    date="xxxx年xx月xx日",
+    type="aly",
+  },
+--[[
   {--用户协议
     icon=R.drawable.ic_shield_account_outline;
     title=R.string.Jesse205_userAgreement,
@@ -11,6 +18,5 @@
     title=R.string.Jesse205_privacyPolicy,
     name="PrivacyPolicy",
     date="xxxx年xx月xx日",
-  },
-]]
+  },]]
 }

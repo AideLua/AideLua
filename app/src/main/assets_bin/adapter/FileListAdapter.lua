@@ -224,7 +224,6 @@ return function(data,item)
       local data={position=position}
       local tag=holder.view.getTag()
       tag._data=data
-
       if position==0 then--是第一项
         if OpenedProject then
           local file=NowDirectory.getParentFile()
@@ -253,6 +252,7 @@ return function(data,item)
           tag.title.setText(fileName)
           tag.icon.setAlpha(getIconAlphaByFileName(fileName))
           if file.isFile() then
+            FilesPositions[filePath]=position
             local fileType=getFileTypeByName(fileName)
             tag.icon.setImageResource(getFileIconResIdByType(fileType))
             if fileType then
@@ -264,6 +264,7 @@ return function(data,item)
               tag.title.setTextColor(theme.color.colorAccent)
               tag.icon.setColorFilter(theme.color.colorAccent)
               tag.highLightCard.setCardBackgroundColor(theme.color.rippleColorAccent)
+              NowFilePosition=position
              else
               tag.title.setTextColor(theme.color.textColorPrimary)
               tag.icon.setColorFilter(colorFilter)

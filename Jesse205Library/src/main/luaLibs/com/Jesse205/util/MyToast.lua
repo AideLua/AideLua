@@ -1,8 +1,8 @@
---module(...,package.seeall)
 local MyToast={}
 setmetatable(MyToast,MyToast)
 
 local context=activity or service
+--mainLay为全局变量
 
 function MyToast.showToast(text)
   local toast=Toast.makeText(context,text,Toast.LENGTH_SHORT)

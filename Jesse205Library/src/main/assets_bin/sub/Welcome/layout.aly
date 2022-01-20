@@ -9,12 +9,14 @@
     layout_width="fill";
     --orientation="vertical";
     id="mainLay2";
+    layoutTransition=LayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
     {
       LinearLayoutCompat;
       layout_height="fill";
       layout_width="fill";
       orientation="vertical";
       layout_weight=1;
+      layoutTransition=LayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
       {
         AutoToolbarLayout;
         layout_width="fill";
@@ -35,6 +37,7 @@
         id="pageView";
         layout_height="fill";
         layout_width="fill";
+        layoutTransition=LayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
       };
     };
     {
@@ -49,8 +52,9 @@
       {
         MaterialButton_TextButton;
         --layout_gravity="left|center";
-        layout_height="48dp";
-        layout_width="64dp";
+        minimumHeight="48dp";
+        minimumWidth="64dp";
+        minWidth=0;
         padding="8dp";
         layout_margin="8dp";
         layout_marginLeft="16dp";
@@ -61,8 +65,9 @@
       {
         MaterialButton;
         --layout_gravity="right|center";
-        layout_height="48dp";
-        layout_width="64dp";
+        minimumHeight="48dp";
+        minimumWidth="64dp";
+        minWidth=0;
         padding="8dp";
         layout_margin="8dp";
         layout_marginLeft="16dp";

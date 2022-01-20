@@ -51,9 +51,13 @@ end
 function onItemClick(view,views,key,data)
   if key=="theme_picker" then
     newSubActivity("ThemePicker")
+    --[[
+   elseif key=="test" then
+    settings[3].enabled=not(settings[3].enabled)
+    adp.notifyItemChanged(2)]]
    elseif key=="about" then
     newSubActivity("About")
-   elseif key=="theme_darkactionbar" then
+   elseif key=="theme_darkactionbar" and not(ThemeUtil.isSysNightMode()) then
     reloadActivity(view)
    else
     if data.action=="editString" then
@@ -79,6 +83,9 @@ recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
     MyAnimationUtil.RecyclerView.onScroll(recyclerView,0,0)
   end
 })
+mainLay.onTouch=function(view,...)
+  recyclerView.onTouchEvent(...)
+end
 
 
 if scroll then

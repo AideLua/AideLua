@@ -1,4 +1,33 @@
 local ScreenFixUtil={}
+function ScreenFixUtil.getNavigationBarHeight()
+  local resourceId = activity.Resources.getIdentifier("navigation_bar_height","dimen", "android");
+  local height = activity.Resources.getDimensionPixelSize(resourceId)
+  return height
+end
+function ScreenFixUtil.getStatusBarHeight()
+  local resourceId = activity.Resources.getIdentifier("status_bar_height", "dimen","android")
+  local height = activity.Resources.getDimensionPixelSize(resourceId)
+  return height
+end
+
+function ScreenFixUtil.getSmallestScreenWidthDp()
+  return activity.Resources.getConfiguration().smallestScreenWidthDp
+end
+
+function ScreenFixUtil.getScreenRealSize()
+  import "android.util.DisplayMetrics"
+  local wm=activity.getSystemService(Context.WINDOW_SERVICE)
+  local displayMetrics=DisplayMetrics()
+  wm.getDefaultDisplay().getRealMetrics(displayMetrics)
+  return displayMetrics.widthPixels,displayMetrics.heightPixels
+end
+
+function ScreenFixUtil.getDensityDpi()
+  import "android.util.DisplayMetrics"
+  local dm=DisplayMetrics()
+  activity.WindowManager.getDefaultDisplay().getMetrics(dm)
+  return dm.densityDpi;
+end
 
 local ScreenConfigDecoder={
   device="phone",
@@ -117,13 +146,13 @@ function ScreenConfigDecoder.decodeConfiguration(self,config)
       setLayoutsOrientation(identicalLays,LinearLayout.HORIZONTAL)
       setLayoutsOrientation(differentLays,LinearLayout.VERTICAL)
       setLayoutsSize(fillParentViews,-1,-2)
-      if device=="phone" then
+      if device=="phone" then--手机视图，横向2个
         setLayoutManagersSpanCount(layoutManagers,2)
         setGridViewsNumColumns(gridViews,2)
-       elseif device=="pad" then
+       elseif device=="pad" then--平板视图，横向4个
         setLayoutManagersSpanCount(layoutManagers,4)
         setGridViewsNumColumns(gridViews,4)
-       elseif device=="pc" then
+       elseif device=="pc" then--电脑视图，横向6个
         setLayoutManagersSpanCount(layoutManagers,6)
         setGridViewsNumColumns(gridViews,6)
       end
@@ -131,13 +160,13 @@ function ScreenConfigDecoder.decodeConfiguration(self,config)
       setLayoutsOrientation(identicalLays,LinearLayout.VERTICAL)
       setLayoutsOrientation(differentLays,LinearLayout.HORIZONTAL)
       setLayoutsSize(fillParentViews,-2,-1)
-      if device=="phone" then
+      if device=="phone" then--手机视图，横向1个
         setLayoutManagersSpanCount(layoutManagers,1)
         setGridViewsNumColumns(gridViews,1)
-       elseif device=="pad" then
+       elseif device=="pad" then--平板视图，横向2个
         setLayoutManagersSpanCount(layoutManagers,2)
         setGridViewsNumColumns(gridViews,2)
-       elseif device=="pc" then
+       elseif device=="pc" then--电脑视图，横向4个
         setLayoutManagersSpanCount(layoutManagers,4)
         setGridViewsNumColumns(gridViews,4)
       end
@@ -154,18 +183,25 @@ function ScreenConfigDecoder.decodeConfiguration(self,config)
   end
 
   if listViews then
-    if device=="phone" then
+    if device=="phone" then--手机视图
       if screenWidthDp>704 then
         setLayoutsSize(listViews,nil,math.dp2int(704))
        else
         setLayoutsSize(listViews,nil,-1)
       end
-     else
+     elseif device=="pad" then--平板视图
       if screenWidthDp>800 then
         setLayoutsSize(listViews,nil,math.dp2int(800))
        else
         setLayoutsSize(listViews,nil,-1)
       end
+     elseif device=="pc" then--电脑视图
+      if screenWidthDp>1000 then
+        setLayoutsSize(listViews,nil,math.dp2int(1000))
+       else
+        setLayoutsSize(listViews,nil,-1)
+      end
+
     end
   end
 

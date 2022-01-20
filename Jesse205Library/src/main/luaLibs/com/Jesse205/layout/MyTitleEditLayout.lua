@@ -19,9 +19,9 @@ MyTitleEditLayout.layout={
   gravity="center|left";
 }
 
-MyTitleEditLayout.insertTable=insertTable
+--MyTitleEditLayout.insertTable=insertTable
 
-function MyTitleEditLayout.Builder(config)
+function MyTitleEditLayout.Builder(config)--返回布局表
   local layout=table.clone(MyTitleEditLayout.layout)
   if config then
     insertTable(layout,config)
@@ -29,7 +29,7 @@ function MyTitleEditLayout.Builder(config)
   return layout
 end
 
-function MyTitleEditLayout.load(config,...)
+function MyTitleEditLayout.load(config,...)--返回视图
   return loadlayout(MyTitleEditLayout.Builder(config),...)
 end
 return MyTitleEditLayout

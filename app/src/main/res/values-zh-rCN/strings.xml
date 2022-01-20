@@ -36,6 +36,7 @@
     <string name="commentedCode">注释代码</string>
     <string name="uncommentedCode">取消注释代码</string>
     <string name="logCat">日志猫</string>
+    <string name="open">打开</string>
     
     <string name="exit_toast">再按一次退出程序</string>
     <string name="res_references">引用资源</string>

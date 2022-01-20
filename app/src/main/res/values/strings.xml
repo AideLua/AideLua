@@ -37,6 +37,7 @@
     <string name="commentedCode">Commented code</string>
     <string name="uncommentedCode">Uncomment code</string>
     <string name="logCat">Log Cat</string>
+    <string name="open">Open</string>
     
     <string name="exit_toast">Press again to exit the program.</string>
     <string name="res_references">Reference resources</string>

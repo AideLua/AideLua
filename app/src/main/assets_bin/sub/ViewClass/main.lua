@@ -224,7 +224,7 @@ for item=0,#allMethods-1 do
   if method:find("%..-%..-%(") then
     method=method:match(".+%.(.-%..-%(.-%))")
   end
-  if throws then
+  if throws and throws~="" then
     info=info.."\n"..throws
   end
   table.insert(MethodsList,{name=method,summary=info})

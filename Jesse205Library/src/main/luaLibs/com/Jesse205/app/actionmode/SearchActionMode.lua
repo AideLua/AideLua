@@ -11,7 +11,7 @@ return function(config)
         hint=config.hint or activity.getString(R.string.abc_search_hint);
         text=config.text;
       },ids))
-      ids.searchEdit.requestFocus()
+      ids.searchEdit.requestFocus()--搜索框取得焦点
       inputMethodService.showSoftInput(ids.searchEdit,InputMethodManager.SHOW_FORCED)
 
       if config.onEditorAction then--点击回车事件

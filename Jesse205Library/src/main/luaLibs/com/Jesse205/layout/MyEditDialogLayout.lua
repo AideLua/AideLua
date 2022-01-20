@@ -18,9 +18,9 @@ MyEditDialogLayout.layout=MyTextInputLayout.Builder{
 
 
 
-MyEditDialogLayout.insertTable=insertTable
+--MyEditDialogLayout.insertTable=insertTable
 
-function MyEditDialogLayout.Builder(config)
+function MyEditDialogLayout.Builder(config)--返回布局表
   local layout=table.clone(MyEditDialogLayout.layout)
   if config then
     insertTable(layout,config)
@@ -28,7 +28,7 @@ function MyEditDialogLayout.Builder(config)
   return layout
 end
 
-function MyEditDialogLayout.load(config,...)
+function MyEditDialogLayout.load(config,...)--返回视图
   return loadlayout({
     LinearLayout;
     layout_width="fill";
