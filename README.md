@@ -6,7 +6,7 @@
 Aide Lua 是一款依赖 Aide 的 Lua 编辑器
 
 ## 下载
-[〖Aide 高级设置版〗](https://www.lanzoui.com/b00zdhbeb)
+[〖Aide 高级设置版〗](https://www.lanzouy.com/b00zdhbeb)
 
 1. [Gitee下载(推荐，快速下载)](https://gitee.com/Jesse205/AideLua/releases)
 
