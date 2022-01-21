@@ -737,7 +737,7 @@ function openFile(file,reOpen,line)
       if not(loadingFiles) then
         adp.notifyDataSetChanged()
       end]]
-      if not(loadingFiles) then
+      if not(loadingFiles) and not(reOpen) then
         if NowFilePosition then
           adp.notifyItemChanged(NowFilePosition)
         end

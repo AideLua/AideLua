@@ -146,6 +146,12 @@ return {{ShoredModuleName}}
   },
 
   {
+    name="Empty Lua File",
+    fileType="lua",
+    defaultContent="",
+  },
+
+  {
     name="Empty File",
     fileType="txt",
     defaultContent="",

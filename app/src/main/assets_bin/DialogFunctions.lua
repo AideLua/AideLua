@@ -74,8 +74,15 @@ function renameDialog(file)--重命名对话框
     local errorState
     local newName=text
     local newFilePath=rel2AbsPath(newName,parentFile.getPath())
+    local lowerNewFilePath=string.lower(newFilePath)
     local newFile=File(newFilePath)
-    if newFile.exists() then--文件不能存在
+    local oldFilePath=file.getPath()
+    local lowerOldFilePath=string.lower(oldFilePath)
+    local isSelfFile=lowerNewFilePath==lowerOldFilePath
+    if newFilePath==oldFilePath then
+      return
+    end
+    if newFile.exists() and not(isSelfFile) then--文件不能存在
       editLay
       .setError(existsStr)
       .setErrorEnabled(true)
@@ -83,9 +90,13 @@ function renameDialog(file)--重命名对话框
     end
     editLay.setErrorEnabled(false)
     xpcall(function()
-      local oldFilePath=file.getPath()
-      local lowerOldFilePath=string.lower(oldFilePath)
-      os.rename(oldFilePath, newFilePath)
+      if isSelfFile then--大小写直接修改无效，使用临时文件
+        local tempFilePath=AppPath.Temp.."/"..os.time()
+        os.rename(oldFilePath, tempFilePath)
+        os.rename(tempFilePath, newFilePath)
+       else
+        os.rename(oldFilePath, newFilePath)
+      end
       local tabTag=FilesTabList[lowerOldFilePath]
       if tabTag then
         local tab=tabTag.tab
@@ -95,7 +106,7 @@ function renameDialog(file)--重命名对话框
         NowFile=newFile
         NowFileType=fileType
         --end
-        FilesTabList[string.lower(newFilePath)]=tabTag
+        FilesTabList[lowerNewFilePath]=tabTag
         FilesTabList[lowerOldFilePath]=nil
         tabTag.fileType=fileType
         tabTag.file=newFile
