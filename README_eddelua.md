@@ -6,7 +6,7 @@
 Edde Lua 是一款依赖 AndroLua+ 的 Lua 编辑器
 
 ## 下载
-[〖AndroLua+〗](https://www.lanzouy.com/b00zdhbeb)
+[〖AndroLua+〗]()
 
 1. [Gitee下载(推荐，快速下载)](https://gitee.com/Jesse205/AideLua/releases)
 
@@ -15,7 +15,7 @@ Edde Lua 是一款依赖 AndroLua+ 的 Lua 编辑器
 
   2. 此软件不能用来开发大型项目
 
-  3. 此软件必须搭配AndroLua等编译器，使用第三方编译器是为了提供编译环境
+  3. 此软件必须搭配AndroLua+等编译器，使用第三方编译器是为了提供编译环境
 
 ## 使用教程
   1.
