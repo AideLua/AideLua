@@ -20,7 +20,7 @@ appInfo={
 
 developers={
   {
-    name="Eddia",
+    name="Eddie",
     qq=2140125724,
     message="AideLua 开发者",
   },

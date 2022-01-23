@@ -14,7 +14,7 @@ local function createFileInfoDialog(config,nowDir)--文件名填写对话框
     local errorState
     local fileName=text
     local fileType=config.fileType
-    if fileType and not(fileName:find("%.")) then
+    if fileType then
       fileName=fileName.."."..fileType
     end
     local filePath=rel2AbsPath(fileName,nowDir.getPath())
@@ -38,8 +38,8 @@ local function createFileInfoDialog(config,nowDir)--文件名填写对话框
       io.open(filePath,"w"):write(fileContent):close()
       showSnackBar(R.string.create_success)
       editLay.setErrorEnabled(false)
-      openFile(file)
       refresh(nowDir)
+      openFile(file)
     end,
     function(err)
       showErrorDialog(R.string.create_failed,err)
