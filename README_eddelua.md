@@ -1,4 +1,4 @@
-# Aide Lua
+# Edde Lua
 [![QQ](https://img.shields.io/badge/Join-QQ_Group-ff69b4)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
 ![icon](https://gitee.com/Jesse205/AideLua/raw/master/ic_cover-aidelua.png)
 
