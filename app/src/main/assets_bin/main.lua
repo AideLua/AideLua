@@ -119,6 +119,7 @@ PathsTabList={}
 PathsTabShowList={}
 
 buildKeysCache()
+magnifierPosition={}
 
 oldJesse205LibHl=getSharedData("Jesse205Lib_Highlight")
 oldAndroidXHl=getSharedData("AndroidX_Highlight")
@@ -197,7 +198,8 @@ setTypeface(Typeface.MONOSPACE);
         File bf = new File(fontDir + "bold.ttf");
         if (bf.exists())
             setBoldTypeface(Typeface.createFromFile(bf));
-        File tf = new File(fontDir + "italic.ttf");
+        File tf = new File(fontDir + "italic.t
+        tf");
         if (tf.exists())
             setItalicTypeface(Typeface.createFromFile(tf));
     }]]
@@ -212,7 +214,7 @@ if notSafeModeEnable then
     import "android.widget.Magnifier"
     magnifier=Magnifier(editorGroup)
     magnifierUpdateTi=Ticker()--放大镜的定时器，定时刷新放大镜
-    magnifierUpdateTi.setPeriod(100)
+    magnifierUpdateTi.setPeriod(200)
     magnifierUpdateTi.onTick=function()
       magnifier.update()
     end
@@ -904,9 +906,11 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
       drawerChild.setLayoutParams(linearParams)
 
       if drawerOpened then
-        task(50,function()
-          drawer.openDrawer(Gravity.LEFT)
-        end)
+        Handler().postDelayed(Runnable({
+          run=function()
+            drawer.openDrawer(Gravity.LEFT)
+          end
+        }),50)
       end
       largeMainLay.setVisibility(View.GONE)
       drawer.setVisibility(View.VISIBLE)
@@ -914,6 +918,7 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
         drawerOpened=false
       end
       drawerChild.setVisibility(View.VISIBLE)
+      toggle.syncState()
 
       largeDrawerLay.setLayoutTransition(LDLayoutTransition)
       largeMainLay.setLayoutTransition(LMLlayoutTransition)
@@ -935,6 +940,7 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
        else
         drawerChild.setVisibility(View.GONE)
       end
+      toggle.syncState()
 
       largeDrawerLay.setLayoutTransition(LDLayoutTransition)
       largeMainLay.setLayoutTransition(LMLlayoutTransition)

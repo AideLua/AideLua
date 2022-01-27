@@ -86,7 +86,13 @@ end
 dlg=luajava.override(AppCompatDialog,{
   onMenuItemSelected=function(super,id,item)
     dlg.dismiss()
-end},activity,R.style.Theme_MaterialComponents_Light)
+  end},activity,(function()
+  if ThemeUtil.NowAppTheme.night then
+    return R.style.Theme_MaterialComponents
+   else
+    return R.style.Theme_MaterialComponents_Light
+  end
+end)())
 dlg.setTitle("布局表预览")
 dlg_actionBar=dlg.getSupportActionBar()
 dlg_actionBar.setElevation(0)
@@ -104,7 +110,11 @@ end
 
 function show(s)
   local oldThemeId=activity.getThemeResId()
-  activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  if ThemeUtil.NowAppTheme.night then
+    activity.setTheme(R.style.Theme_MaterialComponents)
+   else
+    activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  end
   dlg.setContentView(loadlayout(loadstring("return "..s)(),{}))
   activity.setTheme(oldThemeId)
   local dia=dlg.show()

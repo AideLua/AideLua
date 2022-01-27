@@ -1,6 +1,6 @@
 require "import"
 import "Jesse205"
-
+import "com.Jesse205.FileInfoUtils"
 import "com.Jesse205.layout.util.SettingsLayUtil"
 import "com.Jesse205.layout.innocentlayout.RecyclerViewLayout"
 import "com.Jesse205.app.dialog.EditDialogBuilder"
@@ -17,6 +17,8 @@ actionBar.setDisplayHomeAsUpEnabled(true)
 
 oldTheme=ThemeUtil.getAppTheme()
 scroll=...
+
+REQUEST_ADDCLIB=10
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()
@@ -35,6 +37,33 @@ function onConfigurationChanged(config)
   screenConfigDecoder:decodeConfiguration(config)
 end
 
+function onActivityResult(requestCode,resultCode,data)
+  if resultCode==Activity.RESULT_OK then
+    if requestCode==REQUEST_ADDCLIB then
+      addComplexLibrary(FileInfoUtils.getPath(activity,data.getData()))
+    end
+  end
+end
+
+function addComplexLibrary(path)
+  local file=File(path)
+  local name=file.getName():match("(.+)%.zip")
+  local tempDirPath=AppPath.Temp.."/MyCustomComplexLibrary/"..name
+  local tempDir=File(tempDirPath)
+  if tempDir.exists() then
+    LuaUtil.rmDir(tempDir)
+  end
+  ZipUtil.unzip(path,tempDirPath)
+  for index,content in ipairs(luajava.astable(tempDir.listFiles())) do
+    if content.isFile() or not(File(content.getPath().."/config.lua").isFile()) then
+      MyToast(("文件（夹）“%s不合法”"):format(content.getName().."/config.lua"))
+      return
+    end
+  end
+  LuaUtil.copyDir(tempDir,File("/data/data/"..activity.getPackageName().."/files/templates/complexLibraries/"..name))
+  LuaUtil.rmDir(tempDir)--删除
+  MyToast("导入成功")
+end
 
 function reloadActivity(closeView)
   local aRanim=android.R.anim
@@ -59,6 +88,11 @@ function onItemClick(view,views,key,data)
     newSubActivity("About")
    elseif key=="theme_darkactionbar" and not(ThemeUtil.isSysNightMode()) then
     reloadActivity(view)
+   elseif key=="addComplexLibrary" then
+    local intent=Intent(Intent.ACTION_GET_CONTENT)
+    intent.setType("application/zip")
+    intent.addCategory(Intent.CATEGORY_OPENABLE)
+    activity.startActivityForResult(intent, REQUEST_ADDCLIB)
    else
     if data.action=="editString" then
       EditDialogBuilder.settingDialog(adp,views,key,data)

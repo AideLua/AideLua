@@ -11,7 +11,7 @@ BaseTemplateConfig=getConfigFromFile(BaseTemplateDirPath.."/config.lua")
 NotAllowStr={"/","\\",":","*","\"","<",">","|","?","%."}--不允许出现的文字
 
 ProjectsPath=getSharedData("projectsDir")
-AndroluaVersion=nil
+androluaVersion=nil
 --[[
 OpenedCLibs=getSharedData("newproject_openedCLibs") or {}
 OpenedJarLibs=getSharedData("newproject_openedJarLibs") or {}
@@ -85,7 +85,7 @@ function addChoiceChip(title,group,identification)
   local chip=loadlayout({
     Chip;
     text=title;
-    tag=config;
+    --tag=config;
     id=title;
     checkable=true;
     checkedIconResource=R.drawable.ic_mtrl_chip_checked_black;
@@ -147,10 +147,11 @@ function buildkeys()--整合keys
   keys.androidX=androidX
   keys.appName=appNameEdit.text
   keys.appPackageName=packageNameEdit.text
+  keys.androluaVersion=androluaVersion
   return keys
 end
 
-function newProject(keys,AndroluaVersion,BaseTemplateConfig,projectPath,TemplatesDir,BaseTemplateDirPath,BaseTemplatePath,OpenedSLibs,OpenedJarLibs,OpenedCLibs)
+function newProject(keys,BaseTemplateConfig,projectPath,TemplatesDir,BaseTemplateDirPath,BaseTemplatePath,OpenedSLibs,OpenedJarLibs,OpenedCLibs)
   require "import"
   import "java.io.File"
   import "java.io.FileInputStream"
@@ -162,19 +163,20 @@ function newProject(keys,AndroluaVersion,BaseTemplateConfig,projectPath,Template
 
   keys=luajava.astable(keys,true)
   BaseTemplateConfig=luajava.astable(BaseTemplateConfig,true)
-  OpenedSLibs=luajava.astable(OpenedSLibs,true)
-  OpenedJarLibs=luajava.astable(OpenedJarLibs,true)
-  OpenedCLibs=luajava.astable(OpenedCLibs,true)
+  OpenedSLibs=luajava.astable(OpenedSLibs,true)--勾选的简单库
+  OpenedJarLibs=luajava.astable(OpenedJarLibs,true)--勾选的Jar
+  OpenedCLibs=luajava.astable(OpenedCLibs,true)--勾选的复杂库
 
   local formatFilesList=BaseTemplateConfig.format
 
   local androidX=keys.androidX
+  local androluaVersion=keys.androluaVersion
 
   --各种路径
   local mainProjectPath=projectPath.."/app/src/main"
   local mainLibsPath=projectPath.."/app/libs"
   local mainLibsFile=File(mainLibsPath)
-  local androluaTemplatePath=BaseTemplateDirPath.."/androluaTemplate/"..AndroluaVersion
+  local androluaTemplatePath=BaseTemplateDirPath.."/androluaTemplate/"..androluaVersion
   local androluaBaseTemplatePath=androluaTemplatePath.."/baseTemplate.zip"
   local appTemplatePath=BaseTemplateDirPath.."/appTemplate/"..BaseTemplateConfig.appVersions[1]
   if androidX then
@@ -207,7 +209,7 @@ function newProject(keys,AndroluaVersion,BaseTemplateConfig,projectPath,Template
       end
 
       --Androlua定制
-      local customizedPath=("%s/%s.zip"):format(path,AndroluaVersion)
+      local customizedPath=("%s/%s.zip"):format(path,androluaVersion)
       local customizedFile=File(customizedPath)
       if customizedFile.isFile()
         ZipUtil.unzip(customizedPath,mainProjectPath)
@@ -222,6 +224,14 @@ function newProject(keys,AndroluaVersion,BaseTemplateConfig,projectPath,Template
 
   this.update(activity.getString(R.string.project_create_unzip_clibs))
   for index,content in pairs(OpenedCLibs) do
+    local deletePaths=content.delete
+    if deletePaths then
+      for index,content in pairs(deletePaths) do
+        LuaUtil.rmDir(File(projectPath.."/"..content))
+      end
+    end
+  end
+  for index,content in pairs(OpenedCLibs) do
     local path=content.path
     local libProjectPath=path.."/project.zip"
     local libProjectFile=File(libProjectPath)
@@ -235,13 +245,6 @@ function newProject(keys,AndroluaVersion,BaseTemplateConfig,projectPath,Template
     local libJniLibsFile=File(libJniLibsPath)
     local libResPath=path.."/res.zip"
     local libResFile=File(libResPath)
-
-    local deletePaths=content.delete
-    if deletePaths then
-      for index,content in pairs(deletePaths) do
-        LuaUtil.rmDir(File(projectPath.."/"..content))
-      end
-    end
 
     if libProjectFile.isFile() then
       ZipUtil.unzip(libProjectPath,projectPath)
@@ -292,6 +295,8 @@ function newProject(keys,AndroluaVersion,BaseTemplateConfig,projectPath,Template
     end
     io.open(path,"w"):write(fileContent):close()
   end
+
+  activity.setSharedData("openedfilepath_"..projectPath,nil)--将已打开的文件路径设置为空
   return true,projectPath
 end
 
@@ -318,7 +323,7 @@ defaultKeys=getConfigFromFile(TemplatesDir.."/default.lua")
 
 --Androlua版本
 for index,content in ipairs(BaseTemplateConfig.androluaVersions) do
-  addChoiceChip(content,androluaVersionsGroup,"AndroluaVersion")
+  addChoiceChip(content,androluaVersionsGroup,"androluaVersion")
 end
 
 androluaVersionsGroup.setOnCheckedChangeListener{
@@ -327,12 +332,12 @@ androluaVersionsGroup.setOnCheckedChangeListener{
       local chip=chipGroup.findViewById(selectedId)
       if chip then
         local version=chip.text
-        setSharedData("newproject_AndroluaVersion",version)
-        AndroluaVersion=version
+        setSharedData("newproject_androluaVersion",version)
+        androluaVersion=version
         return
       end
     end
-    AndroluaVersion=nil
+    androluaVersion=nil
   end
 }
 --[[
@@ -461,7 +466,7 @@ creativeButton.onClick=function()
     packageNameLay.setErrorEnabled(false)
   end
 
-  if not(AndroluaVersion) then--必须选择一个Androlua版本
+  if not(androluaVersion) then--必须选择一个Androlua版本
     MyToast("请选择一个AndroLua版本")
     return
   end
@@ -470,7 +475,7 @@ creativeButton.onClick=function()
   .setMessage(activity.getString(R.string.project_create_tip))
   .setPositiveButton(R.string.create,function()
     showLoadingDia(nil,R.string.creating)
-    activity.newTask(newProject,update,callback).execute({keys,AndroluaVersion,BaseTemplateConfig,projectPath,TemplatesDir,BaseTemplateDirPath,BaseTemplatePath,OpenedSLibs,OpenedJarLibs,OpenedCLibs})
+    activity.newTask(newProject,update,callback).execute({keys,BaseTemplateConfig,projectPath,TemplatesDir,BaseTemplateDirPath,BaseTemplatePath,OpenedSLibs,OpenedJarLibs,OpenedCLibs})
   end)
   .setNegativeButton(android.R.string.no,nil)
   .show()

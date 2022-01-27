@@ -6,9 +6,9 @@ function deleteFileDialog(name,file)
   .setTitle(formatResStr(R.string.delete_withName,{name}))
   .setMessage(activity.getString(R.string.delete_warning))
   .setPositiveButton(android.R.string.ok,function()
-    refresh()
     local succeed=LuaUtil.rmDir(file)
     if succeed then
+      refresh()
       showSnackBar(R.string.delete_succeed)
       if OpenedFile then
         closeFileAndTabByPath(file.getPath(),true)

@@ -30,6 +30,17 @@
     title="测试禁止";
     key="test";
   };]]
+ {--项目
+    SettingsLayUtil.TITLE;
+    title=R.string.project;
+  };
+  {
+    SettingsLayUtil.ITEM;
+    icon=R.drawable.ic_briefcase_plus_outline;
+    title=R.string.settings_addComplexLibrary;
+    key="addComplexLibrary";
+    summary=R.string.settings_addComplexLibrary_summary
+  };
 
   {--编辑器
     SettingsLayUtil.TITLE;

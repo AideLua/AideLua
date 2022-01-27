@@ -148,6 +148,8 @@
     <string name="settings_editor_symbolNar">Symbol bar</string>
     <string name="settings_tab_icon">File icon</string>
     <string name="settings_needRestart">Restart and take effect after modification</string>
+    <string name="settings_addComplexLibrary">Add complex library</string>
+    <string name="settings_addComplexLibrary_summary">You can use your own complex library in functions such as "new project"</string>
     
     <string name="window_openNew">Open a new window</string>
     <string name="window_openInNewWindow">Open in a new window</string>

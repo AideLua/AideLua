@@ -59,7 +59,11 @@ end
 
 function onCreate()
   local oldThemeId=activity.getThemeResId()
-  activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  if ThemeUtil.NowAppTheme.night then
+    activity.setTheme(R.style.Theme_MaterialComponents)
+   else
+    activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  end
   activity.setContentView(loadlayout2(layout.main,{}))
   activity.setTheme(oldThemeId)
 end
@@ -270,7 +274,11 @@ curr=nil
 --activity.Theme=android.R.style.Theme_Material_Light
 xpcall(function()
   local oldThemeId=activity.getThemeResId()
-  activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  if ThemeUtil.NowAppTheme.night then
+    activity.setTheme(R.style.Theme_MaterialComponents)
+   else
+    activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  end
   activity.setContentView(loadlayout2(layout.main,{}))
   activity.setTheme(oldThemeId)
 end,
@@ -436,7 +444,11 @@ check_list.onItemClick=function(l,v,p,i)
   curr[tostring(fld)]=v
   check_dlg.hide()
   local oldThemeId=activity.getThemeResId()
-  activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  if ThemeUtil.NowAppTheme.night then
+    activity.setTheme(R.style.Theme_MaterialComponents)
+   else
+    activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  end
   local s,l=pcall(loadlayout2,layout.main,{})
   if s then
     activity.setContentView(l)
@@ -480,7 +492,11 @@ func["删除"]=function()
     end
   end
   local oldThemeId=activity.getThemeResId()
-  activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  if ThemeUtil.NowAppTheme.night then
+    activity.setTheme(R.style.Theme_MaterialComponents)
+   else
+    activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  end
   activity.setContentView(loadlayout2(layout.main,{}))
   activity.setTheme(oldThemeId)
 end
@@ -551,7 +567,11 @@ el.onChildClick=function(l,v,g,c)
   local w={_G[wds[g+1][c+1]]}
   table.insert(curr,w)
   local oldThemeId=activity.getThemeResId()
-  activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  if ThemeUtil.NowAppTheme.night then
+    activity.setTheme(R.style.Theme_MaterialComponents)
+   else
+    activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  end
   local s,l=pcall(loadlayout2,layout.main,{})
   if s then
     activity.setContentView(l)
@@ -575,7 +595,11 @@ function ok()
   curr[tostring(fld)]=v
   --sfd_dlg.hide()
   local oldThemeId=activity.getThemeResId()
-  activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  if ThemeUtil.NowAppTheme.night then
+    activity.setTheme(R.style.Theme_MaterialComponents)
+   else
+    activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  end
   local s,l=pcall(loadlayout2,layout.main,{})
   if s then
     activity.setContentView(l)
@@ -592,7 +616,11 @@ function none()
   curr[key]=nil
   --sfd_dlg.hide()
   local oldThemeId=activity.getThemeResId()
-  activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  if ThemeUtil.NowAppTheme.night then
+    activity.setTheme(R.style.Theme_MaterialComponents)
+   else
+    activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  end
   local s,l=pcall(loadlayout2,layout.main,{})
   if s then
     activity.setContentView(l)

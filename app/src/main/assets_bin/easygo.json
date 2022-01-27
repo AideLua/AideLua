@@ -11,11 +11,11 @@
                 "mode": "1",
                 "activityPairs": [
                     {
-                        "from": "com.androlua.Main",
+                        "from": "com.Jesse205.superlua.Main",
                         "to": "*"
                     },
                     {
-                        "from": "com.androlua.LuaActivityX",
+                        "from": "com.Jesse205.superlua.LuaActivityX",
                         "to": "*"
                     }
                 ],
