@@ -26,7 +26,6 @@ local cannotBeEmptyStr=activity.getString(R.string.edit_error_cannotBeEmpty)
 
 activity.setTitle(R.string.project_create)
 activity.setContentView(loadlayout("layout"))
-local actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true)
 
 function onOptionsItemSelected(item)
@@ -156,6 +155,7 @@ function newProject(keys,BaseTemplateConfig,projectPath,TemplatesDir,BaseTemplat
   import "java.io.File"
   import "java.io.FileInputStream"
   import "java.io.FileOutputStream"
+  import "net.lingala.zip4j.core.ZipFile"
 
   import "com.Jesse205.util.FileUtil"
 
@@ -187,32 +187,48 @@ function newProject(keys,BaseTemplateConfig,projectPath,TemplatesDir,BaseTemplat
     appTemplatePath=appTemplatePath.."/Normal.zip"
   end
 
+  function unzip(path,unzipPath)
+    local zipFile=ZipFile(path)
+    if zipFile.isValidZipFile() then
+      zipFile.setFileNameCharset("UTF-8")
+      zipFile.extractAll(unzipPath)
+     else
+      print("损坏的压缩包:",path)
+    end
+  end
+
   this.update(activity.getString(R.string.project_create_unzip_base))
   --解压基础工程
-  ZipUtil.unzip(BaseTemplatePath,projectPath)
-  ZipUtil.unzip(androluaTemplatePath,projectPath)
-  ZipUtil.unzip(androluaBaseTemplatePath,projectPath)
-  ZipUtil.unzip(appTemplatePath,projectPath)
+  local unZipList={
+    {BaseTemplatePath,projectPath},
+    {androluaTemplatePath,projectPath},
+    {androluaBaseTemplatePath,projectPath},
+    {appTemplatePath,projectPath},
+  }
+  for index,content in ipairs(unZipList) do
+    unzip(content[1],content[2])
+  end
+  unZipList=nil
 
   this.update(activity.getString(R.string.project_create_unzip_slibs))
   for index,content in pairs(OpenedSLibs) do
     local path=content.path
     local file=File(path)
     if file.isFile() then
-      ZipUtil.unzip(path,mainProjectPath)
+      unzip(path,mainProjectPath)
      else
       --通用模版
       local currencyPath=path.."/currency.zip"
       local currencyFile=File(currencyPath)
       if currencyFile.isFile()
-        ZipUtil.unzip(currencyPath,mainProjectPath)
+        unzip(currencyPath,mainProjectPath)
       end
 
       --Androlua定制
       local customizedPath=("%s/%s.zip"):format(path,androluaVersion)
       local customizedFile=File(customizedPath)
       if customizedFile.isFile()
-        ZipUtil.unzip(customizedPath,mainProjectPath)
+        unzip(customizedPath,mainProjectPath)
       end
     end
   end
@@ -247,22 +263,22 @@ function newProject(keys,BaseTemplateConfig,projectPath,TemplatesDir,BaseTemplat
     local libResFile=File(libResPath)
 
     if libProjectFile.isFile() then
-      ZipUtil.unzip(libProjectPath,projectPath)
+      unzip(libProjectPath,projectPath)
     end
     if libAssetsFile.isFile() then
-      ZipUtil.unzip(libAssetsPath,mainProjectPath.."/assets_bin")
+      unzip(libAssetsPath,mainProjectPath.."/assets_bin")
     end
     if libJarFile.isFile() then
-      ZipUtil.unzip(libJarPath,mainLibsPath)
+      unzip(libJarPath,mainLibsPath)
     end
     if libLuaLibsFile.isFile() then
-      ZipUtil.unzip(libLuaLibsPath,mainProjectPath.."/luaLibs")
+      unzip(libLuaLibsPath,mainProjectPath.."/luaLibs")
     end
     if libJniLibsFile.isFile() then
-      ZipUtil.unzip(libJniLibsPath,mainProjectPath.."/jniLibs")
+      unzip(libJniLibsPath,mainProjectPath.."/jniLibs")
     end
     if libResFile.isFile() then
-      ZipUtil.unzip(libResPath,mainProjectPath.."/res")
+      unzip(libResPath,mainProjectPath.."/res")
     end
 
     local libFormatFilesList=content.format
@@ -319,10 +335,14 @@ end
 
 --默认的Key
 defaultKeys=getConfigFromFile(TemplatesDir.."/default.lua")
---print(dump(defaultKeys))
+
+local androluaVersions=BaseTemplateConfig.androluaVersions
+if getSharedData("newproject_androluaVersion")==nil then
+  setSharedData("newproject_androluaVersion",androluaVersions[#androluaVersions])
+end
 
 --Androlua版本
-for index,content in ipairs(BaseTemplateConfig.androluaVersions) do
+for index,content in ipairs(androluaVersions) do
   addChoiceChip(content,androluaVersionsGroup,"androluaVersion")
 end
 

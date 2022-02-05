@@ -102,20 +102,26 @@ end
 --二次打包回调
 local function buildProject_callback(success,apkPath,projectDir,install)
   closeLoadingDia()
+  local showingText=""
   if success==true then
     local shortApkPath=activity.getString(R.string.project)..ProjectUtil.shortPath(apkPath,true,projectDir)--转换成相对路径
     if install then
       activity.installApk(apkPath)
-      showSnackBar(formatResStr(R.string.binpoject_state_succeed,{shortApkPath}))
+      showingText=formatResStr(R.string.binpoject_state_succeed,{shortApkPath})
      else
-      showSnackBar(formatResStr(R.string.binpoject_state_succeed_needSign,{shortApkPath}))
+      showingText=formatResStr(R.string.binpoject_state_succeed_needSign,{shortApkPath})
     end
+    showSnackBar(showingText)
    else
+    showingText=success or activity.getString(R.string.unknowError)
     AlertDialog.Builder(this)
     .setTitle(activity.getString(R.string.binpoject_state_failed))
-    .setMessage(success or activity.getString(R.string.unknowError))
+    .setMessage(showingText)
     .setPositiveButton(android.R.string.ok,nil)
     .show()
+  end
+  if activityStopped then
+    MyToast.showToast(showingText)
   end
 end
 

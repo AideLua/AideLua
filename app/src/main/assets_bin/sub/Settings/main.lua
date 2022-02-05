@@ -4,15 +4,15 @@ import "com.Jesse205.FileInfoUtils"
 import "com.Jesse205.layout.util.SettingsLayUtil"
 import "com.Jesse205.layout.innocentlayout.RecyclerViewLayout"
 import "com.Jesse205.app.dialog.EditDialogBuilder"
+import "net.lingala.zip4j.core.ZipFile"
 
-PackInfo=activity.PackageManager.getPackageInfo(activity.getPackageName(),64)
+PackInfo=activity.getPackageManager().getPackageInfo(activity.getPackageName(),64)
 
 import "settings"
 
 activity.setTitle(R.string.settings)
 activity.setContentView(loadlayout(RecyclerViewLayout))
 
-actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true)
 
 oldTheme=ThemeUtil.getAppTheme()
@@ -46,6 +46,7 @@ function onActivityResult(requestCode,resultCode,data)
 end
 
 function addComplexLibrary(path)
+
   local file=File(path)
   local name=file.getName():match("(.+)%.zip")
   local tempDirPath=AppPath.Temp.."/MyCustomComplexLibrary/"..name
@@ -53,14 +54,22 @@ function addComplexLibrary(path)
   if tempDir.exists() then
     LuaUtil.rmDir(tempDir)
   end
-  ZipUtil.unzip(path,tempDirPath)
+  local zipFile=ZipFile(path)
+  if zipFile.isValidZipFile() then
+    zipFile.setFileNameCharset("UTF-8")
+    zipFile.extractAll(tempDirPath)
+   else
+    MyToast("压缩包已损坏")
+  end
+
   for index,content in ipairs(luajava.astable(tempDir.listFiles())) do
     if content.isFile() or not(File(content.getPath().."/config.lua").isFile()) then
-      MyToast(("文件（夹）“%s不合法”"):format(content.getName().."/config.lua"))
+      MyToast(("文件（夹）“%s不合法”"):format(content.getName()))
+      LuaUtil.rmDir(tempDir)--删除
       return
     end
   end
-  LuaUtil.copyDir(tempDir,File("/data/data/"..activity.getPackageName().."/files/templates/complexLibraries/"..name))
+  LuaUtil.copyDir(tempDir,File(AppPath.AppDataDir.."/templates/complexLibraries/"..name))
   LuaUtil.rmDir(tempDir)--删除
   MyToast("导入成功")
 end

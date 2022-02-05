@@ -1,7 +1,7 @@
 local PermissionUtil={}
 local grantedList={}
 PermissionUtil.grantedList=grantedList
-local context=activity or service--当前context
+local context=Jesse205.context--当前context
 
 local function request(permissions)
   activity.requestPermissions(String(permissions),0)

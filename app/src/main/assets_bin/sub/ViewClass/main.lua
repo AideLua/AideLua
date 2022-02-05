@@ -67,7 +67,6 @@ AllNum=0
 activity.setTitle(R.string.javaApiViewer)
 activity.setContentView(loadlayout("layout"))
 
-actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true)
 --actionBar.setElevation(0)
 local classDir,className=classString:match("(.+)%.(.+)")

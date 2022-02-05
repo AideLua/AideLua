@@ -16,6 +16,7 @@ while nowParent do
 end
 nowParent=nil
 
+--设置主题
 if not(Jesse205) then
   import "android.app.*"
   import "android.os.*"
@@ -25,7 +26,17 @@ if not(Jesse205) then
   if isSupportActivity then
     activity.setTheme(R.style.Theme_MaterialComponents)
    else
-    activity.setTheme(android.R.style.Theme_Material)
+    pcall(function()
+      import "autotheme"
+    end)
+    pcall(function()androidhwext={R=luajava.bindClass("androidhwext.R")} end)
+    if not(androidhwext and pcall(function()activity.setTheme(androidhwext.R.style.Theme_Emui)end)) then--没有hwext或者无法设置emui主题
+      if autotheme then--有androlua的自动主题
+        activity.setTheme(autotheme())--就用自动主题
+       else
+        activity.setTheme(android.R.style.Theme_DeviceDefault_Settings)
+      end
+    end
   end
 end
 
@@ -137,7 +148,9 @@ item={--条目
 
 layout=ListView(activity)
 layout.fastScrollEnabled=true
-layout.setDivider(array.getDrawable(1))
+if Jesse205 then--Jesse205主题没有分割线
+  layout.setDivider(array.getDrawable(1))
+end
 adapter=LuaArrayAdapter(activity,item)
 layout.setAdapter(adapter)
 if MyAnimationUtil then

@@ -28,9 +28,6 @@ if getSharedData("tab_icon")==nil then
   setSharedData("tab_icon",true)
 end
 
-if getSharedData("newproject_AndroluaVersion")==nil then
-  setSharedData("newproject_AndroluaVersion","1.0(5.0.16)")
-end
 
 if getSharedData("projectsDir")==nil then
   setSharedData("projectsDir",Environment.getExternalStorageDirectory().getPath().."/AppProjects")

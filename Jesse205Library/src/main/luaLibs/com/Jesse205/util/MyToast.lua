@@ -1,7 +1,7 @@
 local MyToast={}
 setmetatable(MyToast,MyToast)
 
-local context=activity or service
+local context=Jesse205.context
 --mainLay为全局变量
 
 function MyToast.showToast(text)

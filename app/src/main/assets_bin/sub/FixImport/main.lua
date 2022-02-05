@@ -10,7 +10,6 @@ import "getImportCode"
 import "showPackageMenu"
 
 activity.setTitle(R.string.javaApiViewer_fixImport)
-actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true)
 activity.setContentView(loadlayout("layout"))
 

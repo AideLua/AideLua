@@ -63,7 +63,6 @@ import "Jesse205"
 
 activity.setTitle(R.string.app_name)
 activity.setContentView(loadlayout("layout"))
-actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true) 
 
 function onOptionsItemSelected(item)

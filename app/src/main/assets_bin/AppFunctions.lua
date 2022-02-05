@@ -549,7 +549,15 @@ function onFileTabLongClick(view)
   tag.onLongTouch=true
 end
 
-local moveCloseheight=activity.getHeight()/4
+local moveCloseHeight
+function refreshMoveCloseHeight(height)
+  height=height-56
+  if height<=320 then
+    moveCloseHeight=math.dp2int(height/2)
+  else
+    moveCloseHeight=math.dp2int(160)
+  end
+end
 function onFileTabTouch(view,event)
   local tag=view.tag
   local action=event.getAction()
@@ -566,15 +574,15 @@ function onFileTabTouch(view,event)
     local moveY=event.getRawY()-downY
     if action==MotionEvent.ACTION_MOVE then
       --print("test",tointeger(moveY),tointeger(event.getY()))
-      if moveY>0 and moveY<moveCloseheight then
-        view.setRotationX(moveY/moveCloseheight*-90)
-       elseif moveY>=moveCloseheight then
+      if moveY>0 and moveY<moveCloseHeight then
+        view.setRotationX(moveY/moveCloseHeight*-90)
+       elseif moveY>=moveCloseHeight then
         view.setRotationX(-90)
       end
      elseif action==MotionEvent.ACTION_UP then
       NowTabTouchTag=nil
       tag.onLongTouch=false
-      if moveY>moveCloseheight then
+      if moveY>moveCloseHeight then
         closeFileAndTab(tag.tab)
         view.setRotationX(0)
         if OpenedFile then
@@ -749,7 +757,7 @@ function openFile(file,reOpen,line)
       end
       --setActiveFileItem(FilesDataList[filePath],true)--设置文件列表高亮
 
-      local shortFilePath=shortPath(file.getPath(),true,ProjectsPath.."/")
+      local shortFilePath=shortPath(file.getPath(),true,NowProjectDirectory.getParent().."/")
 
       refreshMenusState()
       setSharedData("openedfilepath_"..NowProjectDirectory.getPath(),file.getPath())--保存已打开文件路径
@@ -1151,7 +1159,7 @@ function checkUpdateSharedActivity(name)
 end
 
 function checkSharedActivity(name,update)
-  local sdActivityPath=AppPath.LuaSharedDir.."/activities/"..name
+  local sdActivityPath=AppPath.AppShareDir.."/activities/"..name
   local sdActivityMainPath=sdActivityPath.."/main.lua"
   local sdActivityDir=File(sdActivityPath)
   local sdActivityMainFile=File(sdActivityMainPath)

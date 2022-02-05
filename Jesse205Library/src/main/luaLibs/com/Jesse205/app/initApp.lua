@@ -1,5 +1,5 @@
 import "initApp"
-local context=activity or service
+local context=Jesse205.context
 
 if getSharedData("theme")==nil then--默认主题
   setSharedData("theme","Default")

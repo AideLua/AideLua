@@ -14,7 +14,6 @@ if searchWord=="nil" then
   searchWord=""
 end
 activity.setTitle(R.string.javaApiViewer)
-actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true)
 activity.setContentView(loadlayout("layout"))
 

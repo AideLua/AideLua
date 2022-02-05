@@ -3,10 +3,8 @@ import "Jesse205"
 import "android.text.Html"
 import "android.text.method.LinkMovementMethod"
 
-local actionBar,data
 activity.setTitle(R.string.Jesse205_htmlFileViewer)
 activity.setContentView(loadlayout("layout",_ENV))
-actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true)
 data=...
 

@@ -114,7 +114,7 @@ function renameDialog(oldFile)--重命名对话框
         FilesTabList[lowerOldFilePath]=nil
         tabTag.fileType=fileType
         tabTag.file=newFile
-        tabTag.shortFilePath=shortPath(newFilePath,true,ProjectsPath)
+        tabTag.shortFilePath=shortPath(newFile.getPath(),true,NowProjectDirectory.getParent().."/")
         tab.setText(newName)--设置显示的文字
         if oldTabIcon and notSafeModeEnable then
           tab.setIcon(ProjectUtil.getFileIconResIdByType(fileType))

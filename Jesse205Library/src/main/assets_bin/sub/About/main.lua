@@ -6,16 +6,16 @@ import "com.Jesse205.app.dialog.ImageDialogBuilder"
 import "appAboutInfo"
 import "agreements"
 
-local screenConfigDecoder,actionBar,Landscape,data,PackInfo,adp,layoutManager,Glide,topCardItems
+local screenConfigDecoder,actionBar,Landscape,data,PackInfo,adp,layoutManager,Glide,topCardItems,appIconGroup,topCard,recyclerView
+Glide,activity,actionBar=_G.Glide,_G.activity,_G.actionBar
 activity.setTitle(R.string.Jesse205_about)
 activity.setContentView(loadlayout("layout",_ENV))
-actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true)
 
+appIconGroup,topCard,recyclerView=_G.appIconGroup,_G.topCard,_G.recyclerView
 PackInfo=activity.PackageManager.getPackageInfo(activity.getPackageName(),64)
 Landscape=false
 
-Glide=_G.Glide
 function onOptionsItemSelected(item)
   local id=item.getItemId()
   if id==android.R.id.home then

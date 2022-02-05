@@ -162,6 +162,7 @@ lastBackTime=0
 
 SDK_INT=Build.VERSION.SDK_INT
 
+activityStopped=false
 
 MyLuaEditor=editor2my(LuaEditor)
 MyCodeEditor=editor2my(CodeEditor)
@@ -169,7 +170,6 @@ MyCodeEditor=editor2my(CodeEditor)
 
 activity.setTitle(R.string.app_name)
 activity.setContentView(loadlayout("layout"))
---actionBar=activity.getSupportActionBar()
 actionBar.setTitle(R.string.app_name)
 actionBar.setDisplayHomeAsUpEnabled(true)
 
@@ -363,11 +363,17 @@ function onOptionsItemSelected(item)
    elseif id==Rid.menu_code_checkCode then--代码查错
     editorFunc.check()
    elseif id==Rid.menu_tools_layoutHelper then--布局助手
+    local prjPath,filePath
     if OpenedProject then
-      newSubActivity("LayoutHelper",{NowProjectDirectory.getPath().."/app/src/main/assets_bin",NowFile.getPath()})
-     else
-      newSubActivity("LayoutHelper")
+      local configPath=ReBuildTool.getConfigPathByProjectDir(NowProjectDirectory)
+      local configFile=File(configPath)
+      local config=ReBuildTool.getConfigByFilePath(configPath)
+      prjPath=ReBuildTool.getMainProjectDirByConfig(NowProjectDirectory,config).."/assets_bin"
+      if OpenedFile then
+        filePath=NowFile.getPath()
+      end
     end
+    newSubActivity("LayoutHelper2",{prjPath,filePath})
    elseif id==Rid.menu_more_openNewWindow then--打开新窗口
     activity.newActivity("main",{ProjectsPath},true)
   end
@@ -424,6 +430,7 @@ function onConfigurationChanged(config)
   drawerChild.setLayoutParams(drawerChildLinearParams)
   MyAnimationUtil.ScrollView.onScrollChange(NowEditor,NowEditor.getScrollX(),NowEditor.getScrollY(),0,0,appBarLayout,nil)
   refreshSubTitle()
+  refreshMoveCloseHeight(config.screenHeightDp)
 end
 
 notFirstOnResume=false
@@ -511,6 +518,14 @@ function onPause()
   if OpenedFile and IsEdtor then
     saveFile()
   end
+end
+
+function onStart()
+  activityStopped=false
+end
+
+function onStop()
+  activityStopped=true
 end
 
 function onDestroy()

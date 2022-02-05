@@ -1,12 +1,13 @@
 local Jesse205={}
 _G.Jesse205=Jesse205
-Jesse205._VERSION="10.0.0(Pro)"--库版本名
-Jesse205._VERSIONCODE=100099--库版本号
+Jesse205._VERSION="10.1.0(Pro)"--库版本名
+Jesse205._VERSIONCODE=101099--库版本号
 Jesse205._ENV=_ENV
 Jesse205.themeType="Jesse205"--主题类型
 
 require "import"--导入import
-local context=activity or service--当前context
+local context=context or activity or service--当前context
+Jesse205.context=context
 resources=context.getResources()--当前resources
 
 if activity then
@@ -126,7 +127,7 @@ import "android.content.res.ColorStateList"
 import "android.content.pm.PackageManager"
 
 --导入常用的Material类
-import "com.google.android.material.tabs.TabLayout"
+--import "com.google.android.material.tabs.TabLayout"
 import "com.google.android.material.card.MaterialCardView"--卡片
 import "com.google.android.material.button.MaterialButton"--按钮
 import "com.google.android.material.snackbar.Snackbar"

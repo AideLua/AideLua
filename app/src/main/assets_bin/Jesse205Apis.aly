@@ -3,7 +3,7 @@
   
   --一些标识
   "initApp","notLoadTheme","useCustomAppToolbar",
-  "resources","application","inputMethodService",
+  "resources","application","inputMethodService","actionBar",
   "notLoadTheme","darkStatusBar","darkNavigationBar",
   "window","safeModeEnable","notSafeModeEnable","decorView",
 

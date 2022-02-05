@@ -5,7 +5,7 @@ import "android.view.animation.DecelerateInterpolator"
 import "android.view.animation.AccelerateInterpolator"
 
 --保存一下ActionBar，快速响应
-MyAnimationUtil.actionBar=activity.getSupportActionBar()
+MyAnimationUtil.actionBar=actionBar or activity.getSupportActionBar()
 
 LastActionBarElevation=0
 

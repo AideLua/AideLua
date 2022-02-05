@@ -4,10 +4,8 @@ import "openSourceLicenses"
 
 import "item"
 
-local actionBar,screenConfigDecoder,layoutManager,adp
 activity.setTitle(R.string.Jesse205_openSourceLicense)
 activity.setContentView(loadlayout("layout",_ENV))
-actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true)
 
 function onOptionsItemSelected(item)

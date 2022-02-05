@@ -1,5 +1,9 @@
 local context=activity or service
 local dp2intCache={}
+Jesse205.dp2intCache=dp2intCache
+--[[清理dp2int缓存方法：
+table.clear(Jesse205.dp2int)
+]]
 function math.dp2int(dpValue)
   local cache=dp2intCache[dpValue]
   if cache then

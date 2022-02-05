@@ -1,17 +1,18 @@
 local ScreenFixUtil={}
+local resources=resources
 function ScreenFixUtil.getNavigationBarHeight()
-  local resourceId = activity.Resources.getIdentifier("navigation_bar_height","dimen", "android");
-  local height = activity.Resources.getDimensionPixelSize(resourceId)
+  local resourceId = resources.getIdentifier("navigation_bar_height","dimen", "android");
+  local height = resources.getDimensionPixelSize(resourceId)
   return height
 end
 function ScreenFixUtil.getStatusBarHeight()
-  local resourceId = activity.Resources.getIdentifier("status_bar_height", "dimen","android")
-  local height = activity.Resources.getDimensionPixelSize(resourceId)
+  local resourceId=resources.getIdentifier("status_bar_height", "dimen","android")
+  local height=resources.getDimensionPixelSize(resourceId)
   return height
 end
 
 function ScreenFixUtil.getSmallestScreenWidthDp()
-  return activity.Resources.getConfiguration().smallestScreenWidthDp
+  return resources.getConfiguration().smallestScreenWidthDp
 end
 
 function ScreenFixUtil.getScreenRealSize()

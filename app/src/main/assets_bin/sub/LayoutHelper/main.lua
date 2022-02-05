@@ -27,7 +27,6 @@ require "xml2table"
 import "layout"
 
 activity.setTitle(R.string.layoutHelper)
-actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true)
 
 cm=activity.getSystemService(activity.CLIPBOARD_SERVICE)
