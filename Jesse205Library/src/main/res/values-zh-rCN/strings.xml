@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="lib_name">杰西205共享库</string>
+    <string name="Jesse205_edit_error_cannotBeEmpty">此处不能为空</string>
     <string name="Jesse205_loading">请稍候...</string>
     <string name="Jesse205_toast_copied">已复制到剪贴板</string>
     <string name="Jesse205_ui">界面</string>

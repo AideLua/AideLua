@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="lib_name">Jesse205Library</string>
+    <string name="Jesse205_edit_error_cannotBeEmpty">Cannot be empty here</string>
     <string name="Jesse205_loading">Loading...</string>
     <string name="Jesse205_toast_copied">Copied to clipboard</string>
     <string name="Jesse205_ui">User Interface</string>

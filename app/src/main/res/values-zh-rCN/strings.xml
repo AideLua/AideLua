@@ -17,7 +17,6 @@
     <string name="settings">设置</string>
     <string name="reminder">温馨提示</string>
     <string name="unknown">(未知)</string>
-    <string name="edit_error_cannotBeEmpty">此处不能为空</string>
     <string name="unknowError">未知错误</string>
     <string name="copy">复制</string>
     <string name="copy_popup">复制...</string>

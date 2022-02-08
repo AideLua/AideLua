@@ -1,6 +1,6 @@
 import "com.Jesse205.layout.MyEditDialogLayout"
 local EditDialogBuilder={}
-local cannotBeEmptyStr=activity.getString(R.string.edit_error_cannotBeEmpty)
+local cannotBeEmptyStr=activity.getString(R.string.Jesse205_edit_error_cannotBeEmpty)
 setmetatable(EditDialogBuilder,EditDialogBuilder)
 
 EditDialogBuilder.allowNull=true

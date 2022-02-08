@@ -22,7 +22,7 @@ OpenedJarLibs={}
 OpenedSLibs={}
 
 
-local cannotBeEmptyStr=activity.getString(R.string.edit_error_cannotBeEmpty)
+local cannotBeEmptyStr=activity.getString(R.string.Jesse205_edit_error_cannotBeEmpty)
 
 activity.setTitle(R.string.project_create)
 activity.setContentView(loadlayout("layout"))
