@@ -155,7 +155,8 @@
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|navigation|screenLayout|fontScale|smallestScreenSize|keyboardHidden|orientation|screenSize"
-            android:name="com.androlua.Welcome2">
+            android:name="com.Jesse205.superlua.Welcome"
+            android:theme="@style/Theme.Jesse205.Welcome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

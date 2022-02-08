@@ -2,25 +2,22 @@ require "import"
 import "Jesse205"
 import "loadlayout2"
 import "viewList"
-layoutContent=require "defaultlayout"
+import "defaultLayout"
 
 activity.setTitle(R.string.app_name)
 activity.setContentView(loadlayout("layout"))
 actionBar.setDisplayHomeAsUpEnabled(true)
-projectPath,filePath=...--传入的文件路径
 
+projectPath,layoutContent=...--传入的文件路径
+
+if layoutContent then
+  editFileMode=true
+ else
+  layoutContent=defaultLayout
+  editFileMode=false
+end
 activity.setLuaDir(projectPath)
 
-if filePath and filePath:find("%.aly$") then
-  xpcall(function()
-    layoutContent=loadfile(filePath)()
-  end,
-  function()
-    filePath=nil
-  end)
- else
-  filePath=nil
-end
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()
@@ -34,11 +31,22 @@ function onConfigurationChanged(config)
 end
 
 function refreshLayout()
-  loadlayout2(layoutContent)
+  presentationView.removeAllViews()
+  local view=loadlayout2(loadstring(layoutContent)())
+  presentationView.addView(view)
 end
 
+xpcall(function()
+  refreshLayout()
+end,
+function(err)
+  print(err)
+  MyToast("暂时不支持此布局")
+  layoutContent=defaultLayout
+  editFileMode=false
+end)
 
-
+print(layoutContent,editFileMode)
 
 
 

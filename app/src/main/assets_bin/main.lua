@@ -363,17 +363,28 @@ function onOptionsItemSelected(item)
    elseif id==Rid.menu_code_checkCode then--代码查错
     editorFunc.check()
    elseif id==Rid.menu_tools_layoutHelper then--布局助手
-    local prjPath,filePath
+    --[[
+    local prjPath,layoutContent
     if OpenedProject then
       local configPath=ReBuildTool.getConfigPathByProjectDir(NowProjectDirectory)
       local configFile=File(configPath)
       local config=ReBuildTool.getConfigByFilePath(configPath)
       prjPath=ReBuildTool.getMainProjectDirByConfig(NowProjectDirectory,config).."/assets_bin"
-      if OpenedFile then
-        filePath=NowFile.getPath()
+      if OpenedFile and ProjectUtil.getFileTypeByName(NowFile.getName())=="aly" then
+        layoutContent=NowEditor.getText()
       end
     end
-    newSubActivity("LayoutHelper2",{prjPath,filePath})
+    newSubActivity("LayoutHelper2",{prjPath,layoutContent})]]--新的布局助手没做完
+    if OpenedProject then
+      if OpenedFile then
+        newSubActivity("LayoutHelper",{NowProjectDirectory.getPath().."/app/src/main/assets_bin",NowFile.getPath()})
+       else
+        newSubActivity("LayoutHelper",{NowProjectDirectory.getPath().."/app/src/main/assets_bin"})
+      end
+     else
+      newSubActivity("LayoutHelper")
+    end
+
    elseif id==Rid.menu_more_openNewWindow then--打开新窗口
     activity.newActivity("main",{ProjectsPath},true)
   end

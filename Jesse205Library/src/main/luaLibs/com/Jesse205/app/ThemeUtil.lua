@@ -106,6 +106,7 @@ function ThemeUtil.refreshThemeColor()
     R.attr.rippleColorAccent,--强调波纹
     R.attr.floatingActionButtonBackgroundColor,--悬浮按钮背景
     R.attr.colorBackgroundFloating,--悬浮的背景
+    R.attr.strokeColor,--悬浮的背景
     --R.attr.titleTextColor,
     --R.attr.subtitleTextColor,
   })
@@ -124,6 +125,7 @@ function ThemeUtil.refreshThemeColor()
   colorList.rippleColorAccent=array.getColor(11,0)
   colorList.floatingActionButtonBackgroundColor=array.getColor(12,0)
   colorList.colorBackgroundFloating=array.getColor(13,0)
+  colorList.strokeColor=array.getColor(14,0)
   --colorList.titleTextColor=array.getColor(13,0)
   --colorList.subtitleTextColor=array.getColor(14,0)
   array.recycle()

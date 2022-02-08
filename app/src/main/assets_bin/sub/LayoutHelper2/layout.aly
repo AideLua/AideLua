@@ -4,7 +4,7 @@
   layout_width="fill";
   id="mainLay";
   {
-    CoordinatorLayout;
+    LinearLayout;
     layout_height="fill";
     layout_width="fill";
     id="presentationView"

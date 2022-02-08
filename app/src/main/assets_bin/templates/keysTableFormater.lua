@@ -13,6 +13,8 @@ local function keysTableFormater(key,content)
       content="\n"..table.concat(content,"\n\n").."\n"
      elseif key=="defaultImport" then
       content="\nimport \""..table.concat(content,"\"\nimport \"").."\"\n"
+     elseif key=="am_welcome_info" then
+      content="\n            "..table.concat(content,"\n            ")
     end
   end
   return content

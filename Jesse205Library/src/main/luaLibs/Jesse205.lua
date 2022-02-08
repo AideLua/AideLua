@@ -62,6 +62,7 @@ import "android.os.Build"
 --加载主题
 --在get某东西（ActionBar等）前必须把主题搞定
 if not(notLoadTheme) then
+  local colors,dimens
   local color=theme.color
   local ripple=color.Ripple
   local light=color.Light
@@ -73,15 +74,15 @@ if not(notLoadTheme) then
     color[content]=resources.getColor(R.color["Jesse205_"..content])
     ripple[content]=resources.getColor(R.color["Jesse205_"..content.."_Ripple"])
   end
-  local colors={"Pink"}--Jesse205Library内置的所有明亮颜色
+  colors={"Pink"}--Jesse205Library内置的所有明亮颜色
   for index,content in ipairs(colors) do
     light[content]=resources.getColor(R.color["Jesse205_"..content.."_Light"])
   end
-  local colors={"White","Red","Orange","Pink"}--Jesse205Library内置的所有黑暗颜色
+  colors={"White","Red","Orange","Pink","Grey"}--Jesse205Library内置的所有黑暗颜色
   for index,content in ipairs(colors) do
     dark[content]=resources.getColor(R.color["Jesse205_"..content.."_Dark"])
   end
-  local dimens={"padWidth","pcWidth"}
+  dimens={"padWidth","pcWidth"}
   for index,content in ipairs(dimens) do
     number[content]=resources.getDimension(R.dimen["Jesse205_"..content])
   end

@@ -668,6 +668,8 @@ local function getRealClass(class)
   end
 end
 
+local supportForeground=pcall(function()return View(context).setForeground end)
+
 local function loadlayout(t,root,group)
   if type(t)=="string" then
     t=require(t)
@@ -725,6 +727,20 @@ local function loadlayout(t,root,group)
   local c={}
   setmetatable(c,{__index=t})
   setstyle(c,t,root,view,params,ids)
+
+  local gd=GradientDrawable()
+  gd.setColor(0x00ffffff)
+  gd.setStroke(2,0x44000000,5,5)
+  gd.setGradientRadius(700)
+  gd.setGradientType(1)
+  
+  if supportForeground and view.getForeground()==jil then
+    view.setForeground(gd)
+   else
+    if view.getBackground() == nil then
+      view.setBackground(gd)
+    end
+  end
 
   for k,v in pairs(t) do
     if tonumber(k) and ((type(v)=="table" and not(v._baseClass)) or type(v)=="string") then --创建子view

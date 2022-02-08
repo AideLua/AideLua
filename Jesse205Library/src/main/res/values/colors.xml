@@ -21,6 +21,7 @@
     <color name="Jesse205_Pink_Dark_Ripple">#22C2185B</color>
     <color name="Jesse205_Pink_Ripple">#22FF4081</color>
     <color name="Jesse205_Grey">#FFBDBDBD</color>
+    <color name="Jesse205_Grey_Dark">#FF424242</color>
     <color name="Jesse205_Grey_Ripple">#22BDBDBD</color>
     <color name="design_default_color_on_surface">#ff000000</color>
     <color name="design_dark_default_color_on_surface">#ffffffff</color>

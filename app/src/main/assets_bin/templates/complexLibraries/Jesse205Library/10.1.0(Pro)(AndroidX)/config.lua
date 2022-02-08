@@ -8,7 +8,8 @@ keys={
   appLuaActivity="com.Jesse205.superlua.LuaActivity",
   appLuaActivityX="com.Jesse205.superlua.LuaActivityX",
   appMainActivity="com.Jesse205.superlua.Main",
-  appWelcomeActivity="com.androlua.Welcome2"
+  appWelcomeActivity="com.Jesse205.superlua.Welcome",
+  am_welcome_info={"android:theme=\"@style/Theme.Jesse205.Welcome\""}
 }
 
 delete={

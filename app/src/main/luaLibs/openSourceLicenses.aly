@@ -32,4 +32,9 @@
     message="A cool and optimized code editor on Android platform with good performance and nice features.",
     url="https://github.com/Rosemoe/CodeEditor"
   },
+  {
+    name="Zip4j",
+    message="A Java library for zip files and streams",
+    url="https://github.com/srikanth-lingala/zip4j"
+  },
 }

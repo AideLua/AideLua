@@ -1149,7 +1149,7 @@ function updateSharedActivity(name,sdActivityDir)
 end
 
 function checkUpdateSharedActivity(name)
-  local sdActivityPath=AppPath.LuaSharedDir.."/activities/"..name
+  local sdActivityPath=AppPath.AppShareDir.."/activities/"..name
   local sdActivityDir=File(sdActivityPath)
   local exists=sdActivityDir.exists()
   if exists then

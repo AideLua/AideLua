@@ -1,0 +1,10 @@
+{
+  "minSdkVersion": 21.0,
+  "javaSourceVersion": "8",
+  "libraries": "[]",
+  "javaTargetVersion": "8",
+  "targetSdkVersion": 30.0,
+  "useR8": false,
+  "versionName": "1.0",
+  "versionCode": 1.0
+}

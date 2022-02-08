@@ -4,7 +4,7 @@ import "com.Jesse205.FileInfoUtils"
 import "com.Jesse205.layout.util.SettingsLayUtil"
 import "com.Jesse205.layout.innocentlayout.RecyclerViewLayout"
 import "com.Jesse205.app.dialog.EditDialogBuilder"
-import "net.lingala.zip4j.core.ZipFile"
+import "net.lingala.zip4j.ZipFile"
 
 PackInfo=activity.getPackageManager().getPackageInfo(activity.getPackageName(),64)
 
@@ -56,7 +56,6 @@ function addComplexLibrary(path)
   end
   local zipFile=ZipFile(path)
   if zipFile.isValidZipFile() then
-    zipFile.setFileNameCharset("UTF-8")
     zipFile.extractAll(tempDirPath)
    else
     MyToast("压缩包已损坏")
@@ -95,7 +94,7 @@ function onItemClick(view,views,key,data)
     adp.notifyItemChanged(2)]]
    elseif key=="about" then
     newSubActivity("About")
-   elseif key=="theme_darkactionbar" and not(ThemeUtil.isSysNightMode()) then
+   elseif key=="theme_darkactionbar" and ThemeUtil.NowAppTheme.night~=true then
     reloadActivity(view)
    elseif key=="addComplexLibrary" then
     local intent=Intent(Intent.ACTION_GET_CONTENT)

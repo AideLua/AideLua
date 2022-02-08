@@ -106,10 +106,10 @@ function renameDialog(oldFile)--重命名对话框
         local tab=tabTag.tab
         local newFile=File(newFilePath)
         local fileType=ProjectUtil.getFileTypeByName(newName)
-        --if string.lower(NowFile.getPath())~=string.lower(newFilePath) then
-        NowFile=newFile
-        NowFileType=fileType
-        --end
+        if string.lower(NowFile.getPath())==lowerOldFilePath then
+          NowFile=newFile
+          NowFileType=fileType
+        end
         FilesTabList[lowerNewFilePath]=tabTag
         FilesTabList[lowerOldFilePath]=nil
         tabTag.fileType=fileType

@@ -33,6 +33,8 @@ function buildProject(ProjectPath,MainConfig,BuildTool,install)
     BinPath.."/app.apk",
     BinPath.."/app-debug.apk",
     BinPath.."/app-release.apk",
+    BinPath.."/generated.apk",
+    BinPath.."/signed.apk",
     BuildPath.."/outputs/apk/debug/app.apk",
     BuildPath.."/outputs/apk/debug/app-release.apk",
     BuildPath.."/outputs/apk/debug/app-debug.apk",

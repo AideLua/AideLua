@@ -68,6 +68,7 @@ function addChip(title,config,group)
     text=title;
     tag=config;
     checkable=true;
+    checkedIconResource=R.drawable.ic_check_accent;
     --style=R.style.Widget_MaterialComponents_Chip_Choice;
   })
   group.addView(chip)
@@ -87,13 +88,15 @@ function addChoiceChip(title,group,identification)
     --tag=config;
     id=title;
     checkable=true;
-    checkedIconResource=R.drawable.ic_mtrl_chip_checked_black;
+    checkedIconEnabled=false;
+    --checkedIconResource=R.drawable.ic_mtrl_chip_checked_black;
     --checkedIconVisible=false;
   },{})
   group.addView(chip)
   if activity.getSharedData("newproject_"..identification)==title then
     _G[identification]=title
     chip.setChecked(true)
+    _G[identification.."SelectedId"]=chip.getId()
   end
 end
 
@@ -155,7 +158,7 @@ function newProject(keys,BaseTemplateConfig,projectPath,TemplatesDir,BaseTemplat
   import "java.io.File"
   import "java.io.FileInputStream"
   import "java.io.FileOutputStream"
-  import "net.lingala.zip4j.core.ZipFile"
+  import "net.lingala.zip4j.ZipFile"
 
   import "com.Jesse205.util.FileUtil"
 
@@ -188,9 +191,9 @@ function newProject(keys,BaseTemplateConfig,projectPath,TemplatesDir,BaseTemplat
   end
 
   function unzip(path,unzipPath)
+    File(unzipPath).mkdirs()
     local zipFile=ZipFile(path)
     if zipFile.isValidZipFile() then
-      zipFile.setFileNameCharset("UTF-8")
       zipFile.extractAll(unzipPath)
      else
       print("损坏的压缩包:",path)
@@ -348,16 +351,23 @@ end
 
 androluaVersionsGroup.setOnCheckedChangeListener{
   onCheckedChanged=function(chipGroup, selectedId)
-    if selectedId then
+    --print(selectedId)
+    if selectedId==-1 and androluaVersionSelectedId then
+      local chip=chipGroup.findViewById(androluaVersionSelectedId)
+      chip.setChecked(true)
+      return
+     else
       local chip=chipGroup.findViewById(selectedId)
       if chip then
         local version=chip.text
         setSharedData("newproject_androluaVersion",version)
         androluaVersion=version
+        androluaVersionSelectedId=selectedId
         return
       end
     end
     androluaVersion=nil
+    androluaVersionSelectedId=nil
   end
 }
 --[[
