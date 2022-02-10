@@ -102,8 +102,16 @@
         layout_height="fill";
         id="photoView";
         layout_width="fill";
+        padding="32dp";
       };
     };
+    {
+      LinearLayoutCompat;
+      layout_height="fill";
+      layout_width="fill";
+      id="layoutView";
+    };
+    "layout_previewChips";
     {
       TextView;
       text="Aide Lua 安全模式";

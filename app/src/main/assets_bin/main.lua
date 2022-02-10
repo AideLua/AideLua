@@ -38,6 +38,8 @@ import "androidx.drawerlayout.widget.DrawerLayout"
 --import "com.google.android.material.bottomsheet.BottomSheetDialog"
 --import "com.google.android.material.navigation.NavigationView"
 import "com.google.android.material.tabs.TabLayout"
+import "com.google.android.material.chip.Chip"
+import "com.google.android.material.chip.ChipGroup"
 
 import "com.bumptech.glide.request.RequestOptions"
 import "com.bumptech.glide.load.engine.DiskCacheStrategy"
@@ -70,10 +72,14 @@ import "getImportCode"
 
 import "item"
 
+import "sub.LayoutHelper2.loadlayout2"
+
 import "adapter.FileListAdapter"
 
 --申请存储权限
 PermissionUtil.smartRequestPermission({"android.permission.WRITE_EXTERNAL_STORAGE","android.permission.READ_EXTERNAL_STORAGE"})
+
+DefaultPakcagePath=package.path
 
 safeModeEnable=File("/sdcard/aidelua_safemode").exists()
 notSafeModeEnable=not(safeModeEnable)
@@ -167,7 +173,6 @@ activityStopped=false
 MyLuaEditor=editor2my(LuaEditor)
 MyCodeEditor=editor2my(CodeEditor)
 
-
 activity.setTitle(R.string.app_name)
 activity.setContentView(loadlayout("layout"))
 actionBar.setTitle(R.string.app_name)
@@ -177,32 +182,24 @@ EditorUtil.IsEditors={
   LuaEditor=true,
   CodeEditor=true,
   PhotoView=false,
+  LayoutView=false,
 }
 EditorUtil.Editors={
   LuaEditor=luaEditor,
   CodeEditor=codeEditor,
   PhotoView=photoView,
+  LayoutView=layoutView,
 }
 EditorUtil.EditorsGroup={
   LuaEditor=luaEditorParent,
   CodeEditor=codeEditorParent,
   PhotoView=photoViewParent,
+  LayoutView=layoutView,
 }
 EditorUtil.switchEditor("LuaEditor")
 
---[[
-setTypeface(Typeface.MONOSPACE);
-        File df = new File(fontDir + "default.ttf");
-        if (df.exists())
-            setTypeface(Typeface.createFromFile(df));
-        File bf = new File(fontDir + "bold.ttf");
-        if (bf.exists())
-            setBoldTypeface(Typeface.createFromFile(bf));
-        File tf = new File(fontDir + "italic.t
-        tf");
-        if (tf.exists())
-            setItalicTypeface(Typeface.createFromFile(tf));
-    }]]
+previewChipGroupSelectedId=editChip.getId()
+editChip.setChecked(true)
 
 LuaReservedCharacters={"switch","if","then","and","break","do",
   "else","elseif","end","false",
@@ -564,6 +561,9 @@ function onKeyUp(KeyCode,event)
           drawer.closeDrawer(Gravity.LEFT)--没有当前文件夹，当做啥时也没发生，关闭侧滑
         end
         return true
+       elseif previewChip.isChecked() then
+        editChip.setChecked(true)
+        return true
        else--啥都没打开
         if (System.currentTimeMillis()-lastBackTime)> 2000 then
           showSnackBar(R.string.exit_toast)
@@ -914,6 +914,27 @@ if fontFile.exists() then
 end
 
 refreshSymbolBar(oldEditorSymbolBar)
+
+previewChipGroup.setOnCheckedChangeListener{
+  onCheckedChanged=function(chipGroup, selectedId)
+    --print(selectedId)
+    if selectedId==-1 and previewChipGroupSelectedId then
+      local chip=chipGroup.findViewById(previewChipGroupSelectedId)
+      chip.setChecked(true)
+      return
+     elseif chipGroup.getParent().getVisibility()==View.VISIBLE then
+      local chip=chipGroup.findViewById(selectedId)
+      if chip then
+        local id=chip.getId()
+        local isPreview=id==previewChip.getId()
+        previewChipGroupSelectedId=id
+        EditorUtil.switchPreview(NowFileType,isPreview)
+        return
+      end
+    end
+    previewChipGroupSelectedId=nil
+  end
+}
 
 screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
   onDeviceChanged=function(device,oldDevice)

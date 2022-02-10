@@ -670,7 +670,10 @@ end
 
 local supportForeground=pcall(function()return View(context).setForeground end)
 
-local function loadlayout(t,root,group)
+local function loadlayout(t,root,group,loadDir)
+  if loadDir then
+    luadir=loadDir
+  end
   if type(t)=="string" then
     t=require(t)
    elseif type(t)~="table" then
@@ -733,7 +736,7 @@ local function loadlayout(t,root,group)
   gd.setStroke(2,0x44000000,5,5)
   gd.setGradientRadius(700)
   gd.setGradientType(1)
-  
+
   if supportForeground and view.getForeground()==jil then
     view.setForeground(gd)
    else

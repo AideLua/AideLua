@@ -61,8 +61,9 @@ ProjectUtil.FolderIconsByName={
   keys=R.drawable.ic_folder_key_outline,
 }
 
-ProjectUtil.TextFileType={"lua","aly","html","xml","java","py","pyw","txt","gradle","bat","json"}
+ProjectUtil.TextFileType={lua=true,aly=true,html=true,xml=true,java=true,py=true,pyw=true,txt=true,gradle=true,bat=true,json=true,svg=true}
 ProjectUtil.CallCodeFileType={lua=true,aly=true,java=true,py=true,pyw=true}
+ProjectUtil.SupportPreviewType={xml=true,aly=true,svg=true}
 
 ProjectUtil.HideFiles={
   gradlew=true,
@@ -92,6 +93,7 @@ ProjectUtil.LibsRelativePathType={
   luac=true,
   aly=true,
 }
+
 
 function ProjectUtil.shortPath(path,max,basePath)
   if OpenedProject then
@@ -187,7 +189,7 @@ function ProjectUtil.isSelfFile(file1,file2)
 end
 
 function ProjectUtil.isTextFile(fileType)
-  return toboolean(table.find(ProjectUtil.TextFileType,fileType))
+  return ProjectUtil.TextFileType[fileType]
 end
 
 

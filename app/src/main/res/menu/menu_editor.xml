@@ -29,6 +29,9 @@
             <item
                 android:id="@+id/menu_code_commented"
                 android:title="@string/commentedCode"/>
+            <item
+                android:id="@+id/menu_code_viewApi"
+                android:title="@string/javaApiViewer_viewApi"/>
 
         </menu>
     </item>

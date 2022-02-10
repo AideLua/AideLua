@@ -30,11 +30,6 @@ editorFunc={
       NowEditor.gotoLine()
     end
   end,
-  seach=function()
-    if IsEdtor then
-      NowEditor.search()
-    end
-  end,
   closeFile=function()
     if OpenedFile then
       closeFileAndTabByPath(string.lower(NowFile.getPath()))
@@ -184,6 +179,7 @@ editorFunc={
       ids=SearchActionMode({
         onEditorAction=function(view,actionId,event)
           if event then
+            local text=view.text
             if NowEditorType=="CodeEditor" then
               NowEditor.getSearcher().search(text)
               NowEditor.getSearcher().gotoNext()
@@ -554,7 +550,7 @@ function refreshMoveCloseHeight(height)
   height=height-56
   if height<=320 then
     moveCloseHeight=math.dp2int(height/2)
-  else
+   else
     moveCloseHeight=math.dp2int(160)
   end
 end
@@ -717,13 +713,6 @@ function openFile(file,reOpen,line)
       options.skipMemoryCache(true)--跳过内存缓存
       options.diskCacheStrategy(DiskCacheStrategy.NONE)--不缓冲disk硬盘中
       Glide.with(activity).load(filePath).apply(options).into(NowEditor)
-      appBarLayout.setElevation(0)
-
-     elseif fileType=="svg" then
-      succeeded=true
-      EditorUtil.switchEditor("PhotoView")--将编辑器切换为Lua编辑器
-      Sharp.loadFile(file).into(NowEditor)
-      appBarLayout.setElevation(0)
 
      elseif fileType=="apk" then
       --处理Apk文件
@@ -745,6 +734,14 @@ function openFile(file,reOpen,line)
       if not(loadingFiles) then
         adp.notifyDataSetChanged()
       end]]
+      if ProjectUtil.SupportPreviewType[fileType] then
+        editChip.setChecked(true)
+        previewChipCardView.setVisibility(View.VISIBLE)
+       else
+        previewChipCardView.setVisibility(View.GONE)
+      end
+
+
       if not(loadingFiles) and not(reOpen) then
         if NowFilePosition then
           adp.notifyItemChanged(NowFilePosition)
@@ -884,6 +881,7 @@ function closeFileAndTab(tab,doNotSave)--关闭文件并移除Tab
   filesTabLay.removeTab(tab)
   if table.size(FilesTabList)==0 then--如果列表为0时
     filesTabLay.setVisibility(View.GONE)
+    previewChipCardView.setVisibility(View.GONE)
     adp.notifyDataSetChanged()
     --[[
     if actionBar.getElevation()~=theme.integer.actionBarElevation and not(drawerOpened) then
@@ -910,12 +908,17 @@ function openProject(projectDirectory,file)
   local nowDirectory=projectDirectory
   OpenedProject=true
 
+
   --pathsTabLay.setVisibility(View.VISIBLE)
 
   local configPath=ReBuildTool.getConfigPathByProjectDir(projectPath)
   local configFile=File(configPath)
   local config=ReBuildTool.getConfigByFilePath(configPath)
   local mainFolder=ReBuildTool.getMainProjectDirByConfig(projectPath,config)
+  local mainLuaFolder=mainFolder.."/assets_bin/main.lua"
+
+  package.path=DefaultPakcagePath..mainLuaFolder.."/?.lua;"..mainLuaFolder.."/lua/?.lua;"..mainLuaFolder.."/?/init.lua;"
+
   local openedFilePath=getSharedData("openedfilepath_"..projectPath)
   local openedFileFile
   if openedFilePath then
@@ -926,7 +929,7 @@ function openProject(projectDirectory,file)
   local openFiles={
     file,
     openedFileFile,
-    File(mainFolder.."/assets_bin/main.lua"),
+    File(mainLuaFolder),
     File(mainFolder.."/assets/main.lua"),
     File(mainFolder.."/AndroidManifest.xml")
   }
@@ -957,8 +960,10 @@ end
 
 --关闭工程调用函数
 function closeProject()
+  package.path=DefaultPakcagePath
   closeFile(nil,true)
   filesTabLay.removeAllTabs()
+  previewChipCardView.setVisibility(View.GONE)
   table.clear(FilesTabList)
   buildKeysCache()
 
@@ -1086,6 +1091,9 @@ function onEditorSelectionChangedListener(view,status,start,end_)
           view.paste()
          elseif id==R.id.menu_code_commented then
           editorFunc.commented(view)
+         elseif id==R.id.menu_code_viewApi then
+          local selectedText=view.getSelectedText()
+          newSubActivity("JavaApi",{selectedText})
         end
         return false;
       end,

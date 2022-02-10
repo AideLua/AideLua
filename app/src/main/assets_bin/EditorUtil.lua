@@ -30,6 +30,7 @@ EditorUtil.TextFileType2EditorType={
   aly="LuaEditor",
 
   html="CodeEditor",
+  svg="CodeEditor",
   xml="CodeEditor",
   java="CodeEditor",
   py="CodeEditor",
@@ -40,13 +41,65 @@ EditorUtil.TextFileType2EditorType={
   json="CodeEditor",
 }
 
+local oldThemeId
+EditorUtil.PreviewFunc={
+  svg=function()
+    EditorUtil.switchEditor("PhotoView")--将编辑器切换为Lua编辑器
+    Sharp.loadFile(NowFile).into(NowEditor)
+
+    return true
+  end,
+  aly=function()
+    import "androidx"
+    EditorUtil.switchEditor("LayoutView")--将编辑器切换为Lua编辑器
+    oldThemeId=activity.getThemeResId()
+    if ThemeUtil.NowAppTheme.night then
+      activity.setTheme(R.style.Theme_MaterialComponents)
+     else
+      activity.setTheme(R.style.Theme_MaterialComponents_Light)
+    end
+    local layout=loadlayout2(loadfile(NowFile.getPath())(),{},nil,NowProjectDirectory.getPath())
+    --NowEditor.removeAllViews()
+    NowEditor.addView(layout)
+    return true
+  end,
+  alyFinish=function()
+    if oldThemeId then
+      activity.setTheme(oldThemeId)
+    end
+  end,
+  alyExit=function()
+    NowEditor.removeAllViews()
+  end,
+  xml=function()
+    EditorUtil.switchEditor("PhotoView")--将编辑器切换为Lua编辑器
+    local content=io.readall(NowFile.getPath())
+    content=content:gsub("vector","svg")
+    :gsub("http://schemas.android.com/apk/res/android","http://www.w3.org/2000/svg")
+    :gsub("android:fillColor","fill")
+    :gsub("@android:color/white","#ffffff")
+    :gsub("@android:color/black","#000000")
+    :gsub('android:tint="(.-)"',"")
+    :gsub('android:pathData="(.-)"/>',function(v)
+      return 'd="'..v..'"/>'
+    end)
+    :gsub("dp","")
+    :gsub("viewportWidth(.-)>",[[viewBox="0 0 24 24">]])
+    :gsub("android:","")
+    Sharp.loadString(content).into(NowEditor)
+
+    return true
+  end,
+}
+
+
 EditorUtil.TextFileType2EditorLanguage={
   --lua=LuaLanguage.getInstance(),
   --aly=LuaLanguage.getInstance(),
   --xml=LanguageXML.getInstance(),
-
   html=HTMLLanguage(),
   xml=JavaLanguage(),
+  svg=JavaLanguage(),
   py=PythonLanguage(),
   pyw=PythonLanguage(),
   java=JavaLanguage(),
@@ -78,10 +131,48 @@ function EditorUtil.switchEditor(editorType,language)
       end
       content.setVisibility(View.VISIBLE)
       editor.requestFocus()
+      MyAnimationUtil.ScrollView.onScrollChange(editor,editor.getScrollX(),editor.getScrollY(),0,0,appBarLayout,nil)
      else
       content.setVisibility(View.GONE)
     end
   end
-  return _ENV
+  return EditorUtil
+end
+
+function EditorUtil.switchPreview(fileType,isPreview)
+  if isPreview then
+    local succeed,oldThemeId
+    if OpenedFile and IsEdtor then
+      succeed=saveFile()
+     else
+      succeed=true
+    end
+    if succeed then
+      local finishFunc=EditorUtil.PreviewFunc[fileType.."Finish"]
+      xpcall(function()
+        EditorUtil.PreviewFunc[fileType]()
+      end,
+      function(err)
+        AlertDialog.Builder(this)
+        .setTitle("Preview error")
+        .setMessage(err)
+        .setPositiveButton(android.R.string.ok,nil)
+        .show()
+        editChip.setChecked(true)
+      end)
+      if finishFunc then
+        finishFunc()
+      end
+     else
+      editChip.setChecked(true)
+    end
+   else
+    local exitFunc=EditorUtil.PreviewFunc[fileType.."Exit"]
+    if exitFunc then
+      exitFunc()
+    end
+    EditorUtil.switchEditor(EditorUtil.TextFileType2EditorType[fileType],EditorUtil.TextFileType2EditorLanguage[fileType])--将编辑器切换为Lua编辑器
+  end
+  return EditorUtil
 end
 return EditorUtil

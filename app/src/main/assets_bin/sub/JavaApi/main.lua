@@ -11,14 +11,26 @@ import "item"
 searchWord=...
 searchWord=tostring(searchWord)
 if searchWord=="nil" then
-  searchWord=""
+  searchWord=nil
 end
 activity.setTitle(R.string.javaApiViewer)
 actionBar.setDisplayHomeAsUpEnabled(true)
 activity.setContentView(loadlayout("layout"))
 
 function onCreate()
-  searchItem(searchWord)
+  local trueWord=""
+  if searchWord then
+    trueWord=searchWord.."$"
+  end
+  searchItem(trueWord,function(classesList)
+    if searchWord then
+      if #classesList==1 then
+        newSubActivity("ViewClass",{searchWord})
+       elseif #classesList==2 then
+        newSubActivity("ViewClass",{classesList[2].text})
+      end
+    end
+  end)
   searchEdit.text=searchWord
 end
 
@@ -89,15 +101,22 @@ function search(text,application)
 end
 
 
-function searchItem(text)
+function searchItem(text,callback)
+  if checkTextError(text,searchLay) then
+    return
+  end
   progressBar.setVisibility(View.VISIBLE)
   searchButton.clickable=false
   activity.newTask(search,function(classesList)
+    local classesList=luajava.astable(classesList)
     adp.clear()
-    adp.addAll(luajava.astable(classesList))
+    adp.addAll(classesList)
     adp.notifyDataSetChanged()
     progressBar.setVisibility(View.GONE)
     searchButton.clickable=true
+    if callback then
+      callback(classesList)
+    end
   end).execute({tostring(text),application})
 end
 
@@ -131,20 +150,12 @@ listView.onScroll=function(view,firstVisibleItem,visibleItemCount,totalItemCount
 end
 
 searchButton.onClick=function()
-  local text=searchEdit.text
-  if checkTextError(text,searchLay) then
-    return
-  end
-  searchItem(text)
+  searchItem(searchEdit.text)
 end
 
 searchEdit.onEditorAction=function(view,i,keyEvent)
   if searchButton.clickable then
-    local text=view.text
-    if checkTextError(text,searchLay) then
-      return true
-    end
-    searchItem(text)
+    searchItem(view.text)
   end
   return true
 end
