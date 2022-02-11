@@ -31,7 +31,7 @@ function onCreate()
       end
     end
   end)
-  searchEdit.text=searchWord
+  searchEdit.text=trueWord
 end
 
 function onOptionsItemSelected(item)

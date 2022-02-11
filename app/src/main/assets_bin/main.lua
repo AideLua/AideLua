@@ -917,7 +917,6 @@ refreshSymbolBar(oldEditorSymbolBar)
 
 previewChipGroup.setOnCheckedChangeListener{
   onCheckedChanged=function(chipGroup, selectedId)
-    --print(selectedId)
     if selectedId==-1 and previewChipGroupSelectedId then
       local chip=chipGroup.findViewById(previewChipGroupSelectedId)
       chip.setChecked(true)
@@ -927,8 +926,10 @@ previewChipGroup.setOnCheckedChangeListener{
       if chip then
         local id=chip.getId()
         local isPreview=id==previewChip.getId()
+        if selectedId~=previewChipGroupSelectedId then
+          EditorUtil.switchPreview(NowFileType,isPreview)
+        end
         previewChipGroupSelectedId=id
-        EditorUtil.switchPreview(NowFileType,isPreview)
         return
       end
     end

@@ -158,13 +158,10 @@ function EditorUtil.switchPreview(fileType,isPreview)
         .setMessage(err)
         .setPositiveButton(android.R.string.ok,nil)
         .show()
-        editChip.setChecked(true)
       end)
       if finishFunc then
         finishFunc()
       end
-     else
-      editChip.setChecked(true)
     end
    else
     local exitFunc=EditorUtil.PreviewFunc[fileType.."Exit"]

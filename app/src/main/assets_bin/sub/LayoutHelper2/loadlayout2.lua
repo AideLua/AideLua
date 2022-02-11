@@ -450,7 +450,7 @@ local function setBackground(view,bg)
 end
 
 
-local function setattribute(root,view,params,k,v,ids)
+local function setattribute(root,view,params,k,v,ids,previewFrame)
   --[[
   if k=="layout_x" then
     params.x=checkValue(v)
@@ -509,7 +509,7 @@ local function setattribute(root,view,params,k,v,ids)
       for n,o in ipairs(v) do
         local tp=type(o)
         if tp=="string" or tp=="table" then
-          table.insert(ps,loadlayout(o,root))
+          table.insert(ps,loadlayout(o,root,nil,previewFrame))
          else
           table.insert(ps,o)
         end
@@ -641,7 +641,7 @@ local function copytable(f,t,b)
 end
 
 
-local function setstyle(c,t,root,view,params,ids)
+local function setstyle(c,t,root,view,params,ids,previewFrame)
   local mt=getmetatable(t)
   if not mt or not mt.__index then
     return
@@ -653,11 +653,11 @@ local function setstyle(c,t,root,view,params,ids)
   c[m]=true
   for k,v in pairs(m) do
     if not rawget(c,k) then
-      pcall(setattribute,root,view,params,k,v,ids)
+      pcall(setattribute,root,view,params,k,v,ids,previewFrame)
     end
     c[k]=true
   end
-  setstyle(c,m,root,view,params,ids)
+  setstyle(c,m,root,view,params,ids,previewFrame)
 end
 
 local function getRealClass(class)
@@ -670,7 +670,7 @@ end
 
 local supportForeground=pcall(function()return View(context).setForeground end)
 
-local function loadlayout(t,root,group,loadDir)
+local function loadlayout(t,root,group,loadDir,previewFrame)
   if loadDir then
     luadir=loadDir
   end
@@ -736,12 +736,14 @@ local function loadlayout(t,root,group,loadDir)
   gd.setStroke(2,0x44000000,5,5)
   gd.setGradientRadius(700)
   gd.setGradientType(1)
+  if previewFrame then
 
-  if supportForeground and view.getForeground()==jil then
-    view.setForeground(gd)
-   else
-    if view.getBackground() == nil then
-      view.setBackground(gd)
+    if supportForeground and view.getForeground()==jil then
+      view.setForeground(gd)
+     else
+      if view.getBackground() == nil then
+        view.setBackground(gd)
+      end
     end
   end
 
@@ -753,7 +755,7 @@ local function loadlayout(t,root,group,loadDir)
         end
         view.adapter=LuaAdapter(context,v)
        else
-        view.addView(loadlayout(v,root,t[1]))
+        view.addView(loadlayout(v,root,t[1],nil,previewFrame))
       end
      elseif k=="id" then --创建view的全局变量
       rawset(root,v,view)
@@ -763,7 +765,7 @@ local function loadlayout(t,root,group,loadDir)
       ids[v]=id
 
      else
-      local e,s=pcall(setattribute,root,view,params,k,v,ids)
+      local e,s=pcall(setattribute,root,view,params,k,v,ids,previewFrame)
       if not e then
         local _,i=s:find(":%d+:")
         s=s:sub(i or 1,-1)
