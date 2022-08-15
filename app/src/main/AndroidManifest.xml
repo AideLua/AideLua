@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='utf-8'?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.Jesse205.aidelua2">
+
+    <!-- 读取通话状态和移动网络信息 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+
+    <!-- 查看 WLAN 状态 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+
+    <!-- 查看网络连接 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <!-- 完全的网络访问权限 -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- 修改或删除 SD 卡中的内容 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <!-- MANAGE_EXTERNAL_STORAGE -->
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
+
+    <!-- 安装快捷方式 -->
+    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
+
+    <!-- READ_LOGS -->
+    <uses-permission android:name="android.permission.READ_LOGS"/>
+
+    <!-- 直接下载文件而不显示通知 -->
+    <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION"/>
+
+    <!-- 请求安装文件包 -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+
+    <!-- 运行前台服务 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+
+    <!-- 读取存储卡中的内容 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <!-- 卸载快捷方式 -->
+    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"/>
+
+    <application
+        android:largeHeap="true"
+        android:name="com.androlua.LuaApplication"
+        android:resizeableActivity="true"
+        android:supportsPictureInPicture="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:usesCleartextTraffic="true"
+        android:requestLegacyExternalStorage="true"
+        android:theme="@style/Theme.Jesse205.Default">
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false"/>
+
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="4"/>
+
+        <meta-data
+            android:name="BaiduMobAd_STAT_ID"
+            android:value="f323e9abd1"/>
+
+        <meta-data
+            android:name="BaiduMobAd_EXCEPTION_LOG"
+            android:value="true"/>
+
+        <meta-data
+            android:name="EasyGoClient"
+            android:value="true" />
+        
+
+        <activity
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize"
+            android:label="@string/app_name"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:name="com.Jesse205.superlua.Main"
+            android:theme="@style/Theme.Jesse205.Welcome">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            
+        </activity>
+
+        <activity
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:label="@string/app_name"
+            android:exported="true"
+            android:name="com.Jesse205.superlua.LuaActivity"/>
+
+        <activity
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize"
+            android:documentLaunchMode="intoExisting"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:excludeFromRecents="false"
+            android:label="@string/app_name"
+            android:exported="true"
+            android:name="com.Jesse205.superlua.LuaActivityX"/>
+
+        <activity
+            android:label="@string/app_name"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboard|navigation|screenLayout|fontScale|smallestScreenSize|keyboardHidden|orientation|screenSize"
+            android:name="com.Jesse205.superlua.Welcome"
+            android:theme="@style/Theme.Jesse205.Welcome"/>
+
+        <service
+            android:enabled="true"
+            android:name="com.androlua.LuaService"/>
+
+        <provider
+            android:authorities="com.Jesse205.aidelua2"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            android:name="android.content.FileProvider">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/androlua_filepaths"/>
+        </provider>
+     
+    </application>
+
+</manifest>

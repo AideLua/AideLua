@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/subMenu_openDir"
+        android:title="@string/directory_go_popup">
+        <menu>
+            <item
+                android:id="@+id/menu_openDir_currentFile"
+                android:title="file_current"/>
+            <item
+                android:id="@+id/menu_openDir_assets"
+                android:title="assets_bin"/>
+            <item
+                android:id="@+id/menu_openDir_java"
+                android:title="java"/>
+            <item
+                android:id="@+id/menu_openDir_lua"
+                android:title="luaLibs"/>
+            <item
+                android:id="@+id/menu_openDir_res"
+                android:title="res"/>
+            <item
+                android:id="@+id/menu_openDir_projectRoot"
+                android:title="@string/project_root"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/menu_createFile"
+        android:title="@string/file_create"/>
+    <item
+        android:id="@+id/menu_createDir"
+        android:title="@string/directory_create"/>
+    
+</menu>

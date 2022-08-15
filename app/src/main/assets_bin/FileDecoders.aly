@@ -1,0 +1,49 @@
+{
+  txt={
+    editor="CodeEditor",
+    read=function(path)
+    end,
+    save=function(path,content)
+    end,
+    language=EmptyLanguage(),
+  },
+
+  lua={
+    super="txt",
+    editor="LuaEditor",
+    language=false,
+  },
+  aly={super="lua"},
+  
+  xml={
+    super="txt",
+    language=JavaLanguage(),
+  },
+  java={
+    super="txt",
+    language=JavaLanguage(),
+  },
+  svg={
+    super="java",
+    language=JavaLanguage(),
+  },
+  html={
+    super="txt",
+    language=HTMLLanguage(),
+  },
+  json={
+    super="txt",
+    language=JavaLanguage(),
+  },
+  gradle={super="txt",},
+  bat={super="txt",},
+
+
+
+  png={
+    editor="PhotoView",
+    read=function(path)
+    end,
+    save=false,
+  },
+}
