@@ -1,6 +1,6 @@
 --[[
 FilesBrowserManager: 文件浏览器管理器
-FilesBrowserManager.openState; FilesBrowserManager.getopenState(): 文件浏览器打开状态
+FilesBrowserManager.openState; FilesBrowserManager.getOpenState(): 文件浏览器打开状态
 FilesBrowserManager.directoryFile; FilesBrowserManager.getDirectoryFile(): 获取当前文件夹File
 FilesBrowserManager.directoryFilesList: 获取当前文件列表
 FilesBrowserManager.folderIcons: 文件夹图标
@@ -15,8 +15,12 @@ FilesBrowserManager.init(): 初始化管理器
 ]]local FilesBrowserManager = {}
 local openState = false
 local adapterData={}
+FilesBrowserManager.adapterData = adapterData
 local directoryFile,adapter,layoutManager
+local pathAdapter,pathLayoutManager
 --local directoryFilesList=nil
+local pathSplitList={}
+FilesBrowserManager.pathSplitList = pathSplitList
 local filesPositions={}
 --local projectsPath=getSharedData("projectsDir")
 --local projectsFile=File(projectsPath)
@@ -35,7 +39,46 @@ local folderIcons={
   key=R.drawable.ic_folder_key_outline,
   keys=R.drawable.ic_folder_key_outline,
 }
+setmetatable(folderIcons,{__index=function(self,key)
+    return R.drawable.ic_folder_outline
+end})
 FilesBrowserManager.folderIcons=folderIcons
+
+local fileIcons={--各种文件的图标
+  lua=R.drawable.ic_language_lua,
+  luac=R.drawable.ic_language_lua,
+  aly=R.drawable.ic_language_lua,
+  xml=R.drawable.ic_xml,
+  json=R.drawable.ic_code_json,
+  java=R.drawable.ic_language_java,
+  html=R.drawable.ic_language_html5,
+  htm=R.drawable.ic_language_html5,
+  txt=R.drawable.ic_file_document_outline,
+  zip=R.drawable.ic_zip_box_outline,
+  rar=R.drawable.ic_zip_box_outline,
+  ["7z"]=R.drawable.ic_zip_box_outline,
+  pdf=R.drawable.ic_file_pdf_box_outline,
+  ppt=R.drawable.ic_file_powerpoint_box_outline,
+  pptx=R.drawable.ic_file_powerpoint_box_outline,
+  doc=R.drawable.ic_file_word_box_outline,
+  docx=R.drawable.ic_file_word_box_outline,
+  xls=R.drawable.ic_file_table_box_outline,
+  xlsx=R.drawable.ic_file_table_box_outline,
+  png=R.drawable.ic_image_outline,
+  jpg=R.drawable.ic_image_outline,
+  gif=R.drawable.ic_image_outline,
+  jpeg=R.drawable.ic_image_outline,
+  svg=R.drawable.ic_image_outline,
+  apk=R.drawable.ic_android_debug_bridge,
+  py=R.drawable.ic_language_python,
+  pyw=R.drawable.ic_language_python,
+  pyc=R.drawable.ic_language_python,
+}
+setmetatable(fileIcons,{__index=function(self,key)
+    return R.drawable.ic_file_outline
+end})
+FilesBrowserManager.fileIcons=fileIcons
+
 
 local fileColors = {
   normal = 0xFF9E9E9E, -- 普通颜色
@@ -63,6 +106,34 @@ fileColors["7Z"] = fileColors.ZIP
 fileColors.tar = fileColors.ZIP
 fileColors.RAR = fileColors.ZIP
 fileColors.SVG = fileColors.XML
+
+setmetatable(fileColors,{__index=function(self,key)
+    return self.normal
+end})
+
+local hiddenFiles={
+  gradlew=true,
+  ["gradlew.bat"]=true,
+  ["luajava-license.txt"]=true,
+  ["lua-license.txt"]=true,
+  [".gitignore"]=true,
+  gradle=true,
+  build=true,
+  ["init.lua"]=true,
+  libs=true,
+  cache=true,
+  caches=true,
+}
+
+local hiddenBool2Alpha={
+  ["true"]=0.5,
+  ["false"]=1
+}
+
+function FilesBrowserManager.getIconAlphaByName(fileName)
+  return hiddenBool2Alpha[tostring(toboolean(hiddenFiles[fileName] or fileName:find("^%.")))]
+end
+
 
 function FilesBrowserManager.getProjectIconForGlide(projectPath,config,mainProjectPath)
   --local mainProjectPath=ReBuildTool.getMainProjectDirByConfig(projectPath,config)
@@ -108,10 +179,10 @@ function FilesBrowserManager.getFileIconRIdByType(fileType)
   end
   return icon
 end
-
+--[[
 function FilesBrowserManager.getFolderIconResIdByName(name)
   return folderIcons[name] or R.drawable.ic_folder_outline
-end
+end]]
 
 
 local relLibPathsMatch = {} -- 相对库路径匹配
@@ -151,6 +222,7 @@ function FilesBrowserManager.close()
   openState = false
 end
 
+--切换文件浏览器打开状态
 function FilesBrowserManager.switchState()
   if openState then
     FilesBrowserManager.close()
@@ -179,10 +251,13 @@ function FilesBrowserManager.refresh(file,upFile,force)
     }), 100)
     if not(ProjectManager.openState) then
       file=ProjectManager.projectsFile
-      else
+     else
       file=file or directoryFile
+      if isSamePathFileByPath(file.getPath(),ProjectManager.projectsPath) then
+        ProjectManager.closeProject(false)
+      end
     end
-  
+
 
     if directoryFile then
       local nowDirectoryPath=directoryFile.getPath()--获取已打开文件夹路径
@@ -243,14 +318,71 @@ function FilesBrowserManager.refresh(file,upFile,force)
           end
         end
       end
-      return File(newList)
+      return File(newList),newDirectory
     end,
     function(dataList,newDirectory)
-      --print(dataList[1])
+      local path=newDirectory.getPath()
+      local oldPath=(directoryFile or newDirectory).getPath()
+
+      table.clear(adapterData)
+      --刷新路径指示器
+      if ProjectManager.openState then
+        if oldPath~=path then
+          --如果是返回
+          if String(oldPath).startsWith(path) then
+            local position=#pathSplitList
+            for name in string.split(ProjectManager.shortPath(oldPath,true,path),"/") do
+              if name~="" then
+                table.remove(pathSplitList,position)
+                if position>1 then
+                  pathAdapter.notifyItemChanged(position-2)
+                end
+                pathAdapter.notifyItemRemoved(position-1)
+                position=position-1
+              end
+            end
+            --如果是前进
+           elseif String(path).startsWith(oldPath) then
+            local rootPath=oldPath
+            local position=#pathSplitList
+            for name in string.split(ProjectManager.shortPath(path,true,rootPath),"/") do
+              if name~="" then
+                rootPath=rootPath.."/"..name
+                table.insert(pathSplitList,{name,rootPath})
+                if position>0 then
+                  pathAdapter.notifyItemChanged(position-1)
+                end
+                pathAdapter.notifyItemInserted(position)
+                position=position+1
+              end
+            end
+            --判断不出来
+           else
+            table.clear(pathSplitList)
+            local rootPath=ProjectManager.nowFile.getParent()
+            for name in string.split(ProjectManager.shortPath(path,true,rootPath),"/") do
+              if name~="" then
+                rootPath=rootPath.."/"..name
+                table.insert(pathSplitList,{name,rootPath})
+              end
+            end
+            pathAdapter.notifyDataSetChanged()
+          end
+        end
+       else
+        table.clear(pathSplitList)
+      end
+      directoryFile=newDirectory
       FilesBrowserManager.directoryFilesList=dataList
       swipeRefresh.setRefreshing(false)
       loadingFiles=false
+
       adapter.notifyDataSetChanged()
+      pathLayoutManager.scrollToPosition(#pathSplitList-1)
+      local scroll=filesPositions[path]
+      if scroll then
+        layoutManager.scrollToPositionWithOffset(scroll[1],scroll[2])
+      end
 
     end).execute({file,ProjectManager.openState})
   end
@@ -258,47 +390,34 @@ end
 
 --初始化
 function FilesBrowserManager.init()
-  pathsTabLay.addOnTabSelectedListener(TabLayout.OnTabSelectedListener({
-    onTabSelected = function(tab)
-      local tag = tab.tag
-      local path = tag.path
-      --[[
-    if path and path~=NowDirectory.getPath() then
-      refresh(File(path),true)
-    end]]
-    end,
-    onTabReselected = function(tab)
-    end,
-    onTabUnselected = function(tab)
-    end
-  }))
 
-  if notSafeModeEnable then
-    recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
-      onGlobalLayout = function()
-        if activity.isFinishing() then
-          return
-        end
-        MyAnimationUtil.RecyclerView.onScroll(recyclerView, 0, 0, sideAppBarLayout, "LastSideActionBarElevation")
-      end
-    })
-  end
   swipeRefresh.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
     onRefresh = function()
-      FilesBrowserManager.refresh(nil, nil, true)
+      FilesBrowserManager.refresh()
     end
   })
   MyStyleUtil.applyToSwipeRefreshLayout(swipeRefresh)
 
-  adapter=FileListAdapter(adapterData, item)
+  adapter=FileListAdapter(item)
   recyclerView.setAdapter(adapter)
   layoutManager = LinearLayoutManager()
   recyclerView.setLayoutManager(layoutManager)
   recyclerView.addOnScrollListener(RecyclerView.OnScrollListener {
     onScrolled = function(view, dx, dy)
       MyAnimationUtil.RecyclerView.onScroll(view, dx, dy, sideAppBarLayout, "LastSideActionBarElevation")
-    end
-  })
+  end})
+  recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
+    onGlobalLayout = function()
+      if activity.isFinishing() then return end
+      MyAnimationUtil.RecyclerView.onScroll(recyclerView, 0, 0, sideAppBarLayout, "LastSideActionBarElevation")
+  end})
+
+  pathAdapter=FilePathAdapter(pathItem)
+  pathRecyclerView.setAdapter(pathAdapter)
+  pathLayoutManager = LinearLayoutManager()
+  pathLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL)
+  --pathLayoutManager.setStackFromEnd(true)
+  pathRecyclerView.setLayoutManager(pathLayoutManager)
 
   --判断侧滑开启状态。
   --如果侧滑为开启状态，那么文件浏览器一定是开启的。
@@ -318,7 +437,7 @@ function FilesBrowserManager.init()
       end
     end,
     onDrawerOpened = function(view)
-      FilesTabManager.saveFile()--侧滑打开就保存文件
+      --FilesTabManager.saveFile()--侧滑打开就保存文件
     end,
     onDrawerClosed = function(view)
     end,
@@ -328,7 +447,7 @@ function FilesBrowserManager.init()
 
 end
 
-function FilesBrowserManager.getopenState()
+function FilesBrowserManager.getOpenState()
   return openState
 end
 function FilesBrowserManager.getDirectoryFile()
@@ -336,7 +455,7 @@ function FilesBrowserManager.getDirectoryFile()
 end
 
 function FilesBrowserManager.setDirectoryFile(file)
-   directoryFile=file
+  directoryFile=file
 end
 
 return createVirtualClass(FilesBrowserManager)

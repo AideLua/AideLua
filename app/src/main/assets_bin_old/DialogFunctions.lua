@@ -43,7 +43,7 @@ function createDirsDialog(nowDir)--创建文件夹对话框
     xpcall(function()
       file.mkdirs()
       showSnackBar(R.string.create_success)
-      refresh(nowDir)
+      FilesBrowserManager.refresh(nowDir)
       dialog.dismiss()
     end,
     function(err)

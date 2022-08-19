@@ -3,7 +3,7 @@ import "Jesse205"
 import "com.google.android.material.chip.ChipGroup"
 import "com.google.android.material.chip.Chip"
 
-import "NewProject"
+import "AndroluaProjectUtil"
 TemplatesDir=activity.getLuaDir("../../templates")--模板路径
 BaseTemplateConfig=getConfigFromFile(TemplatesDir.."/baseTemplate/config.lua")
 cannotBeEmptyStr=activity.getString(R.string.Jesse205_edit_error_cannotBeEmpty)
@@ -125,13 +125,14 @@ end
 --整合keys
 function buildkeys()
   local keys=table.clone(defaultKeys)
+  local dependenciesEnd=keys.dependenciesEnd
   local keysLists={}
   local pluginsList={}
   local androidX=androidXSwitch.isChecked()
 
   if androidX then
-    table.insert(androidX,"implementation 'androidx.appcompat:appcompat:1.0.0'")
-    table.insert(androidX,"implementation 'com.google.android.material:material:1.0.0'")
+    table.insert(dependenciesEnd,"api 'androidx.appcompat:appcompat:1.0.0'")
+    table.insert(dependenciesEnd,"api 'com.google.android.material:material:1.0.0'")
   end
 
   for index,content in pairs(openedCLibs) do
@@ -288,7 +289,7 @@ creativeButton.onClick=function()--新建按钮
   .setMessage(activity.getString(R.string.project_create_tip))
   .setPositiveButton(R.string.create,function()
     showLoadingDia(nil,R.string.creating)
-    activity.newTask(NewProject.newProject,NewProject.update,NewProject.callback).execute({keys,BaseTemplateConfig,projectPath,TemplatesDir,openedSLibs,openedJarLibs,openedCLibs})
+    activity.newTask(AndroluaProjectUtil.newProject,AndroluaProjectUtil.update,AndroluaProjectUtil.callback).execute({keys,BaseTemplateConfig,projectPath,TemplatesDir,openedSLibs,openedJarLibs,openedCLibs})
   end)
   .setNegativeButton(android.R.string.cancel,nil)
   .show()

@@ -1,8 +1,15 @@
 import "getImportCode"
 --local directoryFilesList=FilesBrowserManager.directoryFilesList
 local filesPositions=FilesBrowserManager.filesPositions
+local adapterData=FilesBrowserManager.adapterData
 local fileColors=FilesBrowserManager.fileColors
+local fileIcons=FilesBrowserManager.fileIcons
+local folderIcons=FilesBrowserManager.folderIcons
 local unknowString=activity.getString(R.string.unknown)
+
+local refresh=FilesBrowserManager.refresh
+local getIconAlphaByName=FilesBrowserManager.getIconAlphaByName
+
 local directoryFilesList,isResDir,nowFilePosition
 
 local function onClick(view)
@@ -13,13 +20,12 @@ local function onClick(view)
   switch action do
    case "createProject" then
     newSubActivity("NewProject")
-    --CreateProject()
    case "openProject" then
-    --openProject(file)
     ProjectManager.openProject(path)
    case "openFolder" then
-    --refresh(file,data.upFile)
+    refresh(file,data.upFile)
    case "openFile" then
+    openFileITPS(path)
     --local succeed,_,inThirdPartySoftware=openFile(file)
     --todo: 手机端打开成功自动关闭侧滑
   end
@@ -47,6 +53,7 @@ local function onLongClick(view)
 
     local pop=PopupMenu(activity,view)
     local menu=pop.Menu
+    --[[
     if OpenedProject and fileType and LibsRelativePathType[fileType] then--已经打开了项目并且文件类型受支持
 
       local inLibDir,inLibDirIndex=data.inLibDir,data.inLibDirIndex
@@ -84,6 +91,7 @@ local function onLongClick(view)
         end
       end
     end
+  ]]
     pop.inflate(R.menu.menu_main_file)
     --local reNameMenu=menu.findItem(R.id.menu_rename)
     --local deleteMenu=menu.findItem(R.id.menu_delete)
@@ -126,10 +134,11 @@ local function onLongClick(view)
 end
 
 local function fileMoreMenuClick(view)
-  local nowLibName,fileRelativePath,nowPrjDirPath
-  if openProject then
-    nowPrjDirPath=NowProjectDirectory.getPath()
-    fileRelativePath=ProjectUtil.shortPath(NowDirectory.getPath(),true,nowPrjDirPath)
+  local directoryFile=FilesBrowserManager.directoryFile
+  local nowProjectPath=ProjectManager.nowPath
+  local nowLibName,fileRelativePath
+  if ProjectManager.openProject then
+    fileRelativePath=ProjectManager.shortPath(directoryFile.getPath(),true,nowProjectPath)
     if fileRelativePath:find("/.-/") then
       nowLibName=fileRelativePath:match("/(.-)/")
      elseif #fileRelativePath~=0 then
@@ -147,70 +156,55 @@ local function fileMoreMenuClick(view)
     local Rid=R.id
     local openDirPath--点击后要打开的路径，空为不打开
     if id==Rid.menu_createFile then
-      CreateFile(NowDirectory)
+      createFile(directoryFile)
      elseif id==Rid.menu_createDir then
-      createDirsDialog(NowDirectory)
+      createDirsDialog(directoryFile)
      else
-      if openProject then
+      --if FilesBrowserManager.openProject then
         if id==Rid.menu_openDir_assets then
-          openDirPath=("%s/%s/src/main/assets_bin"):format(nowPrjDirPath,nowLibName)
+          openDirPath=("%s/%s/src/main/assets_bin"):format(nowProjectPath,nowLibName)
          elseif id==Rid.menu_openDir_java then
-          openDirPath=("%s/%s/src/main/java"):format(nowPrjDirPath,nowLibName)
+          openDirPath=("%s/%s/src/main/java"):format(nowProjectPath,nowLibName)
          elseif id==Rid.menu_openDir_lua then
-          openDirPath=("%s/%s/src/main/luaLibs"):format(nowPrjDirPath,nowLibName)
+          openDirPath=("%s/%s/src/main/luaLibs"):format(nowProjectPath,nowLibName)
          elseif id==Rid.menu_openDir_res then
-          openDirPath=("%s/%s/src/main/res"):format(nowPrjDirPath,nowLibName)
+          openDirPath=("%s/%s/src/main/res"):format(nowProjectPath,nowLibName)
          elseif id==Rid.menu_openDir_projectRoot then
-          refresh(NowProjectDirectory)
+          openDirPath=nowProjectPath
         end
-      end
+
+      --end
     end
-    --todo:打开路径
+    if openDirPath then
+      FilesBrowserManager.refresh(File(openDirPath))
+    end
   end
 end
 
-
-return function(data,item)
-  local isResDir
+local openState2ViewType={
+  ["true"]={
+    [0]=3,
+    _else=4
+  },
+  ["false"]={
+    [0]=1,
+    _else=2
+  }
+}
+return function(item)
+  --local isResDir
   return LuaCustRecyclerAdapter(AdapterCreator({
     getItemCount=function()
       directoryFilesList=FilesBrowserManager.directoryFilesList
       if directoryFilesList then
-        --[[
-        if OpenedProject then
-          local nowDirPath=NowDirectory.getPath()
-          local cache_isResDir=KeysCache.isResDir[nowDirPath]
-          if cache_isResDir then--有缓存
-            isResDir=cache_isResDir
-           else--无缓存
-            local nowDirName=NowDirectory.getName()
-            isResDir=nowDirName~="values" and not(nowDirName:find("values%-")) and ProjectUtil.shortPath(nowDirPath,true,NowProjectDirectory.getPath()):find(".-/src/.-/res/") or false
-            KeysCache.isResDir[nowDirPath]=isResDir
-          end
-          --print(isResDir)
-         else
-          isResDir=false
-        end]]
-
         return #directoryFilesList+1
        else
         return 1
       end
     end,
     getItemViewType=function(position)
-      if ProjectManager.openState then
-        if position==0 then
-          return 3
-         else
-          return 4
-        end
-       else
-        if position==0 then
-          return 1
-         else
-          return 2
-        end
-      end
+      local son1=openState2ViewType[tostring(ProjectManager.openState)]
+      return son1[position] or son1._else
     end,
     onCreateViewHolder=function(parent,viewType)
       local ids={}
@@ -227,25 +221,40 @@ return function(data,item)
     end,
 
     onBindViewHolder=function(holder,position)
-      local data={position=position}
       local view=holder.view
       local tag=view.getTag()
+      local data=adapterData[position]
+      local initData=false
+      if not(data) then
+        data={position=position}
+        adapterData[position]=data
+        initData=true
+      end
       tag._data=data
       local titleView=tag.title
       local iconView=tag.icon
 
+      local file,filePath
+
       local projectOpenState=ProjectManager.openState
       if position==0 then--是第一项，就是新建项目或者返回上一目录
         if projectOpenState then--项目已打开，就是返回上一级
-          local file=FilesBrowserManager.directoryFile.getParentFile()
+          if initData then
+            file=FilesBrowserManager.directoryFile.getParentFile()
+            if not(file) then--根目录的上一级是工程文件夹
+              file=ProjectManager.projectsFile
+            end
+            filePath=file.getPath()
+
+            data.file=file
+            data.filePath=file.getPath()
+            data.fileName=".."
+            data.upFile=true
+            data.action="openFolder"
+          end
           iconView.setImageResource(R.drawable.ic_folder_outline)
           iconView.setColorFilter(fileColors.folder)
           titleView.setText("..")
-          data.file=file
-          data.filePath=file.getPath()
-          data.fileName=".."
-          data.upFile=true
-          data.action="openFolder"
           view.contentDescription=activity.getString(R.string.file_up)
          else--项目没打开，就是创建项目
           iconView.setImageResource(R.drawable.ic_plus)
@@ -253,26 +262,36 @@ return function(data,item)
           data.action="createProject"
         end
        else--不是第一项
-        local file=directoryFilesList[position-1]
-        local filePath=file.getPath()
-        data.file=file
-        data.filePath=filePath
+        if initData then
+          file=directoryFilesList[position-1]
+          filePath=file.getPath()
+          data.file=file
+          data.filePath=filePath
+         else
+          file=data.file
+          filePath=data.filePath
+        end
         if ProjectManager.openState then
           local colorFilter
           local fileName=file.getName()
           titleView.setText(fileName)
-          --tag.icon.setAlpha(getIconAlphaByFileName(fileName))
+          if initData then
+            data.title=fileName
+            data.fileName=fileName
+          end
+          tag.icon.setAlpha(getIconAlphaByName(fileName))
+
           if file.isFile() then
             filesPositions[filePath]=position
-            --local fileType=getFileTypeByName(fileName)
-            --iconView.setImageResource(getFileIconResIdByType(fileType))
+            local fileType=getFileTypeByName(fileName)
+            iconView.setImageResource(fileIcons[fileType])
             if fileType then
-              colorFilter=fileColors[string.upper(fileType)] or fileColors.normal
+              colorFilter=fileColors[string.upper(fileType)]
              else
               colorFilter=fileColors.normal
             end
-            --[[
-            if OpenedFile and NowFile.getPath()==filePath then
+
+            if FilesTabManager.openState and FilesTabManager.file.getPath()==filePath then
               titleView.setTextColor(theme.color.colorAccent)
               tag.icon.setColorFilter(theme.color.colorAccent)
               tag.highLightCard.setCardBackgroundColor(theme.color.rippleColorAccent)
@@ -281,30 +300,39 @@ return function(data,item)
               titleView.setTextColor(theme.color.textColorPrimary)
               tag.icon.setColorFilter(colorFilter)
               tag.highLightCard.setCardBackgroundColor(0)
-            end]]
+            end
             data.isResFile=isResDir
             data.fileType=fileType
             data.action="openFile"
            else
             data.isResFile=false
             titleView.setTextColor(theme.color.textColorPrimary)
-            --iconView.setImageResource(getFolderIconResIdByName(fileName))
+            iconView.setImageResource(folderIcons[fileName])
             iconView.setColorFilter(fileColors.folder)
             tag.highLightCard.setCardBackgroundColor(0)
             data.action="openFolder"
           end
-
-          data.title=fileName
-          data.fileName=fileName
          else
-          local config=RePackTool.getConfigByProjectPath(filePath)
-          local rePackTool=RePackTool.getRePackToolByConfig(config)
-          local mainProjectPath=RePackTool.getMainProjectDirByConfigAndRePackTool(filePath,config,rePackTool)
-          data.config=config
-          data.rePackTool=rePackTool
-          --todo: 加载项目图标
+          local config,iconUrl
+          if initData then
+            config=RePackTool.getConfigByProjectPath(filePath)
+            local rePackTool=RePackTool.getRePackToolByConfig(config)
+            local mainProjectPath=RePackTool.getMainProjectDirByConfigAndRePackTool(filePath,config,rePackTool)
+            iconUrl=FilesBrowserManager.getProjectIconForGlide(filePath,config,mainProjectPath)
+            data.title=config.appName or unknowString
+            data.action="openProject"
+            data.iconUrl=iconUrl
+            data.config=config
+            data.rePackTool=rePackTool
+           else
+            iconUrl=data.iconUrl
+            config=data.config
+          end
 
-          local iconUrl=FilesBrowserManager.getProjectIconForGlide(filePath,config,mainProjectPath)
+          titleView.setText(config.appName or unknowString)
+          tag.message.setText(config.packageName or unknowString)
+
+
           if type(iconUrl)=="number" then
             iconView.setImageResource(iconUrl)
            else
@@ -314,10 +342,6 @@ return function(data,item)
             Glide.with(activity).load(iconUrl).apply(options).into(iconView)
           end
 
-          titleView.setText(config.appName or unknowString)
-          tag.message.setText(config.packageName or unknowString)
-          data.title=config.appName or unknowString
-          data.action="openProject"
         end
       end
 

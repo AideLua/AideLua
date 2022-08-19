@@ -1,10 +1,10 @@
-local NewProject={}
+local AndroluaProjectUtil={}
 
-function NewProject.update(message)
+function AndroluaProjectUtil.update(message)
   showLoadingDia(message)
 end
 
-function NewProject.callback(success,projectPath)
+function AndroluaProjectUtil.callback(success,projectPath)
   closeLoadingDia()
   if success then
     activity.result({"project_created_successfully",projectPath})
@@ -16,7 +16,7 @@ function NewProject.callback(success,projectPath)
     .show()
   end
 end
-function NewProject.newProject(keys,BaseTemplateConfig,projectPath,TemplatesDir,openedSLibs,openedJarLibs,openedCLibs)
+function AndroluaProjectUtil.newProject(keys,BaseTemplateConfig,projectPath,TemplatesDir,openedSLibs,openedJarLibs,openedCLibs)
   require "import"
   import "java.io.File"
   import "net.lingala.zip4j.ZipFile"
@@ -186,4 +186,4 @@ function NewProject.newProject(keys,BaseTemplateConfig,projectPath,TemplatesDir,
   activity.setSharedData("openedfilepath_"..projectPath,nil)--将已打开的文件路径设置为空
   return true,projectPath
 end
-return NewProject
+return AndroluaProjectUtil

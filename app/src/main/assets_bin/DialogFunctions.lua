@@ -12,6 +12,7 @@ function deleteFileDialog(name,file)
       showSnackBar(R.string.delete_succeed)
       if FilesTabManager.openState then
         --todo: 关闭文件
+        FilesTabManager.closeFile(string.lower(file.getPath()), false)
         --closeFileAndTabByPath(file.getPath(),true)
       end
      else
@@ -44,7 +45,7 @@ function createDirsDialog(nowDir)--创建文件夹对话框
     xpcall(function()
       file.mkdirs()
       showSnackBar(R.string.create_success)
-      refresh(nowDir)
+      FilesBrowserManager.refresh(nowDir)
       dialog.dismiss()
     end,
     function(err)

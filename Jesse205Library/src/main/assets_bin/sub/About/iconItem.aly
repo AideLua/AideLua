@@ -12,17 +12,18 @@
     layout_height="fill";
     layout_margin="8dp";
     {
-      AppCompatImageView;
+      View;
       layout_height="80dp";
       layout_width="80dp";
       id="icon";
+      elevation="4dp";
     };
     {
       AppCompatTextView;
       id="name";
       textSize="16sp";
       gravity="center";
-      layout_marginTop="8dp";
+      layout_marginTop="4dp";
       textColor=theme.color.textColorPrimary;
     };
     {

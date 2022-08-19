@@ -17,7 +17,8 @@ activity.setContentView(loadlayout2(RecyclerViewLayout))
 actionBar.setDisplayHomeAsUpEnabled(true)
 
 oldTheme=ThemeUtil.getAppTheme()
-scroll=...
+
+configType,config=...
 
 REQUEST_ADDCLIB=10
 
@@ -86,17 +87,13 @@ function reloadActivity(closeView)
     pos=layoutManager.findFirstVisibleItemPosition()
     scroll=recyclerView.getChildAt(0).getTop()
   end
-  newActivity("main",aRanim.fade_in,aRanim.fade_out,{{pos,scroll}})
+  newActivity("main",aRanim.fade_in,aRanim.fade_out,{"scroll",{pos,scroll}})
   activity.finish()
 end
 
 function onItemClick(view,views,key,data)
   if key=="theme_picker" then
     newSubActivity("ThemePicker")
-    --[[
-   elseif key=="test" then
-    settings[3].enabled=not(settings[3].enabled)
-    adp.notifyItemChanged(2)]]
    elseif key=="about" then
     newSubActivity("About")
    elseif key=="theme_darkactionbar" then
@@ -115,8 +112,10 @@ function onItemClick(view,views,key,data)
   end
   PluginsUtil.callElevents("onItemClick",views,key,data)
 end
+
+--添加插件设置项
 for index,content in ipairs(settings) do
-  if content.title==R.string.plugins then
+  if content.title==R.string.plugins then--匹配的插件条目，就是他了
     local items={}
     PluginsUtil.callElevents("onLoadItemsList",items)
     for index2,content in ipairs(items) do
@@ -126,8 +125,8 @@ for index,content in ipairs(settings) do
   end
 end
 
-adp=SettingsLayUtil.newAdapter(settings,onItemClick)
-recyclerView.setAdapter(adp)
+adapter=SettingsLayUtil.newAdapter(settings,onItemClick)
+recyclerView.setAdapter(adapter)
 layoutManager=LinearLayoutManager()
 recyclerView.setLayoutManager(layoutManager)
 recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
@@ -148,10 +147,11 @@ mainLay.onTouch=function(view,...)
 end
 
 
-if scroll then
-  scroll=luajava.astable(scroll)
-  local pos=scroll[1] or 0
-  recyclerView.scrollToPosition(pos)
+if config then
+  config=luajava.astable(config)
+  if tostring(configType)=="scroll" then
+    layoutManager.scrollToPositionWithOffset(config[1],config[2])
+  end
 end
 
 

@@ -4,24 +4,40 @@ local plugins
 local activityName, appPluginsDir, appPluginsDataDir
 local setEnabled, getEnabled, loadPlugins, getPluginDir, getAvailable
 
+appPluginsDir = AppPath.AppShareDir .. "/plugins"
+appPluginsDataDir = AppPath.AppShareDir .. "/data/plugins"
+AppPath.AppPluginsDir = appPluginsDir
+AppPath.AppPluginsDataDir = appPluginsDataDir
+PluginsUtil.appPluginsDir = appPluginsDir
+PluginsUtil.appPluginsDataDir = appPluginsDataDir
+PluginsUtil._VERSION="3.0"
+
 local appPackageName = activity.getPackageName()
-local PackInfo = activity.PackageManager.getPackageInfo(appPackageName, 64)
+local PackInfo = activity.PackageManager.getPackageInfo(appPackageName, 0)
 local versionCode = PackInfo.versionCode
 
 function PluginsUtil.callElevents(name, ...)
-  if notSafeModeEnable and activityName then
-    if plugins == nil then
-      loadPlugins()
-    end
-    local events = plugins.events[name]
-    if events then
-      for index, content in ipairs(events) do
-        xpcall(content, function(err)
-          print("Plugin", plugins.eventsName[name][index], "error: ", err)
-        end, ...)
-      end
+  --if activityName then
+  if plugins == nil then
+    loadPlugins()
+  end
+  local events = plugins.events[name]
+  if events then
+    for index, content in ipairs(events) do
+      xpcall(content, function(err)
+        print("Plugin", plugins.eventsName[name][index], "error: ", err)
+      end, activityName, ...)
     end
   end
+  local events2 = plugins.events[name]
+  if events2 then
+    for index, content in ipairs(events2) do
+      xpcall(content, function(err)
+        print("Plugin", plugins.eventsName2[name][index], "error: ", err)
+      end, ...)
+    end
+  end
+  --  end
   return PluginsUtil
 end
 
@@ -34,7 +50,8 @@ function PluginsUtil.setPlugins(newPlugins)
   return PluginsUtil
 end
 
-function PluginsUtil.setActivityName(name) -- 设置活动标识，否则无法加载插件
+--设置活动标识
+function PluginsUtil.setActivityName(name)
   activityName = name
   return PluginsUtil
 end
@@ -56,16 +73,19 @@ function getEnabled(packageName)
 end
 PluginsUtil.getEnabled = getEnabled
 
-function PluginsUtil.getPluginDataDir(packageName) -- 获取插件数据目录
+--获取插件数据目录
+function PluginsUtil.getPluginDataDir(packageName)
   return appPluginsDataDir .. "/" .. packageName
 end
 
-function getPluginDir(packageName) -- 获取插件目录，如果文件夹名与真正的packageName请手动输入文件夹名
+--获取插件目录，如果文件夹名与真正的packageName请手动输入文件夹名
+function getPluginDir(packageName)
   return appPluginsDir .. "/" .. packageName
 end
 PluginsUtil.getPluginDir = getPluginDir
 
-function getAvailable(packageName) -- 获取插件是否可用
+--获取插件是否可用
+function getAvailable(packageName)
   local path = getPluginDir(packageName)
   if not (File(path).isDirectory()) then
     return false
@@ -74,34 +94,44 @@ function getAvailable(packageName) -- 获取插件是否可用
 end
 PluginsUtil.getAvailable = getAvailable
 
+local function getPluginsEventsAndName(pluginsEvents,pluginsEventsName,name)
+  local eventsList=pluginsEvents[name]
+  local eventsNameList=pluginsEventsName[name]
+  if eventsList==nil then
+    eventsList={}
+    eventsNameList={}
+    pluginsEvents[name]=eventsList
+    pluginsEventsName[name]=eventsNameList
+  end
+  return eventsList,eventsNameList
+end
+
 function loadPlugins()
-  appPluginsDir = AppPath.AppShareDir .. "/plugins"
-  appPluginsDataDir = AppPath.AppShareDir .. "/data/plugins"
-  AppPath.AppPluginsDir = appPluginsDir
-  AppPath.AppPluginsDataDir = appPluginsDataDir
-  PluginsUtil.appPluginsDir = appPluginsDir
-  PluginsUtil.appPluginsDataDir = appPluginsDataDir
 
   plugins = {}
   local pluginsEvents = {}
   local pluginsEventsName = {}
+  local pluginsEvents2 = {}
+  local pluginsEventsName2 = {}
   local pluginsActivities = {}
   local pluginsActivitiesName = {}
   plugins.events = pluginsEvents
   plugins.eventsName = pluginsEventsName
+  plugins.events2 = pluginsEvents2
+  plugins.eventsName2 = pluginsEventsName2
   plugins.activities = pluginsActivities
   plugins.activitiesName = pluginsActivitiesName
 
   local pluginsFile = File(appPluginsDir)
-  if notSafeModeEnable and pluginsFile.isDirectory() then -- 存在插件文件夹
+  if pluginsFile.isDirectory() then -- 存在插件文件夹
     local fileList = pluginsFile.listFiles()
     for index = 0, #fileList - 1 do
       local file = fileList[index]
       local path = file.getPath()
       local dirName = file.getName()
-      -- local versionEnabled=getEnabled(dirName,versionCode)
+
       local defaultEnabled = getEnabled(dirName)
-      -- print(dirName,defaultEnabled,getEnabled(dirName,versionCode))
+
       if defaultEnabled then -- 检测是否开启
         local initPath = path .. "/init.lua"
         local mainPath = path .. "/main.lua"
@@ -119,6 +149,7 @@ function loadPlugins()
             })
             local minVerCode = config.minemastercode
             local targetVerCode = config.targetmastercode
+            --进行版本校验
             if (not (minVerCode) or minVerCode <= versionCode) and
               (not (targetVerCode) or targetVerCode >= versionCode or defaultEnabled == versionCode) then -- 版本号在允许的范围之内或者强制启用
               local thirdPlugins = config.thirdplugins
@@ -131,52 +162,38 @@ function loadPlugins()
                   end
                 end
               end
+              --没有问题
               if err == false then
-                --[[
+                local name = ("%s (%s)"):format(config.appname, config.packagename or dirName)
                 local fileEvents=config.events
-                local name=("%s(%s)"):format(config.appname,config.packagename or dirName)
                 for index,content in pairs(fileEvents) do
-                  local eventsList=pluginsEvents[index]
-                  local eventsNameList=pluginsEventsName[index]
-                  if eventsList==nil then
-                    eventsList={}
-                    eventsNameList={}
-                    pluginsEvents[index]=eventsList
-                    pluginsEventsName[index]=eventsNameList
-                  end
+                  local eventsList,eventsNameList=getPluginsEventsAndName(pluginsEvents,pluginsEventsName,index)
                   table.insert(eventsList,content)
                   table.insert(eventsNameList,name)
-                end]]
+                end
+
                 if activityName then
                   local eventsAlyPath = eventsDirPath .. "/" .. activityName .. ".aly"
                   if File(eventsAlyPath).isFile() then
                     local fileEvents = assert(loadfile(eventsAlyPath, "bt", config))()
-                    local name = ("%s(%s)"):format(config.appname, config.packagename or dirName)
                     for index, content in pairs(fileEvents) do
-                      local eventsList = pluginsEvents[index]
-                      local eventsNameList = pluginsEventsName[index]
-                      if eventsList == nil then
-                        eventsList = {}
-                        eventsNameList = {}
-                        pluginsEvents[index] = eventsList
-                        pluginsEventsName[index] = eventsNameList
-                      end
-                      table.insert(eventsList, content)
-                      table.insert(eventsNameList, name)
+                      local eventsList,eventsNameList=getPluginsEventsAndName(pluginsEvents2,pluginsEventsName2,index)
+                      table.insert(eventsList,content)
+                      table.insert(eventsNameList,name)
                     end
                   end
                 end
 
-                if File(mainPath).isFile() then -- 可以使用单独的页面打开
+                --可以使用单独的页面打开
+                if File(mainPath).isFile() then
                   table.insert(pluginsActivities, mainPath)
                   table.insert(pluginsActivitiesName, config.appname or config.packagename or dirName)
                 end
 
               end
-
             end
-
-            end, function(err) -- 语法错误，或者其他问题
+          end,
+          function(err) -- 语法错误，或者其他问题
             print("Plugin", dirName, "error: ", err)
           end)
           -- else--init.lua不存在

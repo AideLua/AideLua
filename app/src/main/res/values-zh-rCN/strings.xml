@@ -95,7 +95,7 @@
     <string name="project_appSubtitle_380dp">项目: %1$s</string>
     <string name="project_appSubtitle_390dp">项目: %1$s</string>
     <string name="project_close">关闭项目</string>
-    <string name="project_settings">项目设置</string>
+    <string name="project_properties">项目属性</string>
     <string name="projects_path">项目路径</string>
     
     <string name="binpoject_loading">正在打包...</string>

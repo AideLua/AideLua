@@ -7,7 +7,7 @@ return function(title,icon,name,date)
       layout_height="fill";
       orientation="vertical";
       buildTitlebar(icon,title);
-      layoutTransition=LayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+      --layoutTransition=LayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
       {
         ScrollView;
         layout_height="fill";

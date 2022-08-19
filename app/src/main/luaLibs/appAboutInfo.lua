@@ -7,6 +7,7 @@ appInfo={
       openUrl("https://gitee.com/Jesse205/AideLua")
     end,
   },
+
   {
     name=R.string.windmill,
     message="为极客和程序员等打造，重认手机上的工具",

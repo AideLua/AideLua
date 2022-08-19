@@ -98,7 +98,7 @@
     <string name="project_appSubtitle_380dp">Prj: %1$s</string>
     <string name="project_appSubtitle_390dp">Project: %1$s</string>
     <string name="project_close">Close project</string>
-    <string name="project_settings">Project settings</string>
+    <string name="project_properties">Project properties</string>
     <string name="projects_path">Projects path</string>
     
     <string name="binpoject_loading">Packing...</string>

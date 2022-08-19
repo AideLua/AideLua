@@ -355,7 +355,7 @@ function EditorsManager.refreshEditorScrollState()
    elseif scrollState then
     scrollState(editorGroupViews,editorConfig)
    else
-
+    appBarLayout.setElevation(0)
   end
 end
 
@@ -432,19 +432,19 @@ function symbolBar.newPsButton(text)
 end
 
 local loadedSymbolBar=false
-  function symbolBar.refreshSymbolBar(state)--刷新符号栏状态
-      if state then
-          if not(loadedSymbolBar) then--没有加载过符号栏，就加载一次
-            local ps={"function()","(",")","[","]","{","}","\"","=",":",".",",",";","_","+","-","*","/","\\","%","#","^","$","?","&","|","<",">","~","'"};
-              for index,content in ipairs(ps) do
-                ps_bar.addView(symbolBar.newPsButton(content))
-            end
-            ps=nil
-            loadedSymbolBar=true
-        end
-        bottomAppBar.setVisibility(View.VISIBLE)
-       else
-        bottomAppBar.setVisibility(View.GONE)
+function symbolBar.refreshSymbolBar(state)--刷新符号栏状态
+  if state then
+    if not(loadedSymbolBar) then--没有加载过符号栏，就加载一次
+      local ps={"function()","(",")","[","]","{","}","\"","=",":",".",",",";","_","+","-","*","/","\\","%","#","^","$","?","&","|","<",">","~","'"};
+      for index,content in ipairs(ps) do
+        ps_bar.addView(symbolBar.newPsButton(content))
+      end
+      ps=nil
+      loadedSymbolBar=true
+    end
+    bottomAppBar.setVisibility(View.VISIBLE)
+   else
+    bottomAppBar.setVisibility(View.GONE)
   end
 end
 

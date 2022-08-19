@@ -48,7 +48,7 @@ import "com.Jesse205.FileInfoUtils"
 
 import "AppFunctions" -- 必须先导入这个，因为下面的导入直接要用
 import "DialogFunctions"
-import "CreateFile"
+import "createFile"
 
 import "buildtools.RePackTool"
 
@@ -58,11 +58,13 @@ import "FilesTabManager"
 import "ProjectManager"
 
 import "layouts.item"
+import "layouts.pathItem"
 
 import "sub.LayoutHelper2.loadpreviewlayout"
 
 import "FileDecoders"
 import "adapter.FileListAdapter"
+import "adapter.FilePathAdapter"
 
 PluginsUtil.setActivityName("main")
 PluginsUtil.loadPlugins()
@@ -101,7 +103,17 @@ LuaReservedCharacters = {"switch", "if", "then", "and", "break", "do", "else", "
 
 function onCreate(savedInstanceState)
   -- todo:根据savedInstanceState和getIntent判断打开项目
+  --FilesBrowserManager.open()
   PluginsUtil.callElevents("onCreate", savedInstanceState)
+end
+function main(data)
+  if data=="projectPicker" then
+    data=nil
+   elseif not(data) then
+
+
+  end
+
 end
 
 function onCreateOptionsMenu(menu)
@@ -209,9 +221,9 @@ function onOptionsItemSelected(item)
    elseif id == Rid.menu_code_checkCode then -- 代码查错
     editorActions.check()
    elseif id == Rid.menu_tools_layoutHelper then -- 布局助手
-
+    print("错误：暂不支持")
    elseif id == Rid.menu_more_openNewWindow then -- 打开新窗口
-    -- activity.newActivity("main",{ProjectManager.ProjectsPath},true)
+    activity.newActivity("main",{"projectPicker"},true)
   end
   PluginsUtil.callElevents("onOptionsItemSelected", item)
 end
@@ -297,7 +309,7 @@ function onResume()
   FilesBrowserManager.refresh()
 
   if notFirstOnResume then
-    -- todo:刷新列表
+    ProjectManager.refreshProjectsPath()
     local newTabIcon = getSharedData("tab_icon") -- 刷新标签栏按钮状态
     if oldTabIcon ~= newTabIcon then
       oldTabIcon = newTabIcon
@@ -364,11 +376,17 @@ function onKeyUp(KeyCode, event)
   if TouchingKey then
     TouchingKey = false
     if KeyCode == KeyEvent.KEYCODE_BACK then -- 返回键事件
-      if FilesBrowserManager.openState and screenConfigDecoder.device == "phone" then -- 没有打开键盘且已打开侧滑，且设备为手机
+      if drawer.isDrawerOpen(Gravity.LEFT) then
+        --if FilesBrowserManager.openState and screenConfigDecoder.device == "phone" then -- 没有打开键盘且已打开侧滑，且设备为手机
         if ProjectManager.openState then
           -- todo:转到上一级文件夹
-
-
+          local directoryFile=FilesBrowserManager.directoryFile
+          local directoryPath=directoryFile.getPath()
+          if directoryPath=="/" or isSamePathFileByPath(directoryPath,ProjectManager.nowPath) then
+            ProjectManager.closeProject()
+           else
+            FilesBrowserManager.refresh(directoryFile.getParentFile())
+          end
          else
           FilesBrowserManager.close()
         end
@@ -397,6 +415,18 @@ toggle.syncState()
 FilesTabManager.init()
 EditorsManager.init()
 FilesBrowserManager.init()
+
+pcall(function()--放大镜
+  import "android.widget.Magnifier"
+  magnifier=Magnifier(editorGroup)
+  magnifierUpdateTi=Ticker()--放大镜的定时器，定时刷新放大镜
+  magnifierUpdateTi.setPeriod(200)
+  magnifierUpdateTi.onTick=function()
+    magnifier.update()
+  end
+  magnifierUpdateTi.setEnabled(false)--先禁用放大镜
+end)
+
 --[[
 
 task(500,function()
@@ -406,24 +436,6 @@ task(500,function()
     MyAnimationUtil.ScrollView.onScrollChange(NowEditor,NowEditor.getScrollX(),NowEditor.getScrollY(),0,0,appBarLayout,nil,true)
   end
 end)]]
---[[
-if safeModeEnable then
-  editorGroup.addView(loadlayout2({
-    TextView;
-    text="Aide Lua 安全模式";
-    textSize="16sp";
-    padding="4dp";
-    paddingLeft="6dp";
-    paddingRight="6dp";
-    layout_gravity="left|bottom";
-    id="safeModeText";
-    textColor=0xff000000;
-    backgroundColor=0xcceeeeee;
-    clickable=true;
-    tooltip="安全模式可以屏蔽很多效果，可以解决很多问题。如要退出安全模式，请删除 /sdcard/aidelua_safemode ，然后重启应用";
-  },nil,CoordinatorLayout))
-end
-]]
 
 EditorsManager.symbolBar.refreshSymbolBar(oldEditorSymbolBar) -- 刷新符号栏状态
 
@@ -494,16 +506,10 @@ screenConfigDecoder = ScreenFixUtil.ScreenConfigDecoder({
 -- screenConfigDecoder.device="phone"--默认为手机
 
 onConfigurationChanged(activity.getResources().getConfiguration())
-if drawerOpened == nil then
-  drawerOpened = false
-end
 
 --[[
-local nowYear=os.date("%Y")
-local nowDate=os.date("%m-%d")
-if nowDate=="11-25" then
-  if getSharedData("festival_11-25")~=nowYear then
-    MyToast.showToast("Father And Mother I Love You")
-    setSharedData("festival_11-25",nowYear)
-  end
+--在刷新后仍然为空，那就是关闭状态
+if drawerOpened == nil then
+  drawerOpened = false
 end]]
+

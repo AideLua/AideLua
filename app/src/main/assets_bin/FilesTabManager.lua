@@ -1,6 +1,6 @@
 --[[
 FilesTabManager:文件标签管理器，顺便管理文件的读写与保存
-FilesTabManager.openState; FilesTabManager.getopenState(): 文件打开状态
+FilesTabManager.openState; FilesTabManager.getOpenState(): 文件打开状态
 FilesTabManager.fileConfig; FilesTabManager.getFileConfig(): 现在打开的文件的配置
 FilesTabManager.fileType; FilesTabManager.getFileType(): 现在打开的文件类型
 FilesTabManager.openedFiles; FilesTabManager.getOpenedFiles(): 已打开的文件列表，以lowerPath作为键
@@ -42,12 +42,19 @@ function FilesTabManager.openFile(newFile,newFileType, keepHistory)
 end
 
 -- 保存当前打开的文件
-function FilesTabManager.saveFile()
+function FilesTabManager.saveFile(lowerFilePath)
   if openState then
-    if nowFileConfig.edited then
-      local newContent = nowFileConfig.newContent
-      io.open(nowFileConfig.path, "w"):write(newContent):close()
-      nowFileConfig.oldContent = newContent -- 讲旧内容设置为新的内容
+    local config
+    if lowerFilePath then
+      config=openedFiles[lowerFilePath]
+     else
+      config=fileConfig
+    end
+    if config.changed then
+      local newContent = config.newContent
+      io.open(config.path, "w"):write(newContent):close()
+      config.oldContent = newContent -- 讲旧内容设置为新的内容
+      config.changed=false
       return true -- 保存成功
     end
   end
@@ -59,8 +66,19 @@ end
 
 -- 关闭文件，由于文件的打开都由Tab管理，所以不存在已有文件打开但是当前当前打开的文件为空的情况
 function FilesTabManager.closeFile(lowerFilePath, saveFile)
-  lowerFilePath = lowerFilePath or nowFileConfig.lowerFilePath
-  openState = false
+  local config
+  if lowerFilePath then
+    config=openedFiles[lowerFilePath]
+   else
+    config=fileConfig
+  end
+  if config then
+    if saveFile~=false then
+      FilesTabManager.saveFile(lowerFilePath)
+    end
+
+    openState = false
+  end
 end
 
 -- 保存所有文件
@@ -70,9 +88,10 @@ function FilesTabManager.closeAllFiles(saveFiles)
   end
 end
 
+local nowTabTouchTag
 local function onFileTabLongClick(view)
   local tag = view.tag
-  NowTabTouchTag = tag
+  nowTabTouchTag = tag
   tag.onLongTouch = true
 end
 
@@ -109,10 +128,12 @@ local function onFileTabTouch(view, event)
         view.setRotationX(-90)
       end
      elseif action == MotionEvent.ACTION_UP then
-      NowTabTouchTag = nil
+      nowTabTouchTag = nil
       tag.onLongTouch = false
       if moveY > moveCloseHeight then
-        closeFileAndTab(tag.tab)
+        --closeFileAndTab(tag.tab)
+        --FilesTabManager.closeFile(lowerFilePath, saveFile)
+        print("提示：tab未关闭，文件未保存")
         view.setRotationX(0)
         if OpenedFile then
           local tabConfig = FilesTabList[string.lower(NowFile.getPath())]
@@ -132,7 +153,7 @@ local function onFileTabTouch(view, event)
 end
 
 local function onFileTabLayTouch(view, event)
-  local tag = NowTabTouchTag
+  local tag = nowTabTouchTag
   if tag == nil or not (tag.onLongTouch) then
     return
   end
@@ -182,12 +203,14 @@ function FilesTabManager.init()
 end
 
 function FilesTabManager.changeContent(content)
-  nowFileConfig.newContent = content
+  fileConfig.newContent = content
+  fileConfig.changed=true
 end
+
 function FilesTabManager.getFileConfig()
   return fileConfig
 end
-function FilesTabManager.getopenState()
+function FilesTabManager.getOpenState()
   return openState
 end
 function FilesTabManager.getOpenedFiles()
@@ -195,6 +218,9 @@ function FilesTabManager.getOpenedFiles()
 end
 function FilesTabManager.getFileType()
   return fileType
+end
+function FilesTabManager.getFile()
+  return file
 end
 
 return createVirtualClass(FilesTabManager)

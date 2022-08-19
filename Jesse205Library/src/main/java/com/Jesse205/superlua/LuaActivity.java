@@ -56,7 +56,7 @@ public class LuaActivity extends com.androlua.LuaActivity {
         super.onRestoreInstanceState(savedInstanceState);
         runFunc("onRestoreInstanceState", savedInstanceState);
     }
-
+    
     public void newActivity(String path, boolean newDocument) {
         newActivity(1, path, null, newDocument);
     }
@@ -177,10 +177,4 @@ public class LuaActivity extends com.androlua.LuaActivity {
 
     }
 
-    /*//显示toast
-     @Override
-     public void showToast(String text) {
-     if (oldLastTime != 0)//在初始化之前，别乱弹Toast
-     super.showToast(text);
-     }*/
 }

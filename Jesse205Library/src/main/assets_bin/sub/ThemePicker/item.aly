@@ -36,8 +36,8 @@
   };
   {
     AppCompatTextView;
-    layout_marginLeft=0;
-    layout_margin="16dp";
+    layout_marginLeft="8dp";
+    layout_margin="36dp";
     textColor=theme.color.textColorPrimary;
     id="title";
     textSize="16sp";

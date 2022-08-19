@@ -48,8 +48,8 @@
                 android:id="@+id/menu_project_build"
                 android:title="@string/project_build"/>
             <item
-                android:id="@+id/menu_project_settings"
-                android:title="@string/settings"/>
+                android:id="@+id/menu_project_properties"
+                android:title="@string/project_properties"/>
             <item
                 android:id="@+id/menu_project_close"
                 android:title="@string/project_close"/>

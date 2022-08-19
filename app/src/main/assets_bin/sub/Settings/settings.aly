@@ -19,6 +19,60 @@
   };
   {
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_theme_light_dark;
+    title="测试";
+    key="test1";
+  };
+  {
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_theme_light_dark;
+    title="测试";
+    key="test2";
+  };
+  {
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_theme_light_dark;
+    title="测试";
+    key="test3";
+  };
+{
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_theme_light_dark;
+    title="测试";
+    key="test4";
+  };
+  {
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_theme_light_dark;
+    title="测试";
+    key="test5";
+  };
+  {
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_theme_light_dark;
+    title="测试";
+    key="test6";
+  };
+{
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_theme_light_dark;
+    title="测试";
+    key="test7";
+  };
+  {
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_theme_light_dark;
+    title="测试";
+    key="test8";
+  };
+  {
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_theme_light_dark;
+    title="测试";
+    key="test9";
+  };
+  {
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
     icon=R.drawable.ic_animation_play_outline;
     title=R.string.settings_ui_richAnim;
     key="richAnim";

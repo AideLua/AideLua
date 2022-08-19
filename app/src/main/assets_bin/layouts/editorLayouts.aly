@@ -1,5 +1,5 @@
 {--各种编辑器，编辑器的id将被赋予成局部变量
---[[
+  --[[
 格式：
   EditorViewName={
     layout={layout},
@@ -26,7 +26,7 @@
         text="No files opened"
       };
     },
-    
+
   },
 
   LuaEditor={--Lua编辑器
@@ -179,7 +179,7 @@
             editorParent.removeView(progressBar)--移除进度条
             application.set("luaeditor_initialized",success)
             MyAnimationUtil.ScrollView.onScrollChange(editor,editor.getScrollX(),editor.getScrollY(),0,0,appBarLayout,nil,true)
-            editorParent.setLayoutTransition(newLayoutTransition())
+              editorParent.setLayoutTransition(newLayoutTransition() or nil)
           end).execute(keysList)
 
          else
@@ -190,7 +190,7 @@
           MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,appBarLayout)
         end
         editor.OnSelectionChangedListener=function(status,start,end_)
-          onEditorSelectionChangedListener(luaEditor,status,start,end_)
+          onEditorSelectionChangedListener(editor,status,start,end_)
         end
 
         --LuaEditor放大镜

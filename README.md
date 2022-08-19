@@ -32,6 +32,7 @@ Aide Lua 是一款依赖 Aide 的 Lua 编辑器
 
 ## 使用教程
 [视频教程](https://b23.tv/nvVHoa)
+[使用文档](https://gitee.com/Jesse205/AideLua/wikis/Home)
 
 ### 一、配置AIDE
   1. 进入“设置-高级设置-工程相关”

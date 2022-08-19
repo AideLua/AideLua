@@ -21,6 +21,7 @@
       minimumHeight=1;
       elevation=0;
       layoutTransition=newLayoutTransition();
+      --[[
       {
         TabLayout;
         layout_width="fill";
@@ -37,6 +38,16 @@
         tabIconTint=ColorStateList({{}},{theme.color.ActionBar.textColorSecondary});
         layoutTransition=newLayoutTransition();
         --minimumWidth=0;
+      };]]
+
+      {
+        RecyclerView;
+        layout_width="fill";
+        --layout_height="32dp";
+        id="pathRecyclerView";
+        paddingLeft="16dp";
+        paddingRight="16dp";
+        clipToPadding=false;
       };
     };
     {
@@ -44,13 +55,6 @@
       layout_width="fill";
       layout_height="fill";
       id="swipeRefresh";
-      --[[
-    {
-      ListView;
-      layout_width="fill";
-      layout_height="fill";
-      id="listView";
-    };]]
       {
         RecyclerView;
         layout_width="fill";

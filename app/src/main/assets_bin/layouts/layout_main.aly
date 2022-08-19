@@ -26,7 +26,6 @@
         TabLayout;
         layout_width="fill";
         tabMode=TabLayout.MODE_SCROLLABLE;
-        --layout_margin="8dp";
         layout_height="32dp";
         id="filesTabLay";
         visibility=View.GONE;

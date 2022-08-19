@@ -158,7 +158,7 @@ function refresh()
             if packageName==dirName then
               summary=summary.."\n包名："..packageName
              else
-              summary=summary..("\n包名：%s (%s)"):format(packageName,dirName)
+              summary=summary..("\n包名：%s\n文件夹名：(%s)"):format(packageName,dirName)
               summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,"请确保模块的包名与文件夹名相同")
             end
            else
@@ -181,10 +181,10 @@ function refresh()
           end
           if config.supported then
             if not(table.find(config.supported,apptype)) then
-              summary=addSummaryTextLine(summarySpanIndex,"Red",summary,"此插件不适配本编辑器，请下载对应版本的插件")
+              summary=addSummaryTextLine(summarySpanIndex,"Red",summary,"此插件不适配本软件，请下载对应版本的插件")
             end
            else
-            summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,"此插件未指定支持的编辑器，因此可能无法正常加载")
+            summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,"此插件未指定支持的软件，因此可能无法正常加载")
           end
          else
           config={}
@@ -224,7 +224,7 @@ function refresh()
   table.insert(settings2,{
     SettingsLayUtil.ITEM_ONLYSUMMARY;
     summary="注：开关插件后需要程序启动本应用",
-    --enabled=false
+    clickable=false
   })
   adp.notifyDataSetChanged()
 end

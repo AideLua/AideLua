@@ -142,10 +142,10 @@ local itemsLay={
     };
     {
       SwitchCompat;
-      focusable=false;
-      clickable=false;
+      --focusable=false;
+      --clickable=false;
       layout_marginRight="16dp";
-      id="status";
+      id="switchView";
     };
   };
 
@@ -173,9 +173,9 @@ local itemsLay={
     };
     {
       SwitchCompat;
-      id="status";
-      focusable=false;
-      clickable=false;
+      id="switchView";
+      --focusable=false;
+      --clickable=false;
       layout_marginRight="16dp";
     };
   };
@@ -291,6 +291,61 @@ local function setAlpha(views,alpha)
 end
 SettingsLayUtil.setAlpha=setAlpha
 
+local function applySwitchData()
+end
+local function onItemViewClick(view)
+  local ids=view.tag
+  local viewConfig=ids._config
+  local data=ids._data
+  local key=data.key
+  local onItemClick=viewConfig.onItemClick
+  viewConfig.allowedChange=false
+
+  local switchView=ids.switchView
+  if switchView then
+    local checked=not(switchView.checked)
+    switchView.setChecked(checked)
+    if data.checked~=nil then
+      data.checked=checked
+     elseif data.key then
+      setSharedData(data.key,checked)
+    end
+  end
+
+  if onItemClick then
+    onItemClick(view,ids,key,data)
+  end
+  viewConfig.allowedChange=true
+  return true
+end
+local function onItemViewLongClick(view)
+  local ids=view.tag
+  local viewConfig=ids._config
+  local data=ids._data
+  local key=data.key
+  local onItemLongClick=viewConfig.onItemLongClick
+  if onItemLongClick then
+    return onItemLongClick(view,ids,key,data)
+  end
+end
+local function onSwitchCheckedChanged(view,checked)
+  local viewConfig=view.tag
+  local allowedChange=viewConfig.allowedChange
+  if allowedChange then
+    local key=viewConfig.key
+    local data=viewConfig.data
+    local onItemClick=viewConfig.onItemClick
+    if data.checked~=nil then
+      data.checked=checked
+     elseif data.key then
+      setSharedData(data.key,checked)
+    end
+    if onItemClick then
+      onItemClick(view,viewConfig.ids,key,data)
+    end
+  end
+end
+
 local adapterEvents={
   getItemCount=function(data)
     return #data
@@ -303,32 +358,22 @@ local adapterEvents={
     local view=loadlayout2(itemsLay[viewType],ids)
     local holder=LuaCustRecyclerHolder(view)
     view.setTag(ids)
-    ids._config={enabled=true}
+    local viewConfig={enabled=true,
+      onItemClick=onItemClick,
+      onItemLongClick=onItemLongClick,
+      itemView=view}
+    ids._config=viewConfig
+    local switchView=ids.switchView
+
     if viewType~=1 then
       view.setFocusable(true)
       view.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
-      view.onClick=function(view)
-        local data=ids._data
-        local key=data.key
-        if not(onItemClick and onItemClick(view,ids,key,data)) then
-          local statusView=ids.status
-          if statusView then
-            local checked=not(statusView.checked)
-            statusView.setChecked(checked)
-            if data.checked~=nil then
-              data.checked=checked
-             elseif data.key then
-              setSharedData(data.key,checked)
-            end
-          end
-        end
-      end
-      if onItemLongClick then
-        view.onLongClick=function(view)
-          local data=ids._data
-          local key=data.key
-          onItemLongClick(view,ids,key,data)
-        end
+      view.onClick=onItemViewClick
+      view.onLongClick=onItemViewLongClick
+      if switchView then
+        switchView.tag=viewConfig
+        switchView.setOnCheckedChangeListener({
+          onCheckedChanged=onSwitchCheckedChanged})
       end
     end
     return holder
@@ -340,16 +385,20 @@ local adapterEvents={
     local tag=layoutView.getTag()
     local viewConfig=tag._config
     tag._data=data
-    --datum
-    --tag.key=data.key
     local title=data.title
     local icon=data.icon
     local summary=data.summary
     local enabled=data.enabled
-    --View
+    local key=data.key
+    viewConfig.key=key
+    viewConfig.ids=tag
+    viewConfig.data=data
+    viewConfig.allowedChange=false
+
+    --Views
     local titleView=tag.title
     local summaryView=tag.summary
-    local statusView=tag.status
+    local switchView=tag.switchView
     local rightIconView=tag.rightIcon
     local iconView=tag.icon
 
@@ -373,9 +422,10 @@ local adapterEvents={
     --设置启用状态透明
     local enabledNotFalse=not(enabled==false)
     if viewConfig.enabled~=enabledNotFalse then
+      viewConfig.enabled=enabledNotFalse
       layoutView.setEnabled(enabledNotFalse)
-      if statusView then
-        statusView.setEnabled(enabledNotFalse)
+      if switchView then
+        switchView.setEnabled(enabledNotFalse)
       end
       local viewsList={titleView,summaryView,iconView,rightIconView}
       if enabledNotFalse then
@@ -386,13 +436,13 @@ local adapterEvents={
     end
 
 
-    if statusView then
+    if switchView then
       if data.checked~=nil then
-        statusView.setChecked(data.checked)
+        switchView.setChecked(data.checked)
        elseif data.key then
-        statusView.setChecked(getSharedData(data.key) or false)
+        switchView.setChecked(getSharedData(key) or false)
        else
-        statusView.setChecked(false)
+        switchView.setChecked(false)
       end
     end
     if rightIconView then
@@ -413,6 +463,7 @@ local adapterEvents={
         end
       end
     end
+    viewConfig.allowedChange=true
   end,
 }
 SettingsLayUtil.adapterEvents=adapterEvents

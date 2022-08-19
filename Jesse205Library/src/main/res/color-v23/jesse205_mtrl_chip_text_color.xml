@@ -3,10 +3,11 @@
 	<item
         android:state_enabled="true"
         android:state_selected="true"
-        android:color="?rippleColorAccent" />
+        android:color="?colorAccent" />
 	<item
         android:state_enabled="true"
-        android:color="?windowBackgroundColor" />
+        android:color="?android:colorForeground"/>
 	<item
-        android:color="?rippleColorPrimary" />
+        android:color="?android:colorForeground"
+        android:alpha="0.3"/>
 </selector>

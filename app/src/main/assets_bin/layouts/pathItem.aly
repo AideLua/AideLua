@@ -1,0 +1,21 @@
+{
+
+  LinearLayoutCompat;
+  layout_height="fill";
+  gravity="center";
+  {
+    AppCompatTextView;
+    id="title";
+    padding="8dp";
+    textSize="14sp";
+    --minimumWidth="24dp";
+    --typeface=Typeface.BOLD;
+  };
+  {
+    AppCompatImageView;
+    id="icon";
+    imageResource=R.drawable.ic_chevron_right;
+    --layout_marginLeft="4dp";
+    --padding="8dp";
+  };
+}

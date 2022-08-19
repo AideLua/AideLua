@@ -12,9 +12,13 @@ activity.setTitle(R.string.Jesse205_about)
 activity.setContentView(loadlayout2("layout",_ENV))
 actionBar.setDisplayHomeAsUpEnabled(true)
 
---appIconGroup,topCard,recyclerView,appBarElevationCard=_G.appIconGroup,_G.topCard,_G.recyclerView,_G.appBarElevationCard
+loadlayout2("iconLayout")
+portraitCardParent=LinearLayout(activity)
+portraitCardParent.addView(iconLayout)
+portraitCardParent.setMinimumHeight(1)
+adapterEvents=SettingsLayUtil.adapterEvents
 PackInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
-Landscape=false
+landscape=false
 LastCard2Elevation=0
 
 function onOptionsItemSelected(item)
@@ -81,27 +85,34 @@ end
 
 function onConfigurationChanged(config)
   screenConfigDecoder:decodeConfiguration(config)
-  if config.orientation==Configuration.ORIENTATION_LANDSCAPE then--横屏时
-    LastActionBarElevation=0
-    topCard.setElevation(0)
-    appBarElevationCard.setVisibility(View.VISIBLE)
-    Landscape=true
-    local linearParams=appIconGroup.getLayoutParams()
-    linearParams.width=math.dp2int(192)
-    appIconGroup.setLayoutParams(linearParams)
-   else
-    appBarElevationCard.setVisibility(View.GONE)
-    Landscape=false
-    local linearParams=appIconGroup.getLayoutParams()
-    linearParams.width=-1
-    appIconGroup.setLayoutParams(linearParams)
+  local newLandscape=config.orientation==Configuration.ORIENTATION_LANDSCAPE
+  if landscape~=newLandscape then
+    landscape=newLandscape
+    if newLandscape then--横屏时
+      LastActionBarElevation=0
+      actionBar.setElevation(0)
+      appBarElevationCard.setVisibility(View.VISIBLE)
+      local linearParams=appIconGroup.getLayoutParams()
+      linearParams.width=math.dp2int(192)
+      appIconGroup.setLayoutParams(linearParams)
+      portraitCardParent.removeView(iconLayout)
+      mainLayChild.addView(iconLayout,0)
+     else
+      appBarElevationCard.setVisibility(View.GONE)
+      local linearParams=appIconGroup.getLayoutParams()
+      linearParams.width=-1
+      appIconGroup.setLayoutParams(linearParams)
+      mainLayChild.removeView(iconLayout)
+      portraitCardParent.addView(iconLayout)
+    end
   end
+  --[[
   if screenConfigDecoder.device=="pc" then
     local linearParams=topCard.getLayoutParams()
     linearParams.height=-2
     linearParams.width=-2
     topCard.setLayoutParams(linearParams)
-  end
+  end]]
 end
 
 topCardItems={}
@@ -111,13 +122,7 @@ for index,content in ipairs(appInfo) do
   appIconGroup.addView(loadlayout2("iconItem",ids,LinearLayoutCompat))
   table.insert(topCardItems,ids.mainIconLay)
   local icon,iconView,nameView=content.icon,ids.icon,ids.name
-  if type(icon)=="number" then
-    iconView.setImageResource(icon)
-   else
-    Glide.with(activity)
-    .load(icon)
-    .into(iconView)
-  end
+  iconView.setBackgroundResource(icon)
   nameView.setText(content.name)
   ids.message.setText(content.message)
   if content.click then
@@ -137,6 +142,10 @@ for index,content in ipairs(appInfo) do
 end
 
 data={
+  {--软件图标
+    -1;
+  };
+
   {--关于软件
     SettingsLayUtil.TITLE;
     title=R.string.Jesse205_about_full;
@@ -170,10 +179,10 @@ end
 
 --开发信息
 if developers or openSourceLicenses then
-table.insert(data,{
-  SettingsLayUtil.TITLE;
-  title=R.string.Jesse205_developerInfo;
-})
+  table.insert(data,{
+    SettingsLayUtil.TITLE;
+    title=R.string.Jesse205_developerInfo;
+  })
 end
 
 --插入开发者
@@ -252,20 +261,45 @@ if copyright then--版权信息
   })
 end
 
-adp=SettingsLayUtil.newAdapter(data,onItemClick)
-recyclerView.setAdapter(adp)
+
+adapter=LuaCustRecyclerAdapter(AdapterCreator({
+  getItemCount=function()
+    return adapterEvents.getItemCount(data)
+  end,
+  getItemViewType=function(position)
+    return adapterEvents.getItemViewType(data,position)
+  end,
+  onCreateViewHolder=function(parent,viewType)
+    if viewType==-1 then
+      local holder=LuaCustRecyclerHolder(portraitCardParent)
+
+      return holder
+     else
+      return adapterEvents.onCreateViewHolder(onItemClick,nil,parent,viewType)
+    end
+  end,
+  onBindViewHolder=function(holder,position)
+    if position~=0 then
+
+      adapterEvents.onBindViewHolder(data,holder,position)
+    end
+  end,
+}))
+
 layoutManager=LinearLayoutManager()
+recyclerView.setAdapter(adapter)
 recyclerView.setLayoutManager(layoutManager)
 
 recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
   onScrolled=function(view,dx,dy)
-    if Landscape then
+    if landscape then
       MyAnimationUtil.RecyclerView.onScroll(view,dx,dy,appBarElevationCard,"LastCard2Elevation")
      else
-      MyAnimationUtil.RecyclerView.onScroll(view,dx,dy,topCard)
+      MyAnimationUtil.RecyclerView.onScroll(view,dx,dy)
     end
   end
 })
+
 
 recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
   onGlobalLayout=function()
@@ -273,14 +307,15 @@ recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
       return
     end
     if Landscape then
-      topCard.setElevation(0)
+
+      print(true)
     end
   end
 })
 
 screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
   orientation={
-    identical={mainLayChild},
+    --identical={mainLayChild},
     different={appIconGroup},
   },
   fillParentViews={topCard},
