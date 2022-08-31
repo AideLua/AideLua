@@ -1,5 +1,5 @@
 require "import"
-useCustomAppToolbar=true
+--useCustomAppToolbar=true
 import "Jesse205"
 import "android.content.pm.PackageManager"
 import "android.text.Html"
@@ -72,50 +72,45 @@ import "pages.permissionPage"
 activity.setTitle(R.string.Jesse205_welcome)
 activity.setContentView(loadlayout2("layout"))
 
-toolbar=activity.findViewById(R.id.toolbar)
-activity.setSupportActionBar(toolbar)
+--toolbar=activity.findViewById(R.id.toolbar)
+--activity.setSupportActionBar(toolbar)
 actionBar=activity.getSupportActionBar()
---actionBar.setDisplayHomeAsUpEnabled(true)
+actionBar.setDisplayHomeAsUpEnabled(true)
+--actionBar.setDisplayShowHomeEnabled(true)
+--actionBar.setDisplayUseLogoEnabled(true)
+--actionBar.setHomeButtonEnabled(false)
+--actionBar.setDisplayShowCustomEnabled(true)
+--actionBar.setHomeActionContentDescription(0)
 
 ScreenFixContent={
   layoutManagers={},
   orientation={
-    identical={mainLay2},
+    --identical={mainLay2},
     --different={buttonBar},
   },
-  fillParentViews={buttonBar},
+  --fillParentViews={buttonBar},
 }
 
 pages={}
+
+function onCreateContextMenu(menu)
+  --print(menu)
+end
+
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()
   if id==android.R.id.home then
     --activity.finish()
+    onKeyDown(KeyEvent.KEYCODE_BACK)
+    if not(onKeyUp(KeyEvent.KEYCODE_BACK)) then
+      activity.finish()
+    end
   end
 end
 
 function onConfigurationChanged(config)
   screenConfigDecoder:decodeConfiguration(config)
-  if config.orientation==Configuration.ORIENTATION_LANDSCAPE then--横屏时
-    local linearParams=previousButton.getLayoutParams()
-    linearParams.width=math.dp2int(64)
-    linearParams.gravity=Gravity.TOP|Gravity.CENTER
-    previousButton.setLayoutParams(linearParams)
-    local linearParams=nextButton.getLayoutParams()
-    linearParams.width=math.dp2int(64)
-    linearParams.gravity=Gravity.BOTTOM|Gravity.CENTER
-    nextButton.setLayoutParams(linearParams)
-   else
-    local linearParams=previousButton.getLayoutParams()
-    linearParams.width=-2
-    linearParams.gravity=Gravity.LEFT|Gravity.CENTER
-    previousButton.setLayoutParams(linearParams)
-    local linearParams=nextButton.getLayoutParams()
-    linearParams.width=-2
-    linearParams.gravity=Gravity.RIGHT|Gravity.CENTER
-    nextButton.setLayoutParams(linearParams)
-  end
   for index,content in ipairs(pages) do
     if content.onConfigurationChanged then
       content:onConfigurationChanged(config)
@@ -123,37 +118,24 @@ function onConfigurationChanged(config)
   end
 end
 
+function onKeyDown(KeyCode, event)
+  TouchingKey = true
+end
+
+
 function onKeyUp(KeyCode,event)
-  if KeyCode==KeyEvent.KEYCODE_BACK then
-    local nowPage=pageView.getCurrentItem()
-    if nowPage>0 then
-      pageView.showPage(nowPage-1)
-      return true
+  if TouchingKey then
+    TouchingKey = false
+    if KeyCode==KeyEvent.KEYCODE_BACK then
+      local nowPage=pageView.getCurrentItem()
+      if nowPage>0 then
+        pageView.showPage(nowPage-1)
+        return true
+      end
     end
   end
 end
 
-function refreshBottomBarState()
-  local config=activity.getResources().getConfiguration()
-  local isLandscape=config.orientation==Configuration.ORIENTATION_LANDSCAPE
-  if previousButton.getVisibility()==View.GONE and nextButton.getVisibility()==View.GONE then
-    local linearParams=buttonBar.getLayoutParams()
-    if isLandscape then
-      linearParams.width=0
-     else
-      linearParams.height=0
-    end
-    buttonBar.setLayoutParams(linearParams)
-   else
-    local linearParams=buttonBar.getLayoutParams()
-    if isLandscape then
-      linearParams.width=-2
-     else
-      linearParams.height=-2
-    end
-    buttonBar.setLayoutParams(linearParams)
-  end
-end
 
 
 for index,content in ipairs(agreements) do
@@ -162,9 +144,10 @@ end
 
 table.insert(pages,permissionPage)
 NowPage=pages[1]
+actionBar.setTitle(NowPage.title)
 
 maxPage=table.size(pages)
-progressBar.setMax((maxPage)*1000)
+--progressBar.setMax((maxPage)*1000)
 
 adp=ArrayPageAdapter()
 
@@ -179,10 +162,11 @@ pageView.setAdapter(adp)
 
 pageView.setOnPageChangeListener(PageView.OnPageChangeListener{
   onPageScrolled=function(arg0,arg1,arg2)
-    progressBar.setProgress((arg0+arg1+1)*1000)
+    --progressBar.setProgress((arg0+arg1+1)*1000)
   end,
   onPageChange=function(view,page)
     local nowPage=pages[page+1]
+    local elevationKey=nowPage.elevationKey
     NowPage=nowPage
     if page+1==maxPage then
       nextButton.setText(R.string.Jesse205_step_finish)
@@ -197,16 +181,16 @@ pageView.setOnPageChangeListener(PageView.OnPageChangeListener{
       previousButton.setVisibility(View.VISIBLE)
     end
     nextButton.setEnabled(not(nowPage.allowNext==false))
-    --[[
-    if nowPage.allowNext==false then
-      nextButton.setClickable(false)
-      nextButton.setVisibility(View.GONE)
+    if elevationKey and _G[elevationKey]~=0 then
+      MyAnimationUtil.ActionBar.openElevation()
      else
-      nextButton.setClickable(true)
-      nextButton.setVisibility(View.VISIBLE)
-    end]]
-    refreshBottomBarState()
+      MyAnimationUtil.ActionBar.closeElevation()
+
+    end
     actionBar.setTitle(nowPage.title)
+    actionBar.setSubtitle(nowPage.subtitle)
+
+    actionBar.setHomeAsUpIndicator(nowPage.icon)
   end
 })
 

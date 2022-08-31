@@ -39,10 +39,6 @@ function onResume()
   end
 end
 
-function onConfigurationChanged(config)
-  screenConfigDecoder:decodeConfiguration(config)
-end
-
 function onActivityResult(requestCode,resultCode,data)
   if resultCode==Activity.RESULT_OK then
     if requestCode==REQUEST_ADDCLIB then
@@ -79,11 +75,13 @@ function addComplexLibrary(path)
   MyToast("导入成功")
 end
 
-function reloadActivity(closeView)
+function reloadActivity(closeViews)
   local aRanim=android.R.anim
   local pos,scroll
   if recyclerView then
-    closeView.setEnabled(false)
+    if closeViews then
+      activity.getDecorView().addView(View(activity).setClickable(true))
+    end
     pos=layoutManager.findFirstVisibleItemPosition()
     scroll=recyclerView.getChildAt(0).getTop()
   end
@@ -97,7 +95,7 @@ function onItemClick(view,views,key,data)
    elseif key=="about" then
     newSubActivity("About")
    elseif key=="theme_darkactionbar" then
-    reloadActivity(view)
+    reloadActivity({view,views.switchView})
    elseif key=="addComplexLibrary" then
     local intent=Intent(Intent.ACTION_GET_CONTENT)
     intent.setType("application/zip")
@@ -107,7 +105,7 @@ function onItemClick(view,views,key,data)
     newSubActivity("PluginsManager")
    else
     if data.action=="editString" then
-      EditDialogBuilder.settingDialog(adp,views,key,data)
+      EditDialogBuilder.settingDialog(adapter,views,key,data)
     end
   end
   PluginsUtil.callElevents("onItemClick",views,key,data)
@@ -154,10 +152,5 @@ if config then
   end
 end
 
-
-screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
-  listViews={recyclerView},
-})
-
-onConfigurationChanged(activity.getResources().getConfiguration())
-
+mainLay.ViewTreeObserver
+.addOnGlobalLayoutListener(ScreenFixUtil.LayoutListenersBuilder.listViews(mainLay,{recyclerView}))

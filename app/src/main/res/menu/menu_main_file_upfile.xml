@@ -6,7 +6,7 @@
         <menu>
             <item
                 android:id="@+id/menu_openDir_currentFile"
-                android:title="file_current"/>
+                android:title="@string/file_current_path"/>
             <item
                 android:id="@+id/menu_openDir_assets"
                 android:title="assets_bin"/>

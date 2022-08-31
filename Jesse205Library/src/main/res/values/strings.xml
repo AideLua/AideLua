@@ -28,8 +28,8 @@
     <string name="Jesse205_htmlFileViewer">HTML Viewer</string>
     <string name="Jesse205_openSourceLicense">Open source license</string>
     <string name="Jesse205_welcome">Welcome</string>
-    <string name="Jesse205_allReady">All ready</string>
-    <string name="Jesse205_allReady_tips">Click the "Finish" button to start the experience! </string>
+    <!--<string name="Jesse205_allReady">All ready</string>
+    <string name="Jesse205_allReady_tips">Click the "Finish" button to start the experience! </string>-->
     <string name="Jesse205_permission">Permission request</string>
     <string name="Jesse205_permission_tips">Failure to grant certain permissions may cause software errors. </string>
     <string name="Jesse205_permission_requestAll">Grant all permissions</string>

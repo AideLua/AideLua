@@ -15,6 +15,8 @@ R=luajava.bindClass(context.getPackageName()..".R")
 
 if activity then
   window=activity.getWindow()
+  notLoadTheme=notLoadTheme or false
+  useCustomAppToolbar=useCustomAppToolbar or false
  else--没有activity不加载主题
   notLoadTheme=true
 end
@@ -39,7 +41,6 @@ activity2luaApi=nil
 
 import "android.os.Environment"
 
-import "com.Jesse205.app.PermissionUtil"
 import "com.Jesse205.lua.math"--导入更强大的math
 import "com.Jesse205.lua.string"--导入更强大的string
 import "com.Jesse205.app.AppPath"--导入路径
@@ -48,15 +49,13 @@ if initApp then--初始化APP
   import "com.Jesse205.app.initApp"
 end
 
-
-
 import "android.view.View"--加载主题要用
 import "android.os.Build"
 
 --加载主题
 --在get某东西（ActionBar等）前必须把主题搞定
 if not(notLoadTheme) then
-   theme={
+  theme={
     color={
       Ripple={},
       Light={},
@@ -64,7 +63,8 @@ if not(notLoadTheme) then
       ActionBar={},
     },
     number={
-      id={}
+      id={},
+      Dimension={},
     },
     boolean={}
   }
@@ -74,6 +74,7 @@ if not(notLoadTheme) then
   local light=color.Light
   local dark=color.Dark
   local number=theme.number
+  local dimension=number.Dimension
 
   setmetatable(color,{--普通颜色
     __index=function(self,key)
@@ -105,6 +106,13 @@ if not(notLoadTheme) then
   })
   setmetatable(number,{--数字
     __index=function(self,key)
+      local value=resources.getInteger(R.integer["Jesse205_"..key])
+      self[key]=value
+      return value
+    end
+  })
+  setmetatable(dimension,{--数字
+    __index=function(self,key)
       local value=resources.getDimension(R.dimen["Jesse205_"..key])
       self[key]=value
       return value
@@ -134,6 +142,7 @@ import "android.graphics.Typeface"
 import "android.graphics.drawable.GradientDrawable"
 
 import "androidx.core.content.ContextCompat"
+import "androidx.core.view.MenuItemCompat"
 
 import "androidx.coordinatorlayout.widget.CoordinatorLayout"
 import "androidx.swiperefreshlayout.widget.SwipeRefreshLayout"
@@ -173,7 +182,8 @@ import "com.lua.custrecycleradapter.AdapterCreator"--导入LuaCustRecyclerAdapte
 import "com.lua.custrecycleradapter.LuaCustRecyclerAdapter"
 import "com.lua.custrecycleradapter.LuaCustRecyclerHolder"
 
-import "com.androlua.LuaUtil"
+--import "com.androlua.LuaUtil"
+import "com.Jesse205.app.PermissionUtil"
 
 import "com.Jesse205.util.MyStyleUtil"
 import "com.Jesse205.util.MyToast"--导入MyToast
@@ -192,9 +202,7 @@ import "com.Jesse205.layout.MyTextInputLayout"
 --import "com.Jesse205.layout.MySearchLayout"
 
 import "com.bumptech.glide.Glide"--导入Glide
-pcall(function()
-  import "com.baidu.mobstat.StatService"--百度移动统计
-end)
+import "com.baidu.mobstat.StatService"--百度移动统计
 
 inputMethodService=activity.getSystemService(Context.INPUT_METHOD_SERVICE)
 
@@ -273,7 +281,9 @@ function newSubActivity(name,...)
   end
 end
 
-
+function getColorStateList(id)
+  return resources.getColorStateList(id)
+end
 
 --好用的加载中对话框
 --[[

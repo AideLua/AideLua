@@ -106,4 +106,5 @@ supportList={--如果有多种方式支持项目，可以使用列表
 ]]
 
 --版权信息
---copyright="No Copyright"
+copyright="Copyright (c) 2020-2022, Jesse205"
+

@@ -1,19 +1,20 @@
 return function(title,icon,name,date)
   return {
     title=title;
+    icon=icon;
     layout={
       LinearLayoutCompat;
       layout_width="fill";
       layout_height="fill";
       orientation="vertical";
-      buildTitlebar(icon,title);
-      --layoutTransition=LayoutTransition().enableTransitionType(LayoutTransition.CHANGING);
+      --buildTitlebar(icon,title);
       {
         ScrollView;
         layout_height="fill";
         layout_width="fill";
         layout_weight="1";
         id="scrollView";
+        
         {
           LinearLayoutCompat;
           layout_height="fill";
@@ -45,8 +46,9 @@ return function(title,icon,name,date)
       self.textView.setText(Html.fromHtml(io.open(activity.getLuaPath(("../../agreements/%s.html"):format(name)),"r"):read("*a")))
       local contrast="LastActionBarElevation_"..name
       _G[contrast]=0
+      self.elevationKey=contrast
       self.scrollView.onScrollChange=function(view,l,t,oldl,oldt)
-        MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,self.topCard,contrast)
+        MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,nil,contrast)
       end
       local agree=toboolean(getSharedData(name)==date)
       self.allowNext=agree
@@ -66,7 +68,6 @@ return function(title,icon,name,date)
         nextButton.setEnabled(false)
         setSharedData(name,nil)
       end
-      refreshBottomBarState()
     end,
   }
 end

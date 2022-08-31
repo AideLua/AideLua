@@ -9,6 +9,7 @@ import com.androlua.LuaApplication;
 public class SettingsActivity extends com.Jesse205.superlua.LuaActivity {
     String luaDir;
     LuaApplication app;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         app = (LuaApplication) getApplication();

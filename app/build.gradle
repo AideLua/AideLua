@@ -44,6 +44,8 @@ dependencies {
     api project(':Jesse205Library')
     api project(':androlua')
     api project(':sharp')
+    //api 'io.github.Rosemoe.sora-editor:editor:0.16.4'
+    
     api 'androidx.appcompat:appcompat:1.0.0'
     api 'com.google.android.material:material:1.0.0'
 }

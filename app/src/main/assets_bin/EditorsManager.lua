@@ -10,24 +10,28 @@ EditorsManager.actions.format(): 格式化
 EditorsManager.actions.commented():注释
 EditorsManager.actions.getText(): 获取编辑器文字内容
 EditorsManager.actions.setText(...): 设置编辑器文字内容
+EditorsManager.actions.check(show): 查错
+  ┗ show (string): 展示结果
 EditorsManager.actions.paste(text): 粘贴文字内容
-  ┗ text: 文字
+  ┗ text (string): 文字
+EditorsManager.actions.setTextSize(size): 设置文字大小
+  ┗ size (number): 文字大小
 EditorsManager.actions.search(text,gotoNext): 搜索
 EditorsManager.startSearch(): 启动搜索
 EditorsManager.save2Tab(): 保存到标签
 EditorsManager.checkEditorSupport(name): 检查编辑器是否支持功能
-  ┗ name: 功能名称
+  ┗ name (string): 功能名称
 EditorsManager.switchPreview(state): 切换预览
-  ┗ state: 状态
+  ┗ state (boolean): 状态
 EditorsManager.switchLanguage(language): 切换语言
-  ┗ language: 语言
+  ┗ language (Object): 语言
 EditorsManager.switchEditor(editorType): 切换编辑器
-  ┗ editorType: 编辑器类型
+  ┗ editorType (string): 编辑器类型
 EditorsManager.symbolBar: 符号栏
 EditorsManager.symbolBar.psButtonClick: 符号栏按钮点击时输入符号点击事件
 EditorsManager.symbolBar.newPsButton(text): 初始化一个符号栏按钮
 EditorsManager.symbolBar.refreshSymbolBar(state): 刷新符号栏状态
-  ┗ editorType: 开关状态
+  ┗ state (boolean): 开关状态
 ]]
 local EditorsManager={}
 local managerActions={}
@@ -109,7 +113,7 @@ EditorsManager.keyWords=String({
 --Jesse205库关键词
 EditorsManager.jesse205KeyWords=String({
   "newActivity","getSupportActionBar","getSharedData","setSharedData",
-  "getString","getPackageName",
+  "getString","getPackageName","getColorStateList",
 
   --一些标识
   "initApp","notLoadTheme","useCustomAppToolbar",
@@ -117,7 +121,7 @@ EditorsManager.jesse205KeyWords=String({
   "notLoadTheme","darkStatusBar","darkNavigationBar",
   "window","safeModeEnable","notSafeModeEnable","decorView",
 
-  "ThemeUtil","theme","formatResStr","autoSetToolTip",
+  "theme","formatResStr","autoSetToolTip",
   "showLoadingDia","closeLoadingDia","getNowLoadingDia",
   "showErrorDialog","toboolean","rel2AbsPath","copyText",
   "newSubActivity","isDarkColor","openInBrowser","openUrl",
@@ -127,6 +131,7 @@ EditorsManager.jesse205KeyWords=String({
   "AppPath","ThemeUtil","EditDialogBuilder","ImageDialogBuilder",
   "NetErrorStr","MyToast","AutoToolbarLayout","PermissionUtil",
   "AutoCollapsingToolbarLayout","SettingsLayUtil","Jesse205",
+  "StyleWidget",
 
   --自定义View或者Util
   "MyTextInputLayout","MyTitleEditLayout","MyEditDialogLayout",
@@ -136,45 +141,6 @@ EditorsManager.jesse205KeyWords=String({
   "MyLuaMultiAdapter","MyLuaAdapter","LuaCustRecyclerAdapter",
   "LuaCustRecyclerHolder","AdapterCreator",
 })
---[[
---部分暂时没有对应的语言
-local fileType2Language={
-  --lua=LuaLanguage.getInstance(),
-  --aly=LuaLanguage.getInstance(),
-  --xml=LanguageXML.getInstance(),
-  html=HTMLLanguage(),
-  xml=JavaLanguage(),
-  svg=JavaLanguage(),
-  py=PythonLanguage(),
-  pyw=PythonLanguage(),
-  java=JavaLanguage(),
-  txt=EmptyLanguage(),
-  gradle=EmptyLanguage(),
-  bat=EmptyLanguage(),
-  html=HTMLLanguage(),
-  json=JavaLanguage(),
-}
-EditorsManager.fileType2Language=fileType2Language
-]]
---[[
---获取文件对应的编辑器
-local fileType2EditorType={
-  lua="LuaEditor",
-  aly="LuaEditor",
-
-  html="CodeEditor",
-  svg="CodeEditor",
-  xml="CodeEditor",
-  java="CodeEditor",
-  py="CodeEditor",
-  pyw="CodeEditor",
-  txt="CodeEditor",
-  gradle="CodeEditor",
-  bat="CodeEditor",
-  json="CodeEditor",
-}
-EditorsManager.fileType2Language=fileType2Language
-]]
 
 --默认的管理器的活动事件
 local function generalActionEvent(name1,name2,...)
@@ -185,8 +151,12 @@ local function generalActionEvent(name1,name2,...)
      else
       return func(editorGroupViews,editorConfig,...)
     end
-   else
+   elseif func==false then
+    showSnackBar("The editor does not support this operation")
     return false
+   else
+    --print("警告：编辑器不支持的调用",name1)
+    return nil
   end
 end
 
@@ -206,6 +176,14 @@ function managerActions.commented()--注释
   generalActionEvent("commented","commented")
 end
 
+function managerActions.format()--格式化
+  generalActionEvent("format","format")
+end
+
+function managerActions.check(show)--查错
+  return generalActionEvent("check","check",show)
+end
+
 function managerActions.getText()--获取编辑器文字内容
   local _,text=generalActionEvent("getText","getText")
   if text then
@@ -220,28 +198,81 @@ function managerActions.paste(text)--粘贴文字内容
   generalActionEvent("paste","paste",text)
 end
 
+function managerActions.getTextSize()--获取文字大小
+  local _,size=generalActionEvent("getTextSize","getTextSize")
+  return size
+end
+
+function managerActions.setTextSize(size)--设置文字大小
+  generalActionEvent("setTextSize","setTextSize",size)
+end
+
+function managerActions.getScrollX()
+  local _,x=generalActionEvent("getScrollX","getScrollX")
+  return x
+end
+
+
+function managerActions.getScrollY()
+  local _,y=generalActionEvent("getScrollY","getScrollY")
+  return y
+end
+
+function managerActions.scrollTo(x,y)
+  generalActionEvent("scrollTo","scrollTo",x,y)
+end
+
+
+function managerActions.setSelection(l)
+  generalActionEvent("setSelection","setSelection",l)
+end
+
+function managerActions.getSelectionEnd()
+  local _,l=generalActionEvent("getSelectionEnd","getSelectionEnd")
+  return l
+end
+
+
+
+
 function managerActions.search(text,gotoNext)--搜索
   local searchActions=editorActions.search
   if searchActions then
     if searchActions=="default" or searchActions.search=="default" then
       if gotoNext then
-        editor.search(text)
+        editor.findNext(text)
       end
-     elseif searchActions.search
-      searchActions.search(editorGroupViews,config，text,gotoNext)
+     elseif searchActions.search then
+      searchActions.search(editorGroupViews,editorConfig,text,gotoNext)
     end
-    --else
-    --return false
   end
 end
 
 --保存到标签
 function EditorsManager.save2Tab()
-  local text=EditorsManager.action.getText()
+  local text=EditorsManager.actions.getText()
   if text then
     FilesTabManager.changeContent(text)--改变Tab保存的内容
-   else--防止以外调用函数
+   else--防止意外调用函数
     error("EditorsManager.actions.save2Tab:无法获取内容")
+  end
+end
+
+--打开新内容
+function EditorsManager.openNewContent(filePath,fileType,decoder)
+  if EditorsManager.isEditor() then
+    local fileConfig=FilesTabManager.fileConfig
+    local content=decoder.read(filePath)
+    fileConfig.oldContent=content
+    fileConfig.newContent=content
+    fileConfig.changed=false
+    managerActions.setText(content)
+    local scrollConfig=assert(loadstring(getSharedData("scroll_"..filePath) or "{}"))()
+    managerActions.setTextSize(scrollConfig.size or math.dp2int(14))
+    managerActions.setSelection(scrollConfig.selection or 0)
+    managerActions.scrollTo(scrollConfig.x or 0,scrollConfig.y or 0)
+   else
+    decoder.apply(filePath,fileType,editor)
   end
 end
 
@@ -257,7 +288,7 @@ function EditorsManager.startSearch()
     local ids
     searching=true
     if searchActions.start then
-      searchActions.start(editorGroupViews,config)
+      searchActions.start(editorGroupViews,editorConfig)
     end
     ids=SearchActionMode({
       onEditorAction=function(view,actionId,event)
@@ -279,7 +310,7 @@ function EditorsManager.startSearch()
       onDestroyActionMode=function(mode)
         searching=false
         if searchActions.finish then--结束搜索
-          searchActions.finish(editorGroupViews,configfunction())
+          searchActions.finish(editorGroupViews,editorConfig)
         end
       end,
     })
@@ -288,6 +319,8 @@ function EditorsManager.startSearch()
       ids.searchEdit.text=searchedContent
       ids.searchEdit.setSelection(utf8.len(tostring(searchedContent)))
     end
+   else
+    showSnackBar(R.string.file_not_supported)
   end
 end
 
@@ -295,7 +328,13 @@ function EditorsManager.checkEditorSupport(name)
   return toboolean(editorActions[name])
 end
 
+function EditorsManager.isEditor()
+  return EditorsManager.checkEditorSupport("setText")
+end
+
 function EditorsManager.switchPreview(state)
+  --todo: 切换预览
+  print("警告：未切换预览")
 end
 
 function EditorsManager.switchLanguage(language)
@@ -303,15 +342,25 @@ function EditorsManager.switchLanguage(language)
 end
 
 --切换编辑器
-function EditorsManager.switchEditor(editorType)
-  if EditorsManager.editorType==editorType then--如果已经是当前编辑器，则不需要再切换一次了
-    print("警告：编辑器无效切换")
+function EditorsManager.switchEditor(newEditorType)
+  if editorType==newEditorType then--如果已经是当前编辑器，则不需要再切换一次了
+    --print("警告：编辑器无效切换")
     return
   end
-  if editorParent then
-    editorGroup.removeView(0)
+
+  editorConfig=editorLayouts[newEditorType]
+
+  --检查是不是真的存在这个编辑器
+  if not(editorConfig) then
+    error("Editor not found")
+    return
   end
-  editorConfig=editorLayouts[editorType]
+
+  --首先把已添加到视图的编辑器移除
+  if editorParent then
+    editorGroup.removeViewAt(0)
+  end
+  editorType=newEditorType
 
   editorActions=editorConfig.action
   if editorActions==nil then--啥操作都不行
@@ -332,9 +381,8 @@ function EditorsManager.switchEditor(editorType)
   editor=editorGroupViews.editor
   editorParent=editorGroupViews.editorParent
   editorGroup.addView(editorParent)
+  ;(editor or editorParent).requestFocus()
 
-  EditorsManager.setEditorType(editorType);
-  (editor or editorParent).requestFocus()
   if editorConfig.supportScroll then
     MyAnimationUtil.ScrollView.onScrollChange(editor,editor.getScrollX(),editor.getScrollY(),0,0,appBarLayout,nil)
    else
@@ -343,22 +391,29 @@ function EditorsManager.switchEditor(editorType)
 end
 
 --同时切换编辑器和语言，一般用于打开文本文件
-function EditorsManager.switchEditorByFileType(fileType)
+function EditorsManager.switchEditorByDecoder(decoder)
   --先切换编辑器，后切换编辑器语言，因为语言的设置是给当前正在使用的编辑器使用的
-  EditorsManager.switchEditor(fileType2EditorType[fileType])
-  EditorsManager.switchLanguage(fileType2Language[fileType])
-end
-function EditorsManager.refreshEditorScrollState()
-  local scrollState=editorConfig.supportScroll
-  if scrollState==true then
-    MyAnimationUtil.ScrollView.onScrollChange(editor,editor.getScrollX(),editor.getScrollY(),0,0,appBarLayout,nil)
-   elseif scrollState then
-    scrollState(editorGroupViews,editorConfig)
-   else
-    appBarLayout.setElevation(0)
+  --print(decoder.editor)
+  EditorsManager.switchEditor(decoder.editor)
+  if decoder.language then
+    EditorsManager.switchLanguage(decoder.language)
   end
 end
 
+function EditorsManager.refreshEditorScrollState()
+  if editorConfig then
+    local scrollState=editorConfig.supportScroll
+    if scrollState==true then
+      MyAnimationUtil.ScrollView.onScrollChange(editor,editor.getScrollX(),editor.getScrollY(),0,0,appBarLayout,nil)
+     elseif scrollState then
+      scrollState(editorGroupViews,editorConfig)
+     else
+      appBarLayout.setElevation(0)
+    end
+  end
+end
+
+--[[
 local function fixFileDecodersItem(config)
   local super=config.super
   if super then
@@ -367,7 +422,8 @@ local function fixFileDecodersItem(config)
     safeCloneTable(oldConfig,config)
     config.super=nil
   end
-end
+end]]
+
 function EditorsManager.init()
   --阻止Chip取消选中
   local previewChipGroupSelectedId
@@ -395,9 +451,6 @@ function EditorsManager.init()
     EditorsManager.switchPreview(true)
   end
 
-  for index,content in pairs(FileDecoders) do
-    fixFileDecodersItem(content)
-  end
 end
 
 
@@ -454,15 +507,17 @@ end
 function EditorsManager.getEditorConfig()
   return editorConfig
 end
+--[[
 function EditorsManager.setEditorConfig(config)
   editorConfig=config
-end
+end]]
 function EditorsManager.getEditorType()
   return editorType
 end
+--[[
 function EditorsManager.setEditorType(_type)
   editorType=_type
-end
+end]]
 
 
 return createVirtualClass(EditorsManager)

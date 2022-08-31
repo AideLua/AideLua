@@ -1,0 +1,25 @@
+{
+  LinearLayout;
+  padding="4dp";
+  paddingLeft="24dp";
+  paddingRight="24dp";
+  gravity="center";
+  layout_width="fill";
+  {
+    ImageView;
+    id="icon";
+    --src="check.png";
+    layout_width="24dp";
+    layout_height="24dp";
+    --colorFilter=colorAccent;
+  };
+  {
+    TextView;
+    id="stateTextView";
+    layout_width="fill";
+    layout_marginLeft="16dp";
+    textColor=theme.color.textColorPrimary;
+    textSize="16sp";
+  };
+
+}

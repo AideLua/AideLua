@@ -1,4 +1,4 @@
-local resources=_G.resources
+--local resources=_G.resources
 local dp2intCache={}
 Jesse205.dp2intCache=dp2intCache
 --[[清理dp2int缓存方法：

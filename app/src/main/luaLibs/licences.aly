@@ -2,11 +2,13 @@
   {
     name="Aide Lua",
     message="依赖 Aide 的一款 Lua 编辑器",
+    license="AideLua License",
     url="https://gitee.com/Jesse205/AideLua",
   },
   {
     name="Androlua",
     message="Lua5.3.3 for android pro",
+    license="Luajava License",
     url="https://github.com/nirenr/AndroLua_pro",
   },
   {
@@ -18,7 +20,8 @@
   {
     name="Glide",
     message="An image loading and caching library for Android focused on smooth scrolling",
-    license="BSD, part MIT and Apache 2.0.",
+    licenseName="BSD, part MIT and Apache 2.0.",
+    license="Glide Lincense",
     url="https://github.com/bumptech/glide"
   },
 --[[
@@ -36,5 +39,11 @@
     name="Zip4j",
     message="A Java library for zip files and streams",
     url="https://github.com/srikanth-lingala/zip4j"
+  },
+{
+    name="sora-editor",
+    message="A cool code editor library on Android with syntax-highlighting and auto-completion. (aka CodeEditor)",
+    license="LGPL-2.1 license",
+    url="https://github.com/Rosemoe/sora-editor"
   },
 }

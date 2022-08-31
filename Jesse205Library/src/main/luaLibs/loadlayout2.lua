@@ -1,4 +1,3 @@
---杰西205修改
 --[[
 修改内容：
 1.加载图片方式改为Glide加载(需要导入Glide)
@@ -20,12 +19,18 @@
 2.去除string类型的true与false
 3.替换null为nil
 4.删除一大堆api
+
+2022.8.26
+1.去除百分比参数
+2.修正glide加载图片时路径拼接错误
+3.移除从全局变量调用的功能
+4.强制导入glide和tooltip
 ]]
 local require=require
 local luajava = luajava
 local table=require "table"
-luajava.ids=luajava.ids or {id=0x7f000000}
-local ids = luajava.ids
+local ids = luajava.ids or {id=0x7f000000}
+luajava.ids=ids
 local _G=_G
 local insert = table.insert
 local new = luajava.new
@@ -54,17 +59,13 @@ local android_R=bindClass("android.R")
 local app_R=bindClass("com.androlua.R")
 android={R=android_R}
 
-local Context=bindClass "android.content.Context"
-local DisplayMetrics=bindClass "android.util.DisplayMetrics"
+local Context=bindClass("android.content.Context")
+local DisplayMetrics=bindClass("android.util.DisplayMetrics")
 
-local success,Glide=pcall(bindClass,"com.bumptech.glide.Glide")
-if not success then
-  Glide=nil
-end
-local success,TooltipCompat=pcall(bindClass,"androidx.appcompat.widget.TooltipCompat")
-if not success then
-  TooltipCompat=nil
-end
+local Glide=bindClass("com.bumptech.glide.Glide")
+
+local TooltipCompat=bindClass("androidx.appcompat.widget.TooltipCompat")
+
 
 local SDK_INT=luajava.bindClass("android.os.Build").VERSION.SDK_INT
 
@@ -97,7 +98,7 @@ local function alyloader(path)
     return f,st
   end
 end
-table.insert(package.searchers,alyloader)
+--table.insert(package.searchers,alyloader)
 
 
 local dm=context.getResources().getDisplayMetrics()
@@ -152,7 +153,7 @@ local toint={
 
   --android:orientation
   vertical=1,
-  horizontal= 0,
+  horizontal=0,
 
   --android:gravity
   axis_clip = 8,
@@ -300,6 +301,7 @@ local function checkType(v)
   return tonumber(n),types[ty]
 end
 
+--[[
 local function checkPercent(v)
   local n,ty=string.match(v,"^(%-?[%.%d]+)%%([wh])$")
   if ty==nil then
@@ -309,7 +311,7 @@ local function checkPercent(v)
    elseif ty=="h" then
     return tonumber(n)*H/100
   end
-end
+end]]
 
 
 local function split(s,t)
@@ -356,10 +358,11 @@ local function checkNumber(var)
       return toint[var]
     end
 
+    --[[
     local p=checkPercent(var)
     if p then
       return p
-    end
+    end]]
 
     local i=checkint(var)
     if i then
@@ -450,31 +453,8 @@ local function dump2 (t)
 end
 
 --Jesse205Library不支持api21以下，所以没必要做低于api16检查
---local ver = luajava.bindClass("android.os.Build").VERSION.SDK_INT;
---[[
-local function setBackground(view,bg)
-  --if ver<16 then
-  --view.setBackgroundDrawable(bg)
-  --else
-  view.setBackground(bg)
-  --end
-end]]
-
 
 local function setattribute(root,view,params,k,v,ids)
-  --[[
-  if k=="layout_x" then
-    params.x=checkValue(v)
-   elseif k=="layout_y" then
-    params.y=checkValue(v)
-   elseif k=="layout_weight" then
-    params.weight=checkValue(v)
-   elseif k=="layout_gravity" then
-    params.gravity=checkValue(v)
-   elseif k=="layout_marginStart" then
-    params.setMarginStart(checkValue(v))
-   elseif k=="layout_marginEnd" then
-    params.setMarginEnd(checkValue(v))]]
   if type(k)=="string" then
     local paramsAttr=k:match("^layout_(.+)")
     if paramsAttr=="margin"
@@ -547,35 +527,21 @@ local function setattribute(root,view,params,k,v,ids)
      elseif k=="url" then
       view.loadUrl(v)
      elseif k=="tooltip" then
-      if TooltipCompat then
-        TooltipCompat.setTooltipText(view,v)
-       elseif SDK_INT>=26 then
-        view.setTooltipText(v)
-      end
+      TooltipCompat.setTooltipText(view,v)
      elseif k=="src" then
       if v:find("^%?") then
         view.setImageResource(getIdentifier(v:sub(2,-1)))
        else
-        if Glide then
-          if not(v:find("^/")) and not(v:find("^.+://")) then
-            v=luadir..v
-          end
-          Glide.with(context).load(v).into(view)
-         elseif v:find("^https?://") then
-          task([[require "import" url=... return loadbitmap(url)]],v,function(bmp)view.setImageBitmap(bmp)end)
-         else
-          view.setImageBitmap(loadbitmap(v))
+        --if Glide then
+        if not(v:find("^/")) and not(v:find("^.+://")) then
+          v=luadir.."/"..v
         end
-        --[=[
-     elseif v:find("^https?://") then
-      task([[require "import" url=... return loadbitmap(url)]],v,function(bmp)view.setImageBitmap(bmp)end)
-     else
-      view.setImageBitmap(loadbitmap(v))]=]
+        Glide.with(context).load(v).into(view)
       end
      elseif k=="scaleType" then
       view.setScaleType(scaleTypes[scaleType[v]])
      elseif k=="background" then
-     local valueType=type(v)
+      local valueType=type(v)
       if valueType=="string" then
         --[[
         if v:find("^%?") then
@@ -592,8 +558,8 @@ local function setattribute(root,view,params,k,v,ids)
             view.setBackground(v)
           end]]
         --else
-        if (not v:find("^/")) and luadir then
-          v=luadir..v
+        if not v:find("^/") then
+          v=luadir.."/"..v
         end
         if v:find("%.9%.png") then
           view.setBackground(NineBitmapDrawable(loadbitmap(v)))
@@ -601,9 +567,7 @@ local function setattribute(root,view,params,k,v,ids)
           view.setBackground(LuaBitmapDrawable(context,v))
         end
         --end
-       elseif valueType=="userdata" then
-        view.setBackground(v)
-       elseif valueType=="number" then
+       elseif valueType=="userdata" or valueType=="number" then
         view.setBackground(v)
       end
      elseif k=="onClick" then --设置onClick事件接口
@@ -612,6 +576,7 @@ local function setattribute(root,view,params,k,v,ids)
         view.onClick=v
        elseif valueType=="userdata" then
         view.setOnClickListener(v)
+        --[[
        elseif valueType=="string" then
         local listener
         if ltrs[v] then
@@ -628,11 +593,8 @@ local function setattribute(root,view,params,k,v,ids)
           end
           ltrs[v]=listener
         end
-        view.setOnClickListener(listener)
+        view.setOnClickListener(listener)]]
       end
-      --[[--旧API，不再支持
-   elseif k=="password" and (v=="true" or v==true) then
-    view.setInputType(0x81)]]
      elseif not(paramsAttr) and not(k:find("padding")) and k~="style" then --设置属性
       k=string.gsub(k,"^(%w)",function(s)return string.upper(s)end)
       if k=="Text" or k=="Title" or k=="Subtitle" or k=="Hint" then

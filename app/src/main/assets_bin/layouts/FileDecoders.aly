@@ -1,0 +1,64 @@
+{
+  txt={
+    editor="CodeEditor",
+    read=function(path)
+      local file=io.open(path,"r")
+      local content=file:read("*a")
+      file:close()
+      return content
+    end,
+    save=function(path,content)
+      --print(path,content)
+      FilesTabManager.backupDir.mkdirs()
+      local backupFilePath=FilesTabManager.backupPath.."/"..System.currentTimeMillis().."_"..File(path).getName()
+      os.rename(path, backupFilePath)
+      io.open(path,"w"):write(content):close()
+    end,
+    language=EmptyLanguage(),
+  },
+
+  lua={
+    super="txt",
+    editor="LuaEditor",
+    language=false,
+  },
+  aly={super="lua"},
+
+  xml={
+    super="txt",
+    language=JavaLanguage(),
+  },
+  java={
+    super="txt",
+    language=JavaLanguage(),
+  },
+  svg={
+    super="java",
+    language=JavaLanguage(),
+  },
+  html={
+    super="txt",
+    language=HTMLLanguage(),
+  },
+  json={
+    super="txt",
+    language=JavaLanguage(),
+  },
+  gradle={super="txt"},
+  bat={super="txt"},
+  properties={super="txt"},
+
+
+  png={
+    editor="PhotoView",
+    apply=function(filePath,fileType,view)
+      local options=RequestOptions()
+      options.skipMemoryCache(true)--跳过内存缓存
+      options.diskCacheStrategy(DiskCacheStrategy.NONE)--不缓冲disk硬盘中
+      Glide.with(activity).load(filePath).apply(options).into(view)
+    end,
+    save=false,
+  },
+  jpg={super="png"},
+  gif={super="png"},
+}

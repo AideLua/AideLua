@@ -1,5 +1,5 @@
 local widgets={
-  MaterialButton={"TextButton","OutlinedButton","TextButton_Icon"},
+  MaterialButton={"TextButton","OutlinedButton","TextButton_Normal","TextButton_Icon"},
 }
 
 local types={}

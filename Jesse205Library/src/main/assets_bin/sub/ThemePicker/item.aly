@@ -8,7 +8,8 @@
     layout_height="36dp";
     radius="18dp";
     --elevation=0;
-    layout_margin="16dp";
+    layout_marginLeft="16dp";
+    layout_margin="8dp";
     layout_width="36dp";
     {
       CardView;
@@ -36,8 +37,8 @@
   };
   {
     AppCompatTextView;
-    layout_marginLeft="8dp";
-    layout_margin="36dp";
+    layout_marginLeft="16dp";
+    layout_margin="16dp";
     textColor=theme.color.textColorPrimary;
     id="title";
     textSize="16sp";

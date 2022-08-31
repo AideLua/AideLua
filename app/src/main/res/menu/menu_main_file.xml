@@ -4,8 +4,11 @@
         android:id="@+id/menu_references"
         android:title="@string/res_references"/>
     <item
-        android:id="@+id/menu_copyName"
-        android:title="@string/file_name_copy"/>
+        android:id="@+id/subMenu_copy"
+        android:title="@string/copy_popup">
+        <menu>
+        </menu>
+    </item>
     <item
         android:id="@+id/menu_rename"
         android:title="@string/rename"/>
@@ -16,7 +19,7 @@
         android:id="@+id/menu_openInNewWindow"
         android:title="@string/window_openInNewWindow"/>
     <!--<item
-        android:id="@+id/menu_create"
-        android:title="@string/create"/>
- -->   
+    android:id="@+id/menu_create"
+    android:title="@string/create"/>
+    -->   
 </menu>

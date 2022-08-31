@@ -354,7 +354,7 @@
       layout_width="fill";
       layoutTransition=newLayoutTransition();
       id="editorParent";
-      visibility=View.GONE;
+      --visibility=View.GONE;
       {
         PhotoView;
         layout_height="fill";

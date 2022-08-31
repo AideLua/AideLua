@@ -1,10 +1,11 @@
 local ThemeUtil={}
 
-local context=activity or service
+local context=Jesse205.context
 local theme=_G.theme
 local SDK_INT=Build.VERSION.SDK_INT
 --local onColorChangedListeners={}
 --local selectableItemBackgroundBorderless
+
 ThemeUtil.APPTHEMES={
   {--深海蓝
     name="Default",
@@ -62,7 +63,8 @@ ThemeUtil.isNightMode=isSysNightMode
 
 --刷新颜色
 function ThemeUtil.refreshThemeColor()
-  local array = context.getTheme().obtainStyledAttributes({
+  local array
+  array = context.getTheme().obtainStyledAttributes({
     android.R.attr.textColorTertiary,
     android.R.attr.textColorPrimary,--普通文字色（黑白）
     android.R.attr.colorPrimary,
@@ -97,12 +99,10 @@ function ThemeUtil.refreshThemeColor()
   colorList.floatingActionButtonBackgroundColor=array.getColor(12,0)
   colorList.colorBackgroundFloating=array.getColor(13,0)
   colorList.strokeColor=array.getColor(14,0)
-  --colorList.titleTextColor=array.getColor(13,0)
-  --colorList.subtitleTextColor=array.getColor(14,0)
   array.recycle()
 
   local numberList=theme.number
-  local array = context.getTheme().obtainStyledAttributes({
+  array = context.getTheme().obtainStyledAttributes({
     android.R.attr.selectableItemBackgroundBorderless,
     android.R.attr.selectableItemBackground,
     R.attr.actionBarTheme,
@@ -113,7 +113,7 @@ function ThemeUtil.refreshThemeColor()
   array.recycle()
 
   local booleanList=theme.boolean
-  local array = context.getTheme().obtainStyledAttributes({
+  array = context.getTheme().obtainStyledAttributes({
     R.attr.windowLightNavigationBar,
     R.attr.windowLightStatusBar,
   })
@@ -130,7 +130,7 @@ function ThemeUtil.refreshThemeColor()
   actionBarColorList.colorControlNormal=array.getColor(1,0)
   array.recycle()
 
-  local array = context.getTheme().obtainStyledAttributes(numberList.id.actionBarTheme,{
+  array = context.getTheme().obtainStyledAttributes(numberList.id.actionBarTheme,{
     R.attr.elevation,
   })
   numberList.actionBarElevation=array.getDimension(0,0)
@@ -214,7 +214,7 @@ function ThemeUtil.refreshUI()
     appTheme=Name2AppTheme[themeKey]
     setAppTheme(themeKey)--自动设置会默认
   end
-  
+
 
   --构建用的主题名字
   local themeString=("Theme_%s_%s"):format(Jesse205.themeType,themeKey)
@@ -226,13 +226,13 @@ function ThemeUtil.refreshUI()
   end
 
   activity.setTheme(R.style[themeString])--设置主题
-  themeString=nil--回收主题名字
+  themeString=nil
 
   ThemeUtil.NowAppTheme=appTheme
   local systemUiVisibility=0
-  if not(decorView) then
-    decorView=activity.getDecorView()--定要在设置主题之后调用
-  end
+  --if not(decorView) then
+  decorView=activity.getDecorView()--定要在设置主题之后调用
+  --end
   local colorList=theme.color
 
   if not(useCustomAppToolbar) then
@@ -245,25 +245,15 @@ function ThemeUtil.refreshUI()
 
   ThemeUtil.refreshThemeColor()--刷新一下颜色
 
+  --[[
   if appTheme.color then--动态覆盖颜色
     for index,content in pairs(appTheme.color) do
       colorList[index]=content
     end
-  end
+  end]]
 
-  if theme.boolean.windowLightNavigationBar and not(darkNavigationBar) then--主题默认亮色导航栏
-    if SDK_INT>=26 then
-      systemUiVisibility=systemUiVisibility|View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR--设置亮色导航栏
-      ThemeUtil.setNavigationbarColor(colorList.navigationBarColor)--直接设置颜色就行了
-    end
-   else--主题默认不是亮色导航栏
-    local windowBackground=colorList.windowBackground--获取背景颜色
-    if not(appTheme.night) then--背景颜色是亮色
-      if SDK_INT>=26 then
-        systemUiVisibility=systemUiVisibility|View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR--设置亮色导航栏
-        ThemeUtil.setNavigationbarColor(windowBackground)--设置为背景颜色
-      end
-    end
+  if theme.boolean.windowLightNavigationBar and SDK_INT>=26 and not(ThemeUtil.isNightMode()) and not(darkNavigationBar) then--主题默认亮色导航栏
+    systemUiVisibility=systemUiVisibility|View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR--设置亮色导航栏
   end
 
   if theme.boolean.windowLightStatusBar and SDK_INT >= 23 and not(darkStatusBar) then--默认是亮色状态栏并且不低于安卓6

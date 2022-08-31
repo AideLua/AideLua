@@ -223,7 +223,7 @@ function refresh()
   end
   table.insert(settings2,{
     SettingsLayUtil.ITEM_ONLYSUMMARY;
-    summary="注：开关插件后需要程序启动本应用",
+    summary="开关插件后需要重新启动本应用",
     clickable=false
   })
   adp.notifyDataSetChanged()

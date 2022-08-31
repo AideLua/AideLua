@@ -60,6 +60,9 @@
         layout_width="fill";
         layout_height="fill";
         id="recyclerView";
+        --verticalScrollBarEnabled=true;
+        --scrollBarSize="4dp";
+        --verticalScrollbarThumbDrawable=resources.getDrawable(R.color.Jesse205_Red);
       };
     };
   };

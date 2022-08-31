@@ -13,9 +13,9 @@ activity.setContentView(loadlayout2("layout",_ENV))
 actionBar.setDisplayHomeAsUpEnabled(true)
 
 loadlayout2("iconLayout")
-portraitCardParent=LinearLayout(activity)
+loadlayout2("portraitCardParentView")
 portraitCardParent.addView(iconLayout)
-portraitCardParent.setMinimumHeight(1)
+
 adapterEvents=SettingsLayUtil.adapterEvents
 PackInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
 landscape=false
@@ -92,27 +92,20 @@ function onConfigurationChanged(config)
       LastActionBarElevation=0
       actionBar.setElevation(0)
       appBarElevationCard.setVisibility(View.VISIBLE)
-      local linearParams=appIconGroup.getLayoutParams()
-      linearParams.width=math.dp2int(192)
-      appIconGroup.setLayoutParams(linearParams)
+      local linearParams=iconLayout.getLayoutParams()
+      linearParams.width=math.dp2int(192+16*2+8)
+      iconLayout.setLayoutParams(linearParams)
       portraitCardParent.removeView(iconLayout)
       mainLayChild.addView(iconLayout,0)
      else
       appBarElevationCard.setVisibility(View.GONE)
-      local linearParams=appIconGroup.getLayoutParams()
+      local linearParams=iconLayout.getLayoutParams()
       linearParams.width=-1
-      appIconGroup.setLayoutParams(linearParams)
+      iconLayout.setLayoutParams(linearParams)
       mainLayChild.removeView(iconLayout)
       portraitCardParent.addView(iconLayout)
     end
   end
-  --[[
-  if screenConfigDecoder.device=="pc" then
-    local linearParams=topCard.getLayoutParams()
-    linearParams.height=-2
-    linearParams.width=-2
-    topCard.setLayoutParams(linearParams)
-  end]]
 end
 
 topCardItems={}
@@ -167,9 +160,10 @@ data={
 
 --插入协议
 if agreements then
+  local fileBasePath=activity.getLuaPath("../../agreements/%s.html")
   for index,content in ipairs(agreements) do
     content[1]=SettingsLayUtil.ITEM_NOSUMMARY
-    content.path=activity.getLuaPath(("../../agreements/%s.html"):format(content.name))
+    content.path=fileBasePath:format(content.name)
     content.key="html"
     content.newPage=true
     table.insert(data,content)
@@ -272,7 +266,6 @@ adapter=LuaCustRecyclerAdapter(AdapterCreator({
   onCreateViewHolder=function(parent,viewType)
     if viewType==-1 then
       local holder=LuaCustRecyclerHolder(portraitCardParent)
-
       return holder
      else
       return adapterEvents.onCreateViewHolder(onItemClick,nil,parent,viewType)
@@ -280,7 +273,6 @@ adapter=LuaCustRecyclerAdapter(AdapterCreator({
   end,
   onBindViewHolder=function(holder,position)
     if position~=0 then
-
       adapterEvents.onBindViewHolder(data,holder,position)
     end
   end,
@@ -301,24 +293,24 @@ recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
 })
 
 
-recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
-  onGlobalLayout=function()
-    if activity.isFinishing() then
-      return
-    end
-    if Landscape then
-
-      print(true)
-    end
-  end
-})
-
 screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
   orientation={
-    --identical={mainLayChild},
     different={appIconGroup},
   },
   fillParentViews={topCard},
+  onDeviceChanged = function(device, oldDevice)
+    if device=="pc" then
+      local linearParams=iconCard.getLayoutParams()
+      linearParams.height=-2
+      linearParams.width=-2
+      iconCard.setLayoutParams(linearParams)
+     elseif oldDevice=="pc" then
+      local linearParams=iconCard.getLayoutParams()
+      linearParams.height=-1
+      linearParams.width=-1
+      iconCard.setLayoutParams(linearParams)
+    end
+  end
 })
 
 onConfigurationChanged(activity.getResources().getConfiguration())

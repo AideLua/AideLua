@@ -17,6 +17,7 @@
     key="theme_darkactionbar";
     --enabled=false;
   };
+--[[
   {
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
     icon=R.drawable.ic_theme_light_dark;
@@ -70,7 +71,7 @@
     icon=R.drawable.ic_theme_light_dark;
     title="测试";
     key="test9";
-  };
+  };]]
   {
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
     icon=R.drawable.ic_animation_play_outline;

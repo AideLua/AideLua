@@ -1,12 +1,13 @@
 require "import"
 import "Jesse205"
-import "openSourceLicenses"
+import "licences"
 
 import "item"
 
 activity.setTitle(R.string.Jesse205_openSourceLicense)
 activity.setContentView(loadlayout2("layout",_ENV))
 actionBar.setDisplayHomeAsUpEnabled(true)
+fileBasePath=activity.getLuaPath("../../licences/%s.txt")
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()
@@ -19,9 +20,9 @@ function onConfigurationChanged(config)
   screenConfigDecoder:decodeConfiguration(config)
 end
 
-adp=LuaCustRecyclerAdapter(AdapterCreator({
+adapter=LuaCustRecyclerAdapter(AdapterCreator({
   getItemCount=function()
-    return #openSourceLicenses
+    return #licences
   end,
   getItemViewType=function(position)
     return 0
@@ -31,23 +32,34 @@ adp=LuaCustRecyclerAdapter(AdapterCreator({
     local view=loadlayout2(item,ids)
     local holder=LuaCustRecyclerHolder(view)
     view.setTag(ids)
-    ids.cardViewChild.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary))
-    ids.cardViewChild.onClick=function()
+    local cardViewChild=ids.cardViewChild
+    local licenseView=ids.license
+    cardViewChild.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary))
+    cardViewChild.onClick=function()
       local url=ids._data.url
       if url then
         openUrl(url)
+      end
+    end
+    licenseView.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
+    licenseView.onClick=function(view)
+      local data=ids._data
+      local path=data.path
+      if path and File(path).isFile() then
+        newSubActivity("HtmlFileViewer",{{title=data.license or data.licenseName,path=path,text=true}})
       end
     end
     return holder
   end,
 
   onBindViewHolder=function(holder,position)
-    local data=openSourceLicenses[position+1]
+    local data=licences[position+1]
     local tag=holder.view.getTag()
     tag._data=data
     local name=data.name
     local message=data.message
     local license=data.license
+    local licenseName=data.licenseName
     tag.name.text=name
 
     local messageView=tag.message
@@ -59,15 +71,18 @@ adp=LuaCustRecyclerAdapter(AdapterCreator({
       messageView.setVisibility(View.GONE)
     end
     if license then
-      licenseView.text=license
+      licenseView.text=licenseName or license
       licenseView.setVisibility(View.VISIBLE)
+      local filePath=fileBasePath:format(license or licenseName)
+      data.path=filePath
+      --licenseView.setClickable(File(filePath).isFile())
      else
       licenseView.setVisibility(View.GONE)
     end
     tag.cardViewChild.setClickable(toboolean(data.url))
   end,
 }))
-recyclerView.setAdapter(adp)
+recyclerView.setAdapter(adapter)
 layoutManager=StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL)
 recyclerView.setLayoutManager(layoutManager)
 recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{

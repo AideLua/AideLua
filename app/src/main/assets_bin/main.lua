@@ -8,6 +8,8 @@ if not (welcomeAgain) then
   for index, content in ipairs(agreements) do
     if getSharedData(content.name) ~= content.date then
       welcomeAgain = true
+      setSharedData("welcome",false)
+      break
     end
   end
 end
@@ -27,6 +29,7 @@ application.set("safeModeEnable", safeModeEnable)
 import "android.text.TextUtils$TruncateAt"
 import "android.content.ComponentName"
 import "android.provider.DocumentsContract"
+--import "androidx.core.widget.ListViewCompat"
 import "androidx.drawerlayout.widget.DrawerLayout"
 
 import "com.google.android.material.tabs.TabLayout"
@@ -49,6 +52,7 @@ import "com.Jesse205.FileInfoUtils"
 import "AppFunctions" -- 必须先导入这个，因为下面的导入直接要用
 import "DialogFunctions"
 import "createFile"
+import "LuaEditorHelper"
 
 import "buildtools.RePackTool"
 
@@ -59,10 +63,14 @@ import "ProjectManager"
 
 import "layouts.item"
 import "layouts.pathItem"
+import "layouts.infoItem"
+import "layouts.buildingLayout"
 
 import "sub.LayoutHelper2.loadpreviewlayout"
 
-import "FileDecoders"
+import "layouts.FileDecoders"
+import "layouts.FileTemplates"
+
 import "adapter.FileListAdapter"
 import "adapter.FilePathAdapter"
 
@@ -86,7 +94,7 @@ oldEditorPreviewButton = getSharedData("editor_previewButton")
 lastBackTime = 0 -- 上次点击返回键时间
 
 SDK_INT = Build.VERSION.SDK_INT
-PackInfo = activity.PackageManager.getPackageInfo(activity.getPackageName(), 64)
+PackInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 64)
 lastUpdateTime = PackInfo.lastUpdateTime
 
 activityStopped = false
@@ -96,24 +104,32 @@ activity.setContentView(loadlayout2("layouts.layout"))
 actionBar.setTitle(R.string.app_name)
 actionBar.setDisplayHomeAsUpEnabled(true)
 
---[[
+
 LuaReservedCharacters = {"switch", "if", "then", "and", "break", "do", "else", "elseif", "end", "false", "for",
   "function", "in", "local", "nil", "not", "or", "repeat", "return", "true", "until", "while"} -- lua关键字
-]]
+
 
 function onCreate(savedInstanceState)
   -- todo:根据savedInstanceState和getIntent判断打开项目
   --FilesBrowserManager.open()
   PluginsUtil.callElevents("onCreate", savedInstanceState)
+  toggle.syncState()
+
 end
+
 function main(data)
   if data=="projectPicker" then
     data=nil
    elseif not(data) then
-
-
+    data=getSharedData("openedProject")
   end
-
+  --print(data)
+  if data then
+    ProjectManager.openProject(data)
+   else
+    ProjectManager.closeProject(false)
+    FilesBrowserManager.open()
+  end
 end
 
 function onCreateOptionsMenu(menu)
@@ -135,9 +151,8 @@ function onCreateOptionsMenu(menu)
 
   -- 菜单组
   StateByFileAndEditorMenus = {saveFileMenu}
-  StateByFileMenus = {closeFileMenu}
+  StateByFileMenus = {fileMenu}
   StateByEditorMenus = {codeMenu}
-  -- StateByProjectMenus={binMenu,closeProjectMenu,binRunMenu}
   StateByProjectMenus = {projectMenu}
 
   screenConfigDecoder.events.menus = { -- 自动刷新菜单显示
@@ -175,20 +190,15 @@ function onOptionsItemSelected(item)
    elseif id == Rid.menu_redo then -- 重装
     editorActions.redo()
    elseif id == Rid.menu_run then -- 运行
-    if ProjectManager.openState then
-      ProjectManager.runProject()
-     else
-      local code=EditorsManager.actions.getText()
-      runLuaFile(nil,code)
-    end
-
+    ProjectManager.runProject()
    elseif id == Rid.menu_project_bin_run then -- 二次打包
+    RePackTool.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,true,true)
    elseif id == Rid.menu_project_bin then -- 二次打包
+    RePackTool.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,false,false)
    elseif id == Rid.menu_project_close then -- 关闭项目
     ProjectManager.closeProject()
    elseif id == Rid.menu_file_save then -- 保存
-    -- editorFunc.save()
-
+    FilesTabManager.saveAllFiles(true)
    elseif id == Rid.menu_file_close then -- 关闭文件
     FilesTabManager.closeFile()
    elseif id == Rid.menu_code_format then -- 格式化
@@ -197,16 +207,15 @@ function onOptionsItemSelected(item)
     EditorsManager.startSearch()
    elseif id == Rid.menu_code_checkImport then -- 检查导入
    elseif id == Rid.menu_tools_javaApiViewer then -- JavaAPI浏览器
-    newSubActivity("JavaApi")
+    newSubActivity("JavaApi",true)
    elseif id == Rid.menu_tools_javaApiViewer_windmill then -- JavaAPI浏览器
     startWindmillActivity("Java API")
    elseif id == Rid.menu_tools_logCat then -- 日志猫
     if ProjectManager.openState then
       ProjectManager.runProject(checkSharedActivity("LogCat"))
      else
-      newSubActivity("LogCat")
+      newSubActivity("LogCat",true)
     end
-
    elseif id == Rid.menu_tools_httpDebugging_windmill then -- Http 调试
     startWindmillActivity("Http 调试")
    elseif id == Rid.menu_tools_luaManual_windmill then -- Lua 手册
@@ -219,7 +228,7 @@ function onOptionsItemSelected(item)
    elseif id == Rid.menu_more_about then -- 关于
     newSubActivity("About")
    elseif id == Rid.menu_code_checkCode then -- 代码查错
-    editorActions.check()
+    editorActions.check(true)
    elseif id == Rid.menu_tools_layoutHelper then -- 布局助手
     print("错误：暂不支持")
    elseif id == Rid.menu_more_openNewWindow then -- 打开新窗口
@@ -229,14 +238,14 @@ function onOptionsItemSelected(item)
 end
 
 function onKeyShortcut(keyCode, event)
-  local filteredMetaState = event.getMetaState() & ~KeyEvent.META_CTRL_MASK;
+  local filteredMetaState = event.getMetaState() & ~KeyEvent.META_CTRL_MASK
   if (KeyEvent.metaStateHasNoModifiers(filteredMetaState)) then
     local editorActions = EditorsManager.action
     if keyCode == KeyEvent.KEYCODE_O then
       editorActions.open()
       return true
      elseif keyCode == KeyEvent.KEYCODE_S then
-      FilesTabManager.saveFiles()
+      FilesTabManager.saveFile(nil,true)
       return true
      elseif keyCode == KeyEvent.KEYCODE_L then
       EditorsManager.startSearch()
@@ -262,20 +271,14 @@ function onConfigurationChanged(config)
   screenConfigDecoder:decodeConfiguration(config)
   local smallestScreenWidthDp = config.smallestScreenWidthDp
   local screenWidthDp = config.screenWidthDp
-  ScreenWidthDp = screenWidthDp
+  --ScreenWidthDp = screenWidthDp
   local drawerChildLinearParams = drawerChild.getLayoutParams()
-  if screenConfigDecoder.device == "pad" then
-    if screenWidthDp > 384 then
-      drawerChildLinearParams.width = math.dp2int(328)
-     else
-      drawerChildLinearParams.width = -1
-    end
+  if screenWidthDp < 448 then
+    drawerChildLinearParams.width = -1
+   elseif screenWidthDp <1176 then
+    drawerChildLinearParams.width = math.dp2int(328)
    else
-    if screenWidthDp > 448 then
-      drawerChildLinearParams.width = math.dp2int(392)
-     else
-      drawerChildLinearParams.width = -1
-    end
+    drawerChildLinearParams.width = math.dp2int(392)
   end
   drawerChild.setLayoutParams(drawerChildLinearParams)
   EditorsManager.refreshEditorScrollState()
@@ -288,8 +291,7 @@ notFirstOnResume = false
 function onResume()
   local reload = false
   if oldJesse205LibHl ~= getSharedData("Jesse205Lib_Highlight")
-    or oldAndroidXHl ~=
-    getSharedData("AndroidX_Highlight") then
+    or oldAndroidXHl ~= getSharedData("AndroidX_Highlight") then
     reload = true
     application.set("luaeditor_initialized", false)
   end
@@ -302,11 +304,8 @@ function onResume()
     activity.recreate()
     return
   end
-  if magnifier then -- 刷新放大镜状态
-    editor_magnify = getSharedData("editor_magnify")
-  end
-
-  FilesBrowserManager.refresh()
+  refreshMagnifier()
+  
 
   if notFirstOnResume then
     ProjectManager.refreshProjectsPath()
@@ -334,24 +333,30 @@ function onResume()
     end
     -- todo:更新预览，刷新代码
   end
+  FilesBrowserManager.refresh()
+
   notFirstOnResume = true
 end
 
 function onResult(name, action, content)
   if action == "project_created_successfully" then
-    showSnackBar(R.string.create_success).setAction(R.string.open, function()
-      if OpenedProject then -- 已打开项目
-        closeProject()
+    showSnackBar(R.string.create_success).setAction(R.string.open, function(view)
+      if ProjectManager.openState then -- 已打开项目
+        ProjectManager.closeProject(false)
       end
-      openProject(File(content))
+      ProjectManager.openProject(content)
     end)
    else
     showSnackBar(action)
   end
 end
 
+
 function onPause()
-  FilesTabManager.saveFile()
+  --print(true)
+  if FilesTabManager.openState then
+    FilesTabManager.saveFile()
+  end
 end
 
 function onStart()
@@ -359,6 +364,7 @@ function onStart()
 end
 
 function onStop()
+  --print(true)
   activityStopped = true
 end
 
@@ -376,8 +382,7 @@ function onKeyUp(KeyCode, event)
   if TouchingKey then
     TouchingKey = false
     if KeyCode == KeyEvent.KEYCODE_BACK then -- 返回键事件
-      if drawer.isDrawerOpen(Gravity.LEFT) then
-        --if FilesBrowserManager.openState and screenConfigDecoder.device == "phone" then -- 没有打开键盘且已打开侧滑，且设备为手机
+      if FilesBrowserManager.openState and screenConfigDecoder.deviceByWidth ~= "pc" then -- 没有打开键盘且已打开侧滑，且设备为手机
         if ProjectManager.openState then
           -- todo:转到上一级文件夹
           local directoryFile=FilesBrowserManager.directoryFile
@@ -410,22 +415,12 @@ end
 
 toggle = ActionBarDrawerToggle(activity, drawer, R.string.drawer_open, R.string.drawer_close)
 drawer.addDrawerListener(toggle)
-toggle.syncState()
+--toggle.syncState()
 
 FilesTabManager.init()
 EditorsManager.init()
 FilesBrowserManager.init()
 
-pcall(function()--放大镜
-  import "android.widget.Magnifier"
-  magnifier=Magnifier(editorGroup)
-  magnifierUpdateTi=Ticker()--放大镜的定时器，定时刷新放大镜
-  magnifierUpdateTi.setPeriod(200)
-  magnifierUpdateTi.onTick=function()
-    magnifier.update()
-  end
-  magnifierUpdateTi.setEnabled(false)--先禁用放大镜
-end)
 
 --[[
 
@@ -438,13 +433,15 @@ task(500,function()
 end)]]
 
 EditorsManager.symbolBar.refreshSymbolBar(oldEditorSymbolBar) -- 刷新符号栏状态
+EditorsManager.switchEditor("NoneView")
 
-EditorsManager.switchEditor("LuaEditor")
 
 screenConfigDecoder = ScreenFixUtil.ScreenConfigDecoder({
-  onDeviceChanged = function(device, oldDevice)
+  onDeviceByWidthChanged = function(device, oldDevice)
+    --print(device, oldDevice)
     local browserOpenState=FilesBrowserManager.openState
-    if device == "phone" then -- 切换为手机时
+    --print(browserOpenState)
+    if oldDevice == "pc" then -- 切换为手机时
       -- 暂时关闭动画，因为动画有延迟
       local LDLayoutTransition, LMLlayoutTransition = largeDrawerLay.getLayoutTransition(),
       largeMainLay.getLayoutTransition()
@@ -470,16 +467,16 @@ screenConfigDecoder = ScreenFixUtil.ScreenConfigDecoder({
       largeMainLay.setVisibility(View.GONE)
       drawer.setVisibility(View.VISIBLE)
       if browserOpenState == nil then
-        FilesBrowserManager.openState = false
+        FilesBrowserManager.setOpenState(false)
       end
       drawerChild.setVisibility(View.VISIBLE)
       toggle.syncState()
 
       largeDrawerLay.setLayoutTransition(LDLayoutTransition)
       largeMainLay.setLayoutTransition(LMLlayoutTransition)
-     elseif oldDevice == "phone" then -- 切换为平板或电脑时
-      local LDLayoutTransition, LMLlayoutTransition = largeDrawerLay.getLayoutTransition(),
-      largeMainLay.getLayoutTransition()
+     elseif device == "pc" then -- 切换为平板或电脑时
+      local LDLayoutTransition = largeDrawerLay.getLayoutTransition()
+      local LMLlayoutTransition = largeMainLay.getLayoutTransition()
       largeDrawerLay.setLayoutTransition(nil)
       largeMainLay.setLayoutTransition(nil)
 
@@ -491,7 +488,7 @@ screenConfigDecoder = ScreenFixUtil.ScreenConfigDecoder({
       largeMainLay.setVisibility(View.VISIBLE)
       drawer.setVisibility(View.GONE)
       if browserOpenState or browserOpenState == nil then
-        FilesBrowserManager.openState = true
+        FilesBrowserManager.setOpenState(true)
         drawerChild.setVisibility(View.VISIBLE)
        else
         drawerChild.setVisibility(View.GONE)
@@ -507,9 +504,9 @@ screenConfigDecoder = ScreenFixUtil.ScreenConfigDecoder({
 
 onConfigurationChanged(activity.getResources().getConfiguration())
 
---[[
+
 --在刷新后仍然为空，那就是关闭状态
-if drawerOpened == nil then
-  drawerOpened = false
-end]]
+if FilesBrowserManager.openState == nil then
+  FilesBrowserManager.setOpenState(false)
+end
 

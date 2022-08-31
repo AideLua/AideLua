@@ -30,15 +30,18 @@ function PluginsUtil.callElevents(name, ...)
     end
   end
   local events2 = plugins.events[name]
+  local finalResult
   if events2 then
     for index, content in ipairs(events2) do
-      xpcall(content, function(err)
+      local state,result=xpcall(content, function(err)
         print("Plugin", plugins.eventsName2[name][index], "error: ", err)
       end, ...)
+      if result~=nil then
+        finalResult=result
+      end
     end
   end
-  --  end
-  return PluginsUtil
+  return finalResult
 end
 
 function PluginsUtil.getPlugins()

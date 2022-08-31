@@ -35,6 +35,7 @@
     <string name="uncommentedCode">取消注释代码</string>
     <string name="logCat">日志猫</string>
     <string name="open">打开</string>
+    <string name="install">安装</string>
     
     <string name="exit_toast">再按一次退出程序</string>
     <string name="res_references">引用资源</string>
@@ -63,7 +64,7 @@
     <string name="file_name">文件名</string>
     <string name="file_name_copy">复制文件名</string>
     <string name="file_close">关闭文件</string>
-    <string name="file_current">当前文件</string>
+    <string name="file_current_path">当前文件路径</string>
     
     <string name="directory">文件夹</string>
     <string name="directory_go_popup">打开目录...</string>
@@ -99,20 +100,22 @@
     <string name="projects_path">项目路径</string>
     
     <string name="binpoject_loading">正在打包...</string>
+    <string name="binpoject_loading_with_parent">正在打包...\n%1$s</string>
     <string name="binpoject_creating_variables">正在创建变量</string>
     <string name="binpoject_arrangement">正在整理App</string>
-    <string name="binpoject_unzip">正在解压 app.apk</string>
+    <string name="binpoject_unzip">正在解压 %1$s</string>
     <string name="binpoject_copying">正在复制文件</string>
     <string name="binpoject_compiling">正在编译文件</string>
     <string name="binpoject_deleting">正在删除临时文件夹</string>
-    <string name="binpoject_signing">正在签名到 app_aidelua_sign.apk</string>
-    <string name="binpoject_copying2">正在重命名 app_aidelua.apk 到 %s</string>
-    <string name="binpoject_zip">正在打包到 app_aidelua.apk</string>
-    <string name="binpoject_state_succeed">打包成功\n路径：%1$s</string>
-    <string name="binpoject_state_succeed_needSign">打包成功，请手动签名\n路径：%1$s</string>
+    <string name="binpoject_signing">正在签名到 %1$s</string>
+    <string name="binpoject_zip">正在打包到 %1$s</string>
+    <string name="binpoject_state_succeed">打包成功</string>
+    <string name="binpoject_state_succeed_with_path">打包成功\n路径：%1$s</string>
+    <string name="binpoject_state_succeed_with_path_needSign">打包成功，请手动签名\n路径：%1$s</string>
     <string name="binpoject_state_failed">打包失败</string>
     <string name="binpoject_error_notfind">未找到 app.apk ，请先使用Aide打包。</string>
     <string name="binpoject_error_signer">签名失败，请手动签名\n路径：%1$s</string>
+    <string name="binpoject_error_parse">安装包 (%1$s) 解析失败</string>
     <string name="binpoject_cannotFindTool">无法找到相应版本的 ReBuildTool，请检查 Aide Lua 是否有更新</string>
     
     <string name="delete">删除</string>

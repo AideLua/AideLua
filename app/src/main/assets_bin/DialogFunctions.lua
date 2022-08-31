@@ -13,7 +13,6 @@ function deleteFileDialog(name,file)
       if FilesTabManager.openState then
         --todo: 关闭文件
         FilesTabManager.closeFile(string.lower(file.getPath()), false)
-        --closeFileAndTabByPath(file.getPath(),true)
       end
      else
       showSnackBar(R.string.delete_failed)
@@ -46,12 +45,12 @@ function createDirsDialog(nowDir)--创建文件夹对话框
       file.mkdirs()
       showSnackBar(R.string.create_success)
       FilesBrowserManager.refresh(nowDir)
-      dialog.dismiss()
+      --dialog.dismiss()
     end,
     function(err)
       showErrorDialog(R.string.create_failed,err)
       errorState=true
-      return true
+      --return true
     end)
     if errorState then
       return true
@@ -103,6 +102,9 @@ function renameDialog(oldFile)--重命名对话框
        else
         os.rename(oldFilePath, newFilePath)
       end
+    --todo: 修改标签栏
+      print("警告：文件标签栏未修改")
+      --[[
       local tabTag=FilesTabList[lowerOldFilePath]
       if tabTag then
         local tab=tabTag.tab
@@ -123,14 +125,14 @@ function renameDialog(oldFile)--重命名对话框
         end
         initFileTabView(tab,tabTag)
       end
-
+]]
       showSnackBar(R.string.rename_success)
-      refresh(newParentFile)
+      FilesBrowserManager.refresh(newParentFile)
     end,
     function(err)
       showErrorDialog(R.string.rename_fail,err)
       errorState=true
-      return true
+      --return true
     end)
     if errorState then
       return true

@@ -11,8 +11,7 @@ if appName==nil then
   application.set("appName",appName)
 end
 
-AppPath.Sdcard=Environment.getExternalStorageDirectory().getPath()--在SD卡中的目录
-AppPath.Temp=context.getLuaExtDir("temp")--临时目录
+AppPath.Sdcard=Environment.getExternalStorageDirectory().getPath()--SD卡的目录
 
 --将默认目录设为“/sdcard/Android/data/Package Name/files”
 local dataDirPath1="/data/data/"..packageName
@@ -24,6 +23,8 @@ dataDirPath2=AppPath.Sdcard.."/"..dataDirPath2
 local function getSelfPublicPath(value)--获取自身公共路径
   return Environment.getExternalStoragePublicDirectory(value).getPath().."/Edde software/"..appName
 end
+
+AppPath.Temp=context.getLuaExtDir("temp")--临时目录
 
 AppPath.Downloads=getSelfPublicPath(Environment.DIRECTORY_DOWNLOADS)
 AppPath.Movies=getSelfPublicPath(Environment.DIRECTORY_MOVIES)

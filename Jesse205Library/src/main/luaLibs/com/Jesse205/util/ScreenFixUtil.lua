@@ -1,5 +1,6 @@
 local ScreenFixUtil={}
 local resources=resources
+--[[
 function ScreenFixUtil.getNavigationBarHeight()
   local resourceId = resources.getIdentifier("navigation_bar_height","dimen", "android");
   local height = resources.getDimensionPixelSize(resourceId)
@@ -21,7 +22,7 @@ function ScreenFixUtil.getScreenRealSize()
   local displayMetrics=DisplayMetrics()
   wm.getDefaultDisplay().getRealMetrics(displayMetrics)
   return displayMetrics.widthPixels,displayMetrics.heightPixels
-end
+end]]
 
 function ScreenFixUtil.getDensityDpi()
   import "android.util.DisplayMetrics"
@@ -30,8 +31,136 @@ function ScreenFixUtil.getDensityDpi()
   return dm.densityDpi
 end
 
+local function getViewSize(view)
+  return view.getMeasuredWidth(),view.getMeasuredHeight()
+end
+ScreenFixUtil.getViewSize=getViewSize
+
+local function setLayoutManagersSpanCount(layoutManagers,count)
+  if layoutManagers then
+    for index=1,#layoutManagers do
+      layoutManagers[index].setSpanCount(count)
+    end
+  end
+end
+ScreenFixUtil.setLayoutManagersSpanCount=setLayoutManagersSpanCount
+
+local function setLayoutsOrientation(lays,orientation)
+  if lays then
+    for index=1,#lays do
+      lays[index].setOrientation(orientation)
+    end
+  end
+end
+ScreenFixUtil.setLayoutsOrientation=setLayoutsOrientation
+
+local function setLayoutsSize(lays,height,width)
+  if lays then
+    for index=1,#lays do
+      local content=lays[index]
+      local linearParams=content.getLayoutParams()
+      if height then
+        linearParams.height=height
+      end
+      if width then
+        linearParams.width=width
+      end
+      content.setLayoutParams(linearParams)
+    end
+  end
+end
+ScreenFixUtil.setLayoutsSize=setLayoutsSize
+
+
+local function setGridViewsNumColumns(gridViews,columns)
+  if gridViews then
+    for index=1,#gridViews do
+      gridViews[index].setNumColumns(columns)
+    end
+  end
+end
+ScreenFixUtil.setGridViewsNumColumns=setGridViewsNumColumns
+
+local function getDeviceTypeFromWidth(width)
+  if width<theme.number.Dimension.padWidth then--判断设备类型
+    return "phone"
+   elseif width<theme.number.Dimension.pcWidth then
+    return "pad"
+   else
+    return "pc"
+  end
+end
+ScreenFixUtil.getDeviceTypeFromWidth=getDeviceTypeFromWidth
+
+local function getDeviceTypeFromWidthDp(widthDp)
+  if widthDp<theme.number.padWidthDp then--判断设备类型
+    return "phone"
+   elseif widthDp<theme.number.pcWidthDp then
+    return "pad"
+   else
+    return "pc"
+  end
+end
+ScreenFixUtil.getDeviceTypeFromWidthDp=getDeviceTypeFromWidthDp
+
+local LayoutListenersBuilder={
+  singleCardViews=function(parentView,views)
+    return ViewTreeObserver.OnGlobalLayoutListener({onGlobalLayout=function()
+        local width=parentView.getMeasuredWidth()
+        if width>math.dp2int(640+32) then
+          setLayoutsSize(views,nil,math.dp2int(640))
+         else
+          setLayoutsSize(views,nil,-1)
+        end
+    end})
+  end,
+  layoutManagers=function(parentView,layoutManagers)
+    return ViewTreeObserver.OnGlobalLayoutListener({onGlobalLayout=function()
+        local width=parentView.getMeasuredWidth()
+        local device=getDeviceTypeFromWidth(width)
+        if device=="phone" then--手机视图，横向2个
+          setLayoutManagersSpanCount(layoutManagers,1)
+         elseif device=="pad" then--平板视图，横向4个
+          setLayoutManagersSpanCount(layoutManagers,2)
+         elseif device=="pc" then--电脑视图，横向6个
+          setLayoutManagersSpanCount(layoutManagers,4)
+        end
+    end})
+  end,
+  gridViews=function(parentView,gridViews)
+    return ViewTreeObserver.OnGlobalLayoutListener({onGlobalLayout=function()
+        local width=parentView.getMeasuredWidth()
+        local device=getDeviceTypeFromWidth(width)
+        if device=="phone" then--手机视图
+          setGridViewsNumColumns(gridViews,1)
+         elseif device=="pad" then--平板视图
+          setGridViewsNumColumns(gridViews,2)
+         elseif device=="pc" then--电脑视图
+          setGridViewsNumColumns(gridViews,4)
+        end
+    end})
+  end,
+  listViews=function(parentView,listViews)
+    return ViewTreeObserver.OnGlobalLayoutListener({onGlobalLayout=function()
+        local width=parentView.getMeasuredWidth()
+        if width<math.dp2int(800) then--屏幕宽度小于800dp，那就填充整个屏幕
+          setLayoutsSize(listViews,nil,-1)
+         elseif width<math.dp2int(1000) then--屏幕宽度大于等于800dp且小于1000dp，固定宽度为704dp
+          setLayoutsSize(listViews,nil,math.dp2int(704))
+         else--屏幕宽度大于等于1000dp，固定宽度为800dp
+          setLayoutsSize(listViews,nil,math.dp2int(800))
+        end
+    end})
+  end
+}
+
+ScreenFixUtil.LayoutListenersBuilder=LayoutListenersBuilder
+
+
+
 local ScreenConfigDecoder={
   device="phone",
+  deviceByWidth="phone",
 }
 ScreenFixUtil.ScreenConfigDecoder=ScreenConfigDecoder
 setmetatable(ScreenConfigDecoder,ScreenConfigDecoder)
@@ -49,7 +178,7 @@ setmetatable(ScreenConfigDecoder,ScreenConfigDecoder)
     }
   fillParent={View...}
   layoutManagers={LayoutManager...}
-  singleViews={View...}
+  singleCardViews={View...}
   }
 ]]
 function ScreenConfigDecoder.__call(self,events)
@@ -58,54 +187,8 @@ function ScreenConfigDecoder.__call(self,events)
   return self
 end
 
-local function setLayoutManagersSpanCount(layoutManagers,count)
-  if layoutManagers then
-    for index,content in ipairs(layoutManagers) do
-      content.setSpanCount(count)
-    end
-  end
-end
-ScreenFixUtil.setLayoutManagersSpanCount=setLayoutManagersSpanCount
-
-local function setLayoutsOrientation(lays,orientation)
-  if lays then
-    for index,content in ipairs(lays) do
-      content.setOrientation(orientation)
-    end
-  end
-end
-ScreenFixUtil.setLayoutsOrientation=setLayoutsOrientation
-
-local function setLayoutsSize(lays,height,width)
-  if lays then
-    for index,content in ipairs(lays) do
-      local linearParams=content.getLayoutParams()
-      if height then
-        linearParams.height=height
-      end
-      if width then
-        linearParams.width=width
-      end
-      content.setLayoutParams(linearParams)
-    end
-  end
-end
-ScreenFixUtil.setLayoutsSize=setLayoutsSize
-
-
-local function setGridViewsNumColumns(gridViews,columns)
-  if gridViews then
-    for index,content in ipairs(gridViews) do
-      content.setNumColumns(columns)
-    end
-  end
-end
-ScreenFixUtil.setGridViewsNumColumns=setGridViewsNumColumns
-
-
 function ScreenConfigDecoder.decodeConfiguration(self,config)
   local smallestScreenWidthDp=config.smallestScreenWidthDp--最小宽度（dp）
-  local smallestScreenWidth=math.dp2int(smallestScreenWidthDp)--最小宽度
   local screenWidthDp=config.screenWidthDp--屏幕宽度（单位为dp）
   local screenWidth=math.dp2int(screenWidthDp)--转换为像素
 
@@ -117,7 +200,8 @@ function ScreenConfigDecoder.decodeConfiguration(self,config)
   local gridViews=events.gridViews--和layoutManagers作用差不多
   local fillParentViews=events.fillParentViews--充填的
 
-  local onDeviceChanged=events.onDeviceChanged--当设备切换时调用
+  local onDeviceChanged=events.onDeviceChanged--当设备类型切换时调用
+  local onDeviceByWidthChanged=events.onDeviceByWidthChanged--当以屏幕宽度判断的设备切换时调用
   local identicalLays,differentLays--同向，异向（屏幕方向）
   local orientation=config.orientation
 
@@ -128,25 +212,33 @@ function ScreenConfigDecoder.decodeConfiguration(self,config)
   end
 
   local oldDevice=self.device
-  local device
-  if smallestScreenWidth~=self.smallestScreenWidth then--最小宽度改变时
-    if smallestScreenWidth<theme.number.padWidth then--判断设备类型
-      device="phone"
-     elseif smallestScreenWidth<theme.number.pcWidth then
-      device="pad"
-     else
-      device="pc"
-    end
-    self.smallestScreenWidth=smallestScreenWidth
+  local oldDeviceByWidth=self.deviceByWidth
+
+  local device,deviceByWidth
+  if smallestScreenWidthDp~=self.smallestScreenWidthDp then--最小宽度改变时
+    device=getDeviceTypeFromWidthDp(smallestScreenWidthDp)
+    self.smallestScreenWidthDp=smallestScreenWidthDp
+    self.device=device
    else--没改变最小宽度，说明设备类型没改变
     device=oldDevice
   end
 
-  if orientation~=self.orientation or device~=self.device then--切换屏幕方向
+  if screenWidthDp~=self.screenWidthDp then--最小宽度改变时
+    deviceByWidth=getDeviceTypeFromWidthDp(screenWidthDp)
+    self.screenWidthDp=screenWidthDp
+    self.deviceByWidth=deviceByWidth
+   else--没改变最小宽度，说明设备类型没改变
+    deviceByWidth=oldDeviceByWidth
+  end
+
+
+  if orientation~=self.orientation or device~=self.device then--切换屏幕方向或切换设备类型时
+
     if orientation==Configuration.ORIENTATION_LANDSCAPE then--横屏时
       setLayoutsOrientation(identicalLays,LinearLayout.HORIZONTAL)
       setLayoutsOrientation(differentLays,LinearLayout.VERTICAL)
       setLayoutsSize(fillParentViews,-1,-2)
+      --[[
       if device=="phone" then--手机视图，横向2个
         setLayoutManagersSpanCount(layoutManagers,2)
         setGridViewsNumColumns(gridViews,2)
@@ -156,11 +248,12 @@ function ScreenConfigDecoder.decodeConfiguration(self,config)
        elseif device=="pc" then--电脑视图，横向6个
         setLayoutManagersSpanCount(layoutManagers,6)
         setGridViewsNumColumns(gridViews,6)
-      end
+      end]]
      else
       setLayoutsOrientation(identicalLays,LinearLayout.VERTICAL)
       setLayoutsOrientation(differentLays,LinearLayout.HORIZONTAL)
       setLayoutsSize(fillParentViews,-2,-1)
+      --[[
       if device=="phone" then--手机视图，横向1个
         setLayoutManagersSpanCount(layoutManagers,1)
         setGridViewsNumColumns(gridViews,1)
@@ -170,10 +263,23 @@ function ScreenConfigDecoder.decodeConfiguration(self,config)
        elseif device=="pc" then--电脑视图，横向4个
         setLayoutManagersSpanCount(layoutManagers,4)
         setGridViewsNumColumns(gridViews,4)
-      end
+      end]]
     end
     self.orientation=config.orientation
   end
+
+
+  if deviceByWidth=="phone" then--手机视图
+    setLayoutManagersSpanCount(layoutManagers,1)
+    setGridViewsNumColumns(gridViews,1)
+   elseif deviceByWidth=="pad" then--平板视图
+    setLayoutManagersSpanCount(layoutManagers,2)
+    setGridViewsNumColumns(gridViews,2)
+   elseif deviceByWidth=="pc" then--电脑视图
+    setLayoutManagersSpanCount(layoutManagers,4)
+    setGridViewsNumColumns(gridViews,4)
+  end
+
 
   if singleCardViews then
     if screenWidthDp>640+32 then
@@ -184,37 +290,28 @@ function ScreenConfigDecoder.decodeConfiguration(self,config)
   end
 
   if listViews then
-    if device=="phone" then--手机视图
-      if screenWidthDp>704 then
-        setLayoutsSize(listViews,nil,math.dp2int(704))
-       else
-        setLayoutsSize(listViews,nil,-1)
-      end
-     elseif device=="pad" then--平板视图
-      if screenWidthDp>800 then
-        setLayoutsSize(listViews,nil,math.dp2int(800))
-       else
-        setLayoutsSize(listViews,nil,-1)
-      end
-     elseif device=="pc" then--电脑视图
-      if screenWidthDp>1000 then
-        setLayoutsSize(listViews,nil,math.dp2int(1000))
-       else
-        setLayoutsSize(listViews,nil,-1)
-      end
-
+    if screenWidthDp<math.dp2int(800) then--屏幕宽度小于800dp，那就填充整个屏幕
+      setLayoutsSize(listViews,nil,-1)
+     elseif screenWidthDp<math.dp2int(1000) then--屏幕宽度大于等于800dp且小于1000dp，固定宽度为704dp
+      setLayoutsSize(listViews,nil,math.dp2int(704))
+     else--屏幕宽度大于等于1000dp，固定宽度为800dp
+      setLayoutsSize(listViews,nil,math.dp2int(800))
     end
   end
 
   self:decodeMenus(screenWidthDp)
 
   if device~=oldDevice then--设备类型切换时
-    self.device=device
     if onDeviceChanged then
       onDeviceChanged(device,oldDevice)
     end
   end
 
+  if deviceByWidth~=oldDeviceByWidth then--设备类型切换时
+    if onDeviceByWidthChanged then
+      onDeviceByWidthChanged(deviceByWidth,oldDeviceByWidth)
+    end
+  end
 
 end
 
@@ -222,15 +319,13 @@ function ScreenConfigDecoder.decodeMenus(self,screenWidthDp)
   local events=self.events
   local menus=events.menus
   if menus then
-    if not(MenuItemCompat) then
-      import "androidx.core.view.MenuItemCompat"
-    end
     for showWidthDp,content in pairs(menus) do
-      for index,content in ipairs(content) do
+      for index=1,#content do
+        local menuItem=content[index]
         if showWidthDp<=screenWidthDp then
-          MenuItemCompat.setShowAsAction(content, MenuItemCompat.SHOW_AS_ACTION_ALWAYS)
+          MenuItemCompat.setShowAsAction(menuItem, MenuItemCompat.SHOW_AS_ACTION_ALWAYS)
          else
-          MenuItemCompat.setShowAsAction(content, MenuItemCompat.SHOW_AS_ACTION_NEVER)
+          MenuItemCompat.setShowAsAction(menuItem, MenuItemCompat.SHOW_AS_ACTION_NEVER)
         end
       end
     end

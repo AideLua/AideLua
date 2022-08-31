@@ -12,11 +12,6 @@ function onOptionsItemSelected()
 end
 
 
-
-function onConfigurationChanged(config)
-  screenConfigDecoder:decodeConfiguration(config)
-end
-
 gridView.onScroll=function(view,firstVisibleItem,visibleItemCount,totalItemCount)
   MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount)
 end
@@ -66,11 +61,6 @@ gridView.onItemClick=function(id,v,zero,one)
   end
 end
 
-screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
-  gridViews={gridView},
-})
-
-onConfigurationChanged(activity.getResources().getConfiguration())
-
-
+mainLay.ViewTreeObserver
+.addOnGlobalLayoutListener(ScreenFixUtil.LayoutListenersBuilder.gridViews(mainLay,{gridView}))
 

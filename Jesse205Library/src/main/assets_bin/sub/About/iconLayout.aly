@@ -1,7 +1,9 @@
 {
   LinearLayoutCompat;
   id="iconLayout";
-  --layout_gravity="center";
+  gravity="center|top";
+  layout_width="fill";
+  layout_height="fill";
   {
     MaterialCardView;
     layout_marginTop="8dp";
@@ -9,6 +11,7 @@
     layout_width="fill";
     layout_height="fill";
     layout_marginBottom="8dp";
+    id="iconCard";
     {
       ScrollView;
       layout_width="fill";

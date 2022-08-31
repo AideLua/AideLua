@@ -4,7 +4,7 @@ PermissionUtil.grantedList=grantedList
 local context=Jesse205.context--当前context
 
 local function request(permissions)
-  activity.requestPermissions(String(permissions),0)
+  context.requestPermissions(String(permissions),0)
 end
 PermissionUtil.request=request
 

@@ -1,5 +1,5 @@
 require "import"
-import "Jesse205"
+--import "Jesse205"
 
 activity.setTitle(luajava.bindClass(activity.getPackageName()..".R").string.runCode)
 activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true)
@@ -14,6 +14,6 @@ end
 local code,codeType=...
 if code then
   if codeType=="lua" or not(codeType) then
-    activity.doString(code,{})
+    activity.doString(code,_G)
   end
 end

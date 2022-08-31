@@ -1,11 +1,14 @@
 {
   title=R.string.Jesse205_permission;
+  icon=R.drawable.ic_account_key_outline;
+  subtitle=R.string.Jesse205_permission_tips;
+  elevationKey="LastActionBarElevation_permissionPage";
   layout={
     LinearLayoutCompat;
     layout_width="fill";
     layout_height="fill";
     orientation="vertical";
-    buildTitlebar(R.drawable.ic_account_key_outline,R.string.Jesse205_permission_tips);
+    --buildTitlebar(R.drawable.ic_account_key_outline,R.string.Jesse205_permission,R.string.Jesse205_permission_tips);
     {
       RecyclerView;
       layout_height="fill";
@@ -31,12 +34,12 @@
     recyclerView.setAdapter(adp)
     local layoutManager=StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL)
     recyclerView.setLayoutManager(layoutManager)
-    _G.LastActionBarElevation_Permissions=0
     recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
       onScrolled=function(view,firstVisibleItem,visibleItemCount,totalItemCount)
-        MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount,self.topCard,"LastActionBarElevation_Permissions")
+        MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount,nil,"LastActionBarElevation_permissionPage")
       end
     })
-    table.insert(ScreenFixContent.layoutManagers,layoutManager)
+    mainLay.ViewTreeObserver
+    .addOnGlobalLayoutListener(ScreenFixUtil.LayoutListenersBuilder.layoutManagers(mainLay,{layoutManager}))
   end,
 }

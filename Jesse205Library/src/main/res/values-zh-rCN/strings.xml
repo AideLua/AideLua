@@ -28,8 +28,8 @@
     <string name="Jesse205_htmlFileViewer">HTML查看器</string>
     <string name="Jesse205_openSourceLicense">开源许可</string>
     <string name="Jesse205_welcome">欢迎</string>
-    <string name="Jesse205_allReady">一切就绪</string>
-    <string name="Jesse205_allReady_tips">点击“完成”按钮开始体验吧！</string>
+    <!--<string name="Jesse205_allReady">一切就绪</string>
+    <string name="Jesse205_allReady_tips">点击“完成”按钮开始体验吧！</string>-->
     <string name="Jesse205_permission">权限申请</string>
     <string name="Jesse205_permission_tips">部分权限不给予将可能导致软件出错</string>
     <string name="Jesse205_permission_requestAll">全部给予</string>

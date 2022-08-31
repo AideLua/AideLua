@@ -1,15 +1,22 @@
 package com.Jesse205.superlua;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import com.androlua.LuaApplication;
 
 
 public class Main extends LuaActivity
 {
-
+    String luaDir;
+    LuaApplication app;
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO: Implement this method
+		app = (LuaApplication) getApplication();
+        luaDir=app.getLocalDir() + "/main.lua";
+        Intent intent = getIntent();
+        intent.setData(Uri.parse("file://" + luaDir));
         setCheckUpdate(true);
 		super.onCreate(savedInstanceState);
 		if(savedInstanceState==null && getIntent().getData()!=null)
@@ -26,22 +33,7 @@ public class Main extends LuaActivity
 		runFunc("onNewIntent", intent);
 		super.onNewIntent(intent);
 	}
-	
-	@Override
-	public String getLuaDir()
-	{
-		// TODO: Implement this method
-		return getLocalDir();
-	}
-
-	@Override
-	public String getLuaPath()
-	{
-		// TODO: Implement this method
-		initMain();
-		return getLocalDir()+"/main.lua";
-	}
-
+    
 	private void onVersionChanged(String newVersionName, String oldVersionName) {
 		// TODO: Implement this method
 		runFunc("onVersionChanged", newVersionName, oldVersionName);

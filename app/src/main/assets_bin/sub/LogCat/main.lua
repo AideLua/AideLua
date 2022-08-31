@@ -204,6 +204,7 @@ layout.fastScrollEnabled=true
 if isJesse205Activity then--Jesse205主题没有分割线
   layout.setDivider(array.getDrawable(1))
 end
+
 adapter=LuaArrayAdapter(activity,item)
 layout.setAdapter(adapter)
 if MyAnimationUtil then

@@ -18,13 +18,9 @@ local adapterData={}
 FilesBrowserManager.adapterData = adapterData
 local directoryFile,adapter,layoutManager
 local pathAdapter,pathLayoutManager
---local directoryFilesList=nil
 local pathSplitList={}
 FilesBrowserManager.pathSplitList = pathSplitList
 local filesPositions={}
---local projectsPath=getSharedData("projectsDir")
---local projectsFile=File(projectsPath)
---FilesBrowserManager.directoryFilesList = directoryFilesList
 FilesBrowserManager.filesPositions = filesPositions
 
 local folderIcons={
@@ -172,13 +168,14 @@ function FilesBrowserManager.getProjectIconForGlide(projectPath,config,mainProje
   return android.R.drawable.sym_def_app_icon--前面没有返回，就返回默认图标
 end
 
+--[[
 function FilesBrowserManager.getFileIconRIdByType(fileType)
   local icon=R.drawable.ic_file_outline
   if fileType then
     icon=ProjectUtil.FileIcons[fileType] or icon
   end
   return icon
-end
+end]]
 --[[
 function FilesBrowserManager.getFolderIconResIdByName(name)
   return folderIcons[name] or R.drawable.ic_folder_outline
@@ -204,20 +201,21 @@ relLibPathsMatch.types = relLibPathsMatchTypes
 
 --打开文件浏览器
 function FilesBrowserManager.open()
-  if screenConfigDecoder.device == "phone" then
-    drawer.openDrawer(Gravity.LEFT)
-   else
+  if screenConfigDecoder.deviceByWidth == "pc" then
     drawerChild.setVisibility(View.VISIBLE)
+   else
+    drawer.openDrawer(Gravity.LEFT)
+
   end
   openState = true
 end
 
 --关闭文件浏览器
 function FilesBrowserManager.close()
-  if screenConfigDecoder.device == "phone" then
-    drawer.closeDrawer(Gravity.LEFT)
+  if screenConfigDecoder.deviceByWidth == "pc" then
+    drawerChild.setVisibility(View.GONE)
    else
-    drawerChild.setVisibility(View.VISIBLE)
+    drawer.closeDrawer(Gravity.LEFT)
   end
   openState = false
 end
@@ -253,8 +251,9 @@ function FilesBrowserManager.refresh(file,upFile,force)
       file=ProjectManager.projectsFile
      else
       file=file or directoryFile
-      if isSamePathFileByPath(file.getPath(),ProjectManager.projectsPath) then
+      if isSamePathFileByPath(file.getPath(),ProjectManager.nowFile.getParent()) then
         ProjectManager.closeProject(false)
+        file=ProjectManager.projectsFile
       end
     end
 
@@ -277,7 +276,7 @@ function FilesBrowserManager.refresh(file,upFile,force)
         end
       end
     end
-    activity.newTask(function(newDirectory,projectopenState)
+    activity.newTask(function(newDirectory,projectOpenState)
       require "import"
       import "java.io.File"
       import "java.util.Collections"
@@ -290,10 +289,10 @@ function FilesBrowserManager.refresh(file,upFile,force)
         filesList={}
       end
       local newList={}--最终要返回的table
-      if projectopenState then
+      if projectOpenState then
         --按名称排序
         table.sort(filesList,function(a,b)
-          return string.upper(a.getName())<string.upper(b.getName()) and a.isDirectory()
+          return string.upper(a.getName())<string.upper(b.getName())
         end)
         local folderIndex=1
         for index,content in ipairs(filesList) do
@@ -322,11 +321,22 @@ function FilesBrowserManager.refresh(file,upFile,force)
     end,
     function(dataList,newDirectory)
       local path=newDirectory.getPath()
-      local oldPath=(directoryFile or newDirectory).getPath()
-
-      table.clear(adapterData)
       --刷新路径指示器
       if ProjectManager.openState then
+        local oldPath
+        local nowPrjPathParent=ProjectManager.nowFile.getParent()
+        if directoryFile then
+          oldPath=directoryFile.getPath()
+          if not(String(oldPath).startsWith(nowPrjPathParent)) then
+            oldPath=nowPrjPathParent
+          end
+          if not(String(path).startsWith(nowPrjPathParent)) then
+            path=nowPrjPathParent
+          end
+         else
+          oldPath=nowPrjPathParent
+        end
+
         if oldPath~=path then
           --如果是返回
           if String(oldPath).startsWith(path) then
@@ -356,6 +366,7 @@ function FilesBrowserManager.refresh(file,upFile,force)
                 position=position+1
               end
             end
+
             --判断不出来
            else
             table.clear(pathSplitList)
@@ -369,11 +380,16 @@ function FilesBrowserManager.refresh(file,upFile,force)
             pathAdapter.notifyDataSetChanged()
           end
         end
+        directoryFile=newDirectory
        else
         table.clear(pathSplitList)
+        directoryFile=nil
       end
-      directoryFile=newDirectory
+      table.clear(adapterData)
+
+      --directoryFile=newDirectory
       FilesBrowserManager.directoryFilesList=dataList
+      FilesBrowserManager.nowFilePosition=nil
       swipeRefresh.setRefreshing(false)
       loadingFiles=false
 
@@ -382,7 +398,10 @@ function FilesBrowserManager.refresh(file,upFile,force)
       local scroll=filesPositions[path]
       if scroll then
         layoutManager.scrollToPositionWithOffset(scroll[1],scroll[2])
+       else
+        layoutManager.scrollToPosition(0)
       end
+
 
     end).execute({file,ProjectManager.openState})
   end
@@ -445,11 +464,68 @@ function FilesBrowserManager.init()
     end
   }))
 
+  recyclerView.onDrag=function(view,event)
+    local action=event.getAction()
+    --print(action)
+    if action==DragEvent.ACTION_DRAG_STARTED then
+      local desc=event.getClipDescription()--必须有描述，必须为文件
+      if not(desc and desc.getMimeTypeCount()~=0 and desc.getMimeType(0)~="text/plain") then
+        return false
+      end
+     elseif action==DragEvent.ACTION_DRAG_ENTERED then
+      view.setBackgroundColor(theme.color.rippleColorAccent)
+     elseif action==DragEvent.ACTION_DRAG_EXITED then
+      view.setBackgroundColor(0)
+     elseif action==DragEvent.ACTION_DROP then
+      view.setBackgroundColor(0)
+      local dropPermissions=activity.requestDragAndDropPermissions(event)
+      local data=event.getClipData()
+      local count=data.getItemCount()
+      if count>0 then
+        for index=0,count-1 do
+          local nameFile
+          local uri=data.getItemAt(index).getUri()
+          local inputStream=activity.getContentResolver().openInputStream(uri)
+          --[[
+          if DocumentsContract.isDocumentUri(activity, uri) then
+            nameFile=File(FileInfoUtils.getPath(activity,uri))
+           else
+            nameFile=File(uri.getPath())
+          end
+        
+          local newPath=NowDirectory.getPath().."/"..nameFile.getName()
+          if File(newPath).exists() then
+            showSnackBar(R.string.file_exists)
+           else
+            local outStream=FileOutputStream(newPath)
+            LuaUtil.copyFile(inputStream, outStream)
+            outStream.close()
+            print(newPath)
+            --refresh()
+          end
+          --print(DocumentsContract.isDocumentUri(activity, uri))
+          --print(FileInfoUtils.getPath(activity,uri))
+          ]]
+        end
+      end
+      dropPermissions.release()
+    end
+    return true
+  end
 end
 
 function FilesBrowserManager.getOpenState()
   return openState
 end
+
+function FilesBrowserManager.setOpenState(newOpenState)
+  openState=newOpenState
+end
+
+function FilesBrowserManager.getAdapter()
+  return adapter
+end
+
 function FilesBrowserManager.getDirectoryFile()
   return directoryFile
 end

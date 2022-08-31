@@ -73,7 +73,7 @@
         <item name="navigationViewColorAccent">?colorAccent</item>
         <item name="windowBackgroundColor">@color/Jesse205_White</item>
         <item name="android:windowBackground">?windowBackgroundColor</item>
-        <item name="android:navigationBarColor">?colorPrimaryDark</item>
+        <item name="android:navigationBarColor">@color/Jesse205_White</item>
         <item name="android:windowLightStatusBar">?windowLightStatusBar</item>
         <item name="android:windowLightNavigationBar">?windowLightNavigationBar</item>
         <item name="windowLightStatusBar">true</item>
@@ -127,7 +127,7 @@
         <item name="navigationViewColorAccent">?colorAccent</item>
         <item name="windowBackgroundColor">@color/Jesse205_Black</item>
         <item name="android:windowBackground">?windowBackgroundColor</item>
-        <item name="android:navigationBarColor">?colorPrimaryDark</item>
+        <item name="android:navigationBarColor">@color/Jesse205_Black</item>
         <item name="android:windowLightStatusBar">?windowLightStatusBar</item>
         <item name="android:windowLightNavigationBar">?windowLightNavigationBar</item>
         <item name="windowLightStatusBar">false</item>
@@ -200,12 +200,10 @@
     <style name="Theme.Jesse205.DarkActionBar" parent="Theme.Jesse205">
         <item name="colorPrimaryDark">?colorPrimary</item>
         <item name="navigationViewColorAccent">?colorPrimary</item>
-        <item name="android:navigationBarColor">?colorPrimaryDark</item>
         <item name="actionBarTheme">@style/ThemeOverlay.Jesse205.Dark.ActionBar</item>
         <item name="tabStyle">@style/Widget.Jesse205.TabLayout.Colored</item>
         <item name="colorPrimary">?colorAccent</item>
         <item name="windowLightStatusBar">false</item>
-        <item name="windowLightNavigationBar">false</item>
     </style>
 
     <style name="Theme.Jesse205.Default" parent="Theme.Jesse205"/>

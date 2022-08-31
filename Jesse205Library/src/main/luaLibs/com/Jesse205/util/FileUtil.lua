@@ -3,11 +3,16 @@ import "java.io.FileInputStream"
 import "java.io.FileOutputStream"
 local FileUtil={}
 local function copyFile(fromFile,toFile,rewrite)
-  local toFileParent=toFile.getParentFile()
-  if not(toFileParent.exists()) then
-    toFileParent.mkdirs()
-   elseif toFile.exists() and rewrite then
+  local exists=toFile.exists()
+  if exists and not(rewrite) then
+    return
+  end
+  if exists then
     toFile.delete()
+  end
+  local toFileParent=toFile.getParentFile()
+  if not(toFileParent.isDirectory()) then
+    toFileParent.mkdirs()
   end
   local fosfrom = FileInputStream(fromFile)
   local fosto = FileOutputStream(toFile)
@@ -36,7 +41,6 @@ local function copyDir(fromFile,toFile,rewrite)
       copyDir(content,newFile,rewrite)
     end
   end
-
 end
 FileUtil.copyDir=copyDir
 

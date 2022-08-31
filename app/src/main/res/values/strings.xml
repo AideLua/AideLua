@@ -36,6 +36,7 @@
     <string name="uncommentedCode">Uncomment code</string>
     <string name="logCat">Log Cat</string>
     <string name="open">Open</string>
+    <string name="install">Install</string>
     
     <string name="exit_toast">Press again to exit the program.</string>
     <string name="res_references">Reference resources</string>
@@ -64,7 +65,7 @@
     <string name="file_name">File name</string>
     <string name="file_name_copy">Copy file name</string>
     <string name="file_close">Close file</string>
-    <string name="file_current">Current file</string>
+    <string name="file_current_path">Current file path</string>
     
     <string name="directory">Folder</string>
     <string name="directory_go_popup">Open Directory...</string>
@@ -102,19 +103,21 @@
     <string name="projects_path">Projects path</string>
     
     <string name="binpoject_loading">Packing...</string>
+    <string name="binpoject_loading_with_parent">Packing...\n%1$s</string>
     <string name="binpoject_creating_variables">Creating variables</string>
     <string name="binpoject_arrangement">Sorting out</string>
-    <string name="binpoject_unzip">Decompressing app.apk</string>
+    <string name="binpoject_unzip">Decompressing %1$s</string>
     <string name="binpoject_copying">Copying files</string>
     <string name="binpoject_compiling">Compiling file</string>
     <string name="binpoject_deleting">Deleting temporary folder</string>
-    <string name="binpoject_signing">Signing to app_aidelua_sign.apk</string>
-    <string name="binpoject_copying2">Rename app_aidelua.apk to %S</string>
-    <string name="binpoject_zip">Packing to app_aidelua.apk</string>
-    <string name="binpoject_state_succeed">Packaged successfully\nPath: %1$s</string>
-    <string name="binpoject_state_succeed_needSign">Packaged successfully, please sign the Apk file. </string>
+    <string name="binpoject_signing">Signing to %1$s</string>
+    <string name="binpoject_zip">Packing to %1$s</string>
+    <string name="binpoject_state_succeed">Packaged successfully</string>
+    <string name="binpoject_state_succeed_with_path">Packaged successfully\nPath: %1$s</string>
+    <string name="binpoject_state_succeed_with_path_needSign">Packaged successfully, please sign the Apk file. </string>
     <string name="binpoject_state_failed">Packaging failed</string>
     <string name="binpoject_error_notfind">Not found app.apk, please use Aide to pack first</string>
+    <string name="binpoject_error_parse">Installation package (%1$s) parsing failed</string>
     <string name="binpoject_error_signer">Failed to sign, please sign manually.\nPath: %1$s</string>
     <string name="binpoject_cannotFindTool">Unable to find the corresponding version of ReBuildTool, please check if Aide Lua is updated</string>
     

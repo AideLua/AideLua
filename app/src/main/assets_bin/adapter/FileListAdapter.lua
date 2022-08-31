@@ -10,7 +10,7 @@ local unknowString=activity.getString(R.string.unknown)
 local refresh=FilesBrowserManager.refresh
 local getIconAlphaByName=FilesBrowserManager.getIconAlphaByName
 
-local directoryFilesList,isResDir,nowFilePosition
+local directoryFilesList,isResDir
 
 local function onClick(view)
   local data=view.tag._data
@@ -25,7 +25,13 @@ local function onClick(view)
    case "openFolder" then
     refresh(file,data.upFile)
    case "openFile" then
-    openFileITPS(path)
+    --openFileITPS(path)
+    local success,inThirdPartySoftware=FilesTabManager.openFile(file,data.fileType,false)
+    if success and not(inThirdPartySoftware) then
+      if screenConfigDecoder.deviceByWidth ~= "pc" then
+        FilesBrowserManager.close()
+      end
+    end
     --local succeed,_,inThirdPartySoftware=openFile(file)
     --todo: 手机端打开成功自动关闭侧滑
   end
@@ -94,15 +100,18 @@ local function onLongClick(view)
   ]]
     pop.inflate(R.menu.menu_main_file)
     --local reNameMenu=menu.findItem(R.id.menu_rename)
-    --local deleteMenu=menu.findItem(R.id.menu_delete)
+    local copyMenu=menu.findItem(R.id.subMenu_copy)
     local openInNewWindowMenu=menu.findItem(Rid.menu_openInNewWindow)--新窗口打开
     local referencesMenu=menu.findItem(Rid.menu_references)--引用资源
     local renameMenu=menu.findItem(Rid.menu_rename)--重命名
+    local copyMenuMenuBuilder = copyMenu.getSubMenu()
 
     --reNameMenu.setVisible(not(isUpFile))
+    copyMenu.setVisible(ProjectManager.openState)
     openInNewWindowMenu.setVisible(isFile or data.action=="openProject")
     referencesMenu.setVisible(toboolean(data.isResFile))
     renameMenu.setVisible(ProjectManager.openState)
+
     if data.isResFile then--是资源文件
       parentFile=file.getParentFile()
       parentName=parentFile.getName()
@@ -125,8 +134,9 @@ local function onLongClick(view)
        elseif id==Rid.menu_references then--引用资源
         NowEditor.paste(("R.%s.%s"):format(parentName:match("(.-)%-")or parentName,fileName:match("(.+)%.")or fileName))
         drawer.closeDrawer(Gravity.LEFT)
+        --[[
        elseif id==R.id.menu_copy_import or id==R.id.menu_copy_classPath2 or id==R.id.menu_copy_classPath or id==R.id.menu_copy_className then
-        MyToast.copyText(item.title)
+        MyToast.copyText(item.title)]]
       end
     end
     return true
@@ -137,12 +147,12 @@ local function fileMoreMenuClick(view)
   local directoryFile=FilesBrowserManager.directoryFile
   local nowProjectPath=ProjectManager.nowPath
   local nowLibName,fileRelativePath
-  if ProjectManager.openProject then
+  if ProjectManager.openState then
     fileRelativePath=ProjectManager.shortPath(directoryFile.getPath(),true,nowProjectPath)
-    if fileRelativePath:find("/.-/") then
-      nowLibName=fileRelativePath:match("/(.-)/")
+    if fileRelativePath:find("/") then
+      nowLibName=fileRelativePath:match("^(.-)/")
      elseif #fileRelativePath~=0 then
-      nowLibName=fileRelativePath:match("/(.+)")
+      nowLibName=fileRelativePath
      else
       nowLibName="app"
     end
@@ -150,6 +160,8 @@ local function fileMoreMenuClick(view)
   local pop=PopupMenu(activity,view)
   local menu=pop.Menu
   pop.inflate(R.menu.menu_main_file_upfile)
+  local currentFileMenu=menu.findItem(R.id.menu_openDir_currentFile)
+  currentFileMenu.setEnabled(FilesTabManager.openState)
   pop.show()
   pop.onMenuItemClick=function(item)
     local id=item.getItemId()
@@ -160,20 +172,19 @@ local function fileMoreMenuClick(view)
      elseif id==Rid.menu_createDir then
       createDirsDialog(directoryFile)
      else
-      --if FilesBrowserManager.openProject then
-        if id==Rid.menu_openDir_assets then
-          openDirPath=("%s/%s/src/main/assets_bin"):format(nowProjectPath,nowLibName)
-         elseif id==Rid.menu_openDir_java then
-          openDirPath=("%s/%s/src/main/java"):format(nowProjectPath,nowLibName)
-         elseif id==Rid.menu_openDir_lua then
-          openDirPath=("%s/%s/src/main/luaLibs"):format(nowProjectPath,nowLibName)
-         elseif id==Rid.menu_openDir_res then
-          openDirPath=("%s/%s/src/main/res"):format(nowProjectPath,nowLibName)
-         elseif id==Rid.menu_openDir_projectRoot then
-          openDirPath=nowProjectPath
-        end
-
-      --end
+      if id==Rid.menu_openDir_currentFile then
+        FilesBrowserManager.refresh(FilesTabManager.file.getParentFile())
+       elseif id==Rid.menu_openDir_assets then
+        openDirPath=("%s/%s/src/main/assets_bin"):format(nowProjectPath,nowLibName)
+       elseif id==Rid.menu_openDir_java then
+        openDirPath=("%s/%s/src/main/java"):format(nowProjectPath,nowLibName)
+       elseif id==Rid.menu_openDir_lua then
+        openDirPath=("%s/%s/src/main/luaLibs"):format(nowProjectPath,nowLibName)
+       elseif id==Rid.menu_openDir_res then
+        openDirPath=("%s/%s/src/main/res"):format(nowProjectPath,nowLibName)
+       elseif id==Rid.menu_openDir_projectRoot then
+        openDirPath=nowProjectPath
+      end
     end
     if openDirPath then
       FilesBrowserManager.refresh(File(openDirPath))
@@ -199,7 +210,7 @@ return function(item)
       if directoryFilesList then
         return #directoryFilesList+1
        else
-        return 1
+        return 0
       end
     end,
     getItemViewType=function(position)
@@ -214,6 +225,7 @@ return function(item)
       view.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
       view.onClick=onClick
       view.onLongClick=onLongClick
+      view.onContextClick=onLongClick
       if viewType==3 then
         ids.more.onClick=fileMoreMenuClick
       end
@@ -271,7 +283,7 @@ return function(item)
           file=data.file
           filePath=data.filePath
         end
-        if ProjectManager.openState then
+        if projectOpenState then
           local colorFilter
           local fileName=file.getName()
           titleView.setText(fileName)
@@ -295,7 +307,7 @@ return function(item)
               titleView.setTextColor(theme.color.colorAccent)
               tag.icon.setColorFilter(theme.color.colorAccent)
               tag.highLightCard.setCardBackgroundColor(theme.color.rippleColorAccent)
-              nowFilePosition=position
+              FilesBrowserManager.nowFilePosition=position
              else
               titleView.setTextColor(theme.color.textColorPrimary)
               tag.icon.setColorFilter(colorFilter)

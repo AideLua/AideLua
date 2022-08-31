@@ -25,7 +25,12 @@ end
 
 local path=data.path
 if path then
-  textView.setText(Html.fromHtml(io.open(path,"r"):read("*a")))
+  local content=io.open(path,"r"):read("*a")
+  if tostring(data.text)=="true" then
+    textView.setText(content)
+   else
+    textView.setText(Html.fromHtml(content))
+  end
 end
 
 scrollView.onScrollChange=function(view,l,t,oldl,oldt)

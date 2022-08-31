@@ -58,10 +58,14 @@ function ProjectManager.runProject(path)
       end)
       if not(success) then--无法通过调用其他app打开时
         showSnackBar(R.string.runCode_noApp)
+        print(err)
       end
      else
       showSnackBar(R.string.runCode_noPackageName)
     end
+   else
+    local code=EditorsManager.actions.getText()
+    runLuaFile(nil,code)
   end
 end
 
@@ -79,7 +83,17 @@ function ProjectManager.openProject(path)
   nowFile=File(path)
   nowPath=path
   local config=RePackTool.getConfigByProjectPath(path)
+  local rePackTool=RePackTool.getRePackToolByConfig(config)
+  local mainProjectPath=RePackTool.getMainProjectDirByConfigAndRePackTool(path,config,rePackTool)
+  if config.projectMainPath then
+    config.projectMainPath=path.."/"..config.projectMainPath
+   else
+    config.projectMainPath=mainProjectPath.."/assets_bin"
+  end
   updateNowConfig(config)
+  setSharedData("openedProject",path)
+  EditorsManager.switchEditor("NoneView")
+
   FilesBrowserManager.refresh(nowFile)
   refreshMenusState()
 end
@@ -91,8 +105,15 @@ function ProjectManager.closeProject(refreshFilesBrowser)
   nowFile=nil
   nowPath=nil
   FilesTabManager.closeAllFiles(true)
-  --ProjectManager.openState=false
   updateNowConfig(nil)
+  setSharedData("openedProject",nil)
+  EditorsManager.switchEditor("LuaEditor")
+  local editor=EditorsManager.editor
+  local defaultText=EditorsManager.editorConfig.defaultText
+  editor.setTextSize(math.dp2int(14))
+  editor.scrollTo(0,0)
+  editor.setText(defaultText)
+  editor.setSelection(#defaultText)
   if refreshFilesBrowser~=false then
     FilesBrowserManager.refresh()
   end
@@ -115,7 +136,7 @@ function ProjectManager.shortPath(path,max,basePath)
     end
   end
   if String(path).startsWith(basePath) then
-    newPath=string.sub(path,string.len(basePath)+1)
+    newPath=string.sub(path,string.len(basePath)+2)
    else
     newPath=path
   end

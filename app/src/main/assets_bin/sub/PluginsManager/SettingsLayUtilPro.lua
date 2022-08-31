@@ -1,5 +1,10 @@
-SettingsLayUtil.ITEM_AVATAR_SWITCH=9
-table.insert(SettingsLayUtil.itemsLay,{--设置项(头像,标题,简介)
+local itemsLay=SettingsLayUtil.itemsLay
+local oldLastIndex=SettingsLayUtil.itemsNumber
+SettingsLayUtil.ITEM_AVATAR_SWITCH=oldLastIndex+1
+SettingsLayUtil.itemsNumber=oldLastIndex+1
+
+
+table.insert(itemsLay,{--设置项(头像,标题,简介)
   LinearLayoutCompat;
   layout_width="fill";
   gravity="center";
@@ -49,7 +54,6 @@ table.insert(SettingsLayUtil.itemsLay,{--设置项(头像,标题,简介)
     focusable=false;
     clickable=false;
     layout_marginRight="16dp";
-    id="status";
+    id="switchView";
   };
-}
-)
+})

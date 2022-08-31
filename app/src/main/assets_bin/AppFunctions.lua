@@ -31,12 +31,13 @@ end
 
 --自动识别显示toast的方式进行显示
 function showSnackBar(text)
-  if drawer.isDrawerOpen(Gravity.LEFT) then
+  if FilesBrowserManager.openState and screenConfigDecoder.deviceByWidth ~= "pc" then
     return MyToast(text,mainLay)
    else
     return MyToast(text,editorGroup)
   end
 end
+
 
 function isBinaryFile(filePath)
   local ioFile = io.open(filePath, "r")
@@ -63,16 +64,16 @@ function safeCloneTable(oldTable,newTable)
   end
 end
 
-
 --刷新Menu状态
 function refreshMenusState()
   if LoadedMenu then
     local fileOpenState,projectOpenState=FilesTabManager.openState,ProjectManager.openState
+    local isEditor=EditorsManager.checkEditorSupport("getText")
     local menus={
       {StateByFileMenus,fileOpenState},
       {StateByProjectMenus,projectOpenState},
-      {StateByFileAndEditorMenus,fileOpenState and IsEdtor},
-      {StateByEditorMenus,IsEdtor},
+      {StateByFileAndEditorMenus,fileOpenState and isEditor},
+      {StateByEditorMenus,isEditor},
     }
     for index,content in pairs(menus)do
       for index,menu in ipairs(content[1]) do
@@ -84,17 +85,33 @@ function refreshMenusState()
   end
 end
 
+function refreshMagnifier()
+  editor_magnify = getSharedData("editor_magnify")
 
+  if not(magnifier) and editor_magnify then
+    pcall(function()--放大镜
+      import "android.widget.Magnifier"
+      magnifier=Magnifier(editorGroup)
+      magnifierUpdateTi=Ticker()--放大镜的定时器，定时刷新放大镜
+      magnifierUpdateTi.setPeriod(200)
+      magnifierUpdateTi.onTick=function()
+        magnifier.update()
+      end
+      magnifierUpdateTi.setEnabled(false)--先禁用放大镜
+    end)
+  end
+end
+
+local MyMimeMap={
+  lua="text/plain",
+}
 --用外部应用打开文件
 function openFileITPS(path)
   import "android.webkit.MimeTypeMap"
-  --import "android.content.Intent"
-  --import "android.net.Uri"
-  --import "java.io.File"
   local file=File(path)
   local name=file.getName()
-  local extensionName=ProjectUtil.getFileTypeByName(name)
-  local mime=MimeTypeMap.getSingleton().getMimeTypeFromExtension(extensionName)
+  local extensionName=getFileTypeByName(name)
+  local mime=MyMimeMap[extensionName] or MimeTypeMap.getSingleton().getMimeTypeFromExtension(extensionName) or "*/"
   if mime then
     local intent=Intent()
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -102,8 +119,12 @@ function openFileITPS(path)
     intent.setType(mime)
     intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     --intent.putExtra(Intent.EXTRA_STREAM, activity.getUriForFile(file))
-    intent.setDataAndType(activity.getUriForFile(file),mime)
-    activity.startActivity(Intent.createChooser(intent,name))
+    intent.setData(activity.getUriForFile(file))
+    if mime=="*/" then
+      activity.startActivity(Intent.createChooser(intent,name))
+     else
+      activity.startActivity(intent)
+    end
   end
 end
 
@@ -177,74 +198,6 @@ function getFileTypeByName(name)
 end
 
 
-
-function screenToViewX(_textField,x)
-  return x-_textField.getPaddingLeft()+_textField.getScrollX()
-end
-function screenToViewY(_textField,y)
-  return y-_textField.getPaddingTop()+_textField.getScrollY()
-end
-
-function isNearChar(bounds,x,y)
-  local TOUCH_SLOP=12
-  return (y >= (bounds.top - TOUCH_SLOP)
-  and y < (bounds.bottom + TOUCH_SLOP*2)
-  and x >= (bounds.left - TOUCH_SLOP)
-  and x < (bounds.right + TOUCH_SLOP))
-end
-
-function isNearChar2(relativeCaretX,relativeCaretY,x,y)
-  local TOUCH_SLOP=EditorsManager.editor.getTextSize()+10
-  --print(TOUCH_SLOP)
-  return (y >= (relativeCaretY - TOUCH_SLOP)
-  and y < (relativeCaretY + TOUCH_SLOP+100)
-  and x >= (relativeCaretX - TOUCH_SLOP-40)
-  and x < (relativeCaretX + TOUCH_SLOP+40))
-end
-
-local _clipboardActionMode=nil
-function onEditorSelectionChangedListener(view,status,start,end_)
-  if not(_clipboardActionMode) and status and not(Searching) then
-    local actionMode=luajava.new(ActionMode.Callback,
-    {
-      onCreateActionMode=function(mode,menu)
-        _clipboardActionMode=mode
-        mode.setTitle(android.R.string.selectTextMode)
-
-        local inflater=mode.getMenuInflater()
-        inflater.inflate(R.menu.menu_editor,menu)
-        return true
-      end,
-      onActionItemClicked=function(mode,item)
-        local id=item.getItemId()
-        if id==R.id.menu_selectAll then
-          view.selectAll()
-         elseif id==R.id.menu_cut then
-          view.cut()
-         elseif id==R.id.menu_copy then
-          view.copy()
-         elseif id==R.id.menu_paste then
-          view.paste()
-         elseif id==R.id.menu_code_commented then
-          EditorsManager.actions.commented(view)
-         elseif id==R.id.menu_code_viewApi then
-          local selectedText=view.getSelectedText()
-          newSubActivity("JavaApi",{selectedText})
-        end
-        return false;
-      end,
-      onDestroyActionMode=function(mode)
-        view.selectText(false)
-        --print("取消选择失败")
-        _clipboardActionMode=nil
-      end,
-    })
-    activity.startSupportActionMode(actionMode)
-   elseif _clipboardActionMode and not(status) then
-    _clipboardActionMode.finish()
-    _clipboardActionMode=nil
-  end
-end
 
 
 

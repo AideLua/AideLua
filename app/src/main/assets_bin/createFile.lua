@@ -7,7 +7,7 @@ local function createFileInfoDialog(config,nowDir)--文件名填写对话框
   local builder
   builder=EditDialogBuilder(activity)
   :setTitle(formatResStr(R.string.project_create_withName,{config.name}))
-  :setHint(R.string.directory_name)
+  :setHint(R.string.file_name)
   :setAllowNull(false)
   :setPositiveButton(R.string.create,function(dialog,text)
     local editLay=builder.ids.editLay
@@ -36,10 +36,10 @@ local function createFileInfoDialog(config,nowDir)--文件名填写对话框
       file.createNewFile()
       local fileContent=config.defaultContent:gsub("{{ShoredModuleName}}",shoredModuleName):gsub("{{ModuleName}}",moduleName)
       io.open(filePath,"w"):write(fileContent):close()
-      showSnackBar(R.string.create_success)
       editLay.setErrorEnabled(false)
-      refresh(nowDir)
-      openFile(file)
+      showSnackBar(R.string.create_success)
+      FilesBrowserManager.refresh(nowDir)
+      --openFile(file)
     end,
     function(err)
       showErrorDialog(R.string.create_failed,err)
@@ -55,7 +55,7 @@ end
 
 local function createFileDialog(nowDir)--模版选择对话框
   local choice=activity.getSharedData("LastCreateFileType") or 0
-  local nowDir=nowDir or NowDirectory
+  local nowDir=nowDir or FilesBrowserManager.directoryFile
   local names={}
   for index,content in ipairs(FileTemplates) do
     table.insert(names,content.name)
