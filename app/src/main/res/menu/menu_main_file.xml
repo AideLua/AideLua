@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menu_references"
-        android:title="@string/res_references"/>
-    <item
         android:id="@+id/subMenu_copy"
         android:title="@string/copy_popup">
         <menu>
@@ -18,6 +15,9 @@
     <item
         android:id="@+id/menu_openInNewWindow"
         android:title="@string/window_openInNewWindow"/>
+    <item
+        android:id="@+id/menu_references"
+        android:title="@string/res_references"/>
     <!--<item
     android:id="@+id/menu_create"
     android:title="@string/create"/>

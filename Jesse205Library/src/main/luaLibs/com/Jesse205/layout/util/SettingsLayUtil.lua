@@ -13,15 +13,6 @@ local colorAccent=theme.color.colorAccent
 local textColorPrimary=theme.color.textColorPrimary
 local textColorSecondary=theme.color.textColorSecondary
 
-local newPageIconLay={
-  AppCompatImageView;
-  id="rightIcon";
-  layout_margin="16dp";
-  --layout_marginLeft=0;
-  layout_width="24dp";
-  layout_height="24dp";
-  colorFilter=textColorSecondary;
-}
 
 local leftIconLay={
   AppCompatImageView,
@@ -33,7 +24,7 @@ local leftIconLay={
   colorFilter=colorAccent,
 }
 
-local leftCoverIcon={
+local leftCoverLay={
   MaterialCardView;
   layout_height="40dp";
   layout_width="40dp";
@@ -53,15 +44,60 @@ local leftCoverIcon={
   };
 }
 
+local oneLineLay={
+  AppCompatTextView;
+  id="title";
+  textSize="16sp";
+  textColor=textColorPrimary;
+  layout_weight=1;
+  layout_marginTop="16dp";
+  layout_marginBottom="16dp";
+}
+
+local twoLineLay={
+  LinearLayoutCompat;
+  orientation="vertical";
+  gravity="center";
+  layout_weight=1;
+  layout_marginTop="16dp";
+  layout_marginBottom="16dp";
+  {
+    AppCompatTextView;
+    id="title";
+    textSize="16sp";
+    layout_width="fill";
+    textColor=textColorPrimary;
+  };
+  {
+    AppCompatTextView;
+    textSize="14sp";
+    id="summary";
+    layout_width="fill";
+  };
+}
+
 local rightSwitchLay={
   SwitchCompat;
   id="switchView";
   layout_marginRight="16dp";
 }
-SettingsLayUtil.newPageIconLay=newPageIconLay
+
+local rightNewPageIconLay={
+  AppCompatImageView;
+  id="rightIcon";
+  layout_margin="16dp";
+  --layout_marginLeft=0;
+  layout_width="24dp";
+  layout_height="24dp";
+  colorFilter=textColorSecondary;
+}
+
 SettingsLayUtil.leftIconLay=leftIconLay
-SettingsLayUtil.leftCoverIcon=leftCoverIcon
+SettingsLayUtil.leftCoverLay=leftCoverLay
+SettingsLayUtil.oneLineLay=oneLineLay
+SettingsLayUtil.twoLineLay=twoLineLay
 SettingsLayUtil.rightSwitchLay=rightSwitchLay
+SettingsLayUtil.rightNewPageIconLay=rightNewPageIconLay
 
 
 local itemsLay={
@@ -73,7 +109,6 @@ local itemsLay={
       AppCompatTextView;
       id="title";
       textSize="14sp";
-      --typeface=Typeface.defaultFromStyle(Typeface.BOLD);
       textColor=colorAccent;
       layout_margin="16dp";
       layout_marginBottom=0;
@@ -86,28 +121,8 @@ local itemsLay={
     gravity="center";
     focusable=true;
     leftIconLay;
-    {
-      LinearLayoutCompat;
-      orientation="vertical";
-      gravity="center";
-      layout_weight=1;
-      layout_marginTop="16dp";
-      layout_marginBottom="16dp";
-      {
-        AppCompatTextView;
-        id="title";
-        textSize="16sp";
-        layout_width="fill";
-        textColor=textColorPrimary;
-      };
-      {
-        AppCompatTextView;
-        textSize="14sp";
-        id="summary";
-        layout_width="fill";
-      };
-    };
-    newPageIconLay;
+    twoLineLay;
+    rightNewPageIconLay;
   };
 
   {--设置项(图片,标题)
@@ -116,16 +131,8 @@ local itemsLay={
     gravity="center";
     focusable=true;
     leftIconLay;
-    {
-      AppCompatTextView;
-      id="title";
-      textSize="16sp";
-      textColor=textColorPrimary;
-      layout_weight=1;
-      layout_marginTop="16dp";
-      layout_marginBottom="16dp";
-    };
-    newPageIconLay;
+    oneLineLay;
+    rightNewPageIconLay;
   };
 
 
@@ -135,27 +142,7 @@ local itemsLay={
     layout_width="fill";
     focusable=true;
     leftIconLay;
-    {
-      LinearLayoutCompat;
-      orientation="vertical";
-      gravity="center";
-      layout_weight=1;
-      layout_marginTop="16dp";
-      layout_marginBottom="16dp";
-      {
-        AppCompatTextView;
-        textSize="16sp";
-        textColor=textColorPrimary;
-        id="title";
-        layout_width="fill";
-      };
-      {
-        AppCompatTextView;
-        layout_width="fill";
-        textSize="14sp";
-        id="summary";
-      };
-    };
+    twoLineLay;
     rightSwitchLay;
   };
 
@@ -166,15 +153,7 @@ local itemsLay={
     layout_width="fill";
     focusable=true;
     leftIconLay;
-    {
-      AppCompatTextView;
-      id="title";
-      textSize="16sp";
-      layout_weight=1;
-      layout_marginTop="16dp";
-      layout_marginBottom="16dp";
-      textColor=textColorPrimary;
-    };
+    oneLineLay;
     rightSwitchLay;
   };
 
@@ -183,30 +162,9 @@ local itemsLay={
     layout_width="fill";
     gravity="center";
     focusable=true;
-    leftCoverIcon;
-    {
-      LinearLayoutCompat;
-      orientation="vertical";
-      gravity="center";
-      layout_marginTop="16dp";
-      layout_marginBottom="16dp";
-      layout_weight=1;
-      --layout_marginLeft=0;
-      {
-        AppCompatTextView;
-        id="title";
-        textSize="16sp";
-        layout_width="fill";
-        textColor=textColorPrimary;
-      };
-      {
-        AppCompatTextView;
-        id="summary";
-        textSize="14sp";
-        layout_width="fill";
-      };
-    };
-    newPageIconLay;
+    leftCoverLay;
+    twoLineLay;
+    rightNewPageIconLay;
   };
 
   {--设置项(简介)
@@ -249,7 +207,7 @@ local function onItemViewClick(view)
   viewConfig.allowedChange=false
 
   local switchView=ids.switchView
-  if switchView then
+  if switchView and viewConfig.switchEnabled then
     local checked=not(switchView.checked)
     switchView.setChecked(checked)
     if data.checked~=nil then
@@ -306,6 +264,7 @@ local adapterEvents={
     local holder=LuaCustRecyclerHolder(view)
     view.setTag(ids)
     local viewConfig={enabled=true,
+      switchEnabled=true,
       onItemClick=onItemClick,
       onItemLongClick=onItemLongClick,
       itemView=view,
@@ -339,6 +298,7 @@ local adapterEvents={
     local icon=data.icon
     local summary=data.summary
     local enabled=data.enabled
+    local switchEnabled=data.switchEnabled
     local key=data.key
     viewConfig.key=key
     viewConfig.data=data
@@ -370,12 +330,10 @@ local adapterEvents={
 
     --设置启用状态透明
     local enabledNotFalse=not(enabled==false)
+    local switchEnabledNotFalse=not(switchEnabled==false)
     if viewConfig.enabled~=enabledNotFalse then
       viewConfig.enabled=enabledNotFalse
       layoutView.setEnabled(enabledNotFalse)
-      if switchView then
-        switchView.setEnabled(enabledNotFalse)
-      end
       local viewsList={titleView,summaryView,iconView,rightIconView}
       if enabledNotFalse then
         setAlpha(viewsList,1)
@@ -383,6 +341,13 @@ local adapterEvents={
         setAlpha(viewsList,0.5)
       end
     end
+    if viewConfig.switchEnabled~=switchEnabledNotFalse then
+      viewConfig.switchEnabled=switchEnabledNotFalse
+      if switchView then
+        switchView.setEnabled(switchEnabledNotFalse)
+      end
+    end
+
 
 
     if switchView then

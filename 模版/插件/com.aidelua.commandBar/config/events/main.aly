@@ -1,5 +1,6 @@
 {
   onCreate=function(savedInstanceState)
+    import "androidx.core.graphics.ColorUtils"
     local buttons={
       {"格式化","formatMenu"},
       {"导入分析","checkImportMenu"},
@@ -7,11 +8,13 @@
       {"二次打包","binMenu"},
     }
     local layouts={}
-    function newCommandButton(text,menu)
+    function newCommandButton(text,menu,subMenu)
       return loadlayout2({
         AppCompatTextView;
-        onClick=function()
-          onOptionsItemSelected(_ENV[menu])--点击菜单
+        onClick=function(view)
+          if _ENV[menu] then
+            onOptionsItemSelected(_ENV[menu])--点击菜单
+          end
         end;
         text=text;
         gravity="center";
@@ -25,7 +28,7 @@
         --padding="16dp";
         focusable=true;
         textColor=theme.color.ActionBar.colorControlNormal;
-        background=ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary)
+        background=ThemeUtil.getRippleDrawable(ColorUtils.setAlphaComponent(theme.color.ActionBar.colorControlNormal,0x22));
       })
     end
     appBarLinearLayout.addView(loadlayout2( {
@@ -45,13 +48,12 @@
     },layouts),0)
     local commandBar=layouts.commandBar
     for index,content in ipairs(buttons) do
-      commandBar.addView(newCommandButton(content[1],content[2]))
+      commandBar.addView(newCommandButton(content[1],content[2],content[3]))
     end
   end,
   onCreateOptionsMenu=function(menu)
     formatMenu=menu.findItem(R.id.menu_code_format)
     checkImportMenu=menu.findItem(R.id.menu_code_checkImport)
     javaApiMenu=menu.findItem(R.id.menu_tools_javaApiViewer)
-
   end,
 }

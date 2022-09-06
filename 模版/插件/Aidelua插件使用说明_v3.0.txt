@@ -14,11 +14,13 @@ AideLua暂时不支持一键安装插件，所以我们提供临时解决方法
 
 代码调用说明：
   PluginsUtil：
-    PluginsUtil.getPluginDataDir(packageName)：获取插件数据目录
-    PluginsUtil.getPluginDir(packageName)：获取插件目录，如果文件夹名与真正的packageName不同，需传入文件夹名
+    PluginsUtil.getPluginDataPath(packageName)：获取插件数据目录
+    PluginsUtil.getPluginPath(packageName)：获取插件目录，如果文件夹名与真正的packageName不同，需传入文件夹名
   activityName:
     main：主页面
     settings：设置页面
+  getPluginDataPath：获取插件数据目录
+  getPluginPath：获取插件目录，如果文件夹名与真正的packageName不同，需传入文件夹名
 
 
 文件说明：
@@ -33,7 +35,7 @@ AideLua暂时不支持一键安装插件，所以我们提供临时解决方法
       mode (string)：模式，默认"plugin"
       thirdplugins (table)：需要安装的第三方库
       supported (table)：支持的编辑器
-      events (table): 全局事件
+      events (table)：全局事件（与独立的事件相比，第一个参数为页面名称，但是可能为nil）
       
   config/events/：存放各个页面的事件的文件夹
                 main.aly：主页面事件存放文件

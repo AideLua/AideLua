@@ -5,12 +5,14 @@ local adapterData=FilesBrowserManager.adapterData
 local fileColors=FilesBrowserManager.fileColors
 local fileIcons=FilesBrowserManager.fileIcons
 local folderIcons=FilesBrowserManager.folderIcons
+local relLibPathsMatch=FilesBrowserManager.relLibPathsMatch
+
 local unknowString=activity.getString(R.string.unknown)
 
 local refresh=FilesBrowserManager.refresh
 local getIconAlphaByName=FilesBrowserManager.getIconAlphaByName
 
-local directoryFilesList,isResDir
+local directoryFilesList
 
 local function onClick(view)
   local data=view.tag._data
@@ -25,15 +27,12 @@ local function onClick(view)
    case "openFolder" then
     refresh(file,data.upFile)
    case "openFile" then
-    --openFileITPS(path)
     local success,inThirdPartySoftware=FilesTabManager.openFile(file,data.fileType,false)
     if success and not(inThirdPartySoftware) then
       if screenConfigDecoder.deviceByWidth ~= "pc" then
         FilesBrowserManager.close()
       end
     end
-    --local succeed,_,inThirdPartySoftware=openFile(file)
-    --todo: 手机端打开成功自动关闭侧滑
   end
 end
 
@@ -47,32 +46,38 @@ local function onLongClick(view)
     local fileName=data.fileName
     local Rid=R.id
 
-    local parentFile,parentName
+    local parentFile=file.getParentFile()
+    local parentName=parentFile.getName()
     local action=data.action
-    local isFile,fileType,fileRelativePath
+    local isFile,fileType,fileRelativePath,isResDir
 
-    if ProjectManager.openState then
+    local inLibDirPath=data.inLibDirPath
+
+    local openState=ProjectManager.openState--工程打开状态=
+
+    if openState then
       isFile=file.isFile()
       fileType=data.fileType
       fileRelativePath=ProjectManager.shortPath(filePath,true)
+      isResDir=parentName~="values" and not(parentName:find("values%-")) and ProjectManager.shortPath(filePath,true):find(".-/src/.-/res/.-/") or false
+     else
+      isResDir=false
     end
 
     local pop=PopupMenu(activity,view)
     local menu=pop.Menu
-    --[[
-    if OpenedProject and fileType and LibsRelativePathType[fileType] then--已经打开了项目并且文件类型受支持
 
-      local inLibDir,inLibDirIndex=data.inLibDir,data.inLibDirIndex
-      if not(inLibDir) then
-        for index,content in ipairs(LibsRelativePathMatch) do
-          inLibDir=fileRelativePath:match(content)
-          inLibDirIndex=index
-          if inLibDir then
-            data.inLibDir,data.inLibDirIndex=inLibDir,inLibDirIndex
+    if openState and ((fileType and relLibPathsMatch.types[fileType]) or not(isFile)) then--已经打开了项目并且文件类型受支持
+      if not(inLibDirPath) then
+        for index,content in ipairs(relLibPathsMatch.paths) do
+          inLibDirPath=fileRelativePath:match(content)
+          if inLibDirPath then
+            data.inLibDirPath=inLibDirPath
             break
           end
         end
       end
+      --[[
       if inLibDir then--是库目录
         pop.inflate(R.menu.menu_javaapi_item_package)
         local callFilePath=inLibDir:gsub("/",".")
@@ -95,28 +100,23 @@ local function onLongClick(view)
         if fileType=="java" then
           copyClassPath2Menu.title="L"..inLibDir..";"
         end
-      end
+      end]]
     end
-  ]]
+
     pop.inflate(R.menu.menu_main_file)
-    --local reNameMenu=menu.findItem(R.id.menu_rename)
     local copyMenu=menu.findItem(R.id.subMenu_copy)
     local openInNewWindowMenu=menu.findItem(Rid.menu_openInNewWindow)--新窗口打开
     local referencesMenu=menu.findItem(Rid.menu_references)--引用资源
     local renameMenu=menu.findItem(Rid.menu_rename)--重命名
-    local copyMenuMenuBuilder = copyMenu.getSubMenu()
+    local copyMenuBuilder = copyMenu.getSubMenu()
 
-    --reNameMenu.setVisible(not(isUpFile))
     copyMenu.setVisible(ProjectManager.openState)
     openInNewWindowMenu.setVisible(isFile or data.action=="openProject")
-    referencesMenu.setVisible(toboolean(data.isResFile))
+    referencesMenu.setVisible(toboolean(isResDir))
     renameMenu.setVisible(ProjectManager.openState)
-
-    if data.isResFile then--是资源文件
-      parentFile=file.getParentFile()
-      parentName=parentFile.getName()
+    if openState then
+      CopyMenuUtil.addSubMenus(copyMenuBuilder,getFilePathCopyMenus(inLibDirPath,filePath,fileName,isFile,fileType))
     end
-
     pop.show()
     pop.onMenuItemClick=function(item)
       local id=item.getItemId()
@@ -125,18 +125,14 @@ local function onLongClick(view)
        elseif id==Rid.menu_rename then--重命名
         renameDialog(file)
        elseif id==Rid.menu_openInNewWindow then--新窗口打开
-        --[[
-        if OpenedProject then--已打开项目
-          activity.newActivity("main",{NowProjectDirectory,file.getPath()},true)
-         else--未打开项目
-          activity.newActivity("main",{file.getPath()},true)
-        end]]
+        if openState then
+          activity.newActivity("main",{ProjectManager.nowPath,filePath},true,int(System.currentTimeMillis()))
+         else
+          activity.newActivity("main",{filePath},true,int(System.currentTimeMillis()))
+        end
        elseif id==Rid.menu_references then--引用资源
-        NowEditor.paste(("R.%s.%s"):format(parentName:match("(.-)%-")or parentName,fileName:match("(.+)%.")or fileName))
-        drawer.closeDrawer(Gravity.LEFT)
-        --[[
-       elseif id==R.id.menu_copy_import or id==R.id.menu_copy_classPath2 or id==R.id.menu_copy_classPath or id==R.id.menu_copy_className then
-        MyToast.copyText(item.title)]]
+        local javaR=("R.%s.%s"):format(parentName:match("(.-)%-")or parentName,fileName:match("(.+)%.")or fileName)
+        EditorsManager.actions.paste(javaR)
       end
     end
     return true
@@ -162,6 +158,7 @@ local function fileMoreMenuClick(view)
   pop.inflate(R.menu.menu_main_file_upfile)
   local currentFileMenu=menu.findItem(R.id.menu_openDir_currentFile)
   currentFileMenu.setEnabled(FilesTabManager.openState)
+
   pop.show()
   pop.onMenuItemClick=function(item)
     local id=item.getItemId()
@@ -173,7 +170,7 @@ local function fileMoreMenuClick(view)
       createDirsDialog(directoryFile)
      else
       if id==Rid.menu_openDir_currentFile then
-        FilesBrowserManager.refresh(FilesTabManager.file.getParentFile())
+        openDirPath=FilesTabManager.file.getParent()
        elseif id==Rid.menu_openDir_assets then
         openDirPath=("%s/%s/src/main/assets_bin"):format(nowProjectPath,nowLibName)
        elseif id==Rid.menu_openDir_java then
@@ -207,6 +204,7 @@ return function(item)
   return LuaCustRecyclerAdapter(AdapterCreator({
     getItemCount=function()
       directoryFilesList=FilesBrowserManager.directoryFilesList
+      --print(directoryFilesList)
       if directoryFilesList then
         return #directoryFilesList+1
        else
@@ -283,20 +281,23 @@ return function(item)
           file=data.file
           filePath=data.filePath
         end
+
         if projectOpenState then
-          local colorFilter
+          local highLightCard=tag.highLightCard
           local fileName=file.getName()
           titleView.setText(fileName)
           if initData then
             data.title=fileName
             data.fileName=fileName
           end
-          tag.icon.setAlpha(getIconAlphaByName(fileName))
+          iconView.setAlpha(getIconAlphaByName(fileName))
 
           if file.isFile() then
+            local colorFilter
             filesPositions[filePath]=position
             local fileType=getFileTypeByName(fileName)
             iconView.setImageResource(fileIcons[fileType])
+
             if fileType then
               colorFilter=fileColors[string.upper(fileType)]
              else
@@ -305,25 +306,24 @@ return function(item)
 
             if FilesTabManager.openState and FilesTabManager.file.getPath()==filePath then
               titleView.setTextColor(theme.color.colorAccent)
-              tag.icon.setColorFilter(theme.color.colorAccent)
-              tag.highLightCard.setCardBackgroundColor(theme.color.rippleColorAccent)
+              iconView.setColorFilter(theme.color.colorAccent)
+              highLightCard.setCardBackgroundColor(theme.color.rippleColorAccent)
               FilesBrowserManager.nowFilePosition=position
              else
               titleView.setTextColor(theme.color.textColorPrimary)
-              tag.icon.setColorFilter(colorFilter)
-              tag.highLightCard.setCardBackgroundColor(0)
+              iconView.setColorFilter(colorFilter)
+              highLightCard.setCardBackgroundColor(0)
             end
-            data.isResFile=isResDir
             data.fileType=fileType
             data.action="openFile"
            else
-            data.isResFile=false
             titleView.setTextColor(theme.color.textColorPrimary)
             iconView.setImageResource(folderIcons[fileName])
             iconView.setColorFilter(fileColors.folder)
-            tag.highLightCard.setCardBackgroundColor(0)
+            highLightCard.setCardBackgroundColor(0)
             data.action="openFolder"
           end
+
          else
           local config,iconUrl
           if initData then
@@ -340,7 +340,7 @@ return function(item)
             iconUrl=data.iconUrl
             config=data.config
           end
-
+          --print(dump(data))
           titleView.setText(config.appName or unknowString)
           tag.message.setText(config.packageName or unknowString)
 

@@ -536,18 +536,14 @@ local function setattribute(root,view,params,k,v,ids,previewFrame)
      elseif k=="url" then
       view.loadUrl(v)
      elseif k=="tooltip" then
-      if TooltipCompat then
-        TooltipCompat.setTooltipText(view,v)
-       elseif SDK_INT>=26 then
-        view.setTooltipText(v)
-      end
+      TooltipCompat.setTooltipText(view,v)
      elseif k=="src" then
       if v:find("^%?") then
         view.setImageResource(getIdentifier(v:sub(2,-1)))
        else
         if Glide then
           if not(v:find("^/")) and not(v:find("^.+://")) then
-            v=luadir..v
+            v=luadir.."/"..v
           end
           Glide.with(context).load(v).into(view)
          elseif v:find("^https?://") then

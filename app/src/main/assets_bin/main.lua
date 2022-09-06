@@ -54,6 +54,7 @@ import "DialogFunctions"
 import "createFile"
 import "LuaEditorHelper"
 
+import "CopyMenuUtil"
 import "buildtools.RePackTool"
 
 import "FilesBrowserManager"
@@ -77,6 +78,7 @@ import "adapter.FilePathAdapter"
 PluginsUtil.setActivityName("main")
 PluginsUtil.loadPlugins()
 plugins = PluginsUtil.getPlugins()
+--print(dump(plugins))
 
 -- 申请存储权限
 PermissionUtil.smartRequestPermission({"android.permission.WRITE_EXTERNAL_STORAGE",
@@ -92,12 +94,17 @@ oldEditorSymbolBar = getSharedData("editor_symbolBar")
 oldEditorPreviewButton = getSharedData("editor_previewButton")
 
 lastBackTime = 0 -- 上次点击返回键时间
+lastPencilkeyTime = 0--上次双击笔时间
 
 SDK_INT = Build.VERSION.SDK_INT
 PackInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 64)
 lastUpdateTime = PackInfo.lastUpdateTime
 
 activityStopped = false
+nowDevice="phone"
+mainWidth=0
+
+receivedData={...}
 
 activity.setTitle(R.string.app_name)
 activity.setContentView(loadlayout2("layouts.layout"))
@@ -108,28 +115,38 @@ actionBar.setDisplayHomeAsUpEnabled(true)
 LuaReservedCharacters = {"switch", "if", "then", "and", "break", "do", "else", "elseif", "end", "false", "for",
   "function", "in", "local", "nil", "not", "or", "repeat", "return", "true", "until", "while"} -- lua关键字
 
+deviceChangeLTFixList={largeDrawerLay,largeMainLay,mainEditorLay,layoutTransition}
 
 function onCreate(savedInstanceState)
   -- todo:根据savedInstanceState和getIntent判断打开项目
   --FilesBrowserManager.open()
-  PluginsUtil.callElevents("onCreate", savedInstanceState)
-  toggle.syncState()
-
-end
-
-function main(data)
+  local data,data2,data3=receivedData[1],receivedData[2],receivedData[3]
   if data=="projectPicker" then
     data=nil
-   elseif not(data) then
-    data=getSharedData("openedProject")
+   else
+    if not(data) then
+      data=getSharedData("openedProject")
+    end
+    if data and not(data2) then
+      data2=getSharedData("openedFilePath_"..data)
+    end
   end
-  --print(data)
+
+  if savedInstanceState then
+    local prjPath=savedInstanceState.getString("prjpath")
+    local dirPath=savedInstanceState.getString("dirpath")
+    data=prjPath
+    data3=dirPath
+  end
   if data then
-    ProjectManager.openProject(data)
+    ProjectManager.openProject(data,data2,data3)
    else
     ProjectManager.closeProject(false)
     FilesBrowserManager.open()
   end
+
+  PluginsUtil.callElevents("onCreate", savedInstanceState)
+  toggle.syncState()
 end
 
 function onCreateOptionsMenu(menu)
@@ -169,6 +186,16 @@ function onCreateOptionsMenu(menu)
     local pluginsMenuBuilder = pluginsMenu.getSubMenu()
     for index, content in ipairs(pluginsActivities) do
       pluginsMenuBuilder.add(pluginsActivitiesName[index]).onMenuItemClick = function()
+        FilesTabManager.saveFile()
+        local prjPath,filePath
+        if ProjectManager.openState then
+          prjPath=ProjectManager.nowPath.."/"
+        end
+        if FilesTabManager.openState then
+          filePath=FilesTabManager.file.getPath()
+        end
+        activity.newActivity(pluginsActivities[index],{prjPath,filePath},true)
+
       end
     end
   end
@@ -231,13 +258,15 @@ function onOptionsItemSelected(item)
     editorActions.check(true)
    elseif id == Rid.menu_tools_layoutHelper then -- 布局助手
     print("错误：暂不支持")
+    
    elseif id == Rid.menu_more_openNewWindow then -- 打开新窗口
-    activity.newActivity("main",{"projectPicker"},true)
+    activity.newActivity("main",{"projectPicker"},true,int(System.currentTimeMillis()))
   end
   PluginsUtil.callElevents("onOptionsItemSelected", item)
 end
 
 function onKeyShortcut(keyCode, event)
+  --print(keyCode)
   local filteredMetaState = event.getMetaState() & ~KeyEvent.META_CTRL_MASK
   if (KeyEvent.metaStateHasNoModifiers(filteredMetaState)) then
     local editorActions = EditorsManager.action
@@ -275,6 +304,8 @@ function onConfigurationChanged(config)
   local drawerChildLinearParams = drawerChild.getLayoutParams()
   if screenWidthDp < 448 then
     drawerChildLinearParams.width = -1
+   elseif screenWidthDp <800 then
+    drawerChildLinearParams.width = math.dp2int(448-56)
    elseif screenWidthDp <1176 then
     drawerChildLinearParams.width = math.dp2int(328)
    else
@@ -285,6 +316,63 @@ function onConfigurationChanged(config)
   refreshSubTitle()
   FilesTabManager.refreshMoveCloseHeight(config.screenHeightDp)
   PluginsUtil.callElevents("onConfigurationChanged", config)
+end
+
+function onDeviceByWidthChanged(device, oldDevice)
+  --print(device, oldDevice)
+  nowDevice=device
+  local browserOpenState=FilesBrowserManager.openState
+  --print(browserOpenState)
+  if oldDevice == "pc" then -- 切换为手机时
+    -- 暂时关闭动画，因为动画有延迟
+    local applyLT=fixLT(deviceChangeLTFixList)
+
+    largeDrawerLay.removeView(drawerChild)
+    largeMainLay.removeView(mainEditorLay)
+    drawer.addView(mainEditorLay)
+    drawer.addView(drawerChild)
+
+    local linearParams = drawerChild.getLayoutParams()
+    linearParams.gravity = Gravity.LEFT
+    drawerChild.setLayoutParams(linearParams)
+    largeMainLay.setVisibility(View.GONE)
+    drawer.setVisibility(View.VISIBLE)
+
+    if browserOpenState then
+      --drawer.openDrawer(Gravity.LEFT)
+      Handler().postDelayed(Runnable({
+        run = function()
+          drawer.openDrawer(Gravity.LEFT)
+        end
+      }), 50)
+    end
+    if browserOpenState == nil then
+      FilesBrowserManager.setOpenState(false)
+    end
+    drawerChild.setVisibility(View.VISIBLE)
+    toggle.syncState()
+
+    applyLT()
+   elseif device == "pc" then -- 切换为电脑时
+    local applyLT=fixLT(deviceChangeLTFixList)
+
+    drawer.removeView(mainEditorLay)
+    drawer.removeView(drawerChild)
+    largeDrawerLay.addView(drawerChild)
+    largeMainLay.addView(mainEditorLay)
+
+    largeMainLay.setVisibility(View.VISIBLE)
+    drawer.setVisibility(View.GONE)
+    if browserOpenState or browserOpenState == nil then
+      FilesBrowserManager.setOpenState(true)
+      drawerChild.setVisibility(View.VISIBLE)
+     else
+      drawerChild.setVisibility(View.GONE)
+    end
+    toggle.syncState()
+
+    applyLT()
+  end
 end
 
 notFirstOnResume = false
@@ -305,7 +393,7 @@ function onResume()
     return
   end
   refreshMagnifier()
-  
+
 
   if notFirstOnResume then
     ProjectManager.refreshProjectsPath()
@@ -374,15 +462,14 @@ function onDestroy()
   end
 end
 
-function onKeyDown(KeyCode, event)
+function onKeyDown(keyCode, event)
   TouchingKey = true
 end
 
-function onKeyUp(KeyCode, event)
+function onKeyUp(keyCode, event)
   if TouchingKey then
-    TouchingKey = false
-    if KeyCode == KeyEvent.KEYCODE_BACK then -- 返回键事件
-      if FilesBrowserManager.openState and screenConfigDecoder.deviceByWidth ~= "pc" then -- 没有打开键盘且已打开侧滑，且设备为手机
+    if keyCode == KeyEvent.KEYCODE_BACK then -- 返回键事件
+      if FilesBrowserManager.openState and nowDevice ~= "pc" then -- 没有打开键盘且已打开侧滑，且设备为手机
         if ProjectManager.openState then
           -- todo:转到上一级文件夹
           local directoryFile=FilesBrowserManager.directoryFile
@@ -405,13 +492,41 @@ function onKeyUp(KeyCode, event)
           return true
         end
       end
+     else
+      local success,result=pcall(function()--华为MPencil双击功能
+        if keyCode==KeyEvent.KEYCODE_F20 then
+          if (System.currentTimeMillis() - lastPencilkeyTime) < 2000 then
+            ProjectManager.runProject()
+          end
+          lastPencilkeyTime = System.currentTimeMillis()
+          return true
+        end
+      end)
+      if success then
+        return result
+      end
     end
   end
 end
 
 function onRestoreInstanceState(savedInstanceState)
   toggle.syncState()
+  local fileBrowserOpenState=savedInstanceState.getBoolean("filebrowser_openstate")
+  if fileBrowserOpenState then
+    FilesBrowserManager.open()
+   else
+    FilesBrowserManager.close()
+  end
 end
+
+function onSaveInstanceState(savedInstanceState)
+  savedInstanceState.putBoolean("filebrowser_openstate",FilesBrowserManager.openState)
+  savedInstanceState.putString("prjpath",ProjectManager.nowPath)
+  if ProjectManager.openState then
+    savedInstanceState.putString("dirpath",FilesBrowserManager.directoryFile.getPath())
+  end
+end
+
 
 toggle = ActionBarDrawerToggle(activity, drawer, R.string.drawer_open, R.string.drawer_close)
 drawer.addDrawerListener(toggle)
@@ -436,77 +551,29 @@ EditorsManager.symbolBar.refreshSymbolBar(oldEditorSymbolBar) -- 刷新符号栏
 EditorsManager.switchEditor("NoneView")
 
 
+mainLay.ViewTreeObserver
+.addOnGlobalLayoutListener(function()
+  mainWidth=mainLay.getMeasuredWidth()
+end)
+
 screenConfigDecoder = ScreenFixUtil.ScreenConfigDecoder({
-  onDeviceByWidthChanged = function(device, oldDevice)
-    --print(device, oldDevice)
-    local browserOpenState=FilesBrowserManager.openState
-    --print(browserOpenState)
-    if oldDevice == "pc" then -- 切换为手机时
-      -- 暂时关闭动画，因为动画有延迟
-      local LDLayoutTransition, LMLlayoutTransition = largeDrawerLay.getLayoutTransition(),
-      largeMainLay.getLayoutTransition()
-      largeDrawerLay.setLayoutTransition(nil)
-      largeMainLay.setLayoutTransition(nil)
-
-      largeDrawerLay.removeView(drawerChild)
-      largeMainLay.removeView(mainEditorLay)
-      drawer.addView(mainEditorLay)
-      drawer.addView(drawerChild)
-
-      local linearParams = drawerChild.getLayoutParams()
-      linearParams.gravity = Gravity.LEFT
-      drawerChild.setLayoutParams(linearParams)
-
-      if browserOpenState then
-        Handler().postDelayed(Runnable({
-          run = function()
-            drawer.openDrawer(Gravity.LEFT)
-          end
-        }), 50)
-      end
-      largeMainLay.setVisibility(View.GONE)
-      drawer.setVisibility(View.VISIBLE)
-      if browserOpenState == nil then
-        FilesBrowserManager.setOpenState(false)
-      end
-      drawerChild.setVisibility(View.VISIBLE)
-      toggle.syncState()
-
-      largeDrawerLay.setLayoutTransition(LDLayoutTransition)
-      largeMainLay.setLayoutTransition(LMLlayoutTransition)
-     elseif device == "pc" then -- 切换为平板或电脑时
-      local LDLayoutTransition = largeDrawerLay.getLayoutTransition()
-      local LMLlayoutTransition = largeMainLay.getLayoutTransition()
-      largeDrawerLay.setLayoutTransition(nil)
-      largeMainLay.setLayoutTransition(nil)
-
-      drawer.removeView(mainEditorLay)
-      drawer.removeView(drawerChild)
-      largeDrawerLay.addView(drawerChild)
-      largeMainLay.addView(mainEditorLay)
-
-      largeMainLay.setVisibility(View.VISIBLE)
-      drawer.setVisibility(View.GONE)
-      if browserOpenState or browserOpenState == nil then
-        FilesBrowserManager.setOpenState(true)
-        drawerChild.setVisibility(View.VISIBLE)
-       else
-        drawerChild.setVisibility(View.GONE)
-      end
-      toggle.syncState()
-
-      largeDrawerLay.setLayoutTransition(LDLayoutTransition)
-      largeMainLay.setLayoutTransition(LMLlayoutTransition)
-    end
-  end
+  onDeviceByWidthChanged=onDeviceByWidthChanged
 })
--- screenConfigDecoder.device="phone"--默认为手机
 
 onConfigurationChanged(activity.getResources().getConfiguration())
+--[[
+nowDevice=screenConfigDecoder.deviceByWidth
+mainWidth=math.dp2int(screenConfigDecoder.screenWidthDp)
+if nowDevice~="phone" then
+  onDeviceByWidthChanged(nowDevice,"phone")
+end
+mainLay.ViewTreeObserver
+.addOnGlobalLayoutListener(ScreenFixUtil.LayoutListenersBuilder.deviceByWidth(mainLay,onDeviceByWidthChanged,nowDevice))
 
+]]
 
 --在刷新后仍然为空，那就是关闭状态
-if FilesBrowserManager.openState == nil then
+if screenConfigDecoder.deviceByWidth~="pc" and FilesBrowserManager.openState == nil then
   FilesBrowserManager.setOpenState(false)
 end
 

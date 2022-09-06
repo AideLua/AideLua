@@ -85,7 +85,8 @@
     title="测试禁止";
     key="test";
   };]]
-  {--项目
+  
+--[[{--项目
     SettingsLayUtil.TITLE;
     title=R.string.project;
   };
@@ -95,7 +96,7 @@
     title=R.string.settings_addComplexLibrary;
     key="addComplexLibrary";
     summary=R.string.settings_addComplexLibrary_summary
-  };
+  };]]
 
   {--插件
     SettingsLayUtil.TITLE;

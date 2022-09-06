@@ -1,5 +1,4 @@
 {
-
   LinearLayoutCompat;
   layout_height="fill";
   gravity="center";
@@ -15,6 +14,7 @@
     AppCompatImageView;
     id="icon";
     imageResource=R.drawable.ic_chevron_right;
+    colorFilter=theme.color.ActionBar.textColorSecondary;
     --layout_marginLeft="4dp";
     --padding="8dp";
   };

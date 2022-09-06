@@ -31,7 +31,7 @@ end
 
 --自动识别显示toast的方式进行显示
 function showSnackBar(text)
-  if FilesBrowserManager.openState and screenConfigDecoder.deviceByWidth ~= "pc" then
+  if FilesBrowserManager.openState and nowDevice ~= "pc" then
     return MyToast(text,mainLay)
    else
     return MyToast(text,editorGroup)
@@ -171,12 +171,12 @@ end
 function refreshSubTitle()
   if ProjectManager.openState then
     local appName=ProjectManager.nowConfig.appName
-    if ScreenWidthDp then
-      if ScreenWidthDp<360 then
+    if mainWidth then
+      if mainWidth<360 then
         actionBar.setSubtitle(appName)
-       elseif ScreenWidthDp<380 then
+       elseif mainWidth<380 then
         actionBar.setSubtitle(formatResStr(R.string.project_appSubtitle_360dp,{appName}))
-       elseif ScreenWidthDp<390 then
+       elseif mainWidth<390 then
         actionBar.setSubtitle(formatResStr(R.string.project_appSubtitle_380dp,{appName}))
        else
         actionBar.setSubtitle(formatResStr(R.string.project_appSubtitle_390dp,{appName}))
@@ -197,9 +197,46 @@ function getFileTypeByName(name)
   end
 end
 
+function fixLT(list)
+  local lTList={}
+  for index=1,#list do
+    local view=list[index]
+    lTList[index]=view.getLayoutTransition()
+    view.setLayoutTransition(nil)
+    --print(view)
+  end
+  return function()
+    for index=1,#list do
+      list[index].setLayoutTransition(lTList[index])
+    end
+    list=nil
+    lTList=nil
+  end
+end
 
+function addStrToTable(text,list,checkList)
+  if not(checkList[text]) then
+    table.insert(list,text)
+    checkList[text]=true
+  end
+end
 
+function getFilePathCopyMenus(inLibDirPath,filePath,fileName,isFile,fileType)
+  local textList={}
+  local textCheckList={}
+  if inLibDirPath then
+    addStrToTable(inLibDirPath,textList,textCheckList)
+    local callLibPath=inLibDirPath
+    if inLibDirPath:find("/") then
+      callLibPath=inLibDirPath:gsub("/",".")
+      addStrToTable(callLibPath,textList,textCheckList)
+    end
+    if fileType=="aly" or fileType=="lua" or File(filePath.."/init.lua").isFile() then
+      addStrToTable(getImportCode(callLibPath),textList,textCheckList)
+    end
 
-
-
-
+   else
+    addStrToTable(fileName,textList,textCheckList)
+  end
+  return textList
+end

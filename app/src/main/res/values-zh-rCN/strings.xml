@@ -34,8 +34,9 @@
     <string name="commentedCode">注释代码</string>
     <string name="uncommentedCode">取消注释代码</string>
     <string name="logCat">日志猫</string>
+   
     <string name="open">打开</string>
-    <string name="install">安装</string>
+    <string name="open_failed">打开失败</string>
     
     <string name="exit_toast">再按一次退出程序</string>
     <string name="res_references">引用资源</string>
@@ -156,7 +157,7 @@
     <string name="settings_addComplexLibrary_summary">可以在“新建项目”等功能使用专属您的复杂库</string>
     <string name="settings_editor_previewButton">预览按钮</string>
     
-    <string name="window_openNew">打开新窗口</string>
+    <string name="window_openNew">新建窗口</string>
     <string name="window_openInNewWindow">在新窗口打开</string>
     
     <string name="rename">重命名</string>
@@ -171,7 +172,29 @@
     <string name="plugins_popup">插件...</string>
     <string name="plugins_manager">插件管理</string>
     <string name="plugins_install">安装插件</string>
+    <string name="plugins_uninstall">卸载插件</string>
     <string name="plugins_installed">已安装插件</string>
+    <string name="plugins_uninstall_warning">确定卸载？卸载后将清除插件数据（如果使用规范的存储方式）</string>
     <string name="plugins_download">下载插件</string>
+    <string name="plugins_info_version">版本：%1$s</string>
+    <string name="plugins_info_packageName">包名：%1$s</string>
+    <string name="plugins_info_folderName">文件夹名：%1$s</string>
+    <string name="plugins_warning_keepPFSame">请确保插件的包名与文件夹名相同</string>
+    <string name="plugins_warning_addPackageName">请填写包名</string>
+    <string name="plugins_warning_update">此插件专为旧版本 Aide Lua 开发，请检查插件更新</string>
+    <string name="plugins_warning_supported">此插件未指定支持的软件，因此可能无法正常加载</string>
+    <string name="plugins_error">非法插件，建议删除</string>
+    <string name="plugins_error_update_app">您的 Aide Lua 版本不符合此插件最低要求，请检查软件更新</string>
+    <string name="plugins_error_unsupported">此插件不适配本软件，请下载对应版本的插件</string>
+    <string name="plugins_reboot">开关插件后需要重新启动本应用</string>
+    
+    <string name="install">安装</string>
+    <string name="install_success">安装成功</string>
+    <string name="install_failed">安装失败</string>
+    
+    <string name="uninstall">卸载</string>
+    <string name="uninstall_withName">卸载 %1$s</string>
+    <string name="uninstall_success">卸载成功</string>
+    <string name="uninstall_failed">卸载失败</string>
     
 </resources>

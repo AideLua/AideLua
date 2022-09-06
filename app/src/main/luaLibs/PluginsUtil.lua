@@ -1,36 +1,38 @@
 local PluginsUtil = {}
 local plugins
 
-local activityName, appPluginsDir, appPluginsDataDir
-local setEnabled, getEnabled, loadPlugins, getPluginDir, getAvailable
+local activityName
+local setEnabled, getEnabled, loadPlugins, getPluginPath, getPluginDataPath, getAvailable
 
-appPluginsDir = AppPath.AppShareDir .. "/plugins"
-appPluginsDataDir = AppPath.AppShareDir .. "/data/plugins"
-AppPath.AppPluginsDir = appPluginsDir
-AppPath.AppPluginsDataDir = appPluginsDataDir
-PluginsUtil.appPluginsDir = appPluginsDir
-PluginsUtil.appPluginsDataDir = appPluginsDataDir
+local PLUGINS_PATH = AppPath.AppShareDir .. "/plugins"
+local PLUGINS_DATA_PATH = AppPath.AppShareDir .. "/data/plugins"
+PluginsUtil.PLUGINS_PATH = PLUGINS_PATH
+PluginsUtil.PLUGINS_DATA_PATH = PLUGINS_DATA_PATH
 PluginsUtil._VERSION="3.0"
 
 local appPackageName = activity.getPackageName()
 local PackInfo = activity.PackageManager.getPackageInfo(appPackageName, 0)
 local versionCode = PackInfo.versionCode
 
+
 function PluginsUtil.callElevents(name, ...)
   --if activityName then
   if plugins == nil then
     loadPlugins()
   end
-  local events = plugins.events[name]
+  local events = plugins.events[name]--公共事件
+  local events2 = plugins.events2[name]--页面事件
+  local finalResult
   if events then
     for index, content in ipairs(events) do
-      xpcall(content, function(err)
+      local state,result=xpcall(content, function(err)
         print("Plugin", plugins.eventsName[name][index], "error: ", err)
       end, activityName, ...)
+      if result~=nil then
+        finalResult=result
+      end
     end
   end
-  local events2 = plugins.events[name]
-  local finalResult
   if events2 then
     for index, content in ipairs(events2) do
       local state,result=xpcall(content, function(err)
@@ -76,20 +78,22 @@ function getEnabled(packageName)
 end
 PluginsUtil.getEnabled = getEnabled
 
---获取插件数据目录
-function PluginsUtil.getPluginDataDir(packageName)
-  return appPluginsDataDir .. "/" .. packageName
-end
-
 --获取插件目录，如果文件夹名与真正的packageName请手动输入文件夹名
-function getPluginDir(packageName)
-  return appPluginsDir .. "/" .. packageName
+function getPluginPath(packageName)
+  return PLUGINS_PATH .. "/" .. packageName
 end
-PluginsUtil.getPluginDir = getPluginDir
+PluginsUtil.getPluginPath = getPluginPath
+
+--获取插件数据目录
+function getPluginDataPath(packageName)
+  return PLUGINS_DATA_PATH .. "/" .. packageName
+end
+PluginsUtil.getPluginDataPath=getPluginDataPath
+
 
 --获取插件是否可用
 function getAvailable(packageName)
-  local path = getPluginDir(packageName)
+  local path = getPluginPath(packageName)
   if not (File(path).isDirectory()) then
     return false
   end
@@ -109,8 +113,14 @@ local function getPluginsEventsAndName(pluginsEvents,pluginsEventsName,name)
   return eventsList,eventsNameList
 end
 
-function loadPlugins()
+local pluginEnvTable={
+  getPluginPath=getPluginPath,
+  getPluginDataPath=getPluginDataPath,
 
+}
+setmetatable(pluginEnvTable,{__index=_G})
+
+function loadPlugins()
   plugins = {}
   local pluginsEvents = {}
   local pluginsEventsName = {}
@@ -125,7 +135,7 @@ function loadPlugins()
   plugins.activities = pluginsActivities
   plugins.activitiesName = pluginsActivitiesName
 
-  local pluginsFile = File(appPluginsDir)
+  local pluginsFile = File(PLUGINS_PATH)
   if pluginsFile.isDirectory() then -- 存在插件文件夹
     local fileList = pluginsFile.listFiles()
     for index = 0, #fileList - 1 do
@@ -145,11 +155,7 @@ function loadPlugins()
           xpcall(function()
             local config = getConfigFromFile(initPath) -- init.lua内容
             config.pluginPath = path
-            setmetatable(config, {
-              __index = function(self, key) -- 设置环境变量
-                return _G[key]
-              end
-            })
+            setmetatable(config, {__index = pluginEnvTable})--设置环境变量
             local minVerCode = config.minemastercode
             local targetVerCode = config.targetmastercode
             --进行版本校验
@@ -169,12 +175,13 @@ function loadPlugins()
               if err == false then
                 local name = ("%s (%s)"):format(config.appname, config.packagename or dirName)
                 local fileEvents=config.events
-                for index,content in pairs(fileEvents) do
-                  local eventsList,eventsNameList=getPluginsEventsAndName(pluginsEvents,pluginsEventsName,index)
-                  table.insert(eventsList,content)
-                  table.insert(eventsNameList,name)
+                if fileEvents then
+                  for index,content in pairs(fileEvents) do
+                    local eventsList,eventsNameList=getPluginsEventsAndName(pluginsEvents,pluginsEventsName,index)
+                    table.insert(eventsList,content)
+                    table.insert(eventsNameList,name)
+                  end
                 end
-
                 if activityName then
                   local eventsAlyPath = eventsDirPath .. "/" .. activityName .. ".aly"
                   if File(eventsAlyPath).isFile() then

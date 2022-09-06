@@ -105,18 +105,24 @@ ScreenFixUtil.getDeviceTypeFromWidthDp=getDeviceTypeFromWidthDp
 
 local LayoutListenersBuilder={
   singleCardViews=function(parentView,views)
-    return ViewTreeObserver.OnGlobalLayoutListener({onGlobalLayout=function()
-        local width=parentView.getMeasuredWidth()
+    local oldWidth=0
+    return function()
+      local width=parentView.getMeasuredWidth()
+      if oldWidth~=width then
         if width>math.dp2int(640+32) then
           setLayoutsSize(views,nil,math.dp2int(640))
          else
           setLayoutsSize(views,nil,-1)
         end
-    end})
+        oldWidth=width
+      end
+    end
   end,
   layoutManagers=function(parentView,layoutManagers)
-    return ViewTreeObserver.OnGlobalLayoutListener({onGlobalLayout=function()
-        local width=parentView.getMeasuredWidth()
+    local oldWidth=0
+    return function()
+      local width=parentView.getMeasuredWidth()
+      if oldWidth~=width then
         local device=getDeviceTypeFromWidth(width)
         if device=="phone" then--手机视图，横向2个
           setLayoutManagersSpanCount(layoutManagers,1)
@@ -125,11 +131,16 @@ local LayoutListenersBuilder={
          elseif device=="pc" then--电脑视图，横向6个
           setLayoutManagersSpanCount(layoutManagers,4)
         end
-    end})
+        oldWidth=width
+
+      end
+    end
   end,
   gridViews=function(parentView,gridViews)
-    return ViewTreeObserver.OnGlobalLayoutListener({onGlobalLayout=function()
-        local width=parentView.getMeasuredWidth()
+    local oldWidth=0
+    return function()
+      local width=parentView.getMeasuredWidth()
+      if oldWidth~=width then
         local device=getDeviceTypeFromWidth(width)
         if device=="phone" then--手机视图
           setGridViewsNumColumns(gridViews,1)
@@ -138,19 +149,41 @@ local LayoutListenersBuilder={
          elseif device=="pc" then--电脑视图
           setGridViewsNumColumns(gridViews,4)
         end
-    end})
+        oldWidth=width
+
+      end
+    end
   end,
   listViews=function(parentView,listViews)
-    return ViewTreeObserver.OnGlobalLayoutListener({onGlobalLayout=function()
-        local width=parentView.getMeasuredWidth()
-        if width<math.dp2int(800) then--屏幕宽度小于800dp，那就填充整个屏幕
+    local oldWidth=0
+    return function()
+      local width=parentView.getMeasuredWidth()
+      if oldWidth~=width then
+        if width<math.dp2int(704) then--屏幕宽度小于704dp，那就填充整个屏幕
           setLayoutsSize(listViews,nil,-1)
-         elseif width<math.dp2int(1000) then--屏幕宽度大于等于800dp且小于1000dp，固定宽度为704dp
+         elseif width<math.dp2int(1000) then--屏幕宽度大于等于704dp且小于1000dp，固定宽度为704dp
           setLayoutsSize(listViews,nil,math.dp2int(704))
          else--屏幕宽度大于等于1000dp，固定宽度为800dp
           setLayoutsSize(listViews,nil,math.dp2int(800))
         end
-    end})
+        oldWidth=width
+      end
+    end
+  end,
+  deviceByWidth=function(parentView,onDeviceByWidthChanged,defaultDevice)
+    local oldWidth=0
+    local device=defaultDevice or "phone"
+    return function()
+      local width=parentView.getMeasuredWidth()
+      if oldWidth~=width then
+        local newDevice=getDeviceTypeFromWidth(width)
+        if newDevice~=device then
+          onDeviceByWidthChanged(newDevice,device)
+          device=newDevice
+        end
+        oldWidth=width
+      end
+    end
   end
 }
 
@@ -159,7 +192,7 @@ ScreenFixUtil.LayoutListenersBuilder=LayoutListenersBuilder
 
 
 local ScreenConfigDecoder={
-  device="phone",
+  --device="phone",
   deviceByWidth="phone",
 }
 ScreenFixUtil.ScreenConfigDecoder=ScreenConfigDecoder
@@ -211,17 +244,18 @@ function ScreenConfigDecoder.decodeConfiguration(self,config)
     differentLays=orientationLays.different
   end
 
-  local oldDevice=self.device
+  --local oldDevice=self.device
   local oldDeviceByWidth=self.deviceByWidth
 
   local device,deviceByWidth
+  --[[
   if smallestScreenWidthDp~=self.smallestScreenWidthDp then--最小宽度改变时
     device=getDeviceTypeFromWidthDp(smallestScreenWidthDp)
     self.smallestScreenWidthDp=smallestScreenWidthDp
     self.device=device
    else--没改变最小宽度，说明设备类型没改变
     device=oldDevice
-  end
+  end]]
 
   if screenWidthDp~=self.screenWidthDp then--最小宽度改变时
     deviceByWidth=getDeviceTypeFromWidthDp(screenWidthDp)
@@ -290,9 +324,9 @@ function ScreenConfigDecoder.decodeConfiguration(self,config)
   end
 
   if listViews then
-    if screenWidthDp<math.dp2int(800) then--屏幕宽度小于800dp，那就填充整个屏幕
+    if screenWidthDp<704 then--屏幕宽度小于704dp，那就填充整个屏幕
       setLayoutsSize(listViews,nil,-1)
-     elseif screenWidthDp<math.dp2int(1000) then--屏幕宽度大于等于800dp且小于1000dp，固定宽度为704dp
+     elseif screenWidthDp<1000 then--屏幕宽度大于等于704dp且小于1000dp，固定宽度为704dp
       setLayoutsSize(listViews,nil,math.dp2int(704))
      else--屏幕宽度大于等于1000dp，固定宽度为800dp
       setLayoutsSize(listViews,nil,math.dp2int(800))
@@ -300,12 +334,6 @@ function ScreenConfigDecoder.decodeConfiguration(self,config)
   end
 
   self:decodeMenus(screenWidthDp)
-
-  if device~=oldDevice then--设备类型切换时
-    if onDeviceChanged then
-      onDeviceChanged(device,oldDevice)
-    end
-  end
 
   if deviceByWidth~=oldDeviceByWidth then--设备类型切换时
     if onDeviceByWidthChanged then

@@ -58,7 +58,7 @@ local function isSysNightMode()
   import "android.content.res.Configuration"
   return (context.getResources().getConfiguration().uiMode)==Configuration.UI_MODE_NIGHT_YES+1
 end
-ThemeUtil.isSysNightMode=isSysNightMode
+ThemeUtil.isSysNightMode=isSysNightMode--这个一般用不到
 ThemeUtil.isNightMode=isSysNightMode
 
 --刷新颜色
@@ -119,7 +119,7 @@ function ThemeUtil.refreshThemeColor()
   })
   booleanList.windowLightNavigationBar=array.getBoolean(0,false)
   booleanList.windowLightStatusBar=array.getBoolean(1,false)
-  array.recycle()--销毁数组
+  array.recycle()--回收数组
 
   local array = context.getTheme().obtainStyledAttributes(numberList.id.actionBarTheme,{
     android.R.attr.textColorSecondary,

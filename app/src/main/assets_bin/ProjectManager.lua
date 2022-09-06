@@ -51,7 +51,7 @@ function ProjectManager.runProject(path)
     FilesTabManager.saveAllFiles()
     if nowConfig.packageName then
       local success,err=pcall(function()
-        local intent=Intent(Intent.ACTION_VIEW,Uri.parse(path or nowConfig.projectMainPath))
+        local intent=Intent(Intent.ACTION_VIEW,Uri.parse(path or nowConfig.projectMainPath.."/main.lua"))
         local componentName=ComponentName(nowConfig.packageName,nowConfig.debugActivity or "com.androlua.LuaActivity")
         intent.setComponent(componentName)
         activity.startActivity(intent)
@@ -78,7 +78,8 @@ end
 ProjectManager.updateNowConfig=updateNowConfig
 
 --打开项目
-function ProjectManager.openProject(path)
+function ProjectManager.openProject(path,filePath,openedDirPath)
+  FilesBrowserManager.clearAdapterData()
   openState=true
   nowFile=File(path)
   nowPath=path
@@ -93,20 +94,42 @@ function ProjectManager.openProject(path)
   updateNowConfig(config)
   setSharedData("openedProject",path)
   EditorsManager.switchEditor("NoneView")
+  local nowBrowserDir,nowOpenedFile
+  local defaultFilePath="app/src/main/assets_bin/main.lua"
+  local defaultFile=File(path.."/"..defaultFilePath)
 
-  FilesBrowserManager.refresh(nowFile)
+  if filePath then
+    nowOpenedFile=File(filePath)
+   elseif defaultFile.isFile() then
+    nowOpenedFile=defaultFile
+   else
+    nowBrowserDir=nowFile
+  end
+  if nowOpenedFile then
+    FilesTabManager.openFile(nowOpenedFile,getFileTypeByName(nowOpenedFile.getName()), false)
+    nowBrowserDir=defaultFile.getParentFile()
+  end
+  if openedDirPath then
+    nowBrowserDir=File(openedDirPath)
+  end
+  pathPlaceholderView.setVisibility(View.VISIBLE)
+  FilesBrowserManager.refresh(nowBrowserDir,false,false,true)
   refreshMenusState()
 end
 
 
 --关闭项目
 function ProjectManager.closeProject(refreshFilesBrowser)
+  FilesBrowserManager.clearAdapterData()
+  FilesTabManager.closeAllFiles(true)
   openState=false
   nowFile=nil
   nowPath=nil
-  FilesTabManager.closeAllFiles(true)
   updateNowConfig(nil)
   setSharedData("openedProject",nil)
+  --FilesBrowserManager.directoryFilesList=nil
+  --FilesBrowserManager.setDirectoryFilesList({})
+
   EditorsManager.switchEditor("LuaEditor")
   local editor=EditorsManager.editor
   local defaultText=EditorsManager.editorConfig.defaultText
@@ -114,8 +137,9 @@ function ProjectManager.closeProject(refreshFilesBrowser)
   editor.scrollTo(0,0)
   editor.setText(defaultText)
   editor.setSelection(#defaultText)
+  pathPlaceholderView.setVisibility(View.GONE)
   if refreshFilesBrowser~=false then
-    FilesBrowserManager.refresh()
+    FilesBrowserManager.refresh(nil,false,false,true)
   end
   refreshMenusState()
 end

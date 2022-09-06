@@ -12,7 +12,8 @@ FilesBrowserManager.close(): 关闭文件浏览器
 FilesBrowserManager.switchState(): 切换文件浏览器开启状态
 FilesBrowserManager.init(): 初始化管理器
 
-]]local FilesBrowserManager = {}
+]]
+local FilesBrowserManager = {}
 local openState = false
 local adapterData={}
 FilesBrowserManager.adapterData = adapterData
@@ -185,10 +186,17 @@ end]]
 local relLibPathsMatch = {} -- 相对库路径匹配
 FilesBrowserManager.relLibPathsMatch = relLibPathsMatch
 
-local relLibPathsMatchPath = {"^.-/src/main/assets_bin/(.+)%.", "^.-/src/main/luaLibs/(.+)%.",
-  "^.-/src/main/jniLibs/.-/lib(.+)%.so", "^.-/src/main/java/(.+)%.",
-  "^.-/src/main/assets/(.+)%."}
-relLibPathsMatch.paths = relLibPathsMatchPath
+local relLibPathsMatchPaths = {
+  "^.-/src/main/assets_bin/(.+)%.",
+  "^.-/src/main/assets_bin/(.+)",
+  "^.-/src/main/assets/(.+)%.",
+  "^.-/src/main/assets/(.+)",
+  "^.-/src/main/luaLibs/(.+)%.",
+  "^.-/src/main/luaLibs/(.+)",
+  "^.-/src/main/jniLibs/.-/lib(.+)%.so",
+  "^.-/src/main/java/(.+)%.",
+  }
+relLibPathsMatch.paths = relLibPathsMatchPaths
 
 local relLibPathsMatchTypes = {
   java = true,
@@ -205,7 +213,6 @@ function FilesBrowserManager.open()
     drawerChild.setVisibility(View.VISIBLE)
    else
     drawer.openDrawer(Gravity.LEFT)
-
   end
   openState = true
 end
@@ -237,24 +244,29 @@ end
 @param force 强制刷新
 ]]
 local loadingFiles = false -- 正在加载文件列表
-function FilesBrowserManager.refresh(file,upFile,force)
+function FilesBrowserManager.refresh(file,upFile,force,atOnce)
   if force or not (loadingFiles) then
     loadingFiles=true
-    Handler().postDelayed(Runnable({
-      run = function()
-        if loadingFiles then
-          swipeRefresh.setRefreshing(true)
-        end
-      end
-    }), 100)
-    if not(ProjectManager.openState) then
-      file=ProjectManager.projectsFile
+    if atOnce then
+      swipeRefresh.setRefreshing(true)
      else
+      Handler().postDelayed(Runnable({
+        run = function()
+          if loadingFiles then
+            swipeRefresh.setRefreshing(true)
+          end
+        end
+      }), 100)
+    end
+
+    if ProjectManager.openState then
       file=file or directoryFile
       if isSamePathFileByPath(file.getPath(),ProjectManager.nowFile.getParent()) then
         ProjectManager.closeProject(false)
         file=ProjectManager.projectsFile
       end
+     else
+      file=ProjectManager.projectsFile
     end
 
 
@@ -384,6 +396,7 @@ function FilesBrowserManager.refresh(file,upFile,force)
        else
         table.clear(pathSplitList)
         directoryFile=nil
+        pathAdapter.notifyDataSetChanged()
       end
       table.clear(adapterData)
 
@@ -394,6 +407,7 @@ function FilesBrowserManager.refresh(file,upFile,force)
       loadingFiles=false
 
       adapter.notifyDataSetChanged()
+      pathPlaceholderView.setVisibility(View.GONE)
       pathLayoutManager.scrollToPosition(#pathSplitList-1)
       local scroll=filesPositions[path]
       if scroll then
@@ -402,14 +416,20 @@ function FilesBrowserManager.refresh(file,upFile,force)
         layoutManager.scrollToPosition(0)
       end
 
-
     end).execute({file,ProjectManager.openState})
   end
 end
 
+function FilesBrowserManager.clearAdapterData()
+  table.clear(adapterData)
+  FilesBrowserManager.directoryFilesList=nil
+  FilesBrowserManager.nowFilePosition=nil
+  adapter.notifyDataSetChanged()
+end
+
 --初始化
 function FilesBrowserManager.init()
-
+  directoryFile=ProjectManager.projectsFile
   swipeRefresh.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
     onRefresh = function()
       FilesBrowserManager.refresh()
@@ -447,8 +467,8 @@ function FilesBrowserManager.init()
   end
   drawer.addDrawerListener(DrawerLayout.DrawerListener({
     onDrawerSlide = function(view, slideOffset)
-      if screenConfigDecoder.device == "phone" then
-        if slideOffset > 0.5 and not (openState) then
+      if nowDevice ~= "pc" then
+        if slideOffset > 0.5 and not(openState) then
           openState = true
          elseif slideOffset <= 0.5 and openState then
           openState = false
@@ -532,6 +552,10 @@ end
 
 function FilesBrowserManager.setDirectoryFile(file)
   directoryFile=file
+end
+
+function FilesBrowserManager.setDirectoryFilesList(list)
+  FilesBrowserManager.directoryFilesList=list
 end
 
 return createVirtualClass(FilesBrowserManager)

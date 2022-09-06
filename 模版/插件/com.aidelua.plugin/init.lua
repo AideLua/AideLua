@@ -1,9 +1,15 @@
 appname="插件模板"--插件名
 packagename="com.aidelua.plugin"--插件包名
-appver="2.1"
-appcode=2199
+appver="3.0"
+appcode=3099
 minemastercode=50000--最低编辑器版本号
 targetmastercode=59999--目标编辑器版本号
 mode="plugin"--模式：插件
 supported={"aidelua","eddelua"}
 thirdplugins={}
+events={
+  onCreate=function(activityName,savedInstanceState)
+    print("进入",activityName,"页面")
+    print(appname,"全局代码加载成功")
+  end,
+}

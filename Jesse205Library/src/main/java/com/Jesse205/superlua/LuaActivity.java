@@ -1,11 +1,11 @@
 package com.Jesse205.superlua;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.View;
@@ -40,6 +40,7 @@ public class LuaActivity extends com.androlua.LuaActivity {
         if (checkUpdate && (oldLastTime != lastTime)) {
             Intent intent = new Intent(this, Welcome.class);
             intent.putExtra("newIntent", getIntent());
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
             startActivity(intent);
             finish();
         }
@@ -71,8 +72,15 @@ public class LuaActivity extends com.androlua.LuaActivity {
         super.onCreateContextMenu(menu, view, menuInfo);
         runFunc("onCreateContextMenu", menu, view, menuInfo);
     }
+    
+    public void newActivity(String path, boolean newDocument,int documentId) {
+        newActivity(1, path, null, newDocument, documentId);
+    }
 
-
+    public void newActivity(String path, Object[] arg, boolean newDocument,int documentId) {
+        newActivity(1, path, arg, newDocument, documentId);
+    }
+    
     @Override
     public void newActivity(int req, String path, Object[] arg, boolean newDocument) {
         newActivity(req, path, arg, newDocument, 0);

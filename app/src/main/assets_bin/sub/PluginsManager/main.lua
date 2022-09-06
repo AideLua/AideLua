@@ -2,14 +2,16 @@ require "import"
 import "Jesse205"
 import "android.text.SpannableString"
 import "android.text.style.ForegroundColorSpan"
+import "net.lingala.zip4j.ZipFile"
 import "com.Jesse205.layout.util.SettingsLayUtil"
 import "com.Jesse205.layout.innocentlayout.RecyclerViewLayout"
 import "settings"
 import "SettingsLayUtilPro"
+import "PluginsManagerUtil"
 
-appPluginsDir=AppPath.AppShareDir.."/plugins"
-AppPath.AppPluginsDir=appPluginsDir
-pluginsFile=File(appPluginsDir)
+--appPluginsDir=AppPath.AppShareDir.."/plugins"
+--AppPath.AppPluginsDir=appPluginsDir
+PLUGINS_DIR=File(PluginsUtil.PLUGINS_PATH)
 
 local PackInfo=activity.PackageManager.getPackageInfo(activity.getPackageName(),64)
 local versionCode=PackInfo.versionCode
@@ -28,14 +30,17 @@ function onOptionsItemSelected(item)
   end
 end
 
-function onConfigurationChanged(config)
-  screenConfigDecoder:decodeConfiguration(config)
-end
-
 function onActivityResult(requestCode,resultCode,data)
   if resultCode==Activity.RESULT_OK then
     if requestCode==REQUEST_INSTALLPLUGIN then
-      installPlugin(data.getData())
+      PluginsManagerUtil.installByUri(data.getData(),function(state)
+        if state=="success" then
+          MyToast(R.string.install_success)
+          refresh()
+         elseif state=="failed" then
+          MyToast(R.string.install_failed)
+        end
+      end)
     end
   end
 end
@@ -44,51 +49,10 @@ function onResume()
   refresh()
 end
 
-function getAlpInfo(path,data)
-  local app = {}
-  loadstring(tostring(String(LuaUtil.readZip(path, "init.lua"))), "bt", "bt", app)()
-  local str = string.format("名称: %s\
-版本: %s\
-包名: %s\
-作者: %s\
-说明: %s\
-路径: %s",
-  app.appname,
-  app.appver,
-  app.packagename,
-  app.developer,
-  app.description,
-  data)
-  return str, app.mode
-end
-
-function installPlugin(uri)
-  local scheme=uri.getScheme()
-  local path
-  if scheme=="content" then
-    local inputStream=activity.getContentResolver().openInputStream(uri);
-    path=AppPath.AppSdcardCacheDataDir.."/"..File(uri.getPath()).getName()
-    local outputStream=FileOutputStream(path);
-    LuaUtil.copyFile(inputStream,outputStream)
-   else
-    return
-  end
-  local message,mode=getAlpInfo(path,uri)
-  if mode=="plugin" then
-    AlertDialog.Builder(this)
-    .setTitle("安装插件")
-    .setMessage(message)
-    .setPositiveButton("安装",function()
-    end)
-    .setNegativeButton(android.R.string.cancel,nil)
-    .show()
-  end
-end
-
 function onItemClick(view,views,key,data)
   if key=="plugin_item" then
-    local config=data.config
-    local newState=not(data.checked)
+    --local config=data.config
+    local newState=data.checked
     if data.enableVer then
       if newState then
         PluginsUtil.setEnabled(data.dirName,versionCode)
@@ -100,10 +64,28 @@ function onItemClick(view,views,key,data)
     end
    elseif key=="install_plugin" then
     local intent=Intent(Intent.ACTION_GET_CONTENT)
-    intent.setType("application/zip|application/alp")
-    intent.putExtra(Intent.EXTRA_MIME_TYPES,{"application/zip","application/alp"})
+    intent.setType("*/*")
     intent.addCategory(Intent.CATEGORY_OPENABLE)
     activity.startActivityForResult(intent, REQUEST_INSTALLPLUGIN)
+  end
+end
+
+function onItemLongClick(view,views,key,data)
+  if key=="plugin_item" then
+    local config=data.config
+    local pop=PopupMenu(activity,view)
+    local menu=pop.Menu
+    menu.add(R.string.plugins_uninstall).onMenuItemClick=function()
+      PluginsManagerUtil.uninstall(data.path,config,function(state)
+        if state=="success" then
+          MyToast(R.string.uninstall_success)
+          refresh()
+         elseif state=="failed" then
+          MyToast(R.string.uninstall_failed)
+        end
+      end)
+    end
+    pop.show()
   end
 end
 
@@ -118,8 +100,8 @@ function refresh()
   for index,content in ipairs(settings) do
     table.insert(settings2,content)
   end
-  if pluginsFile.isDirectory() then--存在插件文件夹
-    local fileList=pluginsFile.listFiles()
+  if PLUGINS_DIR.isDirectory() then--存在插件文件夹
+    local fileList=PLUGINS_DIR.listFiles()
     for index=0,#fileList-1 do
       local file=fileList[index]
       if file.isDirectory() then
@@ -128,7 +110,7 @@ function refresh()
         local summarySpanIndex={}
         local enableVer=false
         local checked=false
-        local enabled=true
+        local switchEnabled=true
         local path=file.getPath()
         local dirName=file.getName()
         local initPath=path.."/init.lua"
@@ -140,61 +122,65 @@ function refresh()
            else
             title=dirName
           end
+
+          --版本号
           local pluginVersionName=config.appver
           local pluginVersionCode=config.appcode
           if pluginVersionName then
             if versionCode then
-              summary=("版本号：%s (%s)"):format(pluginVersionName,pluginVersionCode)
+              summary=formatResStr(R.string.plugins_info_version,{("%s (%s)"):format(pluginVersionName,pluginVersionCode)})
              else
-              summary="版本号："..pluginVersionName
+              summary=formatResStr(R.string.plugins_info_version,{pluginVersionName})
             end
            elseif pluginVersionCode then
-            summary="版本号："..pluginVersionCode
+            summary=formatResStr(R.string.plugins_info_version,{pluginVersionCode})
            else
-            summary="版本号：未知"
+            summary=formatResStr(R.string.plugins_info_version,{getString(R.string.android.R.string.unknownName)})
           end
+
+          --包名
           local packageName=config.packagename
           if packageName then
-            if packageName==dirName then
-              summary=summary.."\n包名："..packageName
-             else
-              summary=summary..("\n包名：%s\n文件夹名：(%s)"):format(packageName,dirName)
-              summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,"请确保模块的包名与文件夹名相同")
+            summary=summary.."\n"..formatResStr(R.string.plugins_info_packageName,{packageName})
+            if packageName~=dirName then
+              summary=summary.."\n"..formatResStr(R.string.plugins_info_folderName,{dirName})
+              summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,getString(R.string.plugins_warning_keepPFSame))
             end
            else
-            summary=summary.."\n包名："..dirName
-            summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,"请填写包名")
+            summary=summary.."\n"..formatResStr(R.string.plugins_info_folderName,{dirName})
+            summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,getString(R.string.plugins_warning_addPackageName))
+          end
+
+          if config.supported then
+            if not(table.find(config.supported,apptype)) then
+              summary=addSummaryTextLine(summarySpanIndex,"Red",summary,getString(R.string.plugins_error_unsupported))
+            end
+           else
+            summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,getString(R.string.plugins_warning_supported))
           end
 
           local minVerCode=config.minemastercode
           local targetVerCode=config.targetmastercode
-          if minVerCode==nil or minVerCode<=versionCode then
+          if minVerCode==nil or minVerCode<=versionCode then--版本号在允许启用模块的范围之内
             checked=PluginsUtil.getEnabled(dirName)
-            if targetVerCode and targetVerCode<versionCode then--版本号在允许的范围之内或者强制启用
+            if targetVerCode and targetVerCode<versionCode then
               checked=checked==versionCode
               enableVer=true
-              summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,"此插件专为旧版本 "..application.get("appName").." 开发，请检查插件更新")
+              summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,getString(R.string.plugins_warning_update))
             end
            else
-            enabled=false
-            summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,"您的 "..application.get("appName").." 版本不符合此插件最低要求，请检查软件更新")
+            switchEnabled=false
+            summary=addSummaryTextLine(summarySpanIndex,"Red",summary,getString(R.string.plugins_error_update_app))
           end
-          if config.supported then
-            if not(table.find(config.supported,apptype)) then
-              summary=addSummaryTextLine(summarySpanIndex,"Red",summary,"此插件不适配本软件，请下载对应版本的插件")
-            end
-           else
-            summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,"此插件未指定支持的软件，因此可能无法正常加载")
-          end
-         else
+         else--不存在init.lua，是非法插件
           config={}
-          enabled=false
+          switchEnabled=false
           title=dirName
-          summary="非法模块，建议删除"
+          summary=getString(R.string.plugins_error)
           table.insert(summarySpanIndex,{theme.color.Red,0,utf8.len(summary)})
-          --checked=false
         end
 
+        --处理文字
         if #summarySpanIndex~=0 then
           spannableSummary=SpannableString(summary)
           summary=nil
@@ -214,25 +200,24 @@ function refresh()
           key="plugin_item",
           checked=toboolean(checked),
           config=config,
-          enabled=enabled,
+          switchEnabled=switchEnabled,
           enableVer=enableVer,
           dirName=dirName,
+          path=path,
         })
       end
     end
   end
   table.insert(settings2,{
     SettingsLayUtil.ITEM_ONLYSUMMARY;
-    summary="开关插件后需要重新启动本应用",
+    summary=R.string.plugins_reboot,
     clickable=false
   })
-  adp.notifyDataSetChanged()
+  adapter.notifyDataSetChanged()
 end
 
---refresh()
-
-adp=SettingsLayUtil.newAdapter(settings2,onItemClick)
-recyclerView.setAdapter(adp)
+adapter=SettingsLayUtil.newAdapter(settings2,onItemClick,onItemLongClick)
+recyclerView.setAdapter(adapter)
 layoutManager=LinearLayoutManager()
 recyclerView.setLayoutManager(layoutManager)
 recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
@@ -253,16 +238,7 @@ mainLay.onTouch=function(view,...)
 end
 
 
-if scroll then
-  scroll=luajava.astable(scroll)
-  local pos=scroll[1] or 0
-  recyclerView.scrollToPosition(pos)
-end
 
 
-screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
-  listViews={recyclerView},
-})
-
-onConfigurationChanged(activity.getResources().getConfiguration())
-
+mainLay.ViewTreeObserver
+.addOnGlobalLayoutListener(ScreenFixUtil.LayoutListenersBuilder.listViews(mainLay,{recyclerView}))

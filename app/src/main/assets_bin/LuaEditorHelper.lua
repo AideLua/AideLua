@@ -86,12 +86,16 @@ end
 
 function LuaEditorHelper.applyPencilInput(editor,pencilEdit)
   local cnString2EnString={
+    {"，",","},
     {"（","("},
     {"）",")"},
     {"［","["},
     {"］","]"},
     {"＇","'"},
     {"＂","\""},
+    {"“","\""},
+    {"”","\""},
+    {"〃","\""},
   }
   pencilEdit.addTextChangedListener({
     onTextChanged=function(text,start,before,count)

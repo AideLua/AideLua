@@ -9,6 +9,7 @@ This project is being repaired. If you need to use the source code, please go to
 
 ## 简介
 Aide Lua 是一款依赖 Aide 的 Lua 编辑器
+Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件开发
 
 ## 下载
 [〖Aide 高级设置版〗](https://www.lanzouy.com/b00zdhbeb)
@@ -59,7 +60,7 @@ Aide Lua 是一款依赖 Aide 的 Lua 编辑器
 
 4. 不是必须用AIDE编译，只不过用AIDE编译会更好一些
 
-## [引用的开源](https://gitee.com/Jesse205/AideLua/blob/master/app/src/main/luaLibs/openSourceLicenses.aly)
+## [开放源代码许可](https://gitee.com/Jesse205/AideLua/blob/master/app/src/main/assets_bin/licences)
 
 ## 高级玩法
 .aidelua/config.lua用法

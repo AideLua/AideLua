@@ -35,8 +35,9 @@
     <string name="commentedCode">Commented code</string>
     <string name="uncommentedCode">Uncomment code</string>
     <string name="logCat">Log Cat</string>
+  
     <string name="open">Open</string>
-    <string name="install">Install</string>
+    <string name="open_failed">Open failed</string>
     
     <string name="exit_toast">Press again to exit the program.</string>
     <string name="res_references">Reference resources</string>
@@ -159,7 +160,7 @@
     <string name="settings_addComplexLibrary_summary">You can use your own complex library in functions such as "new project"</string>
     <string name="settings_editor_previewButton">Preview button</string>
     
-    <string name="window_openNew">Open a new window</string>
+    <string name="window_openNew">New window</string>
     <string name="window_openInNewWindow">Open in a new window</string>
     
     <string name="rename">Rename</string>
@@ -170,11 +171,33 @@
     <string name="runCode_noApp">In order for you to better debug the software, please package and install the project first, and open LuaActivity.</string>
     <string name="runCode_noPackageName">For you to better debug the software, please check whether the packageName of config.lua exists.</string>
 
-    <string name="plugins">Plugins</string>
-    <string name="plugins_popup">Plugins...</string>
+    <string name="plugins">Plug-ins</string>
+    <string name="plugins_popup">Plug-in...</string>
     <string name="plugins_manager">Plugins Manager</string>
-    <string name="plugins_install">Install plugins</string>
-    <string name="plugins_installed">Installed plugins</string>
-    <string name="plugins_download">Download plugins</string>
+    <string name="plugins_install">Install plug-ins</string>
+    <string name="plugins_installed">Installed plug-ins</string>
+    <string name="plugins_uninstall">Uninstall plug-ins</string>
+    <string name="plugins_uninstall_warning">Are you sure to uninstall? The plug-in data will be cleared after uninstallation (if the standard storage method is used)</string>
+    <string name="plugins_download">Download plug-ins</string>
+    <string name="plugins_info_version">Version: %1$s</string>
+    <string name="plugins_info_packageName">Package name: %1$s</string>
+    <string name="plugins_info_folderName">Folder name: %1$s</string>
+    <string name="plugins_warning_keepPFSame">Please make sure the package name of the plugin is the same as the folder name.</string>
+    <string name="plugins_warning_addPackageName">Please fill in the package name.</string>
+    <string name="plugins_warning_update">This plugin is developed for the old version of Aide Lua, please check the plugin update.</string>
+    <string name="plugins_warning_supported">This plugin does not specify the supported software, so it may not be loaded normally.</string>
+    <string name="plugins_error">Illegal plugin, recommended deletion.</string>
+    <string name="plugins_error_update_app">Your Aide Lua version does not meet the minimum requirements of this plugin, please check the software update.</string>
+    <string name="plugins_error_unsupported">This plugin is not suitable for this software, please download the corresponding version of the plugin</string>
+    <string name="plugins_reboot">Restart this application after switching plug-in.</string>
+    
+    <string name="install">Install</string>
+    <string name="install_success">Installation success</string>
+    <string name="install_failed">Installation failed</string>
+    
+    <string name="uninstall">Uninstall</string>
+    <string name="uninstall_withName">Uninstall %1$s</string>
+    <string name="uninstall_success">Uninstall success</string>
+    <string name="uninstall_failed">Uninstall failed</string>
     
 </resources>

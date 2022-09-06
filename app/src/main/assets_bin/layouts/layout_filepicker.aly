@@ -39,7 +39,12 @@
         layoutTransition=newLayoutTransition();
         --minimumWidth=0;
       };]]
-
+      {
+        TextView;
+        textSize="14sp";
+        padding="8dp";
+        id="pathPlaceholderView";
+      };
       {
         RecyclerView;
         layout_width="fill";

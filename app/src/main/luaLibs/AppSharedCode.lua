@@ -23,6 +23,11 @@ function newLayoutTransition()
   end
 end
 
+--加载全局插件
+function onCreate(savedInstanceState)
+  PluginsUtil.callElevents("onCreate", savedInstanceState)
+end
+
 apptype="aidelua"
 
 import "PluginsUtil"

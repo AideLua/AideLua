@@ -268,8 +268,8 @@ function EditorsManager.openNewContent(filePath,fileType,decoder)
     fileConfig.changed=false
     managerActions.setText(content)
     local scrollConfig=assert(loadstring(getSharedData("scroll_"..filePath) or "{}"))()
-    managerActions.setTextSize(scrollConfig.size or math.dp2int(14))
     managerActions.setSelection(scrollConfig.selection or 0)
+    managerActions.setTextSize(scrollConfig.size or math.dp2int(14))
     managerActions.scrollTo(scrollConfig.x or 0,scrollConfig.y or 0)
    else
     decoder.apply(filePath,fileType,editor)

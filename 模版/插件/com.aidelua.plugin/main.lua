@@ -15,6 +15,7 @@ import "androidx.coordinatorlayout.widget.CoordinatorLayout"
 activity.setContentView(loadlayout("layout"))
 actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true)
+prjPath,filePath=...
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()
@@ -22,3 +23,7 @@ function onOptionsItemSelected(item)
     activity.finish()
   end
 end
+
+print("进入插件页面")
+print("工程路径",prjPath)
+print("文件路径",filePath)

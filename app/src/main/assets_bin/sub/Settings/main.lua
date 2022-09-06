@@ -1,10 +1,9 @@
 require "import"
 import "Jesse205"
-import "com.Jesse205.FileInfoUtils"
+--import "com.Jesse205.FileInfoUtils"
 import "com.Jesse205.layout.util.SettingsLayUtil"
 import "com.Jesse205.layout.innocentlayout.RecyclerViewLayout"
 import "com.Jesse205.app.dialog.EditDialogBuilder"
-import "net.lingala.zip4j.ZipFile"
 
 PackInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
 PluginsUtil.setActivityName("settings")
@@ -21,10 +20,10 @@ oldTheme=ThemeUtil.getAppTheme()
 configType,config=...
 
 REQUEST_ADDCLIB=10
-
+--[[
 function onCreate(savedInstanceState)
   PluginsUtil.callElevents("onCreate",savedInstanceState)
-end
+end]]
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()
@@ -39,6 +38,7 @@ function onResume()
   end
 end
 
+--[[
 function onActivityResult(requestCode,resultCode,data)
   if resultCode==Activity.RESULT_OK then
     if requestCode==REQUEST_ADDCLIB then
@@ -74,7 +74,7 @@ function addComplexLibrary(path)
   LuaUtil.rmDir(tempDir)--删除
   MyToast("导入成功")
 end
-
+]]
 function reloadActivity(closeViews)
   local aRanim=android.R.anim
   local pos,scroll
@@ -96,11 +96,6 @@ function onItemClick(view,views,key,data)
     newSubActivity("About")
    elseif key=="theme_darkactionbar" then
     reloadActivity({view,views.switchView})
-   elseif key=="addComplexLibrary" then
-    local intent=Intent(Intent.ACTION_GET_CONTENT)
-    intent.setType("application/zip")
-    intent.addCategory(Intent.CATEGORY_OPENABLE)
-    activity.startActivityForResult(intent, REQUEST_ADDCLIB)
    elseif key=="plugins_manager" then
     newSubActivity("PluginsManager")
    else

@@ -26,11 +26,28 @@ local openedFiles = {}
 FilesTabManager.backupPath=AppPath.AppShareDir..os.date("/backup/%Y%m%d")
 FilesTabManager.backupDir=File(FilesTabManager.backupPath)
 
+local nowTabTouchTag
+local function onFileTabLongClick(view)
+  local tag = view.tag
+  nowTabTouchTag = tag
+  tag.onLongTouch = true
+end
+
+local moveCloseHeight
+local function refreshMoveCloseHeight(height)
+  height = height - 56
+  if height <= 320 then
+    moveCloseHeight = math.dp2int(height / 2)
+   else
+    moveCloseHeight = math.dp2int(160)
+  end
+end
+FilesTabManager.refreshMoveCloseHeight = refreshMoveCloseHeight
+
+
 local function onFileTabTouch(view, event)
   local tag = view.tag
   local action = event.getAction()
-  -- print(action)
-  -- local view=view
   if action == MotionEvent.ACTION_DOWN then
     tag.downY = event.getRawY()
    else
@@ -51,9 +68,18 @@ local function onFileTabTouch(view, event)
       tag.onLongTouch = false
       if moveY > moveCloseHeight then
         --closeFileAndTab(tag.tab)
-        --FilesTabManager.closeFile(lowerFilePath, saveFile)
         print("提示：tab未关闭，文件未保存")
+        print(tag.lowerFilePath)
+        FilesTabManager.closeFile(tag.lowerPath, true)
         view.setRotationX(0)
+        Handler().postDelayed(Runnable({
+          run = function()
+            if openState then
+              fileConfig.tab.select()
+            end
+        end}),1)
+
+        --[[
         if OpenedFile then
           local tabConfig = FilesTabList[string.lower(NowFile.getPath())]
           if tabConfig then
@@ -62,7 +88,7 @@ local function onFileTabTouch(view, event)
               tab.select()
             end)
           end
-        end
+        end]]
        else
         ObjectAnimator.ofFloat(view, "rotationX", {0}).setDuration(200)
         .setInterpolator(DecelerateInterpolator()).start()
@@ -86,6 +112,7 @@ local function initFileTabView(tab, fileConfig)
   view.setPadding(math.dp2int(8), math.dp2int(4), math.dp2int(8), math.dp2int(4))
   view.setGravity(Gravity.LEFT | Gravity.CENTER)
   view.tag = fileConfig
+  view.onLongClick=onFileTabLongClick
   view.onTouch = onFileTabTouch
   TooltipCompat.setTooltipText(view, fileConfig.shortFilePath)
   local imageView = view.getChildAt(0)
@@ -96,6 +123,7 @@ local function initFileTabView(tab, fileConfig)
   textView.setAllCaps(false) -- 关闭全部大写
   .setTextSize(12)
 end
+--FilesTabManager.initFileTabView=initFileTabView
 
 
 
@@ -144,7 +172,10 @@ function FilesTabManager.openFile(newFile,newFileType, keepHistory)
 
     EditorsManager.switchEditorByDecoder(decoder)
     EditorsManager.openNewContent(filePath,newFileType,decoder)
-    
+
+    setSharedData("openedFilePath_"..ProjectManager.nowPath,filePath)
+
+    --更新文件浏览器显示内容
     local browserAdapter=FilesBrowserManager.adapter
     if FilesBrowserManager.nowFilePosition then
       browserAdapter.notifyItemChanged(FilesBrowserManager.nowFilePosition)
@@ -166,7 +197,7 @@ end
 -- 保存当前打开的文件，由于当前没有编辑器监听能力，保存文件需要直接从编辑器获取
 function FilesTabManager.saveFile(lowerFilePath,showToast)
   print("警告：保存文件")
-  if openState and EditorsManager.isEditor() then
+  if openState and ProjectManager.openState then
     local config
     if lowerFilePath then
       config=openedFiles[lowerFilePath]
@@ -174,13 +205,17 @@ function FilesTabManager.saveFile(lowerFilePath,showToast)
       config=fileConfig
     end
     local managerActions=EditorsManager.actions
-    setSharedData("scroll_"..config.path,dump({
+    local editorStateConfig={
       size=managerActions.getTextSize(),
       x=managerActions.getScrollX(),
       y=managerActions.getScrollY(),
       selection=managerActions.getSelectionEnd()
-    }))
-
+    }
+    if table.size(editorStateConfig)==0 then
+      setSharedData("scroll_"..config.path,nil)
+     else
+      setSharedData("scroll_"..config.path,dump(editorStateConfig))
+    end
     EditorsManager.save2Tab()
 
     if config.changed then
@@ -227,19 +262,30 @@ function FilesTabManager.closeFile(lowerFilePath, saveFile)
     config=fileConfig
   end
   if config then
+    local lowerFilePath=config.lowerFilePath
     if saveFile~=false then
       FilesTabManager.saveFile(lowerFilePath)
     end
 
     openedFiles[config.lowerPath]=nil
-    if #openedFiles==0 then
+    filesTabLay.removeTab(config.tab)
+    if table.size(openedFiles)==0 then
       openState = false
       file=nil
       fileConfig=nil
+
+      setSharedData("openedFilePath_"..ProjectManager.nowPath,nil)
+      --更新文件浏览器显示内容
+      local browserAdapter=FilesBrowserManager.adapter
+      if FilesBrowserManager.nowFilePosition then
+        browserAdapter.notifyItemChanged(FilesBrowserManager.nowFilePosition)
+      end
       filesTabLay.setVisibility(View.GONE)--隐藏Tab区域
       EditorsManager.switchEditor("NoneView")
       refreshMenusState()
     end
+   else
+    print("警告：无法关闭文件")
   end
 end
 
@@ -249,24 +295,6 @@ function FilesTabManager.closeAllFiles(saveFiles)
     FilesTabManager.closeFile(index, saveFiles)
   end
 end
-
-local nowTabTouchTag
-local function onFileTabLongClick(view)
-  local tag = view.tag
-  nowTabTouchTag = tag
-  tag.onLongTouch = true
-end
-
-local moveCloseHeight
-local function refreshMoveCloseHeight(height)
-  height = height - 56
-  if height <= 320 then
-    moveCloseHeight = math.dp2int(height / 2)
-   else
-    moveCloseHeight = math.dp2int(160)
-  end
-end
-FilesTabManager.refreshMoveCloseHeight = refreshMoveCloseHeight
 
 
 -- 初始化 FilesTabManager

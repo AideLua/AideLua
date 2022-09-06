@@ -1,6 +1,6 @@
 local pathSplitList=FilesBrowserManager.pathSplitList
 local function onClick(view)
-  FilesBrowserManager.refresh(File(view.tag))
+  FilesBrowserManager.refresh(File(view.tag),true)
 end
 
 local length=0
@@ -26,16 +26,19 @@ return function(item)
 
       titleView.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary))
       titleView.onClick=onClick
-      --view.onLongClick=onLongClick
       titleView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL))
 
       if viewType==1 then
         titleView.setTextColor(theme.color.colorAccent)
         ids.icon.setVisibility(View.GONE)
         titleView.getPaint().setFakeBoldText(true)
-        --titleView.getPaint().setTypeface(Typeface.DEFAULT_BOLD)
+        if getSharedData("theme_darkactionbar") then
+          titleView.setTextColor(theme.color.ActionBar.colorControlNormal)
+         else
+          titleView.setTextColor(theme.color.colorAccent)
+        end
        else
-        --titleView.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
+        titleView.setTextColor(theme.color.ActionBar.textColorSecondary)
       end
       return holder
     end,
@@ -44,7 +47,7 @@ return function(item)
       local data=pathSplitList[position+1]
       local view=holder.view
       local tag=view.getTag()
-     
+
       local titleView=tag.title
       local iconView=tag.icon
       titleView.setText(data[1])

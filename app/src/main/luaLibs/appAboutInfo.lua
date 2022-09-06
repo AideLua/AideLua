@@ -1,7 +1,7 @@
 appInfo={
   {
     name=R.string.app_name,
-    message="依赖Aide的一款Lua编辑器",
+    message="为更快进行移动开发",
     icon=R.mipmap.ic_launcher,
     click=function()
       openUrl("https://gitee.com/Jesse205/AideLua")
