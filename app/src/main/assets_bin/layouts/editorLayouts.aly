@@ -44,6 +44,7 @@
       layout_height="fill";
       layout_width="fill";
       id="editorParent";
+      layoutTransition=newLayoutTransition();
       {
         ProgressBar;--进度条
         id="progressBar";

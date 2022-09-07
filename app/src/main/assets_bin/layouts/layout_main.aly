@@ -21,7 +21,7 @@
       layout_width="fill";
       orientation="vertical";
       id="appBarLinearLayout";
-      layoutTransition=newLayoutTransition();
+      --layoutTransition=newLayoutTransition();
       {
         TabLayout;
         layout_width="fill";
@@ -38,11 +38,11 @@
     };
   };
   {--编辑器部分
-    LinearLayoutCompat;
+    FrameLayout;
     layout_height="fill";
     layout_width="fill";
     layout_weight=1;
-    --layoutTransition=newLayoutTransition();
+    layoutTransition=newLayoutTransition();
     {
       CoordinatorLayout;
       layout_height="fill";
@@ -60,7 +60,7 @@
     elevation="4dp";
     radius=0;
     layout_height="40dp";
-    layoutTransition=newLayoutTransition();
+    --layoutTransition=newLayoutTransition();
     {
       LinearLayoutCompat;
       layout_height="fill";

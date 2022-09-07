@@ -3,9 +3,10 @@ initApp = true -- 首页面，初始化
 require "Jesse205"
 -- 检测是否需要进入欢迎页面
 import "agreements"
-welcomeAgain = not (getSharedData("welcome"))
-if not (welcomeAgain) then
-  for index, content in ipairs(agreements) do
+welcomeAgain = not(getSharedData("welcome"))
+if not(welcomeAgain) then
+  for index=1, #agreements do
+    local content=agreements[index]
     if getSharedData(content.name) ~= content.date then
       welcomeAgain = true
       setSharedData("welcome",false)
@@ -21,10 +22,12 @@ end
 
 StatService.start(activity)
 
+--[[
 -- 安全模式
 safeModeEnable = File("/sdcard/aidelua_safemode").exists()
-notSafeModeEnable = not (safeModeEnable)
+notSafeModeEnable = not(safeModeEnable)
 application.set("safeModeEnable", safeModeEnable)
+]]
 
 import "android.text.TextUtils$TruncateAt"
 import "android.content.ComponentName"
@@ -94,15 +97,15 @@ oldEditorSymbolBar = getSharedData("editor_symbolBar")
 oldEditorPreviewButton = getSharedData("editor_previewButton")
 
 lastBackTime = 0 -- 上次点击返回键时间
-lastPencilkeyTime = 0--上次双击笔时间
+lastPencilkeyTime = 0 -- 上次双击笔时间
 
 SDK_INT = Build.VERSION.SDK_INT
-PackInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 64)
-lastUpdateTime = PackInfo.lastUpdateTime
+packageInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 64)
+lastUpdateTime = packageInfo.lastUpdateTime
 
 activityStopped = false
 nowDevice="phone"
-mainWidth=0
+screenWidthDp=0
 
 receivedData={...}
 
@@ -127,9 +130,6 @@ function onCreate(savedInstanceState)
     if not(data) then
       data=getSharedData("openedProject")
     end
-    if data and not(data2) then
-      data2=getSharedData("openedFilePath_"..data)
-    end
   end
 
   if savedInstanceState then
@@ -139,9 +139,11 @@ function onCreate(savedInstanceState)
     data3=dirPath
   end
   if data then
+    pathPlaceholderView.setVisibility(View.VISIBLE)
     ProjectManager.openProject(data,data2,data3)
    else
     ProjectManager.closeProject(false)
+    pathPlaceholderView.setVisibility(View.GONE)
     FilesBrowserManager.open()
   end
 
@@ -257,8 +259,18 @@ function onOptionsItemSelected(item)
    elseif id == Rid.menu_code_checkCode then -- 代码查错
     editorActions.check(true)
    elseif id == Rid.menu_tools_layoutHelper then -- 布局助手
-    print("错误：暂不支持")
-    
+    --print("错误：暂不支持")
+    FilesTabManager.saveFile()
+    local prjPath,filePath
+    if ProjectManager.openState then
+      prjPath=ProjectManager.nowConfig.projectMainPath.."/"
+    end
+    if FilesTabManager.openState and FilesTabManager.fileType=="aly" then
+      filePath=FilesTabManager.file.getPath()
+
+    end
+    newSubActivity("LayoutHelper",{prjPath,filePath})
+
    elseif id == Rid.menu_more_openNewWindow then -- 打开新窗口
     activity.newActivity("main",{"projectPicker"},true,int(System.currentTimeMillis()))
   end
@@ -299,8 +311,7 @@ end
 function onConfigurationChanged(config)
   screenConfigDecoder:decodeConfiguration(config)
   local smallestScreenWidthDp = config.smallestScreenWidthDp
-  local screenWidthDp = config.screenWidthDp
-  --ScreenWidthDp = screenWidthDp
+  screenWidthDp = config.screenWidthDp--设置为全局变量，其他地方要用到
   local drawerChildLinearParams = drawerChild.getLayoutParams()
   if screenWidthDp < 448 then
     drawerChildLinearParams.width = -1
@@ -313,7 +324,7 @@ function onConfigurationChanged(config)
   end
   drawerChild.setLayoutParams(drawerChildLinearParams)
   EditorsManager.refreshEditorScrollState()
-  refreshSubTitle()
+  refreshSubTitle(screenWidthDp)
   FilesTabManager.refreshMoveCloseHeight(config.screenHeightDp)
   PluginsUtil.callElevents("onConfigurationChanged", config)
 end
@@ -339,7 +350,6 @@ function onDeviceByWidthChanged(device, oldDevice)
     drawer.setVisibility(View.VISIBLE)
 
     if browserOpenState then
-      --drawer.openDrawer(Gravity.LEFT)
       Handler().postDelayed(Runnable({
         run = function()
           drawer.openDrawer(Gravity.LEFT)
@@ -397,6 +407,7 @@ function onResume()
 
   if notFirstOnResume then
     ProjectManager.refreshProjectsPath()
+    FilesTabManager.reopenFile()
     local newTabIcon = getSharedData("tab_icon") -- 刷新标签栏按钮状态
     if oldTabIcon ~= newTabIcon then
       oldTabIcon = newTabIcon
@@ -417,16 +428,17 @@ function onResume()
     local newEditorSymbolBar = getSharedData("editor_symbolBar")
     if oldEditorSymbolBar ~= newEditorSymbolBar then
       oldEditorSymbolBar = newEditorSymbolBar
-      refreshSymbolBar(newEditorSymbolBar)
+      EditorsManager.symbolBar.refresh(newEditorSymbolBar)
     end
     -- todo:更新预览，刷新代码
   end
   FilesBrowserManager.refresh()
-
   notFirstOnResume = true
+  PluginsUtil.callElevents("onResume", notFirstOnResume)
 end
 
 function onResult(name, action, content)
+  local processed=false
   if action == "project_created_successfully" then
     showSnackBar(R.string.create_success).setAction(R.string.open, function(view)
       if ProjectManager.openState then -- 已打开项目
@@ -434,7 +446,10 @@ function onResult(name, action, content)
       end
       ProjectManager.openProject(content)
     end)
-   else
+    processed=true
+  end
+  processed=PluginsUtil.callElevents("onResult", name, action, content) or processed or false
+  if processed==false then
     showSnackBar(action)
   end
 end
@@ -460,6 +475,7 @@ function onDestroy()
   if magnifierUpdateTi and magnifierUpdateTi.isRun() then
     magnifierUpdateTi.stop()
   end
+  PluginsUtil.callElevents("onDestroy")
 end
 
 function onKeyDown(keyCode, event)
@@ -530,7 +546,6 @@ end
 
 toggle = ActionBarDrawerToggle(activity, drawer, R.string.drawer_open, R.string.drawer_close)
 drawer.addDrawerListener(toggle)
---toggle.syncState()
 
 FilesTabManager.init()
 EditorsManager.init()
@@ -547,8 +562,6 @@ task(500,function()
   end
 end)]]
 
-EditorsManager.symbolBar.refreshSymbolBar(oldEditorSymbolBar) -- 刷新符号栏状态
-EditorsManager.switchEditor("NoneView")
 
 
 mainLay.ViewTreeObserver

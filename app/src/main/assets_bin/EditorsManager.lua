@@ -11,27 +11,32 @@ EditorsManager.actions.commented():注释
 EditorsManager.actions.getText(): 获取编辑器文字内容
 EditorsManager.actions.setText(...): 设置编辑器文字内容
 EditorsManager.actions.check(show): 查错
-  ┗ show (string): 展示结果
+  show (string): 展示结果
 EditorsManager.actions.paste(text): 粘贴文字内容
-  ┗ text (string): 文字
+  text (string): 文字
 EditorsManager.actions.setTextSize(size): 设置文字大小
-  ┗ size (number): 文字大小
+  size (number): 文字大小
 EditorsManager.actions.search(text,gotoNext): 搜索
+EditorsManager.openNewContent(filePath,fileType,decoder): 打开新内容
+  filePath (string): 文件路径
+  fileType (string): 文件扩展名
+  decoder (table): 文件解析工具
 EditorsManager.startSearch(): 启动搜索
 EditorsManager.save2Tab(): 保存到标签
 EditorsManager.checkEditorSupport(name): 检查编辑器是否支持功能
-  ┗ name (string): 功能名称
+  name (string): 功能名称
+EditorsManager.isEditor(): 是不是可编辑的编辑器
 EditorsManager.switchPreview(state): 切换预览
-  ┗ state (boolean): 状态
+  state (boolean): 状态
 EditorsManager.switchLanguage(language): 切换语言
-  ┗ language (Object): 语言
+  language (Object): 语言
 EditorsManager.switchEditor(editorType): 切换编辑器
-  ┗ editorType (string): 编辑器类型
+  editorType (string): 编辑器类型
 EditorsManager.symbolBar: 符号栏
 EditorsManager.symbolBar.psButtonClick: 符号栏按钮点击时输入符号点击事件
 EditorsManager.symbolBar.newPsButton(text): 初始化一个符号栏按钮
 EditorsManager.symbolBar.refreshSymbolBar(state): 刷新符号栏状态
-  ┗ state (boolean): 开关状态
+  state (boolean): 开关状态
 ]]
 local EditorsManager={}
 local managerActions={}
@@ -259,14 +264,14 @@ function EditorsManager.save2Tab()
 end
 
 --打开新内容
-function EditorsManager.openNewContent(filePath,fileType,decoder)
+function EditorsManager.openNewContent(filePath,fileType,decoder,keepHistory)
   if EditorsManager.isEditor() then
     local fileConfig=FilesTabManager.fileConfig
     local content=decoder.read(filePath)
     fileConfig.oldContent=content
     fileConfig.newContent=content
     fileConfig.changed=false
-    managerActions.setText(content)
+    managerActions.setText(content,keepHistory or false)
     local scrollConfig=assert(loadstring(getSharedData("scroll_"..filePath) or "{}"))()
     managerActions.setSelection(scrollConfig.selection or 0)
     managerActions.setTextSize(scrollConfig.size or math.dp2int(14))
@@ -451,6 +456,10 @@ function EditorsManager.init()
     EditorsManager.switchPreview(true)
   end
 
+  EditorsManager.symbolBar.refresh(oldEditorSymbolBar) -- 刷新符号栏状态
+  EditorsManager.switchEditor("NoneView")
+
+
 end
 
 
@@ -485,7 +494,7 @@ function symbolBar.newPsButton(text)
 end
 
 local loadedSymbolBar=false
-function symbolBar.refreshSymbolBar(state)--刷新符号栏状态
+function symbolBar.refresh(state)--刷新符号栏状态
   if state then
     if not(loadedSymbolBar) then--没有加载过符号栏，就加载一次
       local ps={"function()","(",")","[","]","{","}","\"","=",":",".",",",";","_","+","-","*","/","\\","%","#","^","$","?","&","|","<",">","~","'"};

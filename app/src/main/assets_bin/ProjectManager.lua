@@ -8,17 +8,17 @@ ProjectManager.openState; ProjectManager.getOpenState(): 项目打开状态
 ProjectManager.nowConfig; ProjectManager.getNowConfig(): 已打开项目的配置
 ProjectManager.refreshProjectsPath(): 刷新项目路径
 ProjectManager.runProject(path): 运行项目
-  ┗ path: 运行的文件路径，留空为默认
+  path: 运行的文件路径，留空为默认
 ProjectManager.updateNowConfig(config)--更新当前项目配置
-  ┗ config: 配置
+  config: 配置
 ProjectManager.openProject(path): 打开项目
-  ┗ path:项目路径
+  path:项目路径
 ProjectManager.closeProject(refreshFilesBrowser): 关闭项目
-  ┗ doNotRefreshFB: 刷新文件浏览器，默认为true
+  doNotRefreshFB: 刷新文件浏览器，默认为true
 ProjectManager.shortPath(path,max,basePath): 截取完整路径的后半，取相对路径
-  ┣ path: 绝对路径路径
-  ┣ max: 最大字符数，如果max为true，代表无限大
-  ┗ basePath: 当前路径
+  path: 绝对路径路径
+  max: 最大字符数，如果max为true，代表无限大
+  basePath: 当前路径
 
 ]]
 local ProjectManager={}
@@ -95,8 +95,8 @@ function ProjectManager.openProject(path,filePath,openedDirPath)
   setSharedData("openedProject",path)
   EditorsManager.switchEditor("NoneView")
   local nowBrowserDir,nowOpenedFile
-  local defaultFilePath="app/src/main/assets_bin/main.lua"
-  local defaultFile=File(path.."/"..defaultFilePath)
+  filePath=filePath or getSharedData("openedFilePath_"..path)
+  local defaultFile=File(config.projectMainPath.."/main.lua")
 
   if filePath then
     nowOpenedFile=File(filePath)
@@ -107,12 +107,11 @@ function ProjectManager.openProject(path,filePath,openedDirPath)
   end
   if nowOpenedFile then
     FilesTabManager.openFile(nowOpenedFile,getFileTypeByName(nowOpenedFile.getName()), false)
-    nowBrowserDir=defaultFile.getParentFile()
+    nowBrowserDir=nowOpenedFile.getParentFile()
   end
   if openedDirPath then
     nowBrowserDir=File(openedDirPath)
   end
-  pathPlaceholderView.setVisibility(View.VISIBLE)
   FilesBrowserManager.refresh(nowBrowserDir,false,false,true)
   refreshMenusState()
 end
@@ -120,8 +119,15 @@ end
 
 --关闭项目
 function ProjectManager.closeProject(refreshFilesBrowser)
+  local openedFilePath
+  if FilesTabManager.openState then
+    openedFilePath=FilesTabManager.file.getPath()
+  end
   FilesBrowserManager.clearAdapterData()
   FilesTabManager.closeAllFiles(true)
+  if openState then
+    setSharedData("openedFilePath_"..nowPath,openedFilePath)
+  end
   openState=false
   nowFile=nil
   nowPath=nil
@@ -137,7 +143,6 @@ function ProjectManager.closeProject(refreshFilesBrowser)
   editor.scrollTo(0,0)
   editor.setText(defaultText)
   editor.setSelection(#defaultText)
-  pathPlaceholderView.setVisibility(View.GONE)
   if refreshFilesBrowser~=false then
     FilesBrowserManager.refresh(nil,false,false,true)
   end

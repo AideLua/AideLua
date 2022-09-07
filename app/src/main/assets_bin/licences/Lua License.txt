@@ -19,7 +19,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 (end of COPYRIGHT)
 
-中文(Deepl)：
+中文(DeepL)：
 Lua许可证
 -----------
 

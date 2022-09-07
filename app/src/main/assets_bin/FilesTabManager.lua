@@ -1,10 +1,11 @@
 --[[
-FilesTabManager:文件标签管理器，顺便管理文件的读写与保存
+FilesTabManager:文件标签管理器，兼职管理文件的读写与保存
 FilesTabManager.openState; FilesTabManager.getOpenState(): 文件打开状态
+FilesTabManager.file; FilesTabManager.getFile(): 现在打开的文件
 FilesTabManager.fileConfig; FilesTabManager.getFileConfig(): 现在打开的文件的配置
 FilesTabManager.fileType; FilesTabManager.getFileType(): 现在打开的文件类型
 FilesTabManager.openedFiles; FilesTabManager.getOpenedFiles(): 已打开的文件列表，以lowerPath作为键
-  ┗ 数据格式:{
+  数据格式:{
    ["/path1.lua"]={
      file=File(),
      path="/path1.lua",
@@ -14,9 +15,9 @@ FilesTabManager.openedFiles; FilesTabManager.getOpenedFiles(): 已打开的文�
      edited=true,
      }
    }
-FilesTabManager.openFile(file,keepHistory): 打开文件
-  ┣ file: 要打开的文件
-  ┗ keepHistory:不删除新编辑器的历史记录
+FilesTabManager.openFile(file,fileType): 打开文件
+  file: 要打开的文件
+  fileType: 文件扩展名
 FilesTabManager.saveFile(): 保存当前编辑的文件
 FilesTabManager.saveAllFiles(): 保存所有文件
 ]]
@@ -67,9 +68,6 @@ local function onFileTabTouch(view, event)
       nowTabTouchTag = nil
       tag.onLongTouch = false
       if moveY > moveCloseHeight then
-        --closeFileAndTab(tag.tab)
-        print("提示：tab未关闭，文件未保存")
-        print(tag.lowerFilePath)
         FilesTabManager.closeFile(tag.lowerPath, true)
         view.setRotationX(0)
         Handler().postDelayed(Runnable({
@@ -127,7 +125,7 @@ end
 
 
 
-function FilesTabManager.openFile(newFile,newFileType, keepHistory)
+function FilesTabManager.openFile(newFile,newFileType)
   if openState and EditorsManager.isEditor() then
     --EditorsManager.save2Tab()
     FilesTabManager.saveFile(nil,false)
@@ -155,7 +153,8 @@ function FilesTabManager.openFile(newFile,newFileType, keepHistory)
         lowerPath = lowerFilePath,
         decoder = decoder,
         tab=tab,
-        shortFilePath=ProjectManager.shortPath(filePath,true)
+        shortFilePath=ProjectManager.shortPath(filePath,true),
+        deleted=false;
       }
       openedFiles[lowerFilePath] = fileConfig
       tab.tag=fileConfig
@@ -164,40 +163,63 @@ function FilesTabManager.openFile(newFile,newFileType, keepHistory)
       initFileTabView(tab,fileConfig)
 
     end
-    if not(tab.isSelected()) then--避免调用tab里面的重复点击事件
-      task(1,function()
-        tab.select()
-      end)--选中Tab
+    if File(filePath).isFile() then
+      if not(tab.isSelected()) then--避免调用tab里面的重复点击事件
+        task(1,function()
+          tab.select()
+        end)--选中Tab
+      end
+
+      EditorsManager.switchEditorByDecoder(decoder)
+      EditorsManager.openNewContent(filePath,newFileType,decoder,false)
+
+      setSharedData("openedFilePath_"..ProjectManager.nowPath,filePath)
+
+      --更新文件浏览器显示内容
+      local browserAdapter=FilesBrowserManager.adapter
+      if FilesBrowserManager.nowFilePosition then
+        browserAdapter.notifyItemChanged(FilesBrowserManager.nowFilePosition)
+      end
+      local newFilePosition=FilesBrowserManager.filesPositions[filePath]
+      FilesBrowserManager.nowFilePosition=newFilePosition
+      if newFilePosition then
+        browserAdapter.notifyItemChanged(newFilePosition)
+      end
+
+      refreshMenusState()
+      return true,false
+     else
+      fileConfig.deleted=true
+      FilesTabManager.closeFile(fileConfig.lowerPath)
+      showSnackBar(R.string.file_not_find)
+      return false,false
     end
 
-    EditorsManager.switchEditorByDecoder(decoder)
-    EditorsManager.openNewContent(filePath,newFileType,decoder)
-
-    setSharedData("openedFilePath_"..ProjectManager.nowPath,filePath)
-
-    --更新文件浏览器显示内容
-    local browserAdapter=FilesBrowserManager.adapter
-    if FilesBrowserManager.nowFilePosition then
-      browserAdapter.notifyItemChanged(FilesBrowserManager.nowFilePosition)
-    end
-    local newFilePosition=FilesBrowserManager.filesPositions[filePath]
-    FilesBrowserManager.nowFilePosition=newFilePosition
-    if newFilePosition then
-      browserAdapter.notifyItemChanged(newFilePosition)
-    end
-
-    refreshMenusState()
-    return true,false
    else
     openFileITPS(filePath)
     return true,true
   end
 end
 
+function FilesTabManager.reopenFile()
+  if openState then
+    if file.isFile() then
+      local decoder=fileConfig.decoder
+      local filePath=fileConfig.path
+      EditorsManager.switchEditorByDecoder(decoder)
+      EditorsManager.openNewContent(filePath,fileType,decoder,true)
+     else
+      fileConfig.deleted=true
+      FilesTabManager.closeFile(fileConfig.lowerPath)
+      showSnackBar(R.string.file_not_find)
+    end
+  end
+end
+
 -- 保存当前打开的文件，由于当前没有编辑器监听能力，保存文件需要直接从编辑器获取
 function FilesTabManager.saveFile(lowerFilePath,showToast)
-  print("警告：保存文件")
-  if openState and ProjectManager.openState then
+  --print("警告：保存文件",lowerFilePath)
+  if openState and ProjectManager.openState and fileConfig.deleted==false then
     local config
     if lowerFilePath then
       config=openedFiles[lowerFilePath]
@@ -248,13 +270,13 @@ end]]
 
 --由于当前没有多文件编辑能力，所有的文件都是实时保存的。为了减少性能消耗，保存所有文件就是保存当前文件
 function FilesTabManager.saveAllFiles(showToast)
-  print("警告：保存所有文件")
+  --print("警告：保存所有文件")
   FilesTabManager.saveFile(nil, showToast)
 end
 
 -- 关闭文件，由于文件的打开都由Tab管理，所以不存在已有文件打开但是当前当前打开的文件为空的情况
-function FilesTabManager.closeFile(lowerFilePath, saveFile)
-  print("警告：关闭文件")
+function FilesTabManager.closeFile(lowerFilePath,blockOpen)
+  --print("警告：关闭文件")
   local config
   if lowerFilePath then
     config=openedFiles[lowerFilePath]
@@ -262,10 +284,8 @@ function FilesTabManager.closeFile(lowerFilePath, saveFile)
     config=fileConfig
   end
   if config then
-    local lowerFilePath=config.lowerFilePath
-    if saveFile~=false then
-      FilesTabManager.saveFile(lowerFilePath)
-    end
+    local lowerPath=config.lowerPath
+    FilesTabManager.saveFile(lowerPath)
 
     openedFiles[config.lowerPath]=nil
     filesTabLay.removeTab(config.tab)
@@ -284,15 +304,16 @@ function FilesTabManager.closeFile(lowerFilePath, saveFile)
       EditorsManager.switchEditor("NoneView")
       refreshMenusState()
     end
-   else
-    print("警告：无法关闭文件")
+    --else
+    --print("警告：无法关闭文件")
   end
 end
 
 -- 保存所有文件
-function FilesTabManager.closeAllFiles(saveFiles)
+function FilesTabManager.closeAllFiles()
+  openState=false
   for index, content in pairs(openedFiles) do
-    FilesTabManager.closeFile(index, saveFiles)
+    FilesTabManager.closeFile(index)
   end
 end
 
@@ -303,7 +324,7 @@ function FilesTabManager.init()
     onTabSelected = function(tab)
       local tag = tab.tag
       local newFile = tag.file
-      if (not(openState) or newFile.getPath()~=file.getPath()) then
+      if (openState and newFile.getPath()~=file.getPath()) then
         FilesTabManager.openFile(newFile,tag.fileType)
       end
     end,
@@ -324,8 +345,10 @@ function FilesTabManager.init()
 end
 
 function FilesTabManager.changeContent(content)
-  fileConfig.newContent = content
-  fileConfig.changed=true
+  if fileConfig.newContent ~= content then
+    fileConfig.newContent = content
+    fileConfig.changed = true
+  end
 end
 
 function FilesTabManager.getFileConfig()

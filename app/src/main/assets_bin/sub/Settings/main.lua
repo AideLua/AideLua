@@ -5,7 +5,7 @@ import "com.Jesse205.layout.util.SettingsLayUtil"
 import "com.Jesse205.layout.innocentlayout.RecyclerViewLayout"
 import "com.Jesse205.app.dialog.EditDialogBuilder"
 
-PackInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
+packageInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
 PluginsUtil.setActivityName("settings")
 
 import "settings"

@@ -8,7 +8,7 @@
   {
     name="Androlua",
     message="Lua5.3.3 for android pro",
-    license="Luajava License",
+    license="Androlua License",
     url="https://github.com/nirenr/AndroLua_pro",
   },
   {
@@ -43,7 +43,7 @@
 {
     name="sora-editor",
     message="A cool code editor library on Android with syntax-highlighting and auto-completion. (aka CodeEditor)",
-    license="LGPL-2.1 license",
+    license="LGPL-2.1 License",
     url="https://github.com/Rosemoe/sora-editor"
   },
 }

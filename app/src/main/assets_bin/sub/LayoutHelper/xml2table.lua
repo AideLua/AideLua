@@ -26,43 +26,43 @@ t={
     layout_margin="4dp";
     {
       MaterialButton_OutlinedButton;
-      id="open";
+      id="formatButton";
       text="转换",
       layout_width="fill";
       layout_marginLeft="8dp";
       layout_marginRight="8dp";
       layout_weight=1;
-      onClick="click";
+      --onClick="click";
     } ,
     {
       MaterialButton_OutlinedButton;
-      id="open";
+      id="previewButton";
       text="预览";
       layout_width="fill";
       layout_marginLeft="8dp";
       layout_marginRight="8dp";
       layout_weight=1;
-      onClick="click2";
+      --onClick="click2";
     };
     {
       MaterialButton_OutlinedButton;
-      id="open";
+      id="copyButton";
       text="复制";
       layout_width="fill";
       layout_marginLeft="8dp";
       layout_marginRight="8dp";
       layout_weight=1;
-      onClick="click3";
+      --onClick="click3";
     };
     {
       MaterialButton_OutlinedButton;
-      id="open";
+      id="okButton";
       text="确定";
       layout_width="fill";
       layout_marginLeft="8dp";
       layout_marginRight="8dp";
       layout_weight=1;
-      onClick="click4";
+      --onClick="click4";
     } ,
   }
 }
@@ -87,7 +87,7 @@ dlg=luajava.override(AppCompatDialog,{
   onMenuItemSelected=function(super,id,item)
     dlg.dismiss()
   end},activity,(function()
-  if ThemeUtil.NowAppTheme.night then
+  if ThemeUtil.isNightMode() then
     return R.style.Theme_MaterialComponents
    else
     return R.style.Theme_MaterialComponents_Light
@@ -95,7 +95,7 @@ dlg=luajava.override(AppCompatDialog,{
 end)())
 dlg.setTitle("布局表预览")
 dlg_actionBar=dlg.getSupportActionBar()
-dlg_actionBar.setElevation(0)
+--dlg_actionBar.setElevation(0)
 dlg_actionBar.setDisplayHomeAsUpEnabled(true)
 --[[
 dlg_actionBar.setDisplayHomeAsUpEnabled(true)
@@ -110,17 +110,14 @@ end
 
 function show(s)
   local oldThemeId=activity.getThemeResId()
-  if ThemeUtil.NowAppTheme.night then
+  if ThemeUtil.isNightMode() then
     activity.setTheme(R.style.Theme_MaterialComponents)
    else
     activity.setTheme(R.style.Theme_MaterialComponents_Light)
   end
   dlg.setContentView(loadlayout2(loadstring("return "..s)(),{}))
   activity.setTheme(oldThemeId)
-  local dia=dlg.show()
-  --print(dia)
-  --parentPanel=dia.findViewById(R.id.action_bar_root)
-  --print(parentPanel)
+  dlg.show()
 end
 
 function click()
@@ -141,7 +138,7 @@ end
 
 function click4()
   layout.main=loadstring("return "..edit.text)()
-  activity.setContentView(loadlayout(layout.main,{}))
+  activity.setContentView(loadpreviewlayout(layout.main,{}))
   dlg2.dismiss()
 end
 
@@ -157,6 +154,10 @@ dlg2_actionBar.setDisplayHomeAsUpEnabled(true)
 dlg2.setTitle("编辑代码")
 dlg2.getWindow().setSoftInputMode(0x10)
 dlg2.setContentView(loadlayout2(t))
+formatButton.onClick=click
+previewButton.onClick=click2
+copyButton.onClick=click3
+okButton.onClick=click4
 
 edit.onScrollChange=function(view,l,t,oldl,oldt)
   MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,dlg2_actionBar)

@@ -17,7 +17,7 @@ loadlayout2("portraitCardParentView")
 portraitCardParent.addView(iconLayout)
 
 adapterEvents=SettingsLayUtil.adapterEvents
-PackInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
+packageInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
 landscape=false
 LastCard2Elevation=0
 
@@ -146,14 +146,14 @@ data={
   {--软件版本
     SettingsLayUtil.ITEM;
     title=R.string.Jesse205_nowVersion_app;
-    summary=("%s(%s)"):format(PackInfo.versionName,PackInfo.versionCode);
+    summary=("%s (%s)"):format(packageInfo.versionName,packageInfo.versionCode);
     icon=R.drawable.ic_information_outline;
     key="update";
   };
   {--Jesse205Library版本
     SettingsLayUtil.ITEM;
     title=R.string.Jesse205_nowVersion_jesse205Library;
-    summary=("%s(%s)"):format(Jesse205._VERSION,Jesse205._VERSIONCODE);
+    summary=("%s (%s)"):format(Jesse205._VERSION,Jesse205._VERSIONCODE);
     icon=R.drawable.ic_information_outline;
   };
 }

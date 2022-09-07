@@ -4,7 +4,7 @@
     <string name="Jesse205_edit_error_cannotBeEmpty">Cannot be empty here</string>
     <string name="Jesse205_loading">Loading...</string>
     <string name="Jesse205_toast_copied">Copied to clipboard</string>
-    <string name="Jesse205_toast_neterror">Network error: %1$s(%2$s)</string>
+    <string name="Jesse205_toast_neterror">Network error: %1$s (%2$s)</string>
     <string name="Jesse205_ui">User Interface</string>
     <string name="Jesse205_themePicker">Theme settings</string>
     <string name="Jesse205_darkActionBar">Dark ActionBar theme</string>
@@ -13,7 +13,7 @@
     <string name="Jesse205_about_full">About app</string>
     <string name="Jesse205_nowVersion_app">App version</string>
     <string name="Jesse205_nowVersion_jesse205Library">Jesse205 Library version</string>
-    <string name="Jesse205_nowVersion_full">Current version: %1$s(%2$s)</string>
+    <string name="Jesse205_nowVersion_full">Current version: %1$s (%2$s)</string>
     <string name="Jesse205_privacyPolicy">Privacy Policy</string>
     <string name="Jesse205_userAgreement">User Agreement</string>
     <string name="Jesse205_tisl">Third-party information sharing list</string>

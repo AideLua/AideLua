@@ -618,5 +618,15 @@ local function loadlayout(t, root, group,p)
   --end
 end
 
-return loadlayout
+return function(...)
+  local oldThemeId=activity.getThemeResId()
+  if ThemeUtil.isNightMode() then
+    activity.setTheme(R.style.Theme_MaterialComponents)
+   else
+    activity.setTheme(R.style.Theme_MaterialComponents_Light)
+  end
+  local lay=loadlayout(...)
+  activity.setTheme(oldThemeId)
+  return lay
+end
 

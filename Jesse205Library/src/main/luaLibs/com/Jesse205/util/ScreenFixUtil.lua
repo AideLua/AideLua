@@ -347,13 +347,16 @@ function ScreenConfigDecoder.decodeMenus(self,screenWidthDp)
   local events=self.events
   local menus=events.menus
   if menus then
-    for showWidthDp,content in pairs(menus) do
-      for index=1,#content do
-        local menuItem=content[index]
-        if showWidthDp<=screenWidthDp then
-          MenuItemCompat.setShowAsAction(menuItem, MenuItemCompat.SHOW_AS_ACTION_ALWAYS)
-         else
-          MenuItemCompat.setShowAsAction(menuItem, MenuItemCompat.SHOW_AS_ACTION_NEVER)
+    if self.menuAppliedWidthDp~=screenWidthDp then
+      self.menuAppliedWidthDp=screenWidthDp
+      for showWidthDp,content in pairs(menus) do
+        for index=1,#content do
+          local menuItem=content[index]
+          if showWidthDp<=screenWidthDp then
+            MenuItemCompat.setShowAsAction(menuItem, MenuItemCompat.SHOW_AS_ACTION_ALWAYS)
+           else
+            MenuItemCompat.setShowAsAction(menuItem, MenuItemCompat.SHOW_AS_ACTION_NEVER)
+          end
         end
       end
     end

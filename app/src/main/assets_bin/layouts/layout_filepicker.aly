@@ -20,7 +20,7 @@
       id="sideAppBarLayout";
       minimumHeight=1;
       elevation=0;
-      layoutTransition=newLayoutTransition();
+      --layoutTransition=newLayoutTransition();
       --[[
       {
         TabLayout;

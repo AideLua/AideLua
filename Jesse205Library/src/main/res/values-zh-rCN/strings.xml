@@ -4,7 +4,7 @@
     <string name="Jesse205_edit_error_cannotBeEmpty">此处不能为空</string>
     <string name="Jesse205_loading">请稍候...</string>
     <string name="Jesse205_toast_copied">已复制到剪贴板</string>
-    <string name="Jesse205_toast_neterror">网络错误：%1$s(%2$s)</string>
+    <string name="Jesse205_toast_neterror">网络错误：%1$s (%2$s)</string>
     <string name="Jesse205_ui">界面</string>
     <string name="Jesse205_themePicker">主题设置</string>
     <string name="Jesse205_darkActionBar">暗色工具栏主题</string>
@@ -13,7 +13,7 @@
     <string name="Jesse205_about_full">关于软件</string>
     <string name="Jesse205_nowVersion_app">软件版本</string>
     <string name="Jesse205_nowVersion_jesse205Library">Jesse205库版本</string>
-    <string name="Jesse205_nowVersion_full">当前版本：%1$s(%2$s)</string>
+    <string name="Jesse205_nowVersion_full">当前版本：%1$s (%2$s)</string>
     <string name="Jesse205_privacyPolicy">隐私政策</string>
     <string name="Jesse205_userAgreement">用户协议</string>
     <string name="Jesse205_tisl">第三方信息共享清单</string>
@@ -34,7 +34,7 @@
     <string name="Jesse205_permission_tips">部分权限不给予将可能导致软件出错</string>
     <string name="Jesse205_permission_requestAll">全部给予</string>
     <string name="Jesse205_permission_requestAll_tips">一键给予全部权限</string>
-    <string name="Jesse205_agreement_checkBox">我已阅读并同意%1$s</string>
+    <string name="Jesse205_agreement_checkBox">我已阅读并同意 %1$s</string>
     <string name="Jesse205_step_previous">上一步</string>
     <string name="Jesse205_step_next">下一步</string>
     <string name="Jesse205_step_finish">完成</string>

@@ -11,7 +11,6 @@ FilesBrowserManager.open(): 打开文件浏览器
 FilesBrowserManager.close(): 关闭文件浏览器
 FilesBrowserManager.switchState(): 切换文件浏览器开启状态
 FilesBrowserManager.init(): 初始化管理器
-
 ]]
 local FilesBrowserManager = {}
 local openState = false
@@ -351,7 +350,7 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
 
         if oldPath~=path then
           --如果是返回
-          if String(oldPath).startsWith(path) then
+          if String(oldPath).startsWith(path) and oldRichAnim then
             local position=#pathSplitList
             for name in string.split(ProjectManager.shortPath(oldPath,true,path),"/") do
               if name~="" then
@@ -364,7 +363,7 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
               end
             end
             --如果是前进
-           elseif String(path).startsWith(oldPath) then
+           elseif String(path).startsWith(oldPath) and oldRichAnim then
             local rootPath=oldPath
             local position=#pathSplitList
             for name in string.split(ProjectManager.shortPath(path,true,rootPath),"/") do

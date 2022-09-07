@@ -1,3 +1,4 @@
+--此文件内为此页面的部分函数
 --检查是不是路径相同的文件
 function isSamePathFileByPath(filePath1,filePath2)--通过文件路径
   return string.lower(filePath1)==string.lower(filePath2)
@@ -80,7 +81,6 @@ function refreshMenusState()
         menu.setEnabled(toboolean(content[2]))
       end
     end
-
     PluginsUtil.callElevents("refreshMenusState")
   end
 end
@@ -167,16 +167,15 @@ function checkSharedActivity(name,packageName)
   end
   return sdActivityMainPath
 end
-
-function refreshSubTitle()
+function refreshSubTitle(newScreenWidthDp)
   if ProjectManager.openState then
     local appName=ProjectManager.nowConfig.appName
-    if mainWidth then
-      if mainWidth<360 then
+    if screenWidthDp then
+      if screenWidthDp<360 then
         actionBar.setSubtitle(appName)
-       elseif mainWidth<380 then
+       elseif screenWidthDp<380 then
         actionBar.setSubtitle(formatResStr(R.string.project_appSubtitle_360dp,{appName}))
-       elseif mainWidth<390 then
+       elseif screenWidthDp<390 then
         actionBar.setSubtitle(formatResStr(R.string.project_appSubtitle_380dp,{appName}))
        else
         actionBar.setSubtitle(formatResStr(R.string.project_appSubtitle_390dp,{appName}))

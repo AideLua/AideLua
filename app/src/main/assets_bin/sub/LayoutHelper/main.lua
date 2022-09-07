@@ -48,23 +48,17 @@ function onOptionsItemSelected(item)
    elseif id==R.id.menu_preview then
     show(dumplayout2(layout.main))
    elseif id==R.id.menu_save then
-    save(dumplayout2(layout.main))
-    MyToast(R.string.save_succeed)
-    activity.finish()
+    edit.text=dumplayout2(layout.main)
+    edit.format()
+    save(edit.text)
+    activity.result({getString(R.string.save_succeed)})
    elseif id==android.R.id.home then
     activity.finish()
   end
 end
 
 function onCreate()
-  local oldThemeId=activity.getThemeResId()
-  if ThemeUtil.NowAppTheme.night then
-    activity.setTheme(R.style.Theme_MaterialComponents)
-   else
-    activity.setTheme(R.style.Theme_MaterialComponents_Light)
-  end
   activity.setContentView(loadpreviewlayout(layout.main,{}))
-  activity.setTheme(oldThemeId)
 end
 
 lastclick=os.time()-2
@@ -272,14 +266,7 @@ end
 curr=nil
 --activity.Theme=android.R.style.Theme_Material_Light
 xpcall(function()
-  local oldThemeId=activity.getThemeResId()
-  if ThemeUtil.NowAppTheme.night then
-    activity.setTheme(R.style.Theme_MaterialComponents)
-   else
-    activity.setTheme(R.style.Theme_MaterialComponents_Light)
-  end
   activity.setContentView(loadpreviewlayout(layout.main,{}))
-  activity.setTheme(oldThemeId)
 end,
 function()
   MyToast("不支持编辑该布局")
@@ -442,12 +429,6 @@ check_list.onItemClick=function(l,v,p,i)
   local old=curr[tostring(fld)]
   curr[tostring(fld)]=v
   check_dlg.hide()
-  local oldThemeId=activity.getThemeResId()
-  if ThemeUtil.NowAppTheme.night then
-    activity.setTheme(R.style.Theme_MaterialComponents)
-   else
-    activity.setTheme(R.style.Theme_MaterialComponents_Light)
-  end
   local s,l=pcall(loadpreviewlayout,layout.main,{})
   if s then
     activity.setContentView(l)
@@ -455,7 +436,6 @@ check_list.onItemClick=function(l,v,p,i)
     curr[tostring(fld)]=old
     print(l)
   end
-  activity.setTheme(oldThemeId)
 end
 
 func={}
@@ -490,14 +470,7 @@ func["删除"]=function()
       break
     end
   end
-  local oldThemeId=activity.getThemeResId()
-  if ThemeUtil.NowAppTheme.night then
-    activity.setTheme(R.style.Theme_MaterialComponents)
-   else
-    activity.setTheme(R.style.Theme_MaterialComponents_Light)
-  end
   activity.setContentView(loadpreviewlayout(layout.main,{}))
-  activity.setTheme(oldThemeId)
 end
 
 
@@ -541,7 +514,7 @@ wds={
   {"CheckBox","RadioButton","ToggleButton","Switch"},
   {"ListView","GridView","PageView","ExpandableListView","Spinner","ViewPager","RecyclerView"},
   {"SeekBar","ProgressBar","RatingBar",
-    "DatePicker","TimePicker","NumberPicker"},
+    "DatePicker","TimePicker","NumberPicker","LuaEditor","LuaWebView"},
   {"LinearLayout","AbsoluteLayout","FrameLayout","RelativeLayout","CoordinatorLayout"},
   {"CardView","RadioGroup","GridLayout",
     "ScrollView","HorizontalScrollView"},--不兼容的布局：SwipeRefreshLayout，SlidingPaneLayout，DrawerLayout
@@ -565,12 +538,6 @@ add_dlg.setContentView(el)
 el.onChildClick=function(l,v,g,c)
   local w={_G[wds[g+1][c+1]]}
   table.insert(curr,w)
-  local oldThemeId=activity.getThemeResId()
-  if ThemeUtil.NowAppTheme.night then
-    activity.setTheme(R.style.Theme_MaterialComponents)
-   else
-    activity.setTheme(R.style.Theme_MaterialComponents_Light)
-  end
   local s,l=pcall(loadpreviewlayout,layout.main,{})
   if s then
     activity.setContentView(l)
@@ -578,7 +545,6 @@ el.onChildClick=function(l,v,g,c)
     table.remove(curr)
     print(l)
   end
-  activity.setTheme(oldThemeId)
   add_dlg.hide()
 end
 
@@ -593,12 +559,6 @@ function ok()
   local old=curr[tostring(fld)]
   curr[tostring(fld)]=v
   --sfd_dlg.hide()
-  local oldThemeId=activity.getThemeResId()
-  if ThemeUtil.NowAppTheme.night then
-    activity.setTheme(R.style.Theme_MaterialComponents)
-   else
-    activity.setTheme(R.style.Theme_MaterialComponents_Light)
-  end
   local s,l=pcall(loadpreviewlayout,layout.main,{})
   if s then
     activity.setContentView(l)
@@ -606,7 +566,6 @@ function ok()
     curr[tostring(fld)]=old
     print(l)
   end
-  activity.setTheme(oldThemeId)
 end
 
 function none()
@@ -614,12 +573,6 @@ function none()
   local old=curr[key]
   curr[key]=nil
   --sfd_dlg.hide()
-  local oldThemeId=activity.getThemeResId()
-  if ThemeUtil.NowAppTheme.night then
-    activity.setTheme(R.style.Theme_MaterialComponents)
-   else
-    activity.setTheme(R.style.Theme_MaterialComponents_Light)
-  end
   local s,l=pcall(loadpreviewlayout,layout.main,{})
   if s then
     activity.setContentView(l)
@@ -627,7 +580,6 @@ function none()
     curr[key]=old
     print(l)
   end
-  activity.setTheme(oldThemeId)
 end
 
 
