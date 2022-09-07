@@ -30,7 +30,7 @@ end
 
 function MyEditDialogLayout.load(config,...)--返回视图
   return loadlayout2({
-    LinearLayout;
+    LinearLayoutCompat;
     layout_width="fill";
     layout_height="fill";
     MyEditDialogLayout.Builder(config);

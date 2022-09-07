@@ -41,7 +41,7 @@
         {
           TextView;
           id="stateTextView";
-          text="请稍候...";
+          text=R.string.Jesse205_loading;
           layout_width="fill";
           textColor=theme.color.textColorPrimary;
           textSize="16sp";
@@ -49,7 +49,7 @@
         {
           TextView;
           id="stateTextView2";
-          text="正在准备打包...";
+          text=R.string.binpoject_loading;
           layout_width="fill";
         };
       };

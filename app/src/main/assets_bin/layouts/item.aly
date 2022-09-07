@@ -138,8 +138,8 @@
         focusable=false;
         id="more";
         iconResource=R.drawable.ic_dots_vertical;
-        tooltip=activity.getString(R.string.menu);
-        contentDescription=activity.getString(R.string.menu);
+        tooltip=getString(R.string.menu);
+        contentDescription=getString(R.string.menu);
       };
     };
   },

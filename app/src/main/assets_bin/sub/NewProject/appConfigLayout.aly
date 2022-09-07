@@ -9,7 +9,7 @@
     layout_width="fill";
     layout_margin="8dp";
     layout_marginBottom=0;
-    hint=activity.getString(R.string.project_app_name);
+    hint=getString(R.string.project_app_name);
     {
       id="appNameEdit";
       inputType="text";
@@ -22,7 +22,7 @@
     layout_width="fill";
     layout_margin="8dp";
     layout_marginBottom=0;
-    hint=activity.getString(R.string.project_package_name);
+    hint=getString(R.string.project_package_name);
     {
       id="packageNameEdit";
       inputType="text";

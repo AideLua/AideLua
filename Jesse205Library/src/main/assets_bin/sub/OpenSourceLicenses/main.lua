@@ -75,7 +75,6 @@ adapter=LuaCustRecyclerAdapter(AdapterCreator({
       licenseView.setVisibility(View.VISIBLE)
       local filePath=fileBasePath:format(license or licenseName)
       data.path=filePath
-      --licenseView.setClickable(File(filePath).isFile())
      else
       licenseView.setVisibility(View.GONE)
     end

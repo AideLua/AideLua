@@ -5,7 +5,7 @@
     name="TISL",
     date="2022-08-24",
   },
- {--隐私政策
+  {--隐私政策
     icon=R.drawable.ic_file_lock_outline;
     title=R.string.Jesse205_privacyPolicy,
     name="PrivacyPolicy",

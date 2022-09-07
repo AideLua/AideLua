@@ -55,8 +55,7 @@ end
 
 --判断是否是系统夜间模式
 local function isSysNightMode()
-  import "android.content.res.Configuration"
-  return (context.getResources().getConfiguration().uiMode)==Configuration.UI_MODE_NIGHT_YES+1
+  return (context.getResources().getConfiguration().uiMode&Configuration.UI_MODE_NIGHT_MASK)==Configuration.UI_MODE_NIGHT_YES
 end
 ThemeUtil.isSysNightMode=isSysNightMode--这个一般用不到
 ThemeUtil.isNightMode=isSysNightMode

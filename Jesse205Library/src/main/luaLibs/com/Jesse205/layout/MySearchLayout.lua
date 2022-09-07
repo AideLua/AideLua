@@ -12,7 +12,7 @@ MySearchLayout.layout={
   .setColor(theme.color.windowBackground)
   .setCornerRadii({0,0,0,0,math.dp2int(8),math.dp2int(8),math.dp2int(8),math.dp2int(8)});
   {
-    LinearLayout;
+    LinearLayoutCompat;
     orientation="horizontal";
     layout_width="fill";
     gravity="center";
@@ -20,7 +20,7 @@ MySearchLayout.layout={
       layout_margin="8dp";
       layout_weight=1;
       layout_marginLeft="16dp";
-      hint=activity.getString(R.string.abc_search_hint);
+      hint=getString(R.string.abc_search_hint);
       id="searchLay";
       {
         inputType="text";

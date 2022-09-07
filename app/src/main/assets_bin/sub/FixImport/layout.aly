@@ -30,7 +30,7 @@
     layout_gravity="bottom|right";
     layout_margin="16dp";
     imageResource=R.drawable.ic_content_copy;
-    tooltip=activity.getString(R.string.copy);
+    tooltip=getString(R.string.copy);
     --supportImageTintList={};
     --backgroundColor=theme.color.colorPrimary;
   };

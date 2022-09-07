@@ -7,7 +7,6 @@ function RePackTool.getMainProjectName(config)
 end
 
 function RePackTool.buildLuaResources(config,projectPath,outputPath,update)
-  --update(activity.getString(R.string.binpoject_creating_variables))
   local outputDir=File(outputPath)
   local luaLibsPaths={}
   local assetsPaths={}

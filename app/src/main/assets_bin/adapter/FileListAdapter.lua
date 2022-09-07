@@ -7,7 +7,7 @@ local fileIcons=FilesBrowserManager.fileIcons
 local folderIcons=FilesBrowserManager.folderIcons
 local relLibPathsMatch=FilesBrowserManager.relLibPathsMatch
 
-local unknowString=activity.getString(R.string.unknown)
+local unknowString=getString(R.string.unknown)
 
 local refresh=FilesBrowserManager.refresh
 local getIconAlphaByName=FilesBrowserManager.getIconAlphaByName

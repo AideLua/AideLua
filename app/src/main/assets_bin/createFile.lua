@@ -1,7 +1,7 @@
 local ids
 local dia
-local cannotBeEmptyStr=activity.getString(R.string.Jesse205_edit_error_cannotBeEmpty)
-local existsStr=activity.getString(R.string.file_exists)
+local cannotBeEmptyStr=getString(R.string.Jesse205_edit_error_cannotBeEmpty)
+local existsStr=getString(R.string.file_exists)
 
 local function createFileInfoDialog(config,nowDir)--文件名填写对话框
   local builder

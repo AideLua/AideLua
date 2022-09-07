@@ -19,8 +19,6 @@ public class Main extends LuaActivity
         intent.setData(Uri.parse("file://" + luaDir));
         setCheckUpdate(true);
 		super.onCreate(savedInstanceState);
-		if(savedInstanceState==null && getIntent().getData()!=null)
-			runFunc("onNewIntent", getIntent());
 		if(getIntent().getBooleanExtra("isVersionChanged",false) && (savedInstanceState==null)){
 			onVersionChanged(getIntent().getStringExtra("newVersionName"),getIntent().getStringExtra("oldVersionName"));
 		}

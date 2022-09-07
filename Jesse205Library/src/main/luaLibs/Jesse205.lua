@@ -1,7 +1,7 @@
 local Jesse205={}
 _G.Jesse205=Jesse205
-Jesse205._VERSION="12.0.0(Pro)(Beta1)"--库版本名
-Jesse205._VERSIONCODE=120001--库版本号
+Jesse205._VERSION="12.0.0(Pro)"--库版本名
+Jesse205._VERSIONCODE=120099--库版本号
 Jesse205._ENV=_ENV
 Jesse205.themeType="Jesse205"--主题类型
 
@@ -40,6 +40,7 @@ end
 activity2luaApi=nil
 
 import "android.os.Environment"
+import "android.content.res.Configuration"
 
 import "com.Jesse205.lua.math"--导入更强大的math
 import "com.Jesse205.lua.string"--导入更强大的string
@@ -157,7 +158,6 @@ import "android.animation.LayoutTransition"
 import "android.net.Uri"
 import "android.content.Intent"
 import "android.content.Context"
-import "android.content.res.Configuration"--各种信息
 import "android.content.res.ColorStateList"
 import "android.content.pm.PackageManager"
 

@@ -82,7 +82,6 @@ PluginsUtil.setActivityName("main")
 PluginsUtil.loadPlugins()
 plugins = PluginsUtil.getPlugins()
 --print(dump(plugins))
-
 -- 申请存储权限
 PermissionUtil.smartRequestPermission({"android.permission.WRITE_EXTERNAL_STORAGE",
   "android.permission.READ_EXTERNAL_STORAGE"})

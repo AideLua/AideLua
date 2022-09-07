@@ -194,7 +194,7 @@ local relLibPathsMatchPaths = {
   "^.-/src/main/luaLibs/(.+)",
   "^.-/src/main/jniLibs/.-/lib(.+)%.so",
   "^.-/src/main/java/(.+)%.",
-  }
+}
 relLibPathsMatch.paths = relLibPathsMatchPaths
 
 local relLibPathsMatchTypes = {
@@ -428,7 +428,7 @@ end
 
 --初始化
 function FilesBrowserManager.init()
-  directoryFile=ProjectManager.projectsFile
+  --directoryFile=ProjectManager.projectsFile
   swipeRefresh.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
     onRefresh = function()
       FilesBrowserManager.refresh()
@@ -485,7 +485,6 @@ function FilesBrowserManager.init()
 
   recyclerView.onDrag=function(view,event)
     local action=event.getAction()
-    --print(action)
     if action==DragEvent.ACTION_DRAG_STARTED then
       local desc=event.getClipDescription()--必须有描述，必须为文件
       if not(desc and desc.getMimeTypeCount()~=0 and desc.getMimeType(0)~="text/plain") then
@@ -500,11 +499,14 @@ function FilesBrowserManager.init()
       local dropPermissions=activity.requestDragAndDropPermissions(event)
       local data=event.getClipData()
       local count=data.getItemCount()
+
       if count>0 then
         for index=0,count-1 do
           local nameFile
           local uri=data.getItemAt(index).getUri()
           local inputStream=activity.getContentResolver().openInputStream(uri)
+          local newPath=directoryFile.getPath().."/"..nameFile.getName()
+          showSnackBar(newPath)
           --[[
           if DocumentsContract.isDocumentUri(activity, uri) then
             nameFile=File(FileInfoUtils.getPath(activity,uri))
@@ -512,7 +514,6 @@ function FilesBrowserManager.init()
             nameFile=File(uri.getPath())
           end
         
-          local newPath=NowDirectory.getPath().."/"..nameFile.getName()
           if File(newPath).exists() then
             showSnackBar(R.string.file_exists)
            else

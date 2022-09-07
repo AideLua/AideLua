@@ -24,12 +24,6 @@
     license="Glide Lincense",
     url="https://github.com/bumptech/glide"
   },
---[[
-  {
-    name="JavaCompile",
-    message="这是一款运行在Android 平台的Java编译器，它可以在你的设备上运行编译简单的Java程序，并且采用了树状结构目录，层次清晰明了。",
-    url="https://github.com/xiaoyvyv/JavaCompile"
-  },]]
   {
     name="CodeEditor",
     message="A cool and optimized code editor on Android platform with good performance and nice features.",
@@ -40,7 +34,7 @@
     message="A Java library for zip files and streams",
     url="https://github.com/srikanth-lingala/zip4j"
   },
-{
+  {
     name="sora-editor",
     message="A cool code editor library on Android with syntax-highlighting and auto-completion. (aka CodeEditor)",
     license="LGPL-2.1 License",
