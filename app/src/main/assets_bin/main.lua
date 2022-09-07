@@ -22,12 +22,6 @@ end
 
 StatService.start(activity)
 
---[[
--- 安全模式
-safeModeEnable = File("/sdcard/aidelua_safemode").exists()
-notSafeModeEnable = not(safeModeEnable)
-application.set("safeModeEnable", safeModeEnable)
-]]
 
 import "android.text.TextUtils$TruncateAt"
 import "android.content.ComponentName"
@@ -70,7 +64,7 @@ import "layouts.pathItem"
 import "layouts.infoItem"
 import "layouts.buildingLayout"
 
-import "sub.LayoutHelper2.loadpreviewlayout"
+--import "sub.LayoutHelper2.loadpreviewlayout"
 
 import "layouts.FileDecoders"
 import "layouts.FileTemplates"
@@ -220,8 +214,10 @@ function onOptionsItemSelected(item)
    elseif id == Rid.menu_run then -- 运行
     ProjectManager.runProject()
    elseif id == Rid.menu_project_bin_run then -- 二次打包
+    FilesTabManager.saveAllFiles()
     RePackTool.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,true,true)
    elseif id == Rid.menu_project_bin then -- 二次打包
+    FilesTabManager.saveAllFiles()
     RePackTool.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,false,false)
    elseif id == Rid.menu_project_close then -- 关闭项目
     ProjectManager.closeProject()
@@ -266,10 +262,8 @@ function onOptionsItemSelected(item)
     end
     if FilesTabManager.openState and FilesTabManager.fileType=="aly" then
       filePath=FilesTabManager.file.getPath()
-
     end
     newSubActivity("LayoutHelper",{prjPath,filePath})
-
    elseif id == Rid.menu_more_openNewWindow then -- 打开新窗口
     activity.newActivity("main",{"projectPicker"},true,int(System.currentTimeMillis()))
   end

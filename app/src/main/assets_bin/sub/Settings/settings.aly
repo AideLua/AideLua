@@ -17,7 +17,7 @@
     key="theme_darkactionbar";
     --enabled=false;
   };
---[[
+  --[[
   {
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
     icon=R.drawable.ic_theme_light_dark;
@@ -85,8 +85,8 @@
     title="测试禁止";
     key="test";
   };]]
-  
---[[{--项目
+
+  --[[{--项目
     SettingsLayUtil.TITLE;
     title=R.string.project;
   };
@@ -140,13 +140,13 @@
     title=R.string.settings_editor_symbolNar;
     key="editor_symbolBar";
   };
+  --[[
   {
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
     icon=R.drawable.ic_file_eye_outline;
     title=R.string.settings_editor_previewButton;
     key="editor_previewButton";
-  };
-
+  };]]
 
   {--标签栏
     SettingsLayUtil.TITLE;

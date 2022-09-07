@@ -289,7 +289,10 @@ import "Jesse205"
       redo="default",
       format=false,
       check=false,
-      paste=false,
+      paste=function(ids,config,text)
+        local editor=ids.editor
+        editor.cursor.onCommitText(text)
+      end,
       setTextSize=nil,
       getTextSize=nil,
       getScrollX=nil,

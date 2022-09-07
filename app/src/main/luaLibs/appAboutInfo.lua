@@ -79,13 +79,6 @@ supportList={--如果有多种方式支持项目，可以使用列表
     name="参与开发",
     url="https://gitee.com/Jesse205/AideLua",
   },
-  --[[
-  {
-    name="资金支持",
-    func=function(view)
-      print("暂不支持")
-    end,
-  },]]
 }
 --[[格式：
 {

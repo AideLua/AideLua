@@ -85,14 +85,18 @@ local function showBuildingDialog()
 end
 
 local repackApk_building=false
-local function repackApk_taskFunc(rePackTool,config,projectPath,install,sign)
+local function repackApk_taskFunc(config,projectPath,install,sign)
   require "import"
+  config=luajava.astable(config,true)
   notLoadTheme=true
   import "Jesse205"
   import "android.content.pm.PackageManager"
   import "net.lingala.zip4j.ZipFile"
   import "apksigner.*"
   import "com.Jesse205.util.FileUtil"
+  RePackTool=require "buildtools.RePackTool"
+  local rePackTool=RePackTool.getRePackToolByConfig(config)
+
   local function updateInfo(message)
     this.update("info")
     this.update(message)
@@ -219,7 +223,7 @@ local function repackApk_taskFunc(rePackTool,config,projectPath,install,sign)
 
 
     updateDoing(getString(R.string.binpoject_deleting))
-    --LuaUtil.rmDir(tempDir)
+    LuaUtil.rmDir(tempDir)
     updateSuccess("Delete completed")
 
     --签名
@@ -337,11 +341,10 @@ function RePackTool.repackApk(config,projectPath,install,sign)
   if repackApk_building then
     MyToast.showToast(R.string.binpoject_loading)
    else
-    local rePackTool=RePackTool.getRePackToolByConfig(config)
     showBuildingDialog()
     --showLoadingDia(nil,R.string.binpoject_loading)
     activity.newTask(repackApk_taskFunc,repackApk_update,repackApk_callback)
-    .execute({rePackTool,config,projectPath,install,sign})
+    .execute({config,projectPath,install,sign})
     repackApk_building=true
   end
 end

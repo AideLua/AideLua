@@ -258,8 +258,8 @@ function EditorsManager.save2Tab()
   local text=EditorsManager.actions.getText()
   if text then
     FilesTabManager.changeContent(text)--改变Tab保存的内容
-   else--防止意外调用函数
-    error("EditorsManager.actions.save2Tab:无法获取内容")
+   --else--防止意外调用函数，但是。。。
+    --error("EditorsManager.actions.save2Tab:无法获取内容")
   end
 end
 
