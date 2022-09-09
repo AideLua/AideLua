@@ -26,7 +26,7 @@ function PluginsUtil.callElevents(name, ...)
   if events then
     for index, content in ipairs(events) do
       local state,result=xpcall(content, function(err)
-        print("Plugin", plugins.eventsName[name][index], "error: ", err)
+        showErrorDialog("Plugin"..plugins.eventsName2[name][index].."error",err)
       end, activityName, ...)
       if result~=nil then
         finalResult=result
@@ -36,7 +36,7 @@ function PluginsUtil.callElevents(name, ...)
   if events2 then
     for index, content in ipairs(events2) do
       local state,result=xpcall(content, function(err)
-        print("Plugin", plugins.eventsName2[name][index], "error: ", err)
+        showErrorDialog("Plugin"..plugins.eventsName2[name][index].."error",err)
       end, ...)
       if result~=nil then
         finalResult=result
@@ -204,7 +204,7 @@ function loadPlugins()
             end
           end,
           function(err) -- 语法错误，或者其他问题
-            print("Plugin", dirName, "error: ", err)
+            showErrorDialog("Plugin"..dirName.."error",err)
           end)
           -- else--init.lua不存在
           -- print("Plugin",dirName,"error: init.lua missing.")

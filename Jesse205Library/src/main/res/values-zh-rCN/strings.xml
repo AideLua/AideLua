@@ -30,10 +30,14 @@
     <string name="Jesse205_welcome">欢迎</string>
     <!--<string name="Jesse205_allReady">一切就绪</string>
     <string name="Jesse205_allReady_tips">点击“完成”按钮开始体验吧！</string>-->
-    <string name="Jesse205_permission">权限申请</string>
+    <string name="Jesse205_permission">权限</string>
+    <string name="Jesse205_permission_request">权限申请</string>
     <string name="Jesse205_permission_tips">部分权限不给予将可能导致软件出错</string>
     <string name="Jesse205_permission_requestAll">全部给予</string>
     <string name="Jesse205_permission_requestAll_tips">一键给予全部权限</string>
+    <string name="Jesse205_permission_storage">存储权限</string>
+    <string name="Jesse205_permission_phone">电话权限</string>
+    <string name="Jesse205_permission_ask">%1$s 需要 %2$s，以 %3$s</string>
     <string name="Jesse205_agreement_checkBox">我已阅读并同意 %1$s</string>
     <string name="Jesse205_step_previous">上一步</string>
     <string name="Jesse205_step_next">下一步</string>

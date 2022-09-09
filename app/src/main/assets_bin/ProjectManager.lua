@@ -79,41 +79,48 @@ ProjectManager.updateNowConfig=updateNowConfig
 
 --打开项目
 function ProjectManager.openProject(path,filePath,openedDirPath)
-  FilesBrowserManager.clearAdapterData()
-  openState=true
-  nowFile=File(path)
-  nowPath=path
-  local config=RePackTool.getConfigByProjectPath(path)
-  local rePackTool=RePackTool.getRePackToolByConfig(config)
-  local mainProjectPath=RePackTool.getMainProjectDirByConfigAndRePackTool(path,config,rePackTool)
-  if config.projectMainPath then
-    config.projectMainPath=path.."/"..config.projectMainPath
-   else
-    config.projectMainPath=mainProjectPath.."/assets_bin"
-  end
-  updateNowConfig(config)
-  setSharedData("openedProject",path)
-  EditorsManager.switchEditor("NoneView")
-  local nowBrowserDir,nowOpenedFile
-  filePath=filePath or getSharedData("openedFilePath_"..path)
-  local defaultFile=File(config.projectMainPath.."/main.lua")
+  xpcall(function()
+    FilesBrowserManager.clearAdapterData()
+    local config=RePackTool.getConfigByProjectPath(path)
+    local rePackTool=RePackTool.getRePackToolByConfig(config)
+    local mainProjectPath=RePackTool.getMainProjectDirByConfigAndRePackTool(path,config,rePackTool)
+    if config.projectMainPath then
+      config.projectMainPath=path.."/"..config.projectMainPath
+     else
+      config.projectMainPath=mainProjectPath.."/assets_bin"
+    end
+    openState=true
+    nowFile=File(path)
+    nowPath=path
 
-  if filePath then
-    nowOpenedFile=File(filePath)
-   elseif defaultFile.isFile() then
-    nowOpenedFile=defaultFile
-   else
-    nowBrowserDir=nowFile
-  end
-  if nowOpenedFile then
-    FilesTabManager.openFile(nowOpenedFile,getFileTypeByName(nowOpenedFile.getName()), false)
-    nowBrowserDir=nowOpenedFile.getParentFile()
-  end
-  if openedDirPath then
-    nowBrowserDir=File(openedDirPath)
-  end
-  FilesBrowserManager.refresh(nowBrowserDir,false,false,true)
-  refreshMenusState()
+    updateNowConfig(config)
+    setSharedData("openedProject",path)
+    EditorsManager.switchEditor("NoneView")
+    local nowBrowserDir,nowOpenedFile
+    filePath=filePath or getSharedData("openedFilePath_"..path)
+    local defaultFile=File(config.projectMainPath.."/main.lua")
+
+    if filePath then
+      nowOpenedFile=File(filePath)
+     elseif defaultFile.isFile() then
+      nowOpenedFile=defaultFile
+     else
+      nowBrowserDir=nowFile
+    end
+    if nowOpenedFile then
+      FilesTabManager.openFile(nowOpenedFile,getFileTypeByName(nowOpenedFile.getName()), false)
+      nowBrowserDir=nowOpenedFile.getParentFile()
+    end
+    if openedDirPath then
+      nowBrowserDir=File(openedDirPath)
+    end
+    FilesBrowserManager.refresh(nowBrowserDir,false,false,true)
+    refreshMenusState()
+  end,
+  function(err)
+    ProjectManager.closeProject(true)
+    showErrorDialog(nil,err)
+  end)
 end
 
 

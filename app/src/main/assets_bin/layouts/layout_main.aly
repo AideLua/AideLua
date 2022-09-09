@@ -30,10 +30,11 @@
         id="filesTabLay";
         visibility=View.GONE;
         inlineLabel=true;
-        paddingLeft="8dp";
-        paddingRight="8dp";
-        clipToPadding=false;
-        layoutTransition=newLayoutTransition();
+        --tabIndicatorFullWidth=false;
+        --paddingLeft="8dp";
+        --paddingRight="8dp";
+        --clipToPadding=false;
+        --layoutTransition=newLayoutTransition();
       };
     };
   };

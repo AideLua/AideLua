@@ -75,7 +75,7 @@ function addComplexLibrary(path)
   MyToast("导入成功")
 end
 ]]
-function reloadActivity(closeViews)
+ function reloadActivity(closeViews)
   local aRanim=android.R.anim
   local pos,scroll
   if recyclerView then

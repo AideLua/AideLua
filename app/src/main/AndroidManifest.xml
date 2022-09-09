@@ -80,6 +80,7 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:name="com.Jesse205.superlua.Main"
+            android:exported="true"
             android:theme="@style/Theme.Jesse205.Welcome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

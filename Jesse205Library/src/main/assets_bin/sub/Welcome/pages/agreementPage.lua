@@ -12,7 +12,7 @@ return function(title,icon,name,date)
         ScrollView;
         layout_height="fill";
         layout_width="fill";
-        layout_weight="1";
+        layout_weight=1;
         id="scrollView";
         
         {

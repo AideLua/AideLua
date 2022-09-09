@@ -30,10 +30,14 @@
     <string name="Jesse205_welcome">Welcome</string>
     <!--<string name="Jesse205_allReady">All ready</string>
     <string name="Jesse205_allReady_tips">Click the "Finish" button to start the experience! </string>-->
-    <string name="Jesse205_permission">Permission request</string>
+    <string name="Jesse205_permission">Permission</string>
+    <string name="Jesse205_permission_request">Permission request</string>
     <string name="Jesse205_permission_tips">Failure to grant certain permissions may cause software errors. </string>
     <string name="Jesse205_permission_requestAll">Grant all permissions</string>
     <string name="Jesse205_permission_requestAll_tips">Give all permissions with one click</string>
+    <string name="Jesse205_permission_storage">Storage permissions</string>
+    <string name="Jesse205_permission_phone">Phone permissions</string>
+    <string name="Jesse205_permission_ask">%1$s needs %2$s to %3$s.</string>
     <string name="Jesse205_agreement_checkBox">I have read and agree to this %1$s</string>
     <string name="Jesse205_step_previous">Previous</string>
     <string name="Jesse205_step_next">Next</string>

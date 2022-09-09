@@ -1,0 +1,23 @@
+{
+  onCreate=function(savedInstanceState)
+    local pluginPath=getPluginPath(packagename)
+    package.path=package.path
+    ..pluginPath.."/?/init.lua;"
+    ..pluginPath.."/?.lua;"--先设置一下环境变量
+    local ts=require 'translate'
+    ts.onResult=function(s)
+      EditorsManager.actions.paste(s)
+    end
+    local oldListener=LuaEditorHelper.onEditorSelectionChangedListener
+    function LuaEditorHelper.onEditorSelectionChangedListener(view,status,start,end_)
+      ts.view=view
+      ts.call(view,status,start,end_)
+      oldListener(view,status,start,end_)
+    end
+  end,
+  onCreateOptionsMenu=function(menu)
+    formatMenu=menu.findItem(R.id.menu_code_format)
+    checkImportMenu=menu.findItem(R.id.menu_code_checkImport)
+    javaApiMenu=menu.findItem(R.id.menu_tools_javaApiViewer)
+  end,
+}

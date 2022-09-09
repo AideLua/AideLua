@@ -62,8 +62,9 @@ ThemeUtil.isNightMode=isSysNightMode
 
 --刷新颜色
 function ThemeUtil.refreshThemeColor()
+  local contextTheme=context.getTheme()
   local array
-  array = context.getTheme().obtainStyledAttributes({
+  array = contextTheme.obtainStyledAttributes({
     android.R.attr.textColorTertiary,
     android.R.attr.textColorPrimary,--普通文字色（黑白）
     android.R.attr.colorPrimary,
@@ -101,7 +102,7 @@ function ThemeUtil.refreshThemeColor()
   array.recycle()
 
   local numberList=theme.number
-  array = context.getTheme().obtainStyledAttributes({
+  array = contextTheme.obtainStyledAttributes({
     android.R.attr.selectableItemBackgroundBorderless,
     android.R.attr.selectableItemBackground,
     R.attr.actionBarTheme,
@@ -112,7 +113,7 @@ function ThemeUtil.refreshThemeColor()
   array.recycle()
 
   local booleanList=theme.boolean
-  array = context.getTheme().obtainStyledAttributes({
+  array = contextTheme.obtainStyledAttributes({
     R.attr.windowLightNavigationBar,
     R.attr.windowLightStatusBar,
   })
@@ -120,7 +121,7 @@ function ThemeUtil.refreshThemeColor()
   booleanList.windowLightStatusBar=array.getBoolean(1,false)
   array.recycle()--回收数组
 
-  local array = context.getTheme().obtainStyledAttributes(numberList.id.actionBarTheme,{
+  local array = contextTheme.obtainStyledAttributes(numberList.id.actionBarTheme,{
     android.R.attr.textColorSecondary,
     R.attr.colorControlNormal,
   })

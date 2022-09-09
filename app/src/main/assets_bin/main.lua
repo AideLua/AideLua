@@ -77,8 +77,18 @@ PluginsUtil.loadPlugins()
 plugins = PluginsUtil.getPlugins()
 --print(dump(plugins))
 -- 申请存储权限
+--[[
 PermissionUtil.smartRequestPermission({"android.permission.WRITE_EXTERNAL_STORAGE",
   "android.permission.READ_EXTERNAL_STORAGE"})
+]]
+PermissionUtil.askForRequestPermissions({
+  {
+    name=getString(R.string.Jesse205_permission_storage),
+    tool=getString(R.string.app_name),
+    todo=getLocalLangObj("获取文件列表，读取文件和保存文件","get file list, read file and save file"),
+    permissions={"android.permission.WRITE_EXTERNAL_STORAGE","android.permission.READ_EXTERNAL_STORAGE"};
+  },
+})
 
 oldJesse205LibHl = getSharedData("Jesse205Lib_Highlight")
 oldAndroidXHl = getSharedData("AndroidX_Highlight")
@@ -153,6 +163,8 @@ function onCreateOptionsMenu(menu)
   binMenu = menu.findItem(R.id.menu_project_bin)
   binRunMenu = menu.findItem(R.id.menu_project_bin_run)
   closeProjectMenu = menu.findItem(R.id.menu_project_close)
+  projectPropertiesMenu = menu.findItem(R.id.menu_project_properties)
+  buildMenu = menu.findItem(R.id.menu_project_build)
 
   codeMenu = menu.findItem(R.id.subMenu_code)
   toolsMenu = menu.findItem(R.id.subMenu_tools)
@@ -166,6 +178,9 @@ function onCreateOptionsMenu(menu)
   StateByFileMenus = {fileMenu}
   StateByEditorMenus = {codeMenu}
   StateByProjectMenus = {projectMenu}
+
+  projectPropertiesMenu.setEnabled(false)
+  buildMenu.setEnabled(false)
 
   screenConfigDecoder.events.menus = { -- 自动刷新菜单显示
     [600] = {codeMenu, toolsMenu},
@@ -190,7 +205,6 @@ function onCreateOptionsMenu(menu)
           filePath=FilesTabManager.file.getPath()
         end
         activity.newActivity(pluginsActivities[index],{prjPath,filePath},true)
-
       end
     end
   end
@@ -214,11 +228,15 @@ function onOptionsItemSelected(item)
    elseif id == Rid.menu_run then -- 运行
     ProjectManager.runProject()
    elseif id == Rid.menu_project_bin_run then -- 二次打包
-    FilesTabManager.saveAllFiles()
-    RePackTool.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,true,true)
+    if ProjectManager.openState then
+      FilesTabManager.saveAllFiles()
+      RePackTool.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,true,true)
+    end
    elseif id == Rid.menu_project_bin then -- 二次打包
-    FilesTabManager.saveAllFiles()
-    RePackTool.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,false,false)
+    if ProjectManager.openState then
+      FilesTabManager.saveAllFiles()
+      RePackTool.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,false,false)
+    end
    elseif id == Rid.menu_project_close then -- 关闭项目
     ProjectManager.closeProject()
    elseif id == Rid.menu_file_save then -- 保存
@@ -230,6 +248,13 @@ function onOptionsItemSelected(item)
    elseif id == Rid.menu_code_search then -- 代码搜索
     EditorsManager.startSearch()
    elseif id == Rid.menu_code_checkImport then -- 检查导入
+    if EditorsManager.isEditor() then
+      local packageName=activity.getPackageName()
+      if ProjectManager.openState then--打开了工程
+        packageName=ProjectManager.nowConfig.packageName
+      end
+      newSubActivity("FixImport",{EditorsManager.actions.getText(),packageName})
+    end
    elseif id == Rid.menu_tools_javaApiViewer then -- JavaAPI浏览器
     newSubActivity("JavaApi",true)
    elseif id == Rid.menu_tools_javaApiViewer_windmill then -- JavaAPI浏览器
@@ -254,7 +279,6 @@ function onOptionsItemSelected(item)
    elseif id == Rid.menu_code_checkCode then -- 代码查错
     editorActions.check(true)
    elseif id == Rid.menu_tools_layoutHelper then -- 布局助手
-    --print("错误：暂不支持")
     FilesTabManager.saveFile()
     local prjPath,filePath
     if ProjectManager.openState then
@@ -405,16 +429,16 @@ function onResume()
     if oldTabIcon ~= newTabIcon then
       oldTabIcon = newTabIcon
       if newTabIcon then
-        for index, content in pairs(FilesTabList) do
+        for index, content in pairs(FilesTabManager.openedFiles) do
           local tab = content.tab
-          tab.setIcon(ProjectUtil.getFileIconResIdByType(content.fileType))
-          initFileTabView(tab, content) -- 再次初始化一下标签栏，下方同理
+          tab.setIcon(FilesBrowserManager.fileIcons[content.fileType])
+          FilesTabManager.initFileTabView(tab, content) -- 再次初始化一下标签栏，下方同理
         end
        else
-        for index, content in pairs(FilesTabList) do
+        for index, content in pairs(FilesTabManager.openedFiles) do
           local tab = content.tab
           tab.setIcon(nil)
-          initFileTabView(tab, content)
+          FilesTabManager.initFileTabView(tab, content)
         end
       end
     end
@@ -545,18 +569,6 @@ EditorsManager.init()
 FilesBrowserManager.init()
 
 
---[[
-
-task(500,function()
-  if safeModeEnable then
-    appBarLayout.setElevation(0)
-   else
-    MyAnimationUtil.ScrollView.onScrollChange(NowEditor,NowEditor.getScrollX(),NowEditor.getScrollY(),0,0,appBarLayout,nil,true)
-  end
-end)]]
-
-
-
 mainLay.ViewTreeObserver
 .addOnGlobalLayoutListener(function()
   mainWidth=mainLay.getMeasuredWidth()
@@ -567,16 +579,7 @@ screenConfigDecoder = ScreenFixUtil.ScreenConfigDecoder({
 })
 
 onConfigurationChanged(activity.getResources().getConfiguration())
---[[
-nowDevice=screenConfigDecoder.deviceByWidth
-mainWidth=math.dp2int(screenConfigDecoder.screenWidthDp)
-if nowDevice~="phone" then
-  onDeviceByWidthChanged(nowDevice,"phone")
-end
-mainLay.ViewTreeObserver
-.addOnGlobalLayoutListener(ScreenFixUtil.LayoutListenersBuilder.deviceByWidth(mainLay,onDeviceByWidthChanged,nowDevice))
 
-]]
 
 --在刷新后仍然为空，那就是关闭状态
 if screenConfigDecoder.deviceByWidth~="pc" and FilesBrowserManager.openState == nil then

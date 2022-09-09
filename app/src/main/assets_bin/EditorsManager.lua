@@ -94,6 +94,7 @@ EditorsManager.keyWords=String({
   "onAccessibilityEvent",
   "onKeyUp",
   "onKeyDown",
+  "onError",
 
   "onClick",
   "onTouch",
@@ -258,7 +259,7 @@ function EditorsManager.save2Tab()
   local text=EditorsManager.actions.getText()
   if text then
     FilesTabManager.changeContent(text)--改变Tab保存的内容
-   --else--防止意外调用函数，但是。。。
+    --else--防止意外调用函数，但是。。。
     --error("EditorsManager.actions.save2Tab:无法获取内容")
   end
 end
@@ -268,16 +269,28 @@ function EditorsManager.openNewContent(filePath,fileType,decoder,keepHistory)
   if EditorsManager.isEditor() then
     local fileConfig=FilesTabManager.fileConfig
     local content=decoder.read(filePath)
-    fileConfig.oldContent=content
-    fileConfig.newContent=content
-    fileConfig.changed=false
-    managerActions.setText(content,keepHistory or false)
-    local scrollConfig=assert(loadstring(getSharedData("scroll_"..filePath) or "{}"))()
-    managerActions.setSelection(scrollConfig.selection or 0)
-    managerActions.setTextSize(scrollConfig.size or math.dp2int(14))
-    managerActions.scrollTo(scrollConfig.x or 0,scrollConfig.y or 0)
+    if content then
+      if fileConfig.oldContent~=content or not(keepHistory) then
+        fileConfig.oldContent=content
+        fileConfig.newContent=content
+        fileConfig.changed=false
+        if keepHistory then
+          managerActions.setText(content,true)
+         else
+          managerActions.setText(content)
+        end
+        local scrollConfig=assert(loadstring(getSharedData("scroll_"..filePath) or "{}"))()
+        managerActions.setSelection(scrollConfig.selection or 0)
+        managerActions.setTextSize(scrollConfig.size or math.dp2int(14))
+        managerActions.scrollTo(scrollConfig.x or 0,scrollConfig.y or 0)
+      end
+      return true
+     else
+      return false
+    end
    else
     decoder.apply(filePath,fileType,editor)
+    return true
   end
 end
 
@@ -352,7 +365,9 @@ function EditorsManager.switchEditor(newEditorType)
     --print("警告：编辑器无效切换")
     return
   end
-
+  if editor and EditorsManager.isEditor() then
+    managerActions.setText("")
+  end
   editorConfig=editorLayouts[newEditorType]
 
   --检查是不是真的存在这个编辑器

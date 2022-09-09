@@ -35,6 +35,10 @@ end
 if getSharedData("tab_icon")==nil then
   setSharedData("tab_icon",true)
 end
+if getSharedData("editor_autoBackupOriginalFiles")==nil then
+  setSharedData("editor_autoBackupOriginalFiles",true)
+end
+
 
 
 if getSharedData("projectsDir")==nil then

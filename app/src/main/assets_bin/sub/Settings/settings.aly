@@ -140,6 +140,16 @@
     title=R.string.settings_editor_symbolNar;
     key="editor_symbolBar";
   };
+
+  {
+    SettingsLayUtil.ITEM_SWITCH;
+    icon=R.drawable.ic_file_clock_outline;
+    title=R.string.settings_editor_automaticallyBackupOriginalFiles;
+    summary=R.string.settings_editor_automaticallyBackupOriginalFiles_summary;
+    key="editor_autoBackupOriginalFiles";
+    enabled=false;
+    switchEnabled=false;
+  };
   --[[
   {
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
@@ -172,7 +182,7 @@
     summary=getSharedData("projectsDir");
     action="editString";
     hint=R.string.projects_path;
-    helperText=R.string.settings_needRestart;
+    --helperText=R.string.settings_needRestart;
     allowNull=false;
   };
   {

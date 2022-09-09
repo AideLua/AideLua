@@ -1,5 +1,5 @@
 {
-  title=R.string.Jesse205_permission;
+  title=R.string.Jesse205_permission_request;
   icon=R.drawable.ic_account_key_outline;
   subtitle=R.string.Jesse205_permission_tips;
   elevationKey="LastActionBarElevation_permissionPage";

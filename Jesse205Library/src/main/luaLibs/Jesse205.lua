@@ -1,7 +1,7 @@
 local Jesse205={}
 _G.Jesse205=Jesse205
-Jesse205._VERSION="12.0.0(Pro)"--库版本名
-Jesse205._VERSIONCODE=120099--库版本号
+Jesse205._VERSION="12.0.1(Pro)"--库版本名
+Jesse205._VERSIONCODE=120199--库版本号
 Jesse205._ENV=_ENV
 Jesse205.themeType="Jesse205"--主题类型
 
@@ -142,6 +142,7 @@ import "android.graphics.Color"
 import "android.graphics.Typeface"
 import "android.graphics.drawable.GradientDrawable"
 
+import "androidx.core.app.ActivityCompat"
 import "androidx.core.content.ContextCompat"
 import "androidx.core.view.MenuItemCompat"
 
@@ -238,7 +239,6 @@ function openInBrowser(url)
 end
 openUrl=openInBrowser--通常情况下，应用不自带内置浏览器
 
-
 --[[
 相对路径转绝对路径
 
@@ -334,6 +334,14 @@ function newLayoutTransition()
     return LayoutTransition().enableTransitionType(LayoutTransition.CHANGING)
   end
 end
+
+--以下为复写事件
+function onError(title,message)
+  showErrorDialog(tostring(title),tostring(message))
+  return true
+end
+--activity.setDebug(false)
+
 
 --导入共享代码
 import "AppSharedCode"

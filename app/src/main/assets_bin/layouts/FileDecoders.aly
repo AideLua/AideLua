@@ -2,16 +2,16 @@
   txt={
     editor="CodeEditor",
     read=function(path)
-      local file=io.open(path,"r")
-      local content=file:read("*a")
-      file:close()
+      local content=isBinaryFile(path)
       return content
     end,
     save=function(path,content)
       --print(path,content)
-      FilesTabManager.backupDir.mkdirs()
-      local backupFilePath=FilesTabManager.backupPath.."/"..System.currentTimeMillis().."_"..File(path).getName()
-      os.rename(path, backupFilePath)
+      if getSharedData("editor_autoBackupOriginalFiles") then
+        FilesTabManager.backupDir.mkdirs()
+        local backupFilePath=FilesTabManager.backupPath.."/"..System.currentTimeMillis().."_"..File(path).getName()
+        os.rename(path, backupFilePath)
+      end
       io.open(path,"w"):write(content):close()
     end,
     language=EmptyLanguage(),
@@ -57,6 +57,7 @@
       options.diskCacheStrategy(DiskCacheStrategy.NONE)--不缓冲disk硬盘中
       Glide.with(activity).load(filePath).apply(options).into(view)
     end,
+    read=false,
     save=false,
   },
   jpg={super="png"},

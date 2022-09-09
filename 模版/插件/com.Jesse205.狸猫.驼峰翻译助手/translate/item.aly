@@ -1,0 +1,15 @@
+{
+  LinearLayout;
+  padding="6dp";
+  layout_width="fill";
+  {
+    TextView;
+    typeface=Typeface.DEFAULT_BOLD;
+    id="word";
+  };
+  {
+    TextView;
+    id="type";
+    layout_width="100%w";
+  };
+};

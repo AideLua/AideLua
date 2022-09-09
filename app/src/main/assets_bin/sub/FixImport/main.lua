@@ -52,13 +52,6 @@ function refreshMenusState()
   if LoadedMenu then
     for index,content in ipairs(StateByLoadedMenus) do
       content.setEnabled(LoadedData)
-      --[[
-      if LoadedData then
-        content.setIconTintList(ColorStateList(int[0].class{int{}},int{0xFF000000}))
-       else
-        content.setIconTintList(ColorStateList(int[0].class{int{}},int{0x99000000}))
-      end
-    ]]
     end
   end
 end

@@ -74,8 +74,8 @@ local luadir=context.getLuaDir()
 local wm =context.getSystemService(Context.WINDOW_SERVICE)
 local outMetrics = DisplayMetrics()
 wm.getDefaultDisplay().getMetrics(outMetrics)
-local W = outMetrics.widthPixels
-local H = outMetrics.heightPixels
+--local W = outMetrics.widthPixels
+--local H = outMetrics.heightPixels
 
 
 local function alyloader(path)
@@ -347,44 +347,15 @@ end
 local function checkNumber(var)
   if type(var) == "string" then
     --true与false不再使用string
-    --[[
-    if var=="true" then
-      return true
-     elseif var=="false" then
-      return false
-    end]]
-
     if toint[var] then
       return toint[var]
     end
-
-    --[[
-    local p=checkPercent(var)
-    if p then
-      return p
-    end]]
 
     local i=checkint(var)
     if i then
       return i
     end
     --#XXX已去除
-    --[[
-    local h=string.match(var,"^#(%x+)$")
-    if h then
-      local c=tonumber(h,16)
-      if c then
-        if #h<=6 then
-          return c-0x1000000
-         elseif #h<=8 then
-          if c>0x7fffffff then
-            return c-0x100000000
-           else
-            return c
-          end
-        end
-      end
-    end]]
 
     local n,ty=checkType(var)
     if ty then
@@ -395,7 +366,7 @@ local function checkNumber(var)
 end
 
 local function checkValue(var)
-  return tonumber(var) or checkNumber(var) or var
+  return checkNumber(var) or var
 end
 
 local function checkValues(...)
@@ -471,6 +442,7 @@ local function setattribute(root,view,params,k,v,ids)
       params.addRule(rules[k])
      elseif rules[k] then
       params.addRule(rules[k],ids[v])
+      --[[
      elseif k=="items" then --创建列表项目
       if type(v)=="table" then
         if view.adapter then
@@ -494,7 +466,7 @@ local function setattribute(root,view,params,k,v,ids)
           local adapter=ArrayListAdapter(context,android_R.layout.simple_list_item_1, String(v()))
           view.setAdapter(adapter)
         end
-      end
+      end]]
      elseif k=="pages" and type(v)=="table" then --创建页项目
       local ps={}
       for n,o in ipairs(v) do

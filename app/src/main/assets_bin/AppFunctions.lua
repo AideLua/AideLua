@@ -8,7 +8,8 @@ function isSamePathFile(file1,file2)--通过文件本身
 end
 function createVirtualClass(normalTable)
   local smartTable={}
-  local metatable={__index=function(self,key)
+  local metatable={
+    __index=function(self,key)
       if normalTable[key] then
         return normalTable[key]
        else
@@ -17,7 +18,11 @@ function createVirtualClass(normalTable)
           return normalTable[getter]()
         end
       end
-  end}
+    end,
+    __newindex=function(self,key,value)
+      normalTable[key]=value
+    end
+  }
   setmetatable(smartTable,metatable)
   return smartTable,metatable
 end
@@ -101,6 +106,7 @@ function refreshMagnifier()
     end)
   end
 end
+
 
 local MyMimeMap={
   lua="text/plain",
@@ -230,7 +236,7 @@ function getFilePathCopyMenus(inLibDirPath,filePath,fileName,isFile,fileType)
       callLibPath=inLibDirPath:gsub("/",".")
       addStrToTable(callLibPath,textList,textCheckList)
     end
-    if fileType=="aly" or fileType=="lua" or File(filePath.."/init.lua").isFile() then
+    if fileType=="aly" or fileType=="lua" or fileType=="java" or fileType=="kt" or File(filePath.."/init.lua").isFile() then
       addStrToTable(getImportCode(callLibPath),textList,textCheckList)
     end
 

@@ -121,11 +121,11 @@ local function initFileTabView(tab, fileConfig)
   textView.setAllCaps(false) -- 关闭全部大写
   .setTextSize(12)
 end
---FilesTabManager.initFileTabView=initFileTabView
+FilesTabManager.initFileTabView=initFileTabView
 
 
 
-function FilesTabManager.openFile(newFile,newFileType)
+function FilesTabManager.openFile(newFile,newFileType,keepHistory)
   if openState and EditorsManager.isEditor() then
     --EditorsManager.save2Tab()
     FilesTabManager.saveFile(nil,false)
@@ -145,7 +145,9 @@ function FilesTabManager.openFile(newFile,newFileType)
      else
       tab=filesTabLay.newTab()--新建一个Tab
       tab.setText(fileName)--设置显示的文字
+      if oldTabIcon then
       tab.setIcon(FilesBrowserManager.fileIcons[fileType])
+      end
       fileConfig = {
         file = file,
         fileType=newFileType,
@@ -161,38 +163,47 @@ function FilesTabManager.openFile(newFile,newFileType)
       filesTabLay.addTab(tab)--在区域添加Tab
       filesTabLay.setVisibility(View.VISIBLE)--显示Tab区域
       initFileTabView(tab,fileConfig)
-
     end
+    local failed=false
     if File(filePath).isFile() then
-      if not(tab.isSelected()) then--避免调用tab里面的重复点击事件
-        task(1,function()
-          tab.select()
-        end)--选中Tab
-      end
+      _,failed=pcall(function()
+        if not(tab.isSelected()) then--避免调用tab里面的重复点击事件
+          task(1,function()
+            tab.select()
+          end)--选中Tab
+        end
 
-      EditorsManager.switchEditorByDecoder(decoder)
-      EditorsManager.openNewContent(filePath,newFileType,decoder,false)
+        EditorsManager.switchEditorByDecoder(decoder)
+        if EditorsManager.openNewContent(filePath,newFileType,decoder,keepHistory) then
+          setSharedData("openedFilePath_"..ProjectManager.nowPath,filePath)
+          --更新文件浏览器显示内容
+          local browserAdapter=FilesBrowserManager.adapter
+          if FilesBrowserManager.nowFilePosition then
+            browserAdapter.notifyItemChanged(FilesBrowserManager.nowFilePosition)
+          end
+          local newFilePosition=FilesBrowserManager.filesPositions[filePath]
+          FilesBrowserManager.nowFilePosition=newFilePosition
+          if newFilePosition then
+            browserAdapter.notifyItemChanged(newFilePosition)
+          end
+         else
+          failed=false
+        end
 
-      setSharedData("openedFilePath_"..ProjectManager.nowPath,filePath)
-
-      --更新文件浏览器显示内容
-      local browserAdapter=FilesBrowserManager.adapter
-      if FilesBrowserManager.nowFilePosition then
-        browserAdapter.notifyItemChanged(FilesBrowserManager.nowFilePosition)
-      end
-      local newFilePosition=FilesBrowserManager.filesPositions[filePath]
-      FilesBrowserManager.nowFilePosition=newFilePosition
-      if newFilePosition then
-        browserAdapter.notifyItemChanged(newFilePosition)
-      end
-
+      end)
       refreshMenusState()
-      return true,false
      else
+      failed=R.string.file_not_find
+    end
+
+    if failed then
       fileConfig.deleted=true
       FilesTabManager.closeFile(fileConfig.lowerPath)
-      showSnackBar(R.string.file_not_find)
+      --showSnackBar(R.string.file_not_find)
+      showErrorDialog(nil,failed)
       return false,false
+     else
+      return true,false
     end
 
    else
@@ -203,16 +214,7 @@ end
 
 function FilesTabManager.reopenFile()
   if openState then
-    if file.isFile() then
-      local decoder=fileConfig.decoder
-      local filePath=fileConfig.path
-      EditorsManager.switchEditorByDecoder(decoder)
-      EditorsManager.openNewContent(filePath,fileType,decoder,true)
-     else
-      fileConfig.deleted=true
-      FilesTabManager.closeFile(fileConfig.lowerPath)
-      showSnackBar(R.string.file_not_find)
-    end
+    FilesTabManager.openFile(file,fileType,true)
   end
 end
 
@@ -288,7 +290,9 @@ function FilesTabManager.closeFile(lowerFilePath,blockOpen)
     FilesTabManager.saveFile(lowerPath)
 
     openedFiles[config.lowerPath]=nil
-    filesTabLay.removeTab(config.tab)
+    if openState then--如果关闭了文件，说明当前是一键关闭
+      filesTabLay.removeTab(config.tab)
+    end
     if table.size(openedFiles)==0 then
       openState = false
       file=nil
@@ -312,6 +316,7 @@ end
 -- 保存所有文件
 function FilesTabManager.closeAllFiles()
   openState=false
+  filesTabLay.removeAllTabs()
   for index, content in pairs(openedFiles) do
     FilesTabManager.closeFile(index)
   end
