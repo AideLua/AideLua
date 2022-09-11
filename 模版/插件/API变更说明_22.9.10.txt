@@ -1,0 +1,5 @@
+v5.0.2(50299)
+1.createVirtualClass(normalTable) 增加 __index 方法
+  作用：使 Manager 可以直接赋值
+2.PermissionUtil.smartRequestPermission(permissions) 方法已删除
+  作用：被 PermissionUtil.askForRequestPermissions(permissionsLists) 代替

@@ -161,7 +161,7 @@
     <string name="settings_addComplexLibrary_summary">You can use your own complex library in functions such as "new project"</string>
     <string name="settings_editor_previewButton">Preview button</string>
     <string name="settings_editor_automaticallyBackupOriginalFiles">Automatically backup the original files</string>
-    <string name="settings_editor_automaticallyBackupOriginalFiles_summary">Automatically backup the original file when saving</string>
+    <string name="settings_editor_automaticallyBackupOriginalFiles_summary">Automatically backup the original file when saving\nTo switch states, please use setSharedData("editor_autobackuporiginalfiles", boolean)</string>
     
     <string name="window_openNew">New window</string>
     <string name="window_openInNewWindow">Open in a new window</string>

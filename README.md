@@ -1,6 +1,8 @@
 # Aide Lua
-[![QQ](https://img.shields.io/badge/Join-QQ_Group-ff69b4)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
-![icon](https://gitee.com/Jesse205/AideLua/raw/master/ic_cover-aidelua.png)
+[![QQ群](https://img.shields.io/badge/加入-QQ_群-0099FF)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
+[![QQ频道](https://img.shields.io/badge/加入-QQ_频道-0099FF)](https://pd.qq.com/s/ncghvc)
+
+![cover](https://gitee.com/Jesse205/AideLua/raw/master/ic_cover-aidelua.png)
 
 ## 警告 Warning
 此项目正在重构。如需使用源代码，请进入[发行版](releases)页面下载
@@ -22,7 +24,7 @@ Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件�
 5. [123云盘(可能更新不及时)](https://www.123pan.com/s/G7a9-Yzck)
 
 ## 使用须知
-1. 本软件默认开启自动保存代码且无法关闭（自动保存触发条件：切换到其他应用、点击二次打包以及打包运行、打开其他文件、关闭文件、打开侧滑（大屏除外）、点击标签栏等）
+1. 本软件默认开启自动保存代码且无法关闭（自动保存触发条件：切换到其他应用、点击二次打包以及打包运行、打开文件、关闭文件）
 2. 此软件不能用来开发大型项目
 3. 此软件必须搭配编译器，不管你用的是真正的Gradle还是仿Gradle（AIDE属于仿Gradle）
 

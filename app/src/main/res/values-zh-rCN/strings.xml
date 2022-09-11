@@ -158,7 +158,7 @@
     <string name="settings_addComplexLibrary_summary">可以在“新建项目”等功能使用专属您的复杂库</string>
     <string name="settings_editor_previewButton">预览按钮</string>
     <string name="settings_editor_automaticallyBackupOriginalFiles">自动备份原文件</string>
-    <string name="settings_editor_automaticallyBackupOriginalFiles_summary">当保存时自动备份原文件</string>
+    <string name="settings_editor_automaticallyBackupOriginalFiles_summary">当保存时自动备份原文件\n如需切换状态，请使用setSharedData("editor_autoBackupOriginalFiles", boolean)</string>
     
     <string name="window_openNew">新建窗口</string>
     <string name="window_openInNewWindow">在新窗口打开</string>
