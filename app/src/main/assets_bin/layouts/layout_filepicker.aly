@@ -67,7 +67,7 @@
         id="recyclerView";
         --verticalScrollBarEnabled=true;
         --scrollBarSize="4dp";
-        --verticalScrollbarThumbDrawable=resources.getDrawable(R.color.Jesse205_Red);
+        --verticalScrollbarThumbDrawable=ColorDrawable(theme.color.Red);
       };
     };
   };

@@ -3,3 +3,8 @@ v5.0.2(50299)
   作用：使 Manager 可以直接赋值
 2.PermissionUtil.smartRequestPermission(permissions) 方法已删除
   作用：被 PermissionUtil.askForRequestPermissions(permissionsLists) 代替
+3.LuaEditorHelper.initKeysTaskFunc(keyWords,jesse205KeyWords)
+4.LuaEditorHelper.initKeys(editor,editorParent,pencilEdit,progressBar)
+v5.0.3
+1.onCreate(savedInstanceState) 先执行模块的onCreate，再执行本身的onCreate。如果模块的返回true，则不执行本身的。
+  作用：支持更多功能（如：新增keys，启动时选择性打开文件）

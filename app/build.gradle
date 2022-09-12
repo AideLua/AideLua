@@ -45,7 +45,8 @@ dependencies {
     api project(':androlua')
     api project(':sharp')
     //api 'io.github.Rosemoe.sora-editor:editor:0.16.4'
-    
     api 'androidx.appcompat:appcompat:1.0.0'
     api 'com.google.android.material:material:1.0.0'
+    api "androidx.recyclerview:recyclerview:1.2.1"
+    
 }

@@ -22,7 +22,7 @@ end
 
 StatService.start(activity)
 
-
+import "android.graphics.drawable.ColorDrawable"
 import "android.text.TextUtils$TruncateAt"
 import "android.content.ComponentName"
 import "android.provider.DocumentsContract"
@@ -117,15 +117,17 @@ activity.setContentView(loadlayout2("layouts.layout"))
 actionBar.setTitle(R.string.app_name)
 actionBar.setDisplayHomeAsUpEnabled(true)
 
-
 LuaReservedCharacters = {"switch", "if", "then", "and", "break", "do", "else", "elseif", "end", "false", "for",
-  "function", "in", "local", "nil", "not", "or", "repeat", "return", "true", "until", "while"} -- lua关键字
+"function", "in", "local", "nil", "not", "or", "repeat", "return", "true", "until", "while"} -- lua关键字
 
 deviceChangeLTFixList={largeDrawerLay,largeMainLay,mainEditorLay,layoutTransition}
 
 function onCreate(savedInstanceState)
   -- todo:根据savedInstanceState和getIntent判断打开项目
   --FilesBrowserManager.open()
+  if PluginsUtil.callElevents("onCreate", savedInstanceState) then
+    return
+  end
   local data,data2,data3=receivedData[1],receivedData[2],receivedData[3]
   if data=="projectPicker" then
     data=nil
@@ -150,7 +152,6 @@ function onCreate(savedInstanceState)
     FilesBrowserManager.open()
   end
 
-  PluginsUtil.callElevents("onCreate", savedInstanceState)
   toggle.syncState()
 end
 
@@ -473,7 +474,6 @@ end
 
 
 function onPause()
-  --print(true)
   if FilesTabManager.openState then
     FilesTabManager.saveFile()
   end
@@ -484,7 +484,6 @@ function onStart()
 end
 
 function onStop()
-  --print(true)
   activityStopped = true
 end
 
