@@ -1,14 +1,15 @@
 local PluginsUtil = {}
 local plugins
+local enabledPluginPaths
 
 local activityName
-local setEnabled, getEnabled, loadPlugins, getPluginPath, getPluginDataPath, getAvailable
+local setEnabled, getEnabled, getReallyEnabled, loadPlugins, getPluginPath, getPluginDataPath, getAvailable
 
 local PLUGINS_PATH = AppPath.AppShareDir .. "/plugins"
 local PLUGINS_DATA_PATH = AppPath.AppShareDir .. "/data/plugins"
 PluginsUtil.PLUGINS_PATH = PLUGINS_PATH
 PluginsUtil.PLUGINS_DATA_PATH = PLUGINS_DATA_PATH
-PluginsUtil._VERSION="3.0"
+PluginsUtil._VERSION="3.1"
 
 local appPackageName = activity.getPackageName()
 local PackInfo = activity.PackageManager.getPackageInfo(appPackageName, 0)
@@ -29,7 +30,7 @@ function PluginsUtil.callElevents(name, ...)
         showErrorDialog("Plugin"..plugins.eventsName2[name][index].."error",err)
       end, activityName, ...)
       if result~=nil then
-        finalResult=result
+        finalResult=result or finalResult
       end
     end
   end
@@ -39,7 +40,7 @@ function PluginsUtil.callElevents(name, ...)
         showErrorDialog("Plugin"..plugins.eventsName2[name][index].."error",err)
       end, ...)
       if result~=nil then
-        finalResult=result
+        finalResult=result or finalResult
       end
     end
   end
@@ -78,6 +79,25 @@ function getEnabled(packageName)
 end
 PluginsUtil.getEnabled = getEnabled
 
+--获取是不是真正启用了
+function getReallyEnabled(enabled,config)
+  local supports=config.supported2
+  if apptype and supports then
+    local versionConfig=supports[apptype]
+    if versionConfig then
+      local minVerCode = versionConfig.mincode
+      local targetVerCode = versionConfig.targetcode
+      --进行版本校验
+      if (minVerCode and minVerCode > versionCode) or (targetVerCode and targetVerCode < versionCode and enabled ~= versionCode) then
+        return false
+      end
+    end
+  end
+  return true
+end
+PluginsUtil.getReallyEnabled = getReallyEnabled
+
+
 --获取插件目录，如果文件夹名与真正的packageName请手动输入文件夹名
 function getPluginPath(packageName)
   return PLUGINS_PATH .. "/" .. packageName
@@ -101,6 +121,7 @@ function getAvailable(packageName)
 end
 PluginsUtil.getAvailable = getAvailable
 
+--获取函数的插件事件与名字列表
 local function getPluginsEventsAndName(pluginsEvents,pluginsEventsName,name)
   local eventsList=pluginsEvents[name]
   local eventsNameList=pluginsEventsName[name]
@@ -116,103 +137,130 @@ end
 local pluginEnvTable={
   getPluginPath=getPluginPath,
   getPluginDataPath=getPluginDataPath,
-
 }
+
+
+local function getConfig(configs,path)
+  local config=configs[path]
+  if not(config) then
+    config = getConfigFromFile(path .. "/init.lua") -- init.lua内容
+    config.pluginPath = path
+    setmetatable(config, {__index = pluginEnvTable})--设置环境变量
+    configs[path]=config
+  end
+  return config
+end
+
+
 setmetatable(pluginEnvTable,{__index=_G})
 
 function loadPlugins()
   plugins = {}
+  enabledPluginPaths=application.get("plugin_enabledpaths")
+  --enabledPluginPaths={}
   local pluginsEvents = {}
   local pluginsEventsName = {}
   local pluginsEvents2 = {}
   local pluginsEventsName2 = {}
   local pluginsActivities = {}
   local pluginsActivitiesName = {}
+  local configs={}
   plugins.events = pluginsEvents
   plugins.eventsName = pluginsEventsName
   plugins.events2 = pluginsEvents2
   plugins.eventsName2 = pluginsEventsName2
   plugins.activities = pluginsActivities
   plugins.activitiesName = pluginsActivitiesName
+  plugins.configs=configs
+  if not(enabledPluginPaths) then
+    enabledPluginPaths={}
+    local pluginsFile = File(PLUGINS_PATH)
+    if pluginsFile.isDirectory() then -- 存在插件文件夹
+      local fileList = pluginsFile.listFiles()
+      for index = 0, #fileList - 1 do
+        local file = fileList[index]
+        local path = file.getPath()
+        local dirName = file.getName()
 
-  local pluginsFile = File(PLUGINS_PATH)
-  if pluginsFile.isDirectory() then -- 存在插件文件夹
-    local fileList = pluginsFile.listFiles()
-    for index = 0, #fileList - 1 do
-      local file = fileList[index]
-      local path = file.getPath()
-      local dirName = file.getName()
+        local defaultEnabled = getEnabled(dirName)
 
-      local defaultEnabled = getEnabled(dirName)
+        if defaultEnabled then -- 检测是否开启
+          local initPath = path .. "/init.lua"
+          if File(initPath).isFile() then -- 存在init.lua
+            xpcall(function()
+              --获取config
+              --下面的步骤和getConfig执行的结果完全一样，但出于性能考虑，重复写一套
+              local config = getConfigFromFile(initPath) -- init.lua内容
+              config.pluginPath = path
+              setmetatable(config, {__index = pluginEnvTable})--设置环境变量
+              configs[path]=config
 
-      if defaultEnabled then -- 检测是否开启
-        local initPath = path .. "/init.lua"
-        local mainPath = path .. "/main.lua"
-        local configDirPath = path .. "/config"
-        local eventsDirPath = configDirPath .. "/events"
-
-        if File(initPath).isFile() then -- 存在init.lua
-          xpcall(function()
-            local config = getConfigFromFile(initPath) -- init.lua内容
-            config.pluginPath = path
-            setmetatable(config, {__index = pluginEnvTable})--设置环境变量
-            local minVerCode = config.minemastercode
-            local targetVerCode = config.targetmastercode
-            --进行版本校验
-            if (not (minVerCode) or minVerCode <= versionCode) and
-              (not (targetVerCode) or targetVerCode >= versionCode or defaultEnabled == versionCode) then -- 版本号在允许的范围之内或者强制启用
-              local thirdPlugins = config.thirdplugins
-              local err = false
-              if thirdPlugins then
-                for index, content in ipairs(thirdPlugins) do
-                  if not (getAvailable(content)) then
-                    print("Plugin", dirName, "error: Plugin", content, "not found.")
-                    err = true
-                  end
-                end
-              end
-              --没有问题
-              if err == false then
-                local name = ("%s (%s)"):format(config.appname, config.packagename or dirName)
-                local fileEvents=config.events
-                if fileEvents then
-                  for index,content in pairs(fileEvents) do
-                    local eventsList,eventsNameList=getPluginsEventsAndName(pluginsEvents,pluginsEventsName,index)
-                    table.insert(eventsList,content)
-                    table.insert(eventsNameList,name)
-                  end
-                end
-                if activityName then
-                  local eventsAlyPath = eventsDirPath .. "/" .. activityName .. ".aly"
-                  if File(eventsAlyPath).isFile() then
-                    local fileEvents = assert(loadfile(eventsAlyPath, "bt", config))()
-                    for index, content in pairs(fileEvents) do
-                      local eventsList,eventsNameList=getPluginsEventsAndName(pluginsEvents2,pluginsEventsName2,index)
-                      table.insert(eventsList,content)
-                      table.insert(eventsNameList,name)
+              if getReallyEnabled(defaultEnabled,config) then
+                local err=false
+                local thirdPlugins = config.thirdplugins
+                if thirdPlugins then--存在需要的第三方插件库
+                  for index, content in ipairs(thirdPlugins) do
+                    if not (getAvailable(content)) then--如果存在不可用的
+                      print("Plugin", dirName, "error: Plugin", content, "not found.")
+                      err = true
                     end
                   end
                 end
-
-                --可以使用单独的页面打开
-                if File(mainPath).isFile() then
-                  table.insert(pluginsActivities, mainPath)
-                  table.insert(pluginsActivitiesName, config.appname or config.packagename or dirName)
+                --没有问题
+                if err == false then
+                  table.insert(enabledPluginPaths,path)
                 end
-
               end
-            end
-          end,
-          function(err) -- 语法错误，或者其他问题
-            showErrorDialog("Plugin"..dirName.."error",err)
-          end)
-          -- else--init.lua不存在
-          -- print("Plugin",dirName,"error: init.lua missing.")
+            end,
+            function(err) -- 语法错误，或者其他问题
+              showErrorDialog("Plugin"..dirName.."error",err)
+            end)
+          end
+        end
+      end
+    end
+    enabledPluginPaths=String(enabledPluginPaths)
+    application.set("plugin_enabledpaths",enabledPluginPaths)
+  end
+
+  for index=0,#enabledPluginPaths-1 do
+    local path=enabledPluginPaths[index]
+    local file=File(path)
+    local dirName = file.getName()
+    local config=getConfig(configs,path)
+    local mainPath = path .. "/main.lua"
+    local configDirPath = path .. "/config"
+    local eventsDirPath = configDirPath .. "/events"
+
+    local name = ("%s (%s)"):format(config.appname, config.packagename or dirName)
+    local fileEvents=config.events
+    if fileEvents then
+      for index,content in pairs(fileEvents) do
+        local eventsList,eventsNameList=getPluginsEventsAndName(pluginsEvents,pluginsEventsName,index)
+        table.insert(eventsList,content)
+        table.insert(eventsNameList,name)
+      end
+    end
+    if activityName then
+      local eventsAlyPath = eventsDirPath .. "/" .. activityName .. ".aly"
+      if File(eventsAlyPath).isFile() then
+        local fileEvents = assert(loadfile(eventsAlyPath, "bt", config))()
+        for index, content in pairs(fileEvents) do
+          local eventsList,eventsNameList=getPluginsEventsAndName(pluginsEvents2,pluginsEventsName2,index)
+          table.insert(eventsList,content)
+          table.insert(eventsNameList,name)
         end
       end
     end
 
+    --可以使用单独的页面打开
+    if File(mainPath).isFile() then
+      table.insert(pluginsActivities, mainPath)
+      table.insert(pluginsActivitiesName, config.appname or config.packagename or dirName)
+    end
   end
+
+
   return PluginsUtil
 end
 PluginsUtil.loadPlugins = loadPlugins

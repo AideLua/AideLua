@@ -1,5 +1,7 @@
 local PluginsManagerUtil={}
 local getAlpInfo,install
+local PackInfo=activity.PackageManager.getPackageInfo(activity.getPackageName(),64)
+local versionCode=PackInfo.versionCode
 
 function getAlpInfo(path)
   local config = {}
@@ -25,6 +27,23 @@ function install(path,uri,config,callback)
     config.developer,
     config.description,
     uri)
+    local supported=config.supported2
+    local waringId
+    if supported then
+      local limitVersion=supported[apptype]
+      if limitVersion then
+        if limitVersion.targetcode<versionCode then
+          waringId=R.string.plugins_warning_update
+        end
+       else
+        waringId=R.string.plugins_error_unsupported
+      end
+     else
+      waringId=R.string.plugins_warning_supported
+    end
+    if waringId then
+      message=message.."\n\n"..getString(waringId)
+    end
     AlertDialog.Builder(this)
     .setTitle(R.string.plugins_install)
     .setMessage(message)
@@ -63,7 +82,21 @@ function PluginsManagerUtil.installByUri(uri,callback)
   end
   local success,config=pcall(getAlpInfo,path)
   if success then--读取成功
-    install(path,uri,config,callback)
+    local supported=config.supported2
+    if supported then
+      if supported[apptype] then
+        local limitVersion=supported[apptype]
+        if limitVersion.mincode>versionCode then
+          showErrorDialog(R.string.plugins_error_update_app)
+         else
+          install(path,uri,config,callback)
+        end
+       else
+        showErrorDialog(R.string.plugins_error_unsupported)
+      end
+     else
+      install(path,uri,config,callback)
+    end
    else--读取失败
     showErrorDialog(R.string.open_failed,config)
   end

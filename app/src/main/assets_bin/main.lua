@@ -72,6 +72,7 @@ import "layouts.FileTemplates"
 import "adapter.FileListAdapter"
 import "adapter.FilePathAdapter"
 
+application.set("plugin_enabledpaths",nil)
 PluginsUtil.setActivityName("main")
 PluginsUtil.loadPlugins()
 plugins = PluginsUtil.getPlugins()
@@ -151,7 +152,6 @@ function onCreate(savedInstanceState)
     pathPlaceholderView.setVisibility(View.GONE)
     FilesBrowserManager.open()
   end
-
   toggle.syncState()
 end
 

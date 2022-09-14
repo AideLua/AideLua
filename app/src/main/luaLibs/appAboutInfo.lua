@@ -101,3 +101,11 @@ supportList={--如果有多种方式支持项目，可以使用列表
 --版权信息
 copyright="Copyright (c) 2020-2022, Jesse205"
 
+function main()
+  table.insert(data,4,{--PluginsUtil 版本
+    SettingsLayUtil.ITEM;
+    title="PluginsUtil Version";
+    summary=PluginsUtil._VERSION;
+    icon=R.drawable.ic_information_outline;
+  })
+end

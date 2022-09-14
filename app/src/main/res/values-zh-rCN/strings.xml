@@ -34,6 +34,7 @@
     <string name="commentedCode">注释代码</string>
     <string name="uncommentedCode">取消注释代码</string>
     <string name="logCat">日志猫</string>
+    <string name="help">帮助</string>
    
     <string name="open">打开</string>
     <string name="open_failed">打开失败</string>
@@ -158,7 +159,7 @@
     <string name="settings_addComplexLibrary_summary">可以在“新建项目”等功能使用专属您的复杂库</string>
     <string name="settings_editor_previewButton">预览按钮</string>
     <string name="settings_editor_automaticallyBackupOriginalFiles">自动备份原文件</string>
-    <string name="settings_editor_automaticallyBackupOriginalFiles_summary">当保存时自动备份原文件\n如需切换状态，请使用setSharedData("editor_autoBackupOriginalFiles", boolean)</string>
+    <string name="settings_editor_automaticallyBackupOriginalFiles_summary">当保存时自动备份原文件\n如需切换状态，请使用 setSharedData("editor_autoBackupOriginalFiles", boolean)</string>
     
     <string name="window_openNew">新建窗口</string>
     <string name="window_openInNewWindow">在新窗口打开</string>
@@ -184,10 +185,10 @@
     <string name="plugins_info_folderName">文件夹名：%1$s</string>
     <string name="plugins_warning_keepPFSame">请确保插件的包名与文件夹名相同</string>
     <string name="plugins_warning_addPackageName">请填写包名</string>
-    <string name="plugins_warning_update">此插件专为旧版本 Aide Lua 开发，请检查插件更新</string>
+    <string name="plugins_warning_update">此插件专为旧版本 APP 开发，请检查插件更新</string>
     <string name="plugins_warning_supported">此插件未指定支持的软件，因此可能无法正常加载</string>
     <string name="plugins_error">非法插件，建议删除</string>
-    <string name="plugins_error_update_app">您的 Aide Lua 版本不符合此插件最低要求，请检查软件更新</string>
+    <string name="plugins_error_update_app">您的 APP 版本不符合此插件最低要求，请检查软件更新</string>
     <string name="plugins_error_unsupported">此插件不适配本软件，请下载对应版本的插件</string>
     <string name="plugins_reboot">开关插件后需要重新启动本应用</string>
     

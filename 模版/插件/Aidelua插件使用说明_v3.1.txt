@@ -1,6 +1,7 @@
 tips: 
   1. 为了您更好的阅读体验，请关闭自动换行，并使用等宽字体
   2. 以下部分说明格式为 “变量名: 数据类型: 说明”
+  3. 标有“[x]”的表示已失效
 
 AideLua暂时不支持一键安装插件，所以我们提供临时解决方法
   1. 打开文件管理，进入 内部存储/Android/media/com.Jesse205.aidelua2/files/plugins ，没有就新建一个
@@ -54,12 +55,14 @@ AideLua暂时不支持一键安装插件，所以我们提供临时解决方法
       packagename: string: 插件包名
       appver: string: 插件版本名
       appcode: number: 插件版本号
-      minemastercode: number: 最低支持的APP版本号
-      targemastercode: number: 目标适配的APP版本号
+      [x]minemastercode: number: 最低支持的APP版本号
+      [x]targemastercode: number: 目标适配的APP版本号
       mode: string: 模式，默认为 "plugin"
-      thirdplugins: table: 需要安装的第三方库
-      supported: table: 支持的APP列表
-        content: 
+      thirdplugins: table(list): 需要安装的第三方库
+        content: string: 插件包名
+      [x]supported: table(list): 支持的APP列表
+      supported2: table(map): 支持的APP列表
+        keys: 
           aidelua: string：Aide Lua
           eddelua: string：Edde Lua (截止目前此app不支持插件)
           alstudio: string：Android Lua Studio (截止目前此app仅存于想象)
@@ -71,7 +74,8 @@ AideLua暂时不支持一键安装插件，所以我们提供临时解决方法
           eddeconnect: string：Edde 互联 (截止目前此app仅存于想象)
           eddestudy: string：Edde 学习桌面 (截止目前此app仅存于想象)
           hellotool: string: 哈兔Box (截止目前此app不支持此类型插件)
-
+        content: table: 支持的版本，mincode为最低版本，targetcode为最高版本
+          {mincode=50399,targetcode=59999}
       events: table: 全局事件（与独立的事件相比，第一个参数为页面名称，但是可能为nil）
 
   config/events/: 存放各个页面的事件的文件夹

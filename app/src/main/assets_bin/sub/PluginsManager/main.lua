@@ -9,8 +9,6 @@ import "settings"
 import "SettingsLayUtilPro"
 import "PluginsManagerUtil"
 
---appPluginsDir=AppPath.AppShareDir.."/plugins"
---AppPath.AppPluginsDir=appPluginsDir
 PLUGINS_DIR=File(PluginsUtil.PLUGINS_PATH)
 
 local PackInfo=activity.PackageManager.getPackageInfo(activity.getPackageName(),64)
@@ -23,10 +21,18 @@ actionBar.setDisplayHomeAsUpEnabled(true)
 REQUEST_INSTALLPLUGIN=10
 settings2={}
 
+function onCreateOptionsMenu(menu)
+   helpMenu=menu.add(R.string.help)
+  helpMenu.setIcon(R.drawable.ic_help_circle_outline)
+  helpMenu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+end
+
 function onOptionsItemSelected(item)
   local id=item.getItemId()
   if id==android.R.id.home then
     activity.finish()
+    elseif item==helpMenu then
+    openInBrowser("https://gitee.com/Jesse205/AideLua/wikis/插件说明/readme")
   end
 end
 
@@ -62,6 +68,7 @@ function onItemClick(view,views,key,data)
      else
       PluginsUtil.setEnabled(data.dirName,newState)
     end
+    application.set("plugin_enabledpaths",nil)
    elseif key=="install_plugin" then
     local intent=Intent(Intent.ACTION_GET_CONTENT)
     intent.setType("*/*")
@@ -104,7 +111,7 @@ function refresh()
     local fileList=PLUGINS_DIR.listFiles()
     for index=0,#fileList-1 do
       local file=fileList[index]
-      if file.isDirectory() then
+      if file.isDirectory() then--存在文件夹
         local title,config,spannableSummary
         local summary=""
         local summarySpanIndex={}
@@ -115,7 +122,7 @@ function refresh()
         local dirName=file.getName()
         local initPath=path.."/init.lua"
         local icon=path.."/icon.png"
-        if File(initPath).isFile() then
+        if File(initPath).isFile() then--存在init.lua，是合法插件
           config=getConfigFromFile(initPath)--init.lua内容
           if config.appname then
             title=config.appname
@@ -151,27 +158,31 @@ function refresh()
             summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,getString(R.string.plugins_warning_addPackageName))
           end
 
-          if config.supported then
-            if not(table.find(config.supported,apptype)) then
+          checked=PluginsUtil.getEnabled(dirName)
+
+          local supports=config.supported2
+          if supports then--声明了受支持的APP
+            local versionConfig=supports[apptype]
+            if versionConfig then--此APP受支持
+              local minVerCode = versionConfig.mincode
+              local targetVerCode = versionConfig.targetcode
+              if not(minVerCode) or minVerCode<=versionCode then--版本号在允许启用模块的范围之内
+                if targetVerCode and targetVerCode<versionCode then--当前APP版本较高
+                  checked=checked==versionCode
+                  enableVer=true--启用版本判断
+                  summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,getString(R.string.plugins_warning_update))
+                end
+               else--APP版本号太低
+                switchEnabled=false
+                summary=addSummaryTextLine(summarySpanIndex,"Red",summary,getString(R.string.plugins_error_update_app))
+              end
+             else--此APP不受支持
               summary=addSummaryTextLine(summarySpanIndex,"Red",summary,getString(R.string.plugins_error_unsupported))
             end
-           else
+           elseif supports==nil then--没有声明受支持的APP
             summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,getString(R.string.plugins_warning_supported))
           end
 
-          local minVerCode=config.minemastercode
-          local targetVerCode=config.targetmastercode
-          if minVerCode==nil or minVerCode<=versionCode then--版本号在允许启用模块的范围之内
-            checked=PluginsUtil.getEnabled(dirName)
-            if targetVerCode and targetVerCode<versionCode then
-              checked=checked==versionCode
-              enableVer=true
-              summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,getString(R.string.plugins_warning_update))
-            end
-           else
-            switchEnabled=false
-            summary=addSummaryTextLine(summarySpanIndex,"Red",summary,getString(R.string.plugins_error_update_app))
-          end
          else--不存在init.lua，是非法插件
           config={}
           switchEnabled=false
@@ -208,6 +219,8 @@ function refresh()
       end
     end
   end
+
+  --添加底部提示
   table.insert(settings2,{
     SettingsLayUtil.ITEM_ONLYSUMMARY;
     summary=R.string.plugins_reboot,

@@ -35,7 +35,8 @@
     <string name="commentedCode">Commented code</string>
     <string name="uncommentedCode">Uncomment code</string>
     <string name="logCat">Log Cat</string>
-  
+    <string name="help">Help</string>
+    
     <string name="open">Open</string>
     <string name="open_failed">Open failed</string>
     
@@ -187,10 +188,10 @@
     <string name="plugins_info_folderName">Folder name: %1$s</string>
     <string name="plugins_warning_keepPFSame">Please make sure the package name of the plugin is the same as the folder name.</string>
     <string name="plugins_warning_addPackageName">Please fill in the package name.</string>
-    <string name="plugins_warning_update">This plugin is developed for the old version of Aide Lua, please check the plugin update.</string>
-    <string name="plugins_warning_supported">This plugin does not specify the supported software, so it may not be loaded normally.</string>
+    <string name="plugins_warning_update">This plugin is developed for the old version of app, please check the plugin update.</string>
+    <string name="plugins_warning_supported">This plugin does not specify the app, so it may not be loaded normally.</string>
     <string name="plugins_error">Illegal plugin, recommended deletion.</string>
-    <string name="plugins_error_update_app">Your Aide Lua version does not meet the minimum requirements of this plugin, please check the software update.</string>
+    <string name="plugins_error_update_app">Your app version does not meet the minimum requirements of this plugin, please check the app update.</string>
     <string name="plugins_error_unsupported">This plugin is not suitable for this software, please download the corresponding version of the plugin</string>
     <string name="plugins_reboot">Restart this application after switching plug-in.</string>
     

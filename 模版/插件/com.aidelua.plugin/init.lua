@@ -1,11 +1,12 @@
 appname="插件模板"--插件名
 packagename="com.aidelua.plugin"--插件包名
-appver="3.0"
-appcode=3099
-minemastercode=50000--最低编辑器版本号
-targetmastercode=59999--目标编辑器版本号
+appver="3.1"
+appcode=3199
 mode="plugin"--模式：插件
-supported={"aidelua","eddelua"}
+supported2={
+  --aidelua的3.1版本是从50399版本开始的
+  aidelua={mincode=50399,targetcode=59999}
+}
 thirdplugins={}
 events={
   onCreate=function(activityName,savedInstanceState)

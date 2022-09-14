@@ -13,13 +13,7 @@ isEmuiSystem=pcall(function()
   androidhwext={R=luajava.bindClass("androidhwext.R")}
 end)
 
---[[
-themes={
-  {isJesse205Activity,nil},
-  {isSupportActivity,"Theme_AppCompat_DayNight",_G},
-  {isEmuiSystem,"Theme_Emui",androidhwext},
-  {true,nil}
-}]]
+
 function toboolean(content)
   if content then
     return true

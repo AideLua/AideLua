@@ -4,7 +4,6 @@ import "Jesse205"
 import "com.Jesse205.layout.util.SettingsLayUtil"
 import "com.Jesse205.layout.innocentlayout.RecyclerViewLayout"
 import "com.Jesse205.app.dialog.EditDialogBuilder"
-
 packageInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
 PluginsUtil.setActivityName("settings")
 
@@ -20,10 +19,7 @@ oldTheme=ThemeUtil.getAppTheme()
 configType,config=...
 
 REQUEST_ADDCLIB=10
---[[
-function onCreate(savedInstanceState)
-  PluginsUtil.callElevents("onCreate",savedInstanceState)
-end]]
+
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()
@@ -38,44 +34,7 @@ function onResume()
   end
 end
 
---[[
-function onActivityResult(requestCode,resultCode,data)
-  if resultCode==Activity.RESULT_OK then
-    if requestCode==REQUEST_ADDCLIB then
-      addComplexLibrary(FileInfoUtils.getPath(activity,data.getData()))
-    end
-  end
-end
-
-function addComplexLibrary(path)
-
-  local file=File(path)
-  local name=file.getName():match("(.+)%.zip")
-  local tempDirPath=AppPath.Temp.."/MyCustomComplexLibrary/"..name
-  local tempDir=File(tempDirPath)
-  if tempDir.exists() then
-    LuaUtil.rmDir(tempDir)
-  end
-  local zipFile=ZipFile(path)
-  if zipFile.isValidZipFile() then
-    zipFile.extractAll(tempDirPath)
-   else
-    MyToast("压缩包已损坏")
-  end
-
-  for index,content in ipairs(luajava.astable(tempDir.listFiles())) do
-    if content.isFile() or not(File(content.getPath().."/config.lua").isFile()) then
-      MyToast(("文件（夹）“%s不合法”"):format(content.getName()))
-      LuaUtil.rmDir(tempDir)--删除
-      return
-    end
-  end
-  LuaUtil.copyDir(tempDir,File(AppPath.AppDataDir.."/templates/complexLibraries/"..name))
-  LuaUtil.rmDir(tempDir)--删除
-  MyToast("导入成功")
-end
-]]
- function reloadActivity(closeViews)
+function reloadActivity(closeViews)
   local aRanim=android.R.anim
   local pos,scroll
   if recyclerView then
