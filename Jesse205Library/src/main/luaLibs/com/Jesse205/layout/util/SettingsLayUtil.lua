@@ -44,6 +44,27 @@ local leftCoverLay={
   };
 }
 
+local leftCoverIconLay={
+  MaterialCardView;
+  layout_height="40dp";
+  layout_width="40dp";
+  layout_margin="16dp";
+  radius="20dp";
+  {
+    CardView;
+    layout_height="fill";
+    layout_width="fill";
+    radius="18dp";
+    {
+      AppCompatImageView;
+      layout_height="24dp";
+      layout_width="24dp";
+      layout_gravity="center";
+      id="icon";
+    };
+  };
+}
+
 local oneLineLay={
   AppCompatTextView;
   id="title";
@@ -94,6 +115,7 @@ local rightNewPageIconLay={
 
 SettingsLayUtil.leftIconLay=leftIconLay
 SettingsLayUtil.leftCoverLay=leftCoverLay
+SettingsLayUtil.leftCoverIconLay=leftCoverIconLay
 SettingsLayUtil.oneLineLay=oneLineLay
 SettingsLayUtil.twoLineLay=twoLineLay
 SettingsLayUtil.rightSwitchLay=rightSwitchLay

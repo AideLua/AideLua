@@ -23,6 +23,19 @@ function newLayoutTransition()
   end
 end
 
+function openUrl(url)
+  xpcall(function()
+    import "androidx.browser.customtabs.CustomTabsIntent"
+    CustomTabsIntent.Builder()
+    .setToolbarColor(theme.color.colorPrimary)
+    .build()
+    .launchUrl(activity, Uri.parse(url))
+  end,
+  function()
+    openInBrowser(url)
+  end)
+end
+
 --加载全局插件
 function onCreate(savedInstanceState)
   PluginsUtil.callElevents("onCreate", savedInstanceState)

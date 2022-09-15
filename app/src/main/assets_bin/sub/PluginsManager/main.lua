@@ -22,7 +22,7 @@ REQUEST_INSTALLPLUGIN=10
 settings2={}
 
 function onCreateOptionsMenu(menu)
-   helpMenu=menu.add(R.string.help)
+  helpMenu=menu.add(R.string.help)
   helpMenu.setIcon(R.drawable.ic_help_circle_outline)
   helpMenu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
 end
@@ -31,8 +31,8 @@ function onOptionsItemSelected(item)
   local id=item.getItemId()
   if id==android.R.id.home then
     activity.finish()
-    elseif item==helpMenu then
-    openInBrowser("https://gitee.com/Jesse205/AideLua/wikis/插件说明/readme")
+   elseif item==helpMenu then
+    openUrl("https://gitee.com/Jesse205/AideLua/wikis/插件说明/readme")
   end
 end
 
@@ -74,6 +74,8 @@ function onItemClick(view,views,key,data)
     intent.setType("*/*")
     intent.addCategory(Intent.CATEGORY_OPENABLE)
     activity.startActivityForResult(intent, REQUEST_INSTALLPLUGIN)
+   elseif key=="download_plugin" then
+    openUrl("https://www.123pan.com/s/G7a9-cdek")
   end
 end
 
@@ -122,6 +124,7 @@ function refresh()
         local dirName=file.getName()
         local initPath=path.."/init.lua"
         local icon=path.."/icon.png"
+        local icon_night=path.."/icon-night.png"
         if File(initPath).isFile() then--存在init.lua，是合法插件
           config=getConfigFromFile(initPath)--init.lua内容
           if config.appname then
@@ -199,12 +202,20 @@ function refresh()
             spannableSummary.setSpan(ForegroundColorSpan(content[1]),content[2],content[3],0)
           end
         end
+        if ThemeUtil.isNightMode() and File(icon_night).isFile() then
+          icon=icon_night
+        end
         if not(File(icon).isFile()) then
           icon=R.drawable.ic_puzzle_icon
-          --icon=android.R.drawable.sym_def_app_icon
         end
         table.insert(settings2,{
-          SettingsLayUtil.ITEM_AVATAR_SWITCH;
+          (function()
+            if config.smallicon then
+              return SettingsLayUtil.ITEM_AVATAR_ICON_SWITCH
+             else
+              return SettingsLayUtil.ITEM_AVATAR_SWITCH
+            end
+          end)();
           icon=icon,
           title=title,
           summary=summary or spannableSummary,

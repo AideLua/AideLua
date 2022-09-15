@@ -58,8 +58,10 @@ AideLua暂时不支持一键安装插件，所以我们提供临时解决方法
       [x]minemastercode: number: 最低支持的APP版本号
       [x]targemastercode: number: 目标适配的APP版本号
       mode: string: 模式，默认为 "plugin"
+      utilversion: string: Util版本，此变量不起任何作用
+      smallicon: boolean: 当icon.png为小图标时，请启用此项
       thirdplugins: table(list): 需要安装的第三方库
-        content: string: 插件包名
+        item: string: 插件包名
       [x]supported: table(list): 支持的APP列表
       supported2: table(map): 支持的APP列表
         keys: 

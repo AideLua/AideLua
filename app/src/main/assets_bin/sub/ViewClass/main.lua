@@ -64,6 +64,8 @@ PageItemTab={}
 NowPage=nil
 AllNum=0
 
+lastSearchText=""
+
 activity.setTitle(R.string.javaApiViewer)
 activity.setContentView(loadlayout2("layout"))
 
@@ -86,18 +88,14 @@ function onOptionsItemSelected(item)
     activity.finish()
    elseif id==R.id.menu_search then
     local ids
-    ids=SearchActionMode({
-      onEditorAction=function(view,actionId,event)
-        if event then
-          local text=view.text
-          if checkTextError(text,view) then
-            return
-          end
-          searchItem(text)
+    local config={
+      onSearch=function(text)
+        if checkTextError(text,ids.searchEdit) then
+          return
         end
+        searchItem(text)
       end,
-      onTextChanged=function(text)
-        text=tostring(text)
+      onIndex=function(text)
         if checkTextError(text,ids.searchEdit) then
           return
         end
@@ -105,23 +103,13 @@ function onOptionsItemSelected(item)
           searchItem(text)
         end
       end,
-      onActionItemClicked=function(mode,item)
-        local title=item.title
-        if title==activity.getString(R.string.abc_searchview_description_search) then
-          local searchEdit=ids.searchEdit
-          local text=tostring(searchEdit.text)
-          if checkTextError(text,searchEdit) then
-            return
-          end
-          searchItem(text)
-        end
-      end,
-      onDestroyActionMode=function(mode)
-        if ids.searchEdit.text~="" then
+      onCancel=function()
+        if lastSearchText~="" then
           searchItem("")
         end
       end,
-    })
+    }
+    ids=SearchActionMode(config)
   end
 end
 
@@ -290,6 +278,7 @@ function searchItem(text)
   end
   adp.notifyDataSetChanged()
   switchTab(NowPage or 1)
+  lastSearchText=text
 end
 --[[
 searchButton.onClick=function()

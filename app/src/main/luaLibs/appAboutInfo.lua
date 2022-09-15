@@ -10,7 +10,7 @@ appInfo={
 
   {
     name=R.string.windmill,
-    message="为极客和程序员等打造，重认手机上的工具",
+    message="重认手机上的工具",
     icon=R.drawable.ic_windmill,
     click=function()
       openUrl("https://www.coolapk.com/apk/com.agyer.windmill")
@@ -104,8 +104,8 @@ copyright="Copyright (c) 2020-2022, Jesse205"
 function main()
   table.insert(data,4,{--PluginsUtil 版本
     SettingsLayUtil.ITEM;
-    title="PluginsUtil Version";
+    title=getLocalLangObj("PluginsUtil版本","PluginsUtil Version");
     summary=PluginsUtil._VERSION;
-    icon=R.drawable.ic_information_outline;
+    icon=R.drawable.ic_puzzle_outline;
   })
 end

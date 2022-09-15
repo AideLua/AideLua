@@ -14,4 +14,5 @@ v5.0.3
   作用：提升子页面的打开速度
 4.PluginsUtil 升级3.1版本
 5.PluginsUtil.getReallyEnabled(enabled,config) 是否真的已启用
-6.模块 init.lua minemastercode、targetmastercode、supported已废除，详情请见Wiki
+6.模块 init.lua 移除 minemastercode、targetmastercode、supported，详情请见Wiki
+7.模块 init.lua 新增 icon-night，自适应夜间模式图标

@@ -23,8 +23,7 @@ return function(item)
       local holder=LuaCustRecyclerHolder(view)
       view.setTag(ids)
       local titleView=ids.title
-
-      titleView.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary))
+      titleView.setBackground(ThemeUtil.getRippleDrawable(ColorUtils.setAlphaComponent(theme.color.ActionBar.colorControlNormal,0x22)))
       titleView.onClick=onClick
       titleView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL))
 

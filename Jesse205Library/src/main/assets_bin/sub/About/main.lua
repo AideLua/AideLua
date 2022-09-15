@@ -88,12 +88,17 @@ function onConfigurationChanged(config)
   local newLandscape=config.orientation==Configuration.ORIENTATION_LANDSCAPE
   if landscape~=newLandscape then
     landscape=newLandscape
+    local screenWidthDp=config.screenWidthDp
     if newLandscape then--横屏时
       LastActionBarElevation=0
       actionBar.setElevation(0)
       appBarElevationCard.setVisibility(View.VISIBLE)
       local linearParams=iconLayout.getLayoutParams()
-      linearParams.width=math.dp2int(192+16*2+8)
+      if screenWidthDp>theme.number.padWidthDp then
+        linearParams.width=math.dp2int(200+16*2)
+       else
+        linearParams.width=math.dp2int(152+16*2)
+      end
       iconLayout.setLayoutParams(linearParams)
       portraitCardParent.removeView(iconLayout)
       mainLayChild.addView(iconLayout,0)

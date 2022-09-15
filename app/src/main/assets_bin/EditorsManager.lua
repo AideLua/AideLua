@@ -308,30 +308,23 @@ function EditorsManager.startSearch()
     if searchActions.start then
       searchActions.start(editorGroupViews,editorConfig)
     end
-    ids=SearchActionMode({
-      onEditorAction=function(view,actionId,event)
-        if event then
-          search(view.text,true)
-        end
+    local config={
+      onSearch=function(text)
+        search(text,true)
       end,
-      onTextChanged=function(text)
+      onIndex=function(text)
         searchedContent=text
         search(text)
       end,
-      onActionItemClicked=function(mode,item)
-        local title=item.title
-        if title==activity.getString(R.string.abc_searchview_description_search) then
-          local text=ids.searchEdit.text
-          search(ids.searchEdit.text,true)
-        end
-      end,
-      onDestroyActionMode=function(mode)
+      onCancel=function()
         searching=false
         if searchActions.finish then--结束搜索
           searchActions.finish(editorGroupViews,editorConfig)
         end
-      end,
-    })
+
+      end
+    }
+    ids=SearchActionMode(config)
     --local searchContent=application.get("editor_search_text")
     if searchedContent then--恢复已搜索的内容
       ids.searchEdit.text=searchedContent
