@@ -16,4 +16,5 @@ compileLua=true
 appIcon="@drawable/ic_launcher"
 defaultImport={}
 am_welcome_info={}
+am_main_info={}
 dependenciesEnd={}
