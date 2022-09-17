@@ -6,7 +6,6 @@
       return content
     end,
     save=function(path,content)
-      --print(path,content)
       if getSharedData("editor_autoBackupOriginalFiles") then
         FilesTabManager.backupDir.mkdirs()
         local backupFilePath=FilesTabManager.backupPath.."/"..System.currentTimeMillis().."_"..File(path).getName()

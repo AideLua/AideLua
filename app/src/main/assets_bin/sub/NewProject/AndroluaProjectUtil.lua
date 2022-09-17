@@ -77,7 +77,9 @@ function AndroluaProjectUtil.newProject(keys,BaseTemplateConfig,projectPath,Temp
     appTemplatePath,
   }
   for index,content in ipairs(unZipList) do
+    if File(content).isFile() then
     unzip(content,projectPath)
+    end
   end
   unZipList=nil
 

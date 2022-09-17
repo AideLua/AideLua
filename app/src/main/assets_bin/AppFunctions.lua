@@ -80,6 +80,7 @@ function refreshMenusState()
       {StateByProjectMenus,projectOpenState},
       {StateByFileAndEditorMenus,fileOpenState and isEditor},
       {StateByEditorMenus,isEditor},
+      {StateByNotBadPrjMenus,not(projectOpenState and ProjectManager.nowConfig.badPrj)}
     }
     for index,content in pairs(menus)do
       for index,menu in ipairs(content[1]) do
@@ -173,6 +174,7 @@ function checkSharedActivity(name,packageName)
   end
   return sdActivityMainPath
 end
+
 function refreshSubTitle(newScreenWidthDp)
   if ProjectManager.openState then
     local appName=ProjectManager.nowConfig.appName
@@ -244,4 +246,18 @@ function getFilePathCopyMenus(inLibDirPath,filePath,fileName,isFile,fileType)
     addStrToTable(fileName,textList,textCheckList)
   end
   return textList
+end
+
+--这是去除./和../的
+function fixPath(path)
+  path=path.."/"
+  path=path:gsub("//","/")
+  path=path:gsub("/%./","/")
+  local newPath=path:gsub("[^/]-/%.%./","",1)--这么写是为了更快
+  while path~=newPath do
+    --print(path)
+    path=newPath
+    newPath=path:gsub("[^/]-/%.%./","",1)
+  end
+  return path:match("(.*)/")
 end

@@ -1,10 +1,10 @@
 --[[
-FilesTabManager:文件标签管理器，兼职管理文件的读写与保存
-FilesTabManager.openState; FilesTabManager.getOpenState(): 文件打开状态
-FilesTabManager.file; FilesTabManager.getFile(): 现在打开的文件
-FilesTabManager.fileConfig; FilesTabManager.getFileConfig(): 现在打开的文件的配置
-FilesTabManager.fileType; FilesTabManager.getFileType(): 现在打开的文件类型
-FilesTabManager.openedFiles; FilesTabManager.getOpenedFiles(): 已打开的文件列表，以lowerPath作为键
+FilesTabManager: metatable(class): 文件标签管理器，兼职管理文件的读写与保存
+FilesTabManager.openState; FilesTabManager.getOpenState(): boolean: 文件打开状态
+FilesTabManager.file; FilesTabManager.getFile(): java.io.File: 现在打开的文件
+FilesTabManager.fileConfig; FilesTabManager.getFileConfig(): table(map): 现在打开的文件的配置
+FilesTabManager.fileType; FilesTabManager.getFileType(): string: 现在打开的文件扩展名
+FilesTabManager.openedFiles; FilesTabManager.getOpenedFiles(): table(map): 已打开的文件列表，以lowerPath作为键
   数据格式:{
    ["/path1.lua"]={
      file=File(),
@@ -16,10 +16,15 @@ FilesTabManager.openedFiles; FilesTabManager.getOpenedFiles(): 已打开的文�
      }
    }
 FilesTabManager.openFile(file,fileType): 打开文件
-  file: 要打开的文件
-  fileType: 文件扩展名
+  file: java.io.File: 要打开的文件
+  fileType: string: 文件扩展名
 FilesTabManager.saveFile(): 保存当前编辑的文件
 FilesTabManager.saveAllFiles(): 保存所有文件
+FilesTabManager.closeFile(lowerFilePath,removeTab,changeEditor): 关闭文件
+  lowerFilePath: string: 小写的文件路径
+  removeTab: boolean: 是否移除Tab，默认为true
+  changeEditor: boolean: 是否未打开文件时自动改变编辑器，默认为true
+FilesTabManager.init(): 初始化管理器
 ]]
 local FilesTabManager = {}
 local openState, file, fileConfig,fileType = false, nil, nil, nil
@@ -146,8 +151,10 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
       tab=filesTabLay.newTab()--新建一个Tab
       tab.setText(fileName)--设置显示的文字
       if oldTabIcon then
-      tab.setIcon(FilesBrowserManager.fileIcons[fileType])
+        tab.setIcon(FilesBrowserManager.fileIcons[fileType])
       end
+    end
+    if not(fileConfig) or fileConfig.needRefresh==true
       fileConfig = {
         file = file,
         fileType=newFileType,
@@ -164,6 +171,7 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
       filesTabLay.setVisibility(View.VISIBLE)--显示Tab区域
       initFileTabView(tab,fileConfig)
     end
+
     local failed=false
     if File(filePath).isFile() then
       _,failed=pcall(function()
@@ -221,42 +229,44 @@ end
 -- 保存当前打开的文件，由于当前没有编辑器监听能力，保存文件需要直接从编辑器获取
 function FilesTabManager.saveFile(lowerFilePath,showToast)
   --print("警告：保存文件",lowerFilePath)
-  if openState and ProjectManager.openState and fileConfig.deleted==false then
-    local config
-    if lowerFilePath then
-      config=openedFiles[lowerFilePath]
-     else
-      config=fileConfig
-    end
-    local managerActions=EditorsManager.actions
-    local editorStateConfig={
-      size=managerActions.getTextSize(),
-      x=managerActions.getScrollX(),
-      y=managerActions.getScrollY(),
-      selection=managerActions.getSelectionEnd()
-    }
-    if table.size(editorStateConfig)==0 then
-      setSharedData("scroll_"..config.path,nil)
-     else
-      setSharedData("scroll_"..config.path,dump(editorStateConfig))
-    end
-    EditorsManager.save2Tab()
-
-    if config.changed then
-      local decoder=config.decoder
-      local newContent = config.newContent
-
-      decoder.save(config.path,newContent)
-      --io.open(config.path, "w"):write(newContent):close()
-      config.oldContent = newContent -- 讲旧内容设置为新的内容
-      config.changed=false
-      if showToast then
-        showSnackBar(R.string.save_succeed)
+  local config
+  if lowerFilePath then
+    config=openedFiles[lowerFilePath]
+   else
+    config=fileConfig
+  end
+  if config then
+    if config.deleted==false then
+      local managerActions=EditorsManager.actions
+      local editorStateConfig={
+        size=managerActions.getTextSize(),
+        x=managerActions.getScrollX(),
+        y=managerActions.getScrollY(),
+        selection=managerActions.getSelectionEnd()
+      }
+      if table.size(editorStateConfig)==0 then
+        setSharedData("scroll_"..config.path,nil)
+       else
+        setSharedData("scroll_"..config.path,dump(editorStateConfig))
       end
-      return true -- 保存成功
-     else
-      if showToast then
-        showSnackBar("Content not changed")
+      EditorsManager.save2Tab()--实际上不应该在这里调用
+
+      if config.changed then
+        local decoder=config.decoder
+        local newContent = config.newContent
+
+        decoder.save(config.path,newContent)
+        --io.open(config.path, "w"):write(newContent):close()
+        config.oldContent = newContent -- 讲旧内容设置为新的内容
+        config.changed=false
+        if showToast then
+          showSnackBar(R.string.save_succeed)
+        end
+        return true -- 保存成功
+       else
+        if showToast then
+          showSnackBar("Content not changed")
+        end
       end
     end
   end
@@ -277,7 +287,7 @@ function FilesTabManager.saveAllFiles(showToast)
 end
 
 -- 关闭文件，由于文件的打开都由Tab管理，所以不存在已有文件打开但是当前当前打开的文件为空的情况
-function FilesTabManager.closeFile(lowerFilePath,blockOpen)
+function FilesTabManager.closeFile(lowerFilePath,removeTab,changeEditor)
   --print("警告：关闭文件")
   local config
   if lowerFilePath then
@@ -288,9 +298,8 @@ function FilesTabManager.closeFile(lowerFilePath,blockOpen)
   if config then
     local lowerPath=config.lowerPath
     FilesTabManager.saveFile(lowerPath)
-
     openedFiles[config.lowerPath]=nil
-    if openState then--如果关闭了文件，说明当前是一键关闭
+    if removeTab~=false then
       filesTabLay.removeTab(config.tab)
     end
     if table.size(openedFiles)==0 then
@@ -305,7 +314,9 @@ function FilesTabManager.closeFile(lowerFilePath,blockOpen)
         browserAdapter.notifyItemChanged(FilesBrowserManager.nowFilePosition)
       end
       filesTabLay.setVisibility(View.GONE)--隐藏Tab区域
-      EditorsManager.switchEditor("NoneView")
+      if changeEditor~=false then
+        EditorsManager.switchEditor("NoneView")
+      end
       refreshMenusState()
     end
     --else
@@ -314,12 +325,12 @@ function FilesTabManager.closeFile(lowerFilePath,blockOpen)
 end
 
 -- 保存所有文件
-function FilesTabManager.closeAllFiles()
-  openState=false
+function FilesTabManager.closeAllFiles(changeEditor)
   filesTabLay.removeAllTabs()
   for index, content in pairs(openedFiles) do
-    FilesTabManager.closeFile(index)
+    FilesTabManager.closeFile(index,false,changeEditor)
   end
+  openState=false
 end
 
 
@@ -355,6 +366,45 @@ function FilesTabManager.changeContent(content)
     fileConfig.changed = true
   end
 end
+
+function FilesTabManager.changePath(lowerPath,newPath)
+  local lowerNewPath=string.lower(newPath)
+  local file=File(newPath)
+  local fileName=file.getName()
+  local fileType=getFileTypeByName(fileName)
+  local decoder=FileDecoders[fileType]
+  local config=openedFiles[lowerPath]
+  if config then--有config，说明已经打开
+    if decoder then--可以打开
+      local tab=config.tab
+      local newConfig = {
+        file = file,
+        fileType=fileType,
+        path = newPath,
+        lowerPath = lowerNewPath,
+        decoder = decoder,
+        tab=tab,
+        shortFilePath=ProjectManager.shortPath(newPath,true),
+        deleted=false;
+      }
+      openedFiles[lowerPath]=nil
+      openedFiles[lowerNewPath] = newConfig
+      tab.setText(fileName)--设置显示的文字
+      if oldTabIcon then
+        tab.setIcon(FilesBrowserManager.fileIcons[fileType])
+      end
+      tab.tag=newConfig
+      initFileTabView(tab,newConfig)
+
+      if lowerPath==fileConfig.lowerPath then--已打开的是此文件
+        FilesTabManager.openFile(file,fileType)
+      end
+     else
+      FilesTabManager.closeFile(lowerPath)
+    end
+  end
+end
+
 
 function FilesTabManager.getFileConfig()
   return fileConfig

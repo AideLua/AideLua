@@ -1,12 +1,12 @@
 --[[
-FilesBrowserManager: 文件浏览器管理器
-FilesBrowserManager.openState; FilesBrowserManager.getOpenState(): 文件浏览器打开状态
-FilesBrowserManager.directoryFile; FilesBrowserManager.getDirectoryFile(): 获取当前文件夹File
-FilesBrowserManager.directoryFilesList: 获取当前文件列表
-FilesBrowserManager.folderIcons: 文件夹图标
-FilesBrowserManager.fileColors: 文件图标颜色
-FilesBrowserManager.relLibPathsMatch.paths: 相对文件路径匹配的字符串列表
-FilesBrowserManager.relLibPathsMatch.types: 支持匹配的文件类型
+FilesBrowserManager: metatable(class): 文件浏览器管理器
+FilesBrowserManager.openState; FilesBrowserManager.getOpenState(): boolean: 文件浏览器打开状态
+FilesBrowserManager.directoryFile; FilesBrowserManager.getDirectoryFile(): java.io.File: 获取当前文件夹File
+FilesBrowserManager.directoryFilesList: String[]: 获取当前文件列表
+FilesBrowserManager.folderIcons: table(map): 文件夹图标
+FilesBrowserManager.fileColors: table(map): 文件图标颜色
+FilesBrowserManager.relLibPathsMatch.paths: table(list): 相对文件路径匹配的字符串列表
+FilesBrowserManager.relLibPathsMatch.types: table(list): 支持匹配的文件类型
 FilesBrowserManager.open(): 打开文件浏览器
 FilesBrowserManager.close(): 关闭文件浏览器
 FilesBrowserManager.switchState(): 切换文件浏览器开启状态
@@ -136,7 +136,7 @@ function FilesBrowserManager.getProjectIconForGlide(projectPath,config,mainProje
   local adaptiveIcon--自适应图标
   --判断是不是table类型，如果是则进行夜间判断，如果是字符串则直接赋值
   if type(config.icon)=="table" then
-    if ThemeUtil.isSysNightMode() then
+    if ThemeUtil.isNightMode() then
       adaptiveIcon=config.icon.night or config.icon.day
      else
       adaptiveIcon=config.icon.day or config.icon.night

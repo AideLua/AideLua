@@ -1,5 +1,5 @@
 --[[
-ProjectManager: 项目管理器
+ProjectManager: metatable(class): 项目管理器
 ProjectManager.projectsPath; ProjectManager.getProjectsPath(): 所有项目的保存路径
 ProjectManager.projectsFile; ProjectManager.getProjectsFile(): 所有项目保存的文件夹
 ProjectManager.nowPath; ProjectManager.getNowPath(): 当前项目的路径
@@ -49,7 +49,9 @@ function ProjectManager.runProject(path)
   local code,projectMainFile
   if openState then
     FilesTabManager.saveAllFiles()
-    if nowConfig.packageName then
+    if nowConfig.badPrj then--损坏的项目
+
+     elseif nowConfig.packageName then
       local success,err=pcall(function()
         local intent=Intent(Intent.ACTION_VIEW,Uri.parse(path or nowConfig.projectMainPath.."/main.lua"))
         local componentName=ComponentName(nowConfig.packageName,nowConfig.debugActivity or "com.androlua.LuaActivity")
@@ -77,25 +79,43 @@ local function updateNowConfig(config)
 end
 ProjectManager.updateNowConfig=updateNowConfig
 
+
 --打开项目
 function ProjectManager.openProject(path,filePath,openedDirPath)
   xpcall(function()
     FilesBrowserManager.clearAdapterData()
-    local config=RePackTool.getConfigByProjectPath(path)
-    local rePackTool=RePackTool.getRePackToolByConfig(config)
-    local mainProjectPath=RePackTool.getMainProjectDirByConfigAndRePackTool(path,config,rePackTool)
-    if config.projectMainPath then
-      config.projectMainPath=path.."/"..config.projectMainPath
+    local loadedConfig,config=pcall(RePackTool.getConfigByProjectPath,path)
+    local projectMainPath,badPrj
+    if loadedConfig then
+      local loadedTool,rePackTool=pcall(RePackTool.getRePackToolByConfig,config)
+      if loadedTool then
+        local mainProjectPath=RePackTool.getMainProjectDirByConfigAndRePackTool(path,config,rePackTool)
+        if config.projectMainPath then
+          projectMainPath=rel2AbsPath(config.projectMainPath,path)
+         else
+          projectMainPath=mainProjectPath.."/assets_bin"
+        end
+       else
+        projectMainPath=path.."/app/src/main/assets_bin"
+        badPrj=true
+      end
      else
-      config.projectMainPath=mainProjectPath.."/assets_bin"
+      config={
+        appName="Bad project",
+      }
+      projectMainPath=path.."/app/src/main/assets_bin"
+      badPrj=true
     end
+    config.projectMainPath=projectMainPath
+    config.badPrj=badPrj
+
     openState=true
     nowFile=File(path)
     nowPath=path
 
     updateNowConfig(config)
     setSharedData("openedProject",path)
-    EditorsManager.switchEditor("NoneView")
+
     local nowBrowserDir,nowOpenedFile
     filePath=filePath or getSharedData("openedFilePath_"..path)
     local defaultFile=File(config.projectMainPath.."/main.lua")
@@ -110,6 +130,8 @@ function ProjectManager.openProject(path,filePath,openedDirPath)
     if nowOpenedFile then
       FilesTabManager.openFile(nowOpenedFile,getFileTypeByName(nowOpenedFile.getName()), false)
       nowBrowserDir=nowOpenedFile.getParentFile()
+     else
+      EditorsManager.switchEditor("NoneView")
     end
     if openedDirPath then
       nowBrowserDir=File(openedDirPath)
@@ -119,7 +141,7 @@ function ProjectManager.openProject(path,filePath,openedDirPath)
   end,
   function(err)
     ProjectManager.closeProject(true)
-    showErrorDialog(nil,err)
+    showErrorDialog("Open project",err)
   end)
 end
 
@@ -131,7 +153,7 @@ function ProjectManager.closeProject(refreshFilesBrowser)
     openedFilePath=FilesTabManager.file.getPath()
   end
   FilesBrowserManager.clearAdapterData()
-  FilesTabManager.closeAllFiles(true)
+  FilesTabManager.closeAllFiles(false)
   if openState then
     setSharedData("openedFilePath_"..nowPath,openedFilePath)
   end

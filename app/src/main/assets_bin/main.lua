@@ -28,6 +28,7 @@ import "android.content.ComponentName"
 import "android.provider.DocumentsContract"
 --import "androidx.core.widget.ListViewCompat"
 import "androidx.drawerlayout.widget.DrawerLayout"
+import "androidx.core.graphics.ColorUtils"
 
 import "com.google.android.material.tabs.TabLayout"
 import "com.google.android.material.chip.Chip"
@@ -161,6 +162,7 @@ function onCreateOptionsMenu(menu)
   -- 获取一下Menu
   closeFileMenu = menu.findItem(R.id.menu_file_close)
   saveFileMenu = menu.findItem(R.id.menu_file_save)
+  runMenu = menu.findItem(R.id.menu_run)
   binMenu = menu.findItem(R.id.menu_project_bin)
   binRunMenu = menu.findItem(R.id.menu_project_bin_run)
   closeProjectMenu = menu.findItem(R.id.menu_project_close)
@@ -179,6 +181,7 @@ function onCreateOptionsMenu(menu)
   StateByFileMenus = {fileMenu}
   StateByEditorMenus = {codeMenu}
   StateByProjectMenus = {projectMenu}
+  StateByNotBadPrjMenus = {runMenu,binMenu,binRunMenu}
 
   projectPropertiesMenu.setEnabled(false)
   buildMenu.setEnabled(false)

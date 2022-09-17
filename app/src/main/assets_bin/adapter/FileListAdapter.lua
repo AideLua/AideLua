@@ -15,11 +15,11 @@ local getIconAlphaByName=FilesBrowserManager.getIconAlphaByName
 local directoryFilesList
 
 local function onClick(view)
-  local data=view.tag._data
-  local file=data.file
-  local path=data.filePath
-  local action=data.action
-  switch action do
+local data=view.tag._data
+local file=data.file
+local path=data.filePath
+local action=data.action
+switch action do
    case "createProject" then
     newSubActivity("NewProject")
    case "openProject" then
@@ -325,24 +325,43 @@ return function(item)
           end
 
          else
-          local config,iconUrl
+          local loadedConfig,config,iconUrl,title,summary
           if initData then
-            config=RePackTool.getConfigByProjectPath(filePath)
-            local rePackTool=RePackTool.getRePackToolByConfig(config)
-            local mainProjectPath=RePackTool.getMainProjectDirByConfigAndRePackTool(filePath,config,rePackTool)
-            iconUrl=FilesBrowserManager.getProjectIconForGlide(filePath,config,mainProjectPath)
-            data.title=config.appName or unknowString
+            loadedConfig,config=pcall(RePackTool.getConfigByProjectPath,filePath)
+            local loadedRePackTool,rePackTool
+            if loadedConfig then
+              loadedRePackTool,rePackTool=pcall(RePackTool.getRePackToolByConfig,config)
+              local mainProjectPath
+              if loadedRePackTool then
+                mainProjectPath=RePackTool.getMainProjectDirByConfigAndRePackTool(filePath,config,rePackTool)
+                title=(config.appName or unknowString)
+               else
+                rePackTool=nil
+                mainProjectPath=filePath.."/app/src/main"
+                title=(config.appName or unknowString).." (Unable to get RePackTool)"
+              end
+              summary=config.packageName or unknowString
+              iconUrl=FilesBrowserManager.getProjectIconForGlide(filePath,config,mainProjectPath)
+             else
+              title="(Unable to load config.lua)"
+              summary=config
+              config={}
+              iconUrl=android.R.drawable.sym_def_app_icon
+            end
+            data.title=title
             data.action="openProject"
             data.iconUrl=iconUrl
             data.config=config
             data.rePackTool=rePackTool
+            data.summary=summary
            else
             iconUrl=data.iconUrl
             config=data.config
+            title=data.title
+            summary=data.summary
           end
-          --print(dump(data))
-          titleView.setText(config.appName or unknowString)
-          tag.message.setText(config.packageName or unknowString)
+          titleView.setText(title)
+          tag.message.setText(summary)
 
 
           if type(iconUrl)=="number" then

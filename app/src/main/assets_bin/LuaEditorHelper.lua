@@ -1,3 +1,9 @@
+--[[
+LuaEditorHelper: metatable(class): LuaEditor一些常用的工具
+LuaEditorHelper.removePackages(editor,packages): 移除包
+  editor:com.androlua.LuaEditor
+  package: table(list)
+]]
 local LuaEditorHelper={}
 
 local function removePackages(editor,packages)
@@ -293,10 +299,5 @@ function LuaEditorHelper.initKeys(editor,editorParent,pencilEdit,progressBar)
     editorParent.setLayoutTransition(newLayoutTransition() or nil)
   end
 end
-
-
-
-
-
 
 return LuaEditorHelper

@@ -10,9 +10,10 @@ function deleteFileDialog(name,file)
     if succeed then
       FilesBrowserManager.refresh()
       showSnackBar(R.string.delete_succeed)
-      if FilesTabManager.openState then
-        --todo: 关闭文件
-        FilesTabManager.closeFile(string.lower(file.getPath()), false)
+      local config=FilesTabManager.openedFiles[string.lower(file.getPath())]
+      if config then
+        config.deleted=true
+        FilesTabManager.closeFile(string.lower(file.getPath()))
       end
      else
       showSnackBar(R.string.delete_failed)
@@ -77,7 +78,7 @@ function renameDialog(oldFile)--重命名对话框
     local oldFilePath=oldFile.getPath()
     local lowerOldFilePath=string.lower(oldFilePath)
 
-    local newFilePath=rel2AbsPath(newName,oldParentFile.getPath())
+    local newFilePath=fixPath(rel2AbsPath(newName,oldParentFile.getPath()))
     local newFile=File(newFilePath)
     local newParentFile=newFile.getParentFile()
     local lowerNewFilePath=string.lower(newFilePath)
@@ -95,6 +96,7 @@ function renameDialog(oldFile)--重命名对话框
     editLay.setErrorEnabled(false)
     xpcall(function()
       newParentFile.mkdirs()
+      FilesTabManager.saveFile(lowerOldFilePath)
       if isSelfFile then--大小写直接修改无效，使用临时文件
         local tempFilePath=AppPath.Temp.."/"..os.time()
         os.rename(oldFilePath, tempFilePath)
@@ -102,30 +104,8 @@ function renameDialog(oldFile)--重命名对话框
        else
         os.rename(oldFilePath, newFilePath)
       end
-    --todo: 修改标签栏
-      print("警告：文件标签栏未修改")
-      --[[
-      local tabTag=FilesTabList[lowerOldFilePath]
-      if tabTag then
-        local tab=tabTag.tab
-        local newFile=File(newFilePath)
-        local fileType=ProjectUtil.getFileTypeByName(newName)
-        if string.lower(NowFile.getPath())==lowerOldFilePath then
-          NowFile=newFile
-          NowFileType=fileType
-        end
-        FilesTabList[lowerNewFilePath]=tabTag
-        FilesTabList[lowerOldFilePath]=nil
-        tabTag.fileType=fileType
-        tabTag.file=newFile
-        tabTag.shortFilePath=shortPath(newFile.getPath(),true,NowProjectDirectory.getParent().."/")
-        tab.setText(newName)--设置显示的文字
-        if oldTabIcon and notSafeModeEnable then
-          tab.setIcon(ProjectUtil.getFileIconResIdByType(fileType))
-        end
-        initFileTabView(tab,tabTag)
-      end
-]]
+      FilesTabManager.changePath(lowerOldFilePath,newFilePath)
+
       showSnackBar(R.string.rename_success)
       FilesBrowserManager.refresh(newParentFile)
     end,
