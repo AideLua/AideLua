@@ -144,8 +144,9 @@ function FilesBrowserManager.getProjectIconForGlide(projectPath,config,mainProje
    else
     adaptiveIcon=config.icon
   end
-  adaptiveIcon=rel2AbsPath(adaptiveIcon,projectPath)
-
+  if adaptiveIcon then
+    adaptiveIcon=rel2AbsPath(adaptiveIcon,projectPath)
+  end
 
   --图标可能存在的目录
   local icons={

@@ -120,7 +120,7 @@ actionBar.setTitle(R.string.app_name)
 actionBar.setDisplayHomeAsUpEnabled(true)
 
 LuaReservedCharacters = {"switch", "if", "then", "and", "break", "do", "else", "elseif", "end", "false", "for",
-"function", "in", "local", "nil", "not", "or", "repeat", "return", "true", "until", "while"} -- lua关键字
+  "function", "in", "local", "nil", "not", "or", "repeat", "return", "true", "until", "while"} -- lua关键字
 
 deviceChangeLTFixList={largeDrawerLay,largeMainLay,mainEditorLay,layoutTransition}
 
@@ -545,13 +545,13 @@ function onKeyUp(keyCode, event)
 end
 
 function onRestoreInstanceState(savedInstanceState)
-  toggle.syncState()
   local fileBrowserOpenState=savedInstanceState.getBoolean("filebrowser_openstate")
   if fileBrowserOpenState then
     FilesBrowserManager.open()
    else
     FilesBrowserManager.close()
   end
+  toggle.syncState()
 end
 
 function onSaveInstanceState(savedInstanceState)

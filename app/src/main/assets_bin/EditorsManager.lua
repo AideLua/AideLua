@@ -101,6 +101,7 @@ EditorsManager.keyWords=String({
   "onLongClick",
   "onItemClick",
   "onItemLongClick",
+  "onContextClick",
   "onVersionChanged",
   "onScroll";
   "onScrollChange",

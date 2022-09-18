@@ -1,7 +1,7 @@
 local Jesse205={}
 _G.Jesse205=Jesse205
-Jesse205._VERSION="12.0.2 (Pro)"--库版本名
-Jesse205._VERSIONCODE=120299--库版本号
+Jesse205._VERSION="12.0.3 (Pro)"--库版本名
+Jesse205._VERSIONCODE=120399--库版本号
 Jesse205._ENV=_ENV
 Jesse205.themeType="Jesse205"--主题类型
 
@@ -246,10 +246,10 @@ openUrl=openInBrowser--通常情况下，应用不自带内置浏览器
 @param localPath 相对的目录
 ]]
 function rel2AbsPath(path,localPath)
-  if path and not(path:find("^/")) then
-    return localPath.."/"..path
-   else
+  if path:find("^/") then
     return path
+   else
+    return localPath.."/"..path
   end
 end
 
@@ -338,6 +338,9 @@ end
 --以下为复写事件
 function onError(title,message)
   showErrorDialog(tostring(title),tostring(message))
+  pcall(function()
+    io.open("/sdcard/Androlua/crash/"..activity.getPackageName()..".txt","a"):write(tostring(title).."\n"..tostring(message).."\n\n"):close()
+  end)
   return true
 end
 --activity.setDebug(false)

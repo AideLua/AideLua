@@ -15,11 +15,11 @@ local getIconAlphaByName=FilesBrowserManager.getIconAlphaByName
 local directoryFilesList
 
 local function onClick(view)
-local data=view.tag._data
-local file=data.file
-local path=data.filePath
-local action=data.action
-switch action do
+  local data=view.tag._data
+  local file=data.file
+  local path=data.filePath
+  local action=data.action
+  switch action do
    case "createProject" then
     newSubActivity("NewProject")
    case "openProject" then
@@ -53,7 +53,7 @@ local function onLongClick(view)
 
     local inLibDirPath=data.inLibDirPath
 
-    local openState=ProjectManager.openState--工程打开状态=
+    local openState=ProjectManager.openState--工程打开状态
 
     if openState then
       isFile=file.isFile()
@@ -63,9 +63,6 @@ local function onLongClick(view)
      else
       isResDir=false
     end
-
-    local pop=PopupMenu(activity,view)
-    local menu=pop.Menu
 
     if openState and ((fileType and relLibPathsMatch.types[fileType]) or not(isFile)) then--已经打开了项目并且文件类型受支持
       if not(inLibDirPath) then
@@ -77,32 +74,10 @@ local function onLongClick(view)
           end
         end
       end
-      --[[
-      if inLibDir then--是库目录
-        pop.inflate(R.menu.menu_javaapi_item_package)
-        local callFilePath=inLibDir:gsub("/",".")
-        local noTypeFileName=fileName:match("(.+)%.")--没有扩展名的文件名
-
-        local copyNameMenu=menu.findItem(R.id.menu_copy_className)
-        local copyClassPathMenu=menu.findItem(R.id.menu_copy_classPath)
-        local copyClassPath2Menu=menu.findItem(R.id.menu_copy_classPath2)
-        local copyImportMenu=menu.findItem(R.id.menu_copy_import)
-        copyImportMenu.title=getImportCode(callFilePath)
-        copyNameMenu.setVisible(fileType~="so")
-        copyClassPathMenu.setVisible(callFilePath~=noTypeFileName)
-        copyClassPath2Menu.setVisible(fileType=="java")--smali仅在java目录下支持
-        if fileType~="so" then
-          copyNameMenu.title=noTypeFileName
-        end
-        if callFilePath~=noTypeFileName then--有重复的时候
-          copyClassPathMenu.title=callFilePath
-        end
-        if fileType=="java" then
-          copyClassPath2Menu.title="L"..inLibDir..";"
-        end
-      end]]
     end
-
+  
+    local pop=PopupMenu(activity,view)
+    local menu=pop.Menu
     pop.inflate(R.menu.menu_main_file)
     local copyMenu=menu.findItem(R.id.subMenu_copy)
     local openInNewWindowMenu=menu.findItem(Rid.menu_openInNewWindow)--新窗口打开
@@ -223,7 +198,7 @@ return function(item)
       view.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
       view.onClick=onClick
       view.onLongClick=onLongClick
-      view.onContextClick=onLongClick
+      --view.onContextClick=onLongClick
       if viewType==3 then
         ids.more.onClick=fileMoreMenuClick
       end
