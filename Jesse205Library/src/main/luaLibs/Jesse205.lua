@@ -26,6 +26,40 @@ safeModeEnable=application.get("safeModeEnable") or false
 notSafeModeEnable=not(safeModeEnable)
 
 
+--惰性导入？
+local fastImport={
+  Bitmap="android.graphics.Bitmap",
+  LayoutTransition="android.animation.LayoutTransition",
+  StatService="com.baidu.mobstat.StatService",
+  AppPath="com.Jesse205.app.AppPath",
+  PermissionUtil="com.Jesse205.app.PermissionUtil",
+  MyStyleUtil="com.Jesse205.util.MyStyleUtil",
+  MyToast="com.Jesse205.util.MyToast",
+  NetErrorStr="com.Jesse205.util.NetErrorStr",
+  MyAnimationUtil="com.Jesse205.util.MyAnimationUtil",
+  ScreenFixUtil="com.Jesse205.util.ScreenFixUtil",
+  --导入各种风格的控件
+  StyleWidget="com.Jesse205.widget.StyleWidget",
+  MaterialButton_TextButton="com.Jesse205.widget.StyleWidget",
+  MaterialButton_OutlinedButton="com.Jesse205.widget.StyleWidget",
+  MaterialButton_TextButton_Normal="com.Jesse205.widget.StyleWidget",
+  MaterialButton_TextButton_Icon="com.Jesse205.widget.StyleWidget",
+  --导入各种布局表
+  MyTextInputLayout="com.Jesse205.layout.MyTextInputLayout",
+}
+local oldMetatable=getmetatable(_G)
+local newMetatable={__index=function(self,key)
+    local value=fastImport[key]
+    if value then
+      import(value)
+      return rawget(_G,key)
+     else
+      return oldMetatable.__index(self,key)
+    end
+  end
+}
+setmetatable(_G,newMetatable)
+
 --JavaAPI转LuaAPI
 local activity2luaApi={
   "newActivity","getSupportActionBar",
@@ -44,7 +78,7 @@ import "android.content.res.Configuration"
 
 import "com.Jesse205.lua.math"--导入更强大的math
 import "com.Jesse205.lua.string"--导入更强大的string
-import "com.Jesse205.app.AppPath"--导入路径
+--import "com.Jesse205.app.AppPath"--导入路径
 
 if initApp then--初始化APP
   import "com.Jesse205.app.initApp"
@@ -133,8 +167,7 @@ import "android.app.*"
 import "android.os.*"
 import "android.view.*"
 import "android.view.inputmethod.InputMethodManager"
---import "android.content.*"
---import "android.graphics.*"
+
 
 --导入常用类
 import "android.graphics.Bitmap"
@@ -154,7 +187,7 @@ import "androidx.recyclerview.widget.RecyclerView"
 import "androidx.recyclerview.widget.StaggeredGridLayoutManager"
 import "androidx.recyclerview.widget.LinearLayoutManager"
 
-import "android.animation.LayoutTransition"
+--import "android.animation.LayoutTransition"
 
 import "android.net.Uri"
 import "android.content.Intent"
@@ -183,27 +216,26 @@ import "com.lua.custrecycleradapter.AdapterCreator"--导入LuaCustRecyclerAdapte
 import "com.lua.custrecycleradapter.LuaCustRecyclerAdapter"
 import "com.lua.custrecycleradapter.LuaCustRecyclerHolder"
 
---import "com.androlua.LuaUtil"
-import "com.Jesse205.app.PermissionUtil"
+--import "com.Jesse205.app.PermissionUtil"--已惰性加载
 
-import "com.Jesse205.util.MyStyleUtil"
-import "com.Jesse205.util.MyToast"--导入MyToast
+--import "com.Jesse205.util.MyStyleUtil"--已惰性加载
+--import "com.Jesse205.util.MyToast"--导入MyToast
 --import "com.Jesse205.util.NetErrorStr"--导入网络错误代码
-import "com.Jesse205.util.MyAnimationUtil"--导入动画Util
-import "com.Jesse205.util.ScreenFixUtil"--导入屏幕适配工具
+--import "com.Jesse205.util.MyAnimationUtil"--导入动画Util
+--import "com.Jesse205.util.ScreenFixUtil"--导入屏幕适配工具
 
 --导入各种风格的控件
-import "com.Jesse205.widget.StyleWidget"
+--import "com.Jesse205.widget.StyleWidget"
 --import "com.Jesse205.widget.AutoToolbarLayout"
 --import "com.Jesse205.widget.AutoCollapsingToolbarLayout"
 
 --导入各种布局表
-import "com.Jesse205.layout.MyTextInputLayout"
+--import "com.Jesse205.layout.MyTextInputLayout"
 --import "com.Jesse205.layout.MyEditDialogLayout"
 --import "com.Jesse205.layout.MySearchLayout"
 
 import "com.bumptech.glide.Glide"--导入Glide
-import "com.baidu.mobstat.StatService"--百度移动统计
+--import "com.baidu.mobstat.StatService"--百度移动统计
 
 inputMethodService=activity.getSystemService(Context.INPUT_METHOD_SERVICE)
 
@@ -225,7 +257,6 @@ end
 function copyText(text)
   context.getSystemService(Context.CLIPBOARD_SERVICE).setText(text)
 end
-
 
 --通过id格式化字符串
 function formatResStr(id,values)
@@ -261,8 +292,6 @@ function toboolean(value)
     return false
   end
 end
-
-
 
 --进入Lua子页面
 function newSubActivity(name,...)
@@ -325,7 +354,6 @@ function showSimpleDialog(title,message)
   .setPositiveButton(android.R.string.ok,nil)
   .show()
 end
---showDialog=showSimpleDialog
 showErrorDialog=showSimpleDialog
 
 --自动初始化一个LayoutTransition
@@ -339,7 +367,7 @@ end
 function onError(title,message)
   showErrorDialog(tostring(title),tostring(message))
   pcall(function()
-    io.open("/sdcard/Androlua/crash/"..activity.getPackageName()..".txt","a"):write(tostring(title).."\n"..tostring(message).."\n\n"):close()
+    io.open("/sdcard/Androlua/crash/"..activity.getPackageName()..".txt","a"):write(tostring(title)..os.date(" %Y-%m-%d %H:%M:%S").."\n"..tostring(message).."\n\n"):close()
   end)
   return true
 end
@@ -347,6 +375,6 @@ end
 
 
 --导入共享代码
-import "AppSharedCode"
+require "AppSharedCode"
 
 return Jesse205

@@ -92,8 +92,8 @@ PermissionUtil.askForRequestPermissions({
   },
 })
 
-oldJesse205LibHl = getSharedData("Jesse205Lib_Highlight")
-oldAndroidXHl = getSharedData("AndroidX_Highlight")
+oldJesse205LibHl = getSharedData("jesse205Lib_highlight")
+oldAndroidXHl = getSharedData("androidX_highlight")
 oldTheme = ThemeUtil.getAppTheme()
 oldDarkActionBar = getSharedData("theme_darkactionbar")
 oldRichAnim = getSharedData("richAnim")
@@ -160,11 +160,13 @@ function onCreateOptionsMenu(menu)
   local inflater = activity.getMenuInflater()
   inflater.inflate(R.menu.menu_main_aidelua, menu)
   -- 获取一下Menu
+  reopenFileMenu = menu.findItem(R.id.menu_file_reopen)
   closeFileMenu = menu.findItem(R.id.menu_file_close)
   saveFileMenu = menu.findItem(R.id.menu_file_save)
   runMenu = menu.findItem(R.id.menu_run)
   binMenu = menu.findItem(R.id.menu_project_bin)
   binRunMenu = menu.findItem(R.id.menu_project_bin_run)
+  reopenProjectMenu = menu.findItem(R.id.menu_project_reopen)
   closeProjectMenu = menu.findItem(R.id.menu_project_close)
   projectPropertiesMenu = menu.findItem(R.id.menu_project_properties)
   buildMenu = menu.findItem(R.id.menu_project_build)
@@ -241,10 +243,14 @@ function onOptionsItemSelected(item)
       FilesTabManager.saveAllFiles()
       RePackTool.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,false,false)
     end
+   elseif id == Rid.menu_project_reopen then -- 重新打开项目
+    ProjectManager.reopenProject()--函数内已判断打开状态
    elseif id == Rid.menu_project_close then -- 关闭项目
     ProjectManager.closeProject()
    elseif id == Rid.menu_file_save then -- 保存
     FilesTabManager.saveAllFiles(true)
+   elseif id == Rid.menu_file_reopen then -- 重新打开文件
+    FilesTabManager.reopenFile()--函数内已判断打开状态
    elseif id == Rid.menu_file_close then -- 关闭文件
     FilesTabManager.closeFile()
    elseif id == Rid.menu_code_format then -- 格式化
@@ -409,8 +415,8 @@ end
 notFirstOnResume = false
 function onResume()
   local reload = false
-  if oldJesse205LibHl ~= getSharedData("Jesse205Lib_Highlight")
-    or oldAndroidXHl ~= getSharedData("AndroidX_Highlight") then
+  if oldJesse205LibHl ~= getSharedData("jesse205Lib_highlight")
+    or oldAndroidXHl ~= getSharedData("androidX_highlight") then
     reload = true
     application.set("luaeditor_initialized", false)
   end
@@ -557,7 +563,7 @@ end
 function onSaveInstanceState(savedInstanceState)
   savedInstanceState.putBoolean("filebrowser_openstate",FilesBrowserManager.openState)
   savedInstanceState.putString("prjpath",ProjectManager.nowPath)
-  if ProjectManager.openState then
+  if ProjectManager.openState and FilesBrowserManager.directoryFile then
     savedInstanceState.putString("dirpath",FilesBrowserManager.directoryFile.getPath())
   end
 end

@@ -38,9 +38,10 @@ end
 
 --根据网络错误代码显示Toast或SnackBar
 function MyToast.showNetErrorToast(code,view)
+  --[[
   if not(NetErrorStr) then
     import "com.Jesse205.util.NetErrorStr"--导入网络错误代码
-  end
+  end]]
   return MyToast.autoShowToast(NetErrorStr(code),view)
 end
 

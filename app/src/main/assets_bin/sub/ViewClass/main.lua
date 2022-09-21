@@ -93,6 +93,7 @@ function onOptionsItemSelected(item)
         if checkTextError(text,ids.searchEdit) then
           return
         end
+        
         searchItem(text)
       end,
       onIndex=function(text)
@@ -114,7 +115,7 @@ function onOptionsItemSelected(item)
 end
 
 function checkTextError(text,searchEdit)
-  local success,err=pcall(string.find,"",text)
+  local success,err=pcall(string.find,text,text)
   if success then
     searchEdit.setError(nil)
     return false

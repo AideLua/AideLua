@@ -59,8 +59,11 @@ function ProjectManager.runProject(path)
         activity.startActivity(intent)
       end)
       if not(success) then--无法通过调用其他app打开时
-        showSnackBar(R.string.runCode_noApp)
-        print(err)
+        showSnackBar(R.string.runCode_noApp).
+        setAction(R.string.viewError, function(view)
+          showErrorDialog("Run Error",err)
+        end)
+        --print(err)
       end
      else
       showSnackBar(R.string.runCode_noPackageName)
@@ -83,7 +86,9 @@ ProjectManager.updateNowConfig=updateNowConfig
 --打开项目
 function ProjectManager.openProject(path,filePath,openedDirPath)
   xpcall(function()
-    FilesBrowserManager.clearAdapterData()
+    if openedDirPath~=false then
+      FilesBrowserManager.clearAdapterData()
+    end
     local loadedConfig,config=pcall(RePackTool.getConfigByProjectPath,path)
     local projectMainPath,badPrj
     if loadedConfig then
@@ -117,32 +122,43 @@ function ProjectManager.openProject(path,filePath,openedDirPath)
     setSharedData("openedProject",path)
 
     local nowBrowserDir,nowOpenedFile
-    filePath=filePath or getSharedData("openedFilePath_"..path)
-    local defaultFile=File(config.projectMainPath.."/main.lua")
+    if filePath~=false then
+      filePath=filePath or getSharedData("openedFilePath_"..path)
+      local defaultFile=File(config.projectMainPath.."/main.lua")
 
-    if filePath then
-      nowOpenedFile=File(filePath)
-     elseif defaultFile.isFile() then
-      nowOpenedFile=defaultFile
-     else
-      nowBrowserDir=nowFile
-    end
-    if nowOpenedFile then
-      FilesTabManager.openFile(nowOpenedFile,getFileTypeByName(nowOpenedFile.getName()), false)
-      nowBrowserDir=nowOpenedFile.getParentFile()
-     else
-      EditorsManager.switchEditor("NoneView")
+      if filePath then
+        nowOpenedFile=File(filePath)
+       elseif defaultFile.isFile() then
+        nowOpenedFile=defaultFile
+       else
+        nowBrowserDir=nowFile
+      end
+      if nowOpenedFile then
+        FilesTabManager.openFile(nowOpenedFile,getFileTypeByName(nowOpenedFile.getName()), false)
+        nowBrowserDir=nowOpenedFile.getParentFile()
+       else
+        EditorsManager.switchEditor("NoneView")
+      end
     end
     if openedDirPath then
       nowBrowserDir=File(openedDirPath)
     end
-    FilesBrowserManager.refresh(nowBrowserDir,false,false,true)
+    if openedDirPath~=false then
+      FilesBrowserManager.refresh(nowBrowserDir,false,false,true)
+    end
     refreshMenusState()
   end,
   function(err)
     ProjectManager.closeProject(true)
     showErrorDialog("Open project",err)
   end)
+end
+
+function ProjectManager.reopenProject()
+  if openState then
+    FilesTabManager.saveFile()
+    ProjectManager.openProject(nowPath,false,false)
+  end
 end
 
 

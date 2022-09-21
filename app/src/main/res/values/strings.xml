@@ -36,6 +36,7 @@
     <string name="uncommentedCode">Uncomment code</string>
     <string name="logCat">Log Cat</string>
     <string name="help">Help</string>
+    <string name="viewError">View Error</string>
     
     <string name="open">Open</string>
     <string name="open_failed">Open failed</string>
@@ -68,6 +69,7 @@
     <string name="file_name_copy">Copy file name</string>
     <string name="file_close">Close file</string>
     <string name="file_current_path">Current file path</string>
+    <string name="file_reopen">Reopen file</string>
     
     <string name="directory">Folder</string>
     <string name="directory_go_popup">Open Directory...</string>
@@ -101,6 +103,7 @@
     <string name="project_appSubtitle_380dp">Prj: %1$s</string>
     <string name="project_appSubtitle_390dp">Project: %1$s</string>
     <string name="project_open">Open project</string>
+    <string name="project_reopen">Reopen project</string>
     <string name="project_close">Close project</string>
     <string name="project_properties">Project properties</string>
     <string name="projects_path">Projects path</string>
@@ -172,8 +175,8 @@
     <string name="rename_fail">Rename failed</string>
     
     <string name="runCode">Run the code</string>
-    <string name="runCode_noApp">In order for you to better debug the software, please package and install the project first, and open LuaActivity.</string>
-    <string name="runCode_noPackageName">For you to better debug the software, please check whether the packageName of config.lua exists.</string>
+    <string name="runCode_noApp">In order to better debug the software, please export LuaActivity and package the project and install first.</string>
+    <string name="runCode_noPackageName">In order to better debug the software, please check whether the packageName in config.lua exists.</string>
 
     <string name="plugins">Plug-ins</string>
     <string name="plugins_popup">Plug-in...</string>

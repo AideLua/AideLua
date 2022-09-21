@@ -14,6 +14,7 @@ local getIconAlphaByName=FilesBrowserManager.getIconAlphaByName
 
 local directoryFilesList
 
+
 local function onClick(view)
   local data=view.tag._data
   local file=data.file
@@ -37,7 +38,8 @@ local function onClick(view)
 end
 
 local function onLongClick(view)
-  local data=view.tag._data
+  local tag=view.tag
+  local data=tag._data
 
   if data.position~=0 then
     local file=data.file
@@ -75,10 +77,13 @@ local function onLongClick(view)
         end
       end
     end
-  
-    local pop=PopupMenu(activity,view)
-    local menu=pop.Menu
-    pop.inflate(R.menu.menu_main_file)
+
+    --local popupMenu=PopupMenu(activity,view)
+    --local popupMenu=data.popupMenu
+    --if data.needInitMenu then
+    local popupMenu=PopupMenu(activity,view)
+    popupMenu.inflate(R.menu.menu_main_file)
+    local menu=popupMenu.getMenu()
     local copyMenu=menu.findItem(R.id.subMenu_copy)
     local openInNewWindowMenu=menu.findItem(Rid.menu_openInNewWindow)--新窗口打开
     local referencesMenu=menu.findItem(Rid.menu_references)--引用资源
@@ -92,8 +97,7 @@ local function onLongClick(view)
     if openState then
       CopyMenuUtil.addSubMenus(copyMenuBuilder,getFilePathCopyMenus(inLibDirPath,filePath,fileName,isFile,fileType))
     end
-    pop.show()
-    pop.onMenuItemClick=function(item)
+    popupMenu.onMenuItemClick=function(item)
       local id=item.getItemId()
       if id==Rid.menu_delete then--删除
         deleteFileDialog(title,file)
@@ -110,58 +114,19 @@ local function onLongClick(view)
         EditorsManager.actions.paste(javaR)
       end
     end
+    --data.needInitMenu=false
+    --end
+    popupMenu.show()
+
+    --tag.menuTouchListener.onTouch
     return true
   end
 end
 
 local function fileMoreMenuClick(view)
-  local directoryFile=FilesBrowserManager.directoryFile
-  local nowProjectPath=ProjectManager.nowPath
-  local nowLibName,fileRelativePath
-  if ProjectManager.openState then
-    fileRelativePath=ProjectManager.shortPath(directoryFile.getPath(),true,nowProjectPath)
-    if fileRelativePath:find("/") then
-      nowLibName=fileRelativePath:match("^(.-)/")
-     elseif #fileRelativePath~=0 then
-      nowLibName=fileRelativePath
-     else
-      nowLibName="app"
-    end
-  end
-  local pop=PopupMenu(activity,view)
-  local menu=pop.Menu
-  pop.inflate(R.menu.menu_main_file_upfile)
-  local currentFileMenu=menu.findItem(R.id.menu_openDir_currentFile)
-  currentFileMenu.setEnabled(FilesTabManager.openState)
-
-  pop.show()
-  pop.onMenuItemClick=function(item)
-    local id=item.getItemId()
-    local Rid=R.id
-    local openDirPath--点击后要打开的路径，空为不打开
-    if id==Rid.menu_createFile then
-      createFile(directoryFile)
-     elseif id==Rid.menu_createDir then
-      createDirsDialog(directoryFile)
-     else
-      if id==Rid.menu_openDir_currentFile then
-        openDirPath=FilesTabManager.file.getParent()
-       elseif id==Rid.menu_openDir_assets then
-        openDirPath=("%s/%s/src/main/assets_bin"):format(nowProjectPath,nowLibName)
-       elseif id==Rid.menu_openDir_java then
-        openDirPath=("%s/%s/src/main/java"):format(nowProjectPath,nowLibName)
-       elseif id==Rid.menu_openDir_lua then
-        openDirPath=("%s/%s/src/main/luaLibs"):format(nowProjectPath,nowLibName)
-       elseif id==Rid.menu_openDir_res then
-        openDirPath=("%s/%s/src/main/res"):format(nowProjectPath,nowLibName)
-       elseif id==Rid.menu_openDir_projectRoot then
-        openDirPath=nowProjectPath
-      end
-    end
-    if openDirPath then
-      FilesBrowserManager.refresh(File(openDirPath))
-    end
-  end
+  local tag=view.tag
+  local popupMenu=tag.popupMenu
+  popupMenu.show()
 end
 
 local openState2ViewType={
@@ -200,7 +165,63 @@ return function(item)
       view.onLongClick=onLongClick
       --view.onContextClick=onLongClick
       if viewType==3 then
-        ids.more.onClick=fileMoreMenuClick
+        local moreView=ids.more
+        local iconView=ids.icon
+        local moreTag={}
+        moreView.tag=moreTag
+        moreView.onClick=fileMoreMenuClick
+        iconView.setImageResource(R.drawable.ic_folder_outline)
+        iconView.setColorFilter(fileColors.folder)
+        ids.title.setText("..")
+        view.contentDescription=activity.getString(R.string.file_up)
+        local popupMenu=PopupMenu(activity,moreView)
+        moreTag.popupMenu=popupMenu
+        moreTag.needInitMenu=true
+        moreView.setOnTouchListener(popupMenu.getDragToOpenListener())
+        popupMenu.inflate(R.menu.menu_main_file_upfile)
+        local menu=popupMenu.getMenu()
+        ids.currentFileMenu=menu.findItem(R.id.menu_openDir_currentFile)
+        popupMenu.onMenuItemClick=function(item)
+          local id=item.getItemId()
+          local Rid=R.id
+          local openDirPath--点击后要打开的路径，空为不打开
+          local directoryFile=FilesBrowserManager.directoryFile
+          if id==Rid.menu_createFile then
+            createFile(directoryFile)
+           elseif id==Rid.menu_createDir then
+            createDirsDialog(directoryFile)
+           else
+            local nowProjectPath=ProjectManager.nowPath
+            local nowLibName,fileRelativePath
+            if ProjectManager.openState then
+              fileRelativePath=ProjectManager.shortPath(directoryFile.getPath(),true,nowProjectPath)
+              if fileRelativePath:find("/") then
+                nowLibName=fileRelativePath:match("^(.-)/")
+               elseif #fileRelativePath~=0 then
+                nowLibName=fileRelativePath
+               else
+                nowLibName="app"
+              end
+            end
+            if id==Rid.menu_openDir_currentFile then
+              openDirPath=FilesTabManager.file.getParent()
+             elseif id==Rid.menu_openDir_assets then
+              openDirPath=("%s/%s/src/main/assets_bin"):format(nowProjectPath,nowLibName)
+             elseif id==Rid.menu_openDir_java then
+              openDirPath=("%s/%s/src/main/java"):format(nowProjectPath,nowLibName)
+             elseif id==Rid.menu_openDir_lua then
+              openDirPath=("%s/%s/src/main/luaLibs"):format(nowProjectPath,nowLibName)
+             elseif id==Rid.menu_openDir_res then
+              openDirPath=("%s/%s/src/main/res"):format(nowProjectPath,nowLibName)
+             elseif id==Rid.menu_openDir_projectRoot then
+              openDirPath=nowProjectPath
+            end
+          end
+          if openDirPath then
+            FilesBrowserManager.refresh(File(openDirPath))
+          end
+        end
+
       end
       return holder
     end,
@@ -237,10 +258,7 @@ return function(item)
             data.upFile=true
             data.action="openFolder"
           end
-          iconView.setImageResource(R.drawable.ic_folder_outline)
-          iconView.setColorFilter(fileColors.folder)
-          titleView.setText("..")
-          view.contentDescription=activity.getString(R.string.file_up)
+          tag.currentFileMenu.setEnabled(FilesTabManager.openState)
          else--项目没打开，就是创建项目
           iconView.setImageResource(R.drawable.ic_plus)
           tag.title.text=activity.getString(R.string.project_create)
@@ -252,6 +270,9 @@ return function(item)
           filePath=file.getPath()
           data.file=file
           data.filePath=filePath
+          --local popupMenu=PopupMenu(activity,view)
+          --data.popupMenu=popupMenu
+          --data.needInitMenu=true
          else
           file=data.file
           filePath=data.filePath
@@ -337,7 +358,6 @@ return function(item)
           end
           titleView.setText(title)
           tag.message.setText(summary)
-
 
           if type(iconUrl)=="number" then
             iconView.setImageResource(iconUrl)

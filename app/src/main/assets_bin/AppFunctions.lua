@@ -261,3 +261,11 @@ function fixPath(path)
   end
   return path:match("(.*)/")
 end
+
+function getTableIndexList(newTable)
+  local list={}
+  for index,content in pairs(newTable) do
+    table.insert(list,index)
+  end
+  return list
+end

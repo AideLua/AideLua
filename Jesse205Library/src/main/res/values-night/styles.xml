@@ -1,4 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Jesse205" parent="Base.Theme.Jesse205.Dark"/>
+    <style name="Base.Theme.Jesse205" parent="Theme.MaterialComponents">
+        <item name="colorPrimary">@color/Jesse205_Black</item>
+        <item name="colorPrimaryDark">?colorPrimary</item>
+        <item name="colorAccent">@color/Jesse205_Blue</item>
+        <item name="strokeColor">@color/Jesse205_Grey_Dark</item>
+        <item name="navigationViewColorAccent">?colorAccent</item>
+        <item name="windowBackgroundColor">@color/Jesse205_Black</item>
+        <item name="android:windowBackground">?windowBackgroundColor</item>
+        <item name="android:navigationBarColor">@color/Jesse205_Black</item>
+        <item name="android:windowLightStatusBar">?windowLightStatusBar</item>
+        <item name="android:windowLightNavigationBar">?windowLightNavigationBar</item>
+        <item name="windowLightStatusBar">false</item>
+        <item name="windowLightNavigationBar">false</item>
+
+        <!--波纹颜色-->
+        <item name="rippleColorAccent">@color/Jesse205_Blue_Ripple</item>
+        <item name="rippleColorPrimary">@color/Jesse205_White_Ripple</item>
+        <item name="android:colorEdgeEffect">@color/Jesse205_White</item>
+
+        <item name="actionBarTheme">@style/ThemeOverlay.Jesse205.Dark.ActionBar</item>
+        <item name="actionBarWidgetTheme">@null</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.MaterialComponents</item>
+        <item name="actionModeBackground">?colorPrimary</item>
+        <item name="floatingActionButtonBackgroundColor">?colorBackgroundFloating</item>
+        <item name="floatingActionButtonStyle">@style/Widget.Jesse205.FloatingActionButton.Dark</item>
+        <item name="android:listViewStyle">@style/Widget.Jesse205.ListView</item>
+        <item name="tabStyle">@style/Widget.Jesse205.TabLayout.Colored</item>
+        <item name="actionOverflowMenuStyle">@style/Widget.Jesse205.PopupMenu.Overflow</item>
+        <item name="popupMenuStyle">@style/Widget.Jesse205.PopupMenu</item>
+        <!--<item name="actionModeStyle">@style/Widget.Jesse205.ActionMode.Colored</item>-->
+        <!--<item name="materialButtonStyle">@style/Widget.MaterialComponents.Button.OutlinedButton</item>-->
+        <item name="android:alertDialogTheme">@style/Base.Theme.Jesse205.Dark.Dialog.Alert</item>
+        <item name="cardViewStyle">@style/Widget.Jesse205.CardView</item>
+        <item name="materialCardViewStyle">@style/Widget.Jesse205.CardView</item>
+        <item name="navigationViewStyle">@style/Widget.Jesse205.NavigationView</item>
+        <item name="bottomNavigationStyle">@style/Widget.Jesse205.BottomNavigationView.Colored</item>
+        <item name="chipStyle">@style/Widget.Jesse205.Chip</item>
+
+        <!--圆角-->
+        <item name="dialogCornerRadius">?cornerRadius</item>
+        <item name="cardCornerRadius">?cornerRadius</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="popupMenuCornerRadius">?cornerRadius</item>
+        <item name="boxCornerRadiusTopStart">4dp</item>
+        <item name="boxCornerRadiusTopEnd">4dp</item>
+        <item name="boxCornerRadiusBottomStart">4dp</item>
+        <item name="boxCornerRadiusBottomEnd">4dp</item>
+
+        <!--图标-->
+        <item name="android:actionModeSelectAllDrawable">@drawable/ic_select_all</item>
+        <item name="android:actionModeCutDrawable">@drawable/ic_content_cut</item>
+        <item name="android:actionModeCopyDrawable">@drawable/ic_content_copy</item>
+        <item name="android:actionModePasteDrawable">@drawable/ic_content_paste</item>
+    </style>
+    
 </resources>

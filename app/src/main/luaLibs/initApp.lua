@@ -9,11 +9,11 @@ if getSharedData("richAnim")==nil then
     setSharedData("richAnim",false)
   end
 end
-if getSharedData("Jesse205Lib_Highlight")==nil then
-  setSharedData("Jesse205Lib_Highlight",false)
+if getSharedData("jesse205Lib_highlight")==nil then
+  setSharedData("jesse205Lib_highlight",false)
 end
-if getSharedData("AndroidX_Highlight")==nil then
-  setSharedData("AndroidX_Highlight",true)
+if getSharedData("androidX_highlight")==nil then
+  setSharedData("androidX_highlight",true)
 end
 if getSharedData("editor_magnify")==nil then
   if SDK_INT>=28 then

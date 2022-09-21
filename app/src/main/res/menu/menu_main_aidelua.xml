@@ -4,16 +4,19 @@
     <item
         android:id="@+id/menu_undo"
         android:icon="@drawable/ic_undo"
+        app:iconTint="?android:textColorPrimary"
         app:showAsAction="always"
         android:title="@string/undo"/>
     <item
         android:id="@+id/menu_redo"
         android:icon="@drawable/ic_redo"
+        app:iconTint="?android:textColorPrimary"
         app:showAsAction="always"
         android:title="@string/redo"/>
     <item
         android:id="@+id/menu_run"
         android:icon="@drawable/ic_play_outline"
+        app:iconTint="?android:textColorPrimary"
         app:showAsAction="always"
         android:title="@string/run"/>
     
@@ -26,6 +29,9 @@
             <item
                 android:id="@+id/menu_file_save"
                 android:title="@string/save"/>
+            <item
+                android:id="@+id/menu_file_reopen"
+                android:title="@string/file_reopen"/>
             <item
                 android:id="@+id/menu_file_close"
                 android:title="@string/file_close"/>
@@ -51,6 +57,9 @@
                 android:id="@+id/menu_project_properties"
                 android:title="@string/project_properties"/>
             <item
+                android:id="@+id/menu_project_reopen"
+                android:title="@string/project_reopen"/>
+            <item
                 android:id="@+id/menu_project_close"
                 android:title="@string/project_close"/>
         </menu>
@@ -74,7 +83,6 @@
             <item
                 android:id="@+id/menu_code_checkCode"
                 android:title="@string/checkCode"/>
-            
         </menu>
     </item>
     

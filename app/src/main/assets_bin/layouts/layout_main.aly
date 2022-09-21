@@ -30,7 +30,7 @@
         id="filesTabLay";
         visibility=View.GONE;
         inlineLabel=true;
-        --tabIndicatorFullWidth=false;
+        tabIndicatorFullWidth=false;
         --paddingLeft="8dp";
         --paddingRight="8dp";
         --clipToPadding=false;

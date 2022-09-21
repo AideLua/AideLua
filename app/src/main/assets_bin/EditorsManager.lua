@@ -73,7 +73,10 @@ MyLuaEditor=toCustomEditorView(LuaEditor)
 MyCodeEditor=toCustomEditorView(CodeEditor)
 
 import "layouts.editorLayouts"
+--将要添加到LuaEditor的关键词列表
+--EditorsManager.keyWordsList={}
 
+--[[
 --编辑器提示关键词
 EditorsManager.keyWords=String({
   --一些事件
@@ -138,7 +141,7 @@ EditorsManager.jesse205KeyWords=String({
   "AppPath","ThemeUtil","EditDialogBuilder","ImageDialogBuilder",
   "NetErrorStr","MyToast","AutoToolbarLayout","PermissionUtil",
   "AutoCollapsingToolbarLayout","SettingsLayUtil","Jesse205",
-  "StyleWidget",
+  "StyleWidget","ScreenFixUtil",
 
   --自定义View或者Util
   "MyTextInputLayout","MyTitleEditLayout","MyEditDialogLayout",
@@ -147,7 +150,7 @@ EditorsManager.jesse205KeyWords=String({
   --适配器
   "MyLuaMultiAdapter","MyLuaAdapter","LuaCustRecyclerAdapter",
   "LuaCustRecyclerHolder","AdapterCreator",
-})
+})]]
 
 --默认的管理器的活动事件
 local function generalActionEvent(name1,name2,...)

@@ -138,14 +138,14 @@ function refresh()
           local pluginVersionCode=config.appcode
           if pluginVersionName then
             if versionCode then
-              summary=formatResStr(R.string.plugins_info_version,{("%s (%s)"):format(pluginVersionName,pluginVersionCode)})
+              summary=summary..formatResStr(R.string.plugins_info_version,{("%s (%s)"):format(pluginVersionName,pluginVersionCode)})
              else
-              summary=formatResStr(R.string.plugins_info_version,{pluginVersionName})
+              summary=summary..formatResStr(R.string.plugins_info_version,{pluginVersionName})
             end
            elseif pluginVersionCode then
-            summary=formatResStr(R.string.plugins_info_version,{pluginVersionCode})
+            summary=summary..formatResStr(R.string.plugins_info_version,{pluginVersionCode})
            else
-            summary=formatResStr(R.string.plugins_info_version,{getString(R.string.android.R.string.unknownName)})
+            summary=summary..formatResStr(R.string.plugins_info_version,{getString(R.string.android.R.string.unknownName)})
           end
 
           --包名

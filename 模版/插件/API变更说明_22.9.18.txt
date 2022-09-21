@@ -19,3 +19,9 @@ v5.0.3
 v5.0.4
 1.FilesTabManager.closeFile(lowerFilePath,removeTab,changeEditor) 第二个变量由原来没用的blockOpen改为removeTab，默认为true
 2.NoneView将不在启动时初始化
+3.新增 ProjectManager.reopenProject() 项目可能会在未关闭旧项目的情况下打开新的
+  作用：刷新config.lua
+4.EditorsManager.keyWords 与 EditorsManager.jesse205KeyWords 已废除，已由 editorLayouts.LuaEditor.packagesList、editorLayouts.LuaEditor.keywordsList 代替
+  作用：方便插件添加关键字
+5.SharedData将 Jesse205Lib_Highlight 与 AndroidX_Highlight分别改为了 jesse205Lib_highlight 与 androidX_highlight
+  作用：统一变量

@@ -3,6 +3,8 @@
   layout_width="fill";
   orientation="vertical";
   layout_height="fill";
+  --minimumHeight="512dp";
+  
   {
     ListView;
     layout_weight=1;
@@ -11,6 +13,7 @@
     layout_marginTop="8dp";
     paddingTop="8dp";
     paddingBottom="8dp";
+    --layout_height="160dp";
     scrollBarStyle=ScrollView.SCROLLBARS_OUTSIDE_OVERLAY;
     transcriptMode=ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL;
     clipToPadding=false;

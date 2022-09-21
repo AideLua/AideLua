@@ -37,6 +37,7 @@ local function onFileTabLongClick(view)
   local tag = view.tag
   nowTabTouchTag = tag
   tag.onLongTouch = true
+
 end
 
 local moveCloseHeight
@@ -64,10 +65,15 @@ local function onFileTabTouch(view, event)
     local moveY = event.getRawY() - downY
     if action == MotionEvent.ACTION_MOVE then
       -- print("test",tointeger(moveY),tointeger(event.getY()))
-      if moveY > 0 and moveY < moveCloseHeight then
-        view.setRotationX(moveY / moveCloseHeight * -90)
-       elseif moveY >= moveCloseHeight then
+      if moveY >= moveCloseHeight*4/3 then
         view.setRotationX(-90)
+        view.setAlpha(0)
+       elseif moveY>moveCloseHeight*3/4 then
+        view.setRotationX(moveY/(moveCloseHeight*4/3) * -90)
+        view.setAlpha(1-(moveY-moveCloseHeight*3/4)/(moveCloseHeight/4))
+       elseif moveY > 0 then
+        view.setRotationX(moveY/(moveCloseHeight*4/3) * -90)
+        view.setAlpha(1)
       end
      elseif action == MotionEvent.ACTION_UP then
       nowTabTouchTag = nil
@@ -75,26 +81,26 @@ local function onFileTabTouch(view, event)
       if moveY > moveCloseHeight then
         FilesTabManager.closeFile(tag.lowerPath, true)
         view.setRotationX(0)
+        view.setAlpha(1)
         Handler().postDelayed(Runnable({
           run = function()
             if openState then
               fileConfig.tab.select()
             end
         end}),1)
-
-        --[[
-        if OpenedFile then
-          local tabConfig = FilesTabList[string.lower(NowFile.getPath())]
-          if tabConfig then
-            local tab = tabConfig.tab
-            task(1, function()
-              tab.select()
-            end)
-          end
-        end]]
        else
-        ObjectAnimator.ofFloat(view, "rotationX", {0}).setDuration(200)
-        .setInterpolator(DecelerateInterpolator()).start()
+        --view.setBackgroundColor(0)
+        --view.setBackground(tag.tabBackground)
+        ObjectAnimator.ofFloat(view, "rotationX", {0})
+        .setDuration(200)
+        .setInterpolator(DecelerateInterpolator())
+        .setDuration(200)
+        .start()
+        .start()
+        ObjectAnimator.ofFloat(view, "alpha", {1})
+        .setDuration(200)
+        .setInterpolator(DecelerateInterpolator())
+        .start()
       end
     end
   end
@@ -117,6 +123,7 @@ local function initFileTabView(tab, fileConfig)
   view.tag = fileConfig
   view.onLongClick=onFileTabLongClick
   view.onTouch = onFileTabTouch
+  --fileConfig.tabBackground=view.getBackground()
   TooltipCompat.setTooltipText(view, fileConfig.shortFilePath)
   local imageView = view.getChildAt(0)
   local textView = view.getChildAt(1)

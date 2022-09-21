@@ -1,1 +1,1 @@
-appname="Aide Lua"
+appname="Aide Lua Pro"

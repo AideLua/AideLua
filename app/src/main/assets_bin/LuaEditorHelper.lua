@@ -185,14 +185,39 @@ function LuaEditorHelper.applyMagnifier(editor)
   end
 end
 
-function LuaEditorHelper.initKeysTaskFunc(keyWords,jesse205KeyWords)
+function LuaEditorHelper.initKeysTaskFunc(keysList,packagesList)
   require "import"
   import "androidApis.editor.androluaApis"
   import "androidApis.editor.systemApis"
 
   local namesCheck={}
   local application=activity.getApplication()
-  function addPackages(lang,packages)
+  local Lexer=luajava.bindClass("b.b.a.b.k")
+  local lang=Lexer.e()
+  local names=application.get("editorBaseList")
+  if not(names) then
+    names=lang.g()--获取现在的names
+    application.set("editorBaseList",names)
+  end
+  names=luajava.astable(names)
+  keysList=luajava.astable(keysList)
+  packagesList=luajava.astable(packagesList)
+  for index,content in ipairs(names) do--首先把已添加的标记一下
+    namesCheck[content]=true
+  end
+  --添加关键字
+  function addWords(wordsList,indexOffset)
+    for index=1,#wordsList do
+      local word=wordsList[index+indexOffset]
+      if not(namesCheck[word]) then--查重
+        table.insert(names,word)
+        namesCheck[word]=true
+      end
+    end
+  end
+
+  --添加包
+  function addPackages(packages)
     for index,package in pairs(packages) do
       local methods={}
       local packageTable=_G[package]
@@ -218,70 +243,67 @@ function LuaEditorHelper.initKeysTaskFunc(keyWords,jesse205KeyWords)
       lang.a(package,methods)
     end
   end
-  local Lexer=luajava.bindClass("b.b.a.b.k")
-  local lang=Lexer.e()
+  local success,message=pcall(function()
+    for index,content in ipairs({androluaApis,systemApis}) do--插入新的names
+      addWords(content,0)
+    end
 
-  local names=application.get("editorBaseList")
-  if not(names) then
-    names=lang.g()--获取现在的names
-    application.set("editorBaseList",names)
-  end
-  names=luajava.astable(names)
-  for index,content in ipairs(names) do
-    namesCheck[content]=true
-  end
+    if activity.getSharedData("androidX_highlight") then
+      import "androidApis.editor.androidxApis"
+      addWords(androidxApis,0)
+    end
 
-  for index,content in ipairs({androluaApis,systemApis,luajava.astable(keyWords)}) do--插入新的names
-    for index,content in ipairs(content) do
-      if not(namesCheck[content]) then
-        table.insert(names,content)
-        namesCheck[content]=true
+    for index,content in pairs(keysList) do
+      addWords(content,-1)
+    end
+
+    addPackages({"activity","application","LuaUtil","android","R"})
+    for index,packages in pairs(packagesList) do
+      for index,content in pairs(luajava.astable(packages)) do
+        lang.a(index,content)
       end
     end
-  end
-  if activity.getSharedData("AndroidX_Highlight") then
-    import "androidApis.editor.androidxApis"
-    for index,content in ipairs(androidxApis) do
-      if not(namesCheck[content]) then
-        table.insert(names,content)
-        namesCheck[content]=true
-      end
-    end
-  end
-
-  addPackages(lang,{"activity","application","LuaUtil","android","R"})
-
-  if activity.getSharedData("Jesse205Lib_Highlight") then--添加杰西205库
-    notLoadTheme=true
-    require "Jesse205"
-    for index,content in ipairs(luajava.astable(jesse205KeyWords)) do
-      if not(namesCheck[content]) then
-        table.insert(names,content)
-        namesCheck[content]=true
-      end
-    end
-    for index,content in ipairs(StyleWidget.types) do
-      if not(namesCheck[content]) then
-        table.insert(names,content)
-        namesCheck[content]=true
-      end
-    end
-    addPackages(lang,{"string","utf8","math","theme","Jesse205","AppPath","MyToast"})
-  end
+  end)
   lang.B(names)--设置成新的names
-  return true
+  return success,message
 end
-
+ 
 function LuaEditorHelper.initKeys(editor,editorParent,pencilEdit,progressBar)
   --application.set("luaeditor_initialized",false)--强制初始化编辑器
-  if not(application.get("luaeditor_initialized")) then--编辑器未初始化
+  if application.get("luaeditor_initialized") then--已初始化过编辑器
+    editorParent.removeView(progressBar)--移除进度条
+    editorParent.setLayoutTransition(newLayoutTransition() or nil)
+   else
     editorParent.removeView(pencilEdit)--先移除view，避免手写输入以及编辑器渲染导致的bug
     editorParent.removeView(editor)
+    local editorConfig=editorLayouts.LuaEditor
     local editorText=editor.text--保存一下编辑器内文字，
     editor.text=""--防止渲染文字造成的卡顿
-    local keysList={EditorsManager.keyWords,EditorsManager.jesse205KeyWords}
+
+    local keywordsList=editorConfig.keywordsList
+    local packagesList=editorConfig.packagesList
+    keywordsList.normalKeywords=editorConfig.normalKeywords
+    if oldJesse205LibHl then--添加杰西205库
+      keywordsList.jesse205Words=editorConfig.jesse205Keywords
+      packagesList.jesse205Words=Map({
+        string=String(getTableIndexList(string)),
+        utf8=String(getTableIndexList(utf8)),
+        math=String(getTableIndexList(math)),
+        theme=String(getTableIndexList(theme)),
+        Jesse205=String(getTableIndexList(Jesse205)),
+        AppPath=String(getTableIndexList(AppPath)),
+        MyToast=String(getTableIndexList(MyToast)),
+      })
+     else
+      keywordsList.jesse205Words=nil
+      packagesList.jesse205Words=nil
+    end
+
     activity.newTask(LuaEditorHelper.initKeysTaskFunc,
-    function(success)
+    function(success,message)
+      if not(success) then
+        showErrorDialog("Load Keyword Error",message)
+      end
       editor.respan()
       editor.invalidate()--不知道干啥的，调用一下就对了
       if editorText~="" then
@@ -293,10 +315,7 @@ function LuaEditorHelper.initKeys(editor,editorParent,pencilEdit,progressBar)
       application.set("luaeditor_initialized",success)
       MyAnimationUtil.ScrollView.onScrollChange(editor,editor.getScrollX(),editor.getScrollY(),0,0,appBarLayout,nil,true)
       editorParent.setLayoutTransition(newLayoutTransition() or nil)
-    end).execute(keysList)
-   else--已初始化过编辑器
-    editorParent.removeView(progressBar)--移除进度条
-    editorParent.setLayoutTransition(newLayoutTransition() or nil)
+    end).execute({Map(keywordsList),Map(packagesList)})
   end
 end
 

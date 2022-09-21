@@ -23,13 +23,14 @@ return function(item)
       local holder=LuaCustRecyclerHolder(view)
       view.setTag(ids)
       local titleView=ids.title
+      local iconView=ids.icon
       titleView.setBackground(ThemeUtil.getRippleDrawable(ColorUtils.setAlphaComponent(theme.color.ActionBar.colorControlNormal,0x22)))
       titleView.onClick=onClick
       titleView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL))
 
       if viewType==1 then
-        titleView.setTextColor(theme.color.colorAccent)
-        ids.icon.setVisibility(View.GONE)
+        --titleView.setTextColor(theme.color.colorAccent)
+        iconView.setVisibility(View.GONE)
         titleView.getPaint().setFakeBoldText(true)
         if getSharedData("theme_darkactionbar") then
           titleView.setTextColor(theme.color.ActionBar.colorControlNormal)
@@ -38,6 +39,7 @@ return function(item)
         end
        else
         titleView.setTextColor(theme.color.ActionBar.textColorSecondary)
+        iconView.setAlpha(Color.alpha(theme.color.ActionBar.textColorSecondary)/255)
       end
       return holder
     end,

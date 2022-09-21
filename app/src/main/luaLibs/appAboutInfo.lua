@@ -36,7 +36,7 @@ developers={
 openSourceLicenses=true
 
 --单个QQ群
---qqGroup=708199076
+qqGroup=628045718
 
 --多个QQ群
 qqGroups={
@@ -72,7 +72,11 @@ qqGroups={
 supportNewPage=false--支持项目页面跳转标识
 supportList={--如果有多种方式支持项目，可以使用列表
   {
-    name="问题反馈",
+    name="问题反馈 (QQ频道)",
+    url="https://pd.qq.com/s/97ho4f",
+  },
+  {
+    name="问题反馈 (Gitee)",
     url="https://gitee.com/Jesse205/AideLua/issues",
   },
   {

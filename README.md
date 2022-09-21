@@ -2,12 +2,12 @@
 [![QQ群](https://img.shields.io/badge/加入-QQ_群-0099FF)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
 [![QQ频道](https://img.shields.io/badge/加入-QQ_频道-0099FF)](https://pd.qq.com/s/ncghvc)
 
-![cover](https://gitee.com/Jesse205/AideLua/raw/master/ic_cover-aidelua.png)
+![cover](ic_cover-aidelua.png)
 
-## 警告 Warning
-此项目正在重构。如需使用源代码，请进入[发行版](releases)页面下载
+## 注意 Alert
+如需使用源代码，请进入[发行版](https://gitee.com/Jesse205/AideLua/releases)页面下载
 
-This project is being repaired. If you need to use the source code, please go to the [releases](releases) page to download.
+If you need to use the source code, please go to the [releases](https://gitee.com/Jesse205/AideLua/releases) page to download.
 
 ## 简介
 Aide Lua 是一款依赖 Aide 的 Lua 编辑器

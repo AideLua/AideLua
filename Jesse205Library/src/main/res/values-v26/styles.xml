@@ -3,6 +3,7 @@
     <style name="Theme.Jesse205" parent="Base.Theme.Jesse205"/>
     <style name="Theme.Jesse205.DarkActionBar" parent="Theme.Jesse205">
         <item name="colorPrimaryDark">?colorPrimary</item>
+        <item name="android:colorEdgeEffect">?colorPrimary</item>
         <item name="navigationViewColorAccent">?colorPrimary</item>
         <item name="actionBarTheme">@style/ThemeOverlay.Jesse205.Dark.ActionBar</item>
         <item name="tabStyle">@style/Widget.Jesse205.TabLayout.Colored</item>

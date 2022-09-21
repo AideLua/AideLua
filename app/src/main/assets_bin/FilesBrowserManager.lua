@@ -270,8 +270,8 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
     end
 
 
-    if directoryFile then
-      local nowDirectoryPath=directoryFile.getPath()--获取已打开文件夹路径
+    if file then
+      local nowDirectoryPath=file.getPath()--获取已打开文件夹路径
       if upFile then--如果是向上
         filesPositions[nowDirectoryPath]=nil--删除当前已打开文件夹滚动
        else
@@ -415,7 +415,6 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
        else
         layoutManager.scrollToPosition(0)
       end
-
     end).execute({file,ProjectManager.openState})
   end
 end
@@ -521,25 +520,6 @@ function FilesBrowserManager.init()
               outStream.close()
               FilesBrowserManager.refresh()
             end
-            --[[
-          if DocumentsContract.isDocumentUri(activity, uri) then
-            nameFile=File(FileInfoUtils.getPath(activity,uri))
-           else
-            nameFile=File(uri.getPath())
-          end
-        
-          if File(newPath).exists() then
-            showSnackBar(R.string.file_exists)
-           else
-            local outStream=FileOutputStream(newPath)
-            LuaUtil.copyFile(inputStream, outStream)
-            outStream.close()
-            print(newPath)
-            --refresh()
-          end
-          --print(DocumentsContract.isDocumentUri(activity, uri))
-          --print(FileInfoUtils.getPath(activity,uri))
-          ]]
           end
         end
         dropPermissions.release()

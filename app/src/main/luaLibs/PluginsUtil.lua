@@ -3,7 +3,10 @@ local plugins
 local enabledPluginPaths
 
 local activityName
-local setEnabled, getEnabled, getReallyEnabled, loadPlugins, getPluginPath, getPluginDataPath, getAvailable
+local setEnabled, getEnabled, getReallyEnabled, loadPlugins,
+getPluginPath, getPluginDataPath, getAvailable,
+getPluginsEventsAndName,getConfig,onPluginError
+
 
 local PLUGINS_PATH = AppPath.AppShareDir .. "/plugins"
 local PLUGINS_DATA_PATH = AppPath.AppShareDir .. "/data/plugins"
@@ -27,7 +30,7 @@ function PluginsUtil.callElevents(name, ...)
   if events then
     for index, content in ipairs(events) do
       local state,result=xpcall(content, function(err)
-        showErrorDialog("Plugin"..plugins.eventsName2[name][index].."error",err)
+        onPluginError(plugins.eventsName[name][index],plugins.eventsPackageName[name][index],err,name.." (Global)")
       end, activityName, ...)
       if result~=nil then
         finalResult=result or finalResult
@@ -37,7 +40,7 @@ function PluginsUtil.callElevents(name, ...)
   if events2 then
     for index, content in ipairs(events2) do
       local state,result=xpcall(content, function(err)
-        showErrorDialog("Plugin"..plugins.eventsName2[name][index].."error",err)
+        onPluginError(plugins.eventsName2[name][index],plugins.eventsPackageName2[name][index],err,name)
       end, ...)
       if result~=nil then
         finalResult=result or finalResult
@@ -122,16 +125,19 @@ end
 PluginsUtil.getAvailable = getAvailable
 
 --获取函数的插件事件与名字列表
-local function getPluginsEventsAndName(pluginsEvents,pluginsEventsName,name)
+function getPluginsEventsAndName(pluginsEvents,pluginsEventsName,pluginsEventsPackageName,name)
   local eventsList=pluginsEvents[name]
   local eventsNameList=pluginsEventsName[name]
+  local eventsPackageNameList=pluginsEventsPackageName[name]
   if eventsList==nil then
     eventsList={}
     eventsNameList={}
+    eventsPackageNameList={}
     pluginsEvents[name]=eventsList
     pluginsEventsName[name]=eventsNameList
+    pluginsEventsPackageName[name]=eventsPackageNameList
   end
-  return eventsList,eventsNameList
+  return eventsList,eventsNameList,eventsPackageNameList
 end
 
 local pluginEnvTable={
@@ -140,7 +146,7 @@ local pluginEnvTable={
 }
 
 
-local function getConfig(configs,path)
+function getConfig(configs,path)
   local config=configs[path]
   if not(config) then
     config = getConfigFromFile(path .. "/init.lua") -- init.lua内容
@@ -151,6 +157,12 @@ local function getConfig(configs,path)
   return config
 end
 
+function onPluginError(titleName,packageName,message,funcName)
+  showErrorDialog("Plugin "..titleName.." error",message)
+  pcall(function()
+    io.open("/sdcard/Androlua/crash/"..activity.getPackageName().."_"..packageName..".txt","a"):write(funcName..os.date(" %Y-%m-%d %H:%M:%S").."\n"..message.."\n\n"):close()
+  end)
+end
 
 setmetatable(pluginEnvTable,{__index=_G})
 
@@ -160,15 +172,19 @@ function loadPlugins()
   --enabledPluginPaths={}
   local pluginsEvents = {}
   local pluginsEventsName = {}
+  local pluginsEventsPackageName = {}
   local pluginsEvents2 = {}
   local pluginsEventsName2 = {}
+  local pluginsEventsPackageName2 = {}
   local pluginsActivities = {}
   local pluginsActivitiesName = {}
   local configs={}
   plugins.events = pluginsEvents
   plugins.eventsName = pluginsEventsName
+  plugins.eventsPackageName = pluginsEventsPackageName
   plugins.events2 = pluginsEvents2
   plugins.eventsName2 = pluginsEventsName2
+  plugins.eventsPackageName2 = pluginsEventsPackageName2
   plugins.activities = pluginsActivities
   plugins.activitiesName = pluginsActivitiesName
   plugins.configs=configs
@@ -213,7 +229,7 @@ function loadPlugins()
               end
             end,
             function(err) -- 语法错误，或者其他问题
-              showErrorDialog("Plugin"..dirName.."error",err)
+              onPluginError(dirName,dirName,err,"init.lua")
             end)
           end
         end
@@ -236,9 +252,10 @@ function loadPlugins()
     local fileEvents=config.events
     if fileEvents then
       for index,content in pairs(fileEvents) do
-        local eventsList,eventsNameList=getPluginsEventsAndName(pluginsEvents,pluginsEventsName,index)
+        local eventsList,eventsNameList,eventsPackageNameList=getPluginsEventsAndName(pluginsEvents,pluginsEventsName,pluginsEventsPackageName,index)
         table.insert(eventsList,content)
         table.insert(eventsNameList,name)
+        table.insert(eventsPackageNameList,config.packagename)
       end
     end
     if activityName then
@@ -246,9 +263,10 @@ function loadPlugins()
       if File(eventsAlyPath).isFile() then
         local fileEvents = assert(loadfile(eventsAlyPath, "bt", config))()
         for index, content in pairs(fileEvents) do
-          local eventsList,eventsNameList=getPluginsEventsAndName(pluginsEvents2,pluginsEventsName2,index)
+          local eventsList,eventsNameList,eventsPackageNameList=getPluginsEventsAndName(pluginsEvents2,pluginsEventsName2,pluginsEventsPackageName2,index)
           table.insert(eventsList,content)
           table.insert(eventsNameList,name)
+          table.insert(eventsPackageNameList,config.packagename)
         end
       end
     end

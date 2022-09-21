@@ -65,6 +65,7 @@ return function(config)
       end
     end,
     onDestroyActionMode=function(mode)
+      inputMethodService.hideSoftInputFromWindow(searchEdit.getWindowToken(), 0)
       if onCancel then
         onCancel()
       end

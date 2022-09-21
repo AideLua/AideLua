@@ -238,6 +238,12 @@ local function onItemViewClick(view)
       setSharedData(data.key,checked)
     end
   end
+  local popupMenu=data.popupMenu
+  if popupMenu==true then
+    popupMenu=PopupMenu(activity,view)
+    data.popupMenu=popupMenu
+    data.needInitMenu=true
+  end
 
   if onItemClick then
     onItemClick(view,ids,key,data)
@@ -250,10 +256,20 @@ local function onItemViewLongClick(view)
   local viewConfig=ids._config
   local data=ids._data
   local key=data.key
+  local result
   local onItemLongClick=viewConfig.onItemLongClick
-  if onItemLongClick then
-    return onItemLongClick(view,ids,key,data)
+  viewConfig.allowedChange=false
+  local popupMenu=data.popupMenu
+  if popupMenu==true then
+    popupMenu=PopupMenu(activity,view)
+    data.popupMenu=popupMenu
+    data.needInitMenu=true
   end
+  if onItemLongClick then
+    result=onItemLongClick(view,ids,key,data)
+  end
+  viewConfig.allowedChange=true
+  return result
 end
 local function onSwitchCheckedChanged(view,checked)
   local viewConfig=view.tag
@@ -370,8 +386,6 @@ local adapterEvents={
       end
     end
 
-
-
     if switchView then
       if data.checked~=nil then
         switchView.setChecked(data.checked)
@@ -398,6 +412,9 @@ local adapterEvents={
           rightIconView.setVisibility(View.GONE)
         end
       end
+    end
+    if data.popupMenu then
+      data.popupMenu=true
     end
     viewConfig.allowedChange=true
   end,

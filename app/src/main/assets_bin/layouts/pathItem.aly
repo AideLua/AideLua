@@ -8,13 +8,12 @@
     padding="8dp";
     textSize="14sp";
     --minimumWidth="24dp";
-    --typeface=Typeface.BOLD;
   };
   {
     AppCompatImageView;
     id="icon";
     imageResource=R.drawable.ic_chevron_right;
-    colorFilter=theme.color.ActionBar.textColorSecondary;
+    colorFilter=theme.color.ActionBar.colorControlNormal;
     --layout_marginLeft="4dp";
     --padding="8dp";
   };

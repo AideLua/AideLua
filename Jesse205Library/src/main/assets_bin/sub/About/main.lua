@@ -41,20 +41,47 @@ function joinQQGroup(groupNumber)
   end
 end
 
+function showQQGroupMenu(data)
+  local popupMenu=data.popupMenu
+  if data.needInitMenu then
+    local menu=popupMenu.getMenu()
+    for index,content in ipairs(data.groups) do
+      menu.add(content.name).onMenuItemClick=function()
+        joinQQGroup(content.id)
+      end
+    end
+    data.needInitMenu=false
+  end
+  popupMenu.show()
+end
+
+function showSupportMenu(data,supportList)
+  local popupMenu=data.popupMenu
+  if data.needInitMenu then
+    local menu=popupMenu.getMenu()
+    for index,content in ipairs(supportList) do
+      menu.add(content.name).onMenuItemClick=function()
+        local url=content.url
+        local func=content.func
+        if func then
+          func()
+         elseif url then
+          openUrl(url)
+        end
+      end
+    end
+    data.needInitMenu=false
+  end
+  popupMenu.show()
+end
+
 function onItemClick(view,views,key,data)
   if key=="qq" then
     pcall(activity.startActivity,Intent(Intent.ACTION_VIEW,Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin="..data.qq)))
    elseif key=="qq_group" then--单个QQ群
     joinQQGroup(data.groupId)
    elseif key=="qq_groups" then--多个QQ群
-    local pop=PopupMenu(activity,view)
-    local menu=pop.Menu
-    for index,content in ipairs(data.groups) do
-      menu.add(content.name).onMenuItemClick=function()
-        joinQQGroup(content.id)
-      end
-    end
-    pop.show()
+    showQQGroupMenu(data)
    elseif key=="html" then
     newSubActivity("HtmlFileViewer",{{title=data.title,path=data.path}})
    elseif key=="openSourceLicenses" then
@@ -63,22 +90,22 @@ function onItemClick(view,views,key,data)
     local supportUrl=data.supportUrl
     local supportList=data.supportList
     if supportList then
-      local pop=PopupMenu(activity,view)
-      local menu=pop.Menu
-      for index,content in ipairs(supportList) do
-        menu.add(content.name).onMenuItemClick=function()
-          local url=content.url
-          local func=content.func
-          if func then
-            func(view)
-           elseif url then
-            openUrl(url)
-          end
-        end
-      end
-      pop.show()
+      showSupportMenu(data,supportList)
      elseif supportUrl then
       openUrl(supportUrl)
+    end
+  end
+end
+
+function onItemLongClick(view,views,key,data)
+  if key=="qq_groups" or (key=="qq_group" and data.groups) then--多个QQ群
+    showQQGroupMenu(data)
+    return true
+   elseif key=="support" then
+    local supportList=data.supportList
+    if supportList then
+      showSupportMenu(data,supportList)
+      return true
     end
   end
 end
@@ -217,26 +244,29 @@ table.insert(data,{
 })
 
 --插入交流群
-if qqGroup then--单个交流群
+if qqGroup then--单个交流群和多个交流群
   table.insert(data,{
     SettingsLayUtil.ITEM_NOSUMMARY;
     title=R.string.Jesse205_qqGroup;
     icon=R.drawable.ic_account_group_outline;
     groupId=qqGroup;
+    groups=qqGroups;
     key="qq_group";
     newPage="newApp";
+    popupMenu=toboolean(qqGroups);
   })
-end
-
-if qqGroups then--多个交流群
+ elseif qqGroups then--多个交流群
   table.insert(data,{
     SettingsLayUtil.ITEM_NOSUMMARY;
     title=R.string.Jesse205_qqGroups;
     icon=R.drawable.ic_account_group_outline;
     groups=qqGroups;
     key="qq_groups";
+    popupMenu=true;
   })
 end
+
+
 
 if supportUrl or supportList then--支持项目
   table.insert(data,{
@@ -247,6 +277,7 @@ if supportUrl or supportList then--支持项目
     supportList=supportList;
     key="support";
     newPage=supportNewPage;
+    popupMenu=toboolean(supportList);
   })
 end
 
@@ -273,7 +304,7 @@ adapter=LuaCustRecyclerAdapter(AdapterCreator({
       local holder=LuaCustRecyclerHolder(portraitCardParent)
       return holder
      else
-      return adapterEvents.onCreateViewHolder(onItemClick,nil,parent,viewType)
+      return adapterEvents.onCreateViewHolder(onItemClick,onItemLongClick,parent,viewType)
     end
   end,
   onBindViewHolder=function(holder,position)

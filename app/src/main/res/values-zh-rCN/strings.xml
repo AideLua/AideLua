@@ -35,7 +35,8 @@
     <string name="uncommentedCode">取消注释代码</string>
     <string name="logCat">日志猫</string>
     <string name="help">帮助</string>
-   
+    <string name="viewError">查看错误</string>
+    
     <string name="open">打开</string>
     <string name="open_failed">打开失败</string>
     
@@ -67,6 +68,7 @@
     <string name="file_name_copy">复制文件名</string>
     <string name="file_close">关闭文件</string>
     <string name="file_current_path">当前文件路径</string>
+    <string name="file_reopen">重新打开</string>
     
     <string name="directory">文件夹</string>
     <string name="directory_go_popup">打开目录...</string>
@@ -98,6 +100,7 @@
     <string name="project_appSubtitle_380dp">项目: %1$s</string>
     <string name="project_appSubtitle_390dp">项目: %1$s</string>
     <string name="project_open">打开项目</string>
+    <string name="project_reopen">重新打开</string>
     <string name="project_close">关闭项目</string>
     <string name="project_properties">项目属性</string>
     <string name="projects_path">项目路径</string>
@@ -169,8 +172,8 @@
     <string name="rename_fail">重命名失败</string>
     
     <string name="runCode">运行代码</string>
-    <string name="runCode_noApp">为了您更好地调试软件，请先打包并安装项目，并开放LuaActivity。</string>
-    <string name="runCode_noPackageName">为了您更好地调试软件，请检查config.lua的packageName是否存在。</string>
+    <string name="runCode_noApp">为了您更好地调试软件，请导出 LuaActivity，并打包项目并安装。</string>
+    <string name="runCode_noPackageName">为了您更好地调试软件，请检查 config.lua 的 packageName 是否存在。</string>
     
     <string name="plugins">插件</string>
     <string name="plugins_popup">插件...</string>

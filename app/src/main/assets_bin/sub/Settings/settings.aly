@@ -117,14 +117,14 @@
     SettingsLayUtil.ITEM_SWITCH;
     icon=R.drawable.ic_tooltip_minus_outline;
     title=R.string.settings_editor_highlight_Jesse205Library;
-    key="Jesse205Lib_Highlight";
+    key="jesse205Lib_highlight";
     summary=R.string.settings_editor_highlight_Jesse205Library_summary;
   };
   {
     SettingsLayUtil.ITEM_SWITCH;
     icon=R.drawable.ic_tooltip_minus_outline;
     title=R.string.settings_editor_highlight_androidx;
-    key="AndroidX_Highlight";
+    key="androidX_highlight";
     summary=R.string.settings_editor_highlight_androidx_summary;
   };
   {
@@ -140,7 +140,6 @@
     title=R.string.settings_editor_symbolNar;
     key="editor_symbolBar";
   };
-
   {
     SettingsLayUtil.ITEM_SWITCH;
     icon=R.drawable.ic_file_clock_outline;
@@ -174,6 +173,17 @@
     SettingsLayUtil.TITLE;
     title=R.string.Jesse205_app;
   };
+  {
+    SettingsLayUtil.ITEM_SWITCH;
+    icon=R.drawable.ic_database_outline;
+    title="Use SAF(Storage Access Framework)";
+    summary="使用SAF会导致文件读取变慢、文件夹加载迟缓、调试工程需要逐个授权的情况\nUsing SAF will cause slow file reading, slow folder loading, and the need to be authorized one by one.";
+    key="useSAF";
+    checked=false;
+    enabled=false;
+    switchEnabled=false;
+  };
+
   {
     SettingsLayUtil.ITEM;
     icon=R.drawable.ic_folder_cog_outline;

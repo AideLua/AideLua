@@ -7,8 +7,9 @@
     <color name="Jesse205_Red_Dark">#FFB71C1C</color>
     <color name="Jesse205_Red_Ripple">#22D32F2F</color>
     <color name="Jesse205_Orange">#FFFFA000</color>
-    <color name="Jesse205_Orange_Dark">#FFFF9800</color>
+    <color name="Jesse205_Orange_Dark">#FFF57C00</color>
     <color name="Jesse205_Orange_Ripple">#22FFA000</color>
+    <color name="Jesse205_Orange_Dark_Ripple">#22F57C00</color>
     <color name="Jesse205_Black">#ff000000</color>
     <color name="Jesse205_Black_Ripple">#22000000</color>
     <color name="Jesse205_Blue">#ff4477e0</color>

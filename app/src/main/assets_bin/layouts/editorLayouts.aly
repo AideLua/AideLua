@@ -142,7 +142,65 @@
     defaultText=[[require "import"
 import "Jesse205"
 
-]]
+]],
+    --将要添加到LuaEditor的关键词列表
+    --更改后需要执行application.set("luaeditor_initialized", false)，以便在下次进入页面时更新
+    --使用activity.recreate()重启页面
+    --index为方便更改内容，请使用string类型
+    keywordsList={
+      --一些常用但不自带的类
+      otherWords=String({"PhotoView","LuaLexerIteratorBuilder"})
+    },
+    packagesList={
+      --otherPackages=Map({hello=String({"world"}),jesse205=String({"nb"})})
+    },
+
+    normalKeywords=String({
+      --一些事件
+      "onCreate","onStart","onResume","onPause","onStop","onDestroy",
+      "onActivityResult","onResult","onCreateOptionsMenu","onOptionsItemSelected",
+      "onTouchEvent","onKeyLongPress","onConfigurationChanged","onHook",
+      "onAccessibilityEvent","onKeyUp","onKeyDown","onError","onVersionChanged",
+
+      "onClick","onTouch","onLongClick","onItemClick","onItemLongClick",
+      "onContextClick","onScroll","onScrollChange","onNewIntent",
+      "onSaveInstanceState",
+
+      --一些自带的类或者包
+      "android","R",
+    }),
+    jesse205Keywords=String({
+      "newActivity","getSupportActionBar","getSharedData","setSharedData",
+      "getString","getPackageName","getColorStateList",
+
+      --一些标识
+      "initApp","notLoadTheme","useCustomAppToolbar",
+      "resources","application","inputMethodService","actionBar",
+      "notLoadTheme","darkStatusBar","darkNavigationBar",
+      "window","safeModeEnable","notSafeModeEnable","decorView",
+
+      "theme","formatResStr","autoSetToolTip",
+      "showLoadingDia","closeLoadingDia","getNowLoadingDia",
+      "showErrorDialog","toboolean","rel2AbsPath","copyText",
+      "newSubActivity","isDarkColor","openInBrowser","openUrl",
+      "loadlayout2","showSimpleDialog","getLocalLangObj",
+      "newLayoutTransition",
+
+      "AppPath","ThemeUtil","EditDialogBuilder","ImageDialogBuilder",
+      "NetErrorStr","MyToast","AutoToolbarLayout","PermissionUtil",
+      "AutoCollapsingToolbarLayout","SettingsLayUtil","Jesse205",
+      "StyleWidget","ScreenFixUtil",
+
+      --自定义View或者Util
+      "MyTextInputLayout","MyTitleEditLayout","MyEditDialogLayout",
+      "MyTipLayout","MySearchLayout","MyAnimationUtil","MyStyleUtil",
+
+      --适配器
+      "MyLuaMultiAdapter","MyLuaAdapter","LuaCustRecyclerAdapter",
+      "LuaCustRecyclerHolder","AdapterCreator",
+      table.unpack(StyleWidget.types)
+    }),
+    
   },
   CodeEditor={
     layout={

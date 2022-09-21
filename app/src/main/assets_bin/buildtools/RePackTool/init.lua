@@ -37,12 +37,12 @@ function RePackTool.getRePackToolByConfig(config)
   return rePackool
 end
 
---通过项目目录获取.AideLua路径
+--通过项目目录获取.aideLua路径
 function RePackTool.getALPathByProjectPath(projectPath)
   return ("%s/.aidelua"):format(projectPath)
 end
 
---通过.AideLua路径获取config.lua路径
+--通过.aideLua路径获取config.lua路径
 function RePackTool.getConfigPathByALPath(aideluaPath)
   return ("%s/config.lua"):format(aideluaPath)
 end
@@ -53,6 +53,8 @@ function RePackTool.getConfigByProjectPath(projectPath)
   local path=RePackTool.getConfigPathByALPath(aideluaPath)
   return getConfigFromFile(path)
 end
+
+
 
 --通过项目名字获取主项目路径
 function RePackTool.getProjectDir(projectDir,name)
@@ -70,7 +72,8 @@ local buildingDiaIds={}
 local buildingAdapter
 local buildingButtons={}
 local function showBuildingDialog()
-  table.clone(buildingDiaIds)
+  table.clear(buildingDiaIds)
+  buildingAdapter=LuaAdapter(activity,infoItem)
   buildingDialog=AlertDialog.Builder(this)
   .setTitle(R.string.binpoject_loading)
   .setView(loadlayout(buildingLayout,buildingDiaIds))
@@ -78,177 +81,218 @@ local function showBuildingDialog()
   .setNegativeButton(android.R.string.cancel,nil)
   .setCancelable(false)
   .show()
+  --buildingDiaIds.listView=buildingDialog.getListView()
   buildingDialog.getButton(AlertDialog.BUTTON_POSITIVE).setVisibility(View.GONE)
   buildingDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setVisibility(View.GONE)
-  buildingAdapter=LuaAdapter(activity,infoItem)
   buildingDiaIds.listView.setAdapter(buildingAdapter)
+
 end
 
 local repackApk_building=false
 local function repackApk_taskFunc(config,projectPath,install,sign)
-  require "import"
-  config=luajava.astable(config,true)
-  notLoadTheme=true
-  import "Jesse205"
-  import "android.content.pm.PackageManager"
-  import "net.lingala.zip4j.ZipFile"
-  import "apksigner.*"
-  import "com.Jesse205.util.FileUtil"
-  RePackTool=require "buildtools.RePackTool"
-  local rePackTool=RePackTool.getRePackToolByConfig(config)
+  return pcall(function()
+    require "import"
+    config=luajava.astable(config,true)
+    notLoadTheme=true
+    import "Jesse205"
+    import "android.content.pm.PackageManager"
+    import "net.lingala.zip4j.ZipFile"
+    import "apksigner.*"
+    import "com.Jesse205.util.FileUtil"
+    RePackTool=require "buildtools.RePackTool"
+    local rePackTool=RePackTool.getRePackToolByConfig(config)
+    local binEventsList={}
 
-  local function updateInfo(message)
-    this.update("info")
-    this.update(message)
-  end
-  local function updateDoing(message)
-    this.update("doing")
-    this.update(message)
-  end
+    local function updateInfo(message)
+      this.update("info")
+      this.update(message)
+    end
+    local function updateDoing(message)
+      this.update("doing")
+      this.update(message)
+    end
 
-  local function updateSuccess(message)
-    this.update("success")
-    this.update(message)
-  end
-  local function autoCompileLua(compileDir)
-    for index,content in ipairs(luajava.astable(compileDir.listFiles())) do
-      if content.isDirectory() then
-        autoCompileLua(content)
-       elseif content.name:find"%.lua$" then
-        local path=content.getPath()
-        local func,err=loadfile(path)
-        if func then
-          io.open(path,"w"):write(string.dump(func,true)):close()
-         else
-          return err
+    local function updateSuccess(message)
+      this.update("success")
+      this.update(message)
+    end
+
+    local function updateError(message)
+      this.update("error")
+      this.update(message)
+    end
+
+    local function autoCompileLua(compileDir)
+      for index,content in ipairs(luajava.astable(compileDir.listFiles())) do
+        if content.isDirectory() then
+          autoCompileLua(content)
+         elseif content.name:find"%.lua$" then
+          local path=content.getPath()
+          local func,err=loadfile(path)
+          if func then
+            io.open(path,"w"):write(string.dump(func,true)):close()
+           else
+            updateError("Compilation failed "..err)
+          end
+          --updateInfo("Compiled "..path)
+          func=nil
+          path=nil
+         elseif content.name:find"%.aly$" then
+          local path=content.getPath()
+          local func,err=loadfile(path)
+          local path=path:match("(.+)%.aly")..".lua"
+          if func then
+            io.open(path,"w"):write(string.dump(func,true)):close()
+           else
+            updateError("Compilation failed "..err)
+          end
+          content.delete()
+          --updateInfo("Compiled "..path)
+          func=nil
+          path=nil
+         elseif content.name==".nomedia" then
+          content.delete()
+          updateInfo("Deleted "..content.getPath())
         end
-        updateInfo("Compiled "..path)
-        func=nil
-        path=nil
-       elseif content.name:find"%.aly$" then
-        local path=content.getPath()
-        local func,err=loadfile(path)
-        local path=path:match("(.+)%.aly")..".lua"
-        if func then
-          io.open(path,"w"):write(string.dump(func,true)):close()
-         else
-          return err
+      end
+    end
+    function runBinEvent(name,...)
+      for index=1,#binEventsList do
+        local binEvents=binEventsList[index]
+        local event=binEvents[name]
+        if event then
+          event(...)
         end
-        content.delete()
-        updateInfo("Compiled "..path)
-        func=nil
-        path=nil
-       elseif content.name==".nomedia" then
-        content.delete()
-        updateInfo("Deleted "..content.getPath())
       end
     end
-  end
 
-  --this.update(activity.getString(R.string.binpoject_creating_variables))
-  local mainAppPath=("%s/%s"):format(projectPath,rePackTool.getMainProjectName(config))
-  local buildPath=mainAppPath.."/build"
-  local binPath=buildPath.."/bin"
-  local binDir=File(binPath)
-  local tempPath=binPath.."/aidelua_unzip"
-  local tempDir=File(tempPath)
-  local appName,appVer,appApkPAI,appApkInfo
-  local newApkName,newApkBaseName,newApkPath
-  --开始查找app.apk
-  local appPathList={
-    config.appApkPath,
-    --Gradle打包
-    buildPath.."/outputs/apk/release/app-release-unsigned.apk",--正式版
-    buildPath.."/outputs/apk/debug/app-debug.apk",
-    --AIDE高级设置版打包
-    binPath.."/app.apk",
-    binPath.."/app-debug.apk",
-    binPath.."/app-release.apk",
-    binPath.."/generated.apk",
-    binPath.."/signed.apk",
-    --普通AIDE打包
-    AppPath.Sdcard.."/Android/data/com.aide.ui/cache/apk/app.apk",
-  }
-  local appPath,appFile
-  for index,content in pairs(appPathList) do
-    if content then
-      local file=File(content)
-      if file.isFile() then
-        appPath=content
-        appFile=file
-        break
+    --this.update(activity.getString(R.string.binpoject_creating_variables))
+    local mainAppPath=("%s/%s"):format(projectPath,rePackTool.getMainProjectName(config))
+    local buildPath=mainAppPath.."/build"
+    local binPath=buildPath.."/bin"
+    local binDir=File(binPath)
+    local tempPath=binPath.."/aidelua_unzip"
+    local tempDir=File(tempPath)
+    local appName,appVer,appApkPAI,appApkInfo
+    local newApkName,newApkBaseName,newApkPath
+    --开始查找app.apk
+    local appPathList={
+      config.appApkPath,
+      --Gradle打包
+      buildPath.."/outputs/apk/release/app-release-unsigned.apk",--正式版
+      buildPath.."/outputs/apk/debug/app-debug.apk",
+      --AIDE高级设置版打包
+      binPath.."/app.apk",
+      binPath.."/app-debug.apk",
+      binPath.."/app-release.apk",
+      binPath.."/generated.apk",
+      binPath.."/signed.apk",
+      --普通AIDE打包
+      AppPath.Sdcard.."/Android/data/com.aide.ui/cache/apk/app.apk",
+    }
+    local appPath,appFile
+    for index,content in pairs(appPathList) do
+      if content then
+        local file=File(content)
+        if file.isFile() then
+          appPath=content
+          appFile=file
+          break
+        end
       end
     end
-  end
-  if not(appPath) then
-    return getString(R.string.binpoject_error_notfind)
-  end
-
-  --找到appPath，就告诉用户
-
-  local packageManager=activity.getPackageManager()
-
-  appApkPAI=packageManager.getPackageArchiveInfo(appPath, PackageManager.GET_ACTIVITIES)
-  if appApkPAI then
-    --可以解析安装包
-    appApkInfo = appApkPAI.applicationInfo
-    appName=config.appName or getString(android.R.string.unknownName)
-    --appName=tostring(packageManager.getApplicationLabel(appApkInfo))
-    appVer=appApkPAI.versionName
-    --解压安装包
-    updateDoing(formatResStr(R.string.binpoject_unzip,{appFile.getName()}))
-    binDir.mkdirs()
-    LuaUtil.rmDir(tempDir)
-    LuaUtil.unZip(appPath,tempPath)
-    updateSuccess("Decompression completed")
-
-    updateDoing(getString(R.string.binpoject_copying))
-    rePackTool.buildLuaResources(config,projectPath,tempPath,updateInfo)
-    updateSuccess("Copy completed")
-
-    --todo:编译Lua
-    if config.compileLua~=false then
-      updateDoing(getString(R.string.binpoject_compiling))
-      autoCompileLua(tempDir)
-      updateSuccess("Compilation completed")
+    if not(appPath) then
+      return getString(R.string.binpoject_error_notfind)
     end
 
-    --压缩
-    newApkBaseName=appName.."_v"..appVer..os.date("_%Y%m%d%H%M%S")
-    newApkName=newApkBaseName..".apk"
-    newApkPath=binPath.."/"..newApkName
-    updateDoing(formatResStr(R.string.binpoject_zip,{newApkName}))
-    LuaUtil.zip(tempPath,binPath,newApkName)
-    updateSuccess("Compression completed")
+    --找到appPath，就告诉用户
 
+    local packageManager=activity.getPackageManager()
 
-    updateDoing(getString(R.string.binpoject_deleting))
-    LuaUtil.rmDir(tempDir)
-    updateSuccess("Delete completed")
+    appApkPAI=packageManager.getPackageArchiveInfo(appPath, PackageManager.GET_ACTIVITIES)
+    if appApkPAI then
+      --可以解析安装包
+      appApkInfo = appApkPAI.applicationInfo
+      appName=config.appName or getString(android.R.string.unknownName)
+      --appName=tostring(packageManager.getApplicationLabel(appApkInfo))
+      appVer=appApkPAI.versionName
 
-    --签名
-    if sign then
-      local signSucceed,signErr
-      local signedApkName=newApkBaseName.."_autosigned.apk"
-      local signedApkPath=binPath.."/"..signedApkName
-      if Signer then--有签名工具
-        updateDoing(formatResStr(R.string.binpoject_signing,{signedApkName}))
-        signSucceed,signErr=pcall(Signer.sign,newApkPath,signedApkPath)
-        updateSuccess("Signature completed")
+      local binEventsPaths={RePackTool.getALPathByProjectPath(projectPath).."/bin.lua"}
+      for _type,path in rePackTool.getSubprojectPathIterator(config,projectPath) do
+        if _type=="project" then
+          table.insert(binEventsPaths,RePackTool.getALPathByProjectPath(path).."/bin.lua")
+        end
       end
-      if signSucceed then--没有签名成功
-        File(newApkPath).delete()
-        return true,signedApkPath,projectPath,install
+      for index=1,#binEventsPaths do
+        local path=binEventsPaths[index]
+        if File(path).isFile() then
+          local success,binEvents=pcall(getConfigFromFile,path)
+          if success then
+            setmetatable(binEvents,{__index=_G})
+            table.insert(binEventsList,binEvents)
+           else
+            updateError(binEvents)
+          end
+        end
+      end
+      binEventsPaths=nil
+      --解压安装包
+      updateDoing(formatResStr(R.string.binpoject_unzip,{appFile.getName()}))
+      binDir.mkdirs()
+      LuaUtil.rmDir(tempDir)
+      LuaUtil.unZip(appPath,tempPath)
+      updateSuccess("Decompression completed")
+
+      updateDoing(getString(R.string.binpoject_copying))
+      rePackTool.buildLuaResources(config,projectPath,tempPath,updateInfo)
+      updateSuccess("Copy completed")
+
+      --todo:编译Lua
+      if config.compileLua~=false then
+        updateDoing(getString(R.string.binpoject_compiling))
+        autoCompileLua(tempDir)
+        updateSuccess("Compilation completed")
+      end
+
+
+      --压缩
+      newApkBaseName=appName.."_v"..appVer..os.date("_%Y%m%d%H%M%S")
+      newApkName=newApkBaseName..".apk"
+      newApkPath=binPath.."/"..newApkName
+      updateDoing(formatResStr(R.string.binpoject_zip,{newApkName}))
+      runBinEvent("beforePack",tempPath)
+      LuaUtil.zip(tempPath,binPath,newApkName)
+      updateSuccess("Compression completed")
+
+
+      updateDoing(getString(R.string.binpoject_deleting))
+      LuaUtil.rmDir(tempDir)
+      updateSuccess("Delete completed")
+
+      --签名
+      if sign then
+        local signSucceed,signErr
+        local signedApkName=newApkBaseName.."_autosigned.apk"
+        local signedApkPath=binPath.."/"..signedApkName
+        if Signer then--有签名工具
+          updateDoing(formatResStr(R.string.binpoject_signing,{signedApkName}))
+          signSucceed,signErr=pcall(Signer.sign,newApkPath,signedApkPath)
+          updateSuccess("Signature completed")
+        end
+        if signSucceed then--没有签名成功
+          File(newApkPath).delete()
+          return true,signedApkPath,projectPath,install
+         else
+          return formatResStr(R.string.binpoject_error_signer,{newApkPath})
+        end
        else
-        return formatResStr(R.string.binpoject_error_signer,{newApkPath})
+        return true,newApkPath,projectPath,false
       end
      else
-      return true,newApkPath,projectPath,false
+      --无法解析安装包
+      return formatResStr(R.string.binpoject_error_parse,{appFile.getName()})
     end
-   else
-    --无法解析安装包
-    return formatResStr(R.string.binpoject_error_parse,{appFile.getName()})
-  end
+  end)
 end
 
 local lastMessage
@@ -295,7 +339,7 @@ local function repackApk_update(message,state)
 end
 
 --二次打包回调
-local function repackApk_callback(message,apkPath,projectPath,install)
+local function repackApk_callback(success,message,apkPath,projectPath,install)
   --closeLoadingDia()
   repackApk_building=false
   local showingText=""
