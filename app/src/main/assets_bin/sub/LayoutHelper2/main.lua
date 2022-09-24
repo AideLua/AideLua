@@ -1,5 +1,5 @@
 require "import"
-import "Jesse205"
+import "jesse205"
 import "loadpreviewlayout"
 import "viewList"
 import "defaultLayout"

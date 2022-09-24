@@ -474,8 +474,6 @@ function EditorsManager.init()
 
   EditorsManager.symbolBar.refresh(oldEditorSymbolBar) -- 刷新符号栏状态
   --EditorsManager.switchEditor("NoneView")
-
-
 end
 
 

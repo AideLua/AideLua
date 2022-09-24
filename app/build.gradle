@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "com.Jesse205.aidelua2"
+        applicationId "com.jesse205.aidelua2"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 50499

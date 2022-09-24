@@ -1,10 +1,10 @@
 require "import"
-import "Jesse205"
+import "jesse205"
 import "android.text.SpannableString"
 import "android.text.style.ForegroundColorSpan"
 import "net.lingala.zip4j.ZipFile"
-import "com.Jesse205.layout.util.SettingsLayUtil"
-import "com.Jesse205.layout.innocentlayout.RecyclerViewLayout"
+import "com.jesse205.layout.util.SettingsLayUtil"
+import "com.jesse205.layout.innocentlayout.RecyclerViewLayout"
 import "settings"
 import "SettingsLayUtilPro"
 import "PluginsManagerUtil"
@@ -114,7 +114,7 @@ function refresh()
     for index=0,#fileList-1 do
       local file=fileList[index]
       if file.isDirectory() then--存在文件夹
-        local title,config,spannableSummary
+        local title,loadedConfig,config,spannableSummary
         local summary=""
         local summarySpanIndex={}
         local enableVer=false
@@ -125,12 +125,16 @@ function refresh()
         local initPath=path.."/init.lua"
         local icon=path.."/icon.png"
         local icon_night=path.."/icon-night.png"
-        if File(initPath).isFile() then--存在init.lua，是合法插件
-          config=getConfigFromFile(initPath)--init.lua内容
+        loadedConfig,config=pcall(getConfigFromFile,initPath)--init.lua内容
+        if loadedConfig then--存在init.lua，是合法插件
           if config.appname then
             title=config.appname
            else
             title=dirName
+          end
+          local description=config.description
+          if description and type(description)=="string" and description~="" then
+            summary=config.description.."\n"
           end
 
           --版本号
@@ -160,7 +164,7 @@ function refresh()
             summary=summary.."\n"..formatResStr(R.string.plugins_info_folderName,{dirName})
             summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,getString(R.string.plugins_warning_addPackageName))
           end
-
+        
           checked=PluginsUtil.getEnabled(dirName)
 
           local supports=config.supported2
@@ -187,11 +191,12 @@ function refresh()
           end
 
          else--不存在init.lua，是非法插件
-          config={}
           switchEnabled=false
           title=dirName
           summary=getString(R.string.plugins_error)
           table.insert(summarySpanIndex,{theme.color.Red,0,utf8.len(summary)})
+          summary=summary.."\n"..config
+          config={}
         end
 
         --处理文字

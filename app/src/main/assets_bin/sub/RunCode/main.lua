@@ -1,5 +1,5 @@
 require "import"
---import "Jesse205"
+--import "jesse205"
 
 activity.setTitle(luajava.bindClass(activity.getPackageName()..".R").string.runCode)
 activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true)

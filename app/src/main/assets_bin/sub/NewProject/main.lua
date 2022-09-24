@@ -1,5 +1,5 @@
 require "import"
-import "Jesse205"
+import "jesse205"
 import "androidx.viewpager.widget.ViewPager"
 import "androidx.viewpager.widget.PagerAdapter"
 import "androidx.appcompat.app.ActionBar$TabListener"
@@ -9,7 +9,8 @@ import "com.google.android.material.tabs.TabLayout"
 import "projectTemplateConfig"
 
 PluginsUtil.setActivityName("newproject")
-
+TEMPLATES_DIR_PATH=activity.getLuaDir("../../templates")--模板路径
+local nowConfig
 activity.setTitle(R.string.project_create)
 activity.setContentView(loadlayout2("layout"))
 actionBar.setDisplayHomeAsUpEnabled(true)
@@ -25,8 +26,14 @@ noButton.onClick=function()--取消按钮
   activity.finish()
 end
 
+creativeButton.onClick=function()--新建按钮
+  if nowConfig and nowConfig.onCreativePrj then
+    nowConfig.onCreativePrj(nowConfig.ids,nowConfig)
+  end
+end
 --templateType=getSharedData("templateType")
 
+PluginsUtil.callElevents("onLoadTemplateConfig", projectTemplateConfig)
 
 adapter=PagerAdapter({
   getCount=function()
@@ -42,6 +49,15 @@ adapter=PagerAdapter({
       view=loadlayout(config.layout,ids)
     end
     config.ids=ids
+    if config.templateDirPath then
+      config.templateDirPath=rel2AbsPath(config.templateDirPath,TEMPLATES_DIR_PATH)
+    end
+    if config.onInit then
+      local success,message=pcall(config.onInit,ids,config)
+      if not(success) then
+        showErrorDialog("Initialization error",message)
+      end
+    end
     container.addView(view)
     return view
   end,
@@ -51,7 +67,7 @@ adapter=PagerAdapter({
   isViewFromObject=function(view,object)
     return view==object
   end,
-  getPageWidth=function(width)
+  getPageWidth=function(position)
     return Float(1)
   end,
   getPageTitle=function(position)
@@ -66,7 +82,6 @@ tabLayout.setupWithViewPager(viewPager)
 
 viewPager.setOnPageChangeListener({
   onPageScrolled=function(position,positionOffset,positionOffsetPixels)
-    --print(position)
     if positionOffset>0.5 then
       bottomCardChild.setTranslationX(-(positionOffset*2-2)*math.dp2int(24))
      else
@@ -74,7 +89,7 @@ viewPager.setOnPageChangeListener({
     end
   end,
   onPageSelected=function(position)
-
+    nowConfig=projectTemplateConfig[position+1]
   end,
   onPageScrollStateChanged=function(state)
 

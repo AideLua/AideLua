@@ -1,12 +1,12 @@
 require "import"
-import "Jesse205"
+import "jesse205"
 import "com.google.android.material.chip.ChipGroup"
 import "com.google.android.material.chip.Chip"
 
 import "AndroluaProjectUtil"
 TemplatesDir=activity.getLuaDir("../../templates")--模板路径
 BaseTemplateConfig=getConfigFromFile(TemplatesDir.."/baseTemplate/config.lua")
-cannotBeEmptyStr=activity.getString(R.string.Jesse205_edit_error_cannotBeEmpty)
+cannotBeEmptyStr=activity.getString(R.string.jesse205_edit_error_cannotBeEmpty)
 
 NotAllowStr={"/","\\",":","*","\"","<",">","|","?","%."}--不允许出现的文字
 

@@ -1,10 +1,10 @@
 require "import"
-import "Jesse205"
+import "jesse205"
 import "licences"
 
 import "item"
 
-activity.setTitle(R.string.Jesse205_openSourceLicense)
+activity.setTitle(R.string.jesse205_openSourceLicense)
 activity.setContentView(loadlayout2("layout",_ENV))
 actionBar.setDisplayHomeAsUpEnabled(true)
 fileBasePath=activity.getLuaPath("../../licences/%s.txt")

@@ -232,6 +232,7 @@ function getFilePathCopyMenus(inLibDirPath,filePath,fileName,isFile,fileType)
   local textList={}
   local textCheckList={}
   if inLibDirPath then
+    addStrToTable(fileName,textList,textCheckList)
     addStrToTable(inLibDirPath,textList,textCheckList)
     local callLibPath=inLibDirPath
     if inLibDirPath:find("/") then

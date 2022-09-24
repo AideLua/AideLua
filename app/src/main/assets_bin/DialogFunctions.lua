@@ -1,4 +1,4 @@
-local cannotBeEmptyStr=getString(R.string.Jesse205_edit_error_cannotBeEmpty)
+local cannotBeEmptyStr=getString(R.string.jesse205_edit_error_cannotBeEmpty)
 local existsStr=getString(R.string.file_exists)
 
 function deleteFileDialog(name,file)

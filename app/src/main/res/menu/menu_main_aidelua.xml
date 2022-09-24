@@ -23,7 +23,7 @@
     <!--文件 子菜单-->
     <item
         android:id="@+id/subMenu_file"
-        app:showAsAction="@integer/Jesse205_menu_showAsAction_800dp"
+        app:showAsAction="@integer/jesse205_menu_showasaction_800dp"
         android:title="@string/file_popup" >
         <menu>
             <item
@@ -41,7 +41,7 @@
     <!--项目 子菜单-->
     <item
         android:id="@+id/subMenu_project"
-        app:showAsAction="@integer/Jesse205_menu_showAsAction_800dp"
+        app:showAsAction="@integer/jesse205_menu_showasaction_800dp"
         android:title="@string/project_popup">
         <menu>
             <item
@@ -68,7 +68,7 @@
     <!--代码 子菜单-->
     <item
         android:id="@+id/subMenu_code"
-        app:showAsAction="@integer/Jesse205_menu_showAsAction_600dp"
+        app:showAsAction="@integer/jesse205_menu_showasaction_600dp"
         android:title="@string/code_popup">
         <menu>
             <item
@@ -89,7 +89,7 @@
     <!--插件 子菜单-->
     <item
         android:id="@+id/subMenu_plugins"
-        app:showAsAction="@integer/Jesse205_menu_showAsAction_800dp"
+        app:showAsAction="@integer/jesse205_menu_showasaction_800dp"
         android:title="@string/plugins_popup">
         <menu>
         </menu>
@@ -98,7 +98,7 @@
     <!--工具 子菜单-->
     <item
         android:id="@+id/subMenu_tools"
-        app:showAsAction="@integer/Jesse205_menu_showAsAction_600dp"
+        app:showAsAction="@integer/jesse205_menu_showasaction_600dp"
         android:title="@string/tools_popup">
         <menu>
             <item
@@ -128,7 +128,7 @@
     <!--更多 子菜单-->
     <item
         android:id="@+id/subMenu_more"
-        app:showAsAction="@integer/Jesse205_menu_showAsAction_800dp"
+        app:showAsAction="@integer/jesse205_menu_showasaction_800dp"
         android:title="@string/more_popup">
         <menu>
             <item
@@ -139,7 +139,7 @@
                 android:title="@string/settings"/>
             <item
                 android:id="@+id/menu_more_about"
-                android:title="@string/Jesse205_about"/>
+                android:title="@string/jesse205_about"/>
         </menu>
     </item>
 

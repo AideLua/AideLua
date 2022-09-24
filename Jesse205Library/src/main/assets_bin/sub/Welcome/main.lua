@@ -1,11 +1,11 @@
 require "import"
 --useCustomAppToolbar=true
-import "Jesse205"
+import "jesse205"
 import "android.content.pm.PackageManager"
 import "android.text.Html"
 
-import "com.Jesse205.layout.util.SettingsLayUtil"
-import "com.Jesse205.widget.AutoToolbarLayout"
+import "com.jesse205.layout.util.SettingsLayUtil"
+import "com.jesse205.widget.AutoToolbarLayout"
 
 import "welcome"
 import "agreements"
@@ -69,7 +69,7 @@ end
 import "pages.agreementPage"
 import "pages.permissionPage"
 
-activity.setTitle(R.string.Jesse205_welcome)
+activity.setTitle(R.string.jesse205_welcome)
 activity.setContentView(loadlayout2("layout"))
 
 --toolbar=activity.findViewById(R.id.toolbar)
@@ -169,9 +169,9 @@ pageView.setOnPageChangeListener(PageView.OnPageChangeListener{
     local elevationKey=nowPage.elevationKey
     NowPage=nowPage
     if page+1==maxPage then
-      nextButton.setText(R.string.Jesse205_step_finish)
+      nextButton.setText(R.string.jesse205_step_finish)
      else
-      nextButton.setText(R.string.Jesse205_step_next)
+      nextButton.setText(R.string.jesse205_step_next)
     end
     if page==0 then
       previousButton.setClickable(false)

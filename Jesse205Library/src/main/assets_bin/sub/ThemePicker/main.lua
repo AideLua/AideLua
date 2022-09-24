@@ -1,9 +1,9 @@
 require "import"
-import "Jesse205"
-import "com.Jesse205.layout.innocentlayout.GridViewLayout"
+import "jesse205"
+import "com.jesse205.layout.innocentlayout.GridViewLayout"
 import "item"
 
-activity.setTitle(R.string.Jesse205_themePicker)
+activity.setTitle(R.string.jesse205_themePicker)
 activity.setContentView(loadlayout2(GridViewLayout))
 activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true)
 

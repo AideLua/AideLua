@@ -1,9 +1,9 @@
 require "import"
-import "Jesse205"
---import "com.Jesse205.FileInfoUtils"
-import "com.Jesse205.layout.util.SettingsLayUtil"
-import "com.Jesse205.layout.innocentlayout.RecyclerViewLayout"
-import "com.Jesse205.app.dialog.EditDialogBuilder"
+import "jesse205"
+--import "com.jesse205.FileInfoUtils"
+import "com.jesse205.layout.util.SettingsLayUtil"
+import "com.jesse205.layout.innocentlayout.RecyclerViewLayout"
+import "com.jesse205.app.dialog.EditDialogBuilder"
 packageInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
 PluginsUtil.setActivityName("settings")
 

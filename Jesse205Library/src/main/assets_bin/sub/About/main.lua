@@ -1,14 +1,14 @@
 require "import"
-import "Jesse205"
+import "jesse205"
 
-import "com.Jesse205.layout.util.SettingsLayUtil"
-import "com.Jesse205.app.dialog.ImageDialogBuilder"
+import "com.jesse205.layout.util.SettingsLayUtil"
+import "com.jesse205.app.dialog.ImageDialogBuilder"
 import "appAboutInfo"
 import "agreements"
 
 --local screenConfigDecoder,actionBar,Landscape,data,PackInfo,adp,layoutManager,Glide,topCardItems,appIconGroup,topCard,recyclerView,appBarElevationCard
 --Glide,activity,actionBar=_G.Glide,_G.activity,_G.actionBar
-activity.setTitle(R.string.Jesse205_about)
+activity.setTitle(R.string.jesse205_about)
 activity.setContentView(loadlayout2("layout",_ENV))
 actionBar.setDisplayHomeAsUpEnabled(true)
 
@@ -173,19 +173,19 @@ data={
 
   {--关于软件
     SettingsLayUtil.TITLE;
-    title=R.string.Jesse205_about_full;
+    title=R.string.jesse205_about_full;
   };
   {--软件版本
     SettingsLayUtil.ITEM;
-    title=R.string.Jesse205_nowVersion_app;
+    title=R.string.jesse205_nowVersion_app;
     summary=("%s (%s)"):format(packageInfo.versionName,packageInfo.versionCode);
     icon=R.drawable.ic_information_outline;
     key="update";
   };
   {--Jesse205Library版本
     SettingsLayUtil.ITEM;
-    title=R.string.Jesse205_nowVersion_jesse205Library;
-    summary=("%s (%s)"):format(Jesse205._VERSION,Jesse205._VERSIONCODE);
+    title=R.string.jesse205_nowVersion_jesse205Library;
+    summary=("%s (%s)"):format(jesse205._VERSION,jesse205._VERSIONCODE);
     icon=R.drawable.ic_information_outline;
   };
 }
@@ -207,7 +207,7 @@ end
 if developers or openSourceLicenses then
   table.insert(data,{
     SettingsLayUtil.TITLE;
-    title=R.string.Jesse205_developerInfo;
+    title=R.string.jesse205_developerInfo;
   })
 end
 
@@ -230,7 +230,7 @@ end
 if openSourceLicenses then
   table.insert(data,{
     SettingsLayUtil.ITEM_NOSUMMARY;
-    title=R.string.Jesse205_openSourceLicense;
+    title=R.string.jesse205_openSourceLicense;
     icon=R.drawable.ic_github;
     key="openSourceLicenses";
     newPage=true;
@@ -240,14 +240,14 @@ end
 --更多内容
 table.insert(data,{
   SettingsLayUtil.TITLE;
-  title=R.string.Jesse205_moreContent;
+  title=R.string.jesse205_moreContent;
 })
 
 --插入交流群
 if qqGroup then--单个交流群和多个交流群
   table.insert(data,{
     SettingsLayUtil.ITEM_NOSUMMARY;
-    title=R.string.Jesse205_qqGroup;
+    title=R.string.jesse205_qqGroup;
     icon=R.drawable.ic_account_group_outline;
     groupId=qqGroup;
     groups=qqGroups;
@@ -258,7 +258,7 @@ if qqGroup then--单个交流群和多个交流群
  elseif qqGroups then--多个交流群
   table.insert(data,{
     SettingsLayUtil.ITEM_NOSUMMARY;
-    title=R.string.Jesse205_qqGroups;
+    title=R.string.jesse205_qqGroups;
     icon=R.drawable.ic_account_group_outline;
     groups=qqGroups;
     key="qq_groups";
@@ -271,7 +271,7 @@ end
 if supportUrl or supportList then--支持项目
   table.insert(data,{
     SettingsLayUtil.ITEM_NOSUMMARY;
-    title=R.string.Jesse205_supportProject;
+    title=R.string.jesse205_supportProject;
     icon=R.drawable.ic_wallet_giftcard;
     supportUrl=supportUrl;
     supportList=supportList;
@@ -284,7 +284,7 @@ end
 if copyright then--版权信息
   table.insert(data,{
     SettingsLayUtil.ITEM;
-    title=R.string.Jesse205_copyright;
+    title=R.string.jesse205_copyright;
     summary=copyright;
     icon=R.drawable.ic_copyright;
     key="copyright";

@@ -1,7 +1,7 @@
 require "import"
-import "Jesse205"
-import "com.Jesse205.adapter.MyLuaAdapter"
-import "com.Jesse205.layout.MySearchLayout"
+import "jesse205"
+import "com.jesse205.adapter.MyLuaAdapter"
+import "com.jesse205.layout.MySearchLayout"
 
 import "getImportCode"
 import "showPackageMenu"

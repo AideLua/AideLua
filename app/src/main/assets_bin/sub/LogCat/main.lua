@@ -1,6 +1,6 @@
 require "import"
 isJesse205Activity=pcall(function()
-  import "Jesse205"
+  import "jesse205"
 end)
 isSupportActivity=pcall(function()
   androidx={appcompat={R=luajava.bindClass("androidx.appcompat.R")}}

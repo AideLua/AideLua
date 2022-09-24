@@ -290,7 +290,7 @@ function LuaEditorHelper.initKeys(editor,editorParent,pencilEdit,progressBar)
         utf8=String(getTableIndexList(utf8)),
         math=String(getTableIndexList(math)),
         theme=String(getTableIndexList(theme)),
-        Jesse205=String(getTableIndexList(Jesse205)),
+        jesse205=String(getTableIndexList(jesse205)),
         AppPath=String(getTableIndexList(AppPath)),
         MyToast=String(getTableIndexList(MyToast)),
       })

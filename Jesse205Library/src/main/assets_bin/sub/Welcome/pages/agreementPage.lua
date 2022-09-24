@@ -34,7 +34,7 @@ return function(title,icon,name,date)
       };
       {
         AppCompatCheckBox;
-        text=formatResStr(R.string.Jesse205_agreement_checkBox,{string.lower(activity.getString(title))});
+        text=formatResStr(R.string.jesse205_agreement_checkBox,{string.lower(activity.getString(title))});
         id="checkBox";
         layout_width="fill";
         layout_height="48dp";

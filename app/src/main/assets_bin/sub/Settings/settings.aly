@@ -1,19 +1,19 @@
 {
   {--界面
     SettingsLayUtil.TITLE;
-    title=R.string.Jesse205_ui;
+    title=R.string.jesse205_ui;
   };
   {
     SettingsLayUtil.ITEM_NOSUMMARY;
     icon=R.drawable.ic_tshirt_crew_outline;
-    title=R.string.Jesse205_themePicker;
+    title=R.string.jesse205_themePicker;
     key="theme_picker";
     newPage=true;
   };
   {
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
     icon=R.drawable.ic_theme_light_dark;
-    title=R.string.Jesse205_darkActionBar;
+    title=R.string.jesse205_darkActionBar;
     key="theme_darkactionbar";
     --enabled=false;
   };
@@ -171,7 +171,7 @@
 
   {--软件
     SettingsLayUtil.TITLE;
-    title=R.string.Jesse205_app;
+    title=R.string.jesse205_app;
   };
   {
     SettingsLayUtil.ITEM_SWITCH;
@@ -198,8 +198,8 @@
   {
     SettingsLayUtil.ITEM;
     icon=R.drawable.ic_information_outline;
-    title=R.string.Jesse205_about;
-    summary=formatResStr(R.string.Jesse205_nowVersion_full,{packageInfo.versionName,packageInfo.versionCode});
+    title=R.string.jesse205_about;
+    summary=formatResStr(R.string.jesse205_nowVersion_full,{packageInfo.versionName,packageInfo.versionCode});
     key="about";
     newPage=true;
   };

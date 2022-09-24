@@ -1,7 +1,7 @@
 {
-  title=R.string.Jesse205_permission_request;
+  title=R.string.jesse205_permission_request;
   icon=R.drawable.ic_account_key_outline;
-  subtitle=R.string.Jesse205_permission_tips;
+  subtitle=R.string.jesse205_permission_tips;
   elevationKey="LastActionBarElevation_permissionPage";
   layout={
     LinearLayoutCompat;
@@ -23,8 +23,8 @@
     end
     table.insert(permissionInformation,{
       icon=R.drawable.ic_check_all,
-      title=R.string.Jesse205_permission_requestAll;
-      summary=R.string.Jesse205_permission_requestAll_tips;
+      title=R.string.jesse205_permission_requestAll;
+      summary=R.string.jesse205_permission_requestAll_tips;
       permissions=luajava.astable(activity.getPackageManager().getPackageInfo(activity.getPackageName(),PackageManager.GET_PERMISSIONS).requestedPermissions);
     })
     for index,content in ipairs(permissionInformation) do

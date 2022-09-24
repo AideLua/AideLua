@@ -1,7 +1,7 @@
 {
   {
     name="AndroLua",
-    templateDirPath="AndroLua",
+    templateDirPath="AndroLua",--初始化时系统会自动转为绝对路径
     useLoadlayout2=true,
     layout={
       ScrollView;
@@ -35,7 +35,10 @@
         "simpleLibrariesLayout";
       };
     },
-    onInit=function(ids)
+    onInit=function(ids,config)
+      print(config.templateDirPath)
+    end,
+    onCreativePrj=function(ids,config)
     end
   },
   {

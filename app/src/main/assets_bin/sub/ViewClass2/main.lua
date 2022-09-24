@@ -1,5 +1,5 @@
 require "import"
-import "Jesse205"
+import "jesse205"
 local classStr=...
 success,class=pcall(luajava.bindClass,classStr)
 if not(success) then

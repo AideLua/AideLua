@@ -59,7 +59,7 @@ end
     name="Lua Activity (Jesse205)",
     fileType="lua",
     defaultContent=[[require "import"
-import "Jesse205"
+import "jesse205"
 
 activity.setTitle(R.string.app_name)
 activity.setContentView(loadlayout2("layout"))

@@ -1,7 +1,7 @@
 package.path=package.path..activity.getLuaPath("../JavaApi/?.lua;")
 require "import"
 --activity.setTheme(R.style.Theme_MaterialComponents_Light_DarkActionBar)
-import "Jesse205"
+import "jesse205"
 
 --import "android.animation.LayoutTransition"
 import "androidx.viewpager.widget.*"
@@ -9,7 +9,7 @@ import "com.google.android.material.tabs.*"
 import "com.google.android.material.appbar.AppBarLayout"
 import "com.google.android.material.textfield.*"
 
-import "com.Jesse205.adapter.MyLuaAdapter"
+import "com.jesse205.adapter.MyLuaAdapter"
 --import "SpannableStringUtil"
 
 import "item"
@@ -31,7 +31,7 @@ import "showConstructorMenu"
 import "showFieldMenu"
 import "showEventMenu"
 import "showMethodMenu"
-import "com.Jesse205.app.actionmode.SearchActionMode"
+import "com.jesse205.app.actionmode.SearchActionMode"
 PageItemLists={
   {},
   {},

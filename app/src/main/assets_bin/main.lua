@@ -1,6 +1,6 @@
 require "import"
 initApp = true -- 首页面，初始化
-require "Jesse205"
+require "jesse205"
 -- 检测是否需要进入欢迎页面
 import "agreements"
 welcomeAgain = not(getSharedData("welcome"))
@@ -40,12 +40,12 @@ import "com.bumptech.glide.load.engine.DiskCacheStrategy"
 import "com.nwdxlgzs.view.photoview.PhotoView"
 import "com.pixplicity.sharp.Sharp"
 
-import "com.Jesse205.layout.MyEditDialogLayout"
-import "com.Jesse205.app.actionmode.SearchActionMode"
-import "com.Jesse205.app.dialog.EditDialogBuilder"
-import "com.Jesse205.util.FileUtil"
-import "com.Jesse205.util.ScreenFixUtil"
-import "com.Jesse205.FileInfoUtils"
+import "com.jesse205.layout.MyEditDialogLayout"
+import "com.jesse205.app.actionmode.SearchActionMode"
+import "com.jesse205.app.dialog.EditDialogBuilder"
+import "com.jesse205.util.FileUtil"
+import "com.jesse205.util.ScreenFixUtil"
+import "com.jesse205.FileInfoUtils"
 
 import "AppFunctions" -- 必须先导入这个，因为下面的导入直接要用
 import "DialogFunctions"
@@ -85,7 +85,7 @@ PermissionUtil.smartRequestPermission({"android.permission.WRITE_EXTERNAL_STORAG
 ]]
 PermissionUtil.askForRequestPermissions({
   {
-    name=getString(R.string.Jesse205_permission_storage),
+    name=getString(R.string.jesse205_permission_storage),
     tool=getString(R.string.app_name),
     todo=getLocalLangObj("获取文件列表，读取文件和保存文件","get file list, read file and save file"),
     permissions={"android.permission.WRITE_EXTERNAL_STORAGE","android.permission.READ_EXTERNAL_STORAGE"};
@@ -141,8 +141,10 @@ function onCreate(savedInstanceState)
 
   if savedInstanceState then
     local prjPath=savedInstanceState.getString("prjpath")
+    local filePath=savedInstanceState.getString("filepath")
     local dirPath=savedInstanceState.getString("dirpath")
     data=prjPath
+    data2=filePath
     data3=dirPath
   end
   if data then
@@ -562,9 +564,12 @@ end
 
 function onSaveInstanceState(savedInstanceState)
   savedInstanceState.putBoolean("filebrowser_openstate",FilesBrowserManager.openState)
-  savedInstanceState.putString("prjpath",ProjectManager.nowPath)
   if ProjectManager.openState and FilesBrowserManager.directoryFile then
+    savedInstanceState.putString("prjpath",ProjectManager.nowPath)
     savedInstanceState.putString("dirpath",FilesBrowserManager.directoryFile.getPath())
+  end
+  if FilesTabManager.openState then
+    savedInstanceState.putString("filepath",FilesTabManager.file.getPath())
   end
 end
 

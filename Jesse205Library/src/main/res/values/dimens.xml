@@ -6,6 +6,6 @@
     <dimen name="mtrl_navigation_item_icon_size">24.0dip</dimen>
     <dimen name="mtrl_navigation_item_shape_horizontal_margin">8.0dip</dimen>
     <dimen name="mtrl_navigation_item_shape_vertical_margin">4.0dip</dimen>
-    <dimen name="Jesse205_padWidth">600dip</dimen>
-    <dimen name="Jesse205_pcWidth">800dip</dimen>
+    <dimen name="jesse205_width_pad">600dip</dimen>
+    <dimen name="jesse205_width_pc">800dip</dimen>
 </resources>

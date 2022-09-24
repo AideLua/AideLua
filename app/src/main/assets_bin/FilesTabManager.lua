@@ -14,6 +14,7 @@ FilesTabManager.openedFiles; FilesTabManager.getOpenedFiles(): table(map): 已�
      lowerPath="/path1.lua",
      edited=true,
      }
+   ...
    }
 FilesTabManager.openFile(file,fileType): 打开文件
   file: java.io.File: 要打开的文件

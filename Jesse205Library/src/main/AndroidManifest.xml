@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.Jesse205" >
+    package="com.jesse205" >
 
     <application>
         <activity
@@ -8,7 +8,7 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:exported="true"
-            android:name="com.Jesse205.activity.SettingsActivity">
+            android:name="com.jesse205.activity.SettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES"/>
                 <category android:name="android.intent.category.DEFAULT"/>

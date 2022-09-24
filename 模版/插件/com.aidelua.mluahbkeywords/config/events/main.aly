@@ -1,0 +1,37 @@
+{
+  onCreate=function(savedInstanceState)
+    local keywordsList=editorLayouts.LuaEditor.keywordsList
+    local packagesList=editorLayouts.LuaEditor.packagesList
+    keywordsList.mukWords=String({
+      --变量
+      "状态栏高度","型号","SDK版本","安卓版本","ROM类型","内部存储路径","应用版本名",
+
+      --函数
+      "状态栏颜色","导航栏颜色","沉浸状态栏","dp2px","px2dp","px2sp","sp2px",
+      "获取文件修改时间","写入文件","读取文件","复制文件","创建文件夹","创建文件",
+      "创建多级文件夹","文件是否存在","删除文件","文件修改时间","内置存储","获取系统夜间模式",
+      "主题","activity背景颜色","转0x","提示","Snakebar","随机数","设置视图","静态渐变",
+      "信息判断","波纹2","波纹","控件不可见","控件可见","对话框按钮颜色","控件隐藏","控件圆角",
+      "关闭对话框","单按钮对话框","双按钮对话框","解压缩","三按钮对话框","压缩","重命名文件",
+      "移动文件","跳转页面","渐变跳转页面","检测键盘","隐藏键盘","显示键盘","关闭页面","复制文本",
+      "QQ群","QQ","全屏","退出全屏","图标","高斯模糊","获取应用信息","编辑框颜色","下载文件",
+      "获取文件MIME","申请权限","判断悬浮窗权限","获取悬浮窗权限","安装apk","浏览器打开","设置图片",
+      "字体","开关颜色","微信扫一扫","支付宝扫一扫","支付宝捐赠","颜色字体","翻译","RL","MD5",
+      "MD5字符串","圆形图片","图片缩放","内置存储文件","MUKAPP文件","图标注释","获取信息",
+      "检查更新","HPageView","设置字体大小倍数","字体大小恢复","设置dpi","dpi恢复","加载对话框",
+      "加载对话框内容","双按钮对话框内容","JarToDex","loadBitmapFromViewBySystem","遍历设置文本",
+      "encodeBase64","decodeBase64","Http_upload","获取控件图片","保存图片","MEditText",
+
+      --包 由于包不能提示，所以需要单独添加
+      "mukactivity","muktable","mukutils"
+    })
+    packagesList.mukWords=Map({
+      mukactivity=String({"setData","setDataR","getData"}),
+      muktable=String({"pairsBySort","sort"}),
+      mukutils=String({"findIdxByValue","stringToTable","trim","split","getDistance",
+        "roundOff","reserveTwo","isCn","checkIsJpeg","mondayDays","shuffle"})
+    })
+
+
+  end,
+}

@@ -10,6 +10,11 @@ FilesBrowserManager.relLibPathsMatch.types: table(list): 支持匹配的文件�
 FilesBrowserManager.open(): 打开文件浏览器
 FilesBrowserManager.close(): 关闭文件浏览器
 FilesBrowserManager.switchState(): 切换文件浏览器开启状态
+FilesBrowserManager.refresh(file,upFile,force,atOnce): 刷新文件浏览器
+  file: java.io.File: 要刷新或者进入的文件夹
+  upFile: boolean: 是否是向上
+  force: boolean: 强制刷新
+  atOnce: boolean: 立刻显示进度条
 FilesBrowserManager.init(): 初始化管理器
 ]]
 local FilesBrowserManager = {}
@@ -242,6 +247,7 @@ end
 @param file 要刷新或者进入的文件夹
 @param upFile 是否是向上
 @param force 强制刷新
+@param atOnce 立刻显示进度条
 ]]
 local loadingFiles = false -- 正在加载文件列表
 function FilesBrowserManager.refresh(file,upFile,force,atOnce)
@@ -440,7 +446,7 @@ function FilesBrowserManager.init()
   recyclerView.setAdapter(adapter)
   layoutManager = LinearLayoutManager()
   recyclerView.setLayoutManager(layoutManager)
-  recyclerView.addOnScrollListener(RecyclerView.OnScrollListener {
+  recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
     onScrolled = function(view, dx, dy)
       MyAnimationUtil.RecyclerView.onScroll(view, dx, dy, sideAppBarLayout, "LastSideActionBarElevation")
   end})

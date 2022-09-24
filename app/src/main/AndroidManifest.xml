@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.Jesse205.aidelua2">
+    package="com.jesse205.aidelua2">
 
     <!-- 读取通话状态和移动网络信息 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
@@ -79,7 +79,7 @@
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize|stateHidden"
-            android:name="com.Jesse205.superlua.Main"
+            android:name="com.jesse205.superlua.Main"
             android:exported="true"
             android:theme="@style/Theme.Jesse205.Welcome">
             <intent-filter>
@@ -94,7 +94,7 @@
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:label="@string/app_name"
             android:exported="true"
-            android:name="com.Jesse205.superlua.LuaActivity"/>
+            android:name="com.jesse205.superlua.LuaActivity"/>
 
         <activity
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize"
@@ -103,13 +103,13 @@
             android:excludeFromRecents="false"
             android:label="@string/app_name"
             android:exported="true"
-            android:name="com.Jesse205.superlua.LuaActivityX"/>
+            android:name="com.jesse205.superlua.LuaActivityX"/>
 
         <activity
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:configChanges="mcc|mnc|locale|touchscreen|keyboard|navigation|screenLayout|fontScale|smallestScreenSize|keyboardHidden|orientation|screenSize"
-            android:name="com.Jesse205.superlua.Welcome"
+            android:name="com.jesse205.superlua.Welcome"
             android:theme="@style/Theme.Jesse205.Welcome"/>
 
         <service
@@ -117,7 +117,7 @@
             android:name="com.androlua.LuaService"/>
 
         <provider
-            android:authorities="com.Jesse205.aidelua2"
+            android:authorities="com.jesse205.aidelua2"
             android:exported="false"
             android:grantUriPermissions="true"
             android:name="android.content.FileProvider">

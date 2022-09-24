@@ -94,11 +94,11 @@ local function repackApk_taskFunc(config,projectPath,install,sign)
     require "import"
     config=luajava.astable(config,true)
     notLoadTheme=true
-    import "Jesse205"
+    import "jesse205"
     import "android.content.pm.PackageManager"
     import "net.lingala.zip4j.ZipFile"
     import "apksigner.*"
-    import "com.Jesse205.util.FileUtil"
+    import "com.jesse205.util.FileUtil"
     RePackTool=require "buildtools.RePackTool"
     local rePackTool=RePackTool.getRePackToolByConfig(config)
     local binEventsList={}

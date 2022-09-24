@@ -10,4 +10,5 @@ application下代码：am_application
 默认icon路径：appIcon
 默认导入：defaultImport
 Androlua版本：androluaVersion
-welcome信息：am_welcome_info
+welcome属性：am_welcome_info
+main属性：am_main_info

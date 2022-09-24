@@ -1,5 +1,5 @@
 require "import"
-import "Jesse205"
+import "jesse205"
 
 activity.setTitle(R.string.javaApiViewer)
 activity.setContentView(loadlayout2("layout"))

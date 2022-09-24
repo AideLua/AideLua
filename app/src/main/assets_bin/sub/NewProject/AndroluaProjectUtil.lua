@@ -21,7 +21,7 @@ function AndroluaProjectUtil.newProject(keys,BaseTemplateConfig,projectPath,Temp
   import "java.io.File"
   import "net.lingala.zip4j.ZipFile"
 
-  import "com.Jesse205.util.FileUtil"
+  import "com.jesse205.util.FileUtil"
   R=luajava.bindClass(activity.getPackageName()..".R")
 
   this.update(activity.getString(R.string.project_create_gathering))

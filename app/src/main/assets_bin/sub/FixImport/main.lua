@@ -1,6 +1,6 @@
 package.path=package.path..activity.getLuaPath("../JavaApi/?.lua;")
 require "import"
-import "Jesse205"
+import "jesse205"
 import "android.animation.Animator$AnimatorListener"
 import "androidx.coordinatorlayout.widget.CoordinatorLayout"
 import "com.google.android.material.floatingactionbutton.FloatingActionButton"
@@ -91,7 +91,7 @@ end
 function fiximport(code,packageName,application)
   require "import"
   notLoadTheme=true
-  import "Jesse205"
+  import "jesse205"
   --import "com.shixin.LuaLexer"
 
   local allClasses=application.get("classes_table_fiximport")

@@ -66,7 +66,7 @@
         layout_marginLeft="16dp";
         layout_marginRight="16dp";
         id="previousButton";
-        text=R.string.Jesse205_step_previous;
+        text=R.string.jesse205_step_previous;
         --textColor=theme.color.textColorPrimary;
         --rippleColor=ColorStateList({{}},{theme.color.rippleColorPrimary});
         --textSize="14sp";
@@ -84,7 +84,7 @@
         layout_marginLeft="16dp";
         layout_marginRight="16dp";
         id="nextButton";
-        text=R.string.Jesse205_step_next;
+        text=R.string.jesse205_step_next;
         --textSize="14sp";
       };
     };

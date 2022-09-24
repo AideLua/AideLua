@@ -1,5 +1,5 @@
 require "import"
-import "Jesse205"
+import "jesse205"
 import "com.google.android.material.appbar.*"
 import "com.google.android.material.behavior.*"
 import "com.google.android.material.bottomappbar.*"
@@ -20,7 +20,7 @@ import "androidx.swiperefreshlayout.widget.SwipeRefreshLayout"
 import "androidx.viewpager.widget.ViewPager"
 import "android.util.*"
 
-import "com.Jesse205.layout.MyEditDialogLayout"
+import "com.jesse205.layout.MyEditDialogLayout"
 
 import "loadpreviewlayout"
 require "xml2table"

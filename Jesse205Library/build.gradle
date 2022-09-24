@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 120399
-        versionName "12.0.3 (Pro)"
+        versionCode 121099
+        versionName "12.1.0 (Pro)"
     }
     buildTypes {
         release {

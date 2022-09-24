@@ -140,7 +140,7 @@
     },
     supportScroll=true;
     defaultText=[[require "import"
-import "Jesse205"
+import "jesse205"
 
 ]],
     --将要添加到LuaEditor的关键词列表
@@ -188,7 +188,7 @@ import "Jesse205"
 
       "AppPath","ThemeUtil","EditDialogBuilder","ImageDialogBuilder",
       "NetErrorStr","MyToast","AutoToolbarLayout","PermissionUtil",
-      "AutoCollapsingToolbarLayout","SettingsLayUtil","Jesse205",
+      "AutoCollapsingToolbarLayout","SettingsLayUtil","jesse205",
       "StyleWidget","ScreenFixUtil",
 
       --自定义View或者Util

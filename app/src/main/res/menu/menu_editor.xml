@@ -23,7 +23,7 @@
         android:title="@android:string/paste"/>
     <item
         android:id="@+id/subMenu_code"
-        app:showAsAction="@integer/Jesse205_menu_showAsAction_600dp"
+        app:showAsAction="@integer/jesse205_menu_showasaction_600dp"
         android:title="@string/code_popup">
         <menu>
             <item

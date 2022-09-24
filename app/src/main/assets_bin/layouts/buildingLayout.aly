@@ -44,7 +44,7 @@
         {
           TextView;
           id="stateTextView";
-          text=R.string.Jesse205_loading;
+          text=R.string.jesse205_loading;
           layout_width="fill";
           textColor=theme.color.textColorPrimary;
           textSize="16sp";
