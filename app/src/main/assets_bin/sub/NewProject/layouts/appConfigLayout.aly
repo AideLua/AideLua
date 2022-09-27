@@ -4,6 +4,7 @@
   layout_width="fill";
   layout_marginLeft="8dp";
   layout_marginRight="8dp";
+  layoutTransition=newLayoutTransition();
   MyTextInputLayout.Builder{
     id="appNameLay";
     layout_width="fill";

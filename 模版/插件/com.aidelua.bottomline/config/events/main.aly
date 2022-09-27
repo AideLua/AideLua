@@ -1,0 +1,6 @@
+{
+  onCreate=function(savedInstanceState)
+    -- 从这里开始写
+    bottomAppBarLinearLayout.addView(loadlayout2({View;layout_width="fill",layout_height="2dp",backgroundColor=theme.color.colorAccent}))
+  end,
+}

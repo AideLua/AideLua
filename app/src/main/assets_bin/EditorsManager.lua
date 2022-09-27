@@ -72,7 +72,7 @@ EditorsManager.toCustomEditorView=toCustomEditorView
 MyLuaEditor=toCustomEditorView(LuaEditor)
 MyCodeEditor=toCustomEditorView(CodeEditor)
 
-import "layouts.editorLayouts"
+import "editorLayouts"
 --将要添加到LuaEditor的关键词列表
 --EditorsManager.keyWordsList={}
 
@@ -485,6 +485,7 @@ EditorsManager.symbolBar=symbolBar
 function symbolBar.psButtonClick(view)
   local text=view.text
   EditorsManager.actions.paste(text)
+  view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
 end
 
 --初始化一个符号栏按钮

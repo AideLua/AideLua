@@ -35,6 +35,31 @@ function onOptionsItemSelected(item)
     openUrl("https://gitee.com/Jesse205/AideLua/wikis/插件说明/readme")
   end
 end
+function onCreateContextMenu(menu,view,menuInfo)
+  local tag=view.tag
+  if tag and type(tag)=="table" then
+    local data=tag._data
+    tag._data=nil
+    if tag._type=="itemview" and data.contextMenuEbaled then
+      local key=data.key
+      if key=="plugin_item" then
+        menu.setHeaderTitle(data.title)
+
+        local config=data.config
+        menu.add(R.string.plugins_uninstall).onMenuItemClick=function()
+          PluginsManagerUtil.uninstall(data.path,config,function(state)
+            if state=="success" then
+              MyToast(R.string.uninstall_success)
+              refresh()
+             elseif state=="failed" then
+              MyToast(R.string.uninstall_failed)
+            end
+          end)
+        end
+      end
+    end
+  end
+end
 
 function onActivityResult(requestCode,resultCode,data)
   if resultCode==Activity.RESULT_OK then
@@ -80,7 +105,9 @@ function onItemClick(view,views,key,data)
 end
 
 function onItemLongClick(view,views,key,data)
-  if key=="plugin_item" then
+  recyclerView.tag._data=data
+  --[[
+ if key=="plugin_item" then
     local config=data.config
     local pop=PopupMenu(activity,view)
     local menu=pop.Menu
@@ -95,7 +122,7 @@ function onItemLongClick(view,views,key,data)
       end)
     end
     pop.show()
-  end
+  end]]
 end
 
 function addSummaryTextLine(summarySpanIndex,color,oldSummary,summary)
@@ -164,7 +191,7 @@ function refresh()
             summary=summary.."\n"..formatResStr(R.string.plugins_info_folderName,{dirName})
             summary=addSummaryTextLine(summarySpanIndex,"Orange",summary,getString(R.string.plugins_warning_addPackageName))
           end
-        
+
           checked=PluginsUtil.getEnabled(dirName)
 
           local supports=config.supported2
@@ -231,6 +258,7 @@ function refresh()
           enableVer=enableVer,
           dirName=dirName,
           path=path,
+          contextMenuEbaled=true,
         })
       end
     end
@@ -249,6 +277,8 @@ adapter=SettingsLayUtil.newAdapter(settings2,onItemClick,onItemLongClick)
 recyclerView.setAdapter(adapter)
 layoutManager=LinearLayoutManager()
 recyclerView.setLayoutManager(layoutManager)
+recyclerView.setTag({_type="itemview"})
+activity.registerForContextMenu(recyclerView)
 recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
   onScrolled=function(view,dx,dy)
     MyAnimationUtil.RecyclerView.onScroll(view,dx,dy)

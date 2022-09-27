@@ -123,12 +123,14 @@ function refreshState(refreshType,state)
 end
 
 --整合keys
-function buildkeys()
-  local keys=table.clone(defaultKeys)
+function buildkeys(defaultPrjConfig)
+  
+  local keys=table.clone(defaultPrjConfig)
   local dependenciesEnd=keys.dependenciesEnd
   local keysLists={}
   local pluginsList={}
-  local androidX=androidXSwitch.isChecked()
+  local androidX=selfPrjConfig
+
 
   if androidX then
     table.insert(dependenciesEnd,"api 'androidx.appcompat:appcompat:1.0.0'")
@@ -153,11 +155,11 @@ function buildkeys()
       end
     end
   end
-  keys.androidX=androidX
-  keys.appName=appNameEdit.text
-  keys.appPackageName=packageNameEdit.text
-  keys.androluaVersion=androluaVersion[1]
-  keys.androluaVersionCode=androluaVersion[2]
+  --keys.androidX=androidX
+  --keys.appName=appNameEdit.text
+  --keys.appPackageName=packageNameEdit.text
+  --keys.androluaVersion=androluaVersion[1]
+  --keys.androluaVersionCode=androluaVersion[2]
 
   return keys
 end

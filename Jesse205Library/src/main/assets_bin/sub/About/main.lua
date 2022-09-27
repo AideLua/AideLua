@@ -28,6 +28,25 @@ function onOptionsItemSelected(item)
   end
 end
 
+function onCreateContextMenu(menu,view,menuInfo)
+  local tag=view.tag
+  if tag and type(tag)=="table" then
+    local data=tag._data
+    tag._data=nil
+    if tag._type=="itemview" and data.contextMenuEbaled then
+      local key=data.key
+      if (key=="qq_groups" or key=="qq_group") and data.groups then--多个QQ群
+        showQQGroupMenu(data,menu)
+       elseif key=="support" then
+        local supportList=data.supportList
+        if supportList then
+          showSupportMenu(data,menu)
+        end
+      end
+    end
+  end
+end
+
 --获取QQ头像链接
 function getUserAvatarUrl(qq,size)
   return ("http://q.qlogo.cn/headimg_dl?spec=%s&img_type=jpg&dst_uin=%s"):format(size or 640,qq)
@@ -37,42 +56,44 @@ end
 function joinQQGroup(groupNumber)
   local uri=Uri.parse(("mqqapi://card/show_pslcard?src_type=internal&version=1&uin=%s&card_type=group&source=qrcode"):format(groupNumber))
   if not(pcall(activity.startActivity,Intent(Intent.ACTION_VIEW,uri))) then
-    MyToast(R.string.Jesse205_noQQ)
+    MyToast(R.string.jesse205_noQQ)
   end
 end
 
-function showQQGroupMenu(data)
-  local popupMenu=data.popupMenu
-  if data.needInitMenu then
-    local menu=popupMenu.getMenu()
-    for index,content in ipairs(data.groups) do
-      menu.add(content.name).onMenuItemClick=function()
-        joinQQGroup(content.id)
-      end
-    end
-    data.needInitMenu=false
+function showQQGroupMenu(data,menu)
+  menu.setHeaderTitle(data.title)
+  local groups=data.groups
+  for index,content in ipairs(groups) do
+    menu.add(0,index,0,content.name)
   end
-  popupMenu.show()
+  menu.setCallback({
+    onMenuItemSelected=function(menu,item)
+      local id=item.getItemId()
+      local content=groups[id]
+      joinQQGroup(content.id)
+    end
+  })
 end
 
-function showSupportMenu(data,supportList)
-  local popupMenu=data.popupMenu
-  if data.needInitMenu then
-    local menu=popupMenu.getMenu()
-    for index,content in ipairs(supportList) do
-      menu.add(content.name).onMenuItemClick=function()
-        local url=content.url
-        local func=content.func
-        if func then
-          func()
-         elseif url then
-          openUrl(url)
-        end
+function showSupportMenu(data,menu)
+  local supportList=data.supportList
+  menu.setHeaderTitle(data.title)
+  for index,content in ipairs(supportList) do
+    menu.add(0,index,0,content.name)
+  end
+  menu.setCallback({
+    onMenuItemSelected=function(menu,item)
+      local id=item.getItemId()
+      local content=supportList[id]
+      local url=content.url
+      local func=content.func
+      if func then
+        func()
+       elseif url then
+        openUrl(url)
       end
     end
-    data.needInitMenu=false
-  end
-  popupMenu.show()
+  })
 end
 
 function onItemClick(view,views,key,data)
@@ -81,7 +102,10 @@ function onItemClick(view,views,key,data)
    elseif key=="qq_group" then--单个QQ群
     joinQQGroup(data.groupId)
    elseif key=="qq_groups" then--多个QQ群
-    showQQGroupMenu(data)
+    --showQQGroupMenu(data)
+    recyclerView.tag._data=data
+    recyclerView.showContextMenu()
+
    elseif key=="html" then
     newSubActivity("HtmlFileViewer",{{title=data.title,path=data.path}})
    elseif key=="openSourceLicenses" then
@@ -90,7 +114,9 @@ function onItemClick(view,views,key,data)
     local supportUrl=data.supportUrl
     local supportList=data.supportList
     if supportList then
-      showSupportMenu(data,supportList)
+      recyclerView.tag._data=data
+      recyclerView.showContextMenu()
+      --showSupportMenu(data,supportList)
      elseif supportUrl then
       openUrl(supportUrl)
     end
@@ -98,16 +124,7 @@ function onItemClick(view,views,key,data)
 end
 
 function onItemLongClick(view,views,key,data)
-  if key=="qq_groups" or (key=="qq_group" and data.groups) then--多个QQ群
-    showQQGroupMenu(data)
-    return true
-   elseif key=="support" then
-    local supportList=data.supportList
-    if supportList then
-      showSupportMenu(data,supportList)
-      return true
-    end
-  end
+  recyclerView.tag._data=data
 end
 
 function onConfigurationChanged(config)
@@ -253,7 +270,7 @@ if qqGroup then--单个交流群和多个交流群
     groups=qqGroups;
     key="qq_group";
     newPage="newApp";
-    popupMenu=toboolean(qqGroups);
+    contextMenuEbaled=toboolean(qqGroups);
   })
  elseif qqGroups then--多个交流群
   table.insert(data,{
@@ -262,7 +279,7 @@ if qqGroup then--单个交流群和多个交流群
     icon=R.drawable.ic_account_group_outline;
     groups=qqGroups;
     key="qq_groups";
-    popupMenu=true;
+    contextMenuEbaled=true;
   })
 end
 
@@ -277,7 +294,7 @@ if supportUrl or supportList then--支持项目
     supportList=supportList;
     key="support";
     newPage=supportNewPage;
-    popupMenu=toboolean(supportList);
+    contextMenuEbaled=toboolean(supportList);
   })
 end
 
@@ -317,6 +334,8 @@ adapter=LuaCustRecyclerAdapter(AdapterCreator({
 layoutManager=LinearLayoutManager()
 recyclerView.setAdapter(adapter)
 recyclerView.setLayoutManager(layoutManager)
+recyclerView.setTag({_type="itemview"})
+activity.registerForContextMenu(recyclerView)
 
 recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
   onScrolled=function(view,dx,dy)

@@ -67,8 +67,8 @@ import "layouts.buildingLayout"
 
 --import "sub.LayoutHelper2.loadpreviewlayout"
 
-import "layouts.FileDecoders"
-import "layouts.FileTemplates"
+import "FileDecoders"
+import "FileTemplates"
 
 import "adapter.FileListAdapter"
 import "adapter.FilePathAdapter"
@@ -305,6 +305,18 @@ function onOptionsItemSelected(item)
   end
   PluginsUtil.callElevents("onOptionsItemSelected", item)
 end
+
+function onCreateContextMenu(menu,view,menuInfo)
+  local tag=view.tag
+  if tag and type(tag)=="table" and tag._type=="filebrowser" then
+    FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
+  end
+end
+
+--[[
+function onContextItemSelected(item)
+  print(item.getClass())
+end]]
 
 function onKeyShortcut(keyCode, event)
   --print(keyCode)

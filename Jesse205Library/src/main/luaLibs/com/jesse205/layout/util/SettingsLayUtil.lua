@@ -1,5 +1,6 @@
 local SettingsLayUtil={}
 import "com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions"
+local contextMenuEnabled
 
 SettingsLayUtil.TITLE=1
 SettingsLayUtil.ITEM=2
@@ -238,12 +239,6 @@ local function onItemViewClick(view)
       setSharedData(data.key,checked)
     end
   end
-  local popupMenu=data.popupMenu
-  if popupMenu==true then
-    popupMenu=PopupMenu(activity,view)
-    data.popupMenu=popupMenu
-    data.needInitMenu=true
-  end
 
   if onItemClick then
     onItemClick(view,ids,key,data)
@@ -413,9 +408,6 @@ local adapterEvents={
         end
       end
     end
-    if data.popupMenu then
-      data.popupMenu=true
-    end
     viewConfig.allowedChange=true
   end,
 }
@@ -437,5 +429,6 @@ function SettingsLayUtil.newAdapter(data,onItemClick,onItemLongClick)
     end,
   }))
 end
+
 
 return SettingsLayUtil

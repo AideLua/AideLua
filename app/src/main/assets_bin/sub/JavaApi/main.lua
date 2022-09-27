@@ -7,6 +7,7 @@ import "getImportCode"
 import "showPackageMenu"
 
 import "item"
+PluginsUtil.setActivityName("javaapi")
 
 searchWord=...
 searchWord=tostring(searchWord)
@@ -20,6 +21,7 @@ activity.setContentView(loadlayout2("layout"))
 searching=false
 
 function onCreate()
+  PluginsUtil.callElevents("onCreate", savedInstanceState)
   local trueWord=""
   if searchWord then
     trueWord=searchWord.."$"

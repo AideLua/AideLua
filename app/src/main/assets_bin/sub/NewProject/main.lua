@@ -6,13 +6,23 @@ import "androidx.appcompat.app.ActionBar$TabListener"
 import "com.google.android.material.chip.ChipGroup"
 import "com.google.android.material.chip.Chip"
 import "com.google.android.material.tabs.TabLayout"
+
+import "NewProjectUtil2"
+import "NewProjectUtil"
 import "projectTemplateConfig"
 
 PluginsUtil.setActivityName("newproject")
-TEMPLATES_DIR_PATH=activity.getLuaDir("../../templates")--模板路径
-local nowConfig
+--[[
+for index=1,#projectTemplateConfig do
+  projectTemplateConfig[index].index=index
+end]]
+defaultPrjConfig=NewProjectUtil2.readConfig("default.lua")
+
+local pagePosition=getSharedData("newProject_pagePosition") or 0
+local nowConfig=projectTemplateConfig[pagePosition+1]
+
 activity.setTitle(R.string.project_create)
-activity.setContentView(loadlayout2("layout"))
+activity.setContentView(loadlayout2("layouts.layout"))
 actionBar.setDisplayHomeAsUpEnabled(true)
 
 function onOptionsItemSelected(item)
@@ -26,10 +36,30 @@ noButton.onClick=function()--取消按钮
   activity.finish()
 end
 
-creativeButton.onClick=function()--新建按钮
-  if nowConfig and nowConfig.onCreativePrj then
-    nowConfig.onCreativePrj(nowConfig.ids,nowConfig)
+createButton.onClick=function(view)--新建按钮
+  if not(nowConfig) then
+    return
   end
+  if nowConfig.checkAppConfig then
+    local ids=nowConfig.ids
+
+    local appName=ids.appNameEdit.text
+    local packageName=ids.packageNameEdit.text
+
+    local appNameLay=ids.appNameLay
+    local packageNameLay=ids.packageNameLay
+
+    if NewProjectUtil.checkAppConfigError(appName,packageName,appNameLay,packageNameLay,nowConfig,view) then
+      return
+    end
+  end
+  --NewProjectUtil2.readConfig(path)
+  local keys=NewProjectUtil.buildkeys(defaultPrjConfig,nowConfig)
+
+  if nowConfig.onCreativePrj then
+    nowConfig.onCreativePrj(nowConfig.ids,nowConfig,keys)
+  end
+
 end
 --templateType=getSharedData("templateType")
 
@@ -50,13 +80,35 @@ adapter=PagerAdapter({
     end
     config.ids=ids
     if config.templateDirPath then
-      config.templateDirPath=rel2AbsPath(config.templateDirPath,TEMPLATES_DIR_PATH)
+      config.templateDirPath=rel2AbsPath(config.templateDirPath,NewProjectUtil2.TEMPLATES_DIR_PATH)
     end
     if config.onInit then
       local success,message=pcall(config.onInit,ids,config)
       if not(success) then
         showErrorDialog("Initialization error",message)
       end
+    end
+    if config.checkAppConfig then
+      local appNameEdit=ids.appNameEdit
+      local packageNameEdit=ids.packageNameEdit
+      appNameEdit.text=defaultPrjConfig.appName
+      packageNameEdit.text=defaultPrjConfig.appPackageName
+      appNameEdit.addTextChangedListener({
+        onTextChanged=function(text,start,before,count)
+          NewProjectUtil.checkAppName(tostring(text),ids.appNameLay,config)
+          if position==pagePosition then
+            NewProjectUtil.refreshCreateEnabled(config,createButton)
+          end
+        end
+      })
+      packageNameEdit.addTextChangedListener({
+        onTextChanged=function(text,start,before,count)
+          NewProjectUtil.checkPackageName(tostring(text),ids.packageNameLay,config)
+          if position==pagePosition then
+            NewProjectUtil.refreshCreateEnabled(config,createButton)
+          end
+        end
+      })
     end
     container.addView(view)
     return view
@@ -68,7 +120,7 @@ adapter=PagerAdapter({
     return view==object
   end,
   getPageWidth=function(position)
-    return Float(1)
+    return float(1)
   end,
   getPageTitle=function(position)
     local config=projectTemplateConfig[position+1]
@@ -77,24 +129,44 @@ adapter=PagerAdapter({
     end
   end
 })
+
+NewProjectUtil.refreshCreateEnabled(nowConfig,createButton)
+
 viewPager.setAdapter(adapter)
 tabLayout.setupWithViewPager(viewPager)
-
+viewPager.setCurrentItem(pagePosition)
 viewPager.setOnPageChangeListener({
   onPageScrolled=function(position,positionOffset,positionOffsetPixels)
-    if positionOffset>0.5 then
-      bottomCardChild.setTranslationX(-(positionOffset*2-2)*math.dp2int(24))
-     else
+    local newPagePosition
+    if positionOffset<0.5 then
       bottomCardChild.setTranslationX(-(positionOffset*2)*math.dp2int(24))
+      --bottomCardChild.setTranslationX(-positionOffsetPixels)
+      newPagePosition=position
+     else
+      bottomCardChild.setTranslationX(-(positionOffset*2-2)*math.dp2int(24))
+      --bottomCardChild.setTranslationX(activity.getWidth()-positionOffsetPixels)
+      newPagePosition=position+1
     end
+    if pagePosition~=newPagePosition then
+      pagePosition=newPagePosition
+      setSharedData("newProject_pagePosition",newPagePosition)
+      nowConfig=projectTemplateConfig[newPagePosition+1]
+
+      NewProjectUtil.refreshCreateEnabled(nowConfig,createButton)
+      if nowConfig.onSelected then
+        nowConfig.onSelected(nowConfig.ids,nowConfig)
+      end
+    end
+
   end,
   onPageSelected=function(position)
-    nowConfig=projectTemplateConfig[position+1]
   end,
   onPageScrollStateChanged=function(state)
 
   end
 })
+
+
 --print(projectTemplateConfig)
 
 

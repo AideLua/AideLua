@@ -1,4 +1,4 @@
-appVersions={"aide_2.1"}--所有app版本号
+appVersions={"2.1"}--所有app版本号
 format={
   "settings.gradle",
   "gradle.properties",

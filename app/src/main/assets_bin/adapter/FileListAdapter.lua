@@ -40,7 +40,8 @@ end
 local function onLongClick(view)
   local tag=view.tag
   local data=tag._data
-
+  recyclerView.tag._data=data
+  --[==[
   if data.position~=0 then
     local file=data.file
     local filePath=data.filePath
@@ -81,6 +82,9 @@ local function onLongClick(view)
     --local popupMenu=PopupMenu(activity,view)
     --local popupMenu=data.popupMenu
     --if data.needInitMenu then
+    --view.showContextMenu()
+    --activity.registerForContextMenu(view)
+    --[[
     local popupMenu=PopupMenu(activity,view)
     popupMenu.inflate(R.menu.menu_main_file)
     local menu=popupMenu.getMenu()
@@ -117,10 +121,10 @@ local function onLongClick(view)
     --data.needInitMenu=false
     --end
     popupMenu.show()
-
+]]
     --tag.menuTouchListener.onTouch
-    return true
-  end
+    --return true
+  end]==]
 end
 
 local function fileMoreMenuClick(view)
@@ -156,7 +160,7 @@ return function(item)
       return son1[position] or son1._else
     end,
     onCreateViewHolder=function(parent,viewType)
-      local ids={}
+      local ids={_type="filebrowser"}
       local view=loadlayout2(item[viewType],ids)
       local holder=LuaCustRecyclerHolder(view)
       view.setTag(ids)
@@ -164,6 +168,10 @@ return function(item)
       view.onClick=onClick
       view.onLongClick=onLongClick
       --view.onContextClick=onLongClick
+      --[[
+      if viewType~=3 and viewType~=1 then
+        activity.registerForContextMenu(view)
+      end]]
       if viewType==3 then
         local moreView=ids.more
         local iconView=ids.icon

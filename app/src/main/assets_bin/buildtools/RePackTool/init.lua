@@ -215,7 +215,7 @@ local function repackApk_taskFunc(config,projectPath,install,sign)
       appApkInfo = appApkPAI.applicationInfo
       appName=config.appName or getString(android.R.string.unknownName)
       --appName=tostring(packageManager.getApplicationLabel(appApkInfo))
-      appVer=appApkPAI.versionName
+      appVer=config.versionName or appApkPAI.versionName
 
       local binEventsPaths={RePackTool.getALPathByProjectPath(projectPath).."/bin.lua"}
       for _type,path in rePackTool.getSubprojectPathIterator(config,projectPath) do
@@ -241,17 +241,17 @@ local function repackApk_taskFunc(config,projectPath,install,sign)
       binDir.mkdirs()
       LuaUtil.rmDir(tempDir)
       LuaUtil.unZip(appPath,tempPath)
-      updateSuccess("Decompression completed")
+      updateSuccess(getString(R.string.binpoject_unzip_done))
 
       updateDoing(getString(R.string.binpoject_copying))
       rePackTool.buildLuaResources(config,projectPath,tempPath,updateInfo)
-      updateSuccess("Copy completed")
+      updateSuccess(getString(R.string.binpoject_copy_done))
 
       --todo:编译Lua
       if config.compileLua~=false then
         updateDoing(getString(R.string.binpoject_compiling))
         autoCompileLua(tempDir)
-        updateSuccess("Compilation completed")
+        updateSuccess(getString(R.string.binpoject_compile_done))
       end
 
 
@@ -262,12 +262,12 @@ local function repackApk_taskFunc(config,projectPath,install,sign)
       updateDoing(formatResStr(R.string.binpoject_zip,{newApkName}))
       runBinEvent("beforePack",tempPath)
       LuaUtil.zip(tempPath,binPath,newApkName)
-      updateSuccess("Compression completed")
+      updateSuccess(getString(R.string.binpoject_zip_done))
 
 
       updateDoing(getString(R.string.binpoject_deleting))
       LuaUtil.rmDir(tempDir)
-      updateSuccess("Delete completed")
+      updateSuccess(getString(R.string.binpoject_delete_done))
 
       --签名
       if sign then
@@ -277,7 +277,7 @@ local function repackApk_taskFunc(config,projectPath,install,sign)
         if Signer then--有签名工具
           updateDoing(formatResStr(R.string.binpoject_signing,{signedApkName}))
           signSucceed,signErr=pcall(Signer.sign,newApkPath,signedApkPath)
-          updateSuccess("Signature completed")
+          updateSuccess(getString(R.string.binpoject_sign_done))
         end
         if signSucceed then--没有签名成功
           File(newApkPath).delete()
@@ -315,6 +315,7 @@ local function repackApk_update(message,state)
      elseif lastMessage=="success" then
       icon=R.drawable.ic_check
       iconColor=theme.color.Green
+      buildingDiaIds.stateTextView.text=message
      elseif lastMessage=="error" then
       icon=R.drawable.ic_close
       iconColor=theme.color.Red
@@ -347,7 +348,7 @@ local function repackApk_callback(success,message,apkPath,projectPath,install)
   local negativeButton=buildingDialog.getButton(AlertDialog.BUTTON_NEGATIVE)
   buildingDialog.setCancelable(true)
   if message==true then
-    local shortApkPath=activity.getString(R.string.project)..ProjectManager.shortPath(apkPath,true,projectPath)--转换成相对路径
+    local shortApkPath=activity.getString(R.string.project).."/"..ProjectManager.shortPath(apkPath,true,projectPath)--转换成相对路径
     if install then
       showingText=formatResStr(R.string.binpoject_state_succeed_with_path,{shortApkPath})
       positiveButton.setVisibility(View.VISIBLE)
@@ -362,13 +363,6 @@ local function repackApk_callback(success,message,apkPath,projectPath,install)
     end
     repackApk_update("success")
     repackApk_update(showingText,true)
-    --[[
-   local snackbar=showSnackBar(showingText)
-    if install then
-      snackbar.setAction(R.string.install, function(view)
-        activity.installApk(apkPath)
-      end)
-    end]]
    else
     showingText=message or activity.getString(R.string.unknowError)
     repackApk_update("error")

@@ -62,16 +62,14 @@ public class LuaActivity extends com.androlua.LuaActivity {
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         // TODO: Implement this method
+		try{
         super.onRestoreInstanceState(savedInstanceState);
+		}catch (Exception e){
+			sendError("onRestoreInstanceState",e);
+		}
         runFunc("onRestoreInstanceState", savedInstanceState);
     }
 
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View view, ContextMenu.ContextMenuInfo menuInfo) {
-        // TODO: Implement this method
-        super.onCreateContextMenu(menu, view, menuInfo);
-        runFunc("onCreateContextMenu", menu, view, menuInfo);
-    }
     
     public void newActivity(String path, boolean newDocument,int documentId) {
         newActivity(1, path, null, newDocument, documentId);

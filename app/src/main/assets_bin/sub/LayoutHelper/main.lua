@@ -1,5 +1,6 @@
 require "import"
 import "jesse205"
+PluginsUtil.setActivityName("layouthelper")
 import "com.google.android.material.appbar.*"
 import "com.google.android.material.behavior.*"
 import "com.google.android.material.bottomappbar.*"

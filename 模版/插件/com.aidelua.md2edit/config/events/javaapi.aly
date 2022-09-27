@@ -1,0 +1,7 @@
+{
+  onCreate=function()
+    local linearParams=searchButton.getLayoutParams()
+    linearParams.setMargins(math.dp2int(8),math.dp2int(8),math.dp2int(16),math.dp2int(16))
+    searchButton.setLayoutParams(linearParams)
+  end
+}

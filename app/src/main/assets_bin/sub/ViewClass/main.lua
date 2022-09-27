@@ -13,6 +13,7 @@ import "com.jesse205.adapter.MyLuaAdapter"
 --import "SpannableStringUtil"
 
 import "item"
+PluginsUtil.setActivityName("viewclass")
 
 local classString=...
 LoadSucceed,class=pcall(luajava.bindClass,classString)

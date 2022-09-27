@@ -1,8 +1,10 @@
 {
   {
     name="AndroLua",
+    _type="androlua",
     templateDirPath="AndroLua",--初始化时系统会自动转为绝对路径
     useLoadlayout2=true,
+    checkAppConfig=true,--检查应用名与包名，应用名与包名的输入名的编辑框id必须相同
     layout={
       ScrollView;
       layout_height="fill";
@@ -28,23 +30,43 @@
             textSize="16sp";
           };
         };
-        "appConfigLayout";
-        "androluaVersionsLayout";
-        "complexLayout";
-        "jarLibrariesLayout";
-        "simpleLibrariesLayout";
+        "layouts.appConfigLayout";
+        "layouts.androluaVersionsLayout";
+        "layouts.complexLayout";
+        "layouts.jarLibrariesLayout";
+        "layouts.simpleLibrariesLayout";
       };
     },
     onInit=function(ids,config)
-      print(config.templateDirPath)
+      --print(config.templateDirPath)
+      local androidXSwitch=ids.androidXSwitch
+      androidXSwitch.setChecked(NewProjectUtil.getSharedData(config._type,"androidxstate"))
+      ids.androidXSwitchParent.onClick=function()
+        local nowState=androidXSwitch.isChecked()
+        local newState=not(nowState)
+        androidXSwitch.setChecked(newState)
+        NewProjectUtil.setSharedData(config._type,"androidxstate",newState)
+      end
+
     end,
-    onCreativePrj=function(ids,config)
+    onCreativePrj=function(ids,config,keys)
+      print(dump(keys))
+
+    end,
+    onBuildKeys=function(ids,config,keysLists)
+      table.insert(keysLists,{androidX=ids.androidXSwitch.isChecked()})
+      print(dump(keysLists))
+
     end
+
   },
   {
     name="LuaJ",
+    _type="androlua",
     templateDirPath="LuaJ",
     useLoadlayout2=true,
+    helloWorld=true,
+    --createButtonEnabled=false,
     layout={
       LinearLayout;
       layout_height="fill";
@@ -57,6 +79,9 @@
         layout_height="fill";
         layout_width="fill";
       };
-    }
+    },
+    onSelected=function(ids,config)
+      --createButton.setEnabled(false)
+    end
   }
 }
