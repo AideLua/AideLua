@@ -1,14 +1,13 @@
 package com.jesse205.superlua;
 
-import android.annotation.SuppressLint;
+import android.app.ActivityManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.ContextMenu;
-import android.view.View;
 import java.io.File;
 
 public class LuaActivity extends com.androlua.LuaActivity {
@@ -26,14 +25,14 @@ public class LuaActivity extends com.androlua.LuaActivity {
             }
             SharedPreferences info = getSharedPreferences("appInfo", 0);
             oldLastTime = info.getLong("lastUpdateTime", 0);
-            if (oldLastTime != lastTime){
+            if (oldLastTime != lastTime) {
                 Intent intent = getIntent();
                 intent.setData(Uri.parse("file:///"));
                 setDebug(false);
             }
-                //setDebug(false);
+			//setDebug(false);
         }
-        
+
 
         super.onCreate(savedInstanceState);
 
@@ -62,23 +61,23 @@ public class LuaActivity extends com.androlua.LuaActivity {
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         // TODO: Implement this method
-		try{
-        super.onRestoreInstanceState(savedInstanceState);
-		}catch (Exception e){
-			sendError("onRestoreInstanceState",e);
+		try {
+			super.onRestoreInstanceState(savedInstanceState);
+		} catch (Exception e) {
+			sendError("onRestoreInstanceState", e);
 		}
         runFunc("onRestoreInstanceState", savedInstanceState);
     }
 
-    
-    public void newActivity(String path, boolean newDocument,int documentId) {
+
+    public void newActivity(String path, boolean newDocument, int documentId) {
         newActivity(1, path, null, newDocument, documentId);
     }
 
-    public void newActivity(String path, Object[] arg, boolean newDocument,int documentId) {
+    public void newActivity(String path, Object[] arg, boolean newDocument, int documentId) {
         newActivity(1, path, arg, newDocument, documentId);
     }
-    
+
     @Override
     public void newActivity(int req, String path, Object[] arg, boolean newDocument) {
         newActivity(req, path, arg, newDocument, 0);
@@ -122,4 +121,11 @@ public class LuaActivity extends com.androlua.LuaActivity {
         overridePendingTransition(in, out);
     }
 
+	@Override
+	public void setTaskDescription(ActivityManager.TaskDescription taskDescription) {
+		TypedArray array =this.getTheme().obtainStyledAttributes(new int[]{android.R.attr.colorPrimary});
+		taskDescription = new ActivityManager.TaskDescription(taskDescription.getLabel(), taskDescription.getIcon(), array.getColor(0, 0xFF0000));
+		array.recycle();
+		super.setTaskDescription(taskDescription);
+	}
 }

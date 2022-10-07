@@ -4,7 +4,7 @@ appInfo={
     message="为更快进行移动开发",
     icon=R.mipmap.ic_launcher,
     click=function()
-      openUrl("https://gitee.com/Jesse205/AideLua")
+      openUrl("https://aidelua.jesse205.com")
     end,
   },
 
@@ -29,6 +29,11 @@ developers={
     name="xiaoyi",
     qq=2821981550,
     message="快乐程序 运营者",
+  },
+  {
+    name="凌肆柒",
+    qq=2088343717,
+    message="AideLua 官网开发者",
   },
 }
 

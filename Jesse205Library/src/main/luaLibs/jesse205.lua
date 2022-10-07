@@ -174,6 +174,7 @@ if not(notLoadTheme) then
       return value
     end
   })
+  import "android.app.ActivityManager"
   import "com.jesse205.app.ThemeUtil"
   ThemeUtil.refreshUI()
 end

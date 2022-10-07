@@ -63,7 +63,7 @@ end
 
 --通过Config和RePackTool获取主项目路径
 function RePackTool.getMainProjectDirByConfigAndRePackTool(projectDir,config,rePackTool)
-  return RePackTool.getProjectDir(projectDir,rePackTool.getMainProjectName(config))
+  return RePackTool.getProjectDir(projectDir,rePackTool.getMainModuleName(config))
 end
 
 
@@ -167,7 +167,7 @@ local function repackApk_taskFunc(config,projectPath,install,sign)
     end
 
     --this.update(activity.getString(R.string.binpoject_creating_variables))
-    local mainAppPath=("%s/%s"):format(projectPath,rePackTool.getMainProjectName(config))
+    local mainAppPath=("%s/%s"):format(projectPath,rePackTool.getMainModuleName(config))
     local buildPath=mainAppPath.."/build"
     local binPath=buildPath.."/bin"
     local binDir=File(binPath)

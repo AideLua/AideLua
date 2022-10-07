@@ -4,6 +4,7 @@
     LinearLayout;
     layout_width="fill";
     gravity="center|left";
+    longClickable=false;
     {
       MaterialCardView;
       layout_marginLeft="16dp";
@@ -47,27 +48,19 @@
     gravity="center|left";
     longClickable=true;
     {
-      MaterialCardView;
+      CardView;
       layout_marginLeft="16dp";
       layout_marginRight="16dp";
       layout_width="40dp";
       layout_height="40dp";
       radius="20dp";
-      --elevation="2dp";
+      cardBackgroundColor=0;
+      elevation=0;
       {
-        CardView;
+        AppCompatImageView;
+        id="icon";
         layout_width="fill";
         layout_height="fill";
-        radius="18dp";
-        cardBackgroundColor=0;
-        elevation=0;
-        {
-          AppCompatImageView;
-          id="icon";
-          layout_width="42dp";
-          layout_height="42dp";
-          layout_margin="-2dp";
-        };
       };
     };
     {
@@ -99,6 +92,7 @@
   {
     LinearLayout;
     layout_width="fill";
+    longClickable=false;
     {
       LinearLayout;
       layout_width="fill";
@@ -141,6 +135,7 @@
         iconResource=R.drawable.ic_dots_vertical;
         tooltip=getString(R.string.menu);
         contentDescription=getString(R.string.menu);
+        --longClickable=false;
       };
     };
   },

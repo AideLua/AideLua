@@ -76,22 +76,7 @@ if not(isJesse205Activity) then
     end)
     actionBar=activity.getActionBar()
   end
-end --[[
-  if isSupportActivity then
-    activity.setTheme(R.style.Theme_MaterialComponents)
-   else
-    pcall(function()
-      import "autotheme"
-    end)
-    pcall(function()androidhwext={R=luajava.bindClass("androidhwext.R")} end)
-    if not(androidhwext and pcall(function()activity.setTheme(androidhwext.R.style.Theme_Emui)end)) then--没有hwext或者无法设置emui主题
-      if autotheme then--有androlua的自动主题
-        activity.setTheme(autotheme())--就用自动主题
-       else
-        activity.setTheme(android.R.style.Theme_DeviceDefault_Settings)
-      end
-    end
-  end]]
+end
 
 
 actionBar.setDisplayHomeAsUpEnabled(true)

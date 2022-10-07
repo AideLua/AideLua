@@ -446,80 +446,82 @@ function FilesBrowserManager.clearAdapterData()
 end
 
 function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
-  local position=menuInfo.position
-  local data=adapterData[position]
-  if data and position~=0 then
-    local file=data.file
-    local filePath=data.filePath
-    local title=data.title--显示的名称
-    local fileName=data.fileName
-    local Rid=R.id
+  if menuInfo then
+    local position=menuInfo.position
+    local data=adapterData[position]
+    if data and position~=0 then
+      local file=data.file
+      local filePath=data.filePath
+      local title=data.title--显示的名称
+      local fileName=data.fileName
+      local Rid=R.id
 
-    local parentFile=file.getParentFile()
-    local parentName=parentFile.getName()
-    local action=data.action
-    local isFile,fileType,fileRelativePath,isResDir
+      local parentFile=file.getParentFile()
+      local parentName=parentFile.getName()
+      local action=data.action
+      local isFile,fileType,fileRelativePath,isResDir
 
-    local inLibDirPath=data.inLibDirPath
+      local inLibDirPath=data.inLibDirPath
 
-    local openState=ProjectManager.openState--工程打开状态
+      local openState=ProjectManager.openState--工程打开状态
 
-    if openState then
-      isFile=file.isFile()
-      fileType=data.fileType
-      fileRelativePath=ProjectManager.shortPath(filePath,true)
-      isResDir=parentName~="values" and not(parentName:find("values%-")) and ProjectManager.shortPath(filePath,true):find(".-/src/.-/res/.-/") or false
-     else
-      isResDir=false
-    end
+      if openState then
+        isFile=file.isFile()
+        fileType=data.fileType
+        fileRelativePath=ProjectManager.shortPath(filePath,true)
+        isResDir=parentName~="values" and not(parentName:find("values%-")) and ProjectManager.shortPath(filePath,true):find(".-/src/.-/res/.-/") or false
+       else
+        isResDir=false
+      end
 
-    if openState and ((fileType and relLibPathsMatch.types[fileType]) or not(isFile)) then--已经打开了项目并且文件类型受支持
-      if not(inLibDirPath) then
-        for index,content in ipairs(relLibPathsMatch.paths) do
-          inLibDirPath=fileRelativePath:match(content)
-          if inLibDirPath then
-            data.inLibDirPath=inLibDirPath
-            break
+      if openState and ((fileType and relLibPathsMatch.types[fileType]) or not(isFile)) then--已经打开了项目并且文件类型受支持
+        if not(inLibDirPath) then
+          for index,content in ipairs(relLibPathsMatch.paths) do
+            inLibDirPath=fileRelativePath:match(content)
+            if inLibDirPath then
+              data.inLibDirPath=inLibDirPath
+              break
+            end
           end
         end
       end
-    end
 
-    menu.setHeaderTitle(data.title)
-    local menuInflater=activity.getMenuInflater()
-    menuInflater.inflate(R.menu.menu_main_file,menu)
-    local copyMenu=menu.findItem(R.id.subMenu_copy)
-    local openInNewWindowMenu=menu.findItem(Rid.menu_openInNewWindow)--新窗口打开
-    local referencesMenu=menu.findItem(Rid.menu_references)--引用资源
-    local renameMenu=menu.findItem(Rid.menu_rename)--重命名
-    local copyMenuBuilder = copyMenu.getSubMenu()
+      menu.setHeaderTitle(data.title)
+      local menuInflater=activity.getMenuInflater()
+      menuInflater.inflate(R.menu.menu_main_file,menu)
+      local copyMenu=menu.findItem(R.id.subMenu_copy)
+      local openInNewWindowMenu=menu.findItem(Rid.menu_openInNewWindow)--新窗口打开
+      local referencesMenu=menu.findItem(Rid.menu_references)--引用资源
+      local renameMenu=menu.findItem(Rid.menu_rename)--重命名
+      local copyMenuBuilder = copyMenu.getSubMenu()
 
-    copyMenu.setVisible(ProjectManager.openState)
-    openInNewWindowMenu.setVisible(isFile or data.action=="openProject")
-    referencesMenu.setVisible(toboolean(isResDir))
-    renameMenu.setVisible(ProjectManager.openState)
-    if openState then
-      CopyMenuUtil.addSubMenus(copyMenuBuilder,getFilePathCopyMenus(inLibDirPath,filePath,fileName,isFile,fileType))
-    end
-    menu.setCallback({
-      onMenuItemSelected=function(menu,item)
-        local id=item.getItemId()
-        if id==Rid.menu_delete then--删除
-          deleteFileDialog(title,file)
-         elseif id==Rid.menu_rename then--重命名
-          renameDialog(file)
-         elseif id==Rid.menu_openInNewWindow then--新窗口打开
-          if openState then
-            activity.newActivity("main",{ProjectManager.nowPath,filePath},true,int(System.currentTimeMillis()))
-           else
-            activity.newActivity("main",{filePath},true,int(System.currentTimeMillis()))
-          end
-         elseif id==Rid.menu_references then--引用资源
-          local javaR=("R.%s.%s"):format(parentName:match("(.-)%-")or parentName,fileName:match("(.+)%.")or fileName)
-          EditorsManager.actions.paste(javaR)
-        end
+      copyMenu.setVisible(ProjectManager.openState)
+      openInNewWindowMenu.setVisible(isFile or data.action=="openProject")
+      referencesMenu.setVisible(toboolean(isResDir))
+      renameMenu.setVisible(ProjectManager.openState)
+      if openState then
+        CopyMenuUtil.addSubMenus(copyMenuBuilder,getFilePathCopyMenus(inLibDirPath,filePath,fileName,isFile,fileType))
       end
-    })
+      menu.setCallback({
+        onMenuItemSelected=function(menu,item)
+          local id=item.getItemId()
+          if id==Rid.menu_delete then--删除
+            deleteFileDialog(title,file)
+           elseif id==Rid.menu_rename then--重命名
+            renameDialog(file)
+           elseif id==Rid.menu_openInNewWindow then--新窗口打开
+            if openState then
+              activity.newActivity("main",{ProjectManager.nowPath,filePath},true,int(System.currentTimeMillis()))
+             else
+              activity.newActivity("main",{filePath},true,int(System.currentTimeMillis()))
+            end
+           elseif id==Rid.menu_references then--引用资源
+            local javaR=("R.%s.%s"):format(parentName:match("(.-)%-")or parentName,fileName:match("(.+)%.")or fileName)
+            EditorsManager.actions.paste(javaR)
+          end
+        end
+      })
+    end
   end
 end
 

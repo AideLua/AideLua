@@ -71,7 +71,7 @@
       layout_height="fill";
       layout_width="fill";
       id="editorGroup";
-      --layoutTransition=newLayoutTransition();
+      saveEnabled=false;
     };
     "layouts.layout_previewChips";--预览按钮
   };

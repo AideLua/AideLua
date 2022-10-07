@@ -1,7 +1,7 @@
 local RePackTool={}
 
 
-function RePackTool.getMainProjectName(config)
+function RePackTool.getMainModuleName(config)
   local firstInclude=config.include[1]
   return firstInclude:match("project:(.+)") or "app"
 end

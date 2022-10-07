@@ -35,7 +35,6 @@ local _G=_G
 local insert = table.insert
 local new = luajava.new
 local bindClass = luajava.bindClass
---local ids={}
 local ltrs={}
 local type=type
 local context=activity or service
@@ -629,8 +628,8 @@ local function loadlayout(t,root,group)
   if t.style then
     if type(t.style)=="number" then
       style=t.style
-     elseif t.style:find("^%?") then
-      style=getIdentifier(t.style:sub(2,-1))
+      --[[elseif t.style:find("^%?") then
+      style=getIdentifier(t.style:sub(2,-1))]]
       --[[
      else
       local st,sty=pcall(require,t.style)
@@ -658,7 +657,8 @@ local function loadlayout(t,root,group)
   end
 
   --设置layout_margin属性
-  if t.layout_margin or t.layout_marginStart or t.layout_marginEnd or t.layout_marginLeft or t.layout_marginTop or t.layout_marginRight or t.layout_marginBottom then
+  -- or t.layout_marginStart or t.layout_marginEnd
+  if t.layout_margin or t.layout_marginLeft or t.layout_marginTop or t.layout_marginRight or t.layout_marginBottom then
     params.setMargins(checkValues( t.layout_marginLeft or t.layout_margin or 0,t.layout_marginTop or t.layout_margin or 0,t.layout_marginRight or t.layout_margin or 0,t.layout_marginBottom or t.layout_margin or 0))
   end
 
@@ -692,7 +692,6 @@ local function loadlayout(t,root,group)
       ids.id=ids.id+1
       view.setId(id)
       ids[v]=id
-
      else
       local e,s=pcall(setattribute,root,view,params,k,v,ids)
       if not e then
@@ -704,12 +703,8 @@ local function loadlayout(t,root,group)
     end
   end
 
-  --if group then
-  --group.addView(view,params)
-  --else
   view.setLayoutParams(params)
   return view
-  --end
 end
 
 

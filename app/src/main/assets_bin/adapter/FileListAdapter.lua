@@ -67,13 +67,13 @@ return function(item)
       return son1[position] or son1._else
     end,
     onCreateViewHolder=function(parent,viewType)
-      local ids={_type="filebrowser"}
+      local ids={}
       local view=loadlayout2(item[viewType],ids)
       local holder=LuaCustRecyclerHolder(view)
       view.setTag(ids)
       view.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
       view.onClick=onClick
-
+      
       if viewType==3 then
         local moreView=ids.more
         local iconView=ids.icon
@@ -86,7 +86,7 @@ return function(item)
         view.contentDescription=activity.getString(R.string.file_up)
         local popupMenu=PopupMenu(activity,moreView)
         moreTag.popupMenu=popupMenu
-        moreTag.needInitMenu=true
+        --moreTag.needInitMenu=true
         moreView.setOnTouchListener(popupMenu.getDragToOpenListener())
         popupMenu.inflate(R.menu.menu_main_file_upfile)
         local menu=popupMenu.getMenu()
@@ -180,9 +180,6 @@ return function(item)
           filePath=file.getPath()
           data.file=file
           data.filePath=filePath
-          --local popupMenu=PopupMenu(activity,view)
-          --data.popupMenu=popupMenu
-          --data.needInitMenu=true
          else
           file=data.file
           filePath=data.filePath
@@ -238,10 +235,10 @@ return function(item)
           if initData then
             loadedConfig,config=pcall(RePackTool.getConfigByProjectPath,filePath)
             local loadedRePackTool,rePackTool
-            if loadedConfig then
+            if loadedConfig then--文件没有损坏
               loadedRePackTool,rePackTool=pcall(RePackTool.getRePackToolByConfig,config)
               local mainProjectPath
-              if loadedRePackTool then
+              if loadedRePackTool then--可以加载二次打包工具
                 mainProjectPath=RePackTool.getMainProjectDirByConfigAndRePackTool(filePath,config,rePackTool)
                 title=(config.appName or unknowString)
                else
