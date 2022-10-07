@@ -3,7 +3,8 @@ tool={
 }
 appName="Aide Lua Pro"--应用名称
 packageName="com.jesse205.aidelua2"--应用包名
-debugActivity="com.jesse205.superlua.LuaActivity"
+debugActivity="com.jesse205.activity.RunActivity"
+key="JXNB"
 --versionName="1.0test"
 include={"project:app","project:Jesse205Library","project:androlua"}--导入，第一个为主程序
 main="app"--老版本

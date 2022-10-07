@@ -7,6 +7,7 @@ NewProjectUtil2.TEMPLATES_DIR_PATH=TEMPLATES_DIR_PATH
 NewProjectUtil2.PRJS_PATH=PRJS_PATH
 
 --格式化信息用的
+--[[
 local tableConfigFormatter={
   dependencies=function(content)
     return "\n    "..table.concat(content,"\n    ")
@@ -27,6 +28,8 @@ local tableConfigFormatter={
     return "\n            "..table.concat(content,"\n            ")
   end,
 }
+]]
+--[[
 tableConfigFormatter.appDependencies=tableConfigFormatter.dependencies
 tableConfigFormatter.appDependenciesEnd=tableConfigFormatter.dependencies
 tableConfigFormatter.dependenciesEnd=tableConfigFormatter.dependencies
@@ -34,10 +37,19 @@ tableConfigFormatter.dependenciesEnd=tableConfigFormatter.dependencies
 tableConfigFormatter.am_application_bottom=tableConfigFormatter.am_application
 tableConfigFormatter.am_welcome_info=tableConfigFormatter.am_activity_info
 tableConfigFormatter.am_main_info=tableConfigFormatter.am_activity_info
-
+]]
+local tableConfigFormatter={
+  defaultImport=function(content) -- import "%s"
+    return "\nimport \""..table.concat(content,"\"\nimport \"").."\"\n"
+  end,
+  includeLua=function(content) -- config.lua中的
+    return "\""..table.concat(content,"\",\"").."\","
+  end,
+}
 NewProjectUtil2.tableConfigFormatter=tableConfigFormatter
 
-function NewProjectUtil2.getKeyText(key,content)
+
+function NewProjectUtil2.buildKeyItem(key,content)
   local text
   if type(content)=="table" then
     if #content=="" then
@@ -51,8 +63,8 @@ function NewProjectUtil2.getKeyText(key,content)
   return text
 end
 
-function NewProjectUtil2.readConfig(path)
-  return getConfigFromFile(TEMPLATES_DIR_PATH.."/"..path)
+function NewProjectUtil2.readConfig(path,basePath)
+  return getConfigFromFile(basePath.."/"..path)
 end
 
 return NewProjectUtil2

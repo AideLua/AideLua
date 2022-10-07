@@ -56,6 +56,7 @@ function ProjectManager.runProject(path)
         local intent=Intent(Intent.ACTION_VIEW,Uri.parse(path or nowConfig.projectMainPath.."/main.lua"))
         local componentName=ComponentName(nowConfig.packageName,nowConfig.debugActivity or "com.androlua.LuaActivity")
         intent.setComponent(componentName)
+        intent.putExtra("key",nowConfig.key)
         activity.startActivity(intent)
       end)
       if not(success) then--无法通过调用其他app打开时
@@ -146,12 +147,13 @@ function ProjectManager.openProject(path,filePath,openedDirPath)
     if openedDirPath~=false then
       FilesBrowserManager.refresh(nowBrowserDir,false,false,true)
     end
-    refreshMenusState()
   end,
   function(err)
     ProjectManager.closeProject(true)
     showErrorDialog("Open project",err)
   end)
+  PluginsUtil.callElevents("onOpenProject", path,config)
+  refreshMenusState()
 end
 
 function ProjectManager.reopenProject()
@@ -191,6 +193,7 @@ function ProjectManager.closeProject(refreshFilesBrowser)
   if refreshFilesBrowser~=false then
     FilesBrowserManager.refresh(nil,false,false,true)
   end
+  PluginsUtil.callElevents("onCloseProject")
   refreshMenusState()
 end
 

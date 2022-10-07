@@ -7,23 +7,6 @@ jesse205.themeType="Jesse205"--主题类型
 
 require "import"--导入import
 import "loadlayout2"
-local context=activity or service--当前context
-jesse205.context=context
-local resources=context.getResources()--当前resources
-_G.resources=resources
-R=luajava.bindClass(context.getPackageName()..".R")
-
-if activity then
-  window=activity.getWindow()
-  notLoadTheme=notLoadTheme or false
-  useCustomAppToolbar=useCustomAppToolbar or false
- else--没有activity不加载主题
-  notLoadTheme=true
-end
-
-application=activity.getApplication()
-safeModeEnable=application.get("safeModeEnable") or false
-notSafeModeEnable=not(safeModeEnable)
 
 
 --惰性导入？
@@ -35,7 +18,7 @@ local fastImport={
   PermissionUtil="com.jesse205.app.PermissionUtil",
   MyStyleUtil="com.jesse205.util.MyStyleUtil",
   MyToast="com.jesse205.util.MyToast",
-  NetErrorStr="com.jesse205.util.NetErrorStr",
+  getNetErrorStr="com.jesse205.util.getNetErrorStr",
   MyAnimationUtil="com.jesse205.util.MyAnimationUtil",
   ScreenFixUtil="com.jesse205.util.ScreenFixUtil",
   --导入各种风格的控件
@@ -47,18 +30,56 @@ local fastImport={
   --导入各种布局表
   MyTextInputLayout="com.jesse205.layout.MyTextInputLayout",
 }
+local normalkeys={
+  this=true,
+  activity=true,
+  application=true,
+  resources=true,
+  useCustomAppToolbar=true,
+  decorView=true,
+  darkNavigationBar=true,
+  darkStatusBar=true,
+  notLoadTheme=true,
+  initApp=true,
+  R=true,
+  jesse205=true,
+  _G=true,
+  mainLay=true,
+}
+jesse205.normalkeys=normalkeys
+
 local oldMetatable=getmetatable(_G)
 local newMetatable={__index=function(self,key)
-    local value=fastImport[key]
-    if value then
-      import(value)
+    if normalkeys[key] then
       return rawget(_G,key)
      else
-      return oldMetatable.__index(self,key)
+      local value=fastImport[key]
+      if value then
+        import(value)
+        return rawget(_G,key)
+       else
+        return oldMetatable.__index(self,key)
+      end
     end
   end
 }
 setmetatable(_G,newMetatable)
+
+local context=activity or service--当前context
+jesse205.context=context
+resources=context.getResources()--当前resources
+--_G.resources=resources
+R=luajava.bindClass(context.getPackageName()..".R")
+
+if activity then
+  window=activity.getWindow()
+  notLoadTheme=notLoadTheme
+  useCustomAppToolbar=useCustomAppToolbar
+ else--没有activity不加载主题
+  notLoadTheme=true
+end
+
+application=activity.getApplication()
 
 --JavaAPI转LuaAPI
 local activity2luaApi={
@@ -113,49 +134,43 @@ if not(notLoadTheme) then
 
   setmetatable(color,{--普通颜色
     __index=function(self,key)
-      key=string.lower(key)
-      local value=resources.getColor(R.color["jesse205_"..key])
-      self[key]=value
+      local value=resources.getColor(R.color["jesse205_"..string.lower(key)])
+      rawset(self,key,value)
       return value
     end
   })
   setmetatable(ripple,{--波纹颜色
     __index=function(self,key)
-      key=string.lower(key)
-      local value=resources.getColor(R.color["jesse205_"..key.."_Ripple"])
-      self[key]=value
+      local value=resources.getColor(R.color["jesse205_"..string.lower(key).."_Ripple"])
+      rawset(self,key,value)
       return value
     end
   })
   setmetatable(light,{--偏亮颜色
     __index=function(self,key)
-      key=string.lower(key)
-      local value=resources.getColor(R.color["jesse205_"..key.."_Light"])
-      self[key]=value
+      local value=resources.getColor(R.color["jesse205_"..string.lower(key).."_Light"])
+      rawset(self,key,value)
       return value
     end
   })
   setmetatable(dark,{--偏暗颜色
     __index=function(self,key)
-      key=string.lower(key)
-      local value=resources.getColor(R.color["jesse205_"..key.."_Dark"])
-      self[key]=value
+      local value=resources.getColor(R.color["jesse205_"..string.lower(key).."_Dark"])
+      rawset(self,key,value)
       return value
     end
   })
   setmetatable(number,{--数字
     __index=function(self,key)
-      key=string.lower(key)
-      local value=resources.getInteger(R.integer["jesse205_"..key])
-      self[key]=value
+      local value=resources.getInteger(R.integer["jesse205_"..string.lower(key)])
+      rawset(self,key,value)
       return value
     end
   })
   setmetatable(dimension,{--数字
     __index=function(self,key)
-      key=string.lower(key)
-      local value=resources.getDimension(R.dimen["jesse205_"..key])
-      self[key]=value
+      local value=resources.getDimension(R.dimen["jesse205_"..string.lower(key)])
+      rawset(self,key,value)
       return value
     end
   })
@@ -166,7 +181,6 @@ end
 --导入常用的包
 import "androidx.appcompat.widget.*"
 import "androidx.appcompat.app.*"
-import "androidx.appcompat.view.*"
 
 import "android.widget.*"
 import "android.app.*"
@@ -174,6 +188,16 @@ import "android.os.*"
 import "android.view.*"
 import "android.view.inputmethod.InputMethodManager"
 
+import "androidx.appcompat.app.AlertDialog"
+
+import "android.widget.TextView"
+import "android.widget.LinearLayout"
+import "android.widget.FrameLayout"
+import "android.widget.ScrollView"
+import "androidx.appcompat.widget.AppCompatTextView"
+import "androidx.appcompat.widget.AppCompatImageView"
+import "androidx.appcompat.widget.LinearLayoutCompat"
+import "androidx.coordinatorlayout.widget.CoordinatorLayout"
 
 --导入常用类
 import "android.graphics.Bitmap"
@@ -189,6 +213,7 @@ import "androidx.coordinatorlayout.widget.CoordinatorLayout"
 import "androidx.swiperefreshlayout.widget.SwipeRefreshLayout"
 import "androidx.cardview.widget.CardView"
 
+import "com.jesse205.widget.MyRecyclerView"
 import "androidx.recyclerview.widget.RecyclerView"
 import "androidx.recyclerview.widget.StaggeredGridLayoutManager"
 import "androidx.recyclerview.widget.LinearLayoutManager"
@@ -202,7 +227,6 @@ import "android.content.res.ColorStateList"
 import "android.content.pm.PackageManager"
 
 --导入常用的Material类
---import "com.google.android.material.tabs.TabLayout"
 import "com.google.android.material.appbar.AppBarLayout"
 import "com.google.android.material.card.MaterialCardView"--卡片
 import "com.google.android.material.button.MaterialButton"--按钮
@@ -210,35 +234,15 @@ import "com.google.android.material.snackbar.Snackbar"
 import "com.google.android.material.textfield.TextInputEditText"--输入框
 import "com.google.android.material.textfield.TextInputLayout"
 
---import "java.io.*"--导入IO
+--导入IO
 import "java.io.File"
 import "java.io.FileInputStream"
 import "java.io.FileOutputStream"
 
 
---import "com.jesse205.adapter.*"--导入Adapter
-
 import "com.lua.custrecycleradapter.AdapterCreator"--导入LuaCustRecyclerAdapter及相关类
 import "com.lua.custrecycleradapter.LuaCustRecyclerAdapter"
 import "com.lua.custrecycleradapter.LuaCustRecyclerHolder"
-
---import "com.jesse205.app.PermissionUtil"--已惰性加载
-
---import "com.jesse205.util.MyStyleUtil"--已惰性加载
---import "com.jesse205.util.MyToast"--导入MyToast
---import "com.jesse205.util.NetErrorStr"--导入网络错误代码
---import "com.jesse205.util.MyAnimationUtil"--导入动画Util
---import "com.jesse205.util.ScreenFixUtil"--导入屏幕适配工具
-
---导入各种风格的控件
---import "com.jesse205.widget.StyleWidget"
---import "com.jesse205.widget.AutoToolbarLayout"
---import "com.jesse205.widget.AutoCollapsingToolbarLayout"
-
---导入各种布局表
---import "com.jesse205.layout.MyTextInputLayout"
---import "com.jesse205.layout.MyEditDialogLayout"
---import "com.jesse205.layout.MySearchLayout"
 
 import "com.bumptech.glide.Glide"--导入Glide
 --import "com.baidu.mobstat.StatService"--百度移动统计
@@ -330,6 +334,7 @@ showLoadingDia：
 local loadingDia
 function showLoadingDia(message,title,cancelable)
   if not(loadingDia) then
+    import "android.app.ProgressDialog"
     loadingDia=ProgressDialog(context)
     loadingDia.setProgressStyle(ProgressDialog.STYLE_SPINNER)--进度条类型
     loadingDia.setTitle(title or context.getString(R.string.jesse205_loading))--标题
@@ -364,9 +369,7 @@ showErrorDialog=showSimpleDialog
 
 --自动初始化一个LayoutTransition
 function newLayoutTransition()
-  if notSafeModeEnable then
-    return LayoutTransition().enableTransitionType(LayoutTransition.CHANGING)
-  end
+  return LayoutTransition().enableTransitionType(LayoutTransition.CHANGING)
 end
 
 --以下为复写事件
@@ -377,7 +380,6 @@ function onError(title,message)
   end)
   return true
 end
---activity.setDebug(false)
 
 
 --导入共享代码

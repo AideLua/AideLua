@@ -32,6 +32,7 @@
   {
     name="Zip4j",
     message="A Java library for zip files and streams",
+    license="Apache-2.0 License",
     url="https://github.com/srikanth-lingala/zip4j"
   },
   {

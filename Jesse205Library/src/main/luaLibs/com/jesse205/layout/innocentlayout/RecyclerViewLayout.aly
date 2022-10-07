@@ -5,7 +5,7 @@
   id="mainLay";
   clickable=true;
   {
-    RecyclerView;
+    MyRecyclerView;
     layout_height="fill";
     layout_width="fill";
     id="recyclerView";

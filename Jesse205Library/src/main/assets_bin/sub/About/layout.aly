@@ -25,7 +25,7 @@
         visibility=View.GONE;
       };
       {
-        RecyclerView;
+        MyRecyclerView;
         layout_height="fill";
         layout_width="fill";
         id="recyclerView";

@@ -11,7 +11,7 @@
     <string name="jesse205_about">About</string>
     <string name="jesse205_about_full">About app</string>
     <string name="jesse205_nowVersion_app">App version</string>
-    <string name="jesse205_nowVersion_jesse205Library">jesse205 Library version</string>
+    <string name="jesse205_nowVersion_jesse205Library">Jesse205 Library version</string>
     <string name="jesse205_nowVersion_full">Current version: %1$s (%2$s)</string>
     <string name="jesse205_privacyPolicy">Privacy Policy</string>
     <string name="jesse205_userAgreement">User Agreement</string>
@@ -21,6 +21,7 @@
     <string name="jesse205_moreContent">More content</string>
     <string name="jesse205_qqGroup">QQ group</string>
     <string name="jesse205_qqGroups">QQ groups</string>
+    <string name="jesse205_qqChannel">QQ channel</string>
     <string name="jesse205_noQQ">QQ is not installed</string>
     <string name="jesse205_copyright">Copyright</string>
     <string name="jesse205_supportProject">Support this project</string>

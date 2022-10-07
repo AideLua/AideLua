@@ -1,6 +1,14 @@
 require "import"
 initApp = true -- 首页面，初始化
 require "jesse205"
+local normalkeys=jesse205.normalkeys
+normalkeys.magnifierUpdateTi=true
+normalkeys.magnifier=true
+normalkeys.FilesBrowserManager=true
+normalkeys.EditorsManager=true
+normalkeys.FilesTabManager=true
+normalkeys.ProjectManager=true
+
 -- 检测是否需要进入欢迎页面
 import "agreements"
 welcomeAgain = not(getSharedData("welcome"))
@@ -40,12 +48,13 @@ import "com.bumptech.glide.load.engine.DiskCacheStrategy"
 import "com.nwdxlgzs.view.photoview.PhotoView"
 import "com.pixplicity.sharp.Sharp"
 
+import "com.jesse205.widget.MyRecyclerView"
 import "com.jesse205.layout.MyEditDialogLayout"
 import "com.jesse205.app.actionmode.SearchActionMode"
 import "com.jesse205.app.dialog.EditDialogBuilder"
 import "com.jesse205.util.FileUtil"
 import "com.jesse205.util.ScreenFixUtil"
-import "com.jesse205.FileInfoUtils"
+import "com.jesse205.util.FileInfoUtils"
 
 import "AppFunctions" -- 必须先导入这个，因为下面的导入直接要用
 import "DialogFunctions"
@@ -78,11 +87,6 @@ PluginsUtil.setActivityName("main")
 PluginsUtil.loadPlugins()
 plugins = PluginsUtil.getPlugins()
 --print(dump(plugins))
--- 申请存储权限
---[[
-PermissionUtil.smartRequestPermission({"android.permission.WRITE_EXTERNAL_STORAGE",
-  "android.permission.READ_EXTERNAL_STORAGE"})
-]]
 PermissionUtil.askForRequestPermissions({
   {
     name=getString(R.string.jesse205_permission_storage),
@@ -101,22 +105,26 @@ oldTabIcon = getSharedData("tab_icon")
 oldEditorSymbolBar = getSharedData("editor_symbolBar")
 oldEditorPreviewButton = getSharedData("editor_previewButton")
 
-lastBackTime = 0 -- 上次点击返回键时间
-lastPencilkeyTime = 0 -- 上次双击笔时间
+local lastBackTime = 0 -- 上次点击返回键时间
+local lastPencilkeyTime = 0 -- 上次双击笔时间
 
 SDK_INT = Build.VERSION.SDK_INT
 packageInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 64)
 lastUpdateTime = packageInfo.lastUpdateTime
 
 activityStopped = false
-nowDevice="phone"
-screenWidthDp=0
+LoadedMenu = false
+notFirstOnResume = false
+local touchingKey = false
 
-receivedData={...}
+nowDevice = "phone"
+screenWidthDp = 0
+
+local receivedData={...}
 
 activity.setTitle(R.string.app_name)
 activity.setContentView(loadlayout2("layouts.layout"))
-actionBar.setTitle(R.string.app_name)
+actionBar.setTitle("Aide Lua")
 actionBar.setDisplayHomeAsUpEnabled(true)
 
 LuaReservedCharacters = {"switch", "if", "then", "and", "break", "do", "else", "elseif", "end", "false", "for",
@@ -127,6 +135,7 @@ deviceChangeLTFixList={largeDrawerLay,largeMainLay,mainEditorLay,layoutTransitio
 function onCreate(savedInstanceState)
   -- todo:根据savedInstanceState和getIntent判断打开项目
   --FilesBrowserManager.open()
+
   if PluginsUtil.callElevents("onCreate", savedInstanceState) then
     return
   end
@@ -283,7 +292,7 @@ function onOptionsItemSelected(item)
     startWindmillActivity("手册")
    elseif id == Rid.menu_tools_manual then -- Lua 手册
     --openUrl("https://gitee.com/Jesse205/AideLua/blob/master/README.md")
-    openUrl("https://gitee.com/Jesse205/AideLua/wikis/pages")
+    openUrl("https://gitee.com/Jesse205/AideLua/wikis")
    elseif id == Rid.menu_more_settings then -- 设置
     newSubActivity("Settings")
    elseif id == Rid.menu_more_about then -- 关于
@@ -306,16 +315,12 @@ function onOptionsItemSelected(item)
   PluginsUtil.callElevents("onOptionsItemSelected", item)
 end
 
+--[[
 function onCreateContextMenu(menu,view,menuInfo)
   local tag=view.tag
   if tag and type(tag)=="table" and tag._type=="filebrowser" then
     FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
   end
-end
-
---[[
-function onContextItemSelected(item)
-  print(item.getClass())
 end]]
 
 function onKeyShortcut(keyCode, event)
@@ -366,7 +371,7 @@ function onConfigurationChanged(config)
   drawerChild.setLayoutParams(drawerChildLinearParams)
   EditorsManager.refreshEditorScrollState()
   refreshSubTitle(screenWidthDp)
-  FilesTabManager.refreshMoveCloseHeight(config.screenHeightDp)
+  --FilesTabManager.refreshMoveCloseHeight(config.screenHeightDp)
   PluginsUtil.callElevents("onConfigurationChanged", config)
 end
 
@@ -393,7 +398,9 @@ function onDeviceByWidthChanged(device, oldDevice)
     if browserOpenState then
       Handler().postDelayed(Runnable({
         run = function()
-          drawer.openDrawer(Gravity.LEFT)
+          if nowDevice==device then
+            drawer.openDrawer(Gravity.LEFT)
+          end
         end
       }), 50)
     end
@@ -426,7 +433,6 @@ function onDeviceByWidthChanged(device, oldDevice)
   end
 end
 
-notFirstOnResume = false
 function onResume()
   local reload = false
   if oldJesse205LibHl ~= getSharedData("jesse205Lib_highlight")
@@ -518,11 +524,12 @@ function onDestroy()
 end
 
 function onKeyDown(keyCode, event)
-  TouchingKey = true
+  touchingKey = true
 end
 
 function onKeyUp(keyCode, event)
-  if TouchingKey then
+  if touchingKey then
+    touchingKey=false
     if keyCode == KeyEvent.KEYCODE_BACK then -- 返回键事件
       if FilesBrowserManager.openState and nowDevice ~= "pc" then -- 没有打开键盘且已打开侧滑，且设备为手机
         if ProjectManager.openState then
@@ -593,11 +600,11 @@ FilesTabManager.init()
 EditorsManager.init()
 FilesBrowserManager.init()
 
-
+--[[
 mainLay.ViewTreeObserver
 .addOnGlobalLayoutListener(function()
   mainWidth=mainLay.getMeasuredWidth()
-end)
+end)]]
 
 screenConfigDecoder = ScreenFixUtil.ScreenConfigDecoder({
   onDeviceByWidthChanged=onDeviceByWidthChanged

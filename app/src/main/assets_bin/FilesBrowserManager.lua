@@ -218,6 +218,11 @@ function FilesBrowserManager.open()
     drawerChild.setVisibility(View.VISIBLE)
    else
     drawer.openDrawer(Gravity.LEFT)
+    Handler().postDelayed(Runnable({
+      run = function()
+        recyclerView.requestFocus()
+      end
+    }), 10)
   end
   openState = true
 end
@@ -228,6 +233,14 @@ function FilesBrowserManager.close()
     drawerChild.setVisibility(View.GONE)
    else
     drawer.closeDrawer(Gravity.LEFT)
+    local editor=EditorsManager.editor
+    if editor then
+      Handler().postDelayed(Runnable({
+        run = function()
+          editor.requestFocus()
+        end
+      }), 10)
+    end
   end
   openState = false
 end
@@ -433,10 +446,9 @@ function FilesBrowserManager.clearAdapterData()
 end
 
 function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
-  local tag=view.tag
-  local data=tag._data
-  tag._data=nil
-  if data and data.position~=0 then
+  local position=menuInfo.position
+  local data=adapterData[position]
+  if data and position~=0 then
     local file=data.file
     local filePath=data.filePath
     local title=data.title--显示的名称
@@ -523,7 +535,6 @@ function FilesBrowserManager.init()
 
   adapter=FileListAdapter(item)
   recyclerView.setAdapter(adapter)
-  recyclerView.setTag({_type="filebrowser"})
   layoutManager = LinearLayoutManager()
   recyclerView.setLayoutManager(layoutManager)
   recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
@@ -543,6 +554,12 @@ function FilesBrowserManager.init()
   --pathLayoutManager.setStackFromEnd(true)
   pathRecyclerView.setLayoutManager(pathLayoutManager)
   activity.registerForContextMenu(recyclerView)
+  recyclerView.onCreateContextMenu=function(menu,view,menuInfo)
+    FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
+  end
+
+
+
 
   --判断侧滑开启状态。
   --如果侧滑为开启状态，那么文件浏览器一定是开启的。

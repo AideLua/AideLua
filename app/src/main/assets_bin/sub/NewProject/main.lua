@@ -1,5 +1,10 @@
 require "import"
 import "jesse205"
+local normalkeys=jesse205.normalkeys
+normalkeys.templateMap=true
+normalkeys.pageConfigsList=true
+normalkeys.nowPageConfig=true
+
 import "androidx.viewpager.widget.ViewPager"
 import "androidx.viewpager.widget.PagerAdapter"
 import "androidx.appcompat.app.ActionBar$TabListener"
@@ -8,22 +13,19 @@ import "com.google.android.material.chip.Chip"
 import "com.google.android.material.tabs.TabLayout"
 
 import "NewProjectUtil2"
-import "NewProjectUtil"
-import "projectTemplateConfig"
+import "NewProjectManager"
 
 PluginsUtil.setActivityName("newproject")
---[[
-for index=1,#projectTemplateConfig do
-  projectTemplateConfig[index].index=index
-end]]
-defaultPrjConfig=NewProjectUtil2.readConfig("default.lua")
 
-local pagePosition=getSharedData("newProject_pagePosition") or 0
-local nowConfig=projectTemplateConfig[pagePosition+1]
+
+templateMap={}--存放大模板的列表
+pageConfigsList={}
+
 
 activity.setTitle(R.string.project_create)
 activity.setContentView(loadlayout2("layouts.layout"))
 actionBar.setDisplayHomeAsUpEnabled(true)
+--actionBar.setSubtitle(templateType.." "..templateList[templateType].baseVer)
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()
@@ -37,81 +39,97 @@ noButton.onClick=function()--取消按钮
 end
 
 createButton.onClick=function(view)--新建按钮
-  if not(nowConfig) then
+  if not(nowPageConfig) then
     return
   end
-  if nowConfig.checkAppConfig then
-    local ids=nowConfig.ids
-
+  if nowPageConfig.checkAppConfig then
+    local ids=nowPageConfig.ids
     local appName=ids.appNameEdit.text
     local packageName=ids.packageNameEdit.text
-
     local appNameLay=ids.appNameLay
     local packageNameLay=ids.packageNameLay
-
-    if NewProjectUtil.checkAppConfigError(appName,packageName,appNameLay,packageNameLay,nowConfig,view) then
+    if NewProjectManager.checkAppConfigError(appName,packageName,appNameLay,packageNameLay,nowPageConfig) then
       return
     end
   end
-  --NewProjectUtil2.readConfig(path)
-  local keys=NewProjectUtil.buildkeys(defaultPrjConfig,nowConfig)
 
-  if nowConfig.onCreativePrj then
-    nowConfig.onCreativePrj(nowConfig.ids,nowConfig,keys)
+  local keys,formatList,unzipList=NewProjectManager.buildConfig(nowPageConfig)
+
+  if nowPageConfig.onCreativePrj then
+    nowPageConfig.onCreativePrj(nowPageConfig.ids,nowPageConfig,keys,formatList,unzipList)
   end
 
 end
 --templateType=getSharedData("templateType")
 
-PluginsUtil.callElevents("onLoadTemplateConfig", projectTemplateConfig)
+NewProjectManager.loadTemplate(NewProjectUtil2.TEMPLATES_DIR_PATH)
+PluginsUtil.callElevents("onLoadTemplateConfig", templateMap,pageConfigsList)
+
+
+
+local pagePosition=getSharedData("newProject_pagePosition") or 0
+nowPageConfig=pageConfigsList[pagePosition+1]
+if not(nowPageConfig) then
+  pagePosition=0
+  setSharedData("newProject_pagePosition",pagePosition)
+  nowPageConfig=pageConfigsList[pagePosition+1]
+end
 
 adapter=PagerAdapter({
   getCount=function()
-    return int(table.size(projectTemplateConfig))
+    return int(table.size(pageConfigsList))
   end,
   instantiateItem=function(container,position)
-    local config=projectTemplateConfig[position+1]
-    local view
-    local ids={}
-    if config.useLoadlayout2 then
-      view=loadlayout2(config.layout,ids)
-     else
-      view=loadlayout(config.layout,ids)
-    end
-    config.ids=ids
-    if config.templateDirPath then
-      config.templateDirPath=rel2AbsPath(config.templateDirPath,NewProjectUtil2.TEMPLATES_DIR_PATH)
-    end
-    if config.onInit then
-      local success,message=pcall(config.onInit,ids,config)
-      if not(success) then
-        showErrorDialog("Initialization error",message)
+    local config=pageConfigsList[position+1]
+    local templateConfig=templateMap[config.templateType or "default"]
+    config.templateConfig=templateConfig
+    if config then
+      local view
+      local ids={}
+      if config.useLoadlayout2 then
+        view=loadlayout2(config.layout,ids)
+       else
+        view=loadlayout(config.layout,ids)
       end
-    end
-    if config.checkAppConfig then
-      local appNameEdit=ids.appNameEdit
-      local packageNameEdit=ids.packageNameEdit
-      appNameEdit.text=defaultPrjConfig.appName
-      packageNameEdit.text=defaultPrjConfig.appPackageName
-      appNameEdit.addTextChangedListener({
-        onTextChanged=function(text,start,before,count)
-          NewProjectUtil.checkAppName(tostring(text),ids.appNameLay,config)
-          if position==pagePosition then
-            NewProjectUtil.refreshCreateEnabled(config,createButton)
-          end
+      config.ids=ids
+      --[[
+      if config.templateDirPath then
+        config.templateDirPath=rel2AbsPath(config.templateDirPath,NewProjectUtil2.TEMPLATES_DIR_PATH)
+      end]]
+      if config.onInit then
+        local success,message=pcall(config.onInit,ids,config)
+        if not(success) then
+          showErrorDialog("Initialization error",message)
         end
-      })
-      packageNameEdit.addTextChangedListener({
-        onTextChanged=function(text,start,before,count)
-          NewProjectUtil.checkPackageName(tostring(text),ids.packageNameLay,config)
-          if position==pagePosition then
-            NewProjectUtil.refreshCreateEnabled(config,createButton)
+      end
+      if config.checkAppConfig then
+        local defaultKeys=templateConfig.defaultKeys
+        local appNameEdit=ids.appNameEdit
+        local packageNameEdit=ids.packageNameEdit
+        appNameEdit.text=defaultKeys.appName
+        packageNameEdit.text=defaultKeys.appPackageName
+        appNameEdit.addTextChangedListener({
+          onTextChanged=function(text,start,before,count)
+            NewProjectManager.checkAppName(tostring(text),ids.appNameLay,config)
+            if position==pagePosition then
+              NewProjectManager.refreshCreateEnabled(config,createButton)
+            end
           end
-        end
-      })
+        })
+        packageNameEdit.addTextChangedListener({
+          onTextChanged=function(text,start,before,count)
+            NewProjectManager.checkPackageName(tostring(text),ids.packageNameLay,config)
+            if position==pagePosition then
+              NewProjectManager.refreshCreateEnabled(config,createButton)
+            end
+          end
+        })
+      end
+      container.addView(view)
+      return view
+     else
+      return View(activity)
     end
-    container.addView(view)
-    return view
   end,
   destroyItem=function(container,position,object)
     container.removeView(object)
@@ -123,14 +141,14 @@ adapter=PagerAdapter({
     return float(1)
   end,
   getPageTitle=function(position)
-    local config=projectTemplateConfig[position+1]
+    local config=pageConfigsList[position+1]
     if config then
       return config.name
     end
   end
 })
 
-NewProjectUtil.refreshCreateEnabled(nowConfig,createButton)
+NewProjectManager.refreshCreateEnabled(nowPageConfig,createButton)
 
 viewPager.setAdapter(adapter)
 tabLayout.setupWithViewPager(viewPager)
@@ -150,11 +168,13 @@ viewPager.setOnPageChangeListener({
     if pagePosition~=newPagePosition then
       pagePosition=newPagePosition
       setSharedData("newProject_pagePosition",newPagePosition)
-      nowConfig=projectTemplateConfig[newPagePosition+1]
-
-      NewProjectUtil.refreshCreateEnabled(nowConfig,createButton)
-      if nowConfig.onSelected then
-        nowConfig.onSelected(nowConfig.ids,nowConfig)
+      nowPageConfig=pageConfigsList[newPagePosition+1]
+      if not(nowPageConfig) then
+        nowPageConfig=pageConfigsList[1]
+      end
+      NewProjectManager.refreshCreateEnabled(nowPageConfig,createButton)
+      if nowPageConfig.onSelected then
+        nowPageConfig.onSelected(nowPageConfig.ids,nowPageConfig)
       end
     end
 
@@ -165,10 +185,6 @@ viewPager.setOnPageChangeListener({
 
   end
 })
-
-
---print(projectTemplateConfig)
-
 
 
 --[[

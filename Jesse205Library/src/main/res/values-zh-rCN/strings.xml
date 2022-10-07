@@ -11,7 +11,7 @@
     <string name="jesse205_about">关于</string>
     <string name="jesse205_about_full">关于软件</string>
     <string name="jesse205_nowVersion_app">软件版本</string>
-    <string name="jesse205_nowVersion_jesse205Library">jesse205库版本</string>
+    <string name="jesse205_nowVersion_jesse205Library">Jesse205库版本</string>
     <string name="jesse205_nowVersion_full">当前版本：%1$s (%2$s)</string>
     <string name="jesse205_privacyPolicy">隐私政策</string>
     <string name="jesse205_userAgreement">用户协议</string>
@@ -21,6 +21,7 @@
     <string name="jesse205_moreContent">更多内容</string>
     <string name="jesse205_qqGroup">QQ交流群</string>
     <string name="jesse205_qqGroups">QQ交流群</string>
+    <string name="jesse205_qqChannel">QQ频道</string>
     <string name="jesse205_noQQ">未安装QQ</string>
     <string name="jesse205_copyright">版权信息</string>
     <string name="jesse205_supportProject">支持项目</string>

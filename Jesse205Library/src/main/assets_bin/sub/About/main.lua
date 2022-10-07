@@ -1,15 +1,18 @@
 require "import"
 import "jesse205"
-
+local normalkeys=jesse205.normalkeys
+normalkeys.appInfo=true
+normalkeys.openSourceLicenses=true
+normalkeys.developers=true
+normalkeys.moreItem=true
+normalkeys.copyright=true
 import "com.jesse205.layout.util.SettingsLayUtil"
 import "com.jesse205.app.dialog.ImageDialogBuilder"
 import "appAboutInfo"
 import "agreements"
 
---local screenConfigDecoder,actionBar,Landscape,data,PackInfo,adp,layoutManager,Glide,topCardItems,appIconGroup,topCard,recyclerView,appBarElevationCard
---Glide,activity,actionBar=_G.Glide,_G.activity,_G.actionBar
 activity.setTitle(R.string.jesse205_about)
-activity.setContentView(loadlayout2("layout",_ENV))
+activity.setContentView(loadlayout2("layout"))
 actionBar.setDisplayHomeAsUpEnabled(true)
 
 loadlayout2("iconLayout")
@@ -28,28 +31,11 @@ function onOptionsItemSelected(item)
   end
 end
 
-function onCreateContextMenu(menu,view,menuInfo)
-  local tag=view.tag
-  if tag and type(tag)=="table" then
-    local data=tag._data
-    tag._data=nil
-    if tag._type=="itemview" and data.contextMenuEbaled then
-      local key=data.key
-      if (key=="qq_groups" or key=="qq_group") and data.groups then--多个QQ群
-        showQQGroupMenu(data,menu)
-       elseif key=="support" then
-        local supportList=data.supportList
-        if supportList then
-          showSupportMenu(data,menu)
-        end
-      end
-    end
-  end
-end
-
 --获取QQ头像链接
 function getUserAvatarUrl(qq,size)
-  return ("http://q.qlogo.cn/headimg_dl?spec=%s&img_type=jpg&dst_uin=%s"):format(size or 640,qq)
+  if qq then
+    return ("http://q.qlogo.cn/headimg_dl?spec=%s&img_type=jpg&dst_uin=%s"):format(size or 640,qq)
+  end
 end
 
 --加入QQ交流群
@@ -60,71 +46,37 @@ function joinQQGroup(groupNumber)
   end
 end
 
-function showQQGroupMenu(data,menu)
-  menu.setHeaderTitle(data.title)
-  local groups=data.groups
-  for index,content in ipairs(groups) do
-    menu.add(0,index,0,content.name)
-  end
-  menu.setCallback({
-    onMenuItemSelected=function(menu,item)
-      local id=item.getItemId()
-      local content=groups[id]
-      joinQQGroup(content.id)
-    end
-  })
-end
-
-function showSupportMenu(data,menu)
-  local supportList=data.supportList
-  menu.setHeaderTitle(data.title)
-  for index,content in ipairs(supportList) do
-    menu.add(0,index,0,content.name)
-  end
-  menu.setCallback({
-    onMenuItemSelected=function(menu,item)
-      local id=item.getItemId()
-      local content=supportList[id]
-      local url=content.url
-      local func=content.func
-      if func then
-        func()
-       elseif url then
-        openUrl(url)
-      end
-    end
-  })
-end
-
 function onItemClick(view,views,key,data)
-  if key=="qq" then
-    pcall(activity.startActivity,Intent(Intent.ACTION_VIEW,Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin="..data.qq)))
-   elseif key=="qq_group" then--单个QQ群
-    joinQQGroup(data.groupId)
-   elseif key=="qq_groups" then--多个QQ群
-    --showQQGroupMenu(data)
-    recyclerView.tag._data=data
-    recyclerView.showContextMenu()
-
+  if key=="developer" then
+    if data.qq then
+      pcall(activity.startActivity,Intent(Intent.ACTION_VIEW,Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin="..data.qq)))
+    end
+   elseif key=="more" then
+    if data.url then--单个QQ群
+      openUrl(data.url)
+     elseif data.browserUrl then--单个QQ群
+      openUrl(data.browserUrl)
+     elseif data.qqGroup then--多个QQ群
+      joinQQGroup(data.qqGroup)
+     elseif data.func then
+      data.func()
+     elseif data.contextMenuEnabled then
+      --recyclerView.tag._data=data
+      recyclerView.showContextMenuForChild(view)
+      --recyclerView.showContextMenu()
+    end
    elseif key=="html" then
     newSubActivity("HtmlFileViewer",{{title=data.title,path=data.path}})
    elseif key=="openSourceLicenses" then
     newSubActivity("OpenSourceLicenses")
    elseif key=="support" then
     local supportUrl=data.supportUrl
-    local supportList=data.supportList
-    if supportList then
-      recyclerView.tag._data=data
+    if data.supportList then
       recyclerView.showContextMenu()
-      --showSupportMenu(data,supportList)
      elseif supportUrl then
       openUrl(supportUrl)
     end
   end
-end
-
-function onItemLongClick(view,views,key,data)
-  recyclerView.tag._data=data
 end
 
 function onConfigurationChanged(config)
@@ -138,7 +90,7 @@ function onConfigurationChanged(config)
       actionBar.setElevation(0)
       appBarElevationCard.setVisibility(View.VISIBLE)
       local linearParams=iconLayout.getLayoutParams()
-      if screenWidthDp>theme.number.padWidthDp then
+      if screenWidthDp>theme.number.width_dp_pad then
         linearParams.width=math.dp2int(200+16*2)
        else
         linearParams.width=math.dp2int(152+16*2)
@@ -159,28 +111,30 @@ end
 
 topCardItems={}
 --插入大软件图标
-for index,content in ipairs(appInfo) do
-  local ids={}
-  appIconGroup.addView(loadlayout2("iconItem",ids,LinearLayoutCompat))
-  table.insert(topCardItems,ids.mainIconLay)
-  local icon,iconView,nameView=content.icon,ids.icon,ids.name
-  iconView.setBackgroundResource(icon)
-  nameView.setText(content.name)
-  ids.message.setText(content.message)
-  if content.click then
-    ids.mainIconLay.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary))
-    ids.mainIconLay.onClick=content.click
+if appInfo then
+  for index,content in ipairs(appInfo) do
+    local ids={}
+    appIconGroup.addView(loadlayout2("iconItem",ids,LinearLayoutCompat))
+    table.insert(topCardItems,ids.mainIconLay)
+    local icon,iconView,nameView=content.icon,ids.icon,ids.name
+    iconView.setBackgroundResource(icon)
+    nameView.setText(content.name)
+    ids.message.setText(content.message)
+    if content.click then
+      ids.mainIconLay.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary))
+      ids.mainIconLay.onClick=content.click
+    end
+    local pain=ids.name.getPaint()
+    if content.typeface then
+      pain.setTypeface(content.typeface)
+     else
+      pain.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
+    end
+    if content.nameColor then
+      nameView.setTextColor(content.nameColor)
+    end
+    ids=nil
   end
-  local pain=ids.name.getPaint()
-  if content.typeface then
-    pain.setTypeface(content.typeface)
-   else
-    pain.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
-  end
-  if content.nameColor then
-    nameView.setTextColor(content.nameColor)
-  end
-  ids=nil
 end
 
 data={
@@ -235,9 +189,9 @@ if developers then
       SettingsLayUtil.ITEM_AVATAR;
       title="@"..content.name;
       summary=content.message;
-      icon=getUserAvatarUrl(content.qq,content.imageSize);
+      icon=content.avatar or getUserAvatarUrl(content.qq,content.imageSize);
       qq=content.qq;
-      key="qq";
+      key="developer";
       newPage="newApp";
     })
   end
@@ -254,58 +208,28 @@ if openSourceLicenses then
   })
 end
 
---更多内容
-table.insert(data,{
-  SettingsLayUtil.TITLE;
-  title=R.string.jesse205_moreContent;
-})
-
---插入交流群
-if qqGroup then--单个交流群和多个交流群
+if moreItem or copyright then
+  --更多内容
   table.insert(data,{
-    SettingsLayUtil.ITEM_NOSUMMARY;
-    title=R.string.jesse205_qqGroup;
-    icon=R.drawable.ic_account_group_outline;
-    groupId=qqGroup;
-    groups=qqGroups;
-    key="qq_group";
-    newPage="newApp";
-    contextMenuEbaled=toboolean(qqGroups);
+    SettingsLayUtil.TITLE;
+    title=R.string.jesse205_moreContent;
   })
- elseif qqGroups then--多个交流群
-  table.insert(data,{
-    SettingsLayUtil.ITEM_NOSUMMARY;
-    title=R.string.jesse205_qqGroups;
-    icon=R.drawable.ic_account_group_outline;
-    groups=qqGroups;
-    key="qq_groups";
-    contextMenuEbaled=true;
-  })
-end
-
-
-
-if supportUrl or supportList then--支持项目
-  table.insert(data,{
-    SettingsLayUtil.ITEM_NOSUMMARY;
-    title=R.string.jesse205_supportProject;
-    icon=R.drawable.ic_wallet_giftcard;
-    supportUrl=supportUrl;
-    supportList=supportList;
-    key="support";
-    newPage=supportNewPage;
-    contextMenuEbaled=toboolean(supportList);
-  })
-end
-
-if copyright then--版权信息
-  table.insert(data,{
-    SettingsLayUtil.ITEM;
-    title=R.string.jesse205_copyright;
-    summary=copyright;
-    icon=R.drawable.ic_copyright;
-    key="copyright";
-  })
+  if moreItem then
+    for index=1,#moreItem do
+      local content=moreItem[index]
+      content.key="more"
+      table.insert(data,content)
+    end
+  end
+  if copyright then--版权信息
+    table.insert(data,{
+      SettingsLayUtil.ITEM;
+      title=R.string.jesse205_copyright;
+      summary=copyright;
+      icon=R.drawable.ic_copyright;
+      key="copyright";
+    })
+  end
 end
 
 
@@ -321,7 +245,7 @@ adapter=LuaCustRecyclerAdapter(AdapterCreator({
       local holder=LuaCustRecyclerHolder(portraitCardParent)
       return holder
      else
-      return adapterEvents.onCreateViewHolder(onItemClick,onItemLongClick,parent,viewType)
+      return adapterEvents.onCreateViewHolder(onItemClick,nil,parent,viewType)
     end
   end,
   onBindViewHolder=function(holder,position)
@@ -331,11 +255,38 @@ adapter=LuaCustRecyclerAdapter(AdapterCreator({
   end,
 }))
 
-layoutManager=LinearLayoutManager()
 recyclerView.setAdapter(adapter)
+layoutManager=LinearLayoutManager()
 recyclerView.setLayoutManager(layoutManager)
-recyclerView.setTag({_type="itemview"})
 activity.registerForContextMenu(recyclerView)
+recyclerView.onCreateContextMenu=function(menu,view,menuInfo)
+  local data=data[menuInfo.position+1]
+  if data and data.contextMenuEnabled then
+    local key=data.key
+    if key=="more" and data.contextMenuEnabled then--多个QQ群
+      menu.setHeaderTitle(data.title)
+      local menusList=data.menus
+      for index,content in ipairs(menusList) do
+        menu.add(0,index,0,content.title)
+      end
+      menu.setCallback({
+        onMenuItemSelected=function(menu,item)
+          local id=item.getItemId()
+          local menuData=menusList[id]
+          if menuData.url then--单个QQ群
+            openUrl(menuData.url)
+           elseif menuData.browserUrl then--单个QQ群
+            openUrl(menuData.browserUrl)
+           elseif menuData.qqGroup then--多个QQ群
+            joinQQGroup(menuData.qqGroup)
+           elseif menuData.func then
+            menuData.func()
+          end
+        end
+      })
+    end
+  end
+end
 
 recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
   onScrolled=function(view,dx,dy)

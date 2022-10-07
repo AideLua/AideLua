@@ -35,67 +35,71 @@ developers={
 --启用开源许可
 openSourceLicenses=true
 
---单个QQ群
-qqGroup=628045718
+moreItem={
+  {--交流群
+    SettingsLayUtil.ITEM_NOSUMMARY;
+    title=R.string.jesse205_qqGroup;
+    icon=R.drawable.ic_account_group_outline;
+    newPage="newApp";
+    qqGroup=628045718;
+    contextMenuEnabled=true;
+    menus={
+      {
+        title="Aide Lua Bug测试群",
+        qqGroup=680850455,
+      },
+      {
+        title="Aide Lua 尝鲜群",
+        qqGroup=628045718,
+      },
+      {
+        title="Edde 综合群",
+        qqGroup=708199076,
+      },
+    };
+  },
+  {--频道
+    SettingsLayUtil.ITEM_NOSUMMARY;
+    title=R.string.jesse205_qqChannel;
+    icon=R.drawable.ic_qq_channel;
+    newPage="newApp";
+    url="https://pd.qq.com/s/n51c4k";
+  },
+  {--支持
+    SettingsLayUtil.ITEM_NOSUMMARY;
+    title=R.string.jesse205_supportProject;
+    icon=R.drawable.ic_wallet_giftcard;
+    contextMenuEnabled=true;
+    menus={
+      {
+        title="问题反馈 (QQ频道)",
+        url="https://pd.qq.com/s/97ho4f",
+      },
+      {
+        title="问题反馈 (Gitee)",
+        url="https://gitee.com/Jesse205/AideLua/issues",
+      },
+      {
+        title="参与开发",
+        url="https://gitee.com/Jesse205/AideLua",
+      },
+    };
+  }
 
---多个QQ群
-qqGroups={
-  {
-    name="Aide Lua Bug测试群",
-    id=680850455,
-  },
-  {
-    name="Aide Lua 尝鲜群",
-    id=628045718,
-  },
-  {
-    name="Edde 综合群",
-    id=708199076,
-  },
 }
---[[格式：
+
+--[[menus 格式：
 {
   {
-    name="群名称",--群名称
-    id=708199076,--群号
+    name="群名称"; -- 群名称
+    qqGroup=708199076; -- 群号
+    contextMenuEnabled=true;
   },
   {
-    name="群名称",--群名称
-    id=708199076,--群号
-  },
-  --以此类推
-}
-]]
-
---支持项目
---supportUrl="https://afdian.net/@Jesse205"--支持项目链接
-supportNewPage=false--支持项目页面跳转标识
-supportList={--如果有多种方式支持项目，可以使用列表
-  {
-    name="问题反馈 (QQ频道)",
-    url="https://pd.qq.com/s/97ho4f",
-  },
-  {
-    name="问题反馈 (Gitee)",
-    url="https://gitee.com/Jesse205/AideLua/issues",
-  },
-  {
-    name="参与开发",
-    url="https://gitee.com/Jesse205/AideLua",
-  },
-}
---[[格式：
-{
-  {
-    name="百度",--显示的名称
-    url="http://www.baidu.com"--跳转链接
-    func=function(view)--函数（不可和url共存）
-    end,
-  },
-  {
-    name="百度",--显示的名称
-    url="http://www.baidu.com"--跳转链接
-    func=function(view)--函数（不可和url共存）
+    name="百度", -- 显示的名称
+    url="http://www.baidu.com" -- 跳转连接
+    browserUrl="http://www.baidu.com" -- 浏览器打开链接
+    func=function(view) -- 函数（不可和url共存）
     end,
   },
   --以此类推
@@ -106,6 +110,7 @@ supportList={--如果有多种方式支持项目，可以使用列表
 copyright="Copyright (c) 2020-2022, Jesse205"
 
 PluginsUtil.setActivityName("about")
+
 function main()
   table.insert(data,4,{--PluginsUtil 版本
     SettingsLayUtil.ITEM;

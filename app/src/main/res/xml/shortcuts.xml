@@ -1,0 +1,15 @@
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+	<shortcut
+		android:shortcutId="javaapi"
+		android:enabled="true"
+		android:icon="@drawable/ic_android"
+		android:shortcutLongLabel="@string/javaApiViewer">
+		<intent
+			android:action="android.intent.action.VIEW"
+			android:targetPackage="com.jesse205.aidelua2"
+			android:targetClass="com.jesse205.superlua.LuaActivityX"
+			android:data="/data/data/com.jesse205.aidelua2/files/sub/JavaApi/main.lua?documentId=0" />
+		<categories android:name="android.shortcut.conversation" />
+	</shortcut>
+	<!-- Specify more shortcuts here. -->
+</shortcuts>

@@ -1,5 +1,7 @@
 require "import"
 import "jesse205"
+import "android.widget.ListView"
+
 local classStr=...
 success,class=pcall(luajava.bindClass,classStr)
 if not(success) then

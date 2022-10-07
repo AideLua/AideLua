@@ -32,7 +32,79 @@ local openState, file, fileConfig,fileType = false, nil, nil, nil
 local openedFiles = {}
 FilesTabManager.backupPath=AppPath.AppShareDir..os.date("/backup/%Y%m%d")
 FilesTabManager.backupDir=File(FilesTabManager.backupPath)
+FilesTabManager.tabShowingMenu=0
 
+local function applyTabMenu(view,tabFileConfig)
+  local popupMenu=PopupMenu(activity,view)
+  popupMenu.inflate(R.menu.menu_main_filetab)
+  local menu=popupMenu.getMenu()
+  local dropListener=popupMenu.getDragToOpenListener()
+  local dropMenuState=false
+  local menuState=false
+  local Rid=R.id
+  popupMenu.onDismiss=function(popupMenu)
+    dropMenuState=false
+    FilesTabManager.tabShowingMenu=FilesTabManager.tabShowingMenu-1
+  end
+  popupMenu.onMenuItemClick=function(item)
+    local id=item.getItemId()
+    if id==Rid.menu_close then
+      FilesTabManager.closeFile(tabFileConfig.lowerPath)
+      Handler().postDelayed(Runnable({
+        run = function()
+          if openState then
+            fileConfig.tab.select()
+          end
+      end}),1)
+     elseif id==Rid.menu_close_all then
+      FilesTabManager.closeAllFiles()
+     elseif id==Rid.menu_close_other then
+      local file,fileType=tabFileConfig.file,tabFileConfig.fileType
+      FilesTabManager.closeAllFiles(false)
+      FilesTabManager.openFile(file,fileType,true)
+    end
+  end
+  local startTime
+  local maxY=0
+  view.onTouch=function(view,event)
+    local action=event.getAction()
+    local y=event.getY()
+    local x=event.getX()
+    local time=System.currentTimeMillis()
+    if maxY<y then
+      maxY=y
+    end
+    if action==MotionEvent.ACTION_DOWN then
+      startTime=time
+     elseif action==MotionEvent.ACTION_MOVE then
+      if not(dropMenuState) and y>filesTabLay.getHeight() then
+        dropMenuState=true
+        FilesTabManager.tabShowingMenu=FilesTabManager.tabShowingMenu+1
+        popupMenu.show()
+      end
+    end
+    if dropMenuState and ((time-startTime)>700 or maxY-y>math.dp2int(8)) then
+      dropListener.onTouch(view,event)
+    end
+    if action==MotionEvent.ACTION_UP then
+      startTime=0
+      maxY=0
+    end
+  end
+  view.onGenericMotion=function(view,event)
+    local buttonState = event.getButtonState()
+    if buttonState==MotionEvent.BUTTON_SECONDARY then
+      popupMenu.show()
+    end
+  end
+  --[[
+  view.onLongClick=function(view)
+    menuState=true
+    popupMenu.show()
+    --return true
+  end]]
+end
+--[[
 local nowTabTouchTag
 local function onFileTabLongClick(view)
   local tag = view.tag
@@ -51,7 +123,6 @@ local function refreshMoveCloseHeight(height)
   end
 end
 FilesTabManager.refreshMoveCloseHeight = refreshMoveCloseHeight
-
 
 local function onFileTabTouch(view, event)
   local tag = view.tag
@@ -114,7 +185,8 @@ local function onFileTabLayTouch(view, event)
   end
   onFileTabTouch(tag.view, event)
   return true
-end
+end]]
+
 
 local function initFileTabView(tab, fileConfig)
   local view = tab.view
@@ -122,8 +194,9 @@ local function initFileTabView(tab, fileConfig)
   view.setPadding(math.dp2int(8), math.dp2int(4), math.dp2int(8), math.dp2int(4))
   view.setGravity(Gravity.LEFT | Gravity.CENTER)
   view.tag = fileConfig
-  view.onLongClick=onFileTabLongClick
-  view.onTouch = onFileTabTouch
+  applyTabMenu(view,fileConfig)
+  --view.onLongClick=onFileTabLongClick
+  --view.onTouch = onFileTabTouch
   --fileConfig.tabBackground=view.getBackground()
   TooltipCompat.setTooltipText(view, fileConfig.shortFilePath)
   local imageView = view.getChildAt(0)
@@ -332,7 +405,7 @@ function FilesTabManager.closeFile(lowerFilePath,removeTab,changeEditor)
   end
 end
 
--- 保存所有文件
+-- 关闭所有文件
 function FilesTabManager.closeAllFiles(changeEditor)
   filesTabLay.removeAllTabs()
   for index, content in pairs(openedFiles) do
@@ -340,6 +413,20 @@ function FilesTabManager.closeAllFiles(changeEditor)
   end
   openState=false
 end
+
+--[=[
+-- 关闭其他文件
+function FilesTabManager.closeOtherFiles()
+  --[[
+  local file,fileType=file,fileType
+  FilesTabManager.closeAllFiles(false)
+  FilesTabManager.openFile(file,fileType,true)]]
+  for index, content in pairs(openedFiles) do
+    if index~=fileConfig.lowerPath then
+      FilesTabManager.closeFile(index,false)
+    end
+  end
+end]=]
 
 
 -- 初始化 FilesTabManager
@@ -357,7 +444,7 @@ function FilesTabManager.init()
     onTabUnselected = function(tab)
     end
   }))
-  filesTabLay.onTouch = onFileTabLayTouch
+  --filesTabLay.onTouch = onFileTabLayTouch
 
   for index,content in pairs(FileDecoders) do
     local superType=content.super

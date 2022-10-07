@@ -232,6 +232,9 @@ function managerActions.scrollTo(x,y)
   generalActionEvent("scrollTo","scrollTo",x,y)
 end
 
+function managerActions.selectText(select)
+  generalActionEvent("selectText","selectText",select)
+end
 
 function managerActions.setSelection(l)
   generalActionEvent("setSelection","setSelection",l)
@@ -279,6 +282,7 @@ function EditorsManager.openNewContent(filePath,fileType,decoder,keepHistory)
         fileConfig.newContent=content
         fileConfig.changed=false
         if keepHistory then
+          managerActions.selectText(false)
           managerActions.setText(content,true)
          else
           managerActions.setText(content)
@@ -367,6 +371,7 @@ function EditorsManager.switchEditor(newEditorType)
     managerActions.setText("")
   end
   editorConfig=editorLayouts[newEditorType]
+  editorConfig.name=newEditorType
 
   --检查是不是真的存在这个编辑器
   if not(editorConfig) then
@@ -380,7 +385,7 @@ function EditorsManager.switchEditor(newEditorType)
     editorGroup.removeViewAt(0)
   end]]
   editorGroup.removeAllViews()
-  
+
   editorType=newEditorType
 
   editorActions=editorConfig.action
@@ -409,6 +414,7 @@ function EditorsManager.switchEditor(newEditorType)
    else
     MyAnimationUtil.ScrollView.onScrollChange(editor,0,0,0,0,appBarLayout,nil)
   end
+  PluginsUtil.callElevents("onSwitchEditor", newEditorType,editorConfig)
 end
 
 --同时切换编辑器和语言，一般用于打开文本文件

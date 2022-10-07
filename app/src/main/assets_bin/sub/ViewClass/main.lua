@@ -1,9 +1,8 @@
 package.path=package.path..activity.getLuaPath("../JavaApi/?.lua;")
 require "import"
---activity.setTheme(R.style.Theme_MaterialComponents_Light_DarkActionBar)
 import "jesse205"
+import "android.widget.ListView"
 
---import "android.animation.LayoutTransition"
 import "androidx.viewpager.widget.*"
 import "com.google.android.material.tabs.*"
 import "com.google.android.material.appbar.AppBarLayout"
@@ -22,6 +21,20 @@ if not(LoadSucceed) or not(class) then
   activity.result({R.string.javaApiViewer_notFindClass})
   return
 end
+developerClassesRegularTable={
+  "^android%.",
+  "^androidx%.",
+  "^com%.google%.android%.material%.",
+  "^dalvik%.",
+  "^java%.",
+  "^javax%.",
+  "^junit%.",
+  "^org%.apache%.http%.",
+  "^org%.json%.",
+  "^org%.w3c%.",
+  "^org%.xml%.",
+  "^org%.chromium%.",
+}
 
 PageTypes={"parents","constructors","events","fields","methods"}
 
@@ -72,7 +85,7 @@ activity.setContentView(loadlayout2("layout"))
 
 actionBar.setDisplayHomeAsUpEnabled(true)
 --actionBar.setElevation(0)
-local classDir,className=classString:match("(.+)%.(.+)")
+local classDir,className=classString:match("(.*)%.(.*)")
 actionBar.setTitle(className or classString)--设置标题
 actionBar.setSubtitle(("Located at \"%s\""):format(classDir))
 
@@ -80,6 +93,14 @@ actionBar.setSubtitle(("Located at \"%s\""):format(classDir))
 function onCreateOptionsMenu(menu)
   local inflater=activity.getMenuInflater()
   inflater.inflate(R.menu.menu_javaapi_viewclass,menu)
+  local developerMenu=menu.findItem(R.id.menu_openInAndroidDeveloper)
+  developerMenu.setEnabled(false)
+  for index=1,#developerClassesRegularTable do
+    if classString:find(developerClassesRegularTable[index]) then
+      developerMenu.setEnabled(true)
+      break
+    end
+  end
   LoadedMenu=true
 end
 
@@ -94,7 +115,6 @@ function onOptionsItemSelected(item)
         if checkTextError(text,ids.searchEdit) then
           return
         end
-        
         searchItem(text)
       end,
       onIndex=function(text)
@@ -112,6 +132,8 @@ function onOptionsItemSelected(item)
       end,
     }
     ids=SearchActionMode(config)
+   elseif id==R.id.menu_openInAndroidDeveloper then
+    openUrl("https://developer.android.google.cn/reference/"..classString:gsub("%.","/"):gsub("%$","."))
   end
 end
 

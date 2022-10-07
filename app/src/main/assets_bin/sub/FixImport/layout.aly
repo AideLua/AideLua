@@ -8,11 +8,11 @@
     ProgressBar;
     id="progressBar";
     indeterminate=true;
-    layout_width="fill";
-    paddingTop="-8dp";
-    paddingBottom="-8dp";
-    layout_height="4dp";
-    style="?android:attr/progressBarStyleHorizontal"
+    --layout_width="fill";
+    --paddingTop="-8dp";
+    --paddingBottom="-8dp";
+    --layout_height="4dp";
+    layout_gravity="center";
   };
   {
     ListView;

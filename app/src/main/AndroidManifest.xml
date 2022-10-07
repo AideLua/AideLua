@@ -3,44 +3,35 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jesse205.aidelua2">
 
-    <!-- 读取通话状态和移动网络信息 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
-    <!-- 查看 WLAN 状态 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
-    <!-- 查看网络连接 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-    <!-- 完全的网络访问权限 -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
-    <!-- 修改或删除 SD 卡中的内容 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-    <!-- MANAGE_EXTERNAL_STORAGE -->
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
 
-    <!-- 安装快捷方式 -->
-    <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
-
-    <!-- READ_LOGS -->
     <uses-permission android:name="android.permission.READ_LOGS"/>
 
-    <!-- 直接下载文件而不显示通知 -->
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION"/>
 
-    <!-- 请求安装文件包 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 
-    <!-- 运行前台服务 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
-    <!-- 读取存储卡中的内容 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
-    <!-- 卸载快捷方式 -->
-    <uses-permission android:name="com.android.launcher.permission.UNINSTALL_SHORTCUT"/>
+    <uses-permission android:name="com.termux.permission.RUN_COMMAND"/>
+
+	<uses-permission android:name="com.huawei.permission.POPUP_BACKGROUND_WINDOW"/>
+
+    <supports-screens
+        android:largeScreens="true"
+        android:xlargeScreens="true"/>
 
     <application
         android:largeHeap="true"
@@ -62,6 +53,10 @@
             android:value="4"/>
 
         <meta-data
+            android:name="AideLua_KEY_MD5"
+            android:value="2f2db2934f8eb0cddf80ba54abd741b1"/>
+
+        <meta-data
             android:name="BaiduMobAd_STAT_ID"
             android:value="f323e9abd1"/>
 
@@ -71,8 +66,7 @@
 
         <meta-data
             android:name="EasyGoClient"
-            android:value="true" />
-        
+            android:value="true"/>
 
         <activity
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize"
@@ -82,18 +76,21 @@
             android:name="com.jesse205.superlua.Main"
             android:exported="true"
             android:theme="@style/Theme.Jesse205.Welcome">
+
             <intent-filter>
+
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
+
             </intent-filter>
-            
+
         </activity>
 
         <activity
             android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:label="@string/app_name"
-            android:exported="true"
             android:name="com.jesse205.superlua.LuaActivity"/>
 
         <activity
@@ -102,7 +99,6 @@
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:excludeFromRecents="false"
             android:label="@string/app_name"
-            android:exported="true"
             android:name="com.jesse205.superlua.LuaActivityX"/>
 
         <activity
@@ -121,11 +117,15 @@
             android:exported="false"
             android:grantUriPermissions="true"
             android:name="android.content.FileProvider">
+
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/androlua_filepaths"/>
+
         </provider>
-     
+
+        <activity android:name="com.jesse205.activity.RunActivity"/>
+
     </application>
 
 </manifest>

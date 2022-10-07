@@ -1,61 +1,61 @@
 local ThemeUtil={}
-
+local ThemeUtilJava=luajava.bindClass("com.jesse205.app.ThemeUtil")
 local context=jesse205.context
 local theme=_G.theme
 local SDK_INT=Build.VERSION.SDK_INT
---local onColorChangedListeners={}
---local selectableItemBackgroundBorderless
 
-ThemeUtil.APPTHEMES={
-  {--深海蓝
-    name="Default",
-    show={
-      name=R.string.jesse205_theme_default,
-      preview=0xff4477e0,
-    },
-  },
-
-  {--水鸭绿
-    name="Teal",
-    show={
-      name=R.string.jesse205_theme_teal,
-      preview=0xff009688,
-    },
-  },
-  {--极客橙
-    name="Orange",
-    show={
-      name=R.string.jesse205_theme_orange,
-      preview=0xFFFFA000,
-    },
-  },
-  {--舒适粉
-    name="Pink",
-    show={
-      name=R.string.jesse205_theme_pink,
-      preview=0xFFFF4081,
-    },
-  },
-  {--新年红
-    name="Red",
-    show={
-      name=R.string.jesse205_theme_red,
-      preview=0xfff44336,
-    },
-  },
+local supportedThemeName={
+  Default=true,
+  Teal=true,
+  Orange=true,
+  Pink=true,
+  Red=true,
 }
-ThemeUtil.NowAppTheme=nil
 
-local Name2AppTheme={}
-ThemeUtil.Name2AppTheme=Name2AppTheme
-for index,content in ipairs(ThemeUtil.APPTHEMES)
-  Name2AppTheme[content.name]=content
+function ThemeUtil.getAppThemes()
+  return {
+    {--深海蓝
+      name="Default",
+      show={
+        name=R.string.jesse205_theme_default,
+        preview=0xff4477e0,
+      },
+    },
+
+    {--水鸭绿
+      name="Teal",
+      show={
+        name=R.string.jesse205_theme_teal,
+        preview=0xff009688,
+      },
+    },
+    {--极客橙
+      name="Orange",
+      show={
+        name=R.string.jesse205_theme_orange,
+        preview=0xFFFFA000,
+      },
+    },
+    {--舒适粉
+      name="Pink",
+      show={
+        name=R.string.jesse205_theme_pink,
+        preview=0xFFFF4081,
+      },
+    },
+    {--新年红
+      name="Red",
+      show={
+        name=R.string.jesse205_theme_red,
+        preview=0xfff44336,
+      },
+    },
+  }
 end
-
 
 --判断是否是系统夜间模式
 local function isSysNightMode()
-  return (context.getResources().getConfiguration().uiMode&Configuration.UI_MODE_NIGHT_MASK)==Configuration.UI_MODE_NIGHT_YES
+  return ThemeUtilJava.isSysNightMode(context)
 end
 ThemeUtil.isSysNightMode=isSysNightMode--这个一般用不到
 ThemeUtil.isNightMode=isSysNightMode
@@ -143,7 +143,6 @@ end
 function ThemeUtil.setStatusBarColor(color)
   theme.color.statusBarColor=color--保存导航栏颜色
   window.setStatusBarColor(color)
-  --ThemeUtil.callOnColorChangedListener("navigationBarColor",color)--响应导航栏颜色改变事件
   return color
 end
 
@@ -151,18 +150,14 @@ end
 function ThemeUtil.setNavigationbarColor(color)
   theme.color.navigationBarColor=color--保存导航栏颜色
   window.setNavigationBarColor(color)--设置导航栏颜色
-  --ThemeUtil.callOnColorChangedListener("navigationBarColor",color)--响应导航栏颜色改变事件
   return color
 end
 
 --获取波纹Drawable
 function ThemeUtil.getRippleDrawable(color,square)
-  local rippleId
-  if square then
-    rippleId=theme.number.id.selectableItemBackground
-   else
-    rippleId=theme.number.id.selectableItemBackgroundBorderless
-  end
+  local rippleId=square and theme.number.id.selectableItemBackground
+  or theme.number.id.selectableItemBackgroundBorderless
+
   local drawable=context.getResources().getDrawable(rippleId)--获取RippleDrawable
 
   if color then--要修改颜色
@@ -174,22 +169,11 @@ function ThemeUtil.getRippleDrawable(color,square)
   end
   return drawable
 end
---[[
-function ThemeUtil.makeGradientDrawable(Thickness,FrameColor,InsideColor,radiu)
-  import "android.graphics.drawable.GradientDrawable"
-  local drawable = GradientDrawable()
-  drawable.setShape(GradientDrawable.RECTANGLE)
-  if Thickness and FrameColor then
-    drawable.setStroke(Thickness, FrameColor)
-  end
-  drawable.setColor(InsideColor)
-  if type(radiu)=="number" then
-    drawable.setCornerRadius(radiu)
-   elseif type(radiu)=="table" then
-    drawable.setCornerRadii(radiu)
-  end
-  return drawable
-end]]
+
+local function isGrayNavigationBarSystem()
+  return ThemeUtilJava.isGrayNavigationBarSystem()
+end
+ThemeUtil.isGrayNavigationBarSystem=isGrayNavigationBarSystem
 
 --设置软件主题，如："Default"
 local function setAppTheme(key)
@@ -206,15 +190,12 @@ ThemeUtil.getAppTheme=getAppTheme
 
 --刷新UI
 function ThemeUtil.refreshUI()
-  local themeKey,appTheme
+  local themeKey
   themeKey=getAppTheme()--获取当前设置的主题
-  appTheme=Name2AppTheme[themeKey]--获取主题配置
-  if not(appTheme) then--主图里面没有，可能是废除了这个主题
+  if not(supportedThemeName[themeKey]) then--主图里面没有，可能是废除了这个主题
     themeKey="Default"
-    appTheme=Name2AppTheme[themeKey]
     setAppTheme(themeKey)--自动设置会默认
   end
-
 
   --构建用的主题名字
   local themeString=("Theme_%s_%s"):format(jesse205.themeType,themeKey)
@@ -228,11 +209,8 @@ function ThemeUtil.refreshUI()
   activity.setTheme(R.style[themeString])--设置主题
   themeString=nil
 
-  ThemeUtil.NowAppTheme=appTheme
   local systemUiVisibility=0
-  --if not(decorView) then
   decorView=activity.getDecorView()--定要在设置主题之后调用
-  --end
   local colorList=theme.color
 
   if not(useCustomAppToolbar) then
@@ -245,12 +223,9 @@ function ThemeUtil.refreshUI()
 
   ThemeUtil.refreshThemeColor()--刷新一下颜色
 
-  --[[
-  if appTheme.color then--动态覆盖颜色
-    for index,content in pairs(appTheme.color) do
-      colorList[index]=content
-    end
-  end]]
+  if isGrayNavigationBarSystem() then
+    ThemeUtil.setNavigationbarColor(theme.color.windowBackground)
+  end
 
   if theme.boolean.windowLightNavigationBar and SDK_INT>=26 and not(ThemeUtil.isNightMode()) and not(darkNavigationBar) then--主题默认亮色导航栏
     systemUiVisibility=systemUiVisibility|View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR--设置亮色导航栏

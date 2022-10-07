@@ -1,5 +1,10 @@
 require "import"
 import "jesse205"
+local normalkeys=jesse205.normalkeys
+
+normalkeys.scroll=true
+
+import "android.widget.GridView"
 import "com.jesse205.layout.innocentlayout.GridViewLayout"
 import "item"
 
@@ -22,7 +27,7 @@ data={}
 adapter=LuaAdapter(activity, data,item)
 gridView.setAdapter(adapter)
 
-for index,content in pairs(ThemeUtil.APPTHEMES) do
+for index,content in pairs(ThemeUtil.getAppThemes()) do
   --print(index)
   local item={
     title={text=content.show.name},
@@ -36,7 +41,6 @@ for index,content in pairs(ThemeUtil.APPTHEMES) do
    else
     item.now={visibility=View.GONE}
   end
-
 end
 
 

@@ -1,6 +1,6 @@
 local netCodeMap=application.get("netCodeMap")
 if netCodeMap==nil then
-  netCodeMap=Map({
+  netCodeMap=HashMap({
     [301] ="Moved Permanently",
     [305] ="Use Proxy",
     [405] ="Method Not Allowed",
@@ -41,9 +41,9 @@ if netCodeMap==nil then
   application.set("netCodeMap",netCodeMap)
 end
 
-function NetErrorStr(code)
+local function getNetErrorStr(code)
   local errStr=netCodeMap[code]
   return formatResStr(R.string.jesse205_toast_neterror,{errStr or "Unknow",code})
 end
 application.set("NetErrorStr",NetErrorStr)
-return NetErrorStr
+return getNetErrorStr

@@ -35,31 +35,6 @@ function onOptionsItemSelected(item)
     openUrl("https://gitee.com/Jesse205/AideLua/wikis/插件说明/readme")
   end
 end
-function onCreateContextMenu(menu,view,menuInfo)
-  local tag=view.tag
-  if tag and type(tag)=="table" then
-    local data=tag._data
-    tag._data=nil
-    if tag._type=="itemview" and data.contextMenuEbaled then
-      local key=data.key
-      if key=="plugin_item" then
-        menu.setHeaderTitle(data.title)
-
-        local config=data.config
-        menu.add(R.string.plugins_uninstall).onMenuItemClick=function()
-          PluginsManagerUtil.uninstall(data.path,config,function(state)
-            if state=="success" then
-              MyToast(R.string.uninstall_success)
-              refresh()
-             elseif state=="failed" then
-              MyToast(R.string.uninstall_failed)
-            end
-          end)
-        end
-      end
-    end
-  end
-end
 
 function onActivityResult(requestCode,resultCode,data)
   if resultCode==Activity.RESULT_OK then
@@ -106,23 +81,6 @@ end
 
 function onItemLongClick(view,views,key,data)
   recyclerView.tag._data=data
-  --[[
- if key=="plugin_item" then
-    local config=data.config
-    local pop=PopupMenu(activity,view)
-    local menu=pop.Menu
-    menu.add(R.string.plugins_uninstall).onMenuItemClick=function()
-      PluginsManagerUtil.uninstall(data.path,config,function(state)
-        if state=="success" then
-          MyToast(R.string.uninstall_success)
-          refresh()
-         elseif state=="failed" then
-          MyToast(R.string.uninstall_failed)
-        end
-      end)
-    end
-    pop.show()
-  end]]
 end
 
 function addSummaryTextLine(summarySpanIndex,color,oldSummary,summary)
@@ -279,6 +237,26 @@ layoutManager=LinearLayoutManager()
 recyclerView.setLayoutManager(layoutManager)
 recyclerView.setTag({_type="itemview"})
 activity.registerForContextMenu(recyclerView)
+recyclerView.onCreateContextMenu=function(menu,view,menuInfo)
+  local data=settings2[menuInfo.position+1]
+  if data.contextMenuEbaled then
+    local key=data.key
+    if key=="plugin_item" then
+      local config=data.config
+      menu.setHeaderTitle(data.title)
+      menu.add(R.string.plugins_uninstall).onMenuItemClick=function()
+        PluginsManagerUtil.uninstall(data.path,config,function(state)
+          if state=="success" then
+            MyToast(R.string.uninstall_success)
+            refresh()
+           elseif state=="failed" then
+            MyToast(R.string.uninstall_failed)
+          end
+        end)
+      end
+    end
+  end
+end
 recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
   onScrolled=function(view,dx,dy)
     MyAnimationUtil.RecyclerView.onScroll(view,dx,dy)

@@ -29,7 +29,8 @@
         <item name="tabStyle">@style/Widget.Jesse205.TabLayout.Colored</item>
         <item name="actionOverflowMenuStyle">@style/Widget.Jesse205.PopupMenu.Overflow</item>
         <item name="popupMenuStyle">@style/Widget.Jesse205.PopupMenu</item>
-        <!--<item name="actionModeStyle">@style/Widget.Jesse205.ActionMode.Colored</item>-->
+		<item name="android:contextPopupMenuStyle">@style/Widget.Jesse205.ContextPopupMenu</item>
+		<!--<item name="actionModeStyle">@style/Widget.Jesse205.ActionMode.Colored</item>-->
         <!--<item name="materialButtonStyle">@style/Widget.MaterialComponents.Button.OutlinedButton</item>-->
         <item name="android:alertDialogTheme">@style/Base.Theme.Jesse205.Dark.Dialog.Alert</item>
         <item name="cardViewStyle">@style/Widget.Jesse205.CardView</item>
@@ -37,7 +38,10 @@
         <item name="navigationViewStyle">@style/Widget.Jesse205.NavigationView</item>
         <item name="bottomNavigationStyle">@style/Widget.Jesse205.BottomNavigationView.Colored</item>
         <item name="chipStyle">@style/Widget.Jesse205.Chip</item>
-
+		
+		<!--字体-->
+		<item name="textAppearancePopupMenuHeader">@style/TextAppearance.Jesse205.Widget.PopupMenu.Header</item>
+		
         <!--圆角-->
         <item name="dialogCornerRadius">?cornerRadius</item>
         <item name="cardCornerRadius">?cornerRadius</item>

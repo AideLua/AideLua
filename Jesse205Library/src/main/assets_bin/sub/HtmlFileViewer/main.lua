@@ -4,9 +4,9 @@ import "android.text.Html"
 import "android.text.method.LinkMovementMethod"
 
 activity.setTitle(R.string.jesse205_htmlFileViewer)
-activity.setContentView(loadlayout2("layout",_ENV))
+activity.setContentView(loadlayout2("layout"))
 actionBar.setDisplayHomeAsUpEnabled(true)
-data=...
+local data=...
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()

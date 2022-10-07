@@ -23,7 +23,29 @@
       id="appBarLinearLayout";
       --layoutTransition=newLayoutTransition();
       {
-        TabLayout;
+        function(context)--适配了菜单的TabLayout
+          local startX=0
+          return luajava.override(TabLayout,{
+            onInterceptTouchEvent=function(super,event)
+              local action=event.getAction()
+              local x=event.getX()
+              if action==MotionEvent.ACTION_DOWN then
+                startX=x
+               elseif action==MotionEvent.ACTION_MOVE then
+                if (startX-x)>math.dp2int(16) or (x-startX)>math.dp2int(16) then
+                  if FilesTabManager.tabShowingMenu==0 then
+                    return super(event)
+                   else
+                    return false
+                  end
+                 else
+                  return nil
+                end
+              end
+              return super(event)
+            end,
+          })
+        end;
         layout_width="fill";
         tabMode=TabLayout.MODE_SCROLLABLE;
         layout_height="32dp";

@@ -14,7 +14,6 @@ local getIconAlphaByName=FilesBrowserManager.getIconAlphaByName
 
 local directoryFilesList
 
-
 local function onClick(view)
   local data=view.tag._data
   local file=data.file
@@ -37,96 +36,6 @@ local function onClick(view)
   end
 end
 
-local function onLongClick(view)
-  local tag=view.tag
-  local data=tag._data
-  recyclerView.tag._data=data
-  --[==[
-  if data.position~=0 then
-    local file=data.file
-    local filePath=data.filePath
-    local title=data.title--显示的名称
-    local fileName=data.fileName
-    local Rid=R.id
-
-    local parentFile=file.getParentFile()
-    local parentName=parentFile.getName()
-    local action=data.action
-    local isFile,fileType,fileRelativePath,isResDir
-
-    local inLibDirPath=data.inLibDirPath
-
-    local openState=ProjectManager.openState--工程打开状态
-
-    if openState then
-      isFile=file.isFile()
-      fileType=data.fileType
-      fileRelativePath=ProjectManager.shortPath(filePath,true)
-      isResDir=parentName~="values" and not(parentName:find("values%-")) and ProjectManager.shortPath(filePath,true):find(".-/src/.-/res/.-/") or false
-     else
-      isResDir=false
-    end
-
-    if openState and ((fileType and relLibPathsMatch.types[fileType]) or not(isFile)) then--已经打开了项目并且文件类型受支持
-      if not(inLibDirPath) then
-        for index,content in ipairs(relLibPathsMatch.paths) do
-          inLibDirPath=fileRelativePath:match(content)
-          if inLibDirPath then
-            data.inLibDirPath=inLibDirPath
-            break
-          end
-        end
-      end
-    end
-
-    --local popupMenu=PopupMenu(activity,view)
-    --local popupMenu=data.popupMenu
-    --if data.needInitMenu then
-    --view.showContextMenu()
-    --activity.registerForContextMenu(view)
-    --[[
-    local popupMenu=PopupMenu(activity,view)
-    popupMenu.inflate(R.menu.menu_main_file)
-    local menu=popupMenu.getMenu()
-    local copyMenu=menu.findItem(R.id.subMenu_copy)
-    local openInNewWindowMenu=menu.findItem(Rid.menu_openInNewWindow)--新窗口打开
-    local referencesMenu=menu.findItem(Rid.menu_references)--引用资源
-    local renameMenu=menu.findItem(Rid.menu_rename)--重命名
-    local copyMenuBuilder = copyMenu.getSubMenu()
-
-    copyMenu.setVisible(ProjectManager.openState)
-    openInNewWindowMenu.setVisible(isFile or data.action=="openProject")
-    referencesMenu.setVisible(toboolean(isResDir))
-    renameMenu.setVisible(ProjectManager.openState)
-    if openState then
-      CopyMenuUtil.addSubMenus(copyMenuBuilder,getFilePathCopyMenus(inLibDirPath,filePath,fileName,isFile,fileType))
-    end
-    popupMenu.onMenuItemClick=function(item)
-      local id=item.getItemId()
-      if id==Rid.menu_delete then--删除
-        deleteFileDialog(title,file)
-       elseif id==Rid.menu_rename then--重命名
-        renameDialog(file)
-       elseif id==Rid.menu_openInNewWindow then--新窗口打开
-        if openState then
-          activity.newActivity("main",{ProjectManager.nowPath,filePath},true,int(System.currentTimeMillis()))
-         else
-          activity.newActivity("main",{filePath},true,int(System.currentTimeMillis()))
-        end
-       elseif id==Rid.menu_references then--引用资源
-        local javaR=("R.%s.%s"):format(parentName:match("(.-)%-")or parentName,fileName:match("(.+)%.")or fileName)
-        EditorsManager.actions.paste(javaR)
-      end
-    end
-    --data.needInitMenu=false
-    --end
-    popupMenu.show()
-]]
-    --tag.menuTouchListener.onTouch
-    --return true
-  end]==]
-end
-
 local function fileMoreMenuClick(view)
   local tag=view.tag
   local popupMenu=tag.popupMenu
@@ -144,11 +53,9 @@ local openState2ViewType={
   }
 }
 return function(item)
-  --local isResDir
   return LuaCustRecyclerAdapter(AdapterCreator({
     getItemCount=function()
       directoryFilesList=FilesBrowserManager.directoryFilesList
-      --print(directoryFilesList)
       if directoryFilesList then
         return #directoryFilesList+1
        else
@@ -166,12 +73,7 @@ return function(item)
       view.setTag(ids)
       view.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
       view.onClick=onClick
-      view.onLongClick=onLongClick
-      --view.onContextClick=onLongClick
-      --[[
-      if viewType~=3 and viewType~=1 then
-        activity.registerForContextMenu(view)
-      end]]
+
       if viewType==3 then
         local moreView=ids.more
         local iconView=ids.icon
@@ -312,11 +214,13 @@ return function(item)
               titleView.setTextColor(theme.color.colorAccent)
               iconView.setColorFilter(theme.color.colorAccent)
               highLightCard.setCardBackgroundColor(theme.color.rippleColorAccent)
+              view.setSelected(true)
               FilesBrowserManager.nowFilePosition=position
              else
               titleView.setTextColor(theme.color.textColorPrimary)
               iconView.setColorFilter(colorFilter)
               highLightCard.setCardBackgroundColor(0)
+              view.setSelected(false)
             end
             data.fileType=fileType
             data.action="openFile"
@@ -325,6 +229,7 @@ return function(item)
             iconView.setImageResource(folderIcons[fileName])
             iconView.setColorFilter(fileColors.folder)
             highLightCard.setCardBackgroundColor(0)
+            view.setSelected(false)
             data.action="openFolder"
           end
 

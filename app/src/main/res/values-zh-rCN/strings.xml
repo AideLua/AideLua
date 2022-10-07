@@ -36,6 +36,7 @@
     <string name="logCat">日志猫</string>
     <string name="help">帮助</string>
     <string name="viewError">查看错误</string>
+    <string name="openInAndroidDeveloper">在“Android 开发者”上打开</string>
     
     <string name="open">打开</string>
     <string name="open_failed">打开失败</string>
@@ -67,6 +68,8 @@
     <string name="file_name">文件名</string>
     <string name="file_name_copy">复制文件名</string>
     <string name="file_close">关闭文件</string>
+    <string name="file_close_all">关闭所有文件</string>
+    <string name="file_close_other">关闭其他文件</string>
     <string name="file_current_path">当前文件路径</string>
     <string name="file_reopen">重新打开</string>
     

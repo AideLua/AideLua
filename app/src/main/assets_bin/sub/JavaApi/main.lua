@@ -1,5 +1,7 @@
 require "import"
 import "jesse205"
+import "android.widget.ListView"
+
 import "com.jesse205.adapter.MyLuaAdapter"
 import "com.jesse205.layout.MySearchLayout"
 
@@ -7,6 +9,7 @@ import "getImportCode"
 import "showPackageMenu"
 
 import "item"
+
 PluginsUtil.setActivityName("javaapi")
 
 searchWord=...

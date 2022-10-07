@@ -16,6 +16,7 @@
     icon=R.drawable.ic_cloud_download_outline;
     title=R.string.plugins_download;
     key="download_plugin";
+    newPage="newApp";
   };
   {--已安装的插件
     SettingsLayUtil.TITLE;

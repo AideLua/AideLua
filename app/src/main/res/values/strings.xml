@@ -37,6 +37,7 @@
     <string name="logCat">Log Cat</string>
     <string name="help">Help</string>
     <string name="viewError">View Error</string>
+    <string name="openInAndroidDeveloper">Open in \"Android Developer\"</string>
     
     <string name="open">Open</string>
     <string name="open_failed">Open failed</string>
@@ -68,7 +69,9 @@
     <string name="file_name">File name</string>
     <string name="file_name_copy">Copy file name</string>
     <string name="file_close">Close file</string>
-    <string name="file_current_path">Current file path</string>
+	<string name="file_close_all">Close all files</string>
+    <string name="file_close_other">Close other files</string>
+	<string name="file_current_path">Current file path</string>
     <string name="file_reopen">Reopen file</string>
     
     <string name="directory">Folder</string>
@@ -184,12 +187,12 @@
     <string name="runCode_noApp">In order to better debug the software, please export LuaActivity and package the project and install first.</string>
     <string name="runCode_noPackageName">In order to better debug the software, please check whether the packageName in config.lua exists.</string>
 
-    <string name="plugins">Plug-ins</string>
-    <string name="plugins_popup">Plug-in...</string>
+    <string name="plugins">Plugins</string>
+    <string name="plugins_popup">Plugins...</string>
     <string name="plugins_manager">Plugins Manager</string>
-    <string name="plugins_install">Install plug-ins</string>
-    <string name="plugins_installed">Installed plug-ins</string>
-    <string name="plugins_uninstall">Uninstall plug-ins</string>
+    <string name="plugins_install">Install plugins</string>
+    <string name="plugins_installed">Installed plugins</string>
+    <string name="plugins_uninstall">Uninstall plugins</string>
     <string name="plugins_uninstall_warning">Are you sure to uninstall? The plug-in data will be cleared after uninstallation (if the standard storage method is used)</string>
     <string name="plugins_download">Download plug-ins</string>
     <string name="plugins_info_version">Version: %1$s</string>

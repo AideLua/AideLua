@@ -1,4 +1,4 @@
-require "import"
+--require "import"
 --import "jesse205"
 
 activity.setTitle(luajava.bindClass(activity.getPackageName()..".R").string.runCode)

@@ -42,7 +42,7 @@ function MyToast.showNetErrorToast(code,view)
   if not(NetErrorStr) then
     import "com.jesse205.util.NetErrorStr"--导入网络错误代码
   end]]
-  return MyToast.autoShowToast(NetErrorStr(code),view)
+  return MyToast.autoShowToast(getNetErrorStr(code),view)
 end
 
 --复制文字然后显示Toast

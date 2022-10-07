@@ -1,0 +1,96 @@
+{
+  {
+    name="AndroLua+",
+    _type="androlua",
+    templateDirPath="AndroLua",--初始化时系统会自动转为绝对路径
+    useLoadlayout2=true,
+    checkAppConfig=true,--检查应用名与包名，应用名与包名的输入名的编辑框id必须相同
+    templateType="default",
+    layout={
+      ScrollView;
+      layout_height="fill";
+      layout_width="fill";
+      {
+        LinearLayout;
+        layout_width="fill";
+        layout_height="fill";
+        orientation="vertical";
+        layoutTransition=newLayoutTransition();
+        {
+          LinearLayout;
+          layout_width="fill";
+          id="androidXSwitchParent";
+          background=ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true);
+          {
+            SwitchCompat;
+            text="启用 AndroidX";
+            layout_width="fill";
+            padding="16dp";
+            id="androidXSwitch";--此ID需固定不变
+            clickable=false;
+            textSize="16sp";
+          };
+        };
+        "layouts.appConfigLayout";
+        "layouts.androluaVersionsLayout";
+        "layouts.complexLayout";
+        "layouts.jarLibrariesLayout";
+        "layouts.simpleLibrariesLayout";
+      };
+    },
+    onInit=function(ids,config)
+      --print(config.templateDirPath)
+      local chipList={}
+      config.chipList=chipList
+      local androidXSwitch=ids.androidXSwitch
+      local androidXState=NewProjectUtil.getSharedData(config._type,"androidxstate") or false
+      androidXSwitch.setChecked(androidXState)
+      config.androidXState=androidXState
+      ids.androidXSwitchParent.onClick=function()
+        local nowState=androidXSwitch.isChecked()
+        local newState=not(nowState)
+        androidXSwitch.setChecked(newState)
+        NewProjectUtil.setSharedData(config._type,"androidxstate",newState)
+        config.androidXState=newState
+        NewProjectUtil.refreshState("androidx",newState,chipList)
+      end
+
+     NewProjectUtil.refreshState("androidx",androidXState,chipList)
+   
+    end,
+    onCreativePrj=function(ids,config,keys)
+      print(dump(keys))
+
+    end,
+    onBuildConfig=function(ids,config,keysLists,formatList,defaultUnzipList)
+      --table.insert(keysLists,{androidX=ids.androidXSwitch.isChecked()})
+      print(dump(keysLists),dump(formatList),dump(defaultUnzipList))
+    end
+
+  },
+  {
+    name="LuaJ",
+    _type="androlua",
+    templateDirPath="LuaJ",
+    useLoadlayout2=true,
+    checkAppConfig=false,
+    helloWorld=true,--不可用标识
+    templateType="default",
+    layout={
+      LinearLayout;
+      layout_height="fill";
+      layout_width="fill";
+      orientation="vertical";
+      {
+        TextView;
+        gravity="center";
+        text="Hello World";
+        layout_height="fill";
+        layout_width="fill";
+      };
+    },
+    onSelected=function(ids,config)
+      --createButton.setEnabled(false)
+    end
+  }
+}

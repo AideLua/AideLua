@@ -1,0 +1,10 @@
+## This file must *NOT* be checked into Version Control Systems,
+# as it contains information specific to your local configuration.
+#
+# Location of the SDK. This is only used by Gradle.
+# For customization when using a Version Control System, please read the
+# header note.
+
+sdk.dir=/sdcard/Android/media/com.termux/android-sdk
+ndk.dir=/sdcard/Android/media/com.termux/android-ndk-r24
+cmake.dir=/sdcard/Android/media/com.termux/android-sdk/cmake

@@ -45,7 +45,3 @@ apptype="aidelua"
 
 import "PluginsUtil"
 
---PluginsUtil.callElevents("onLoadJesse205")
-
-
---PluginsUtil.loadPlugins()

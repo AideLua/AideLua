@@ -45,6 +45,7 @@
     LinearLayout;
     layout_width="fill";
     gravity="center|left";
+    longClickable=true;
     {
       MaterialCardView;
       layout_marginLeft="16dp";
@@ -148,6 +149,7 @@
   {
     LinearLayout;
     layout_width="fill";
+    longClickable=true;
     {
       CardView;
       layout_width="fill";
@@ -167,7 +169,6 @@
           layout_margin="8dp";
           layout_width="24dp";
           layout_height="24dp";
-          --imageTintList=ColorStateList({{}},{theme.color.textColorSecondary})
         };
         {
           AppCompatTextView;

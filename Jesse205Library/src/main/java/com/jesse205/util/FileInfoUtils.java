@@ -1,4 +1,4 @@
-package com.jesse205;
+package com.jesse205.util;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;

@@ -1,9 +1,13 @@
 require "import"
 import "jesse205"
---import "com.jesse205.FileInfoUtils"
+local normalkeys=jesse205.normalkeys
+normalkeys.configType=true
+normalkeys.config=true
+
 import "com.jesse205.layout.util.SettingsLayUtil"
 import "com.jesse205.layout.innocentlayout.RecyclerViewLayout"
 import "com.jesse205.app.dialog.EditDialogBuilder"
+
 packageInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
 PluginsUtil.setActivityName("settings")
 
@@ -17,9 +21,6 @@ actionBar.setDisplayHomeAsUpEnabled(true)
 oldTheme=ThemeUtil.getAppTheme()
 
 configType,config=...
-
-REQUEST_ADDCLIB=10
-
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()

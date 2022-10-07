@@ -78,6 +78,7 @@
         basewordColor=theme.color.Blue;
         userwordColor=0xff5c6bc0;
         textSize=math.dp2int(14);
+        
       };
     },
     init=function(ids,config)
@@ -105,6 +106,7 @@
       getScrollX="default",
       getScrollY="default",
       scrollTo="default",
+      selectText="default",
       setSelection="default",
       getSelectionEnd="default",
       check=function(ids,config,show)
@@ -171,7 +173,7 @@ import "jesse205"
     }),
     jesse205Keywords=String({
       "newActivity","getSupportActionBar","getSharedData","setSharedData",
-      "getString","getPackageName","getColorStateList",
+      "getString","getPackageName","getColorStateList","getNetErrorStr",
 
       --一些标识
       "initApp","notLoadTheme","useCustomAppToolbar",
@@ -187,7 +189,7 @@ import "jesse205"
       "newLayoutTransition",
 
       "AppPath","ThemeUtil","EditDialogBuilder","ImageDialogBuilder",
-      "NetErrorStr","MyToast","AutoToolbarLayout","PermissionUtil",
+      "MyToast","AutoToolbarLayout","PermissionUtil",
       "AutoCollapsingToolbarLayout","SettingsLayUtil","jesse205",
       "StyleWidget","ScreenFixUtil",
 
@@ -198,9 +200,12 @@ import "jesse205"
       --适配器
       "MyLuaMultiAdapter","MyLuaAdapter","LuaCustRecyclerAdapter",
       "LuaCustRecyclerHolder","AdapterCreator",
-      table.unpack(StyleWidget.types)
+
+      table.unpack(StyleWidget.types),
+
+      "FileInfoUtils",
     }),
-    
+
   },
   CodeEditor={
     layout={

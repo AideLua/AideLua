@@ -5,12 +5,14 @@
     <item
         android:id="@+id/menu_selectAll"
         app:showAsAction="always"
-        android:icon="@drawable/ic_check_box_multiple_outline"
+		app:iconTint="?android:textColorPrimary"
+		android:icon="@drawable/ic_check_box_multiple_outline"
         android:title="@string/selectAll"/>
     <item
         android:id="@+id/menu_unSelectAll"
         app:showAsAction="always"
-        android:icon="@drawable/ic_checkbox_multiple_blank_outline"
+		app:iconTint="?android:textColorPrimary"
+		android:icon="@drawable/ic_checkbox_multiple_blank_outline"
         android:title="@string/deselectAll"/>
     
 </menu>

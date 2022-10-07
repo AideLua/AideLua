@@ -159,7 +159,9 @@ function updateSharedActivity(name,sdActivityDir)
   LuaUtil.copyDir(File(activity.getLuaDir("sub/"..name)),sdActivityDir)
 end
 
-function checkSharedActivity(name,packageName)
+function checkSharedActivity(name)
+  local packageName
+  packageName=ProjectManager.openState and ProjectManager.nowConfig.packageName or activity.getPackageName()
   local sdActivityPath=sharedActivityPath:format(packageName,name)--AppPath.AppShareCacheDir.."/activities/"..name
   local sdActivityMainPath=sdActivityPath.."/main.lua"
   local sdActivityDir=File(sdActivityPath)
@@ -191,11 +193,12 @@ function refreshSubTitle(newScreenWidthDp)
      else
       actionBar.setSubtitle(appName)
     end
+    activity.setTaskDescription(ActivityManager.TaskDescription(appName.."-"..getString(R.string.app_name),nil,theme.color.colorPrimary))
    else
     actionBar.setSubtitle(R.string.project_no_open)
+    activity.setTaskDescription(ActivityManager.TaskDescription(getString(R.string.app_name),nil,theme.color.colorPrimary))
   end
 end
-
 
 function getFileTypeByName(name)
   local _type=name:match(".+%.(.+)")
