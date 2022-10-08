@@ -47,6 +47,7 @@
     layout_width="fill";
     gravity="center|left";
     longClickable=true;
+
     {
       CardView;
       layout_marginLeft="16dp";
@@ -55,12 +56,14 @@
       layout_height="40dp";
       radius="20dp";
       cardBackgroundColor=0;
-      elevation=0;
+      --elevation="2dp";
       {
         AppCompatImageView;
         id="icon";
         layout_width="fill";
         layout_height="fill";
+        elevation="1dp";
+        --outlineProvider=ViewOutlineProvider.BOUNDS;
       };
     };
     {

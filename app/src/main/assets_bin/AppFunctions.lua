@@ -273,3 +273,35 @@ function getTableIndexList(newTable)
   end
   return list
 end
+
+local name2ColorMap={
+  white=0xffffffff,
+  black=0xff000000,
+  red=0xffff0000,
+  green=0xff00ff00,
+  blue=0xff0000ff,
+
+}
+function formatColor2Name(color)
+  if color>=0 and color<=0xFFFFFFFF then
+    local success,result=pcall(String.format,"%08X", {color})
+    if success then
+      return "#"..result
+    end
+  end
+end
+
+function getColorAndName(text)
+  if text and text~="" then
+    local success,color
+    color=name2ColorMap[string.lower(text)] or tonumber(text)
+    if color then
+      return color,formatColor2Name(color)
+    end
+    success,color=pcall(Color.parseColor,"#"..text)
+    if success then
+      return color,"#"..string.upper(text)
+    end
+  end
+end
+

@@ -73,7 +73,7 @@ return function(item)
       view.setTag(ids)
       view.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
       view.onClick=onClick
-      
+
       if viewType==3 then
         local moreView=ids.more
         local iconView=ids.icon
@@ -272,10 +272,28 @@ return function(item)
           if type(iconUrl)=="number" then
             iconView.setImageResource(iconUrl)
            else
+            --iconView.setBackgroundDrawable(LuaBitmapDrawable(activity,iconUrl))
+
             local options=RequestOptions()
             options.skipMemoryCache(true)--跳过内存缓存
+            --options.placeholder(ColorDrawable(theme.color.strokeColor))
+            --options.transform(GlideCircleTransform(activity))
             options.diskCacheStrategy(DiskCacheStrategy.NONE)--不缓冲disk硬盘中
-            Glide.with(activity).load(iconUrl).apply(options).into(iconView)
+            Glide.with(activity)
+            .load(iconUrl)
+            .transition(DrawableTransitionOptions.withCrossFade())
+            .apply(options)
+            --[[
+            .listener(RequestListener({
+              onResourceReady=function(resource,model,target,dataSource,isFirstResource)
+                iconView.post(Runnable({
+                  run=function()
+                    iconView.setBackground(resource)
+                  end
+                }))
+              end
+            }))]]
+            .into(iconView)
           end
 
         end

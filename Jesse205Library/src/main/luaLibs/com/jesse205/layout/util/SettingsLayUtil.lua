@@ -303,7 +303,6 @@ local adapterEvents={
       itemView=view,
       ids=ids}
     ids._config=viewConfig
-
     if viewType==1 then
       ids.title.getPaint().setFakeBoldText(true)
      else

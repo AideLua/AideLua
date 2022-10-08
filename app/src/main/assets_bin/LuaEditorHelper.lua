@@ -5,6 +5,7 @@ LuaEditorHelper.removePackages(editor,packages): 移除包
   package: table(list)
 ]]
 local LuaEditorHelper={}
+local _clipboardActionMode=nil
 
 local function removePackages(editor,packages)
   for index,package in pairs(packages) do
@@ -45,7 +46,6 @@ end
 LuaEditorHelper.isNearChar2=isNearChar2
 
 
-local _clipboardActionMode=nil
 function LuaEditorHelper.onEditorSelectionChangedListener(view,status,start,end_)
   --print(Searching)
   if not(_clipboardActionMode) and status then
@@ -69,7 +69,7 @@ function LuaEditorHelper.onEditorSelectionChangedListener(view,status,start,end_
          elseif id==R.id.menu_paste then
           view.paste()
          elseif id==R.id.menu_code_commented then
-          EditorsManager.actions.commented(view)
+          EditorsManager.actions.commented()
          elseif id==R.id.menu_code_viewApi then
           local selectedText=view.getSelectedText()
           newSubActivity("JavaApi",{selectedText})
@@ -86,15 +86,28 @@ function LuaEditorHelper.onEditorSelectionChangedListener(view,status,start,end_
     _clipboardActionMode.finish()
     _clipboardActionMode=nil
   end
+  if _clipboardActionMode then
+    local selectedText=view.getSelectedText()
+    local previewString
+    local color,colorName=getColorAndName(selectedText)
+    if color then
+      previewString = SpannableString(colorName or selectedText)
+      previewString.setSpan(BackgroundColorSpan(color),0,#previewString,Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+      if ColorUtil.isLightColor(color) then
+        previewString.setSpan(ForegroundColorSpan(theme.color.Black),0,#previewString,Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+       else
+        previewString.setSpan(ForegroundColorSpan(theme.color.White),0,#previewString,Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+      end
+    end
+    _clipboardActionMode.setTitle(previewString or android.R.string.selectTextMode)
+  end
 end
-
 
 function LuaEditorHelper.applyStyleToolBar(editor)
   editor.OnSelectionChangedListener=function(status,start,end_)
     LuaEditorHelper.onEditorSelectionChangedListener(editor,status,start,end_)
   end
 end
-
 
 function LuaEditorHelper.applyPencilInput(editor,pencilEdit)
   local cnString2EnString={
@@ -267,7 +280,7 @@ function LuaEditorHelper.initKeysTaskFunc(keysList,packagesList)
   lang.B(names)--设置成新的names
   return success,message
 end
- 
+
 function LuaEditorHelper.initKeys(editor,editorParent,pencilEdit,progressBar)
   --application.set("luaeditor_initialized",false)--强制初始化编辑器
   if application.get("luaeditor_initialized") then--已初始化过编辑器

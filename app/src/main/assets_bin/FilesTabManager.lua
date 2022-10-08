@@ -256,11 +256,6 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
     local failed=false
     if File(filePath).isFile() then
       _,failed=pcall(function()
-        if not(tab.isSelected()) then--避免调用tab里面的重复点击事件
-          task(1,function()
-            tab.select()
-          end)--选中Tab
-        end
 
         EditorsManager.switchEditorByDecoder(decoder)
         if EditorsManager.openNewContent(filePath,newFileType,decoder,keepHistory) then
@@ -275,8 +270,11 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
           if newFilePosition then
             browserAdapter.notifyItemChanged(newFilePosition)
           end
-         else
-          failed=false
+        end
+        if not(tab.isSelected()) then--避免调用tab里面的重复点击事件
+          task(1,function()
+            tab.select()
+          end)--选中Tab
         end
 
       end)

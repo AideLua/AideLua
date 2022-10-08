@@ -79,7 +79,7 @@ function ThemeUtil.refreshThemeColor()
     R.attr.rippleColorAccent,--强调波纹
     R.attr.floatingActionButtonBackgroundColor,--悬浮按钮背景
     R.attr.colorBackgroundFloating,--悬浮的背景
-    R.attr.strokeColor,--悬浮的背景
+    R.attr.strokeColor,--线条颜色
     --R.attr.titleTextColor,
     --R.attr.subtitleTextColor,
   })

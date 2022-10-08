@@ -34,6 +34,11 @@ import "android.graphics.drawable.ColorDrawable"
 import "android.text.TextUtils$TruncateAt"
 import "android.content.ComponentName"
 import "android.provider.DocumentsContract"
+import "android.text.SpannableString"
+import "android.text.style.ForegroundColorSpan"
+import "android.text.style.BackgroundColorSpan"
+import "android.text.Spannable"
+
 --import "androidx.core.widget.ListViewCompat"
 import "androidx.drawerlayout.widget.DrawerLayout"
 import "androidx.core.graphics.ColorUtils"
@@ -44,6 +49,8 @@ import "com.google.android.material.chip.ChipGroup"
 
 import "com.bumptech.glide.request.RequestOptions"
 import "com.bumptech.glide.load.engine.DiskCacheStrategy"
+import "com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions"
+import "com.bumptech.glide.request.RequestListener"
 
 import "com.nwdxlgzs.view.photoview.PhotoView"
 import "com.pixplicity.sharp.Sharp"
@@ -54,7 +61,10 @@ import "com.jesse205.app.actionmode.SearchActionMode"
 import "com.jesse205.app.dialog.EditDialogBuilder"
 import "com.jesse205.util.FileUtil"
 import "com.jesse205.util.ScreenFixUtil"
+
 import "com.jesse205.util.FileInfoUtils"
+import "com.jesse205.util.ColorUtil"
+
 
 import "AppFunctions" -- 必须先导入这个，因为下面的导入直接要用
 import "DialogFunctions"
