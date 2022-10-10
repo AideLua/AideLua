@@ -5,36 +5,64 @@ local PRJS_PATH=NewProjectUtil2.PRJS_PATH--工程存放路径
 NewProjectManager.TEMPLATES_DIR_PATH=TEMPLATES_DIR_PATH
 NewProjectManager.PRJS_PATH=PRJS_PATH
 
---将错误代码转为文字
+--[[将错误代码转为文字
+1: 不能为空
+2: 项目已存在
+]]
 local errorCode2String={
   [1]=activity.getString(R.string.jesse205_edit_error_cannotBeEmpty),
   [2]=activity.getString(R.string.project_exists)
 }
 NewProjectManager.errorCode2String=errorCode2String
 
-function NewProjectManager.loadTemplate(path)
-  local config=getConfigFromFile(path.."/config.lua")
-  local subTemplateConfigsMap=config.subTemplateConfigsMap or {}
-  local pageConfigs=assert(loadfile(path.."/pageConfigs.aly"))()
+--[[加载模板
+path: 模板路径
+parentTemplateConfig: 父模板配置
+]]
+function NewProjectManager.loadTemplate(path,parentTemplateConfig)
+  parentTemplateConfig=parentTemplateConfig or {}
+  local config=getConfigFromFile(path.."/config.lua")--读取文件
+  local subTemplates=config.subTemplates--获取子模板
+  local subTemplatesMap={}--子模板地图
   local templateType=config.templateType
-  templateMap[templateType]=config
+  if templateType then--有模板类型就添加到主模板地图
+    templateMap[templateType]=config
+  end
   local configSuper={
     templateType=templateType,--模板类型
     templateConfig=config,--模板配置
-    subTemplateConfigsMap=subTemplateConfigsMap,--子模板地图
-    templateDirPath=path,--模板路径
+    subTemplatesMap=subTemplatesMap,--子模板地图
+    parentTemplateConfig=parentTemplateConfig,--父模板配置
+    templatePath=path,--模板路径
+    parentTemplatePath=parentTemplateConfig.templatePath,--父模板配置
   }
   local configMetatable={__index=configSuper}
   setmetatable(config,configMetatable)
 
-  for index=1,#pageConfigs do
-    local pageConfig=pageConfigs[index]
-    setmetatable(pageConfig,configMetatable)
-    local subTemplateName=pageConfig.subTemplateName
-    pageConfig.subTemplateConfig=subTemplateConfigsMap[subTemplateName]--子模板配置
-    pageConfig.subTemplateDirPath=path.."/"..subTemplateName--子模板路径
-    table.insert(pageConfigsList,pageConfig)--添加到页面列表
+  --加载子模板
+  if subTemplates then
+    for index=1,#subTemplates do
+      local subTemplateName=subTemplates[index]
+      subTemplatesMap[subTemplateName]=NewProjectManager.loadTemplate(path.."/"..subTemplateName,config)
+    end
+    print(dump(subTemplatesMap))
   end
+
+  local pageConfigsPath=path.."/pageConfigs.aly"--页面配置路径
+  local pageConfigs=nil
+  if File(pageConfigsPath).isFile() then
+    pageConfigs=assert(loadfile(pageConfigsPath))()
+    for index=1,#pageConfigs do
+      local pageConfig=pageConfigs[index]
+      setmetatable(pageConfig,configMetatable)
+      local subTemplateName=pageConfig.subTemplateName
+      pageConfig.subTemplateConfig=subTemplatesMap[subTemplateName]--子模板配置
+      pageConfig.subTemplatePath=path.."/"..subTemplateName--子模板路径
+      table.insert(pageConfigsList,pageConfig)--添加到页面列表
+    end
+  end
+
+  return config
 end
 
 --仅检查工程是否存在，应用名为空等
@@ -161,9 +189,10 @@ end
 
 --构建一个键，需要格式化的文件的列表
 function NewProjectManager.buildConfig(pageConfig)
-  local keys=table.clone(pageConfig.defaultKeys or {})
-  local formatList=table.clone(pageConfig.defaultFormatList or {})
-  local unzipList=table.clone(pageConfig.defaultUnzipList or {})
+  local templateConfig=pageConfig.templateConfig
+  local keys=table.clone(templateConfig.keys or {})
+  local formatList=table.clone(templateConfig.formatList or {})
+  local unzipList=table.clone(templateConfig.unzipList or {})
   local dependenciesEnd=keys.dependenciesEnd
   local keysLists={}--这是准备整合到keys的列表
   local pluginsList={}

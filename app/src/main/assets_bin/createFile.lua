@@ -13,9 +13,9 @@ local function createFileInfoDialog(config,nowDir)--文件名填写对话框
     local editLay=builder.ids.editLay
     local errorState
     local fileName=text
-    local fileType=config.fileType
-    if fileType then
-      fileName=fileName.."."..fileType
+    local fileExtension=config.fileExtension
+    if fileExtension and not(fileName:find("%.([^/]*)")) then
+      fileName=fileName.."."..fileExtension
     end
     local filePath=rel2AbsPath(fileName,nowDir.getPath())
     local file=File(filePath)
@@ -28,7 +28,7 @@ local function createFileInfoDialog(config,nowDir)--文件名填写对话框
     editLay.setErrorEnabled(false)
     xpcall(function()
       local moduleName=fileName:match("(.+)%.") or fileName
-      local shoredModuleName=moduleName:gsub("%.","_"):gsub("%[",""):gsub("%]",""):gsub("%:","_")
+      local shoredModuleName=(moduleName:match("/(.+)") or moduleName):gsub("%.","_"):gsub("%[",""):gsub("%]",""):gsub("%:","_")
       if table.find(LuaReservedCharacters,shoredModuleName) then
         shoredModuleName=shoredModuleName.."_"
       end

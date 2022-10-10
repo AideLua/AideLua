@@ -7,7 +7,7 @@ versions={
 subTemplates={"AndroLua"}
 subTemplateConfigsMap={}
 
-format={
+formatList={
   "settings.gradle",
   "gradle.properties",
   ".aidelua/config.lua",
@@ -19,14 +19,10 @@ format={
   "app/src/main/assets_bin/main.lua",
 }
 
-defaultKeys={
+keys={
   appTheme="@style/AppTheme",
   appName="MyApplication",
   appPackageName="com.aidelua.myapplication",
-  --appLuaActivity="com.androlua.LuaActivity"
-  --appLuaActivityX="com.androlua.LuaActivityX"
-  --appMainActivity="com.androlua.Main"
-  --appWelcomeActivity="com.androlua.Welcome"
   am_application={},
   am_application_bottom={},
   appDependencies={},

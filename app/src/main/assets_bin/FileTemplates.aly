@@ -1,7 +1,7 @@
 {
   {
     name="Lua Activity",
-    fileType="lua",
+    fileExtension="lua",
     defaultContent=[[require "import"
 import "android.app.*"
 import "android.os.*"
@@ -26,7 +26,7 @@ end
 
   {
     name="Lua Activity (AndroidX)",
-    fileType="lua",
+    fileExtension="lua",
     defaultContent=[[require "import"
 --import "androidx"
 import "androidx.appcompat.app.*"
@@ -57,7 +57,7 @@ end
 
   {
     name="Lua Activity (Jesse205)",
-    fileType="lua",
+    fileExtension="lua",
     defaultContent=[[require "import"
 import "jesse205"
 
@@ -88,7 +88,7 @@ onConfigurationChanged(activity.getResources().getConfiguration())
 
   {
     name="Lua Layout",
-    fileType="aly",
+    fileExtension="aly",
     defaultContent=[[{
   LinearLayout;
   layout_height="fill";
@@ -106,7 +106,7 @@ onConfigurationChanged(activity.getResources().getConfiguration())
 
   {
     name="Lua Layout (AndroidX)",
-    fileType="aly",
+    fileExtension="aly",
     defaultContent=[[{
   CoordinatorLayout;
   layout_height="fill";
@@ -124,7 +124,7 @@ onConfigurationChanged(activity.getResources().getConfiguration())
 
   {
     name="Lua Table",
-    fileType="aly",
+    fileExtension="aly",
     defaultContent=[[{
   
 }]],
@@ -132,7 +132,7 @@ onConfigurationChanged(activity.getResources().getConfiguration())
 
   {
     name="Lua Module",
-    fileType="lua",
+    fileExtension="lua",
     defaultContent=[[local {{ShoredModuleName}}={}
 setmetatable({{ShoredModuleName}},{{ShoredModuleName}})
 
@@ -146,13 +146,13 @@ return {{ShoredModuleName}}
 
   {
     name="Empty Lua File",
-    fileType="lua",
+    fileExtension="lua",
     defaultContent="",
   },
 
   {
     name="Empty File",
-    fileType="txt",
+    fileExtension="txt",
     defaultContent="",
   },
 

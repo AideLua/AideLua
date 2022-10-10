@@ -113,7 +113,7 @@
             android:name="com.androlua.LuaService"/>
 
         <provider
-            android:authorities="com.jesse205.aidelua2"
+            android:authorities="${applicationId}"
             android:exported="false"
             android:grantUriPermissions="true"
             android:name="android.content.FileProvider">

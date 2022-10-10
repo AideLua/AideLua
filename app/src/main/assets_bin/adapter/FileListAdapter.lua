@@ -281,7 +281,7 @@ return function(item)
             options.diskCacheStrategy(DiskCacheStrategy.NONE)--不缓冲disk硬盘中
             Glide.with(activity)
             .load(iconUrl)
-            .transition(DrawableTransitionOptions.withCrossFade())
+            --.transition(DrawableTransitionOptions.withCrossFade())
             .apply(options)
             --[[
             .listener(RequestListener({

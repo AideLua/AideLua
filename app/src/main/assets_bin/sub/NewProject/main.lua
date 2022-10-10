@@ -103,11 +103,11 @@ adapter=PagerAdapter({
         end
       end
       if config.checkAppConfig then
-        local defaultKeys=templateConfig.defaultKeys
+        local keys=templateConfig.keys
         local appNameEdit=ids.appNameEdit
         local packageNameEdit=ids.packageNameEdit
-        appNameEdit.text=defaultKeys.appName
-        packageNameEdit.text=defaultKeys.appPackageName
+        appNameEdit.text=keys.appName
+        packageNameEdit.text=keys.appPackageName
         appNameEdit.addTextChangedListener({
           onTextChanged=function(text,start,before,count)
             NewProjectManager.checkAppName(tostring(text),ids.appNameLay,config)
