@@ -14,7 +14,7 @@ local function createFileInfoDialog(config,nowDir)--文件名填写对话框
     local errorState
     local fileName=text
     local fileExtension=config.fileExtension
-    if fileExtension and not(fileName:find("%.([^/]*)")) then
+    if fileExtension and not(fileName:find("%.[^/]*$")) then
       fileName=fileName.."."..fileExtension
     end
     local filePath=rel2AbsPath(fileName,nowDir.getPath())
