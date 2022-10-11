@@ -38,6 +38,8 @@
     <string name="help">Help</string>
     <string name="viewError">View Error</string>
     <string name="openInAndroidDeveloper">Open in \"Android Developer\"</string>
+    <string name="download">Download</string>
+    <string name="checkingUpdates">Checking for updates</string>
     
     <string name="open">Open</string>
     <string name="open_failed">Open failed</string>

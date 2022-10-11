@@ -6,6 +6,8 @@ normalkeys.openSourceLicenses=true
 normalkeys.developers=true
 normalkeys.moreItem=true
 normalkeys.copyright=true
+normalkeys.onUpdate=true
+
 import "com.jesse205.layout.util.SettingsLayUtil"
 import "com.jesse205.app.dialog.ImageDialogBuilder"
 import "appAboutInfo"
@@ -47,7 +49,11 @@ function joinQQGroup(groupNumber)
 end
 
 function onItemClick(view,views,key,data)
-  if key=="developer" then
+  if key=="update" then
+    if onUpdate then
+      onUpdate()
+    end
+   elseif key=="developer" then
     if data.qq then
       pcall(activity.startActivity,Intent(Intent.ACTION_VIEW,Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin="..data.qq)))
     end

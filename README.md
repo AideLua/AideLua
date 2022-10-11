@@ -32,6 +32,12 @@ Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件�
 2. 此软件不能用来开发大型项目
 3. 此软件必须搭配编译器，不管你用的是真正的Gradle还是仿Gradle（AIDE属于仿Gradle）
 
+## 如何接收更新推送
+1. 首先进入 `设置-通知设置` ，打开 `有新的 Release`
+![步骤1](images/releases/step1)
+2. 然后点击仓库右上角 `Watch`，然后点击 `关注所有动态`
+![步骤2](images/releases/step2)
+
 ## 使用教程
 [视频教程](https://space.bilibili.com/1229937144)
 [使用文档](https://gitee.com/Jesse205/AideLua/wikis/Home)

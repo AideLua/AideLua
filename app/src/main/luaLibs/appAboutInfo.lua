@@ -1,3 +1,4 @@
+import "GiteeUpdateUtil"
 appInfo={
   {
     name=R.string.app_name,
@@ -17,6 +18,9 @@ appInfo={
     end,
   },
 }
+function onUpdate()
+  GiteeUpdateUtil.checkUpdate("Jesse205","AideLua")
+end
 
 --开发者们
 developers={

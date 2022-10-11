@@ -37,6 +37,8 @@
     <string name="help">帮助</string>
     <string name="viewError">查看错误</string>
     <string name="openInAndroidDeveloper">在“Android 开发者”上打开</string>
+    <string name="download">下载</string>
+    <string name="checkingUpdates">正在检查更新</string>
     
     <string name="open">打开</string>
     <string name="open_failed">打开失败</string>

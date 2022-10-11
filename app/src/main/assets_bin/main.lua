@@ -84,7 +84,6 @@ import "layouts.pathItem"
 import "layouts.infoItem"
 import "layouts.buildingLayout"
 --import "sub.LayoutHelper2.loadpreviewlayout"
-import "GiteeUpdateUtil"
 
 
 application.set("plugin_enabledpaths",nil)
@@ -631,5 +630,3 @@ onConfigurationChanged(activity.getResources().getConfiguration())
 if screenConfigDecoder.deviceByWidth~="pc" and FilesBrowserManager.openState == nil then
   FilesBrowserManager.setOpenState(false)
 end
-
-GiteeUpdateUtil.checkUpdate()
