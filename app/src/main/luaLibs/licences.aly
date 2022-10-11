@@ -2,12 +2,14 @@
   {
     name="Aide Lua",
     message="依赖 Aide 的一款 Lua 编辑器",
+    licenseName="The MIT License (MIT)",
     license="AideLua License",
     url="https://gitee.com/Jesse205/AideLua",
   },
   {
     name="Androlua",
     message="Lua5.3.3 for android pro",
+    licenseName="The MIT License (MIT)",
     license="Androlua License",
     url="https://github.com/nirenr/AndroLua_pro",
   },
