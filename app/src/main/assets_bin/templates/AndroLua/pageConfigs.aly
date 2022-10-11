@@ -56,7 +56,7 @@
       end
 
       NewProjectManager.refreshState("androidx",androidXState,chipList)
-      print(config.templateDirPath)
+      print(config.templatePath)
     end,
     onCreativePrj=function(ids,config,keys)
       print(dump(keys))
@@ -83,7 +83,7 @@
       {
         TextView;
         gravity="center";
-        text="Hello World";
+        text="DemoPage";
         layout_height="fill";
         layout_width="fill";
       };

@@ -11,7 +11,7 @@ normalkeys.ProjectManager=true
 
 -- 检测是否需要进入欢迎页面
 import "agreements"
-welcomeAgain = not(getSharedData("welcome"))
+local welcomeAgain = not(getSharedData("welcome"))
 if not(welcomeAgain) then
   for index=1, #agreements do
     local content=agreements[index]
@@ -83,14 +83,9 @@ import "layouts.item"
 import "layouts.pathItem"
 import "layouts.infoItem"
 import "layouts.buildingLayout"
-
 --import "sub.LayoutHelper2.loadpreviewlayout"
+import "GiteeUpdateUtil"
 
-import "FileDecoders"
-import "FileTemplates"
-
-import "adapter.FileListAdapter"
-import "adapter.FilePathAdapter"
 
 application.set("plugin_enabledpaths",nil)
 PluginsUtil.setActivityName("main")
@@ -106,8 +101,8 @@ PermissionUtil.askForRequestPermissions({
   },
 })
 
-oldJesse205LibHl = getSharedData("jesse205Lib_highlight")
-oldAndroidXHl = getSharedData("androidX_highlight")
+oldJesse205Support = getSharedData("jesse205Lib_support")
+oldAndroidXSupport = getSharedData("androidX_support")
 oldTheme = ThemeUtil.getAppTheme()
 oldDarkActionBar = getSharedData("theme_darkactionbar")
 oldRichAnim = getSharedData("richAnim")
@@ -124,11 +119,18 @@ lastUpdateTime = packageInfo.lastUpdateTime
 
 activityStopped = false
 LoadedMenu = false
-notFirstOnResume = false
+local notFirstOnResume = false
 local touchingKey = false
 
 nowDevice = "phone"
 screenWidthDp = 0
+
+import "FileDecoders"
+import "FileTemplates"
+
+import "adapter.FileListAdapter"
+import "adapter.FilePathAdapter"
+
 
 local receivedData={...}
 
@@ -444,9 +446,12 @@ function onDeviceByWidthChanged(device, oldDevice)
 end
 
 function onResume()
+  if PluginsUtil.callElevents("onResume", notFirstOnResume)
+    return
+  end
   local reload = false
-  if oldJesse205LibHl ~= getSharedData("jesse205Lib_highlight")
-    or oldAndroidXHl ~= getSharedData("androidX_highlight") then
+  if oldJesse205Support ~= getSharedData("jesse205Lib_support")
+    or oldAndroidXSupport ~= getSharedData("androidX_support") then
     reload = true
     application.set("luaeditor_initialized", false)
   end
@@ -491,7 +496,6 @@ function onResume()
   end
   FilesBrowserManager.refresh()
   notFirstOnResume = true
-  PluginsUtil.callElevents("onResume", notFirstOnResume)
 end
 
 function onResult(name, action, content)
@@ -628,3 +632,4 @@ if screenConfigDecoder.deviceByWidth~="pc" and FilesBrowserManager.openState == 
   FilesBrowserManager.setOpenState(false)
 end
 
+GiteeUpdateUtil.checkUpdate()

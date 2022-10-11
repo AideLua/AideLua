@@ -111,6 +111,7 @@
     <string name="project_close">Close project</string>
     <string name="project_properties">Project properties</string>
     <string name="projects_path">Projects path</string>
+    <string name="projects_newActivity">New Activity</string>
     
     <string name="binpoject_loading">Packing...</string>
     <string name="binpoject_loading_with_parent">Packing...\n%1$s</string>
@@ -162,10 +163,10 @@
     
     <string name="settings">Settings</string>
     <string name="settings_ui_richAnim">Rich animation</string>
-    <string name="settings_editor_highlight_Jesse205Library">Jesse205Library code tips</string>
-    <string name="settings_editor_highlight_Jesse205Library_summary">Show advanced usage of Jesse205Library.</string>
-    <string name="settings_editor_highlight_androidx">AndroidX code tips</string>
-    <string name="settings_editor_highlight_androidx_summary">Prompt for AndroidX classes</string>
+    <string name="settings_support_Jesse205Library">Jesse205 library support</string>
+    <string name="settings_support_Jesse205Library_summary">Provide Jesse205 library support</string>
+    <string name="settings_support_androidx">AndroidX support</string>
+    <string name="settings_support_androidx_summary">Provide Android X support. This option does not affect the New Page option.</string>
     <string name="settings_editor_magnify">Magnifier</string>
     <string name="settings_editor_magnify_summary">Only valid for Android 9 and above</string>
     <string name="settings_editor_symbolNar">Symbol bar</string>
@@ -176,6 +177,7 @@
     <string name="settings_editor_previewButton">Preview button</string>
     <string name="settings_editor_automaticallyBackupOriginalFiles">Automatically backup the original files</string>
     <string name="settings_editor_automaticallyBackupOriginalFiles_summary">Automatically backup the original file when saving\nTo switch states, please use setSharedData("editor_autobackuporiginalfiles", boolean)</string>
+    <string name="settings_autoCheckUpdate">Automatic check for updates</string>
     
     <string name="window_openNew">New window</string>
     <string name="window_openInNewWindow">Open in a new window</string>

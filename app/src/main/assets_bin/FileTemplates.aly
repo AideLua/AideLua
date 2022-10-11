@@ -27,6 +27,7 @@ end
   {
     name="Lua Activity (AndroidX)",
     fileExtension="lua",
+    enabled=toboolean(oldAndroidXSupport),
     defaultContent=[[require "import"
 --import "androidx"
 import "androidx.appcompat.app.*"
@@ -58,6 +59,7 @@ end
   {
     name="Lua Activity (Jesse205)",
     fileExtension="lua",
+    enabled=toboolean(oldJesse205Support),
     defaultContent=[[require "import"
 import "jesse205"
 
@@ -107,6 +109,7 @@ onConfigurationChanged(activity.getResources().getConfiguration())
   {
     name="Lua Layout (AndroidX)",
     fileExtension="aly",
+    enabled=toboolean(oldAndroidXSupport),
     defaultContent=[[{
   CoordinatorLayout;
   layout_height="fill";

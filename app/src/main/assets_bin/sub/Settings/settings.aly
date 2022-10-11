@@ -78,25 +78,26 @@
     title=R.string.settings_ui_richAnim;
     key="richAnim";
   };
-  --[[
-  {
-    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
-    icon=R.drawable.ic_animation_play_outline;
-    title="测试禁止";
-    key="test";
-  };]]
 
-  --[[{--项目
+  {--项目
     SettingsLayUtil.TITLE;
     title=R.string.project;
   };
   {
-    SettingsLayUtil.ITEM;
-    icon=R.drawable.ic_briefcase_plus_outline;
-    title=R.string.settings_addComplexLibrary;
-    key="addComplexLibrary";
-    summary=R.string.settings_addComplexLibrary_summary
-  };]]
+    SettingsLayUtil.ITEM_SWITCH;
+    icon=R.drawable.ic_tooltip_minus_outline;
+    title=R.string.settings_support_Jesse205Library;
+    key="jesse205Lib_support";
+    summary=R.string.settings_support_Jesse205Library_summary;
+  };
+  {
+    SettingsLayUtil.ITEM_SWITCH;
+    icon=R.drawable.ic_tooltip_minus_outline;
+    title=R.string.settings_support_androidx;
+    key="androidX_support";
+    summary=R.string.settings_support_androidx_summary;
+  };
+
 
   {--插件
     SettingsLayUtil.TITLE;
@@ -112,20 +113,6 @@
   {--编辑器
     SettingsLayUtil.TITLE;
     title=R.string.editor;
-  };
-  {
-    SettingsLayUtil.ITEM_SWITCH;
-    icon=R.drawable.ic_tooltip_minus_outline;
-    title=R.string.settings_editor_highlight_Jesse205Library;
-    key="jesse205Lib_highlight";
-    summary=R.string.settings_editor_highlight_Jesse205Library_summary;
-  };
-  {
-    SettingsLayUtil.ITEM_SWITCH;
-    icon=R.drawable.ic_tooltip_minus_outline;
-    title=R.string.settings_editor_highlight_androidx;
-    key="androidX_highlight";
-    summary=R.string.settings_editor_highlight_androidx_summary;
   };
   {
     SettingsLayUtil.ITEM_SWITCH;
@@ -195,6 +182,12 @@
     --helperText=R.string.settings_needRestart;
     allowNull=false;
   };
+  --[[{
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_update;
+    title=R.string.settings_autoCheckUpdate;
+    key="autoCheckUpdate";
+  };]]
   {
     SettingsLayUtil.ITEM;
     icon=R.drawable.ic_information_outline;

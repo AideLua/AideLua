@@ -81,49 +81,54 @@ adapter=PagerAdapter({
   end,
   instantiateItem=function(container,position)
     local config=pageConfigsList[position+1]
+    local templateConfig=config.templateConfig
+    --[[
     local templateConfig=templateMap[config.templateType or "default"]
-    config.templateConfig=templateConfig
+    config.templateConfig=templateConfig]]
     if config then
-      local view
-      local ids={}
-      if config.useLoadlayout2 then
-        view=loadlayout2(config.layout,ids)
-       else
-        view=loadlayout(config.layout,ids)
-      end
-      config.ids=ids
-      --[[
+      local view=config.mainLayout
+      if not(view) then
+        local ids={}
+        if config.useLoadlayout2 then
+          view=loadlayout2(config.layout,ids)
+         else
+          view=loadlayout(config.layout,ids)
+        end
+        config.ids=ids
+        --[[
       if config.templateDirPath then
         config.templateDirPath=rel2AbsPath(config.templateDirPath,NewProjectUtil2.TEMPLATES_DIR_PATH)
       end]]
-      if config.onInit then
-        local success,message=pcall(config.onInit,ids,config)
-        if not(success) then
-          showErrorDialog("Initialization error",message)
+        if config.onInit then
+          local success,message=pcall(config.onInit,ids,config)
+          if not(success) then
+            showErrorDialog("Initialization error",message)
+          end
         end
-      end
-      if config.checkAppConfig then
-        local keys=templateConfig.keys
-        local appNameEdit=ids.appNameEdit
-        local packageNameEdit=ids.packageNameEdit
-        appNameEdit.text=keys.appName
-        packageNameEdit.text=keys.appPackageName
-        appNameEdit.addTextChangedListener({
-          onTextChanged=function(text,start,before,count)
-            NewProjectManager.checkAppName(tostring(text),ids.appNameLay,config)
-            if position==pagePosition then
-              NewProjectManager.refreshCreateEnabled(config,createButton)
+        if config.checkAppConfig then
+          local keys=templateConfig.keys
+          local appNameEdit=ids.appNameEdit
+          local packageNameEdit=ids.packageNameEdit
+          appNameEdit.text=keys.appName
+          packageNameEdit.text=keys.appPackageName
+          appNameEdit.addTextChangedListener({
+            onTextChanged=function(text,start,before,count)
+              NewProjectManager.checkAppName(tostring(text),ids.appNameLay,config)
+              if position==pagePosition then
+                NewProjectManager.refreshCreateEnabled(config,createButton)
+              end
             end
-          end
-        })
-        packageNameEdit.addTextChangedListener({
-          onTextChanged=function(text,start,before,count)
-            NewProjectManager.checkPackageName(tostring(text),ids.packageNameLay,config)
-            if position==pagePosition then
-              NewProjectManager.refreshCreateEnabled(config,createButton)
+          })
+          packageNameEdit.addTextChangedListener({
+            onTextChanged=function(text,start,before,count)
+              NewProjectManager.checkPackageName(tostring(text),ids.packageNameLay,config)
+              if position==pagePosition then
+                NewProjectManager.refreshCreateEnabled(config,createButton)
+              end
             end
-          end
-        })
+          })
+        end
+        config.mainLayout=view
       end
       container.addView(view)
       return view

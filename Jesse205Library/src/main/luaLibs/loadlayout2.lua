@@ -26,6 +26,7 @@
 3.移除从全局变量调用的功能
 4.强制导入glide和tooltip
 ]]
+--将以 view[key](value) 形式为主
 local require=require
 local luajava = luajava
 local table=require "table"
@@ -55,8 +56,8 @@ local ScaleType=bindClass("android.widget.ImageView$ScaleType")
 local TruncateAt=bindClass("android.text.TextUtils$TruncateAt")
 local scaleTypes=ScaleType.values()
 local android_R=bindClass("android.R")
-local app_R=bindClass("com.androlua.R")
-android={R=android_R}
+--local app_R=bindClass("com.androlua.R")
+--android={R=android_R}
 
 local Context=bindClass("android.content.Context")
 local DisplayMetrics=bindClass("android.util.DisplayMetrics")
@@ -70,12 +71,11 @@ local SDK_INT=luajava.bindClass("android.os.Build").VERSION.SDK_INT
 
 local luadir=context.getLuaDir()
 
+--[[
 local wm =context.getSystemService(Context.WINDOW_SERVICE)
 local outMetrics = DisplayMetrics()
 wm.getDefaultDisplay().getMetrics(outMetrics)
---local W = outMetrics.widthPixels
---local H = outMetrics.heightPixels
-
+]]
 
 local function alyloader(path)
   local alypath=package.path:gsub("%.lua;",".aly;")
@@ -300,18 +300,6 @@ local function checkType(v)
   return tonumber(n),types[ty]
 end
 
---[[
-local function checkPercent(v)
-  local n,ty=string.match(v,"^(%-?[%.%d]+)%%([wh])$")
-  if ty==nil then
-    return nil
-   elseif ty=="w" then
-    return tonumber(n)*W/100
-   elseif ty=="h" then
-    return tonumber(n)*H/100
-  end
-end]]
-
 
 local function split(s,t)
   local idx=1
@@ -376,30 +364,7 @@ local function checkValues(...)
   return unpack(vars)
 end
 
---[[
-local function getAndroidAttr(s)
-  return android_R.attr[s]
-end
 
-local function getAttr(s)
-  return app_R.attr[s]
-end]]
---[[
-local function checkAndroidAttr(s)
-  local e,s=pcall(getAttr,s)
-  if e then
-    return s
-  end
-  return nil
-end
-
-local function checkAttr(s)
-  local e,s=pcall(getAttr,s)
-  if e then
-    return s
-  end
-  return checkAndroidAttr(s)
-end]]
 
 
 local function getIdentifier(name)
@@ -423,8 +388,101 @@ local function dump2 (t)
 end
 
 --Jesse205Library不支持api21以下，所以没必要做低于api16检查
+local attributeSetterMap={
+  pages=function(root,view,params,k,v,keyType,valueType,ids)
+    if valueType=="table" then
+      local ps={}
+      for n,o in ipairs(v) do
+        local tp=type(o)
+        if tp=="string" or tp=="table" then
+          table.insert(ps,loadlayout(o,root))
+         else
+          table.insert(ps,o)
+        end
+      end
+      local adapter=ArrayPageAdapter(View(ps))
+      view.setAdapter(adapter)
+    end
+  end,
+  textSize=function(root,view,params,k,v,keyType,valueType,ids)
+    if tonumber(v) then
+      view.setTextSize(tonumber(v))
+     elseif type(v)=="string" then
+      local n,ty=checkType(v)
+      if ty then
+        view.setTextSize(ty,n)
+       else
+        view.setTextSize(v)
+      end
+     else
+      view.setTextSize(v)
+    end
+  end,
+  textAppearance=function(root,view,params,k,v,keyType,valueType,ids)
+    view.setTextAppearance(context,v)
+  end,
+  ellipsize=function(root,view,params,k,v,keyType,valueType,ids)
+    view.setEllipsize(TruncateAt[string.upper(v)])
+  end,
+  url=function(root,view,params,k,v,keyType,valueType,ids)
+    view.loadUrl(v)
+  end,
+  tooltip=function(root,view,params,k,v,keyType,valueType,ids)
+    TooltipCompat.setTooltipText(view,v)
+  end,
+  src=function(root,view,params,k,v,keyType,valueType,ids)
+    if v:find("^%?") then
+      view.setImageResource(getIdentifier(v:sub(2,-1)))
+     else
+      if not(v:find("^/")) and not(v:find("^.+://")) then
+        v=luadir.."/"..v
+      end
+      Glide.with(context).load(v).into(view)
+    end
+  end,
+  scaleType=function(root,view,params,k,v,keyType,valueType,ids)
+    view.setScaleType(scaleTypes[scaleType[v]])
+  end,
+  background=function(root,view,params,k,v,keyType,valueType,ids)
+    --local valueType=type(v)
+    if valueType=="string" then
+      if not v:find("^/") then
+        v=luadir.."/"..v
+      end
+      if v:find("%.9%.png") then
+        view.setBackground(NineBitmapDrawable(loadbitmap(v)))
+       else
+        view.setBackground(LuaBitmapDrawable(context,v))
+      end
+      --end
+     elseif valueType=="userdata" or valueType=="number" then
+      view.setBackground(v)
+    end
+  end,
+  onClick=function(root,view,params,k,v,keyType,valueType,ids) --设置onClick事件接口
+    --local valueType=type(v)
+    if valueType=="function" then
+      view.onClick=v
+     elseif valueType=="userdata" then
+      view.setOnClickListener(v)
+    end
+  end,
+}
 
 local function setattribute(root,view,params,k,v,ids)
+  local keyType,valueType=type(k),type(v)
+  if rules[k] then
+    if rules[k] and (v==true or v=="true") then
+      params.addRule(rules[k])
+     elseif rules[k] then
+      params.addRule(rules[k],ids[v])
+    end
+    return
+  end
+  local setter=attributeSetterMap[k]
+  if setter then
+    return setter(root,view,params,k,v,keyType,valueType,ids)
+  end
   if type(k)=="string" then
     local paramsAttr=k:match("^layout_(.+)")
     if paramsAttr=="margin"
@@ -437,35 +495,12 @@ local function setattribute(root,view,params,k,v,ids)
     end
     if paramsAttr then
       params[paramsAttr]=checkValue(v)
+      --[[
      elseif rules[k] and (v==true or v=="true") then
       params.addRule(rules[k])
      elseif rules[k] then
-      params.addRule(rules[k],ids[v])
-      --[[
-     elseif k=="items" then --创建列表项目
-      if type(v)=="table" then
-        if view.adapter then
-          view.adapter.addAll(v)
-         else
-          local adapter=ArrayListAdapter(context,android_R.layout.simple_list_item_1, String(v))
-          view.setAdapter(adapter)
-        end
-       elseif type(v)=="function" then
-        if view.adapter then
-          view.adapter.addAll(v())
-         else
-          local adapter=ArrayListAdapter(context,android_R.layout.simple_list_item_1, String(v()))
-          view.setAdapter(adapter)
-        end
-       elseif type(v)=="string" then
-        local v=rawget(root,v) or rawget(_G,v)
-        if view.adapter then
-          view.adapter.addAll(v())
-         else
-          local adapter=ArrayListAdapter(context,android_R.layout.simple_list_item_1, String(v()))
-          view.setAdapter(adapter)
-        end
-      end]]
+      params.addRule(rules[k],ids[v])]]
+      --[=[
      elseif k=="pages" and type(v)=="table" then --创建页项目
       local ps={}
       for n,o in ipairs(v) do
@@ -514,21 +549,6 @@ local function setattribute(root,view,params,k,v,ids)
      elseif k=="background" then
       local valueType=type(v)
       if valueType=="string" then
-        --[[
-        if v:find("^%?") then
-          view.setBackgroundResource(getIdentifier(v:sub(2,-1)))]]
-        --[[--推荐直接使用0xXXXXXXXX
-         elseif v:find("^#") then
-          view.setBackgroundColor(checkNumber(v))]]
-        --[[
-         elseif rawget(root,v) or rawget(_G,v) then
-          v=rawget(root,v) or rawget(_G,v)
-          if type(v)=="function" then
-            view.setBackground(LuaDrawable(v))
-           elseif type(v)=="userdata" then
-            view.setBackground(v)
-          end]]
-        --else
         if not v:find("^/") then
           v=luadir.."/"..v
         end
@@ -547,26 +567,8 @@ local function setattribute(root,view,params,k,v,ids)
         view.onClick=v
        elseif valueType=="userdata" then
         view.setOnClickListener(v)
-        --[[
-       elseif valueType=="string" then
-        local listener
-        if ltrs[v] then
-          listener=ltrs[v]
-         else
-          local l=rawget(root,v) or rawget(_G,v)
-          if type(l)=="function" then
-            --view.onClick=l
-            listener=OnClickListener{onClick=l}
-           elseif type(l)=="userdata" then
-            listener=l
-           else
-            listener=OnClickListener{onClick=(root[v] or _G[v])}
-          end
-          ltrs[v]=listener
-        end
-        view.setOnClickListener(listener)]]
-      end
-     elseif not(paramsAttr) and not(k:find("padding")) and k~="style" then --设置属性
+      end]=]
+     elseif not(k:find("padding")) and k~="style" then --设置属性
       k=string.gsub(k,"^(%w)",function(s)return string.upper(s)end)
       if k=="Text" or k=="Title" or k=="Subtitle" or k=="Hint" then
         view["set"..k](v)
@@ -628,17 +630,6 @@ local function loadlayout(t,root,group)
   if t.style then
     if type(t.style)=="number" then
       style=t.style
-      --[[elseif t.style:find("^%?") then
-      style=getIdentifier(t.style:sub(2,-1))]]
-      --[[
-     else
-      local st,sty=pcall(require,t.style)
-      if st then
-        --copytable(sty,t)
-        setmetatable(t,{__index=sty})
-       else
-        style=t.style
-      end]]
     end
   end
   if not t[1] then

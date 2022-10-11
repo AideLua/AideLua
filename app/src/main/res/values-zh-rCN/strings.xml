@@ -108,6 +108,7 @@
     <string name="project_close">关闭项目</string>
     <string name="project_properties">项目属性</string>
     <string name="projects_path">项目路径</string>
+    <string name="projects_newActivity">新建 Activity</string>
     
     <string name="binpoject_loading">正在打包...</string>
     <string name="binpoject_loading_with_parent">正在打包...\n%1$s</string>
@@ -159,10 +160,10 @@
     
     <string name="settings">设置</string>
     <string name="settings_ui_richAnim">丰富的动画</string>
-    <string name="settings_editor_highlight_Jesse205Library">Jesse205Library 代码提示</string>
-    <string name="settings_editor_highlight_Jesse205Library_summary">提示 Jesse205 Library 高级用法</string>
-    <string name="settings_editor_highlight_androidx">AndroidX 代码提示</string>
-    <string name="settings_editor_highlight_androidx_summary">提示 AndroidX 类</string>
+    <string name="settings_support_Jesse205Library">Jesse205库 支持</string>
+    <string name="settings_support_Jesse205Library_summary">提供 Jesse205库 支持</string>
+    <string name="settings_support_androidx">AndroidX 支持</string>
+    <string name="settings_support_androidx_summary">提供 AndroidX 支持。此选项不影响新建页面选项</string>
     <string name="settings_editor_magnify">放大镜</string>
     <string name="settings_editor_magnify_summary">仅支持安卓9及以上</string>
     <string name="settings_editor_symbolNar">符号栏</string>
@@ -173,6 +174,7 @@
     <string name="settings_editor_previewButton">预览按钮</string>
     <string name="settings_editor_automaticallyBackupOriginalFiles">自动备份原文件</string>
     <string name="settings_editor_automaticallyBackupOriginalFiles_summary">当保存时自动备份原文件\n如需切换状态，请使用 setSharedData("editor_autoBackupOriginalFiles", boolean)</string>
+    <string name="settings_autoCheckUpdate">自动检查更新</string>
     
     <string name="window_openNew">新建窗口</string>
     <string name="window_openInNewWindow">在新窗口打开</string>

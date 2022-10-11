@@ -9,6 +9,8 @@ formatList={
   "androlua/build.gradle",
 }
 keys={
+  --appPackageName="DemoPage",
+  appName="DemoPage",
   appLuaActivity="com.androlua.LuaActivity",
   appLuaActivityX="com.androlua.LuaActivityX",
   appMainActivity="com.androlua.Main",

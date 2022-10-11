@@ -261,7 +261,8 @@ function LuaEditorHelper.initKeysTaskFunc(keysList,packagesList)
       addWords(content,0)
     end
 
-    if activity.getSharedData("androidX_highlight") then
+    --androidx关键字在这里
+    if activity.getSharedData("settings_support_androidx") then
       import "androidApis.editor.androidxApis"
       addWords(androidxApis,0)
     end
@@ -296,7 +297,7 @@ function LuaEditorHelper.initKeys(editor,editorParent,pencilEdit,progressBar)
     local keywordsList=editorConfig.keywordsList
     local packagesList=editorConfig.packagesList
     keywordsList.normalKeywords=editorConfig.normalKeywords
-    if oldJesse205LibHl then--添加杰西205库
+    if oldJesse205Support then--添加杰西205库
       keywordsList.jesse205Words=editorConfig.jesse205Keywords
       packagesList.jesse205Words=Map({
         string=String(getTableIndexList(string)),

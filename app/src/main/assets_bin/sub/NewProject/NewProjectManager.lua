@@ -19,12 +19,15 @@ NewProjectManager.errorCode2String=errorCode2String
 path: 模板路径
 parentTemplateConfig: 父模板配置
 ]]
+
+
 function NewProjectManager.loadTemplate(path,parentTemplateConfig)
   parentTemplateConfig=parentTemplateConfig or {}
   local config=getConfigFromFile(path.."/config.lua")--读取文件
   local subTemplates=config.subTemplates--获取子模板
   local subTemplatesMap={}--子模板地图
   local templateType=config.templateType
+  local pageConfigsListIndex=#pageConfigsList
   if templateType then--有模板类型就添加到主模板地图
     templateMap[templateType]=config
   end
@@ -36,8 +39,11 @@ function NewProjectManager.loadTemplate(path,parentTemplateConfig)
     templatePath=path,--模板路径
     parentTemplatePath=parentTemplateConfig.templatePath,--父模板配置
   }
+
   local configMetatable={__index=configSuper}
   setmetatable(config,configMetatable)
+
+  setmetatable(config.keys,{__index=parentTemplateConfig.keys})
 
   --加载子模板
   if subTemplates then
@@ -45,7 +51,6 @@ function NewProjectManager.loadTemplate(path,parentTemplateConfig)
       local subTemplateName=subTemplates[index]
       subTemplatesMap[subTemplateName]=NewProjectManager.loadTemplate(path.."/"..subTemplateName,config)
     end
-    print(dump(subTemplatesMap))
   end
 
   local pageConfigsPath=path.."/pageConfigs.aly"--页面配置路径
@@ -58,7 +63,8 @@ function NewProjectManager.loadTemplate(path,parentTemplateConfig)
       local subTemplateName=pageConfig.subTemplateName
       pageConfig.subTemplateConfig=subTemplatesMap[subTemplateName]--子模板配置
       pageConfig.subTemplatePath=path.."/"..subTemplateName--子模板路径
-      table.insert(pageConfigsList,pageConfig)--添加到页面列表
+      pageConfigsListIndex=pageConfigsListIndex+1
+      table.insert(pageConfigsList,pageConfigsListIndex,pageConfig)--添加到页面列表
     end
   end
 

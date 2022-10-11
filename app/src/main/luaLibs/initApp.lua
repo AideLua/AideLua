@@ -9,11 +9,11 @@ if getSharedData("richAnim")==nil then
     setSharedData("richAnim",false)
   end
 end
-if getSharedData("jesse205Lib_highlight")==nil then
-  setSharedData("jesse205Lib_highlight",false)
+if getSharedData("jesse205Lib_support")==nil then
+  setSharedData("jesse205Lib_support",false)
 end
-if getSharedData("androidX_highlight")==nil then
-  setSharedData("androidX_highlight",true)
+if getSharedData("androidX_support")==nil then
+  setSharedData("androidX_support",true)
 end
 if getSharedData("editor_magnify")==nil then
   if SDK_INT>=28 then
@@ -39,8 +39,10 @@ if getSharedData("editor_autoBackupOriginalFiles")==nil then
   setSharedData("editor_autoBackupOriginalFiles",true)
 end
 
-
-
 if getSharedData("projectsDir")==nil then
   setSharedData("projectsDir",Environment.getExternalStorageDirectory().getPath().."/AppProjects")
+end
+
+if getSharedData("autoCheckUpdate")==nil then
+  setSharedData("autoCheckUpdate",false)
 end
