@@ -73,6 +73,7 @@
     <string name="file_close_other">Close other files</string>
 	<string name="file_current_path">Current file path</string>
     <string name="file_reopen">Reopen file</string>
+    <string name="file_noChange">This file has not been changed</string>
     
     <string name="directory">Folder</string>
     <string name="directory_go_popup">Open Directory...</string>

@@ -344,7 +344,7 @@ function FilesTabManager.saveFile(lowerFilePath,showToast)
         return true -- 保存成功
        else
         if showToast then
-          showSnackBar("Content not changed")
+          showSnackBar(R.string.file_noChange)
         end
       end
     end
