@@ -4,7 +4,6 @@ local GiteeUpdateUtil={}
 local packageInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
 local baseUrl="https://gitee.com/api/v5/repos/%s/%s/releases/latest"
 
-
 --显示更新弹窗
 function GiteeUpdateUtil.showUpdateDialog(content)
   if not activity.isFinishing() then

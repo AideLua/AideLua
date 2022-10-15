@@ -30,7 +30,7 @@ FilesTabManager.init(): 初始化管理器
 local FilesTabManager = {}
 local openState, file, fileConfig,fileType = false, nil, nil, nil
 local openedFiles = {}
-FilesTabManager.backupPath=AppPath.AppShareDir..os.date("/backup/%Y%m%d")
+FilesTabManager.backupPath=AppPath.AppMediaDir..os.date("/backup/%Y%m%d")
 FilesTabManager.backupDir=File(FilesTabManager.backupPath)
 FilesTabManager.tabShowingMenu=0
 

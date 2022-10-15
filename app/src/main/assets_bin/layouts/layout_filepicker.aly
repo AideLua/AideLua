@@ -65,9 +65,9 @@
         layout_width="fill";
         layout_height="fill";
         id="recyclerView";
-        --verticalScrollBarEnabled=true;
-        --scrollBarSize="4dp";
-        --verticalScrollbarThumbDrawable=ColorDrawable(theme.color.Red);
+        verticalScrollBarEnabled=true;
+        scrollBarSize="4dp";
+        verticalScrollbarThumbDrawable=ColorDrawable(theme.color.Red);
       };
     };
   };

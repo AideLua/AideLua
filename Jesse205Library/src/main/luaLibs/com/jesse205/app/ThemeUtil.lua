@@ -18,7 +18,7 @@ function ThemeUtil.getAppThemes()
       name="Default",
       show={
         name=R.string.jesse205_theme_default,
-        preview=0xff4477e0,
+        preview=0xff3F51B5,
       },
     },
 

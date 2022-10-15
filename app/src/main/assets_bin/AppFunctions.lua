@@ -168,12 +168,12 @@ function checkSharedActivity(name)
   local sdActivityMainFile=File(sdActivityMainPath)
   local exists=sdActivityDir.exists()
   local mainExists=sdActivityMainFile.isFile()
-  if not(mainExists) or getSharedData("sharedactivity_"..name)~=lastUpdateTime then
-    if exists then
-      LuaUtil.rmDir(sdActivityDir)
-    end
-    updateSharedActivity(name,sdActivityDir)
+  --if not(mainExists) or getSharedData("sharedactivity_"..name)~=lastUpdateTime then
+  if exists then
+    LuaUtil.rmDir(sdActivityDir)
   end
+  updateSharedActivity(name,sdActivityDir)
+  --end
   return sdActivityMainPath
 end
 

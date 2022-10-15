@@ -8,7 +8,6 @@ jesse205.themeType="Jesse205"--主题类型
 require "import"--导入import
 import "loadlayout2"
 
-
 --惰性导入？
 local fastImport={
   Bitmap="android.graphics.Bitmap",
@@ -65,21 +64,29 @@ local newMetatable={__index=function(self,key)
 }
 setmetatable(_G,newMetatable)
 
+application=activity.getApplication()
+
 local context=activity or service--当前context
 jesse205.context=context
+
+--软件名
+local appName
+appName=application.get("appName")
+if appName==nil then
+  appName=context.getApplicationInfo().loadLabel(context.getPackageManager())
+  application.set("appName",appName)
+end
+jesse205.appName=appName
+
 resources=context.getResources()--当前resources
---_G.resources=resources
 R=luajava.bindClass(context.getPackageName()..".R")
 
 if activity then
   window=activity.getWindow()
-  notLoadTheme=notLoadTheme
-  useCustomAppToolbar=useCustomAppToolbar
  else--没有activity不加载主题
   notLoadTheme=true
 end
 
-application=activity.getApplication()
 
 --JavaAPI转LuaAPI
 local activity2luaApi={
@@ -101,83 +108,6 @@ import "com.jesse205.lua.math"--导入更强大的math
 import "com.jesse205.lua.string"--导入更强大的string
 --import "com.jesse205.app.AppPath"--导入路径
 
-if initApp then--初始化APP
-  import "com.jesse205.app.initApp"
-end
-
-import "android.view.View"--加载主题要用
-import "android.os.Build"
-
---加载主题
---在get某东西（ActionBar等）前必须把主题搞定
-if not(notLoadTheme) then
-  theme={
-    color={
-      Ripple={},
-      Light={},
-      Dark={},
-      ActionBar={},
-    },
-    number={
-      id={},
-      Dimension={},
-    },
-    boolean={}
-  }
-  local colors,dimens
-  local color=theme.color
-  local ripple=color.Ripple
-  local light=color.Light
-  local dark=color.Dark
-  local number=theme.number
-  local dimension=number.Dimension
-
-  setmetatable(color,{--普通颜色
-    __index=function(self,key)
-      local value=resources.getColor(R.color["jesse205_"..string.lower(key)])
-      rawset(self,key,value)
-      return value
-    end
-  })
-  setmetatable(ripple,{--波纹颜色
-    __index=function(self,key)
-      local value=resources.getColor(R.color["jesse205_"..string.lower(key).."_Ripple"])
-      rawset(self,key,value)
-      return value
-    end
-  })
-  setmetatable(light,{--偏亮颜色
-    __index=function(self,key)
-      local value=resources.getColor(R.color["jesse205_"..string.lower(key).."_Light"])
-      rawset(self,key,value)
-      return value
-    end
-  })
-  setmetatable(dark,{--偏暗颜色
-    __index=function(self,key)
-      local value=resources.getColor(R.color["jesse205_"..string.lower(key).."_Dark"])
-      rawset(self,key,value)
-      return value
-    end
-  })
-  setmetatable(number,{--数字
-    __index=function(self,key)
-      local value=resources.getInteger(R.integer["jesse205_"..string.lower(key)])
-      rawset(self,key,value)
-      return value
-    end
-  })
-  setmetatable(dimension,{--数字
-    __index=function(self,key)
-      local value=resources.getDimension(R.dimen["jesse205_"..string.lower(key)])
-      rawset(self,key,value)
-      return value
-    end
-  })
-  import "android.app.ActivityManager"
-  import "com.jesse205.app.ThemeUtil"
-  ThemeUtil.refreshUI()
-end
 
 --导入常用的包
 import "androidx.appcompat.widget.*"
@@ -185,7 +115,9 @@ import "androidx.appcompat.app.*"
 
 import "android.widget.*"
 import "android.app.*"
+import "android.os.Build"
 import "android.os.*"
+import "android.view.View"--加载主题要用
 import "android.view.*"
 import "android.view.inputmethod.InputMethodManager"
 
@@ -219,7 +151,9 @@ import "androidx.recyclerview.widget.RecyclerView"
 import "androidx.recyclerview.widget.StaggeredGridLayoutManager"
 import "androidx.recyclerview.widget.LinearLayoutManager"
 
---import "android.animation.LayoutTransition"
+import "com.lua.custrecycleradapter.AdapterCreator"--导入LuaCustRecyclerAdapter及相关类
+import "com.lua.custrecycleradapter.LuaCustRecyclerAdapter"
+import "com.lua.custrecycleradapter.LuaCustRecyclerHolder"
 
 import "android.net.Uri"
 import "android.content.Intent"
@@ -239,11 +173,6 @@ import "com.google.android.material.textfield.TextInputLayout"
 import "java.io.File"
 import "java.io.FileInputStream"
 import "java.io.FileOutputStream"
-
-
-import "com.lua.custrecycleradapter.AdapterCreator"--导入LuaCustRecyclerAdapter及相关类
-import "com.lua.custrecycleradapter.LuaCustRecyclerAdapter"
-import "com.lua.custrecycleradapter.LuaCustRecyclerHolder"
 
 import "com.bumptech.glide.Glide"--导入Glide
 --import "com.baidu.mobstat.StatService"--百度移动统计
@@ -382,6 +311,80 @@ function onError(title,message)
   return true
 end
 
+if initApp then--初始化APP
+  import "com.jesse205.app.initApp"
+end
+
+--加载主题
+--在get某东西（ActionBar等）前必须把主题搞定
+if not(notLoadTheme) then
+  theme={
+    color={
+      Ripple={},
+      Light={},
+      Dark={},
+      ActionBar={},
+    },
+    number={
+      id={},
+      Dimension={},
+    },
+    boolean={}
+  }
+  local colors,dimens
+  local color=theme.color
+  local ripple=color.Ripple
+  local light=color.Light
+  local dark=color.Dark
+  local number=theme.number
+  local dimension=number.Dimension
+
+  setmetatable(color,{--普通颜色
+    __index=function(self,key)
+      local value=resources.getColor(R.color["jesse205_"..string.lower(key)])
+      rawset(self,key,value)
+      return value
+    end
+  })
+  setmetatable(ripple,{--波纹颜色
+    __index=function(self,key)
+      local value=resources.getColor(R.color["jesse205_"..string.lower(key).."_Ripple"])
+      rawset(self,key,value)
+      return value
+    end
+  })
+  setmetatable(light,{--偏亮颜色
+    __index=function(self,key)
+      local value=resources.getColor(R.color["jesse205_"..string.lower(key).."_Light"])
+      rawset(self,key,value)
+      return value
+    end
+  })
+  setmetatable(dark,{--偏暗颜色
+    __index=function(self,key)
+      local value=resources.getColor(R.color["jesse205_"..string.lower(key).."_Dark"])
+      rawset(self,key,value)
+      return value
+    end
+  })
+  setmetatable(number,{--数字
+    __index=function(self,key)
+      local value=resources.getInteger(R.integer["jesse205_"..string.lower(key)])
+      rawset(self,key,value)
+      return value
+    end
+  })
+  setmetatable(dimension,{--数字
+    __index=function(self,key)
+      local value=resources.getDimension(R.dimen["jesse205_"..string.lower(key)])
+      rawset(self,key,value)
+      return value
+    end
+  })
+  import "android.app.ActivityManager"
+  import "com.jesse205.app.ThemeUtil"
+  ThemeUtil.refreshUI()
+end
 
 --导入共享代码
 require "AppSharedCode"

@@ -5,7 +5,7 @@ appInfo={
     message="为更快进行移动开发",
     icon=R.mipmap.ic_launcher,
     click=function()
-      openUrl("https://aidelua.jesse205.com")
+      openUrl("https://jesse205.com/aidelua")
     end,
   },
 

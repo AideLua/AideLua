@@ -54,20 +54,32 @@ local function createFileInfoDialog(config,nowDir)--文件名填写对话框
 end
 
 local function createFileDialog(nowDir)--模版选择对话框
-  local choice=activity.getSharedData("LastCreateFileType") or 0
+  local choice=activity.getSharedData("createfile_type")
   local nowDir=nowDir or FilesBrowserManager.directoryFile
   local names={}
+  local templates={}
   for index,content in ipairs(FileTemplates) do
-    table.insert(names,content.name)
+    if content.enabled~=false then
+      local name=content.name
+      table.insert(names,name)
+      table.insert(templates,content)
+      if choice==name then
+        choice=table.size(templates)-1
+      end
+    end
   end
+  if type(choice)~="number" then
+    choice=0
+  end
+
   AlertDialog.Builder(activity)
   .setTitle(R.string.file_create)
   .setSingleChoiceItems(names,choice,{onClick=function(dialogInterface,index)
       choice=index
-      activity.setSharedData("LastCreateFileType",index)
+      activity.setSharedData("createfile_type",templates[index+1].name)
   end})
   .setPositiveButton(android.R.string.ok,function()
-    local template=FileTemplates[choice+1]
+    local template=templates[choice+1]
     if template then
       createFileInfoDialog(template,nowDir)
     end

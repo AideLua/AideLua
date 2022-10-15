@@ -171,19 +171,19 @@ local function generalActionEvent(name1,name2,...)
 end
 
 function managerActions.undo()--撤销
-  generalActionEvent("undo","undo")
+  return generalActionEvent("undo","undo")
 end
 
 function managerActions.redo()--重做
-  generalActionEvent("redo","redo")
+  return generalActionEvent("redo","redo")
 end
 
 function managerActions.format()--格式化
-  generalActionEvent("format","format")
+  return generalActionEvent("format","format")
 end
 
 function managerActions.commented()--注释
-  generalActionEvent("commented","commented")
+  return generalActionEvent("commented","commented")
 end
 
 function managerActions.format()--格式化
@@ -205,7 +205,7 @@ function managerActions.setText(...)--设置编辑器文字内容
 end
 
 function managerActions.paste(text)--粘贴文字内容
-  generalActionEvent("paste","paste",text)
+  return generalActionEvent("paste","paste",text)
 end
 
 function managerActions.getTextSize()--获取文字大小
@@ -490,13 +490,14 @@ EditorsManager.symbolBar=symbolBar
 --符号栏按钮点击时输入符号
 function symbolBar.psButtonClick(view)
   local text=view.text
-  EditorsManager.actions.paste(text)
-  view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+  if managerActions.paste(text) then
+    view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+  end
 end
 
 --初始化一个符号栏按钮
 function symbolBar.newPsButton(text)
-  return loadlayout2({
+  local button=loadlayout2({
     AppCompatTextView;
     onClick=symbolBar.psButtonClick;
     text=text;
@@ -512,6 +513,9 @@ function symbolBar.newPsButton(text)
     textColor=theme.color.textColorPrimary;
     background=ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary)
   })
+  --button.getPaint().setFakeBoldText(true)
+
+  return button
 end
 
 local loadedSymbolBar=false

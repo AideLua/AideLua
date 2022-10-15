@@ -19,8 +19,6 @@ NewProjectManager.errorCode2String=errorCode2String
 path: 模板路径
 parentTemplateConfig: 父模板配置
 ]]
-
-
 function NewProjectManager.loadTemplate(path,parentTemplateConfig)
   parentTemplateConfig=parentTemplateConfig or {}
   local config=getConfigFromFile(path.."/config.lua")--读取文件
@@ -43,7 +41,7 @@ function NewProjectManager.loadTemplate(path,parentTemplateConfig)
   local configMetatable={__index=configSuper}
   setmetatable(config,configMetatable)
 
-  setmetatable(config.keys,{__index=parentTemplateConfig.keys})
+  setmetatable(config.keys,{__index=parentTemplateConfig.keys})--可以直接访问父模板的变量
 
   --加载子模板
   if subTemplates then

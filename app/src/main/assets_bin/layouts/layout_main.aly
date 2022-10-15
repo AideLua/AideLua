@@ -23,16 +23,16 @@
       id="appBarLinearLayout";
       --layoutTransition=newLayoutTransition();
       {
-        function(context)--适配了菜单的TabLayout
+        function(context)--适配了菜单的TabLayout，解决下拉与滚动的冲突
           local startX=0
           return luajava.override(TabLayout,{
             onInterceptTouchEvent=function(super,event)
               local action=event.getAction()
               local x=event.getX()
               if action==MotionEvent.ACTION_DOWN then
-                startX=x
+                startX=x--记录按下位置
                elseif action==MotionEvent.ACTION_MOVE then
-                if (startX-x)>math.dp2int(16) or (x-startX)>math.dp2int(16) then
+                if (startX-x)>math.dp2int(16) or (x-startX)>math.dp2int(16) then--偏移16dp，就说明要横向滚动了
                   if FilesTabManager.tabShowingMenu==0 then
                     return super(event)
                    else

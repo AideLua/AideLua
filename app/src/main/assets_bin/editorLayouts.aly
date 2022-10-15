@@ -78,7 +78,7 @@
         basewordColor=theme.color.Blue;
         userwordColor=0xff5c6bc0;
         textSize=math.dp2int(14);
-
+        --focusableInTouchMode=false;
       };
     },
     init=function(ids,config)

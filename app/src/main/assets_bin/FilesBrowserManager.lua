@@ -218,11 +218,12 @@ function FilesBrowserManager.open()
     drawerChild.setVisibility(View.VISIBLE)
    else
     drawer.openDrawer(Gravity.LEFT)
+    --[[
     Handler().postDelayed(Runnable({
       run = function()
         recyclerView.requestFocus()
       end
-    }), 10)
+    }), 10)]]
   end
   openState = true
 end
@@ -233,6 +234,7 @@ function FilesBrowserManager.close()
     drawerChild.setVisibility(View.GONE)
    else
     drawer.closeDrawer(Gravity.LEFT)
+    --[[
     local editor=EditorsManager.editor
     if editor then
       Handler().postDelayed(Runnable({
@@ -240,7 +242,7 @@ function FilesBrowserManager.close()
           editor.requestFocus()
         end
       }), 10)
-    end
+    end]]
   end
   openState = false
 end

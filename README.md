@@ -8,7 +8,7 @@
 [![Gitee 仓库](https://img.shields.io/badge/Gitee-仓库-C71D23?logo=gitee)](https://gitee.com/Jesse205/AideLua/)
 [![Github 仓库](https://img.shields.io/badge/Github-仓库-0969DA?logo=github)](https://github.com/Jesse205/Aide-Lua)
 
-![cover](ic_cover-aidelua.png)
+![cover](images/ic_cover-aidelua.png)
 
 ## 注意 Alert
 如需使用源代码，请进入 [发行版](https://gitee.com/Jesse205/AideLua/releases) 页面下载<br>

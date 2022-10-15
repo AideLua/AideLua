@@ -8,15 +8,15 @@ getPluginPath, getPluginDataPath, getAvailable,
 getPluginsEventsAndName,getConfig,onPluginError
 
 
-local PLUGINS_PATH = AppPath.AppShareDir .. "/plugins"
-local PLUGINS_DATA_PATH = AppPath.AppShareDir .. "/data/plugins"
+local PLUGINS_PATH = AppPath.AppMediaDir .. "/plugins"
+local PLUGINS_DATA_PATH = AppPath.AppMediaDir .. "/data/plugins"
 PluginsUtil.PLUGINS_PATH = PLUGINS_PATH
 PluginsUtil.PLUGINS_DATA_PATH = PLUGINS_DATA_PATH
 PluginsUtil._VERSION="3.1"
 
 local appPackageName = activity.getPackageName()
-local PackInfo = activity.PackageManager.getPackageInfo(appPackageName, 0)
-local versionCode = PackInfo.versionCode
+local packInfo = activity.PackageManager.getPackageInfo(appPackageName, 0)
+local versionCode = packInfo.versionCode
 
 
 function PluginsUtil.callElevents(name, ...)
