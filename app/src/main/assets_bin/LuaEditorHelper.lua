@@ -89,7 +89,7 @@ function LuaEditorHelper.onEditorSelectionChangedListener(view,status,start,end_
   if _clipboardActionMode then
     local selectedText=view.getSelectedText()
     local previewString
-    local color,colorName=getColorAndName(selectedText)
+    local color,colorName=getColorAndHex(selectedText)
     if color then
       previewString = SpannableString(colorName or selectedText)
       previewString.setSpan(BackgroundColorSpan(color),0,#previewString,Spannable.SPAN_EXCLUSIVE_INCLUSIVE)

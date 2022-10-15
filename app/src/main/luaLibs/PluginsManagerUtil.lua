@@ -1,5 +1,5 @@
 local PluginsManagerUtil={}
-local getAlpInfo,install
+local getAlpInfo,showInstallDialog
 local PackInfo=activity.PackageManager.getPackageInfo(activity.getPackageName(),64)
 local versionCode=PackInfo.versionCode
 
@@ -11,7 +11,7 @@ end
 PluginsManagerUtil.getAlpInfo=getAlpInfo
 
 
-function install(path,uri,config,callback)
+function showInstallDialog(path,uri,config,callback)
   local mode=config.mode
   if mode=="plugin" or mode==nil then
     local packageName=config.packagename
@@ -67,14 +67,14 @@ function install(path,uri,config,callback)
     callback("failed")
   end
 end
-PluginsManagerUtil.install=install
+PluginsManagerUtil.showInstallDialog=showInstallDialog
 
 function PluginsManagerUtil.installByUri(uri,callback)
   local scheme=uri.getScheme()
   local path
   if scheme=="content" then
     local inputStream=activity.getContentResolver().openInputStream(uri)
-    path=AppPath.AppSdcardCacheDataDir.."/"..System.currentTimeMillis()..".zip"
+    path=AppPath.AppSdcardDataTempDir.."/"..System.currentTimeMillis()..".zip"
     local outputStream=FileOutputStream(path)
     LuaUtil.copyFile(inputStream,outputStream)
    else
@@ -84,18 +84,18 @@ function PluginsManagerUtil.installByUri(uri,callback)
   if success then--读取成功
     local supported=config.supported2
     if supported then
-      if supported[apptype] then
+      if supported[apptype] then--支持此APP
         local limitVersion=supported[apptype]
-        if limitVersion.mincode>versionCode then
+        if limitVersion.mincode>versionCode then--在最低版本之上
           showErrorDialog(R.string.plugins_error_update_app)
          else
-          install(path,uri,config,callback)
+          showInstallDialog(path,uri,config,callback)
         end
        else
         showErrorDialog(R.string.plugins_error_unsupported)
       end
      else
-      install(path,uri,config,callback)
+      showInstallDialog(path,uri,config,callback)
     end
    else--读取失败
     showErrorDialog(R.string.open_failed,config)
@@ -109,8 +109,7 @@ function PluginsManagerUtil.uninstall(path,config,callback)
   .setTitle(formatResStr(R.string.uninstall_withName,{config.appname or dirName}))
   .setMessage(R.string.plugins_uninstall_warning)
   .setPositiveButton(R.string.uninstall,function()
-    --local path=PluginsUtil.getPluginPath(config.packagename)
-    if dir.exists() then
+    if dir.exists() then--判断一下插件是否存在
       LuaUtil.rmDir(dir)
       LuaUtil.rmDir(File(PluginsUtil.getPluginDataPath(dirName)))
       PluginsUtil.setEnabled(dirName,nil)

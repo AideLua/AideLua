@@ -1,4 +1,5 @@
 require "import"
+initApp=true
 import "jesse205"
 local normalkeys=jesse205.normalkeys
 normalkeys.configType=true

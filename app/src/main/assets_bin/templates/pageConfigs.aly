@@ -70,7 +70,7 @@
   },
   {
     name="LuaJ",
-    _type="androlua",
+    _type="luaj",
     subTemplateName="LuaJ",
     useLoadlayout2=true,
     checkAppConfig=false,

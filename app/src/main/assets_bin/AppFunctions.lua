@@ -280,9 +280,19 @@ local name2ColorMap={
   red=0xffff0000,
   green=0xff00ff00,
   blue=0xff0000ff,
-
 }
-function formatColor2Name(color)
+name2ColorMap.白色=name2ColorMap.white
+name2ColorMap.黑色=name2ColorMap.black
+name2ColorMap.红色=name2ColorMap.red
+name2ColorMap.绿色=name2ColorMap.green
+name2ColorMap.蓝色=name2ColorMap.blue
+name2ColorMap.白=name2ColorMap.white
+name2ColorMap.黑=name2ColorMap.black
+name2ColorMap.红=name2ColorMap.white
+name2ColorMap.绿=name2ColorMap.green
+name2ColorMap.蓝=name2ColorMap.blue
+
+function formatColor2Hex(color)
   if color>=0 and color<=0xFFFFFFFF then
     local success,result=pcall(String.format,"%08X", {color})
     if success then
@@ -291,12 +301,12 @@ function formatColor2Name(color)
   end
 end
 
-function getColorAndName(text)
+function getColorAndHex(text)
   if text and text~="" then
     local success,color
     color=name2ColorMap[string.lower(text)] or tonumber(text)
     if color then
-      return color,formatColor2Name(color)
+      return color,formatColor2Hex(color)
     end
     success,color=pcall(Color.parseColor,"#"..text)
     if success then
