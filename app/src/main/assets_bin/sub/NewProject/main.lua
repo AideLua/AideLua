@@ -21,11 +21,9 @@ PluginsUtil.setActivityName("newproject")
 templateMap={}--存放大模板的列表
 pageConfigsList={}
 
-
 activity.setTitle(R.string.project_create)
 activity.setContentView(loadlayout2("layouts.layout"))
 actionBar.setDisplayHomeAsUpEnabled(true)
---actionBar.setSubtitle(templateType.." "..templateList[templateType].baseVer)
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()
@@ -60,12 +58,9 @@ createButton.onClick=function(view)--新建按钮
   end
 
 end
---templateType=getSharedData("templateType")
 
 NewProjectManager.loadTemplate(NewProjectUtil2.TEMPLATES_DIR_PATH)
 PluginsUtil.callElevents("onLoadTemplateConfig", templateMap,pageConfigsList)
-
-
 
 local pagePosition=getSharedData("newProject_pagePosition") or 0
 nowPageConfig=pageConfigsList[pagePosition+1]
@@ -82,9 +77,6 @@ adapter=PagerAdapter({
   instantiateItem=function(container,position)
     local config=pageConfigsList[position+1]
     local templateConfig=config.templateConfig
-    --[[
-    local templateConfig=templateMap[config.templateType or "default"]
-    config.templateConfig=templateConfig]]
     if config then
       local view=config.mainLayout
       if not(view) then
@@ -95,10 +87,6 @@ adapter=PagerAdapter({
           view=loadlayout(config.layout,ids)
         end
         config.ids=ids
-        --[[
-      if config.templateDirPath then
-        config.templateDirPath=rel2AbsPath(config.templateDirPath,NewProjectUtil2.TEMPLATES_DIR_PATH)
-      end]]
         if config.onInit then
           local success,message=pcall(config.onInit,ids,config)
           if not(success) then

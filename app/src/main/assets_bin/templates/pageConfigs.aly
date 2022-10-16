@@ -1,9 +1,8 @@
 {
   {
-    name="AndroLua+",
-    _type="androlua",
-    subTemplateName="AndroLua",
-    --templateDirPath="AndroLua",--初始化时系统会自动转为绝对路径
+    name="AndroLua+ (Recommend)",--显示的名称
+    _type="androlua",--仅仅是标识而已
+    subTemplateName="AndroLua",--子模板文件夹名
     useLoadlayout2=true,
     checkAppConfig=true,--检查应用名与包名，应用名与包名的输入名的编辑框id必须相同
     layout={
@@ -91,5 +90,30 @@
     onSelected=function(ids,config)
       --createButton.setEnabled(false)
     end
-  }
+  },
+--[[
+  {
+    name="ALuaJ",
+    _type="aluaj",
+    subTemplateName="ALuaJ",
+    useLoadlayout2=true,
+    checkAppConfig=false,
+    helloWorld=true,--不可用标识
+    layout={
+      LinearLayout;
+      layout_height="fill";
+      layout_width="fill";
+      orientation="vertical";
+      {
+        TextView;
+        gravity="center";
+        text="Hello World";
+        layout_height="fill";
+        layout_width="fill";
+      };
+    },
+    onSelected=function(ids,config)
+      --createButton.setEnabled(false)
+    end
+  }]]
 }

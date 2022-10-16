@@ -47,7 +47,7 @@ LuaEditorHelper.isNearChar2=isNearChar2
 
 
 function LuaEditorHelper.onEditorSelectionChangedListener(view,status,start,end_)
-  --print(Searching)
+  
   if not(_clipboardActionMode) and status then
     local actionMode=luajava.new(ActionMode.Callback,
     {
