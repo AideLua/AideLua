@@ -630,3 +630,4 @@ onConfigurationChanged(activity.getResources().getConfiguration())
 if screenConfigDecoder.deviceByWidth~="pc" and FilesBrowserManager.openState == nil then
   FilesBrowserManager.setOpenState(false)
 end
+

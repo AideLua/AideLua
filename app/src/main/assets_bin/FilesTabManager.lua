@@ -32,19 +32,20 @@ local openState, file, fileConfig,fileType = false, nil, nil, nil
 local openedFiles = {}
 FilesTabManager.backupPath=AppPath.AppMediaDir..os.date("/backup/%Y%m%d")
 FilesTabManager.backupDir=File(FilesTabManager.backupPath)
-FilesTabManager.tabShowingMenu=0
+--FilesTabManager.tabShowingMenu=0--已改进判断方法，此API废除
+
 
 local function applyTabMenu(view,tabFileConfig)
   local popupMenu=PopupMenu(activity,view)
   popupMenu.inflate(R.menu.menu_main_filetab)
   local menu=popupMenu.getMenu()
   local dropListener=popupMenu.getDragToOpenListener()
-  local dropMenuState=false
-  local menuState=false
+  local dropMenuState=false--当前拉动菜单状态
+  --local menuState=false
   local Rid=R.id
   popupMenu.onDismiss=function(popupMenu)
     dropMenuState=false
-    FilesTabManager.tabShowingMenu=FilesTabManager.tabShowingMenu-1
+    --FilesTabManager.tabShowingMenu=FilesTabManager.tabShowingMenu-1--当前正在显示的菜单减少一个
   end
   popupMenu.onMenuItemClick=function(item)
     local id=item.getItemId()
@@ -65,7 +66,7 @@ local function applyTabMenu(view,tabFileConfig)
     end
   end
   local startTime
-  local maxY=0
+  local maxY=0--最大滑动垂直距离
   view.onTouch=function(view,event)
     local action=event.getAction()
     local y=event.getY()
@@ -79,7 +80,8 @@ local function applyTabMenu(view,tabFileConfig)
      elseif action==MotionEvent.ACTION_MOVE then
       if not(dropMenuState) and y>filesTabLay.getHeight() then
         dropMenuState=true
-        FilesTabManager.tabShowingMenu=FilesTabManager.tabShowingMenu+1
+        view.requestDisallowInterceptTouchEvent(true)
+        --FilesTabManager.tabShowingMenu=FilesTabManager.tabShowingMenu+1
         popupMenu.show()
       end
     end
@@ -97,12 +99,6 @@ local function applyTabMenu(view,tabFileConfig)
       popupMenu.show()
     end
   end
-  --[[
-  view.onLongClick=function(view)
-    menuState=true
-    popupMenu.show()
-    --return true
-  end]]
 end
 --[[
 local nowTabTouchTag

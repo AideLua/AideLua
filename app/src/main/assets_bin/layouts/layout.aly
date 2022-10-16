@@ -10,10 +10,8 @@
     layout_width="fill";
     layout_height="fill";
     id="drawer";
-    --backgroundColor=theme.color.colorPrimary;
     "layouts.layout_main";
     "layouts.layout_filepicker";
-
   };
   {
     LinearLayoutCompat;

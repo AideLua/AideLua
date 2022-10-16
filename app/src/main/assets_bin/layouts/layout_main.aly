@@ -21,7 +21,7 @@
       layout_width="fill";
       orientation="vertical";
       id="appBarLinearLayout";
-      --layoutTransition=newLayoutTransition();
+      layoutTransition=newLayoutTransition();
       {
         function(context)--适配了菜单的TabLayout，解决下拉与滚动的冲突
           local startX=0
@@ -33,12 +33,9 @@
                 startX=x--记录按下位置
                elseif action==MotionEvent.ACTION_MOVE then
                 if (startX-x)>math.dp2int(16) or (x-startX)>math.dp2int(16) then--偏移16dp，就说明要横向滚动了
-                  if FilesTabManager.tabShowingMenu==0 then
-                    return super(event)
-                   else
-                    return false
-                  end
+                  return super(event)
                  else
+                  filesTabLay.onTouchEvent(event)--这时候可能要下拉，但是为了提升滚动灵敏度要绕过super执行onTouchEvent
                   return nil
                 end
               end
@@ -53,10 +50,6 @@
         visibility=View.GONE;
         inlineLabel=true;
         tabIndicatorFullWidth=false;
-        --paddingLeft="8dp";
-        --paddingRight="8dp";
-        --clipToPadding=false;
-        --layoutTransition=newLayoutTransition();
       };
     };
   };
@@ -82,7 +75,6 @@
     backgroundColor=theme.color.windowBackground;
     elevation="4dp";
     radius=0;
-    --layoutTransition=newLayoutTransition();
     {
       LinearLayoutCompat;
       layout_height="fill";
