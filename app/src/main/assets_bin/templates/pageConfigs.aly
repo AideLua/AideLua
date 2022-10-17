@@ -56,6 +56,8 @@
 
       NewProjectManager.refreshState("androidx",androidXState,chipList)
       --print(config.templatePath)
+      
+      
     end,
     onCreativePrj=function(ids,config,keys)
       print(dump(keys))

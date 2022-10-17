@@ -19,8 +19,22 @@ NewProjectManager.errorCode2String=errorCode2String
 path: 模板路径
 parentTemplateConfig: 父模板配置
 ]]
+local baseTemplateConfig={
+  keys={
+    androidX=false,
+    appTheme="@style/AppTheme",
+    appName="MyApplication",
+    dependenciesEnd={},
+    appDependencies={},
+    appDependenciesEnd={},
+    appIncludeLua={},
+    appInclude={},
+    defaultImport={},
+    compileLua=true,
+  }
+}
 function NewProjectManager.loadTemplate(path,parentTemplateConfig)
-  parentTemplateConfig=parentTemplateConfig or {}
+  parentTemplateConfig=parentTemplateConfig or baseTemplateConfig
   local config=getConfigFromFile(path.."/config.lua")--读取文件
   local subTemplates=config.subTemplates--获取子模板
   local subTemplatesMap={}--子模板地图
@@ -159,7 +173,6 @@ function NewProjectManager.refreshState(refreshType,state,chipList)
       local chip=chipList[index]
       local content=chip.tag
       local support=content.support
-      --local chip=content.chip
       if support then
         if (support=="androidx" and state) or (support=="normal" and notState) then
           chip.setEnabled(true)
@@ -173,13 +186,12 @@ function NewProjectManager.refreshState(refreshType,state,chipList)
   end
 end
 
-
-
+--view.tag={viewIndex=index,enabledList=list}
 function NewProjectManager.onChipCheckChangedListener(view,isChecked)
   local config=view.tag
   local viewIndex=config.viewIndex
   local enabledList=config.enabledList
-  if view.isEnabled() then
+  if view.isEnabled() then--如果是启用状态，那么是主动的，就需要保存数据
     setSharedData("newproject_"..config.path,isChecked)
     config.checked=isChecked
   end
@@ -194,19 +206,31 @@ end
 --构建一个键，需要格式化的文件的列表
 function NewProjectManager.buildConfig(pageConfig)
   local templateConfig=pageConfig.templateConfig
-  local keys=table.clone(templateConfig.keys or {})
-  local formatList=table.clone(templateConfig.formatList or {})
-  local unzipList=table.clone(templateConfig.unzipList or {})
-  local dependenciesEnd=keys.dependenciesEnd
+  local subTemplateConfig=pageConfig.subTemplateConfig
+
+  local templateConfigsList={subTemplateConfig}
+
+  local localParentConfig=templateConfig
+  while localParentConfig do
+    table.insert(templateConfigsList,1,localParentConfig)
+    localParentConfig=localParentConfig.parentTemplateConfig
+  end
+
+
+  local keys={}--table.clone(templateConfig.keys or {})
+  local formatList={}--table.clone(templateConfig.formatList or {})
+  local unzipList={}--table.clone(templateConfig.unzipList or {})
+
   local keysLists={}--这是准备整合到keys的列表
-  local pluginsList={}
+
+  for index=1,#templateConfigsList do
+    local config=templateConfigsList[index]
+    table.insert(keysLists,config.keys)
+  end
+
   local androidX=pageConfig.androidxState
   keys.androidX=androidX
-  --NewProjectManager.getBaseTemplateZipPathList(TEMPLATES_DIR_PATH,androidX,"app","aide(2.1)")
-  if androidX then--启用AndroiX后自动追加
-    table.insert(dependenciesEnd,"api 'androidx.appcompat:appcompat:1.0.0'")
-    table.insert(dependenciesEnd,"api 'com.google.android.material:material:1.0.0'")
-  end
+
 
   local onBuildConfig=pageConfig.onBuildConfig
   if onBuildConfig then
@@ -226,6 +250,12 @@ function NewProjectManager.buildConfig(pageConfig)
         keys[index]=content--覆盖原有值
       end
     end
+  end
+
+  local dependenciesEnd=keys.dependenciesEnd
+  if androidX then--启用AndroiX后自动追加
+    table.insert(dependenciesEnd,"api 'androidx.appcompat:appcompat:1.0.0'")
+    table.insert(dependenciesEnd,"api 'com.google.android.material:material:1.0.0'")
   end
 
 

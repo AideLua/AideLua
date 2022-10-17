@@ -19,7 +19,6 @@ local leftIconLay={
   AppCompatImageView,
   id="icon",
   layout_margin="16dp",
-  layout_marginRight="32dp",
   layout_width="24dp",
   layout_height="24dp",
   colorFilter=colorAccent,
@@ -30,6 +29,7 @@ local leftCoverLay={
   layout_height="40dp";
   layout_width="40dp";
   layout_margin="16dp";
+  layout_marginRight=0;
   radius="20dp";
   {
     CardView;
@@ -50,6 +50,7 @@ local leftCoverIconLay={
   layout_height="40dp";
   layout_width="40dp";
   layout_margin="16dp";
+  layout_marginRight=0;
   radius="20dp";
   {
     CardView;
@@ -72,8 +73,7 @@ local oneLineLay={
   textSize="16sp";
   textColor=textColorPrimary;
   layout_weight=1;
-  layout_marginTop="16dp";
-  layout_marginBottom="16dp";
+  layout_margin="16dp";
 }
 
 local twoLineLay={
@@ -81,8 +81,7 @@ local twoLineLay={
   orientation="vertical";
   gravity="center";
   layout_weight=1;
-  layout_marginTop="16dp";
-  layout_marginBottom="16dp";
+  layout_margin="16dp";
   {
     AppCompatTextView;
     id="title";
@@ -101,14 +100,14 @@ local twoLineLay={
 local rightSwitchLay={
   SwitchCompat;
   id="switchView";
-  layout_marginRight="16dp";
+  layout_marginLeft=0;
+  layout_margin="16dp";
 }
 
 local rightNewPageIconLay={
   AppCompatImageView;
   id="rightIcon";
   layout_margin="16dp";
-  --layout_marginLeft=0;
   layout_width="24dp";
   layout_height="24dp";
   colorFilter=textColorSecondary;

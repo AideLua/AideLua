@@ -262,7 +262,7 @@ function LuaEditorHelper.initKeysTaskFunc(keysList,packagesList)
     end
 
     --androidx关键字在这里
-    if activity.getSharedData("settings_support_androidx") then
+    if activity.getSharedData("androidX_support") then
       import "androidApis.editor.androidxApis"
       addWords(androidxApis,0)
     end

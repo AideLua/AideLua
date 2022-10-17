@@ -25,27 +25,8 @@ keys={
   appPackageName="com.aidelua.myapplication",
   am_application={},
   am_application_bottom={},
-  appDependencies={},
-  appDependenciesEnd={},
-  appIncludeLua={},
-  appInclude={},
-  androidX=true,
-  compileLua=true,
   appIcon="@drawable/ic_launcher",
-  defaultImport={},
   am_welcome_info={},
   am_main_info={},
-  dependenciesEnd={},
 }
 
-tableConfigFormatter={
-  include=function(content)--settings.gradle中的
-    return ",'"..table.concat(content,"','").."'"
-  end,
-  dependencies=function(content)
-    return "\n    "..table.concat(content,"\n    ")
-  end,
-}
-tableConfigFormatter.appDependencies=tableConfigFormatter.dependencies
-tableConfigFormatter.appDependenciesEnd=tableConfigFormatter.dependencies
-tableConfigFormatter.dependenciesEnd=tableConfigFormatter.dependencies
