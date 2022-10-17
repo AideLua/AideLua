@@ -56,7 +56,9 @@
 
       NewProjectManager.refreshState("androidx",androidXState,chipList)
       --print(config.templatePath)
-      
+      local templatePath=config.templatePath
+      local subTemplatePath=config.subTemplatePath
+      print(templatePath,subTemplatePath)
       
     end,
     onCreativePrj=function(ids,config,keys)

@@ -144,8 +144,6 @@ LuaReservedCharacters = {"switch", "if", "then", "and", "break", "do", "else", "
 deviceChangeLTFixList={largeDrawerLay,largeMainLay,mainEditorLay,layoutTransition}
 
 function onCreate(savedInstanceState)
-  -- todo:根据savedInstanceState和getIntent判断打开项目
-  --FilesBrowserManager.open()
 
   if PluginsUtil.callElevents("onCreate", savedInstanceState) then
     return

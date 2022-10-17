@@ -108,6 +108,7 @@ local rightNewPageIconLay={
   AppCompatImageView;
   id="rightIcon";
   layout_margin="16dp";
+  layout_marginLeft=0;
   layout_width="24dp";
   layout_height="24dp";
   colorFilter=textColorSecondary;

@@ -47,4 +47,13 @@ function NewProjectUtil2.unzip(path,unzipPath)
     return false
   end
 end
+
+--将 itemsTable 中的项目添加到 mainTable
+function NewProjectUtil2.addItemsToTable(mainTable,itemsTable)
+  for index=1,#itemsTable do
+    table.insert(mainTable,itemsTable[index])
+  end
+end
+
+
 return NewProjectUtil2

@@ -5,7 +5,6 @@ versions={
   },--所有app版本号
 }
 subTemplates={"AndroLua"}
-subTemplateConfigsMap={}
 
 formatList={
   "settings.gradle",
@@ -21,8 +20,6 @@ formatList={
 
 keys={
   appTheme="@style/AppTheme",
-  appName="MyApplication",
-  appPackageName="com.aidelua.myapplication",
   am_application={},
   am_application_bottom={},
   appIcon="@drawable/ic_launcher",

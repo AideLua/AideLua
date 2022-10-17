@@ -1,3 +1,5 @@
+--NewProjectManager 是给主UI用的管理器，不能在线程里面使用
+--导入 NewProjectManager 前必须先导入 NewProjectUtil2
 local NewProjectManager={}
 local TEMPLATES_DIR_PATH=NewProjectUtil2.TEMPLATES_DIR_PATH--模板路径
 local PRJS_PATH=NewProjectUtil2.PRJS_PATH--工程存放路径
@@ -22,8 +24,8 @@ parentTemplateConfig: 父模板配置
 local baseTemplateConfig={
   keys={
     androidX=false,
-    appTheme="@style/AppTheme",
     appName="MyApplication",
+    appPackageName="com.aidelua.myapplication",
     dependenciesEnd={},
     appDependencies={},
     appDependenciesEnd={},
@@ -210,22 +212,29 @@ function NewProjectManager.buildConfig(pageConfig)
 
   local templateConfigsList={subTemplateConfig}
 
-  local localParentConfig=templateConfig
+  --获取所有父模板配置
+  local localParentConfig=templateConfig--这是当前父模板
   while localParentConfig do
     table.insert(templateConfigsList,1,localParentConfig)
     localParentConfig=localParentConfig.parentTemplateConfig
   end
+  localParentConfig=nil--防止脑子短路，手动赋值为空
 
+  local keys={}--杂列表，需要用 NewProjectUtil2.buildKeyItem 生成字符串
+  local formatList={}--字符串列表
+  local unzipList={}--字符串列表
 
-  local keys={}--table.clone(templateConfig.keys or {})
-  local formatList={}--table.clone(templateConfig.formatList or {})
-  local unzipList={}--table.clone(templateConfig.unzipList or {})
+  local keysLists={}--这是准备整合到keys的列表，一行一个keys
 
-  local keysLists={}--这是准备整合到keys的列表
-
-  for index=1,#templateConfigsList do
+  for index=1,#templateConfigsList do--开始添加列表
     local config=templateConfigsList[index]
     table.insert(keysLists,config.keys)
+    if config.formatList then
+      NewProjectUtil2.addItemsToTable(formatList,config.formatList)
+    end
+    if config.unzipList then
+      NewProjectUtil2.addItemsToTable(unzipList,config.unzipList)
+    end
   end
 
   local androidX=pageConfig.androidxState
