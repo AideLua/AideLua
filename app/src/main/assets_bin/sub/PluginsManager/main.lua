@@ -32,7 +32,7 @@ function onOptionsItemSelected(item)
   if id==android.R.id.home then
     activity.finish()
    elseif item==helpMenu then
-    openUrl("https://gitee.com/Jesse205/AideLua/wikis/插件说明/readme")
+    openUrl("https://gitee.com/Jesse205/AideLua/wikis/插件说明/概述")
   end
 end
 
