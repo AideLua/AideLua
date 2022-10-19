@@ -18,7 +18,7 @@ local tableConfigFormatter={
 NewProjectUtil2.tableConfigFormatter=tableConfigFormatter
 
 
-function NewProjectUtil2.buildKeyItem(key,content)
+local function buildKeyItem(key,content)
   local text
   if type(content)=="table" then
     if #content=="" then
@@ -30,6 +30,20 @@ function NewProjectUtil2.buildKeyItem(key,content)
     text=tostring(content)
   end
   return text
+end
+NewProjectUtil2.buildKeyItem=buildKeyItem
+
+--构建内容中的key
+function NewProjectUtil2.buildKeysInContent(content,keys,reallyKeysMap)
+  content:gsub("{{(.-)}}",function(key)
+    local item=reallyKeysMap[key]
+    if not(item) then
+      item=buildKeyItem(key,keys[key])
+      reallyKeysMap[key]=item
+    end
+    return item
+  end)
+  return content
 end
 
 function NewProjectUtil2.readConfig(path,basePath)

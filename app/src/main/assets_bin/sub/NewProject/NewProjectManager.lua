@@ -23,16 +23,16 @@ parentTemplateConfig: 父模板配置
 ]]
 local baseTemplateConfig={
   keys={
-    androidX=false,
-    appName="MyApplication",
-    appPackageName="com.aidelua.myapplication",
-    dependenciesEnd={},
-    appDependencies={},
-    appDependenciesEnd={},
-    appIncludeLua={},
-    appInclude={},
-    defaultImport={},
-    compileLua=true,
+    androidX=false,--androidx启动开关，用于追加默认的androidx以及material依赖
+    appName="MyApplication",--默认应用名
+    appPackageName="com.aidelua.myapplication",--默认包名
+    dependenciesEnd={},--所有模块的build.prop依赖
+    appDependencies={},--app目录下的依赖
+    appDependenciesEnd={},--app目录下依赖的末尾
+    appIncludeLua={},--config.lua的包含，只对项目根目录生效，第一个为主模块
+    appInclude={},--settings.gradle的包含的模块
+    defaultImport={},--main.lua默认导入
+    compileLua=true,--默认编译lua文件
   }
 }
 function NewProjectManager.loadTemplate(path,parentTemplateConfig)
