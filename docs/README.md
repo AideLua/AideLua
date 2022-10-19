@@ -5,7 +5,7 @@
 [![QQ 频道](https://img.shields.io/badge/加入-QQ_频道-0099FF?logo=TencentQQ)](https://pd.qq.com/s/ncghvc)
 
 [![Gitee 仓库](https://img.shields.io/badge/Gitee-仓库-C71D23?logo=gitee)](https://gitee.com/Jesse205/AideLua/)
-[![Github 仓库](https://img.shields.io/badge/Github-仓库-0969DA?logo=github)](https://github.com/Jesse205/Aide-Lua)
+[![Github 仓库](https://img.shields.io/badge/Github-仓库-0969DA?logo=github)](https://github.com/Jesse205/AideLua)
 
 Aide Lua 是一款依赖 Aide 的 Lua 编辑器<br>
 Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件开发

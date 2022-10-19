@@ -1,0 +1,17 @@
+{
+    "name": "AideLuaPro",
+    "version": "5.0.4",
+    "description": "依赖 Aide ，使用 Lua 快速、高效开发的工具",
+    "main": "index.js",
+    "repository": "https://gitee.com/Jesse205/AideLua",
+    "author": "Jesse205",
+    "license": "MIT",
+    "private": false,
+    "devDependencies": {
+        "vuepress": "^2.0.0-beta.51"
+    },
+    "scripts": {
+        "docs:dev": "vuepress dev docs",
+        "docs:build": "vuepress build docs"
+    }
+}
