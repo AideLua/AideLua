@@ -48,40 +48,37 @@ function joinQQGroup(groupNumber)
   end
 end
 
+function callItem(parent,view,data)
+  if data.url then
+    openUrl(data.url)
+    return true
+   elseif data.browserUrl then
+    openInBrowser(data.browserUrl)
+    return true
+   elseif data.qqGroup then--QQ群
+    joinQQGroup(data.qqGroup)
+   elseif data.qq then
+    pcall(activity.startActivity,Intent(Intent.ACTION_VIEW,Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin="..data.qq)))
+    return true
+   elseif data.func then
+    data.func()
+   elseif data.contextMenuEnabled then
+    if parent and view then
+      parent.showContextMenuForChild(view)
+    end
+  end
+end
+
 function onItemClick(view,views,key,data)
-  if key=="update" then
+  if callItem(recyclerView,view,data) then
+   elseif key=="version" then
     if onUpdate then
       onUpdate()
-    end
-   elseif key=="developer" then
-    if data.qq then
-      pcall(activity.startActivity,Intent(Intent.ACTION_VIEW,Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin="..data.qq)))
-    end
-   elseif key=="more" then
-    if data.url then--单个QQ群
-      openUrl(data.url)
-     elseif data.browserUrl then--单个QQ群
-      openUrl(data.browserUrl)
-     elseif data.qqGroup then--多个QQ群
-      joinQQGroup(data.qqGroup)
-     elseif data.func then
-      data.func()
-     elseif data.contextMenuEnabled then
-      --recyclerView.tag._data=data
-      recyclerView.showContextMenuForChild(view)
-      --recyclerView.showContextMenu()
     end
    elseif key=="html" then
     newSubActivity("HtmlFileViewer",{{title=data.title,path=data.path}})
    elseif key=="openSourceLicenses" then
     newSubActivity("OpenSourceLicenses")
-   elseif key=="support" then
-    local supportUrl=data.supportUrl
-    if data.supportList then
-      recyclerView.showContextMenu()
-     elseif supportUrl then
-      openUrl(supportUrl)
-    end
   end
 end
 
@@ -147,7 +144,6 @@ data={
   {--软件图标
     -1;
   };
-
   {--关于软件
     SettingsLayUtil.TITLE;
     title=R.string.jesse205_about_full;
@@ -157,7 +153,7 @@ data={
     title=R.string.jesse205_nowVersion_app;
     summary=("%s (%s)"):format(packageInfo.versionName,packageInfo.versionCode);
     icon=R.drawable.ic_information_outline;
-    key="update";
+    key="version";
   };
   {--Jesse205Library版本
     SettingsLayUtil.ITEM;
@@ -179,40 +175,41 @@ if agreements then
   end
 end
 
-
 --开发信息
 if developers or openSourceLicenses then
   table.insert(data,{
     SettingsLayUtil.TITLE;
     title=R.string.jesse205_developerInfo;
   })
-end
+  --插入开发者
+  if developers then
+    for index,content in ipairs(developers) do
+      table.insert(data,{
+        SettingsLayUtil.ITEM_AVATAR;
+        title="@"..content.name;
+        summary=content.message;
+        icon=content.avatar or getUserAvatarUrl(content.qq,content.imageSize);
+        url=content.url,
+        qq=content.qq;
+        key="developer";
+        newPage="newApp";
+      })
+    end
+  end
 
---插入开发者
-if developers then
-  for index,content in ipairs(developers) do
+  --插入开源许可
+  if openSourceLicenses then
     table.insert(data,{
-      SettingsLayUtil.ITEM_AVATAR;
-      title="@"..content.name;
-      summary=content.message;
-      icon=content.avatar or getUserAvatarUrl(content.qq,content.imageSize);
-      qq=content.qq;
-      key="developer";
-      newPage="newApp";
+      SettingsLayUtil.ITEM_NOSUMMARY;
+      title=R.string.jesse205_openSourceLicense;
+      icon=R.drawable.ic_github;
+      key="openSourceLicenses";
+      newPage=true;
     })
   end
 end
 
---插入开源许可
-if openSourceLicenses then
-  table.insert(data,{
-    SettingsLayUtil.ITEM_NOSUMMARY;
-    title=R.string.jesse205_openSourceLicense;
-    icon=R.drawable.ic_github;
-    key="openSourceLicenses";
-    newPage=true;
-  })
-end
+
 
 if moreItem or copyright then
   --更多内容
@@ -269,7 +266,7 @@ recyclerView.onCreateContextMenu=function(menu,view,menuInfo)
   local data=data[menuInfo.position+1]
   if data and data.contextMenuEnabled then
     local key=data.key
-    if key=="more" and data.contextMenuEnabled then--多个QQ群
+    if data.contextMenuEnabled then--多个QQ群
       menu.setHeaderTitle(data.title)
       local menusList=data.menus
       for index,content in ipairs(menusList) do
@@ -279,15 +276,7 @@ recyclerView.onCreateContextMenu=function(menu,view,menuInfo)
         onMenuItemSelected=function(menu,item)
           local id=item.getItemId()
           local menuData=menusList[id]
-          if menuData.url then--单个QQ群
-            openUrl(menuData.url)
-           elseif menuData.browserUrl then--单个QQ群
-            openUrl(menuData.browserUrl)
-           elseif menuData.qqGroup then--多个QQ群
-            joinQQGroup(menuData.qqGroup)
-           elseif menuData.func then
-            menuData.func()
-          end
+          callItem(nil,nil,menuData)
         end
       })
     end

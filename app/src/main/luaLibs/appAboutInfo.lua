@@ -8,7 +8,6 @@ appInfo={
       openUrl("https://jesse205.com/aidelua")
     end,
   },
-
   {
     name=R.string.windmill,
     message="重认手机上的工具",
@@ -28,6 +27,7 @@ developers={
     name="Eddie",
     qq=2140125724,
     message="AideLua 开发者",
+    url="https://b23.tv/Xp0Cc4P",
   },
   {
     name="xiaoyi",
