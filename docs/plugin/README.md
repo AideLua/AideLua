@@ -18,7 +18,7 @@
 2. 扩展名应为 `alp` (Androlua+ 扩展) 或 `zip`
 3. 为了防止污染全局变量，插件内直接赋值为插件的局部变量。如要修改全局变量，请使用 `_G.xxx=xxx`
 
-### 通用API
+### 通用 API
 #### PluginsUtil `table` `Util`
 插件相关API
 

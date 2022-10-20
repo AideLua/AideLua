@@ -10,30 +10,86 @@ export default defineUserConfig({
 
   ],
   base: "/AideLua/",
+
   theme: defaultTheme({
     // 在这里进行配置
+    logo: '/images/aidelua.png',
+    logoDark: '/images/aidelua-night.png',
+    repo: "https://gitee.com/Jesse205/AideLua",
+    editLinkText: "编辑此页",
+    editLinkPattern: ":repo/edit/:branch/:path",
+    contributorsText: "贡献者",
+    lastUpdatedText: "最近更新",
+    tip: "提示",
+    warning: "警告",
+    danger: "危险",
+    backToHome: "返回首页",
+    toggleColorMode: "切换颜色模式",
+    toggleSidebar: "切换侧边栏",
+    notFound: ["是怎么到这里的呢？"],
+    docsDir: "docs",
+    docsRepo: "https://gitee.com/Jesse205/AideLua",
+    docsBranch: "master",
     navbar: [
       {
         text: '首页',
         link: 'https://jesse205.github.io/aidelua/',
       },
       {
-        text: '文档',
+        text: '使用文档',
         link: '/',
+      },
+      {
+        text: 'Gitee',
+        link: 'https://gitee.com/Jesse205/AideLua',
+      },
+      {
+        text: 'Github',
+        link: 'https://github.com/Jesse205/AideLua',
       },
     ],
     sidebar: [
       {
-        text: '文档',
+        text: '使用文档',
         link: '/',
       },
       {
         text: '功能介绍',
         collapsible: true,
+        children: [
+          {
+            text: '新建工程',
+            link: '/function/newproject.html',
+          },
+          {
+            text: '安全调试',
+            link: '/function/safedebug.html',
+          },
+        ]
       },
       {
         text: '工程介绍',
         collapsible: true,
+        children: [
+          {
+            text: '概述',
+            link: '/project/',
+          },
+          {
+            text: '使用 Git',
+            link: '/project/usegit.html',
+          },
+          {
+            text: '.aidelua',
+            collapsible: true,
+            children: [
+              {
+                text: 'config.lua',
+                link: '/project/aidelua/config.lua.html',
+              },
+            ]
+          },
+        ]
       },
       {
         text: 'Androlua+ 文档',
@@ -201,13 +257,8 @@ export default defineUserConfig({
           },
         ]
       },
+    ]
 
-    ],
-    editLinkText: "编辑此页",
-    editLinkPattern: ":repo/edit/:branch/:path",
-    docsDir: "docs",
-    docsRepo: "https://gitee.com/Jesse205/AideLua",
-    docsBranch: "master",
   }),
 
 })

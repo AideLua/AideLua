@@ -8,5 +8,6 @@ packagename="com.androlua.demo"
 ```
 目录下 `icon.png` 替换图标，`welcome.png` 替换启动图。 <br>
 打包使用debug签名。 <br>
-
-注意: Aide Lua 不支持这种操作
+::: warning 注意
+Aide Lua 不支持这种操作，
+:::

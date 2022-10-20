@@ -1,7 +1,8 @@
 :root {
     --c-brand: #3F51B5;
     --c-brand-light: #5C6BC0;
-    --c-text-lighter: var(--c-brand-light);
+    --c-text-lighter: #3949AB;
+    --code-ln-wrapper-width: 2rem
 }
 
 html.dark {
@@ -13,6 +14,7 @@ html.dark {
     --c-bg-lighter: #424242;
 
     --c-text: white;
+    --c-text-lighter: #7986CB;
 
     --c-border: #424242;
     --c-border-dark: #424242;

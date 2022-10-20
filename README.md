@@ -11,17 +11,21 @@
 ![cover](images/ic_cover-aidelua.png)
 
 ## 注意 Alert
-如需使用源代码，请进入 [发行版](https://gitee.com/Jesse205/AideLua/releases) 页面下载<br>
-If you need to use the source code, please go to the [releases](https://gitee.com/Jesse205/AideLua/releases) page to download.
+如需使用源代码，请进入 [发行版](/Jesse205/AideLua/releases) 页面下载。<br>
+If you need to use the source code, please go to the [releases](/Jesse205/AideLua/releases) page to download.
+
+尽量不要在 Github 内直接更改此仓库，因为 Github 的仓库是由 Gitee 镜像过去的。<br>
+Try not to change the repository directly in Github, because Github's repository is mirrored by Gitee。
 
 ## 简介
 Aide Lua 是一款依赖 Aide 的 Lua 编辑器<br>
-Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件开发
+Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件开发<br>
+Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 ## 下载
 [〖Aide 高级设置版〗](https://www.lanzouy.com/b00zdhbeb)
 
-1. [Gitee 下载 (推荐)](https://gitee.com/Jesse205/AideLua/releases)
+1. [Gitee 下载 (推荐，更新及时)](https://gitee.com/Jesse205/AideLua/releases)
 2. [天翼云盘 (可能更新不及时)](https://cloud.189.cn/t/ZZ7RzijyqiUv)
 3. [腾讯微云 (可能更新不及时)](https://share.weiyun.com/oLiNtxMR)
 4. [百度网盘 (可能今天下不完)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q)，密码 `jxnb`
@@ -60,7 +64,7 @@ Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件�
 4. 不是必须用 AIDE 编译，只不过用 AIDE 编译会更好一些
 
 ## 开放源代码许可
-https://gitee.com/Jesse205/AideLua/blob/master/app/src/main/assets_bin/licences
+[https://gitee.com/Jesse205/AideLua/blob/master/app/src/main/assets_bin/licences](https://gitee.com/Jesse205/AideLua/blob/master/app/src/main/assets_bin/licences)
 
 ## 高级玩法
 `.aidelua/config.lua` 用法
