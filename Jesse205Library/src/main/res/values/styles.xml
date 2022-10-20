@@ -163,7 +163,8 @@
         <item name="navigationViewColorAccent">?colorPrimary</item>
         <item name="actionBarTheme">@style/ThemeOverlay.Jesse205.Dark.ActionBar</item>
         <item name="tabStyle">@style/Widget.Jesse205.TabLayout.Colored</item>
-        <item name="colorPrimary">?colorAccent</item>
+        <item name="colorAccent">@color/jesse205_blue</item>
+        <item name="colorPrimary">@color/jesse205_blue_light</item>
         <item name="windowLightStatusBar">false</item>
     </style>
     
@@ -270,4 +271,3 @@
     </style>
     
 </resources>
-
