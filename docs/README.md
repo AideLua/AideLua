@@ -1,3 +1,8 @@
+---
+lang: zh-CN
+title: 关于
+description: 关于页面
+---
 ## 简介
 [![star](https://gitee.com/Jesse205/AideLua/badge/star.svg?theme=dark)](https://gitee.com/Jesse205/AideLua/stargazers)
 [![Gitee 发行版](https://img.shields.io/badge/Gitee-发行版-C71D23?logo=gitee)](https://gitee.com/Jesse205/AideLua/releases)

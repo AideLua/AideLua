@@ -1,7 +1,213 @@
 import { defineUserConfig } from 'vuepress'
+import { defaultTheme } from '@vuepress/theme-default'
 
 export default defineUserConfig({
   lang: 'zh-CN',
-  title: '你好， VuePress ！',
-  description: '这是我的第一个 VuePress 站点',
+  title: 'Aide Lua Pro',
+  description: '让您在移动设备上也能享受高级的、快速的软件开发',
+  head: [
+    ['link', { rel: 'icon', sizes: "any", mask: "", href: 'favicon.png' }],
+
+  ],
+  base: "/AideLua/",
+  theme: defaultTheme({
+    // 在这里进行配置
+    navbar: [
+      {
+        text: '首页',
+        link: 'https://jesse205.github.io/aidelua/',
+      },
+      {
+        text: '文档',
+        link: '/',
+      },
+    ],
+    sidebar: [
+      {
+        text: '文档',
+        link: '/',
+      },
+      {
+        text: '功能介绍',
+        collapsible: true,
+      },
+      {
+        text: '工程介绍',
+        collapsible: true,
+      },
+      {
+        text: 'Androlua+ 文档',
+        collapsible: true,
+        children: [
+          {
+            text: '关于',
+            link: '/androluapro/',
+          },
+          {
+            text: '软件基本操作',
+            link: '/androluapro/base.html',
+          },
+          {
+            text: '快速入门',
+            link: '/androluapro/fast.html',
+          },
+          {
+            text: '与标准 Lua5.3 的不同',
+            link: '/androluapro/differentwithlua5.3.html',
+          },
+          {
+            text: '与标准 java 的不同',
+            link: '/androluapro/differentwithjava.html',
+          },
+          {
+            text: '01. 参考链接',
+            link: '/androluapro/01.html',
+          },
+          {
+            text: '02. 导入模块',
+            link: '/androluapro/02.html',
+          },
+          {
+            text: '03. 导入包或类',
+            link: '/androluapro/03.html',
+          },
+          {
+            text: '04. 创建布局与组件',
+            link: '/androluapro/04.html',
+          },
+          {
+            text: '05. 使用方法',
+            link: '/androluapro/05.html',
+          },
+          {
+            text: '06. 使用事件',
+            link: '/androluapro/06.html',
+          },
+          {
+            text: '07. 回调方法',
+            link: '/androluapro/07.html',
+          },
+          {
+            text: '08. 按键与触控',
+            link: '/androluapro/08.html',
+          },
+          {
+            text: '09. 使用数组与 map',
+            link: '/androluapro/09.html',
+          },
+          {
+            text: '10. 使用线程',
+            link: '/androluapro/10.html',
+          },
+          {
+            text: '11. 使用布局表',
+            link: '/androluapro/11.html',
+          },
+          {
+            text: '12. 2D 绘图',
+            link: '/androluapro/12.html',
+          },
+          {
+            text: '13. Lua 类型与 Java 类型',
+            link: '/androluapro/13.html',
+          },
+          {
+            text: '14.1 canvas 模块',
+            link: '/androluapro/14.1.html',
+          },
+          {
+            text: '14.2 OpenGL 模块',
+            link: '/androluapro/14.2.html',
+          },
+          {
+            text: '14.3 http 同步网络模块',
+            link: '/androluapro/14.3.html',
+          },
+          {
+            text: '14.4 import 模块',
+            link: '/androluapro/14.4.html',
+          },
+          {
+            text: '14.5 Http 异步网络模块',
+            link: '/androluapro/14.5.html',
+          },
+          {
+            text: '14.6 bmob 网络数据库',
+            link: '/androluapro/14.6.html',
+          },
+          {
+            text: '15.1 LuaUtil 辅助库',
+            link: '/androluapro/15.1.html',
+          },
+          {
+            text: '15.2 LuaAdapter 适配器',
+            link: '/androluapro/15.2.html',
+          },
+          {
+            text: '15.3 LuaDialog 对话框',
+            link: '/androluapro/15.3.html',
+          },
+          {
+            text: '15.4 LuaDrawable 绘制',
+            link: '/androluapro/15.4.html',
+          },
+          {
+            text: '关于打包',
+            link: '/androluapro/bin.html',
+          },
+          {
+            text: '部分函数参考',
+            link: '/androluapro/api.html',
+          },
+          {
+            text: 'activity 部分 API 参考',
+            link: '/androluapro/activityapi.html',
+          },
+          {
+            text: '布局表字符串常量',
+            link: '/androluapro/layout.html',
+          },
+        ]
+      },
+      {
+        text: '插件文档',
+        collapsible: true,
+        children: [
+          {
+            text: '概览',
+            link: '/plugin/',
+          },
+          {
+            text: '页面配置',
+            collapsible: true,
+            children: [
+              {
+                text: 'main.aly',
+                link: '/plugin/pages/main.html',
+              },
+              {
+                text: 'newproject.aly',
+                link: '/plugin/pages/newproject.html',
+              },
+              {
+                text: 'settings.aly',
+                link: '/plugin/pages/settings.html',
+              },
+            ],
+          },
+          {
+            text: 'API变更说明',
+            link: '/plugin/apichanges.html',
+          },
+        ]
+      },
+
+    ],
+    editLinkText: "编辑此页",
+    editLinkPattern: ":repo/edit/:branch/:path",
+    docsDir: "docs",
+    docsRepo: "https://gitee.com/Jesse205/AideLua",
+    docsBranch: "master",
+  }),
+
 })

@@ -1,0 +1,21 @@
+:root {
+    --c-brand: #3F51B5;
+    --c-brand-light: #5C6BC0;
+    --c-text-lighter: var(--c-brand-light);
+}
+
+html.dark {
+    --c-brand: #5C6BC0;
+    --c-brand-light: #7986CB;
+
+    --c-bg: #212121;
+    --c-bg-light: #424242;
+    --c-bg-lighter: #424242;
+
+    --c-text: white;
+
+    --c-border: #424242;
+    --c-border-dark: #424242;
+
+    --c-details-bg:#424242;
+}

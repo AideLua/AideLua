@@ -1,0 +1,53 @@
+# 关于
+如本文档侵犯您的权益，请联系 `jesse205@qq.com` 进行删除<br>
+
+AndroLua 是基于 LuaJava 开发的安卓平台轻量级脚本编程语言工具，既具有 Lua 简洁优雅的特质，又支持绝大部分安卓 API，可以使你在手机上快速编写小型应用。<br>
+
+[![官方QQ群：236938279(已满)](https://img.shields.io/badge/加入-官方_QQ_群-0099FF)](http://jq.qq.com/?_wv=1027&k=dcofRr)
+[![官方QQ2群：148389676](https://img.shields.io/badge/加入-官方_QQ_2群-0099FF)](http://jq.qq.com/?_wv=1027&k=2Gqxcak)
+
+百度贴吧：<br>
+http://c.tieba.baidu.com/mo/m?kw=androlua <br>
+项目地址：<br>
+https://github.com/nirenr/AndroLua_pro <br>
+点击链接支持我的工作：<br>
+https://qr.alipay.com/apt7ujjb4jngmu3z9a <br>    
+
+## 开源项目
+本程序使用了以下开源项目部分代码
+
+bson,crypt,md5 <br>
+https://github.com/cloudwu/skynet <br>
+
+cjson <br>
+https://sourceforge.net/projects/cjson/ <br>
+
+zlib <br>
+https://github.com/brimworks/lua-zlib <br>
+
+xml <br>
+https://github.com/chukong/quick-cocos2d-x <br>
+
+luv <br>
+https://github.com/luvit/luv <br>
+https://github.com/clibs/uv <br>
+
+zip <br>
+https://github.com/brimworks/lua-zip <br>
+https://github.com/julienr/libzip-android <br>
+
+luagl <br>
+http://luagl.sourceforge.net/ <br>
+
+luasocket <br>
+https://github.com/diegonehab/luasocket <br>
+
+sensor <br>
+https://github.com/ddlee/AndroidLuaActivity <br>
+
+canvas <br>
+由 落叶似秋 开发
+
+jni <br>
+由 nirenr 开发
+
