@@ -1,12 +1,12 @@
 # Aide Lua
 [![star](https://gitee.com/Jesse205/AideLua/badge/star.svg?theme=dark)](https://gitee.com/Jesse205/AideLua/stargazers)
 [![Gitee 发行版](https://img.shields.io/badge/Gitee-发行版-C71D23?logo=gitee)](https://gitee.com/Jesse205/AideLua/releases)
-[![Gitee Wiki](https://img.shields.io/badge/Gitee-Wiki-C71D23?logo=gitee)](https://gitee.com/Jesse205/AideLua/wikis/Home)
 [![QQ 群](https://img.shields.io/badge/加入-QQ_群-0099FF?logo=tencentqq)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
 [![QQ 频道](https://img.shields.io/badge/加入-QQ_频道-0099FF?logo=tencentqq)](https://pd.qq.com/s/ncghvc)
 
 [![Gitee 仓库](https://img.shields.io/badge/Gitee-仓库-C71D23?logo=gitee)](https://gitee.com/Jesse205/AideLua/)
 [![Github 仓库](https://img.shields.io/badge/Github-仓库-0969DA?logo=github)](https://github.com/Jesse205/AideLua)
+[![使用文档](https://img.shields.io/badge/使用-文档-3F51B5)](https://jesse205.github.io/AideLua/)
 
 ![cover](images/ic_cover-aidelua.png)
 
@@ -44,7 +44,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 ## 使用教程
 [视频教程](https://space.bilibili.com/1229937144)
-[使用文档](https://gitee.com/Jesse205/AideLua/wikis/Home)
+[使用文档](https://jesse205.github.io/AideLua/)
 
 ### 一、配置AIDE
 1. 进入 `设置`-`高级设置`-`工程相关`
