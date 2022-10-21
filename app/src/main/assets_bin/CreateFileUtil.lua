@@ -1,10 +1,20 @@
+local CreateFileUtil={}
 local ids
 local dia
 local cannotBeEmptyStr=getString(R.string.jesse205_edit_error_cannotBeEmpty)
 local existsStr=getString(R.string.file_exists)
 
-local function createFileInfoDialog(config,nowDir)--文件名填写对话框
+--根据文件名和扩展名获取用户真正想创建的文件名
+local function buildReallyFileName(name,extensionName)
+  if extensionName and not(name:find("%.[^/]*$")) then
+    return name.."."..extensionName
+  end
+  return name
+end
+
+function CreateFileUtil.showCreateFileDialog(config,nowDir)--文件名填写对话框
   local builder
+  local fileExtension=config.fileExtension
   builder=EditDialogBuilder(activity)
   :setTitle(formatResStr(R.string.project_create_withName,{config.name}))
   :setHint(R.string.file_name)
@@ -12,11 +22,7 @@ local function createFileInfoDialog(config,nowDir)--文件名填写对话框
   :setPositiveButton(R.string.create,function(dialog,text)
     local editLay=builder.ids.editLay
     local errorState
-    local fileName=text
-    local fileExtension=config.fileExtension
-    if fileExtension and not(fileName:find("%.[^/]*$")) then
-      fileName=fileName.."."..fileExtension
-    end
+    local fileName=buildReallyFileName(text,fileExtension)
     local filePath=rel2AbsPath(fileName,nowDir.getPath())
     local file=File(filePath)
     if file.exists() then--文件不能存在
@@ -39,7 +45,6 @@ local function createFileInfoDialog(config,nowDir)--文件名填写对话框
       editLay.setErrorEnabled(false)
       showSnackBar(R.string.create_success)
       FilesBrowserManager.refresh(nowDir)
-      --openFile(file)
     end,
     function(err)
       showErrorDialog(R.string.create_failed,err)
@@ -51,9 +56,31 @@ local function createFileInfoDialog(config,nowDir)--文件名填写对话框
   end,true,true)
   :setNegativeButton(android.R.string.cancel,nil)
   builder:show()
+  local ids=builder.ids
+  local edit,editLay=ids.edit,ids.editLay
+  editLay.setHelperText("."..fileExtension)
+
+  local lastErtor=false--如果在关闭错误之后立马设置帮助文字，就会导致帮助文字不显示。所以需要判断一下。
+  edit.addTextChangedListener({
+    onTextChanged=function(text,start,before,count)
+      text=tostring(text)--获取到的text是java类型的
+      if text~="" then
+        local fileName=buildReallyFileName(text,fileExtension)
+        if lastErtor then
+          editLay
+          .setHelperTextEnabled(false)
+          .setHelperTextEnabled(true)
+        end
+        editLay.setHelperText(fileName)
+        lastErtor=false
+       else
+        lastErtor=true
+      end
+    end
+  })
 end
 
-local function createFileDialog(nowDir)--模版选择对话框
+function CreateFileUtil.showSelectTypeDialog(nowDir)--模版选择对话框
   local choice=activity.getSharedData("createfile_type")
   local nowDir=nowDir or FilesBrowserManager.directoryFile
   local names={}
@@ -81,11 +108,11 @@ local function createFileDialog(nowDir)--模版选择对话框
   .setPositiveButton(android.R.string.ok,function()
     local template=templates[choice+1]
     if template then
-      createFileInfoDialog(template,nowDir)
+      CreateFileUtil.showCreateFileDialog(template,nowDir)
     end
   end)
   .setNegativeButton(android.R.string.cancel,nil)
   .show()
 end
 
-return createFileDialog
+return CreateFileUtil

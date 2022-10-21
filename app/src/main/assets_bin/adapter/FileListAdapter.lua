@@ -97,7 +97,7 @@ return function(item)
           local openDirPath--点击后要打开的路径，空为不打开
           local directoryFile=FilesBrowserManager.directoryFile
           if id==Rid.menu_createFile then
-            createFile(directoryFile)
+            CreateFileUtil.showSelectTypeDialog(directoryFile)
            elseif id==Rid.menu_createDir then
             createDirsDialog(directoryFile)
            else

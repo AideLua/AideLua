@@ -68,7 +68,7 @@ import "com.jesse205.util.ColorUtil"
 
 import "AppFunctions" -- 必须先导入这个，因为下面的导入直接要用
 import "DialogFunctions"
-import "createFile"
+import "CreateFileUtil"
 import "LuaEditorHelper"
 
 import "CopyMenuUtil"
@@ -90,7 +90,6 @@ application.set("plugin_enabledpaths",nil)
 PluginsUtil.setActivityName("main")
 PluginsUtil.loadPlugins()
 plugins = PluginsUtil.getPlugins()
---print(dump(plugins))
 PermissionUtil.askForRequestPermissions({
   {
     name=getString(R.string.jesse205_permission_storage),
@@ -324,14 +323,6 @@ function onOptionsItemSelected(item)
   PluginsUtil.callElevents("onOptionsItemSelected", item)
 end
 
---[[
-function onCreateContextMenu(menu,view,menuInfo)
-  local tag=view.tag
-  if tag and type(tag)=="table" and tag._type=="filebrowser" then
-    FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
-  end
-end]]
-
 function onKeyShortcut(keyCode, event)
   --print(keyCode)
   local filteredMetaState = event.getMetaState() & ~KeyEvent.META_CTRL_MASK
@@ -462,7 +453,6 @@ function onResume()
     return
   end
   refreshMagnifier()
-
 
   if notFirstOnResume then
     ProjectManager.refreshProjectsPath()
@@ -611,18 +601,11 @@ FilesTabManager.init()
 EditorsManager.init()
 FilesBrowserManager.init()
 
---[[
-mainLay.ViewTreeObserver
-.addOnGlobalLayoutListener(function()
-  mainWidth=mainLay.getMeasuredWidth()
-end)]]
-
 screenConfigDecoder = ScreenFixUtil.ScreenConfigDecoder({
   onDeviceByWidthChanged=onDeviceByWidthChanged
 })
 
 onConfigurationChanged(activity.getResources().getConfiguration())
-
 
 --在刷新后仍然为空，那就是关闭状态
 if screenConfigDecoder.deviceByWidth~="pc" and FilesBrowserManager.openState == nil then
