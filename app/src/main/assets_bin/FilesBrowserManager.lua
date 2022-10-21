@@ -29,16 +29,20 @@ local filesPositions={}
 FilesBrowserManager.filesPositions = filesPositions
 
 local folderIcons={
-  build=R.drawable.ic_folder_cog_outline,
-  gradle=R.drawable.ic_folder_cog_outline,
+  [".git"]=R.drawable.ic_folder_cog_outline,
+  [".github"]=R.drawable.ic_folder_cog_outline,
   [".gradle"]=R.drawable.ic_folder_cog_outline,
   [".idea"]=R.drawable.ic_folder_cog_outline,
+  build=R.drawable.ic_folder_cog_outline,
+  wrapper=R.drawable.ic_folder_cog_outline,
+  gradle=R.drawable.ic_folder_cog_outline,
   [".aidelua"]=R.drawable.ic_folder_cog_outline,
   res=R.drawable.ic_folder_table_outline,
   assets=R.drawable.ic_folder_zip_outline,
   assets_bin=R.drawable.ic_folder_zip_outline,
   key=R.drawable.ic_folder_key_outline,
   keys=R.drawable.ic_folder_key_outline,
+  node_modules=R.drawable.ic_folder_cog_outline,
 }
 setmetatable(folderIcons,{__index=function(self,key)
     return R.drawable.ic_folder_outline
@@ -192,6 +196,7 @@ local relLibPathsMatch = {} -- 相对库路径匹配
 FilesBrowserManager.relLibPathsMatch = relLibPathsMatch
 
 local relLibPathsMatchPaths = {
+  "^.-/src/main/assets_bin/sub/.-/(.+)%.",
   "^.-/src/main/assets_bin/(.+)%.",
   "^.-/src/main/assets_bin/(.+)",
   "^.-/src/main/assets/(.+)%.",

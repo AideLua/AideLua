@@ -49,6 +49,8 @@
   gradle={super="txt"},
   bat={super="txt"},
   properties={super="txt"},
+  md={super="txt"},
+  markdown={super="txt"},
 
 
   png={
