@@ -15,7 +15,7 @@ export default defineUserConfig({
     // 在这里进行配置
     logo: '/images/aidelua.png',
     logoDark: '/images/aidelua-night.png',
-    repo: "https://gitee.com/Jesse205/AideLua",
+    //repo: "https://gitee.com/Jesse205/AideLua",
     editLinkText: "编辑此页",
     editLinkPattern: ":repo/edit/:branch/:path",
     contributorsText: "贡献者",
