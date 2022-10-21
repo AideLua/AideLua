@@ -3,7 +3,7 @@ appInfo={
   {
     name=R.string.app_name,
     message="为更快进行移动开发",
-    icon=R.mipmap.ic_launcher,
+    iconResource=R.mipmap.ic_launcher,
     click=function()
       openUrl("https://jesse205.com/aidelua")
     end,
@@ -11,7 +11,7 @@ appInfo={
   {
     name=R.string.windmill,
     message="重认手机上的工具",
-    icon=R.drawable.ic_windmill,
+    iconResource=R.drawable.ic_windmill,
     click=function()
       openUrl("https://www.coolapk.com/apk/com.agyer.windmill")
     end,

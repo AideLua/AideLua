@@ -25,6 +25,7 @@ adapterEvents=SettingsLayUtil.adapterEvents
 packageInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
 landscape=false
 LastCard2Elevation=0
+topCardItems={}
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()
@@ -112,31 +113,27 @@ function onConfigurationChanged(config)
   end
 end
 
-topCardItems={}
 --插入大软件图标
 if appInfo then
   for index,content in ipairs(appInfo) do
     local ids={}
     appIconGroup.addView(loadlayout2("iconItem",ids,LinearLayoutCompat))
-    table.insert(topCardItems,ids.mainIconLay)
-    local icon,iconView,nameView=content.icon,ids.icon,ids.name
-    iconView.setBackgroundResource(icon)
+    local mainIconLay=ids.mainIconLay--主布局
+    local iconView,nameView,messageView=ids.icon,ids.name,ids.message
+    table.insert(topCardItems,mainIconLay)
+    local iconResource=content.iconResource
+    iconView.setBackgroundResource(iconResource)
     nameView.setText(content.name)
-    ids.message.setText(content.message)
+    messageView.setText(content.message)
     if content.click then
-      ids.mainIconLay.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary))
-      ids.mainIconLay.onClick=content.click
+      mainIconLay.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary))
+      mainIconLay.onClick=content.click
     end
     local pain=ids.name.getPaint()
-    if content.typeface then
-      pain.setTypeface(content.typeface)
-     else
-      pain.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD))
-    end
+    pain.setTypeface(content.typeface or Typeface.defaultFromStyle(Typeface.BOLD))
     if content.nameColor then
       nameView.setTextColor(content.nameColor)
     end
-    ids=nil
   end
 end
 

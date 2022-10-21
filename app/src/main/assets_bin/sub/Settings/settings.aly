@@ -3,76 +3,20 @@
     SettingsLayUtil.TITLE;
     title=R.string.jesse205_ui;
   };
-  {
+  {--主题选择
     SettingsLayUtil.ITEM_NOSUMMARY;
     icon=R.drawable.ic_tshirt_crew_outline;
     title=R.string.jesse205_themePicker;
     key="theme_picker";
     newPage=true;
   };
-  {
+  {--暗色工具栏
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
     icon=R.drawable.ic_theme_light_dark;
     title=R.string.jesse205_darkActionBar;
     key="theme_darkactionbar";
-    --enabled=false;
   };
-  --[[
-  {
-    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
-    icon=R.drawable.ic_theme_light_dark;
-    title="测试";
-    key="test1";
-  };
-  {
-    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
-    icon=R.drawable.ic_theme_light_dark;
-    title="测试";
-    key="test2";
-  };
-  {
-    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
-    icon=R.drawable.ic_theme_light_dark;
-    title="测试";
-    key="test3";
-  };
-{
-    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
-    icon=R.drawable.ic_theme_light_dark;
-    title="测试";
-    key="test4";
-  };
-  {
-    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
-    icon=R.drawable.ic_theme_light_dark;
-    title="测试";
-    key="test5";
-  };
-  {
-    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
-    icon=R.drawable.ic_theme_light_dark;
-    title="测试";
-    key="test6";
-  };
-{
-    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
-    icon=R.drawable.ic_theme_light_dark;
-    title="测试";
-    key="test7";
-  };
-  {
-    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
-    icon=R.drawable.ic_theme_light_dark;
-    title="测试";
-    key="test8";
-  };
-  {
-    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
-    icon=R.drawable.ic_theme_light_dark;
-    title="测试";
-    key="test9";
-  };]]
-  {
+  {--更多动画
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
     icon=R.drawable.ic_animation_play_outline;
     title=R.string.settings_ui_richAnim;
@@ -83,27 +27,25 @@
     SettingsLayUtil.TITLE;
     title=R.string.project;
   };
-  {
+  {--Jesse205库支持
     SettingsLayUtil.ITEM_SWITCH;
     icon=R.drawable.ic_tooltip_minus_outline;
     title=R.string.settings_support_Jesse205Library;
     key="jesse205Lib_support";
     summary=R.string.settings_support_Jesse205Library_summary;
   };
-  {
+  {--AndroidX支持
     SettingsLayUtil.ITEM_SWITCH;
     icon=R.drawable.ic_tooltip_minus_outline;
     title=R.string.settings_support_androidx;
     key="androidX_support";
     summary=R.string.settings_support_androidx_summary;
   };
-
-
   {--插件
     SettingsLayUtil.TITLE;
     title=R.string.plugins;
   };
-  {
+  {--插件管理
     SettingsLayUtil.ITEM_NOSUMMARY;
     icon=R.drawable.ic_puzzle_outline;
     title=R.string.plugins_manager;
@@ -114,20 +56,20 @@
     SettingsLayUtil.TITLE;
     title=R.string.editor;
   };
-  {
+  {--放大镜
     SettingsLayUtil.ITEM_SWITCH;
     icon=R.drawable.ic_magnify;
     title=R.string.settings_editor_magnify;
     key="editor_magnify";
     summary=R.string.settings_editor_magnify_summary;
   };
-  {
+  {--符号栏
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
     icon=R.drawable.ic_symbol;
     title=R.string.settings_editor_symbolNar;
     key="editor_symbolBar";
   };
-  {
+  {--自动备份
     SettingsLayUtil.ITEM_SWITCH;
     icon=R.drawable.ic_file_clock_outline;
     title=R.string.settings_editor_automaticallyBackupOriginalFiles;
@@ -148,7 +90,7 @@
     SettingsLayUtil.TITLE;
     title=R.string.tab;
   };
-  {
+  {--标签栏图标，
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
     icon=R.drawable.ic_file_eye_outline;
     title=R.string.settings_tab_icon;
@@ -171,7 +113,7 @@
     switchEnabled=false;
   };
 
-  {
+  {--工程路径
     SettingsLayUtil.ITEM;
     icon=R.drawable.ic_folder_cog_outline;
     title=R.string.projects_path;
@@ -182,12 +124,6 @@
     --helperText=R.string.settings_needRestart;
     allowNull=false;
   };
-  --[[{
-    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
-    icon=R.drawable.ic_update;
-    title=R.string.settings_autoCheckUpdate;
-    key="autoCheckUpdate";
-  };]]
   {
     SettingsLayUtil.ITEM;
     icon=R.drawable.ic_information_outline;

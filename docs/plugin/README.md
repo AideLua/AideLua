@@ -42,7 +42,8 @@
 | 值 | 说明 |
 | ---- | --- |
 | main | 主页面 |
-| settings | 设置页面 |
+| settings | 软件设置页面 |
+| newproject | 新建工程页面 |
 
 #### getPluginDataPath(packageName)
 获取插件数据目录，与 [`PluginsUtil.getPluginDataPath(packageName)`](#pluginsutil-getplugindatapath-packagename-function) 完全相同
@@ -99,13 +100,6 @@
 存放各个页面的事件的文件夹
 
 * 文件扩展名: `aly`
-* 文件名称: `页面名称.aly`
+* 文件名称: `<页面名称>.aly`
 * 文件示例: `main.aly` `settings.aly`
 * 更多请见 `page` 文件夹
-
-| 文件 | 说明 |
-| ---- | --- |
-| main.aly | 软件主页面 |
-| settings.aly | 软件设置页面 |
-| newproject.aly | 新建工程页面 |
-

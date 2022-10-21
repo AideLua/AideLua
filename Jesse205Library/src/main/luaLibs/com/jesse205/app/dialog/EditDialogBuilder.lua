@@ -1,13 +1,14 @@
 import "com.jesse205.layout.MyEditDialogLayout"
 local EditDialogBuilder={}
-local cannotBeEmptyStr=getString(R.string.jesse205_edit_error_cannotBeEmpty)
 setmetatable(EditDialogBuilder,EditDialogBuilder)
+local metatable={__index=EditDialogBuilder}
+local cannotBeEmptyStr=getString(R.string.jesse205_edit_error_cannotBeEmpty)
 
-EditDialogBuilder.allowNull=true
-
-function EditDialogBuilder.__call(self,context)
-  self=table.clone(self)
+function EditDialogBuilder.__call(class,context)
+  local self={}
+  setmetatable(self,metatable)
   self.context=context
+  self.buttonConfigs={}
   self.checkNullButtons={}
   return self
 end
@@ -44,7 +45,7 @@ local function setButton(self,text,func,defaultFunc,checkNull,buttonType)
       local dialog=self.dialog
       local text=self.ids.edit.text
       local editLay=self.ids.editLay
-      if checkNull and not(self.allowNull) then
+      if checkNull and self.allowNull==false then
         if text=="" then
           editLay
           .setError(cannotBeEmptyStr)
@@ -58,78 +59,47 @@ local function setButton(self,text,func,defaultFunc,checkNull,buttonType)
       end
     end
   end
-  self[buttonType]={text,onClick,checkNull}
-  if defaultFunc then
+  self.buttonConfigs[buttonType]={text,onClick,checkNull}
+  if defaultFunc then--按回车键默认执行
     self.defaultFunc=onClick
   end
   return self
 end
 
 function EditDialogBuilder:setPositiveButton(text,func,defaultFunc,checkNull)
-  return setButton(self,text,func,defaultFunc,checkNull,"positiveButton")
+  return setButton(self,text,func,defaultFunc,checkNull,"positive")
 end
 
 function EditDialogBuilder:setNeutralButton(text,func,defaultFunc,checkNull)
-  return setButton(self,text,func,defaultFunc,checkNull,"neutralButton")
+  return setButton(self,text,func,defaultFunc,checkNull,"neutral")
 end
 
 function EditDialogBuilder:setNegativeButton(text,func,defaultFunc,checkNull)
-  return setButton(self,text,func,defaultFunc,checkNull,"negativeButton")
+  return setButton(self,text,func,defaultFunc,checkNull,"negative")
 end
 
 function EditDialogBuilder:show()
   local ids={}
   self.ids=ids
-  local context,checkNullButtons=self.context,self.checkNullButtons
-  local positiveButton,neutralButton,negativeButton=self.positiveButton,self.neutralButton,self.negativeButton
+  local context,checkNullButtons,buttonConfigs=self.context,self.checkNullButtons,self.buttonConfigs
   local text,hint,helperText=self.text,self.hint,self.helperText
   local defaultFunc=self.defaultFunc
   local dialogBuilder=AlertDialog.Builder(context)
   .setTitle(self.title)
   .setView(MyEditDialogLayout.load(nil,ids))
 
-  if positiveButton then--设置文字
-    dialogBuilder.setPositiveButton(positiveButton[1],nil)
-  end
-  if neutralButton then
-    dialogBuilder.setNeutralButton(neutralButton[1],nil)
-  end
-  if negativeButton then
-    dialogBuilder.setNegativeButton(negativeButton[1],nil)
+  for index,content in pairs(buttonConfigs) do
+    dialogBuilder["set"..index:gsub("^%l", string.upper).."Button"](content[1],nil)
   end
   local dialog=dialogBuilder.show()
   local textState=toboolean(text==nil or text=="")
 
-  if positiveButton then--设置点击事件
-    local button=dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-    if positiveButton[2] then
-      button.onClick=positiveButton[2]
+  for index,content in pairs(buttonConfigs) do
+    local button=dialog.getButton(AlertDialog["BUTTON_"..string.upper(index)])
+    if content[2] then
+      button.onClick=content[2]
     end
-    if positiveButton[3] then
-      table.insert(checkNullButtons,button)
-      if textState then
-        button.setEnabled(false)
-      end
-    end
-  end
-  if neutralButton then
-    local button=dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
-    if neutralButton[2] then
-      button.onClick=neutralButton[2]
-    end
-    if neutralButton[3] then
-      table.insert(checkNullButtons,button)
-      if textState then
-        button.setEnabled(false)
-      end
-    end
-  end
-  if negativeButton then
-    local button=dialog.getButton(AlertDialog.BUTTON_NEGATIVE)
-    if negativeButton[2] then
-      button.onClick=negativeButton[2]
-    end
-    if negativeButton[3] then
+    if content[3] then
       table.insert(checkNullButtons,button)
       if textState then
         button.setEnabled(false)
@@ -141,7 +111,7 @@ function EditDialogBuilder:show()
 
   local edit,editLay=ids.edit,ids.editLay
   edit.requestFocus()--输入框取得焦点
-  inputMethodService.showSoftInput(edit,InputMethodManager.SHOW_FORCED)
+  
   if helperText then
     if type(helperText)=="number" then
       helperText=context.getString(helperText)
@@ -151,22 +121,23 @@ function EditDialogBuilder:show()
   end
   if text then
     edit.setText(text)
-    edit.setSelection(utf8.len(text))
+    edit.setSelection(utf8.len(text))--光标后置
   end
   if hint then
     if type(hint)=="number" then
-      hint=context.getString(hint)
+      hint=getString(hint)
     end
     editLay.setHint(hint)
   end
   if defaultFunc then
     edit.onEditorAction=defaultFunc
   end
-  if not(self.allowNull) then
+
+  if self.allowNull==false then
     local oldErrorEnabled=textState
     edit.addTextChangedListener({
       onTextChanged=function(text,start,before,count)
-        text=tostring(text)
+        text=tostring(text)--获取到的text是java类型的
         if text=="" and not(oldErrorEnabled) then--文件夹名不能为空
           editLay
           .setError(cannotBeEmptyStr)
@@ -193,8 +164,8 @@ end
 function EditDialogBuilder.settingDialog(adapter,views,key,data)
   local builder
   builder=EditDialogBuilder(activity)
-  :setTitle(data.title)
-  :setText(data.summary)
+  :setTitle(data.title)--设置标题
+  :setText(data.summary)--设置文字
   :setHint(data.hint)
   :setHelperText(data.helperText)
   :setAllowNull(data.allowNull)

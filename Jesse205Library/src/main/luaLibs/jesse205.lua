@@ -44,6 +44,7 @@ local normalkeys={
   jesse205=true,
   _G=true,
   mainLay=true,
+  LastActionBarElevation=true,
 }
 jesse205.normalkeys=normalkeys
 

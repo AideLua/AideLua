@@ -1,4 +1,3 @@
---module(...,package.seeall)
 local MyAnimationUtil={}
 import "android.animation.ObjectAnimator"
 import "android.view.animation.DecelerateInterpolator"
@@ -15,7 +14,6 @@ LastActionBarElevation=0
 1.当ListView未在顶端时打开ActionBar阴影
 2.当ListView在顶端时关闭阴影
 ]]
-
 MyAnimationUtil.ListView={}
 function MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount,actionBar,contrast,mandatory)
   local contrast=contrast or "LastActionBarElevation"
