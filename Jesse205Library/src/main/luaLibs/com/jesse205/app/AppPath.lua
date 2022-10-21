@@ -35,8 +35,8 @@ AppPath.AppMediaCacheDir=mediaDirPath.."/cache"
 AppPath.AppDataCacheDir=dataDirPath.."/cache"
 AppPath.AppSdcardDataCacheDir=sdcardDataDirPath.."/cache"
 
-AppPath.AppMediaTempDir=mediaDirPath.."/temp"
-AppPath.AppDataTempDir=dataDirPath.."/temp"
-AppPath.AppSdcardDataTempDir=sdcardDataDirPath.."/temp"
+AppPath.AppMediaTempDir=mediaDirPath.."/files/temp"
+AppPath.AppDataTempDir=dataDirPath.."/files/temp"
+AppPath.AppSdcardDataTempDir=sdcardDataDirPath.."/files/temp"
 
 return AppPath

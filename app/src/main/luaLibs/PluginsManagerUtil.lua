@@ -75,6 +75,7 @@ function PluginsManagerUtil.installByUri(uri,callback)
   if scheme=="content" then
     local inputStream=activity.getContentResolver().openInputStream(uri)
     path=AppPath.AppSdcardDataTempDir.."/"..System.currentTimeMillis()..".zip"
+    File(AppPath.AppSdcardDataTempDir).mkdirs()
     local outputStream=FileOutputStream(path)
     LuaUtil.copyFile(inputStream,outputStream)
    else
