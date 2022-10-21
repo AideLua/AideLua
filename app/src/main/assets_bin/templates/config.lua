@@ -20,6 +20,7 @@ formatList={
   "app/src/main/assets_bin/main.lua",
 }
 
+--格式化的键值
 keys={
   appTheme="@style/AppTheme",--app模块下的application主题
   am_application={},--app模块下AndroidManifest.xml的application顶部

@@ -38,3 +38,5 @@ v5.0.4
 10. 修复 `main` 页面 `onResume` 的 `notFirstOnResume`始终为 `true` 的 bug，并且现在可以返回true阻止程序继续运行
 11. `AppPath.AppSdcardCacheDataDir` 已更名为 `AppPath.AppSdcardDataCacheDir`，`AppPath.AppShareDir`已更名为`AppPath.AppMediaDir`，`AppPath.AppShareCacheDir `已更名为 `AppPath.AppMediaCacheDir` ，新增 `AppPath.AppSdcardDataTempDir`等路径
 12. `main` 页面新增 `formatColor2Hex(color)` 与 `getColorAndHex(text)`
+13. FileTemplates 新增 `enName` 与 `id`
+    作用：新增中文，切换语言时保持选项不变

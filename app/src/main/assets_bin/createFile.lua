@@ -59,11 +59,11 @@ local function createFileDialog(nowDir)--模版选择对话框
   local names={}
   local templates={}
   for index,content in ipairs(FileTemplates) do
-    if content.enabled~=false then
-      local name=content.name
-      table.insert(names,name)
+    local enabledVar=content.enabledVar
+    if not(enabledVar) or _G[enabledVar] then
+      table.insert(names,getLocalLangObj(content.name,content.enName))
       table.insert(templates,content)
-      if choice==name then
+      if choice==content.id then
         choice=table.size(templates)-1
       end
     end
