@@ -135,6 +135,7 @@ local itemsLay={
       textColor=colorAccent;
       layout_margin="16dp";
       layout_marginBottom=0;
+      typeface=Typeface.defaultFromStyle(Typeface.BOLD);
     };
   };
 
@@ -303,9 +304,9 @@ local adapterEvents={
       itemView=view,
       ids=ids}
     ids._config=viewConfig
-    if viewType==1 then
-      ids.title.getPaint().setFakeBoldText(true)
-     else
+    if viewType~=1 then
+      --ids.title.getPaint().setFakeBoldText(true)
+     --else
       local switchView=ids.switchView
       view.setFocusable(true)
       view.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
