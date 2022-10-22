@@ -75,6 +75,7 @@
     <string name="file_current_path">当前文件路径</string>
     <string name="file_reopen">重新打开</string>
     <string name="file_noChange">此文件未改动</string>
+    <string name="file_viewName_content">文件名：%1$s</string>
     
     <string name="directory">文件夹</string>
     <string name="directory_go_popup">打开目录...</string>

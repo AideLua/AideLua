@@ -81,8 +81,6 @@ import "ProjectManager"
 
 import "layouts.item"
 import "layouts.pathItem"
-import "layouts.infoItem"
-import "layouts.buildingLayout"
 --import "sub.LayoutHelper2.loadpreviewlayout"
 
 
@@ -137,8 +135,6 @@ activity.setContentView(loadlayout2("layouts.layout"))
 actionBar.setTitle("Aide Lua")
 actionBar.setDisplayHomeAsUpEnabled(true)
 
-LuaReservedCharacters = {"switch", "if", "then", "and", "break", "do", "else", "elseif", "end", "false", "for",
-  "function", "in", "local", "nil", "not", "or", "repeat", "return", "true", "until", "while"} -- lua关键字
 
 deviceChangeLTFixList={largeDrawerLay,largeMainLay,mainEditorLay,layoutTransition}
 
