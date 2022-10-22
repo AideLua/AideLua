@@ -45,7 +45,7 @@
     <string name="open_failed">Open failed</string>
     
     <string name="exit_toast">Press again to exit the program.</string>
-    <string name="res_references">Reference resources</string>
+    <string name="res_reference">Reference resources</string>
     
     <string name="create">Create</string>
     <string name="create_success">Created successfully</string>

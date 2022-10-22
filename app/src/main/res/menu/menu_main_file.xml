@@ -16,8 +16,8 @@
         android:id="@+id/menu_openInNewWindow"
         android:title="@string/window_openInNewWindow"/>
     <item
-        android:id="@+id/menu_references"
-        android:title="@string/res_references"/>
+        android:id="@+id/menu_reference"
+        android:title="@string/res_reference"/>
     <!--<item
     android:id="@+id/menu_create"
     android:title="@string/create"/>

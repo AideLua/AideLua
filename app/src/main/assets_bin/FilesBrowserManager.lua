@@ -197,14 +197,20 @@ FilesBrowserManager.relLibPathsMatch = relLibPathsMatch
 
 local relLibPathsMatchPaths = {
   "^.-/src/main/assets_bin/sub/.-/(.+)%.",
+  "^.-/src/main/assets_bin/sub/.-/(.+)$",
+  "^.-/src/main/assets_bin/activity/.-/(.+)%.",
+  "^.-/src/main/assets_bin/activity/.-/(.+)$",
   "^.-/src/main/assets_bin/(.+)%.",
-  "^.-/src/main/assets_bin/(.+)",
+  "^.-/src/main/assets_bin/(.+)$",
   "^.-/src/main/assets/(.+)%.",
-  "^.-/src/main/assets/(.+)",
+  "^.-/src/main/assets/(.+)$",
   "^.-/src/main/luaLibs/(.+)%.",
-  "^.-/src/main/luaLibs/(.+)",
+  "^.-/src/main/luaLibs/(.+)$",
   "^.-/src/main/jniLibs/.-/lib(.+)%.so",
-  "^.-/src/main/java/(.+)%.",
+  "^.-/src/main/java/lua/(.+)%.",
+  "^.-/src/main/java/lua/(.+)$",
+  "^.-/src/main/java/(.+)%.java",
+  "^.-/src/main/java/(.+)%.kt",
 }
 relLibPathsMatch.paths = relLibPathsMatchPaths
 
@@ -466,17 +472,18 @@ function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
       local parentFile=file.getParentFile()
       local parentName=parentFile.getName()
       local action=data.action
-      local isFile,fileType,fileRelativePath,isResDir
+      local isFile,fileType,fileRelativePath,isResDir,javaRReference
 
       local inLibDirPath=data.inLibDirPath
 
       local openState=ProjectManager.openState--工程打开状态
-
+   
       if openState then
         isFile=file.isFile()
         fileType=data.fileType
-        fileRelativePath=ProjectManager.shortPath(filePath,true)
+        fileRelativePath=ProjectManager.shortPath(filePath,true,ProjectManager.nowPath)
         isResDir=parentName~="values" and not(parentName:find("values%-")) and ProjectManager.shortPath(filePath,true):find(".-/src/.-/res/.-/") or false
+        javaRReference=isResDir and ("R.%s.%s"):format(parentName:match("(.-)%-")or parentName,fileName:match("(.+)%.")or fileName) or nil
        else
         isResDir=false
       end
@@ -498,16 +505,17 @@ function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
       menuInflater.inflate(R.menu.menu_main_file,menu)
       local copyMenu=menu.findItem(R.id.subMenu_copy)
       local openInNewWindowMenu=menu.findItem(Rid.menu_openInNewWindow)--新窗口打开
-      local referencesMenu=menu.findItem(Rid.menu_references)--引用资源
+      local referenceMenu=menu.findItem(Rid.menu_reference)--引用资源
       local renameMenu=menu.findItem(Rid.menu_rename)--重命名
-      local copyMenuBuilder = copyMenu.getSubMenu()
+      local copyMenuBuilder=copyMenu.getSubMenu()
 
       copyMenu.setVisible(ProjectManager.openState)
       openInNewWindowMenu.setVisible(isFile or data.action=="openProject")
-      referencesMenu.setVisible(toboolean(isResDir))
+      referenceMenu.setVisible(toboolean(isResDir))
       renameMenu.setVisible(ProjectManager.openState)
       if openState then
-        CopyMenuUtil.addSubMenus(copyMenuBuilder,getFilePathCopyMenus(inLibDirPath,filePath,fileName,isFile,fileType))
+        CopyMenuUtil.addSubMenus(copyMenuBuilder,{javaRReference})
+        CopyMenuUtil.addSubMenus(copyMenuBuilder,getFilePathCopyMenus(inLibDirPath,filePath,fileRelativePath,fileName,isFile,isResDir,fileType))
       end
       menu.setCallback({
         onMenuItemSelected=function(menu,item)
@@ -522,8 +530,8 @@ function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
              else
               activity.newActivity("main",{filePath},true,int(System.currentTimeMillis()))
             end
-           elseif id==Rid.menu_references then--引用资源
-            local javaR=("R.%s.%s"):format(parentName:match("(.-)%-")or parentName,fileName:match("(.+)%.")or fileName)
+           elseif id==Rid.menu_reference then--引用资源
+            local javaR=("R.%s.%s"):format(javaRReference)
             EditorsManager.actions.paste(javaR)
           end
         end
@@ -566,9 +574,6 @@ function FilesBrowserManager.init()
   recyclerView.onCreateContextMenu=function(menu,view,menuInfo)
     FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
   end
-
-
-
 
   --判断侧滑开启状态。
   --如果侧滑为开启状态，那么文件浏览器一定是开启的。
@@ -614,8 +619,6 @@ function FilesBrowserManager.init()
         local dropPermissions=activity.requestDragAndDropPermissions(event)
         local data=event.getClipData()
         local count=data.getItemCount()
-        --showSnackBar(tostring(data))
-
         if count>0 then
           for index=0,count-1 do
             local uri=data.getItemAt(index).getUri()
@@ -668,18 +671,4 @@ end
 
 return createVirtualClass(FilesBrowserManager)
 
---[[
-pathsTabLay.addOnTabSelectedListener(TabLayout.OnTabSelectedListener({
-  onTabSelected=function(tab)
-    local tag=tab.tag
-    local path=tag.path
-    if path and path~=NowDirectory.getPath() then
-      refresh(File(path),true)
-    end
-  end,
-  onTabReselected=function(tab)
-  end,
-  onTabUnselected=function(tab)
-  end
-}))
-]]
+

@@ -231,24 +231,21 @@ function addStrToTable(text,list,checkList)
   end
 end
 
-function getFilePathCopyMenus(inLibDirPath,filePath,fileName,isFile,fileType)
+function getFilePathCopyMenus(inLibDirPath,filePath,fileRelativePath,fileName,isFile,isResDir,fileType)
   local textList={}
   local textCheckList={}
   if inLibDirPath then
-    addStrToTable(fileName,textList,textCheckList)
-    addStrToTable(inLibDirPath,textList,textCheckList)
-    local callLibPath=inLibDirPath
-    if inLibDirPath:find("/") then
-      callLibPath=inLibDirPath:gsub("/",".")
-      addStrToTable(callLibPath,textList,textCheckList)
-    end
+    local callLibPath=inLibDirPath:gsub("/",".")
+    addStrToTable(fileName:match("(.+)%.") or fileName,textList,textCheckList)
+    addStrToTable(callLibPath,textList,textCheckList)
     if fileType=="aly" or fileType=="lua" or fileType=="java" or fileType=="kt" or File(filePath.."/init.lua").isFile() then
       addStrToTable(getImportCode(callLibPath),textList,textCheckList)
     end
-
    else
     addStrToTable(fileName,textList,textCheckList)
+    
   end
+  addStrToTable(fileRelativePath,textList,textCheckList)
   return textList
 end
 

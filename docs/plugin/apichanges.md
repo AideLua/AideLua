@@ -40,3 +40,5 @@ v5.0.4
 12. `main` 页面新增 `formatColor2Hex(color)` 与 `getColorAndHex(text)`
 13. FileTemplates 新增 `enName` 与 `id`
     作用：新增中文，切换语言时保持选项不变
+14. `getFilePathCopyMenus()` 的参数改为 `(inLibDirPath,filePath,fileRelativePath,fileName,isFile,isResDir,fileType)`，新增了 `fileRelativePath` 与 `isResDir`
+    作用：能获取到更多的复制菜单

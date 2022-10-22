@@ -44,7 +44,7 @@
     <string name="open_failed">打开失败</string>
     
     <string name="exit_toast">再按一次退出程序</string>
-    <string name="res_references">引用资源</string>
+    <string name="res_reference">引用资源</string>
     
     <string name="create">新建</string>
     <string name="create_success">创建成功</string>
