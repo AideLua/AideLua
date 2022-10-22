@@ -8,6 +8,7 @@
     layout_height="fill";
     layout_width="fill";
     id="scrollView";
+    fillViewport=true;
     {
       AppCompatTextView;
       padding="16dp";
@@ -16,7 +17,7 @@
       layout_width="fill";
       textIsSelectable=true;
       textColor=theme.color.textColorPrimary;
-      --movementMethod=LinkMovementMethod.getInstance();
+      movementMethod=RTEditorMovementMethod.getInstance();
     };
   };
 };

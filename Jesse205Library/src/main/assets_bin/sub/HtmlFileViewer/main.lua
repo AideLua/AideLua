@@ -1,7 +1,7 @@
 require "import"
 import "jesse205"
 import "android.text.Html"
-import "android.text.method.LinkMovementMethod"
+import "com.onegravity.rteditor.RTEditorMovementMethod"
 
 activity.setTitle(R.string.jesse205_htmlFileViewer)
 activity.setContentView(loadlayout2("layout"))

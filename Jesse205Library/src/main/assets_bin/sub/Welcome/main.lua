@@ -4,6 +4,8 @@ import "jesse205"
 import "android.content.pm.PackageManager"
 import "android.text.Html"
 
+import "com.onegravity.rteditor.RTEditorMovementMethod"
+
 import "com.jesse205.layout.util.SettingsLayUtil"
 import "com.jesse205.widget.AutoToolbarLayout"
 

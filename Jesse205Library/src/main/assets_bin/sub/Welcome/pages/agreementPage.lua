@@ -14,7 +14,7 @@ return function(title,icon,name,date)
         layout_width="fill";
         layout_weight=1;
         id="scrollView";
-        
+        fillViewport=true;
         {
           LinearLayoutCompat;
           layout_height="fill";
@@ -28,7 +28,7 @@ return function(title,icon,name,date)
             layout_width="fill";
             textIsSelectable=true;
             textColor=theme.color.textColorPrimary;
-            --movementMethod=LinkMovementMethod.getInstance();
+            movementMethod=RTEditorMovementMethod.getInstance();
           };
         };
       };
@@ -43,7 +43,8 @@ return function(title,icon,name,date)
       };
     },
     onInitLayout=function(self)
-      self.textView.setText(Html.fromHtml(io.open(activity.getLuaPath(("../../agreements/%s.html"):format(name)),"r"):read("*a")))
+      local textView,checkBox=self.textView,self.checkBox
+      textView.setText(Html.fromHtml(io.open(activity.getLuaPath(("../../agreements/%s.html"):format(name)),"r"):read("*a")))
       local contrast="LastActionBarElevation_"..name
       _G[contrast]=0
       self.elevationKey=contrast
@@ -52,8 +53,8 @@ return function(title,icon,name,date)
       end
       local agree=toboolean(getSharedData(name)==date)
       self.allowNext=agree
-      self.checkBox.setChecked(agree)
-      self.checkBox.setOnCheckedChangeListener({onCheckedChanged=function()
+      checkBox.setChecked(agree)
+      checkBox.setOnCheckedChangeListener({onCheckedChanged=function()
           self:refresh()
       end})
     end,

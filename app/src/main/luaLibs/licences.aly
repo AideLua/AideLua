@@ -1,4 +1,5 @@
 {
+  --本软件
   {
     name="Aide Lua",
     message="依赖 Aide 的一款 Lua 编辑器",
@@ -6,36 +7,44 @@
     license="AideLua License",
     url="https://gitee.com/Jesse205/AideLua",
   },
-  {
+  --Jesse205库使用的
+  {--运行环境
     name="Androlua",
     message="Lua5.3.3 for android pro",
     licenseName="The MIT License (MIT)",
     license="Androlua License",
     url="https://github.com/nirenr/AndroLua_pro",
   },
-  {
+  {--MD控件
     name="Material Components for Android",
     license="Apache-2.0 License",
     message="Modular and customizable Material Design UI components for Android",
     url="https://github.com/material-components/material-components-android",
   },
-  {
+  {--图片加载
     name="Glide",
     message="An image loading and caching library for Android focused on smooth scrolling",
     licenseName="BSD, part MIT and Apache 2.0.",
     license="Glide Lincense",
     url="https://github.com/bumptech/glide"
   },
-  {
-    name="CodeEditor",
-    message="A cool and optimized code editor on Android platform with good performance and nice features.",
-    url="https://github.com/Rosemoe/CodeEditor"
-  },
-  {
+  {--解压工具
     name="Zip4j",
     message="A Java library for zip files and streams",
     license="Apache-2.0 License",
     url="https://github.com/srikanth-lingala/zip4j"
+  },
+  {--
+    name="Android RTEditor",
+    message="The Android RTEditor is a rich text editor component for Android that can be used as a drop in for EditText",
+    license="Apache-2.0 License",
+    url="https://github.com/1gravity/Android-RTEditor"
+  },
+  --本软件使用的
+  {
+    name="CodeEditor",
+    message="A cool and optimized code editor on Android platform with good performance and nice features.",
+    url="https://github.com/Rosemoe/CodeEditor"
   },
   {
     name="sora-editor",
