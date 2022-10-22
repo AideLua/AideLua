@@ -47,7 +47,7 @@ function ThemeUtil.getAppThemes()
       name="Red",
       show={
         name=R.string.jesse205_theme_red,
-        preview=0xfff44336,
+        preview=0xFFD32F2F,
       },
     },
   }
