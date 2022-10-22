@@ -16,20 +16,14 @@ return function(title,icon,name,date)
         id="scrollView";
         fillViewport=true;
         {
-          LinearLayoutCompat;
+          AppCompatTextView;
+          padding="16dp";
+          id="textView";
           layout_height="fill";
           layout_width="fill";
-          orientation="vertical";
-          {
-            AppCompatTextView;
-            padding="16dp";
-            id="textView";
-            layout_height="fill";
-            layout_width="fill";
-            textIsSelectable=true;
-            textColor=theme.color.textColorPrimary;
-            movementMethod=RTEditorMovementMethod.getInstance();
-          };
+          textIsSelectable=true;
+          textColor=theme.color.textColorPrimary;
+          movementMethod=RTEditorMovementMethod.getInstance();
         };
       };
       {
