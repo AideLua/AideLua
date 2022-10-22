@@ -72,7 +72,7 @@ import "CreateFileUtil"
 import "LuaEditorHelper"
 
 import "CopyMenuUtil"
-import "buildtools.RePackTool"
+import "buildtools.BuildToolUtil"
 
 import "FilesBrowserManager"
 import "EditorsManager"
@@ -251,12 +251,12 @@ function onOptionsItemSelected(item)
    elseif id == Rid.menu_project_bin_run then -- 二次打包
     if ProjectManager.openState then
       FilesTabManager.saveAllFiles()
-      RePackTool.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,true,true)
+      BuildToolUtil.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,true,true)
     end
    elseif id == Rid.menu_project_bin then -- 二次打包
     if ProjectManager.openState then
       FilesTabManager.saveAllFiles()
-      RePackTool.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,false,false)
+      BuildToolUtil.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,false,false)
     end
    elseif id == Rid.menu_project_reopen then -- 重新打开项目
     ProjectManager.reopenProject()--函数内已判断打开状态
