@@ -95,7 +95,7 @@ Activity销毁时执行，常见于关闭页面
 | \[x\] keyWords | 忘了 | 编辑器提示关键词列表 |
 | \[x\] jesse205KeyWords | 忘了 | Jesse205库关键词列表 |
 | \[x\] fileType2Language | 忘了 | 文件类型转语言索引列表 |
-| [actions](#editorsmanager_actions) | table (map) | 编辑器事件列表 |
+| [actions](#editorsmanager-actions-table-manager) | table (map) | 编辑器事件列表 |
 | openNewContent(filePath,fileType,decoder) | function | 打开新内容 <br> __filePath__ (string): 文件路径 <br> __fileType__ (string): 文件扩展名 <br> __decoder__ (metatable(map)): 文件解析工具 |
 | startSearch() | function | 启动搜索 |
 | save2Tab() | function | 保存到标签 |
@@ -104,7 +104,7 @@ Activity销毁时执行，常见于关闭页面
 | switchPreview(state) | function | 切换预览 <br> __state__ (boolean): 状态 |
 | switchLanguage(language) | function | 切换语言 <br> __language__ (Object): 语言 |
 | switchEditor(editorType) | function | 切换编辑器 <br> __editorType__ (string): 编辑器类型|
-| [symbolBar](#editorsmanager_symbolbar) | table (class) | 符号栏 |
+| [symbolBar](#editorsmanager-symbolbar-table-manager) | table (class) | 符号栏 |
 
 ##### EditorsManager.actions `table` `Manager`
 | 键 | 类型 | 返回类型 | 说明 |
