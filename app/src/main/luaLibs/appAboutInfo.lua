@@ -74,6 +74,13 @@ moreItem={
     newPage="newApp";
     url="https://pd.qq.com/s/n51c4k";
   },
+  {--使用文档
+    SettingsLayUtil.ITEM_NOSUMMARY;
+    title=R.string.app_documnet;
+    icon=R.drawable.ic_file_document_outline;
+    newPage="newApp";
+    url="https://jesse205.github.io/AideLua";
+  },
   {--支持
     SettingsLayUtil.ITEM_NOSUMMARY;
     title=R.string.jesse205_supportProject;
@@ -93,8 +100,7 @@ moreItem={
         url="https://gitee.com/Jesse205/AideLua",
       },
     };
-  }
-
+  },
 }
 
 --[[menus 格式：

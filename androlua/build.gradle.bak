@@ -5,16 +5,26 @@ android {
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 29
-        versionCode 121099
-        versionName "12.1.0 (Pro)"
+        //applicationId "com.androlua"
+        minSdkVersion 14
+        targetSdkVersion 28
+        versionCode 1199
+        versionName "5.0.18(1.1)(armeabi-v7a,arm64-v8a)"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             ndk {abiFilters 'armeabi-v7a', 'x86', 'arm64-v8a'}
+        }
+        debug {
+            minifyEnabled false
+            ndk {abiFilters 'armeabi-v7a', 'x86', 'arm64-v8a'}
+        }
+    }
+    sourceSets {
+        main {
+            //jniLibs.srcDirs = ['libs']
         }
     }
     lintOptions {
@@ -25,7 +35,6 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    api project(':androlua')
     api 'androidx.appcompat:appcompat:1.0.0'
     api 'com.google.android.material:material:1.0.0'
 }

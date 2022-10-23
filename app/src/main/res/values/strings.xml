@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Aide Lua Pro</string>
-    <string name="windmill">Windmill</string>
+	<string name="app_documnet">App document</string>
+	<string name="windmill">Windmill</string>
     <string name="undo">Undo</string>
     <string name="redo">Redo</string>
     <string name="run">Run</string>
