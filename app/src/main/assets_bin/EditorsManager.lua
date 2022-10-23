@@ -513,8 +513,6 @@ function symbolBar.newPsButton(text)
     textColor=theme.color.textColorPrimary;
     background=ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary)
   })
-  --button.getPaint().setFakeBoldText(true)
-
   return button
 end
 

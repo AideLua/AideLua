@@ -320,7 +320,9 @@ function onOptionsItemSelected(item)
 end
 
 function onKeyShortcut(keyCode, event)
-  --print(keyCode)
+  if PluginsUtil.callElevents("onKeyShortcut", keyCode, event) then
+    return true
+  end
   local filteredMetaState = event.getMetaState() & ~KeyEvent.META_CTRL_MASK
   if (KeyEvent.metaStateHasNoModifiers(filteredMetaState)) then
     local editorActions = EditorsManager.action
@@ -347,7 +349,6 @@ function onKeyShortcut(keyCode, event)
       return true
     end
   end
-  PluginsUtil.callElevents("onKeyShortcut", keyCode, event)
 end
 
 function onConfigurationChanged(config)
