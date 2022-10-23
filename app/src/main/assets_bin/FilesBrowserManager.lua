@@ -1,5 +1,8 @@
 --[[
 FilesBrowserManager: metatable(class): 文件浏览器管理器
+FilesBrowserManager.providers：提供者地图
+FilesBrowserManager.providers.menuProviders：ContextMenu提供者列表
+FilesBrowserManager.providers.copyMenuProviders：复制菜单提供者列表
 FilesBrowserManager.openState; FilesBrowserManager.getOpenState(): boolean: 文件浏览器打开状态
 FilesBrowserManager.directoryFile; FilesBrowserManager.getDirectoryFile(): java.io.File: 获取当前文件夹File
 FilesBrowserManager.directoryFilesList: String[]: 获取当前文件列表
@@ -18,6 +21,26 @@ FilesBrowserManager.refresh(file,upFile,force,atOnce): 刷新文件浏览器
 FilesBrowserManager.init(): 初始化管理器
 ]]
 local FilesBrowserManager = {}
+local providers={
+  menuProviders={--参数：menuBuilder,config
+  },
+  copyMenuProviders={
+    function(menuBuilder,config)--复制菜单默认提供者
+      if ProjectManager.openState then
+        CopyMenuUtil.addSubMenus(menuBuilder,{config.javaRReference})
+        CopyMenuUtil.addSubMenus(menuBuilder,getFilePathCopyMenus(config.inLibDirPath,
+        config.filePath,
+        config.fileRelativePath,
+        config.fileName,
+        config.isFile,
+        config.isResDir,
+        config.fileType))
+      end
+    end
+  }
+}--提供者们
+FilesBrowserManager.providers=providers
+
 local openState = false
 local adapterData={}
 FilesBrowserManager.adapterData = adapterData
@@ -178,18 +201,6 @@ function FilesBrowserManager.getProjectIconForGlide(projectPath,config,mainProje
   return android.R.drawable.sym_def_app_icon--前面没有返回，就返回默认图标
 end
 
---[[
-function FilesBrowserManager.getFileIconRIdByType(fileType)
-  local icon=R.drawable.ic_file_outline
-  if fileType then
-    icon=ProjectUtil.FileIcons[fileType] or icon
-  end
-  return icon
-end]]
---[[
-function FilesBrowserManager.getFolderIconResIdByName(name)
-  return folderIcons[name] or R.drawable.ic_folder_outline
-end]]
 
 
 local relLibPathsMatch = {} -- 相对库路径匹配
@@ -229,12 +240,6 @@ function FilesBrowserManager.open()
     drawerChild.setVisibility(View.VISIBLE)
    else
     drawer.openDrawer(Gravity.LEFT)
-    --[[
-    Handler().postDelayed(Runnable({
-      run = function()
-        recyclerView.requestFocus()
-      end
-    }), 10)]]
   end
   openState = true
 end
@@ -245,15 +250,6 @@ function FilesBrowserManager.close()
     drawerChild.setVisibility(View.GONE)
    else
     drawer.closeDrawer(Gravity.LEFT)
-    --[[
-    local editor=EditorsManager.editor
-    if editor then
-      Handler().postDelayed(Runnable({
-        run = function()
-          editor.requestFocus()
-        end
-      }), 10)
-    end]]
   end
   openState = false
 end
@@ -477,13 +473,13 @@ function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
       local inLibDirPath=data.inLibDirPath
 
       local openState=ProjectManager.openState--工程打开状态
-   
+
       if openState then
         isFile=file.isFile()
         fileType=data.fileType
         fileRelativePath=ProjectManager.shortPath(filePath,true,ProjectManager.nowPath)
         isResDir=parentName~="values" and not(parentName:find("values%-")) and ProjectManager.shortPath(filePath,true):find(".-/src/.-/res/.-/") or false
-        javaRReference=isResDir and ("R.%s.%s"):format(parentName:match("(.-)%-")or parentName,fileName:match("(.+)%.")or fileName) or nil
+        javaRReference=isResDir and ("R.%s.%s"):format(parentName:match("(.-)%-") or parentName,fileName:match("(.+)%.") or fileName) or nil
        else
         isResDir=false
       end
@@ -499,8 +495,25 @@ function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
           end
         end
       end
+      local config={
+        data=data,
+        title=title,
+        javaRReference=javaRReference,
+        copyMenuVisible=ProjectManager.openState,
+        openInNewWindowMenuVisible=isFile or data.action=="openProject",
+        referenceMenuVisible=toboolean(isResDir),
+        renameMenuVisible=ProjectManager.openState,
 
-      menu.setHeaderTitle(data.title)
+        inLibDirPath=inLibDirPath,--从 relLibPathsMatchPaths 匹配出来的路径
+        filePath=filePath,--文件路径
+        fileRelativePath=fileRelativePath,--相对于工程根目录的相对路径
+        fileName=fileName,--文件名
+        isFile=isFile,--是不是文件
+        isResDir=isResDir,--是否在Res目录
+        fileType=fileType,--扩展名（不是MimeType）
+      }
+
+      menu.setHeaderTitle(config.title)
       local menuInflater=activity.getMenuInflater()
       menuInflater.inflate(R.menu.menu_main_file,menu)
       local copyMenu=menu.findItem(R.id.subMenu_copy)
@@ -509,14 +522,18 @@ function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
       local renameMenu=menu.findItem(Rid.menu_rename)--重命名
       local copyMenuBuilder=copyMenu.getSubMenu()
 
-      copyMenu.setVisible(ProjectManager.openState)
-      openInNewWindowMenu.setVisible(isFile or data.action=="openProject")
-      referenceMenu.setVisible(toboolean(isResDir))
-      renameMenu.setVisible(ProjectManager.openState)
-      if openState then
-        CopyMenuUtil.addSubMenus(copyMenuBuilder,{javaRReference})
-        CopyMenuUtil.addSubMenus(copyMenuBuilder,getFilePathCopyMenus(inLibDirPath,filePath,fileRelativePath,fileName,isFile,isResDir,fileType))
-      end
+      table.foreach(providers.menuProviders,function(index,content)
+        content(menu,config)
+      end)
+      table.foreach(providers.copyMenuProviders,function(index,content)
+        content(copyMenuBuilder,config)
+      end)
+
+      copyMenu.setVisible(config.copyMenuVisible)
+      openInNewWindowMenu.setVisible(config.openInNewWindowMenuVisible)
+      referenceMenu.setVisible(config.referenceMenuVisible)
+      renameMenu.setVisible(config.renameMenuVisible)
+
       menu.setCallback({
         onMenuItemSelected=function(menu,item)
           local id=item.getItemId()
