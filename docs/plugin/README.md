@@ -71,7 +71,12 @@
 | thirdplugins | __table (list)__: 需要安装的第三方库 <br > 内容: 插件的包名 |
 | `[x]` supported | __table (list)__: 支持的APP列表 |
 | supported2 | __table (map)__: 支持的APP列表 <br > 索引: 软件代号 (`apptype`) <br > 内容: __table (map)__: 支持的版本，mincode为最低版本，targetcode为最高版本|
-| events | __table (map)__: 全局事件（与独立的事件相比，第一个参数为页面名称，但是很可能为 `nil`）
+| events | __table (map)__: 全局事件 |
+
+::: tip
+全局事件与独立事件基本一致。<br>
+但与独立的事件相比，第一个参数为页面名称，但是很可能为 `nil`）
+:::
 
 | 软件代号 (`apptype`) | 代指软件 |
 | ---- | --- |
@@ -91,13 +96,13 @@
 ### main.lua
 插件主页面
 
-| 接收参数 (...) | 说明 |
+| 接收参数顺序 (...) | 说明 |
 | ---- | --- |
-| prjPath | 项目路径 |
-| filePath | 文件路径 |
+| 1 | 项目路径 |
+| 2 | 文件路径 |
 
 ### config/events/
-存放各个页面的事件的文件夹
+存放各个页面的独立事件的文件夹
 
 * 文件扩展名: `aly`
 * 文件名称: `<页面名称>.aly`
