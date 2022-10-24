@@ -23,28 +23,29 @@ export default defineUserConfig({
     tip: "提示",
     warning: "警告",
     danger: "危险",
-    backToHome: "返回首页",
+    backToHome: "返回文档",
     toggleColorMode: "切换颜色模式",
     toggleSidebar: "切换侧边栏",
     notFound: ["是怎么到这里的呢？"],
     docsDir: "docs",
     docsRepo: "https://gitee.com/Jesse205/AideLua",
     docsBranch: "master",
+    backToTop: false,
     navbar: [
       {
         text: '首页',
-        link: 'https://jesse205.github.io/aidelua/',
+        link: '/aidelua.html',
       },
       {
         text: '使用文档',
         link: '/',
       },
       {
-        text: 'Gitee',
+        text: 'Gitee 仓库',
         link: 'https://gitee.com/Jesse205/AideLua',
       },
       {
-        text: 'Github',
+        text: 'Github 仓库',
         link: 'https://github.com/Jesse205/AideLua',
       },
     ],

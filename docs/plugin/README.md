@@ -1,3 +1,8 @@
+---
+next:
+  text: main.aly 配置
+  link: pages/main.md
+---
 # 插件文档
 文档版本：v3.1
 ## tips
@@ -78,7 +83,7 @@
 | mode | __string__: 模式，默认为 `"plugin"` |
 | utilversion | __string__: Util版本，此变量不起任何作用，当前为 `"3.1"` |
 | thirdplugins | __table (list)__: 需要安装的第三方库 <br > 内容: 插件的包名 |
-| `[x]` supported | __table (list)__: 支持的APP列表。此变量在 Util 版本 `3.1` 弃用。 |
+| \[x\] supported | __table (list)__: 支持的APP列表。此变量在 Util 版本 `3.1` 弃用。 |
 | supported2 | __table (map)__: 支持的APP列表 <br > 索引: 软件代号 (`apptype`) <br > 内容: __table (map)__: 支持的版本，mincode为最低版本，targetcode为最高版本|
 | events | __table (map)__: 全局事件 |
 
