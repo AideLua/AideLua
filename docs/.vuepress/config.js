@@ -6,8 +6,7 @@ export default defineUserConfig({
   title: 'Aide Lua Pro',
   description: '让您在移动设备上也能享受高级的、快速的软件开发',
   head: [
-    ['link', { rel: 'icon', sizes: "any", mask: "", href: 'favicon.png' }],
-
+    ['link', { rel: 'icon', sizes: "any", mask: "", href: "/favicon.png" }],
   ],
   base: "/AideLua/",
 
