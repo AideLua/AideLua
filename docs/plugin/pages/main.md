@@ -17,13 +17,13 @@ Activity 生命周期：onCreate
 | boolean | 如果返回 `true` 则停止执行接下来的操作（如：自动打开工程等）。 |
 
 代码执行顺序：
-> 执行插件事件 - 判断返回值，检测并打开项目 - 同步 `toggle` 状态
+> 调用插件事件 - 判断返回值，检测并打开项目 - 同步 `toggle` 状态
 
 ::: warning 注意
 返回值在版本 `v5.0.3(50399)` 添加
 
 在 `v5.0.3(50399)` 之前，代码执行顺序为：
-> 检测并打开项目 - 执行插件事件 - 同步 `toggle` 状态
+> 检测并打开项目 - 调用插件事件 - 同步 `toggle` 状态
 :::
 
 #### onCreateOptionsMenu(menu)
@@ -44,7 +44,7 @@ Activity 生命周期：onCreate
 | item | __MenuItem__: 被选中的菜单项。此值不能为空。|
 
 代码执行顺序：
-> 添加自带菜单 - 执行插件事件 - 标记 `LoadedMenu` 为 `true` - 刷新菜单状态
+> 添加自带菜单 - 调用插件事件 - 标记 `LoadedMenu` 为 `true` - 刷新菜单状态
 
 ::: warning
 Aide Lua 未使用标准的菜单更新方式，因此您使用 `activity.invalidateOptionsMenu()` 无法刷新菜单显示
@@ -64,13 +64,13 @@ Aide Lua 未使用标准的菜单更新方式，因此您使用 `activity.invali
 | boolean | 如果返回 `true` 则停止执行接下来的操作（响应自带快捷键）。 |
 
 代码执行顺序：
-> 执行插件事件 - 判断返回值，执行自带快捷键
+> 调用插件事件 - 判断返回值，响应自带快捷键事件
 
 ::: warning 注意
 返回值在版本 `v5.0.4(50499)` 添加
 
 在 `v5.0.4(50499)` 之前，代码执行顺序为：
-> 执行自带快捷键 - 执行插件事件
+> 响应自带快捷键事件 - 调用插件事件
 :::
 
 #### onConfigurationChanged(config)
@@ -104,7 +104,7 @@ Activity销毁时执行，常见于关闭页面
 | switchPreview(state) | function | 切换预览 <br> __state__ (boolean): 状态 |
 | switchLanguage(language) | function | 切换语言 <br> __language__ (Object): 语言 |
 | switchEditor(editorType) | function | 切换编辑器 <br> __editorType__ (string): 编辑器类型|
-| [symbolBar](#editorsmanager-symbolbar-table-manager) | table (class) | 符号栏 |
+| [symbolBar](#editorsmanager-symbolbar-table-util) | table (class) | 符号栏 |
 
 ##### EditorsManager.actions `table` `Manager`
 | 键 | 类型 | 返回类型 | 说明 |

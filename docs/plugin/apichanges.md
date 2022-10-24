@@ -42,3 +42,4 @@ v5.0.4
     作用：新增中文，切换语言时保持选项不变
 14. `getFilePathCopyMenus()` 的参数改为 `(inLibDirPath,filePath,fileRelativePath,fileName,isFile,isResDir,fileType)`，新增了 `fileRelativePath` 与 `isResDir`
     作用：能获取到更多的复制菜单
+15. 新增文件浏览器提供者，`FilesBrowserManager.providers`

@@ -19,8 +19,18 @@
 3. 为了防止污染全局变量，插件内直接赋值为插件的局部变量。如要修改全局变量，请使用 `_G.xxx=xxx`
 
 ### 通用 API
+::: warning
+尽量避免使用 Jesse205 库。因为 Jesse205 库每次改动都比较大，很容易引起插件报错。
+:::
+
 #### PluginsUtil `table` `Util`
-插件相关API
+插件相关 API，也是支持插件运行的模块
+
+| 变量 | 说明 |
+| ---- | --- |
+| _VERSION | __string__: Util 版本 |
+| PLUGINS_PATH | __string__: 插件存放路径 |
+| PLUGINS_DATA_PATH | __string__: 插件数据存放路径 |
 
 ##### PluginsUtil.getPluginDataPath(packageName) `function`
 获取插件数据目录
@@ -51,7 +61,6 @@
 #### getPluginPath(packageName)
 获取插件目录，与 [`PluginsUtil.getPluginPath(packageName)`](#pluginsutil-getpluginpath-packagename-function) 完全相同
 
-
 ## 插件文件说明: 
 ### \* init.lua
 插件入口，也用于存放模块信息的文件
@@ -64,12 +73,12 @@
 | \* appver | __string__: 插件版本名 |
 | \* appcode | __number__: 插件版本号 |
 | \* packagename | __string__: 插件包名 |
-| \[x\] minemastercode | __number__: 最低支持的APP版本号 |
-| \[x\] targemastercode | __number__: 目标适配的APP版本号 |
+| \[x\] minemastercode | __number__: 最低支持的APP版本号。此变量在 Util 版本 `3.1` 弃用。 |
+| \[x\] targemastercode | __number__: 目标适配的APP版本号。此变量在 Util 版本 `3.1` 弃用。 |
 | mode | __string__: 模式，默认为 `"plugin"` |
 | utilversion | __string__: Util版本，此变量不起任何作用，当前为 `"3.1"` |
 | thirdplugins | __table (list)__: 需要安装的第三方库 <br > 内容: 插件的包名 |
-| `[x]` supported | __table (list)__: 支持的APP列表 |
+| `[x]` supported | __table (list)__: 支持的APP列表。此变量在 Util 版本 `3.1` 弃用。 |
 | supported2 | __table (map)__: 支持的APP列表 <br > 索引: 软件代号 (`apptype`) <br > 内容: __table (map)__: 支持的版本，mincode为最低版本，targetcode为最高版本|
 | events | __table (map)__: 全局事件 |
 
@@ -78,6 +87,11 @@
 但与独立的事件相比，第一个参数为页面名称，但是很可能为 `nil`）
 :::
 
+::: warning
+`init.lua` 中运行中不会有各种内置变量，只有在运行后会将环境表设置为 `metatable` ，自动取 `_G` 中的值
+:::
+
+::: details 彩蛋
 | 软件代号 (`apptype`) | 代指软件 |
 | ---- | --- |
 | aidelua | Aide Lua (Pro) |
@@ -92,11 +106,12 @@
 | eddeconnect | Edde 互联 (截止目前此app仅存于想象) |
 | eddestudy | Edde 学习桌面 (截止目前此app仅存于想象) 
 | hellotool | 哈兔Box (截止目前此app不支持此类型插件) |
+:::
 
 ### main.lua
 插件主页面
 
-| 接收参数顺序 (...) | 说明 |
+| 参数顺序 (...) | 说明 |
 | ---- | --- |
 | 1 | 项目路径 |
 | 2 | 文件路径 |
@@ -107,4 +122,4 @@
 * 文件扩展名: `aly`
 * 文件名称: `<页面名称>.aly`
 * 文件示例: `main.aly` `settings.aly`
-* 更多请见 `page` 文件夹
+* 更多请见 [`page` 目录](pages/main.md)
