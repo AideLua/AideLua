@@ -35,6 +35,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 1. 本软件默认开启自动保存代码且无法关闭（自动保存触发条件：切换到其他应用、点击二次打包以及打包运行、打开文件、关闭文件）
 2. 此软件不能用来开发大型项目
 3. 此软件必须搭配编译器，不管你用的是真正的Gradle还是仿Gradle（AIDE属于仿Gradle）
+4. 要实现直接运行项目，必须导出 `LuaActivity`（默认是导出的），并成功安装项目软件（先用 AIDE 打包，然后用 Aide Lua 打包，最后安装）
 
 ## 如何接收更新推送
 1. 首先进入 `设置`-`通知设置` ，打开 `有新的 Release`<br>
@@ -61,11 +62,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 1. AIDE 必须使用 `AIDE高级设置版本` ，否则无法打开 `重定义Apk路径`
 2. AIDE 必须打开 `重定义Apk路径` ，否则会导致 APK 混乱
 3. AIDE 最好关闭 `adrt调试文件` 
-4. 不是必须用 AIDE 编译，只不过用 AIDE 编译会更好一些
+4. 不是必须用 AIDE 编译，也可以使用 Android Studio 编译
 
 ## 开放源代码许可
 [https://gitee.com/Jesse205/AideLua/blob/master/app/src/main/assets_bin/licences](https://gitee.com/Jesse205/AideLua/blob/master/app/src/main/assets_bin/licences)
-
-## 高级玩法
-`.aidelua/config.lua` 用法
-
