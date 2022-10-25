@@ -16,10 +16,10 @@
 
     --c-tip: var(--c-brand) !important;
 
-    --c-warning: #E65100 !important;
-    --c-warning-text: #802d00 !important;
+    --c-warning: #FF6F00 !important;
+    --c-warning-text: #BF360C !important;
     --c-warning-title: var(--c-warning) !important;
-    --c-warning-bg: rgba(230, 80, 0, 0.25);
+    --c-warning-bg: rgba(255, 111, 0, 0.25);
 
     --c-danger: #B71C1C !important;
     --c-danger-text: #801414 !important;
@@ -30,7 +30,7 @@
 
     --code-hl-bg-color: var(--c-bg-lighter) !important; //不知道官方为啥在夜间模式单独设置了一下
     --font-family-code: "Consolas Code", Monaco, "Andale Mono", "Ubuntu Mono", monospace;
-    --font-family: system-ui, "HarmonyOS Sans SC",-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    --font-family: system-ui, "HarmonyOS Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
         Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
@@ -51,7 +51,7 @@ html.dark {
     --c-details-bg: #424242;
 
 
-    --c-warning-bg: rgba(255, 204, 128, 0.6);
+    --c-warning-bg: rgba(255, 183, 77, 0.5);
 
     --c-danger-bg: rgba(229, 115, 115, 0.6);
 }
