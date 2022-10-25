@@ -1,28 +1,37 @@
 :root {
-    --c-brand: #3F51B5;
-    --c-brand-light: #5C6BC0;
+    --c-brand: #3F51B5; //主题色
+    --c-brand-light: #5C6BC0; //主题亮色
 
-    --c-bg-light: #F5F5F5;
-    --c-bg-lighter: #EEEEEE;
+    --c-bg-light: #F5F5F5; //亮背景色，用于表格，代码框，提示等
+    --c-bg-lighter: #EEEEEE; //更亮背景色，用于小代码框，代码框内高亮
 
+    --c-text: black;
     --c-text-lighter: #303F9F;
 
     --code-ln-wrapper-width: 2rem;
     --code-bg-color: var(--c-bg-light);
     --code-hl-bg-color: var(--c-bg-lighter);
-    --font-family-code: Consolas Code, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+
+    --c-border-dark: #9E9E9E !important; //这个颜色无论哪种颜色模式都很合适
 
     --c-tip: var(--c-brand) !important;
+
     --c-warning: #E65100 !important;
     --c-warning-text: #802d00 !important;
     --c-warning-title: var(--c-warning) !important;
-    --c-warning-bg: #E6510022;
+    --c-warning-bg: rgba(230, 80, 0, 0.25);
+
     --c-danger: #B71C1C !important;
     --c-danger-text: #801414 !important;
     --c-danger-title: var(--c-danger) !important;
-    --c-danger-bg: #B71C1C22;
+    --c-danger-bg: rgba(183, 28, 28, 0.25);
 
     --c-details-bg: var(--c-bg-light) !important;
+
+    --code-hl-bg-color: var(--c-bg-lighter) !important; //不知道官方为啥在夜间模式单独设置了一下
+    --font-family-code: "Consolas Code", Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+    --font-family: system-ui, "HarmonyOS Sans SC",-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
 html.dark {
@@ -42,11 +51,12 @@ html.dark {
     --c-details-bg: #424242;
 
 
-    --c-warning-bg: #ffcc8099;
+    --c-warning-bg: rgba(255, 204, 128, 0.6);
 
-    --c-danger-bg: #E5737399;
+    --c-danger-bg: rgba(229, 115, 115, 0.6);
 }
 
+//给代码框设置自适应主题
 .theme-default-content pre code,
 .theme-default-content pre[class*=language-] code {
     color: black;
@@ -57,6 +67,7 @@ html.dark {
     color: #E0E0E0;
 }
 
+//代码高亮
 .token.string {
     color: #c2185b;
 }
@@ -114,11 +125,23 @@ html.dark {
     background-color: #FFFFFF22;
 }
 
+//加深一下引用
+blockquote {
+    color: var(--c-text);
+    border-left: 0.2rem solid var(--c-border-dark);
+}
+
 .custom-container.warning blockquote,
 .custom-container.danger blockquote {
-    font-size: 1rem;
-    color: var(--c-text);
-    border-left: 0.2rem solid var(--c-text);
-    margin: 1rem 0;
-    padding: 0.25rem 0 0.25rem 1rem;
+    border-left: 0.2rem solid #757575;
+}
+
+.dark .custom-container.warning blockquote,
+.dark .custom-container.danger blockquote {
+    border-left: 0.2rem solid #BDBDBD;
+}
+
+// 官方没有给lua写上语言标注，这里补一下
+div[class*=language-].ext-lua:before {
+    content: "lua";
 }
