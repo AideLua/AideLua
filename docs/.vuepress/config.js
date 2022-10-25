@@ -29,7 +29,6 @@ export default defineUserConfig({
     docsDir: "docs",
     docsRepo: "https://gitee.com/Jesse205/AideLua",
     docsBranch: "master",
-    backToTop: false,
     navbar: [
       {
         text: '首页',
@@ -257,7 +256,10 @@ export default defineUserConfig({
           },
         ]
       },
-    ]
+    ],
+    themePlugins: {
+      backToTop: false,
+    }
 
   }),
 

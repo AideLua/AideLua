@@ -1,8 +1,28 @@
 :root {
     --c-brand: #3F51B5;
     --c-brand-light: #5C6BC0;
-    --c-text-lighter: #3949AB;
-    --code-ln-wrapper-width: 2rem
+
+    --c-bg-light: #F5F5F5;
+    --c-bg-lighter: #EEEEEE;
+
+    --c-text-lighter: #303F9F;
+
+    --code-ln-wrapper-width: 2rem;
+    --code-bg-color: var(--c-bg-light);
+    --code-hl-bg-color: var(--c-bg-lighter);
+    --font-family-code: Consolas Code, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+
+    --c-tip: var(--c-brand) !important;
+    --c-warning: #E65100 !important;
+    --c-warning-text: #802d00 !important;
+    --c-warning-title: var(--c-warning) !important;
+    --c-warning-bg: #E6510022;
+    --c-danger: #B71C1C !important;
+    --c-danger-text: #801414 !important;
+    --c-danger-title: var(--c-danger) !important;
+    --c-danger-bg: #B71C1C22;
+
+    --c-details-bg: var(--c-bg-light) !important;
 }
 
 html.dark {
@@ -10,14 +30,95 @@ html.dark {
     --c-brand-light: #7986CB;
 
     --c-bg: #212121;
-    --c-bg-light: #424242;
+    --c-bg-light: #303030;
     --c-bg-lighter: #424242;
 
-    --c-text: white;
+    --c-text: #F5F5F5;
     --c-text-lighter: #7986CB;
 
     --c-border: #424242;
     --c-border-dark: #424242;
 
-    --c-details-bg:#424242;
+    --c-details-bg: #424242;
+
+
+    --c-warning-bg: #ffcc8099;
+
+    --c-danger-bg: #E5737399;
+}
+
+.theme-default-content pre code,
+.theme-default-content pre[class*=language-] code {
+    color: black;
+}
+
+.dark .theme-default-content pre code,
+.dark .theme-default-content pre[class*=language-] code {
+    color: #E0E0E0;
+}
+
+.token.string {
+    color: #c2185b;
+}
+
+.dark .token.string {
+    color: #EC407A;
+}
+
+.token.punctuation {
+    color: #616161;
+}
+
+.token.number,
+.token.function {
+    color: #5C6BC0;
+}
+
+.token.operator,
+.token.entity,
+.token.url {
+    color: #616161;
+}
+
+.token.comment,
+.token.block-comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: #9E9E9E;
+}
+
+.token.boolean,
+.token.selector,
+.token.important,
+.token.atrule,
+.token.keyword,
+.token.builtin {
+    color: #3f51b5;
+    font-weight: bold;
+}
+
+.custom-container.warning code {
+    background-color: #00000011;
+    color: var(--c-warning);
+}
+
+
+.custom-container.danger code {
+    background-color: #00000011;
+    color: var(--c-danger);
+}
+
+.dark .custom-container.warning code,
+.dark .custom-container.danger code {
+    background-color: #FFFFFF22;
+}
+
+.custom-container.warning blockquote,
+.custom-container.danger blockquote {
+    font-size: 1rem;
+    color: var(--c-text);
+    border-left: 0.2rem solid var(--c-text);
+    margin: 1rem 0;
+    padding: 0.25rem 0 0.25rem 1rem;
 }
