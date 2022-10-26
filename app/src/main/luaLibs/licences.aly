@@ -42,6 +42,11 @@
   },
   --本软件使用的
   {
+    name="LuaDB",
+    message="基于 Lua 的高性能持久化 kv 数据库",
+    url="https://github.com/limao996/LuaDB"
+  },
+  {
     name="CodeEditor",
     message="A cool and optimized code editor on Android platform with good performance and nice features.",
     url="https://github.com/Rosemoe/CodeEditor"

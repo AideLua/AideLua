@@ -39,7 +39,6 @@ import "android.text.style.ForegroundColorSpan"
 import "android.text.style.BackgroundColorSpan"
 import "android.text.Spannable"
 
---import "androidx.core.widget.ListViewCompat"
 import "androidx.drawerlayout.widget.DrawerLayout"
 import "androidx.core.graphics.ColorUtils"
 
@@ -65,23 +64,25 @@ import "com.jesse205.util.ScreenFixUtil"
 import "com.jesse205.util.FileInfoUtils"
 import "com.jesse205.util.ColorUtil"
 
+--db=require "db"
 
-import "AppFunctions" -- 必须先导入这个，因为下面的导入直接要用
-import "DialogFunctions"
-import "CreateFileUtil"
-import "LuaEditorHelper"
+require "AppFunctions" -- 必须先导入这个，因为下面的导入模块要直接使用
+require "DialogFunctions"
+CreateFileUtil=require "CreateFileUtil"
+LuaEditorHelper=require "LuaEditorHelper"
 
-import "CopyMenuUtil"
-import "buildtools.BuildToolUtil"
+CopyMenuUtil=require "CopyMenuUtil"
+BuildToolUtil=require "buildtools.BuildToolUtil"
 
-import "FilesBrowserManager"
-import "EditorsManager"
-import "FilesTabManager"
-import "ProjectManager"
+--各种管理器
+FilesBrowserManager=require "FilesBrowserManager"
+EditorsManager=require "EditorsManager"
+FilesTabManager=require "FilesTabManager"
+ProjectManager=require "ProjectManager"
 
-import "layouts.item"
-import "layouts.pathItem"
---import "sub.LayoutHelper2.loadpreviewlayout"
+--各种布局
+item=require "layouts.item"
+pathItem=require "layouts.pathItem"
 
 
 application.set("plugin_enabledpaths",nil)

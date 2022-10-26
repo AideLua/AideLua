@@ -20,25 +20,6 @@
       id="sideAppBarLayout";
       minimumHeight=1;
       elevation=0;
-      --layoutTransition=newLayoutTransition();
-      --[[
-      {
-        TabLayout;
-        layout_width="fill";
-        tabMode=TabLayout.MODE_SCROLLABLE;
-        --layout_margin="8dp";
-        layout_height="32dp";
-        id="pathsTabLay";
-        selectedTabIndicatorHeight=0;
-        visibility=View.GONE;
-        inlineLabel=true;
-        paddingLeft="16dp";
-        paddingRight="16dp";
-        clipToPadding=false;
-        tabIconTint=ColorStateList({{}},{theme.color.ActionBar.textColorSecondary});
-        layoutTransition=newLayoutTransition();
-        --minimumWidth=0;
-      };]]
       {
         TextView;
         textSize="14sp";
