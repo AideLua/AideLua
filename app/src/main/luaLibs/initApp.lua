@@ -29,8 +29,8 @@ if getSharedData("editor_previewButton")==nil then
     setSharedData("editor_previewButton",false)
   end
 end
-if getSharedData("editor_front")==nil then
-  setSharedData("editor_front",0)
+if getSharedData("editor_font")==nil then
+  setSharedData("editor_font",0)
 end
 if getSharedData("editor_symbolBar")==nil then
   setSharedData("editor_symbolBar",true)

@@ -77,6 +77,55 @@ import "editorLayouts"
 
 --字体改变监听器
 local typefaceChangeListeners={}
+EditorsManager.typefaceChangeListeners=typefaceChangeListeners
+
+--获取字体Typeface
+local function getEditorTypefaces()
+  --常规，粗体，斜体
+  local typeface,boldTypeface,italicTypeface
+  local id=oldEditorFontId
+  if id==0 then
+    local fontDir=LuaApplication.getInstance().getLuaExtDir("fonts")
+
+    --常规
+    local defaultFile=File(fontDir, "default.ttf")
+    if defaultFile.exists() then
+      typeface=Typeface.createFromFile(defaultFile)
+     else
+      typeface=Typeface.MONOSPACE
+    end
+
+    --粗体
+    local boldFile=File(fontDir, "bold.ttf")
+    if boldFile.exists() then
+      boldTypeface=Typeface.createFromFile(boldFile)
+     else
+      boldTypeface=Typeface.create(typeface,Typeface.BOLD)
+    end
+
+    --斜体
+    local italicFile=File(fontDir, "italic.ttf")
+    if italicFile.exists() then
+      italicTypeface=Typeface.createFromFile(italicFile)
+     else
+      italicTypeface=Typeface.create(typeface,Typeface.ITALIC)
+    end
+   elseif id==1 then
+    typeface=ResourcesCompat.getFont(activity, R.font.cascadiacode)
+    boldTypeface=Typeface.create(typeface,Typeface.BOLD)
+    italicTypeface=ResourcesCompat.getFont(activity, R.font.cascadiacodeitalic)
+   elseif id==2 then
+    typeface=Typeface.DEFAULT
+    boldTypeface=Typeface.DEFAULT_BOLD
+    italicTypeface=Typeface.create(typeface,Typeface.ITALIC)
+   elseif id==3 then
+    typeface=Typeface.SERIF
+    boldTypeface=Typeface.create(typeface,Typeface.BOLD)
+    italicTypeface=Typeface.create(typeface,Typeface.ITALIC)
+  end
+  return typeface,boldTypeface,italicTypeface
+end
+EditorsManager.getEditorTypefaces=getEditorTypefaces
 
 --默认的管理器的活动事件
 local function generalActionEvent(name1,name2,...)
@@ -329,6 +378,14 @@ function EditorsManager.switchEditor(newEditorType)
       editorConfig.init(editorGroupViews,editorConfig)
     end
     editorConfig.initedViews=editorGroupViews
+    local onTypefaceChangeListener=editorConfig.onTypefaceChangeListener
+    if onTypefaceChangeListener then
+      local function callOnTypefaceChangeListener(typeface,boldTypeface,italicTypeface)
+        onTypefaceChangeListener(editorGroupViews,editorConfig,editorGroupViews.editor,typeface,boldTypeface,italicTypeface)
+      end
+      callOnTypefaceChangeListener(getEditorTypefaces())
+      table.insert(typefaceChangeListeners,callOnTypefaceChangeListener)
+    end
   end
   editor=editorGroupViews.editor
   editorParent=editorGroupViews.editorParent

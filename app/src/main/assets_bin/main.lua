@@ -41,6 +41,7 @@ import "android.text.Spannable"
 
 import "androidx.drawerlayout.widget.DrawerLayout"
 import "androidx.core.graphics.ColorUtils"
+import "androidx.core.content.res.ResourcesCompat"
 
 import "com.google.android.material.tabs.TabLayout"
 import "com.google.android.material.chip.Chip"
@@ -110,6 +111,7 @@ oldDarkActionBar = getSharedData("theme_darkactionbar")
 oldRichAnim = getSharedData("richAnim")
 oldTabIcon = getSharedData("tab_icon")
 oldEditorSymbolBar = getSharedData("editor_symbolBar")
+oldEditorFontId = getSharedData("editor_font") or 0
 oldEditorPreviewButton = getSharedData("editor_previewButton")
 
 --计时间戳器
@@ -451,7 +453,6 @@ function onResume()
     or (oldTheme ~= ThemeUtil.getAppTheme())
     or (oldDarkActionBar ~= getSharedData("theme_darkactionbar"))
     or (oldRichAnim ~= getSharedData("richAnim"))
-    -- or ProjectsPath~=File(getSharedData("projectsDir")).getPath()
     then
     activity.recreate()
     return
@@ -476,6 +477,15 @@ function onResume()
           tab.setIcon(nil)
           FilesTabManager.initFileTabView(tab, content)
         end
+      end
+    end
+    local newEditorFontId = getSharedData("editor_font")
+    if oldEditorFontId ~= newEditorFontId then
+      oldEditorFontId = newEditorFontId
+      local typeface,boldTypeface,italicTypeface=EditorsManager.getEditorTypefaces()
+      local typefaceChangeListeners=EditorsManager.typefaceChangeListeners
+      for index=1,#typefaceChangeListeners do
+        typefaceChangeListeners[index](typeface,boldTypeface,italicTypeface)
       end
     end
     local newEditorSymbolBar = getSharedData("editor_symbolBar")

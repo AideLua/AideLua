@@ -355,7 +355,7 @@ local adapterEvents={
       if summary then
         summaryView.text=summary
         elseif action=="singleChoose" then
-        summaryView.text=chooseItems[getSharedData(key)+1]
+        summaryView.text=chooseItems[(getSharedData(key) or 0)+1]
       end
     end
     if icon and iconView then

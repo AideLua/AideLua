@@ -90,16 +90,11 @@
       LuaEditorHelper.applyStyleToolBar(editor)
       LuaEditorHelper.applyMagnifier(editor)
       LuaEditorHelper.applyPencilInput(editor,pencilEdit)
-
     end,
     onTypefaceChangeListener=function(ids,config,editor,typeface,boldTypeface,italicTypeface)
       editor.setTypeface(typeface)
-      if boldTypeface then
-        editor.setBoldTypeface(boldTypeface)
-      end
-      if italicTypeface then
-        editor.setItalicTypeface(italicTypeface)
-      end
+      editor.setBoldTypeface(boldTypeface)
+      editor.setItalicTypeface(italicTypeface)
     end,
     action={
       undo="default",

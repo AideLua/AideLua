@@ -45,3 +45,5 @@ v5.0.4
 15. 新增文件浏览器提供者，`FilesBrowserManager.providers`
     作用：更自由添加文件菜单
 16. 新增模块 `db`，[在 Github 上查看](https://github.com/limao996/LuaDB)
+17. 新增 `editorLayouts[EditorName].onTypefaceChangeListener(ids,config,editor,typeface,boldTypeface,italicTypeface)
+    作用：提供个性化字体

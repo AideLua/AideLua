@@ -81,10 +81,10 @@
   {--字体
     SettingsLayUtil.ITEM;
     icon=R.drawable.ic_format_font;
-    title=R.string.front;
-    key="editor_front";
+    title=R.string.font;
+    key="editor_font";
     --summary=getSharedData("projectsDir");
-    items={"Default","CascadiaCode"},
+    items={"Default","Cascadia Code","System UI","Serif"},
     action="singleChoose";
     hint=R.string.projects_path;
     allowNull=false;
