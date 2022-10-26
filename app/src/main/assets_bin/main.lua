@@ -64,7 +64,7 @@ import "com.jesse205.util.ScreenFixUtil"
 import "com.jesse205.util.FileInfoUtils"
 import "com.jesse205.util.ColorUtil"
 
---db=require "db"
+db=require "db"--模块仓库：https://github.com/limao996/LuaDB
 
 require "AppFunctions" -- 必须先导入这个，因为下面的导入模块要直接使用
 require "DialogFunctions"
@@ -84,11 +84,15 @@ ProjectManager=require "ProjectManager"
 item=require "layouts.item"
 pathItem=require "layouts.pathItem"
 
+db.byte_order = '='
 
+--加载模块
 application.set("plugin_enabledpaths",nil)
 PluginsUtil.setActivityName("main")
 PluginsUtil.loadPlugins()
 plugins = PluginsUtil.getPlugins()
+
+--请求权限
 PermissionUtil.askForRequestPermissions({
   {
     name=getString(R.string.jesse205_permission_storage),
@@ -98,6 +102,7 @@ PermissionUtil.askForRequestPermissions({
   },
 })
 
+--个性化设置
 oldJesse205Support = getSharedData("jesse205Lib_support")
 oldAndroidXSupport = getSharedData("androidX_support")
 oldTheme = ThemeUtil.getAppTheme()
@@ -107,9 +112,11 @@ oldTabIcon = getSharedData("tab_icon")
 oldEditorSymbolBar = getSharedData("editor_symbolBar")
 oldEditorPreviewButton = getSharedData("editor_previewButton")
 
+--计时间戳器
 local lastBackTime = 0 -- 上次点击返回键时间
 local lastPencilkeyTime = 0 -- 上次双击笔时间
 
+--软件信息
 SDK_INT = Build.VERSION.SDK_INT
 packageInfo = activity.getPackageManager().getPackageInfo(activity.getPackageName(), 64)
 lastUpdateTime = packageInfo.lastUpdateTime
@@ -128,7 +135,7 @@ import "FileTemplates"
 import "adapter.FileListAdapter"
 import "adapter.FilePathAdapter"
 
-
+--传入的数据
 local receivedData={...}
 
 activity.setTitle(R.string.app_name)
@@ -140,7 +147,6 @@ actionBar.setDisplayHomeAsUpEnabled(true)
 deviceChangeLTFixList={largeDrawerLay,largeMainLay,mainEditorLay,layoutTransition}
 
 function onCreate(savedInstanceState)
-
   if PluginsUtil.callElevents("onCreate", savedInstanceState) then
     return
   end

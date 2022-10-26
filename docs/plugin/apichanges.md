@@ -43,3 +43,5 @@ v5.0.4
 14. `getFilePathCopyMenus()` 的参数改为 `(inLibDirPath,filePath,fileRelativePath,fileName,isFile,isResDir,fileType)`，新增了 `fileRelativePath` 与 `isResDir`
     作用：能获取到更多的复制菜单
 15. 新增文件浏览器提供者，`FilesBrowserManager.providers`
+    作用：更自由添加文件菜单
+16. 新增模块 `db`，[在 Github 上查看](https://github.com/limao996/LuaDB)
