@@ -25,7 +25,7 @@
     name="Glide",
     message="An image loading and caching library for Android focused on smooth scrolling",
     licenseName="BSD, part MIT and Apache 2.0.",
-    license="Glide Lincense",
+    license="Glide License",
     url="https://github.com/bumptech/glide"
   },
   {--解压工具
@@ -55,6 +55,13 @@
     name="sora-editor",
     message="A cool code editor library on Android with syntax-highlighting and auto-completion. (aka CodeEditor)",
     license="LGPL-2.1 License",
+    url="https://github.com/Rosemoe/sora-editor"
+  },
+  {
+    name="Cascadia Code",
+    message="A cool code editor library on Android with syntax-highlighting and auto-completion. (aka CodeEditor)",
+    licenseName="SIL Open Font License, Version 1.1",
+    license="Cascadia Code License",
     url="https://github.com/Rosemoe/sora-editor"
   },
 }

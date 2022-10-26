@@ -73,84 +73,10 @@ MyLuaEditor=toCustomEditorView(LuaEditor)
 MyCodeEditor=toCustomEditorView(CodeEditor)
 
 import "editorLayouts"
---将要添加到LuaEditor的关键词列表
---EditorsManager.keyWordsList={}
 
---[[
---编辑器提示关键词
-EditorsManager.keyWords=String({
-  --一些事件
-  "onCreate",
-  "onStart",
-  "onResume",
-  "onPause",
-  "onStop",
-  "onDestroy",
-  "onActivityResult",
-  "onResult",
-  "onCreateOptionsMenu",
-  "onOptionsItemSelected",
-  "onTouchEvent",
-  "onKeyLongPress",
-  "onConfigurationChanged",
-  "onHook",
-  "onAccessibilityEvent",
-  "onKeyUp",
-  "onKeyDown",
-  "onError",
 
-  "onClick",
-  "onTouch",
-  "onLongClick",
-  "onItemClick",
-  "onItemLongClick",
-  "onContextClick",
-  "onVersionChanged",
-  "onScroll";
-  "onScrollChange",
-  "onNewIntent",
-  "onSaveInstanceState",
-
-  --一些自带的类或者包
-  "android",
-  "R",
-
-  --一些常用但不自带的类
-  "PhotoView",
-  "LuaLexerIteratorBuilder",
-})
-
---Jesse205库关键词
-EditorsManager.jesse205KeyWords=String({
-  "newActivity","getSupportActionBar","getSharedData","setSharedData",
-  "getString","getPackageName","getColorStateList",
-
-  --一些标识
-  "initApp","notLoadTheme","useCustomAppToolbar",
-  "resources","application","inputMethodService","actionBar",
-  "notLoadTheme","darkStatusBar","darkNavigationBar",
-  "window","safeModeEnable","notSafeModeEnable","decorView",
-
-  "theme","formatResStr","autoSetToolTip",
-  "showLoadingDia","closeLoadingDia","getNowLoadingDia",
-  "showErrorDialog","toboolean","rel2AbsPath","copyText",
-  "newSubActivity","isDarkColor","openInBrowser","openUrl",
-  "loadlayout2","showSimpleDialog","getLocalLangObj",
-  "newLayoutTransition",
-
-  "AppPath","ThemeUtil","EditDialogBuilder","ImageDialogBuilder",
-  "NetErrorStr","MyToast","AutoToolbarLayout","PermissionUtil",
-  "AutoCollapsingToolbarLayout","SettingsLayUtil","Jesse205",
-  "StyleWidget","ScreenFixUtil",
-
-  --自定义View或者Util
-  "MyTextInputLayout","MyTitleEditLayout","MyEditDialogLayout",
-  "MyTipLayout","MySearchLayout","MyAnimationUtil","MyStyleUtil",
-
-  --适配器
-  "MyLuaMultiAdapter","MyLuaAdapter","LuaCustRecyclerAdapter",
-  "LuaCustRecyclerHolder","AdapterCreator",
-})]]
+--字体改变监听器
+local typefaceChangeListeners={}
 
 --默认的管理器的活动事件
 local function generalActionEvent(name1,name2,...)

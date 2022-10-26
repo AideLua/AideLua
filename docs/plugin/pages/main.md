@@ -92,8 +92,9 @@ Activity销毁时执行，常见于关闭页面
 #### EditorsManager `table` `Manager`
 | 键 | 类型 | 说明 |
 | ---- | ---- | ---- |
-| \[x\] keyWords | 忘了 | 编辑器提示关键词列表 |
-| \[x\] jesse205KeyWords | 忘了 | Jesse205库关键词列表 |
+| \[x\] keyWordsList | 忘了 | 编辑器提示词列表 |
+| \[x\] keyWords | String[] | 编辑器默认提示词列表 |
+| \[x\] jesse205KeyWords | String[] | Jesse205库提示词列表 |
 | \[x\] fileType2Language | 忘了 | 文件类型转语言索引列表 |
 | [actions](#editorsmanager-actions-table-manager) | table (map) | 编辑器事件列表 |
 | openNewContent(filePath,fileType,decoder) | function | 打开新内容 <br> __filePath__ (string): 文件路径 <br> __fileType__ (string): 文件扩展名 <br> __decoder__ (metatable(map)): 文件解析工具 |
@@ -147,3 +148,8 @@ Activity销毁时执行，常见于关闭页面
 | 参数 | 说明 |
 | ---- | --- |
 | path | __string__: 文件路径|
+
+##### editorLayouts
+编辑器布局等配置
+
+

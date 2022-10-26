@@ -78,6 +78,17 @@
     enabled=false;
     switchEnabled=false;
   };
+  {--字体
+    SettingsLayUtil.ITEM;
+    icon=R.drawable.ic_format_font;
+    title=R.string.front;
+    key="editor_front";
+    --summary=getSharedData("projectsDir");
+    items={"Default","CascadiaCode"},
+    action="singleChoose";
+    hint=R.string.projects_path;
+    allowNull=false;
+  };
   --[[
   {
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;

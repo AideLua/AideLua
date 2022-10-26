@@ -290,7 +290,9 @@ local adapterEvents={
     return #data
   end,
   getItemViewType=function(data,position)
-    return data[position+1][1]
+    local itemData=data[position+1]
+    itemData.position=position
+    return itemData[1]
   end,
   onCreateViewHolder=function(onItemClick,onItemLongClick,parent,viewType)
     local ids={}
@@ -306,7 +308,7 @@ local adapterEvents={
     ids._config=viewConfig
     if viewType~=1 then
       --ids.title.getPaint().setFakeBoldText(true)
-     --else
+      --else
       local switchView=ids.switchView
       view.setFocusable(true)
       view.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
@@ -333,6 +335,8 @@ local adapterEvents={
     local enabled=data.enabled
     local switchEnabled=data.switchEnabled
     local key=data.key
+    local action=data.action
+    local chooseItems=data.items
     viewConfig.key=key
     viewConfig.data=data
     viewConfig.allowedChange=false
@@ -347,8 +351,12 @@ local adapterEvents={
     if title and titleView then
       titleView.text=title
     end
-    if summary and summaryView then
-      summaryView.text=summary
+    if summaryView then
+      if summary then
+        summaryView.text=summary
+        elseif action=="singleChoose" then
+        summaryView.text=chooseItems[getSharedData(key)+1]
+      end
     end
     if icon and iconView then
       if type(icon)=="number" then

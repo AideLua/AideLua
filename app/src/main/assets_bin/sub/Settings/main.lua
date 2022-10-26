@@ -51,6 +51,7 @@ function reloadActivity(closeViews)
 end
 
 function onItemClick(view,views,key,data)
+  local action=data.action
   if key=="theme_picker" then
     newSubActivity("ThemePicker")
    elseif key=="about" then
@@ -60,8 +61,17 @@ function onItemClick(view,views,key,data)
    elseif key=="plugins_manager" then
     newSubActivity("PluginsManager")
    else
-    if data.action=="editString" then
+    if action=="editString" then
       EditDialogBuilder.settingDialog(adapter,views,key,data)
+     elseif action=="singleChoose" then
+      AlertDialog.Builder(activity)
+      .setTitle(data.title)
+      .setSingleChoiceItems(data.items,getSharedData(key) or 0,function(dialog,which)
+        setSharedData(key,which)
+        dialog.dismiss()
+        adapter.notifyDataSetChanged()
+      end)
+      .show()
     end
   end
   PluginsUtil.callElevents("onItemClick",views,key,data)
