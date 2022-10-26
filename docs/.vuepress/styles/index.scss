@@ -1,3 +1,7 @@
+@font-face{
+    font-family:'Consolas Code Online';
+    src:url('/fonts/CascadiaCode.ttf');
+}
 :root {
     --c-brand: #3F51B5; //主题色
     --c-brand-light: #5C6BC0; //主题亮色
@@ -29,7 +33,7 @@
     --c-details-bg: var(--c-bg-light) !important;
 
     --code-hl-bg-color: var(--c-bg-lighter) !important; //不知道官方为啥在夜间模式单独设置了一下
-    --font-family-code: "Consolas Code", Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+    --font-family-code: "Consolas Code", "Consolas Code Online", Monaco, "Andale Mono", "Ubuntu Mono", monospace;
     --font-family: system-ui, "HarmonyOS Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
         Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
