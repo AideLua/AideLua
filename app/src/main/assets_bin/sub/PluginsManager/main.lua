@@ -75,7 +75,7 @@ function onItemClick(view,views,key,data)
     intent.addCategory(Intent.CATEGORY_OPENABLE)
     activity.startActivityForResult(intent, REQUEST_INSTALLPLUGIN)
    elseif key=="download_plugin" then
-    openUrl("https://www.123pan.com/s/G7a9-cdek")
+    openUrl("https://jesse205.github.io/aidelua/plugins.html")
   end
 end
 

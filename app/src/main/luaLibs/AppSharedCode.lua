@@ -27,6 +27,7 @@ function openUrl(url)
   xpcall(function()
     import "androidx.browser.customtabs.CustomTabsIntent"
     CustomTabsIntent.Builder()
+    .setShowTitle(true)
     .setToolbarColor(theme.color.colorPrimary)
     .build()
     .launchUrl(activity, Uri.parse(url))
