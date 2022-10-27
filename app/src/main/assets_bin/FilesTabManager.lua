@@ -32,7 +32,6 @@ local openState, file, fileConfig,fileType = false, nil, nil, nil
 local openedFiles = {}
 FilesTabManager.backupPath=AppPath.AppMediaDir..os.date("/backup/%Y%m%d")
 FilesTabManager.backupDir=File(FilesTabManager.backupPath)
---FilesTabManager.tabShowingMenu=0--已改进判断方法，此API废除
 
 
 local function applyTabMenu(view,tabFileConfig)
@@ -45,7 +44,6 @@ local function applyTabMenu(view,tabFileConfig)
   local Rid=R.id
   popupMenu.onDismiss=function(popupMenu)
     dropMenuState=false
-    --FilesTabManager.tabShowingMenu=FilesTabManager.tabShowingMenu-1--当前正在显示的菜单减少一个
   end
   popupMenu.onMenuItemClick=function(item)
     local id=item.getItemId()
@@ -81,7 +79,6 @@ local function applyTabMenu(view,tabFileConfig)
       if not(dropMenuState) and y>filesTabLay.getHeight() then
         dropMenuState=true
         view.requestDisallowInterceptTouchEvent(true)
-        --FilesTabManager.tabShowingMenu=FilesTabManager.tabShowingMenu+1
         popupMenu.show()
       end
     end
@@ -100,89 +97,6 @@ local function applyTabMenu(view,tabFileConfig)
     end
   end
 end
---[[
-local nowTabTouchTag
-local function onFileTabLongClick(view)
-  local tag = view.tag
-  nowTabTouchTag = tag
-  tag.onLongTouch = true
-
-end
-
-local moveCloseHeight
-local function refreshMoveCloseHeight(height)
-  height = height - 56
-  if height <= 320 then
-    moveCloseHeight = math.dp2int(height / 2)
-   else
-    moveCloseHeight = math.dp2int(160)
-  end
-end
-FilesTabManager.refreshMoveCloseHeight = refreshMoveCloseHeight
-
-local function onFileTabTouch(view, event)
-  local tag = view.tag
-  local action = event.getAction()
-  if action == MotionEvent.ACTION_DOWN then
-    tag.downY = event.getRawY()
-   else
-    if not (tag.onLongTouch) then
-      return
-    end
-    local downY = tag.downY
-    local moveY = event.getRawY() - downY
-    if action == MotionEvent.ACTION_MOVE then
-      -- print("test",tointeger(moveY),tointeger(event.getY()))
-      if moveY >= moveCloseHeight*4/3 then
-        view.setRotationX(-90)
-        view.setAlpha(0)
-       elseif moveY>moveCloseHeight*3/4 then
-        view.setRotationX(moveY/(moveCloseHeight*4/3) * -90)
-        view.setAlpha(1-(moveY-moveCloseHeight*3/4)/(moveCloseHeight/4))
-       elseif moveY > 0 then
-        view.setRotationX(moveY/(moveCloseHeight*4/3) * -90)
-        view.setAlpha(1)
-      end
-     elseif action == MotionEvent.ACTION_UP then
-      nowTabTouchTag = nil
-      tag.onLongTouch = false
-      if moveY > moveCloseHeight then
-        FilesTabManager.closeFile(tag.lowerPath, true)
-        view.setRotationX(0)
-        view.setAlpha(1)
-        Handler().postDelayed(Runnable({
-          run = function()
-            if openState then
-              fileConfig.tab.select()
-            end
-        end}),1)
-       else
-        --view.setBackgroundColor(0)
-        --view.setBackground(tag.tabBackground)
-        ObjectAnimator.ofFloat(view, "rotationX", {0})
-        .setDuration(200)
-        .setInterpolator(DecelerateInterpolator())
-        .setDuration(200)
-        .start()
-        .start()
-        ObjectAnimator.ofFloat(view, "alpha", {1})
-        .setDuration(200)
-        .setInterpolator(DecelerateInterpolator())
-        .start()
-      end
-    end
-  end
-end
-
-local function onFileTabLayTouch(view, event)
-  local tag = nowTabTouchTag
-  if tag == nil or not (tag.onLongTouch) then
-    return
-  end
-  onFileTabTouch(tag.view, event)
-  return true
-end]]
-
 
 local function initFileTabView(tab, fileConfig)
   local view = tab.view
@@ -191,9 +105,6 @@ local function initFileTabView(tab, fileConfig)
   view.setGravity(Gravity.LEFT | Gravity.CENTER)
   view.tag = fileConfig
   applyTabMenu(view,fileConfig)
-  --view.onLongClick=onFileTabLongClick
-  --view.onTouch = onFileTabTouch
-  --fileConfig.tabBackground=view.getBackground()
   TooltipCompat.setTooltipText(view, fileConfig.shortFilePath)
   local imageView = view.getChildAt(0)
   local textView = view.getChildAt(1)
@@ -254,6 +165,7 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
       _,failed=pcall(function()
 
         EditorsManager.switchEditorByDecoder(decoder)
+        --编辑器滚动相关在 EditorsManager.openNewContent 内
         if EditorsManager.openNewContent(filePath,newFileType,decoder,keepHistory) then
           setSharedData("openedFilePath_"..ProjectManager.nowPath,filePath)
           --更新文件浏览器显示内容
@@ -313,6 +225,7 @@ function FilesTabManager.saveFile(lowerFilePath,showToast)
   if config then
     if config.deleted==false then
       local managerActions=EditorsManager.actions
+      --保存编辑器滚动
       local editorStateConfig={
         size=managerActions.getTextSize(),
         x=managerActions.getScrollX(),
@@ -331,7 +244,6 @@ function FilesTabManager.saveFile(lowerFilePath,showToast)
         local newContent = config.newContent
 
         decoder.save(config.path,newContent)
-        --io.open(config.path, "w"):write(newContent):close()
         config.oldContent = newContent -- 讲旧内容设置为新的内容
         config.changed=false
         if showToast then

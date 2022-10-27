@@ -5,21 +5,21 @@
 * `main.lua` 工程主入口文件
 * `layout.aly` 工程默认创建的布局文件
 ### init.lua 配置
-| 键 | 类型 | 说明 |
-| ---- | ---- | ---- |
-| appname | `string` | 应用名 |
-| appver | `string` | 版本名 |
-| appcode | `string` | 版本号 |
-| packagename | `string` | 应用包名 |
-| appsdk | `string` | 等你来补充 |
-| path_pattern | `string` | 等你来补充 |
-| theme | `string` | 主 Activity 默认主题 |
-| app_key | `string` | 等你来补充 |
-| app_channel | `string` | 等你来补充 |
-| developer | `string` | 等你来补充 |
-| description | `string` | 应用描述 |
-| debugmode | `boolean` | 调试模式，影响 `print` 与报错的提示显示 |
-| user_permission | `table (list)` | 权限列表，不加 `android.permission` |
+| 键 | 说明 |
+| ---- | ---- |
+| appname | __string__: 应用名 |
+| appver | __string__: 版本名 |
+| appcode | __string__: 版本号 |
+| packagename | __string__: 应用包名 |
+| appsdk | __string__: 等你来补充 |
+| path_pattern | __string__: 等你来补充 |
+| theme | __string__: 主 Activity 默认主题 |
+| app_key | __string__: 等你来补充 |
+| app_channel | __string__: 等你来补充 |
+| developer | __string__: 等你来补充 |
+| description | __string__: 应用描述 |
+| debugmode | __boolean__: 调试模式，影响 `print` 与报错的提示显示 |
+| user_permission | __table (list)__: 权限列表，不加 `android.permission` |
 
 [命名包 (Naming a Package)](https://docs.oracle.com/javase/tutorial/java/package/namingpkgs.html)
 

@@ -69,9 +69,9 @@ local function askForRequestPermissions(permissionsItemsList)
       end)
       .show()
     end
-
   end
 end
+
 PermissionUtil.askForRequestPermissions=askForRequestPermissions
 
 return PermissionUtil

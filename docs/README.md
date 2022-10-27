@@ -1,19 +1,23 @@
 # Aide Lua 使用文档
 ## 简介
-[![star](https://gitee.com/Jesse205/AideLua/badge/star.svg?theme=dark)](https://gitee.com/Jesse205/AideLua/stargazers)
-[![Gitee 发行版](https://img.shields.io/badge/Gitee-发行版-C71D23?logo=gitee)](https://gitee.com/Jesse205/AideLua/releases)
-[![QQ 群](https://img.shields.io/badge/加入-QQ_群-0099FF?logo=TencentQQ)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
-[![QQ 频道](https://img.shields.io/badge/加入-QQ_频道-0099FF?logo=TencentQQ)](https://pd.qq.com/s/ncghvc)
+[![QQ 群](https://img.shields.io/badge/加入-QQ_群-0099FF?logo=TencentQQ&style=flat-square)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
+[![QQ 频道](https://img.shields.io/badge/加入-QQ_频道-0099FF?logo=TencentQQ&style=flat-square)](https://pd.qq.com/s/ncghvc)
+[![Gitee 发行版](https://img.shields.io/badge/Gitee-发行版-C71D23?logo=gitee&style=flat-square)](https://gitee.com/Jesse205/AideLua/releases)
 
 Aide Lua 是一款依赖 Aide 的 Lua 编辑器<br>
 Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件开发
 
 [![杰西205/Aide Lua](https://gitee.com/Jesse205/AideLua/widgets/widget_card.svg?colors=4183c4,ffffff,ffffff,e3e9ed,666666,9b9b9b)](https://gitee.com/Jesse205/AideLua)
 
+## TIPS
+1. 本文档部分说明格式为 “__变量名__ (数据类型): 说明” 、 “__数据类型__: 说明”
+2. 标有 <Badge type="danger" text="X" vertical="middle" /> 的表示已废除，相关 API 已被删除
+3. 标有 <Badge type="danger" text="*" vertical="middle" /> 的表示必须文件、方法 或 变量
+
 ## 下载
 [〖Aide 高级设置版〗](https://www.lanzouy.com/b00zdhbeb)
 
-1. [Gitee 下载 (推荐，更新及时)](https://gitee.com/Jesse205/AideLua/releases)
+1. [__Gitee 下载 (推荐，更新及时)__](https://gitee.com/Jesse205/AideLua/releases)
 2. [天翼云盘 (可能更新不及时)](https://cloud.189.cn/t/ZZ7RzijyqiUv)
 3. [腾讯微云 (可能更新不及时)](https://share.weiyun.com/oLiNtxMR)
 4. [百度网盘 (可能今天下不完)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q)，密码jxnb

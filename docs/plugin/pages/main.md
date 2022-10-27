@@ -1,9 +1,13 @@
 未完待续
-## config/events/main.aly
-主页面事件存放文件
-### 事件说明
-#### onCreate(savedInstanceState)
-Activity 生命周期：onCreate
+# main.aly <Badge text="文件" vertical="middle" /> <Badge text="table" vertical="middle" /> <Badge text="Map" vertical="middle" />
+::: details 本页内容
+[[toc]]
+:::
+`config/events/main.aly` : 主页面事件存放文件
+
+## 事件说明
+### onCreate(savedInstanceState) <Badge text="生命周期" vertical="middle" />
+[Activity 生命周期：onCreate()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#oncreate)
 
 这是页面创建时候执行的事件 <br>
 此时软件即将自动打开上一次或者传入的工程，以及刷新 `toggle` 状态
@@ -26,7 +30,7 @@ Activity 生命周期：onCreate
 > 检测并打开项目 - 调用插件事件 - 同步 `toggle` 状态
 :::
 
-#### onCreateOptionsMenu(menu)
+### onCreateOptionsMenu(menu)
 这是创建菜单时执行的事件
 
 | 参数 | 说明 |
@@ -36,7 +40,7 @@ Activity 生命周期：onCreate
 代码执行顺序：
 > 添加自带菜单 - 执行插件事件
 
-#### onOptionsItemSelected(item)
+### onOptionsItemSelected(item)
 这是菜单被点击时执行的事件
 
 | 参数 | 说明 |
@@ -50,7 +54,7 @@ Activity 生命周期：onCreate
 Aide Lua 未使用标准的菜单更新方式，因此您使用 `activity.invalidateOptionsMenu()` 无法刷新菜单显示
 :::
 
-#### onKeyShortcut(keyCode, event)
+### onKeyShortcut(keyCode, event)
 按键被按
 当一个快捷键事件没有被 Activity 中的任何视图处理时被调用。覆盖此方法以实现 Activity 的全局按键快捷方式。按键快捷方式也可以通过设置菜单项的快捷方式属性来实现。
 
@@ -73,30 +77,44 @@ Aide Lua 未使用标准的菜单更新方式，因此您使用 `activity.invali
 > 响应自带快捷键事件 - 调用插件事件
 :::
 
-#### onConfigurationChanged(config)
+### onConfigurationChanged(config)
 配置文件发生改变，常见于屏幕旋转
 
-#### onResume()
+### onResume() <Badge text="生命周期" vertical="middle" />
+[Activity 生命周期：onResume()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#onresume)
+
 常见于返回到页面
 
-#### onDestroy()
-Activity销毁时执行，常见于关闭页面
+### onStart() <Badge text="生命周期" vertical="middle" /> <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />
+[Activity 生命周期：onStart()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#onstart)
 
-#### onResult(name, action, content)
+Activity 开始时执行，常见于关闭页面
+
+### onStop() <Badge text="生命周期" vertical="middle" /> <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />
+[Activity 生命周期：onStop()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#onstop)
+
+Activity 停止时执行，常见于关闭页面
+
+### onDestroy() <Badge text="生命周期" vertical="middle" />
+[Activity 生命周期：onDestroy()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#ondestroy)
+
+Activity 销毁时执行，常见于关闭页面
+
+### onResult(name, action, content)
  有返回参数时执行
  
-#### refreshMenusState()
+### refreshMenusState()
 刷新菜单状态
 
-### 页面API
-#### EditorsManager `table` `Manager`
+## 页面API
+### EditorsManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 | 键 | 类型 | 说明 |
 | ---- | ---- | ---- |
-| \[x\] keyWordsList | 忘了 | 编辑器提示词列表 |
-| \[x\] keyWords | String[] | 编辑器默认提示词列表 |
-| \[x\] jesse205KeyWords | String[] | Jesse205库提示词列表 |
-| \[x\] fileType2Language | 忘了 | 文件类型转语言索引列表 |
-| [actions](#editorsmanager-actions-table-manager) | table (map) | 编辑器事件列表 |
+| <Badge type="danger" text="X" vertical="middle" /> keyWordsList | 忘了 | 编辑器提示词列表 |
+| <Badge type="danger" text="X" vertical="middle" /> keyWords | String[] | 编辑器默认提示词列表 |
+| <Badge type="danger" text="X" vertical="middle" /> jesse205KeyWords | String[] | Jesse205库提示词列表 |
+| <Badge type="danger" text="X" vertical="middle" /> fileType2Language | 忘了 | 文件类型转语言索引列表 |
+| [actions](#editorsmanager-actions) | table (map) | 编辑器事件列表 |
 | openNewContent(filePath,fileType,decoder) | function | 打开新内容 <br> __filePath__ (string): 文件路径 <br> __fileType__ (string): 文件扩展名 <br> __decoder__ (metatable(map)): 文件解析工具 |
 | startSearch() | function | 启动搜索 |
 | save2Tab() | function | 保存到标签 |
@@ -107,7 +125,7 @@ Activity销毁时执行，常见于关闭页面
 | switchEditor(editorType) | function | 切换编辑器 <br> __editorType__ (string): 编辑器类型|
 | [symbolBar](#editorsmanager-symbolbar-table-util) | table (class) | 符号栏 |
 
-##### EditorsManager.actions `table` `Manager`
+#### EditorsManager.actions <Badge text="table" vertical="middle" /> <Badge text="Map" vertical="middle" />
 | 键 | 类型 | 返回类型 | 说明 |
 | ---- | ---- | ---- | --- |
 | undo() | function | / | 撤销 |
@@ -121,35 +139,35 @@ Activity销毁时执行，常见于关闭页面
 | setTextSize(size) | function | / | 设置文字大小 <br> __size__ (number): 文字大小 |
 | search(text,gotoNext) | function | / | 搜索 <br> __text__ (number): 搜索内容 <br> __gotoNext__ (boolean): 是否搜索下一个 |
 
-##### EditorsManager.symbolBar `table` `Util`
+#### EditorsManager.symbolBar `table` `Util`
 | 键 | 类型 | 说明 |
 | ---- | ---- | ---- |
 | psButtonClick(view) | function (listener)| 符号栏按钮点击时输入符号点击事件 |
 | newPsButton(text) | function | 初始化一个符号栏按钮 |
 | refreshSymbolBar(state) | function | 刷新符号栏状态 <br> _state__ (boolean): 开关状态 |
 
-#### FilesBrowserManager `table` `Manager`
+### FilesBrowserManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 
-#### FilesTabManager `table` `Manager`
+### FilesTabManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 
-#### ProjectManager `table` `Manager`
+### ProjectManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 
-#### 其他API
-##### showSnackBar(text)
+## 其他API
+### showSnackBar(text) <Badge text="function" vertical="middle" />
 显示 SnackBar (底部提示)
 
 | 参数 | 说明 |
 | ---- | --- |
 | text | __string__: 显示的文字
 
-##### openFileITPS(path)
+### openFileITPS(path) <Badge text="function" vertical="middle" />
 用外部应用打开文件
 
 | 参数 | 说明 |
 | ---- | --- |
 | path | __string__: 文件路径|
 
-##### editorLayouts
+### editorLayouts <Badge text="table" vertical="middle" /> <Badge text="Map" vertical="middle" />
 编辑器布局等配置
 
 

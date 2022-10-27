@@ -1,5 +1,6 @@
 import { defineUserConfig } from 'vuepress'
 import { defaultTheme } from '@vuepress/theme-default'
+import { prismjsPlugin } from '@vuepress/plugin-prismjs'
 
 export default defineUserConfig({
   lang: 'zh-CN',
@@ -260,7 +261,10 @@ export default defineUserConfig({
     themePlugins: {
       backToTop: false,
     }
-
   }),
-
+  plugins: [
+    prismjsPlugin({
+     preloadLanguages: ["lua"]
+    })
+  ]
 })

@@ -98,6 +98,7 @@ local fileIcons={--各种文件的图标
   jpeg=R.drawable.ic_image_outline,
   svg=R.drawable.ic_image_outline,
   apk=R.drawable.ic_android_debug_bridge,
+  apks=R.drawable.ic_android_debug_bridge,
   py=R.drawable.ic_language_python,
   pyw=R.drawable.ic_language_python,
   pyc=R.drawable.ic_language_python,
@@ -115,25 +116,32 @@ local fileColors = {
 
   -- 按文件类型
   APK = 0xFF00E676, -- 安卓应用程序
+  APKS = 0xFF00E676,
+
   LUA = 0xFF448AFF,
   ALY = 0xFF64B5F6,
+
   PNG = 0xFFF44336, -- 图片文件
-  GRADLE = 0xFF0097A7,
+  JPG = 0xFFF44336,
+
   XML = 0xffff6f00, -- XML文件
+  SVG = 0xffff6f00,
+
   DEX = 0xFF00BCD4,
   JAVA = 0xFF2962FF,
   JAR = 0xffe64a19,
+
   ZIP = 0xFF795548, -- 压缩文件
+  ["7Z"] = 0xFF795548,
+  TAR = 0xFF795548,
+  RAR = 0xFF795548,
+
+  GRADLE = 0xFF0097A7,
+
   HTML = 0xffff5722,
-  JSON = 0xffffa000
+  JSON = 0xffffa000,
 }
 FilesBrowserManager.fileColors = fileColors
-
-fileColors.JPG = fileColors.PNG
-fileColors["7Z"] = fileColors.ZIP
-fileColors.tar = fileColors.ZIP
-fileColors.RAR = fileColors.ZIP
-fileColors.SVG = fileColors.XML
 
 setmetatable(fileColors,{__index=function(self,key)
     return self.normal

@@ -4,11 +4,11 @@ next:
   link: pages/main.md
 ---
 # 插件文档
-文档版本：v3.1
-## tips
-1. 以下部分说明格式为 “变量名: 数据类型: 说明”
-2. 标有 `[x]` 的表示已废除
-3. 标有 `*` 的表示必须文件、方法 或 变量
+Util 版本：v3.1
+## TIPS
+1. 本文档部分说明格式为 “__变量名__ (数据类型): 说明” 或 “__数据类型__: 说明”
+2. 标有 <Badge type="danger" text="X" vertical="middle" /> 的表示已废除，相关 API 已被删除
+3. 标有 <Badge type="danger" text="*" vertical="middle" /> 的表示必须文件、方法 或 变量
 
 ## 手动导入
 1. 打开文件管理，进入 `内部存储/Android/media/com.Jesse205.aidelua2/files/plugins` ，没有就新建一个
@@ -28,7 +28,7 @@ next:
 尽量避免使用 Jesse205 库。因为 Jesse205 库每次改动都比较大，很容易引起插件报错。
 :::
 
-#### PluginsUtil `table` `Util`
+#### PluginsUtil <Badge text="table" vertical="middle" /> <Badge text="Util" vertical="middle" />
 插件相关 API，也是支持插件运行的模块
 
 | 变量 | 说明 |
@@ -37,21 +37,21 @@ next:
 | PLUGINS_PATH | __string__: 插件存放路径 |
 | PLUGINS_DATA_PATH | __string__: 插件数据存放路径 |
 
-##### PluginsUtil.getPluginDataPath(packageName) `function`
+##### PluginsUtil.getPluginDataPath(packageName) <Badge text="function" vertical="middle" />
 获取插件数据目录
 
 | 参数 | 说明 |
 | ---- | --- |
 | packageName | __string__: 插件包名。 |
 
-##### PluginsUtil.getPluginPath(packageName) `function`
+##### PluginsUtil.getPluginPath(packageName) <Badge text="function" vertical="middle" />
 获取插件目录
 
 | 参数 | 说明 |
 | ---- | --- |
 | packageName | __string__: 插件包名，如果文件夹名与真正的 `init.lua` 中的 `packagename` 不同，则 `packageName` 传入文件夹名。 |
 
-#### activityName `string`
+#### activityName <Badge text="string" vertical="middle" />
 当前活动名，可能为 `nil`
 
 | 值 | 说明 |
@@ -60,26 +60,26 @@ next:
 | settings | 软件设置页面 |
 | newproject | 新建工程页面 |
 
-#### getPluginDataPath(packageName)
-获取插件数据目录，与 [`PluginsUtil.getPluginDataPath(packageName)`](#pluginsutil-getplugindatapath-packagename-function) 完全相同
+#### getPluginDataPath(packageName) <Badge text="function" vertical="middle" />
+获取插件数据目录，与 [`PluginsUtil.getPluginDataPath(packageName)`](#pluginsutil-getplugindatapath-packagename) 完全相同
 
-#### getPluginPath(packageName)
-获取插件目录，与 [`PluginsUtil.getPluginPath(packageName)`](#pluginsutil-getpluginpath-packagename-function) 完全相同
+#### getPluginPath(packageName) <Badge text="function" vertical="middle" />
+获取插件目录，与 [`PluginsUtil.getPluginPath(packageName)`](#pluginsutil-getpluginpath-packagename) 完全相同
 
 ## 插件文件说明: 
-### \* init.lua
+### <Badge type="danger" text="*" vertical="center" /> init.lua
 插件入口，也用于存放模块信息的文件
 
 | 变量 | 说明 |
 | ---- | --- |
-| \* appname | __string__: 插件名 |
-| \* packagename | __string__: 插件包名 |
-| \* appname | __string__: 插件名 |
-| \* appver | __string__: 插件版本名 |
-| \* appcode | __number__: 插件版本号 |
-| \* packagename | __string__: 插件包名 |
-| \[x\] minemastercode | __number__: 最低支持的APP版本号。此变量在 Util 版本 `3.1` 弃用。 |
-| \[x\] targemastercode | __number__: 目标适配的APP版本号。此变量在 Util 版本 `3.1` 弃用。 |
+| <Badge type="danger" text="*" vertical="middle" /> appname | __string__: 插件名 |
+| <Badge type="danger" text="*" vertical="middle" /> packagename | __string__: 插件包名 |
+| <Badge type="danger" text="*" vertical="middle" /> appname | __string__: 插件名 |
+| <Badge type="danger" text="*" vertical="middle" /> appver | __string__: 插件版本名 |
+| <Badge type="danger" text="*" vertical="middle" /> appcode | __number__: 插件版本号 |
+| <Badge type="danger" text="*" vertical="middle" /> packagename | __string__: 插件包名 |
+| <Badge type="danger" text="*" vertical="middle" /> <Badge type="danger" text="X" vertical="middle" /> minemastercode | __number__: 最低支持的APP版本号。此变量在 Util 版本 `3.1` 弃用。 |
+| <Badge type="danger" text="*" vertical="middle" /> <Badge type="danger" text="X" vertical="middle" /> targemastercode | __number__: 目标适配的APP版本号。此变量在 Util 版本 `3.1` 弃用。 |
 | mode | __string__: 模式，默认为 `"plugin"` |
 | utilversion | __string__: Util版本，此变量不起任何作用，当前为 `"3.1"` |
 | thirdplugins | __table (list)__: 需要安装的第三方库 <br > 内容: 插件的包名 |
@@ -113,7 +113,7 @@ next:
 | hellotool | 哈兔Box (截止目前此app不支持此类型插件) |
 :::
 
-### main.lua
+### main.lua <Badge text="文件" vertical="middle" />
 插件主页面
 
 | 参数顺序 (...) | 说明 |
@@ -121,7 +121,7 @@ next:
 | 1 | 项目路径 |
 | 2 | 文件路径 |
 
-### config/events/
+### config/events/ <Badge text="文件夹" vertical="middle" />
 存放各个页面的独立事件的文件夹
 
 * 文件扩展名: `aly`

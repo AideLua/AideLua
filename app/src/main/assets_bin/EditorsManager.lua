@@ -308,7 +308,6 @@ function EditorsManager.startSearch()
       end
     }
     ids=SearchActionMode(config)
-    --local searchContent=application.get("editor_search_text")
     if searchedContent then--恢复已搜索的内容
       ids.searchEdit.text=searchedContent
       ids.searchEdit.setSelection(utf8.len(tostring(searchedContent)))
@@ -422,17 +421,6 @@ function EditorsManager.refreshEditorScrollState()
     end
   end
 end
-
---[[
-local function fixFileDecodersItem(config)
-  local super=config.super
-  if super then
-    local oldConfig=FileDecoders[super]
-    fixFileDecodersItem(oldConfig)
-    safeCloneTable(oldConfig,config)
-    config.super=nil
-  end
-end]]
 
 function EditorsManager.init()
   --阻止Chip取消选中

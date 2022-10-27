@@ -14,9 +14,9 @@
 
     --code-ln-wrapper-width: 2rem;
     --code-bg-color: var(--c-bg-light);
-    --code-hl-bg-color: var(--c-bg-lighter);
+    --code-hl-bg-color: #E0E0E0 !important;
 
-    --c-border-dark: #9E9E9E !important; //这个颜色无论哪种颜色模式都很合适
+    --c-border-dark: #9E9E9E  !important; //这个颜色无论哪种颜色模式都很合适
 
     --c-tip: var(--c-brand) !important;
 
@@ -32,7 +32,6 @@
 
     --c-details-bg: var(--c-bg-light) !important;
 
-    --code-hl-bg-color: var(--c-bg-lighter) !important; //不知道官方为啥在夜间模式单独设置了一下
     --font-family-code: "Consolas Code", "Consolas Code Online", Monaco, "Andale Mono", "Ubuntu Mono", monospace;
     --font-family: system-ui, "HarmonyOS Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
         Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
@@ -48,6 +47,8 @@ html.dark {
 
     --c-text: #F5F5F5;
     --c-text-lighter: #7986CB;
+
+    --code-hl-bg-color: var(--c-bg-lighter) !important;
 
     --c-border: #424242;
     --c-border-dark: #424242;
@@ -147,6 +148,14 @@ blockquote {
 .dark .custom-container.warning blockquote,
 .dark .custom-container.danger blockquote {
     border-left: 0.2rem solid #bdbdbd;
+}
+
+.code-group__nav-tab{
+    color: var(--c-text);
+}
+
+.badge{
+    color: white;
 }
 
 // 官方没有给lua写上语言标注，这里补一下

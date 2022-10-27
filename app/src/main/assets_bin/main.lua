@@ -66,6 +66,7 @@ import "com.jesse205.util.FileInfoUtils"
 import "com.jesse205.util.ColorUtil"
 
 db=require "db"--模块仓库：https://github.com/limao996/LuaDB
+db.byte_order = '='
 
 require "AppFunctions" -- 必须先导入这个，因为下面的导入模块要直接使用
 require "DialogFunctions"
@@ -85,7 +86,6 @@ ProjectManager=require "ProjectManager"
 item=require "layouts.item"
 pathItem=require "layouts.pathItem"
 
-db.byte_order = '='
 
 --加载模块
 application.set("plugin_enabledpaths",nil)
@@ -525,10 +525,12 @@ end
 
 function onStart()
   activityStopped = false
+  PluginsUtil.callElevents("onStart")
 end
 
 function onStop()
   activityStopped = true
+  PluginsUtil.callElevents("onStop")
 end
 
 function onDestroy()
