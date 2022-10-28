@@ -21,6 +21,7 @@ FilesBrowserManager.refresh(file,upFile,force,atOnce): 刷新文件浏览器
 FilesBrowserManager.init(): 初始化管理器
 ]]
 local FilesBrowserManager = {}
+
 local providers={
   menuProviders={--参数：menuBuilder,config
   },
@@ -241,6 +242,18 @@ local relLibPathsMatchTypes = {
   aly = true
 }
 relLibPathsMatch.types = relLibPathsMatchTypes
+
+--路劲RecyclerView，解决与侧滑手势的冲突
+function FilesBrowserManager.PathRecyclerViewBuilder(context)
+  return luajava.override(RecyclerView,{
+    onInterceptTouchEvent=function(super,event)
+      if pathRecyclerView.canScrollHorizontally(1) then
+        sideAppBarLayout.requestDisallowInterceptTouchEvent(true)--不能请求自己，因为会导致不滚动
+      end
+      return super(event)
+    end,
+  })
+end
 
 --打开文件浏览器
 function FilesBrowserManager.open()

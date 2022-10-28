@@ -23,7 +23,7 @@
       id="appBarLinearLayout";
       layoutTransition=newLayoutTransition();
       {
-        function(context)--适配了菜单的TabLayout，解决下拉与滚动的冲突
+        function(context)--适配了菜单的TabLayout，平衡下拉与滚动的冲突
           local startX=0
           return luajava.override(TabLayout,{
             onInterceptTouchEvent=function(super,event)

@@ -27,9 +27,8 @@
         id="pathPlaceholderView";
       };
       {
-        RecyclerView;
+        FilesBrowserManager.PathRecyclerViewBuilder;
         layout_width="fill";
-        --layout_height="32dp";
         id="pathRecyclerView";
         paddingLeft="16dp";
         paddingRight="16dp";

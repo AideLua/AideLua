@@ -11,6 +11,8 @@
   {
     AppCompatImageView;
     id="icon";
+    layout_height="16dp";
+    layout_width="16dp";
     imageResource=R.drawable.ic_chevron_right;
     colorFilter=theme.color.ActionBar.colorControlNormal;
     padding="-4dp";
