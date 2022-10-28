@@ -18,3 +18,4 @@ node_modules
 .temp
 .cache
 .obsidian
+yarn.lock
