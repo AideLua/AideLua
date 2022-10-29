@@ -108,7 +108,6 @@ actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS)
 local filterNames={"全部","Lua","Test","Tcc","Error","Warning","Info","Debug","Verbose"}
 local filterParameters={"","lua:* *:S","test:* *:S","tcc:* *:S","*:E","*:W","*:I","*:D","*:V"}
 local nowPriorityIndex=2
-local isBottom=true
 local isRefreshing=false
 local canCallSelected=false
 
@@ -127,9 +126,10 @@ function onOptionsItemSelected(item)
 end
 
 function show(content)--展示日志
-  local isBottom=isBottom
+  local canScroll=listView.canScrollVertically(1)
   adapter.clear()
   progressBar.setVisibility(View.GONE)
+  listView.setVisibility(View.VISIBLE)
   canCallSelected=false
   actionBar.setSelectedNavigationItem(nowPriorityIndex-1)
   canCallSelected=true
@@ -154,7 +154,7 @@ function show(content)--展示日志
     adapter.add({__type=1,title="<运行应用程序以查看其日志输出>"})
   end
   actionBar.setSubtitle(os.date("%Y-%m-%d %H:%M:%S."..System.currentTimeMillis()%1000))
-  if isBottom then
+  if not(canScroll) then
     listView.setSelection(adapter.getCount()-1)
   end
 end
@@ -175,6 +175,8 @@ function refreshLog(index)
   index=index or nowPriorityIndex
   isRefreshing=true
   progressBar.setVisibility(View.VISIBLE)
+  listView.setVisibility(View.GONE)
+  actionBar.setSubtitle(nil)
   task(readLog,filterParameters[index],show)
 end
 
@@ -182,6 +184,7 @@ function runClearLog()
   if not isRefreshing then
     isRefreshing=true
     progressBar.setVisibility(View.VISIBLE)
+    --listView.setVisibility(View.GONE)
     task(clearLog,refreshLog)
   end
 end
@@ -258,13 +261,6 @@ end
 
 adapter=LuaMultiAdapter(activity,item)
 listView.setAdapter(adapter)
-
-listView.onScroll=function(view,firstVisibleItem,visibleItemCount,totalItemCount)
-  if MyAnimationUtil then
-    MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount,topCard)
-  end
-  isBottom=(firstVisibleItem+visibleItemCount ==totalItemCount) and (totalItemCount>0)
-end
 
 if CoordinatorLayout then
   mainLay=CoordinatorLayout(activity)
