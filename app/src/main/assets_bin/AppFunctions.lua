@@ -153,8 +153,9 @@ function startWindmillActivity(toolName)
 end
 
 --公共Activity
-local sharedActivityPath=AppPath.Sdcard.."/Android/media/%s/.aidelua/activities/%s"
+local sharedActivityPathTemplate=AppPath.Sdcard.."/Android/media/temp/%s/aidelua/activities/%s"
 
+--更新共享Activity到目录
 function updateSharedActivity(name,sdActivityDir)
   LuaUtil.copyDir(File(activity.getLuaDir("sub/"..name)),sdActivityDir)
 end
@@ -162,18 +163,18 @@ end
 function checkSharedActivity(name)
   local packageName
   packageName=ProjectManager.openState and ProjectManager.nowConfig.packageName or activity.getPackageName()
-  local sdActivityPath=sharedActivityPath:format(packageName,name)--AppPath.AppShareCacheDir.."/activities/"..name
+  local sdActivityPath=sharedActivityPathTemplate:format(packageName,name)--AppPath.AppShareCacheDir.."/activities/"..name
   local sdActivityMainPath=sdActivityPath.."/main.lua"
   local sdActivityDir=File(sdActivityPath)
   local sdActivityMainFile=File(sdActivityMainPath)
   local exists=sdActivityDir.exists()
-  local mainExists=sdActivityMainFile.isFile()
-  --if not(mainExists) or getSharedData("sharedactivity_"..name)~=lastUpdateTime then
-  if exists then
-    LuaUtil.rmDir(sdActivityDir)
+  local mainExists=sdActivityMainFile.isFile()--主页面是否存在
+  if not(mainExists) or true then
+    if exists then
+      LuaUtil.rmDir(sdActivityDir)
+    end
+    updateSharedActivity(name,sdActivityDir)
   end
-  updateSharedActivity(name,sdActivityDir)
-  --end
   return sdActivityMainPath
 end
 
@@ -298,6 +299,7 @@ function formatColor2Hex(color)
   end
 end
 
+--获取文字内颜色的数值和16进制
 function getColorAndHex(text)
   if text and text~="" then
     local success,color
