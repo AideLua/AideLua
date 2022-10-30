@@ -46,7 +46,6 @@ function MySearchLayout.Builder(config)--返回布局表
   if config then
     insertTable(layout,config)
   end
-  --local mainLayout=loadlayout2(layout,ids)
   return layout
 end
 

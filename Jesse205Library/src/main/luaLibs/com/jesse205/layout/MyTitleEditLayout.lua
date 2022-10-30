@@ -18,8 +18,6 @@ MyTitleEditLayout.layout={
   gravity="center|left";
 }
 
---MyTitleEditLayout.insertTable=insertTable
-
 function MyTitleEditLayout.Builder(config)--返回布局表
   local layout=table.clone(MyTitleEditLayout.layout)
   if config then

@@ -167,16 +167,11 @@ import "android.content.res.ColorStateList"
 import "android.content.pm.PackageManager"
 
 --导入常用的Material类
-import "com.google.android.material.appbar.AppBarLayout"
 import "com.google.android.material.card.MaterialCardView"--卡片
 import "com.google.android.material.button.MaterialButton"--按钮
-import "com.google.android.material.textfield.TextInputEditText"--输入框
-import "com.google.android.material.textfield.TextInputLayout"
 
 --导入IO
 import "java.io.File"
-import "java.io.FileInputStream"
-import "java.io.FileOutputStream"
 
 import "com.bumptech.glide.Glide"--导入Glide
 --import "com.baidu.mobstat.StatService"--百度移动统计

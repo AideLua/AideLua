@@ -11,7 +11,7 @@ return function(item)
       return length
     end,
     getItemViewType=function(position)
-      if position==length-1 then
+      if position+1==length then
         return 1
        else
         return 0
@@ -29,10 +29,9 @@ return function(item)
       titleView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL))
 
       if viewType==1 then
-        --titleView.setTextColor(theme.color.colorAccent)
         iconView.setVisibility(View.GONE)
         titleView.getPaint().setFakeBoldText(true)
-        if getSharedData("theme_darkactionbar") then
+        if oldDarkActionBar then
           titleView.setTextColor(theme.color.ActionBar.colorControlNormal)
          else
           titleView.setTextColor(theme.color.colorAccent)

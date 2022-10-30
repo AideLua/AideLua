@@ -27,8 +27,6 @@ MyTipLayout.layout={
   };
 }
 
---MyTipLayout.insertTable=insertTable
-
 function MyTipLayout.Builder(config)--返回布局表
   local layout=table.clone(MyTipLayout.layout)
   if config then

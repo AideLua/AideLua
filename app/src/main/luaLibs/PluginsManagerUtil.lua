@@ -1,3 +1,5 @@
+import "java.io.FileOutputStream"
+
 local PluginsManagerUtil={}
 local getAlpInfo,showInstallDialog
 local PackInfo=activity.PackageManager.getPackageInfo(activity.getPackageName(),64)

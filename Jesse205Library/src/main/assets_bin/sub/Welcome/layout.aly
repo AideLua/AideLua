@@ -17,13 +17,6 @@
       orientation="vertical";
       layout_weight=1;
       gravity="center";
-      --layoutTransition=newLayoutTransition();
-      --[[
-      {
-        AutoToolbarLayout;
-        layout_width="fill";
-        id="appBarLayout";
-      };]]
       {
         MyPageView;
         id="pageView";
@@ -32,18 +25,6 @@
         layout_weight=1;
         --layoutTransition=newLayoutTransition();
       };
-    --[[
-      {
-        ProgressBar;
-        id="progressBar";
-        style="?android:attr/progressBarStyleHorizontal";
-        paddingTop="-8dp";
-        paddingBottom="-8dp";
-        --indeterminate=true;
-        layout_width="56dp";
-        layout_height="2dp";
-      };]]
-
     };
     {
       CardView;
@@ -67,9 +48,6 @@
         layout_marginRight="16dp";
         id="previousButton";
         text=R.string.jesse205_step_previous;
-        --textColor=theme.color.textColorPrimary;
-        --rippleColor=ColorStateList({{}},{theme.color.rippleColorPrimary});
-        --textSize="14sp";
       };
       {
         MaterialButton_TextButton;
@@ -85,7 +63,6 @@
         layout_marginRight="16dp";
         id="nextButton";
         text=R.string.jesse205_step_next;
-        --textSize="14sp";
       };
     };
   };
