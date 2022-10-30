@@ -42,6 +42,7 @@ function onActivityResult(requestCode,resultCode,data)
       PluginsManagerUtil.installByUri(data.getData(),function(state)
         if state=="success" then
           MyToast(R.string.install_success)
+          PluginsUtil.clearOpenedPluginPaths()
           refresh()
          elseif state=="failed" then
           MyToast(R.string.install_failed)
@@ -68,7 +69,7 @@ function onItemClick(view,views,key,data)
      else
       PluginsUtil.setEnabled(data.dirName,newState)
     end
-    application.set("plugin_enabledpaths",nil)
+    PluginsUtil.clearOpenedPluginPaths()
    elseif key=="install_plugin" then
     local intent=Intent(Intent.ACTION_GET_CONTENT)
     intent.setType("*/*")

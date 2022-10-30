@@ -86,9 +86,8 @@ ProjectManager=require "ProjectManager"
 item=require "layouts.item"
 pathItem=require "layouts.pathItem"
 
-
---加载模块
-application.set("plugin_enabledpaths",nil)
+--加载插件
+PluginsUtil.clearOpenedPluginPaths()
 PluginsUtil.setActivityName("main")
 PluginsUtil.loadPlugins()
 plugins = PluginsUtil.getPlugins()

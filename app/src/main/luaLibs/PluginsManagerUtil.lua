@@ -20,7 +20,7 @@ function showInstallDialog(path,uri,config,callback)
 包名: %s\
 作者: %s\
 说明: %s\
-路径: %s",
+URI: %s",
     config.appname,
     config.appver,
     packageName,

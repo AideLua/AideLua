@@ -55,6 +55,9 @@ Util 版本：v3.1
 | ---- | --- |
 | packageName | __string__: 插件包名，如果文件夹名与真正的 `init.lua` 中的 `packagename` 不同，则 `packageName` 传入文件夹名。 |
 
+#### PluginsUtil.clearOpenedPluginPaths() <Badge text="function" vertical="middle" /> <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />
+清除已启用插件列表，用于重新加载插件
+
 ### activityName <Badge text="string" vertical="middle" />
 当前页面 (Activity) 名，可能为 `nil`
 

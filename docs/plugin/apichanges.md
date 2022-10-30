@@ -68,3 +68,5 @@
 17. 新增 `editorLayouts[EditorName].onTypefaceChangeListener(ids,config,editor,typeface,boldTypeface,italicTypeface)`
     * 作用：提供个性化字体
 18. 新增 `onStart` 与 `onStop` 等事件，[了解详情](/AideLua/plugin/pages/main.html#onstart)
+19. 新增 `PluginsUtil.clearOpenedPluginPaths()`，清除已启用的插件路径列表
+    * 作用：方便重载插件

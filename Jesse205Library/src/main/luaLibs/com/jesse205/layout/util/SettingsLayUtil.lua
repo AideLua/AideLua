@@ -220,8 +220,6 @@ local function setAlpha(views,alpha)
 end
 SettingsLayUtil.setAlpha=setAlpha
 
-local function applySwitchData()
-end
 local function onItemViewClick(view)
   local ids=view.tag
   local viewConfig=ids._config
@@ -247,6 +245,7 @@ local function onItemViewClick(view)
   viewConfig.allowedChange=true
   return true
 end
+
 local function onItemViewLongClick(view)
   local ids=view.tag
   local viewConfig=ids._config
@@ -255,18 +254,13 @@ local function onItemViewLongClick(view)
   local result
   local onItemLongClick=viewConfig.onItemLongClick
   viewConfig.allowedChange=false
-  local popupMenu=data.popupMenu
-  if popupMenu==true then
-    popupMenu=PopupMenu(activity,view)
-    data.popupMenu=popupMenu
-    data.needInitMenu=true
-  end
   if onItemLongClick then
     result=onItemLongClick(view,ids,key,data)
   end
   viewConfig.allowedChange=true
   return result
 end
+
 local function onSwitchCheckedChanged(view,checked)
   local viewConfig=view.tag
   local allowedChange=viewConfig.allowedChange
@@ -307,8 +301,6 @@ local adapterEvents={
       ids=ids}
     ids._config=viewConfig
     if viewType~=1 then
-      --ids.title.getPaint().setFakeBoldText(true)
-      --else
       local switchView=ids.switchView
       view.setFocusable(true)
       view.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
@@ -317,7 +309,7 @@ local adapterEvents={
       if switchView then
         switchView.tag=viewConfig
         switchView.setOnCheckedChangeListener({
-          onCheckedChanged=onSwitchCheckedChanged})
+        onCheckedChanged=onSwitchCheckedChanged})
       end
     end
     return holder
@@ -354,7 +346,7 @@ local adapterEvents={
     if summaryView then
       if summary then
         summaryView.text=summary
-        elseif action=="singleChoose" then
+       elseif action=="singleChoose" then
         summaryView.text=chooseItems[(getSharedData(key) or 0)+1]
       end
     end
@@ -398,6 +390,7 @@ local adapterEvents={
         switchView.setChecked(false)
       end
     end
+  
     if rightIconView then
       local newPage=data.newPage
       local visibility=rightIconView.getVisibility()

@@ -50,6 +50,10 @@ function PluginsUtil.callElevents(name, ...)
   return finalResult
 end
 
+function PluginsUtil.clearOpenedPluginPaths()
+  application.set("plugin_enabledpaths",nil)
+end
+
 function PluginsUtil.getPlugins()
   return plugins
 end
