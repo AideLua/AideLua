@@ -1,6 +1,5 @@
 local MyEditDialogLayout={}
-import "com.jesse205.layout.insertTable"
-local insertTable=insertTable
+local insertTable=require "com.jesse205.layout.insertTable"
 
 MyEditDialogLayout.layout=MyTextInputLayout.Builder{
   layout_margin="8dp";

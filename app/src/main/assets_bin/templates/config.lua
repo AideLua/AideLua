@@ -1,3 +1,4 @@
+_G["import"] "com.jesse205.layout.MyTipLayout"
 templateType="default"
 versions={
   app={

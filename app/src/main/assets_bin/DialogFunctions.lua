@@ -21,6 +21,7 @@ function deleteFileDialog(name,file)
   end)
   .setNegativeButton(android.R.string.cancel,nil)
   .show()
+
 end
 
 function createDirsDialog(nowDir)--创建文件夹对话框

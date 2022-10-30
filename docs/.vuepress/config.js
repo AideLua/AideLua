@@ -249,6 +249,10 @@ export default defineUserConfig({
                 text: 'settings.aly',
                 link: '/plugin/pages/settings.html',
               },
+              {
+                text: 'viewclass.aly',
+                link: '/plugin/pages/viewclass.html',
+              },
             ],
           },
           {

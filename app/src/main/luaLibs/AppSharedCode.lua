@@ -1,5 +1,5 @@
-function getConfigFromFile(path)
-  local env={}
+function getConfigFromFile(path,env)
+  env=env or {}
   assert(loadfile(tostring(path),"bt",env))()
   return env
 end

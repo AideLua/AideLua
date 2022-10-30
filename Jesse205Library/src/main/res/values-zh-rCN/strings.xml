@@ -11,7 +11,7 @@
     <string name="jesse205_about">关于</string>
     <string name="jesse205_about_full">关于软件</string>
     <string name="jesse205_nowVersion_app">软件版本</string>
-    <string name="jesse205_nowVersion_jesse205Library">Jesse205库版本</string>
+    <string name="jesse205_nowVersion_jesse205Library">Jesse205 库版本</string>
     <string name="jesse205_nowVersion_full">当前版本：%1$s (%2$s)</string>
     <string name="jesse205_privacyPolicy">隐私政策</string>
     <string name="jesse205_userAgreement">用户协议</string>

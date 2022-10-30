@@ -17,10 +17,7 @@ local errorCode2String={
 }
 NewProjectManager.errorCode2String=errorCode2String
 
---[[加载模板
-path: 模板路径
-parentTemplateConfig: 父模板配置
-]]
+--基础模板
 local baseTemplateConfig={
   keys={
     androidX=false,--androidx启动开关，用于追加默认的androidx以及material依赖
@@ -35,27 +32,37 @@ local baseTemplateConfig={
     compileLua=true,--默认编译lua文件
   }
 }
+
+--[[加载模板
+path: 模板路径
+parentTemplateConfig: 父模板配置
+]]
 function NewProjectManager.loadTemplate(path,parentTemplateConfig)
+  
+  import "com.jesse205.layout.MyTipLayout"
   parentTemplateConfig=parentTemplateConfig or baseTemplateConfig
-  local config=getConfigFromFile(path.."/config.lua")--读取文件
+  local config={}
+  local configSuper={
+    parentTemplateConfig=parentTemplateConfig,--父模板配置
+    parentTemplatePath=parentTemplateConfig.templatePath,--父模板配置
+  }
+  setmetatable(configSuper,{__index=_G})
+
+  local configMetatable={__index=configSuper}--统一metatable
+  setmetatable(config,configMetatable)
+
+  getConfigFromFile(path.."/config.lua",config)--读取文件
   local subTemplates=config.subTemplates--获取子模板
   local subTemplatesMap={}--子模板地图
   local templateType=config.templateType
-  local pageConfigsListIndex=#pageConfigsList
+  local pageConfigsListIndex=#pageConfigsList--为了按顺序添加页面
   if templateType then--有模板类型就添加到主模板地图
     templateMap[templateType]=config
   end
-  local configSuper={
-    templateType=templateType,--模板类型
-    templateConfig=config,--模板配置
-    subTemplatesMap=subTemplatesMap,--子模板地图
-    parentTemplateConfig=parentTemplateConfig,--父模板配置
-    templatePath=path,--模板路径
-    parentTemplatePath=parentTemplateConfig.templatePath,--父模板配置
-  }
-
-  local configMetatable={__index=configSuper}
-  setmetatable(config,configMetatable)
+  configSuper.templateType=templateType--模板类型
+  configSuper.templateConfig=config--模板配置
+  configSuper.templatePath=path--模板路径
+  configSuper.subTemplatesMap=subTemplatesMap--子模板地图
 
   setmetatable(config.keys,{__index=parentTemplateConfig.keys})--可以直接访问父模板的变量
 

@@ -150,15 +150,12 @@ viewPager.setOnPageChangeListener({
   onPageScrolled=function(position,positionOffset,positionOffsetPixels)
     local positionOffsetX2=positionOffset*2
     local newPagePosition
-    
     if positionOffset<0.5 then
       bottomCardChild.setTranslationX(-positionOffsetX2*math.dp2int(24))
-      --bottomCardChild.setTranslationX(-positionOffsetPixels)
       bottomCardChild.setAlpha(1-positionOffsetX2)
       newPagePosition=position
      else
       bottomCardChild.setTranslationX((2-positionOffsetX2)*math.dp2int(24))
-      --bottomCardChild.setTranslationX(activity.getWidth()-positionOffsetPixels)
       bottomCardChild.setAlpha(positionOffsetX2-1)
       newPagePosition=position+1
     end

@@ -4,17 +4,15 @@ appInfo={
     name=R.string.app_name,
     message="为更快进行移动开发",
     iconResource=R.mipmap.ic_launcher,
-    click=function()
-      openUrl("https://jesse205.com/aidelua")
-    end,
+    url="https://jesse205.com/aidelua",
+    clickable=true;
   },
   {
     name=R.string.windmill,
     message="重认手机上的工具",
     iconResource=R.drawable.ic_windmill,
-    click=function()
-      openUrl("https://www.coolapk.com/apk/com.agyer.windmill")
-    end,
+    url="https://www.coolapk.com/apk/com.agyer.windmill",
+    clickable=true;
   },
 }
 function onUpdate()
@@ -103,18 +101,18 @@ moreItem={
   },
 }
 
---[[menus 格式：
+--[[格式：
 {
   {
     name="群名称"; -- 群名称
     qqGroup=708199076; -- 群号
-    contextMenuEnabled=true;
+    contextMenuEnabled=true; -- 启用ContextMenu
   },
   {
     name="百度", -- 显示的名称
     url="http://www.baidu.com" -- 跳转连接
     browserUrl="http://www.baidu.com" -- 浏览器打开链接
-    func=function(view) -- 函数（不可和url共存）
+    func=function(view) -- 执行的函数
     end,
   },
   --以此类推
@@ -129,7 +127,7 @@ PluginsUtil.setActivityName("about")
 function main()
   table.insert(data,4,{--PluginsUtil 版本
     SettingsLayUtil.ITEM;
-    title=getLocalLangObj("PluginsUtil版本","PluginsUtil version");
+    title=getLocalLangObj("PluginsUtil 版本","PluginsUtil version");
     summary=PluginsUtil._VERSION;
     icon=R.drawable.ic_puzzle_outline;
   })

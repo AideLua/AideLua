@@ -1,12 +1,10 @@
 versions={
-  androlua={
-    {"5.0.10(1.6)(armeabi-v7a)",1699},
-    {"5.0.16(1.2)(arm64-v8a)",1299},
-    {"5.0.18(1.1)(armeabi-v7a,arm64-v8a)",1199}
-  }--所有androlua版本号
+  luaj={
+    {"1970-01-01(2022-10-30)",20221030},
+  }--所有luaj版本号
 }
 formatList={
-  "androlua/build.gradle",
+  "luaj/build.gradle",
 }
 keys={
   appLuaActivity="com.androlua.LuaActivity",

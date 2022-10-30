@@ -7,6 +7,8 @@ jesse205.themeType="Jesse205"--主题类型
 
 require "import"--导入import
 import "loadlayout2"
+local import_=_G["import"]--防止编辑器报错
+local appName, loadingDia
 
 --惰性导入？
 local fastImport={
@@ -29,6 +31,8 @@ local fastImport={
   --导入各种布局表
   MyTextInputLayout="com.jesse205.layout.MyTextInputLayout",
 }
+
+--根本就不是class的key
 local normalkeys={
   this=true,
   activity=true,
@@ -46,6 +50,7 @@ local normalkeys={
   mainLay=true,
   LastActionBarElevation=true,
 }
+
 jesse205.normalkeys=normalkeys
 
 local oldMetatable=getmetatable(_G)
@@ -55,7 +60,7 @@ local newMetatable={__index=function(self,key)
      else
       local value=fastImport[key]
       if value then
-        import(value)
+        import_(value)
         return rawget(_G,key)
        else
         return oldMetatable.__index(self,key)
@@ -71,7 +76,6 @@ local context=activity or service--当前context
 jesse205.context=context
 
 --软件名
-local appName
 appName=application.get("appName")
 if appName==nil then
   appName=context.getApplicationInfo().loadLabel(context.getPackageManager())
@@ -166,7 +170,6 @@ import "android.content.pm.PackageManager"
 import "com.google.android.material.appbar.AppBarLayout"
 import "com.google.android.material.card.MaterialCardView"--卡片
 import "com.google.android.material.button.MaterialButton"--按钮
-import "com.google.android.material.snackbar.Snackbar"
 import "com.google.android.material.textfield.TextInputEditText"--输入框
 import "com.google.android.material.textfield.TextInputLayout"
 
@@ -185,7 +188,7 @@ local phoneLanguage
 function getLocalLangObj(zh,en)
   if not(phoneLanguage) then
     import "java.util.Locale"
-    phoneLanguage = Locale.getDefault().getLanguage();
+    phoneLanguage = Locale.getDefault().getLanguage()
   end
   if phoneLanguage=="zh" then
     return zh or en
@@ -262,7 +265,6 @@ showLoadingDia：
 @param title 标题
 @param cancelable 是否可以取消
 ]]
-local loadingDia
 function showLoadingDia(message,title,cancelable)
   if not(loadingDia) then
     import "android.app.ProgressDialog"
@@ -304,16 +306,16 @@ function newLayoutTransition()
 end
 
 --以下为复写事件
-function onError(title,message)
-  showErrorDialog(tostring(title),tostring(message))
-  pcall(function()
+function onError(title,message)--报错重写
+  showErrorDialog(tostring(title),tostring(message))--显示成对话框，解决安卓12的toast限制问题
+  pcall(function()--保存到文件。有报错说明软件有问题，必须解决掉。
     io.open("/sdcard/Androlua/crash/"..activity.getPackageName()..".txt","a"):write(tostring(title)..os.date(" %Y-%m-%d %H:%M:%S").."\n"..tostring(message).."\n\n"):close()
   end)
   return true
 end
 
 if initApp then--初始化APP
-  import "com.jesse205.app.initApp"
+  require "com.jesse205.app.initApp"
 end
 
 --加载主题
@@ -349,21 +351,21 @@ if not(notLoadTheme) then
   })
   setmetatable(ripple,{--波纹颜色
     __index=function(self,key)
-      local value=resources.getColor(R.color["jesse205_"..string.lower(key).."_Ripple"])
+      local value=resources.getColor(R.color["jesse205_"..string.lower(key).."_ripple"])
       rawset(self,key,value)
       return value
     end
   })
   setmetatable(light,{--偏亮颜色
     __index=function(self,key)
-      local value=resources.getColor(R.color["jesse205_"..string.lower(key).."_Light"])
+      local value=resources.getColor(R.color["jesse205_"..string.lower(key).."_light"])
       rawset(self,key,value)
       return value
     end
   })
   setmetatable(dark,{--偏暗颜色
     __index=function(self,key)
-      local value=resources.getColor(R.color["jesse205_"..string.lower(key).."_Dark"])
+      local value=resources.getColor(R.color["jesse205_"..string.lower(key).."_dark"])
       rawset(self,key,value)
       return value
     end

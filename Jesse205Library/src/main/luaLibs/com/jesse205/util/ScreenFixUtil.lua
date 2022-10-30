@@ -204,15 +204,15 @@ setmetatable(ScreenConfigDecoder,ScreenConfigDecoder)
     phone=function()
     pad=function()
     pc=function()
-    }
+  }
   orientation={
     identical={LinearLayout...}
     different={LinearLayout...}
-    }
+  }
   fillParent={View...}
   layoutManagers={LayoutManager...}
   singleCardViews={View...}
-  }
+}
 ]]
 function ScreenConfigDecoder.__call(self,events)
   self=table.clone(self)

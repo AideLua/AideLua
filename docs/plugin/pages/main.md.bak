@@ -18,7 +18,7 @@
 
 | 返回类型 | 说明 |
 | ---- | --- |
-| boolean | 如果返回 `true` 则停止执行接下来的操作（如：自动打开工程等）。 <Badge type="warning" text="在 v5.0.3(50399) 添加" vertical="middle" />|
+| boolean | 如果返回 `true` 则停止执行接下来的操作（如：自动打开工程等）。 <Badge type="warning" text="在 __v5.0.3(50399)__ 添加" vertical="middle" />|
 
 代码执行顺序：
 > 调用插件事件 - 判断返回值，检测并打开项目 - 同步 `toggle` 状态
@@ -63,7 +63,7 @@ Aide Lua 未使用标准的菜单更新方式，因此您使用 `activity.invali
 
 | 返回类型 | 说明 |
 | ---- | --- |
-| boolean | 如果返回 `true` 则停止执行接下来的操作（响应自带快捷键）。 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />|
+| boolean | 如果返回 `true` 则停止执行接下来的操作（响应自带快捷键）。 <Badge type="warning" text="在 __v5.0.4(50499)__ 添加" vertical="middle" />|
 
 代码执行顺序：
 > 调用插件事件 - 判断返回值，响应自带快捷键事件
@@ -81,12 +81,12 @@ Aide Lua 未使用标准的菜单更新方式，因此您使用 `activity.invali
 
 常见于返回到页面
 
-### onStart() <Badge text="生命周期" vertical="middle" /> <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />
+### onStart() <Badge text="生命周期" vertical="middle" /> <Badge type="warning" text="在 __v5.0.4(50499)__ 添加" vertical="middle" />
 [Activity 生命周期：onStart()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#onstart)
 
 Activity 开始时执行，常见于关闭页面
 
-### onStop() <Badge text="生命周期" vertical="middle" /> <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />
+### onStop() <Badge text="生命周期" vertical="middle" /> <Badge type="warning" text="在 __v5.0.4(50499)__ 添加" vertical="middle" />
 [Activity 生命周期：onStop()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#onstop)
 
 Activity 停止时执行，常见于关闭页面

@@ -79,6 +79,7 @@ local function applyTabMenu(view,tabFileConfig)
       if not(dropMenuState) and y>filesTabLay.getHeight() then
         dropMenuState=true
         view.requestDisallowInterceptTouchEvent(true)
+        view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
         popupMenu.show()
       end
     end
@@ -178,13 +179,16 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
           if newFilePosition then
             browserAdapter.notifyItemChanged(newFilePosition)
           end
+          local currentFileMenu=FilesBrowserManager.currentFileMenu
+          if currentFileMenu then
+            currentFileMenu.setEnabled(true)
+          end
         end
         if not(tab.isSelected()) then--避免调用tab里面的重复点击事件
           task(1,function()
             tab.select()
           end)--选中Tab
         end
-
       end)
       refreshMenusState()
      else
@@ -194,7 +198,6 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
     if failed then
       fileConfig.deleted=true
       FilesTabManager.closeFile(fileConfig.lowerPath)
-      --showSnackBar(R.string.file_not_find)
       showErrorDialog(nil,failed)
       return false,false
      else
@@ -299,6 +302,10 @@ function FilesTabManager.closeFile(lowerFilePath,removeTab,changeEditor)
       local browserAdapter=FilesBrowserManager.adapter
       if FilesBrowserManager.nowFilePosition then
         browserAdapter.notifyItemChanged(FilesBrowserManager.nowFilePosition)
+      end
+      local currentFileMenu=FilesBrowserManager.currentFileMenu
+      if currentFileMenu then
+        currentFileMenu.setEnabled(false)
       end
       filesTabLay.setVisibility(View.GONE)--隐藏Tab区域
       if changeEditor~=false then

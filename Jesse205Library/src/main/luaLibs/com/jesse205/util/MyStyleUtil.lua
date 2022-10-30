@@ -5,4 +5,5 @@ function MyStyleUtil.applyToSwipeRefreshLayout(view)
   view.setColorSchemeColors(int{theme.color.colorAccent})
   return view
 end
+
 return MyStyleUtil

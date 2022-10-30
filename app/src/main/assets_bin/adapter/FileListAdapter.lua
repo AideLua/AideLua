@@ -76,62 +76,8 @@ return function(item)
 
       if viewType==3 then
         local moreView=ids.more
-        local iconView=ids.icon
-        local moreTag={}
-        moreView.tag=moreTag
         moreView.onClick=fileMoreMenuClick
-        iconView.setImageResource(R.drawable.ic_folder_outline)
-        iconView.setColorFilter(fileColors.folder)
-        ids.title.setText("..")
-        view.contentDescription=activity.getString(R.string.file_up)
-        local popupMenu=PopupMenu(activity,moreView)
-        moreTag.popupMenu=popupMenu
-        --moreTag.needInitMenu=true
-        moreView.setOnTouchListener(popupMenu.getDragToOpenListener())
-        popupMenu.inflate(R.menu.menu_main_file_upfile)
-        local menu=popupMenu.getMenu()
-        ids.currentFileMenu=menu.findItem(R.id.menu_openDir_currentFile)
-        popupMenu.onMenuItemClick=function(item)
-          local id=item.getItemId()
-          local Rid=R.id
-          local openDirPath--点击后要打开的路径，空为不打开
-          local directoryFile=FilesBrowserManager.directoryFile
-          if id==Rid.menu_createFile then
-            CreateFileUtil.showSelectTypeDialog(directoryFile)
-           elseif id==Rid.menu_createDir then
-            createDirsDialog(directoryFile)
-           else
-            local nowProjectPath=ProjectManager.nowPath
-            local nowLibName,fileRelativePath
-            if ProjectManager.openState then
-              fileRelativePath=ProjectManager.shortPath(directoryFile.getPath(),true,nowProjectPath)
-              if fileRelativePath:find("/") then
-                nowLibName=fileRelativePath:match("^(.-)/")
-               elseif #fileRelativePath~=0 then
-                nowLibName=fileRelativePath
-               else
-                nowLibName="app"
-              end
-            end
-            if id==Rid.menu_openDir_currentFile then
-              openDirPath=FilesTabManager.file.getParent()
-             elseif id==Rid.menu_openDir_assets then
-              openDirPath=("%s/%s/src/main/assets_bin"):format(nowProjectPath,nowLibName)
-             elseif id==Rid.menu_openDir_java then
-              openDirPath=("%s/%s/src/main/java"):format(nowProjectPath,nowLibName)
-             elseif id==Rid.menu_openDir_lua then
-              openDirPath=("%s/%s/src/main/luaLibs"):format(nowProjectPath,nowLibName)
-             elseif id==Rid.menu_openDir_res then
-              openDirPath=("%s/%s/src/main/res"):format(nowProjectPath,nowLibName)
-             elseif id==Rid.menu_openDir_projectRoot then
-              openDirPath=nowProjectPath
-            end
-          end
-          if openDirPath then
-            FilesBrowserManager.refresh(File(openDirPath))
-          end
-        end
-
+        local popupMenu=FilesBrowserManager.loadMoreMenu(moreView)
       end
       return holder
     end,
@@ -141,7 +87,7 @@ return function(item)
       local tag=view.getTag()
       local data=adapterData[position]
       local initData=false
-      if not(data) then
+      if not(data) then--没有data 说明需要初始化
         data={position=position}
         adapterData[position]=data
         initData=true
@@ -149,6 +95,7 @@ return function(item)
       tag._data=data
       local titleView=tag.title
       local iconView=tag.icon
+      local messageView=tag.message
 
       local file,filePath
 
@@ -160,18 +107,11 @@ return function(item)
             if not(file) then--根目录的上一级是工程文件夹
               file=ProjectManager.projectsFile
             end
-            filePath=file.getPath()
-
             data.file=file
-            data.filePath=file.getPath()
-            data.fileName=".."
             data.upFile=true
             data.action="openFolder"
           end
-          tag.currentFileMenu.setEnabled(FilesTabManager.openState)
-         else--项目没打开，就是创建项目
-          iconView.setImageResource(R.drawable.ic_plus)
-          tag.title.text=activity.getString(R.string.project_create)
+         else--项目没打开，就是创建项目选项
           data.action="createProject"
         end
        else--不是第一项
@@ -187,25 +127,32 @@ return function(item)
 
         if projectOpenState then
           local highLightCard=tag.highLightCard
-          local fileName=file.getName()
+          local fileName
+
           titleView.setText(fileName)
           if initData then
+            fileName=file.getName()
             data.title=fileName
             data.fileName=fileName
+           else
+            fileName=data.fileName
           end
+          titleView.setText(fileName)
           iconView.setAlpha(getIconAlphaByName(fileName))
 
-          if file.isFile() then
+          if file.isFile() then--当前是文件
             local colorFilter
-            filesPositions[filePath]=position
-            local fileType=getFileTypeByName(fileName)
+            local fileType
+            if initData then
+              filesPositions[filePath]=position
+              fileType=getFileTypeByName(fileName)
+              data.fileType=fileType
+             else
+              fileType=data.fileType
+            end
             iconView.setImageResource(fileIcons[fileType])
 
-            if fileType then
-              colorFilter=fileColors[string.upper(fileType)]
-             else
-              colorFilter=fileColors.normal
-            end
+            colorFilter=fileColors[fileType and string.upper(fileType) or "normal"]
 
             if FilesTabManager.openState and FilesTabManager.file.getPath()==filePath then
               titleView.setTextColor(theme.color.colorAccent)
@@ -221,7 +168,7 @@ return function(item)
             end
             data.fileType=fileType
             data.action="openFile"
-           else
+           else--当前是文件夹
             titleView.setTextColor(theme.color.textColorPrimary)
             iconView.setImageResource(folderIcons[fileName])
             iconView.setColorFilter(fileColors.folder)
@@ -230,7 +177,8 @@ return function(item)
             data.action="openFolder"
           end
 
-         else
+         else--未打开工程
+
           local loadedConfig,config,iconUrl,title,summary
           if initData then
             loadedConfig,config=pcall(RePackTool.getConfigByProjectPath,filePath)
@@ -241,14 +189,14 @@ return function(item)
               if loadedRePackTool then--可以加载二次打包工具
                 mainProjectPath=RePackTool.getMainProjectDirByConfigAndRePackTool(filePath,config,rePackTool)
                 title=(config.appName or unknowString)
-               else
+               else--无法加载二次打包工具
                 rePackTool=nil
                 mainProjectPath=filePath.."/app/src/main"
                 title=(config.appName or unknowString).." (Unable to get RePackTool)"
               end
               summary=config.packageName or unknowString
               iconUrl=FilesBrowserManager.getProjectIconForGlide(filePath,config,mainProjectPath)
-             else
+             else--文件已损坏
               title="(Unable to load config.lua)"
               summary=config
               config={}
@@ -267,32 +215,18 @@ return function(item)
             summary=data.summary
           end
           titleView.setText(title)
-          tag.message.setText(summary)
+          messageView.setText(summary)
 
+          --设置应用图标
           if type(iconUrl)=="number" then
             iconView.setImageResource(iconUrl)
            else
-            --iconView.setBackgroundDrawable(LuaBitmapDrawable(activity,iconUrl))
-
             local options=RequestOptions()
             options.skipMemoryCache(true)--跳过内存缓存
-            --options.placeholder(ColorDrawable(theme.color.strokeColor))
-            --options.transform(GlideCircleTransform(activity))
             options.diskCacheStrategy(DiskCacheStrategy.NONE)--不缓冲disk硬盘中
             Glide.with(activity)
             .load(iconUrl)
-            --.transition(DrawableTransitionOptions.withCrossFade())
             .apply(options)
-            --[[
-            .listener(RequestListener({
-              onResourceReady=function(resource,model,target,dataSource,isFirstResource)
-                iconView.post(Runnable({
-                  run=function()
-                    iconView.setBackground(resource)
-                  end
-                }))
-              end
-            }))]]
             .into(iconView)
           end
 

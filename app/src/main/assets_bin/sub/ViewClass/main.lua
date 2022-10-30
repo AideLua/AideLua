@@ -9,7 +9,6 @@ import "com.google.android.material.appbar.AppBarLayout"
 import "com.google.android.material.textfield.*"
 
 import "com.jesse205.adapter.MyLuaAdapter"
---import "SpannableStringUtil"
 
 import "item"
 PluginsUtil.setActivityName("viewclass")
@@ -80,12 +79,12 @@ AllNum=0
 
 lastSearchText=""
 
+local classDir,className=classString:match("(.*)%.(.*)")
+
 activity.setTitle(R.string.javaApiViewer)
 activity.setContentView(loadlayout2("layout"))
 
 actionBar.setDisplayHomeAsUpEnabled(true)
---actionBar.setElevation(0)
-local classDir,className=classString:match("(.*)%.(.*)")
 actionBar.setTitle(className or classString)--设置标题
 actionBar.setSubtitle(("Located at \"%s\""):format(classDir))
 
@@ -159,7 +158,6 @@ function shortString(text)
   return text:gsub("java%.lang%.String","String")
 end
 
---adp=ArrayAdapter(activity,android.R.layout.simple_list_item_1)
 datas={}
 adp=MyLuaAdapter(activity,datas,item)
 listView.setAdapter(adp)
@@ -169,11 +167,6 @@ listView.onItemClick=function(id,v,zero,one)
     if name~=classString then
       newActivity("main",{name})
     end
-    --[[
-   elseif NowPage==2 then
-   elseif NowPage==3 then
-   elseif NowPage==4 then
-   elseif NowPage==5 then]]
   end
 end
 listView.onItemLongClick=function(id,v,zero,one)
@@ -280,10 +273,6 @@ tabs.addOnTabSelectedListener(TabLayout.OnTabSelectedListener({
   onTabUnselected=function(tab)
   end
 }))
---tabs.getTabAt(0).select()
---switchTab(1)
-
-
 
 function searchItem(text)
   local isEmptyText=text==""
@@ -304,16 +293,5 @@ function searchItem(text)
   switchTab(NowPage or 1)
   lastSearchText=text
 end
---[[
-searchButton.onClick=function()
-  searchItem(searchEdit.text)
-end
 
-searchEdit.onEditorAction=function(view)
-  if searchButton.clickable then
-    searchItem(view.text)
-    return true
-  end
-end
-]]
 searchItem("")

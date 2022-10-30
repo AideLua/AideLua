@@ -21,22 +21,24 @@
         elevation=0;
         {
           AppCompatImageView;
-          id="icon";
+          --id="icon";
           layout_width="24dp";
           layout_height="24dp";
           layout_gravity="center";
           colorFilter=theme.color.colorAccent;
+          imageResource=R.drawable.ic_plus;
         };
       };
     };
     {
       AppCompatTextView;
-      id="title";
+      --id="title";
       textSize="16sp";
       layout_margin="16dp";
       layout_marginLeft=0;
       layout_weight=1;
       --typeface=Typeface.DEFAULT_BOLD;
+      text=activity.getString(R.string.project_create);
       textColor=theme.color.textColorPrimary;
     };
   },
@@ -96,27 +98,30 @@
     LinearLayout;
     layout_width="fill";
     longClickable=false;
+    contentDescription=getString(R.string.file_up);
     {
       LinearLayout;
       layout_width="fill";
       gravity="center|left";
       {
         AppCompatImageView;
-        id="icon";
+        --id="icon";
         layout_marginLeft="24dp";
         layout_margin="16dp";
         layout_width="24dp";
         layout_height="24dp";
-        --imageTintList=ColorStateList({{}},{theme.color.textColorSecondary})
+        imageResource=R.drawable.ic_folder_outline;
+        colorFilter=FilesBrowserManager.fileColors.folder;
       };
       {
         AppCompatTextView;
-        id="title";
+        --id="title";
         textSize="16sp";
         layout_margin="16dp";
         layout_marginLeft="8dp";
         layout_marginRight=0;
         layout_weight=1;
+        text="..";
         textColor=theme.color.textColorPrimary;
       };
       {

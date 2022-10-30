@@ -1,6 +1,5 @@
 local MyTitleEditLayout={}
-import "com.jesse205.layout.insertTable"
-local insertTable=insertTable
+local insertTable=require "com.jesse205.layout.insertTable"
 
 MyTitleEditLayout.layout={
   AppCompatEditText;

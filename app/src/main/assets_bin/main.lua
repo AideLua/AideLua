@@ -65,7 +65,7 @@ import "com.jesse205.util.ScreenFixUtil"
 import "com.jesse205.util.FileInfoUtils"
 import "com.jesse205.util.ColorUtil"
 
-db=require "db"--模块仓库：https://github.com/limao996/LuaDB
+db=require "db"--LuaDB模块仓库：https://github.com/limao996/LuaDB
 db.byte_order = '='
 
 require "AppFunctions" -- 必须先导入这个，因为下面的导入模块要直接使用

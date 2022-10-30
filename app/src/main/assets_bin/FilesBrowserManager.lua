@@ -119,8 +119,8 @@ local fileColors = {
   APK = 0xFF00E676, -- 安卓应用程序
   APKS = 0xFF00E676,
 
-  LUA = 0xFF448AFF,
-  ALY = 0xFF64B5F6,
+  LUA = 0xff2962ff,
+  ALY = 0xff2196f3,
 
   PNG = 0xFFF44336, -- 图片文件
   JPG = 0xFFF44336,
@@ -243,7 +243,7 @@ local relLibPathsMatchTypes = {
 }
 relLibPathsMatch.types = relLibPathsMatchTypes
 
---路劲RecyclerView，解决与侧滑手势的冲突
+--路径RecyclerView，解决与侧滑手势的冲突
 function FilesBrowserManager.PathRecyclerViewBuilder(context)
   return luajava.override(RecyclerView,{
     onInterceptTouchEvent=function(super,event)
@@ -254,6 +254,62 @@ function FilesBrowserManager.PathRecyclerViewBuilder(context)
     end,
   })
 end
+
+function FilesBrowserManager.loadMoreMenu(moreView)
+  local popupMenu=PopupMenu(activity,moreView)
+  moreView.setOnTouchListener(popupMenu.getDragToOpenListener())
+  popupMenu.inflate(R.menu.menu_main_file_upfile)
+  local menu=popupMenu.getMenu()
+  local currentFileMenu=menu.findItem(R.id.menu_openDir_currentFile)
+  FilesBrowserManager.currentFileMenu=currentFileMenu
+  currentFileMenu.setEnabled(FilesTabManager.openState)
+  popupMenu.onMenuItemClick=function(item)
+    local id=item.getItemId()
+    local Rid=R.id
+    local openDirPath--点击后要打开的路径，空为不打开
+    if id==Rid.menu_createFile then
+      CreateFileUtil.showSelectTypeDialog(directoryFile)
+     elseif id==Rid.menu_createDir then
+      createDirsDialog(directoryFile)
+     else
+      local nowProjectPath=ProjectManager.nowPath
+      local nowLibName,fileRelativePath
+      if ProjectManager.openState then
+        fileRelativePath=ProjectManager.shortPath(directoryFile.getPath(),true,nowProjectPath)
+        if fileRelativePath:find("/") then
+          nowLibName=fileRelativePath:match("^(.-)/")
+         elseif #fileRelativePath~=0 then
+          nowLibName=fileRelativePath
+         else
+          nowLibName="app"
+        end
+      end
+      if id==Rid.menu_openDir_currentFile then
+        openDirPath=FilesTabManager.file.getParent()
+       elseif id==Rid.menu_openDir_assets then
+        openDirPath=("%s/%s/src/main/assets_bin"):format(nowProjectPath,nowLibName)
+       elseif id==Rid.menu_openDir_java then
+        openDirPath=("%s/%s/src/main/java"):format(nowProjectPath,nowLibName)
+       elseif id==Rid.menu_openDir_lua then
+        openDirPath=("%s/%s/src/main/luaLibs"):format(nowProjectPath,nowLibName)
+       elseif id==Rid.menu_openDir_res then
+        openDirPath=("%s/%s/src/main/res"):format(nowProjectPath,nowLibName)
+       elseif id==Rid.menu_openDir_projectRoot then
+        openDirPath=nowProjectPath
+      end
+    end
+    if openDirPath then
+      FilesBrowserManager.refresh(File(openDirPath))
+    end
+  end
+  local moreTag={}
+  moreView.tag=moreTag
+  moreTag.popupMenu=popupMenu
+
+  return popupMenu
+end
+
+--FilesBrowserManager
 
 --打开文件浏览器
 function FilesBrowserManager.open()

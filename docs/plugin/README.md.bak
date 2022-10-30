@@ -62,11 +62,11 @@ Util 版本：v3.1
 | ---- | --- |
 | main | 主页面 |
 | settings | 软件设置页面 |
-| newproject | 新建工程页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> |
-| viewclass | 查看类页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> |
-| about | 关于页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> |
-| layouthelper | 布局助手页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> |
-| javaapi | JavaAPI查看器页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> |
+| newproject | 新建工程页面 |
+| viewclass | 查看类页面 |
+| about | 关于页面 |
+| layouthelper | 布局助手页面 |
+| javaapi | JavaAPI查看器页面 |
 
 ### getPluginDataPath(packageName) <Badge text="function" vertical="middle" />
 获取插件数据目录，与 [`PluginsUtil.getPluginDataPath(packageName)`](#pluginsutil-getplugindatapath-packagename) 完全相同

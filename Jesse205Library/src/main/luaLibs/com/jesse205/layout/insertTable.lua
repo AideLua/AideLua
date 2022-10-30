@@ -1,3 +1,4 @@
+--将table2合并到table1中
 local function insertTable(table1,table2)
   for index,content in pairs(table2) do
     if type(content)=="table" and type(index)=="number" then

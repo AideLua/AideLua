@@ -13,7 +13,7 @@
         <item name="android:windowLightNavigationBar">?windowLightNavigationBar</item>
         <item name="windowLightStatusBar">false</item>
         <item name="windowLightNavigationBar">false</item>
-
+		
         <!--波纹颜色-->
         <item name="rippleColorAccent">@color/jesse205_blue_ripple</item>
         <item name="rippleColorPrimary">@color/jesse205_white_ripple</item>
@@ -27,13 +27,16 @@
         <item name="floatingActionButtonStyle">@style/Widget.Jesse205.FloatingActionButton.Dark</item>
         <item name="android:listViewStyle">@style/Widget.Jesse205.ListView</item>
         <item name="tabStyle">@style/Widget.Jesse205.TabLayout.Colored</item>
-        <item name="actionOverflowMenuStyle">@style/Widget.Jesse205.PopupMenu.Overflow</item>
+    
+		<item name="actionOverflowMenuStyle">@style/Widget.Jesse205.PopupMenu.Overflow</item>
         <item name="popupMenuStyle">@style/Widget.Jesse205.PopupMenu</item>
 		<item name="android:contextPopupMenuStyle">@style/Widget.Jesse205.ContextPopupMenu</item>
 		<!--<item name="actionModeStyle">@style/Widget.Jesse205.ActionMode.Colored</item>-->
-        <!--<item name="materialButtonStyle">@style/Widget.MaterialComponents.Button.OutlinedButton</item>-->
-        <item name="android:alertDialogTheme">@style/Base.Theme.Jesse205.Dark.Dialog.Alert</item>
-        <item name="cardViewStyle">@style/Widget.Jesse205.CardView</item>
+       
+		<item name="android:alertDialogTheme">@style/Base.Theme.Jesse205.Dark.Dialog.Alert</item>
+		<item name="alertDialogTheme">@style/ThemeOverlay.Jesse205.Dialog.Alert</item>
+		
+		<item name="cardViewStyle">@style/Widget.Jesse205.CardView</item>
         <item name="materialCardViewStyle">@style/Widget.Jesse205.CardView</item>
         <item name="navigationViewStyle">@style/Widget.Jesse205.NavigationView</item>
         <item name="bottomNavigationStyle">@style/Widget.Jesse205.BottomNavigationView.Colored</item>

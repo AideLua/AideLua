@@ -23,7 +23,7 @@ portraitCardParent.addView(iconLayout)
 
 adapterEvents=SettingsLayUtil.adapterEvents
 packageInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
-landscape=false
+landscapeState=false--是否是横屏。此Activity按竖屏做的，因此默认为false
 LastCard2Elevation=0
 topCardItems={}
 
@@ -41,6 +41,14 @@ function getUserAvatarUrl(qq,size)
   end
 end
 
+--QQ交流
+function chatOnQQ(qqNumber)
+  local uri=Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin="..qqNumber)
+  if not(pcall(activity.startActivity,Intent(Intent.ACTION_VIEW,uri))) then
+    MyToast(R.string.jesse205_noQQ)
+  end
+end
+
 --加入QQ交流群
 function joinQQGroup(groupNumber)
   local uri=Uri.parse(("mqqapi://card/show_pslcard?src_type=internal&version=1&uin=%s&card_type=group&source=qrcode"):format(groupNumber))
@@ -52,17 +60,14 @@ end
 function callItem(parent,view,data)
   if data.url then
     openUrl(data.url)
-    return true
    elseif data.browserUrl then
     openInBrowser(data.browserUrl)
-    return true
    elseif data.qqGroup then--QQ群
     joinQQGroup(data.qqGroup)
    elseif data.qq then
-    pcall(activity.startActivity,Intent(Intent.ACTION_VIEW,Uri.parse("mqqwpa://im/chat?chat_type=wpa&uin="..data.qq)))
-    return true
-   elseif data.func then
-    data.func()
+    chatOnQQ(data.qq)
+   elseif data.click then
+    data.click()
    elseif data.contextMenuEnabled then
     if parent and view then
       parent.showContextMenuForChild(view)
@@ -85,16 +90,16 @@ end
 
 function onConfigurationChanged(config)
   screenConfigDecoder:decodeConfiguration(config)
-  local newLandscape=config.orientation==Configuration.ORIENTATION_LANDSCAPE
-  if landscape~=newLandscape then
-    landscape=newLandscape
+  local newLandscapeState=config.orientation==Configuration.ORIENTATION_LANDSCAPE--新的横屏状态
+  if landscapeState~=newLandscapeState then--因为有的时候调节的时候可能不会改变屏幕方向，所以要判断一下
+    landscapeState=newLandscapeState
     local screenWidthDp=config.screenWidthDp
     if newLandscape then--横屏时
       LastActionBarElevation=0
       actionBar.setElevation(0)
       appBarElevationCard.setVisibility(View.VISIBLE)
       local linearParams=iconLayout.getLayoutParams()
-      if screenWidthDp>theme.number.width_dp_pad then
+      if screenWidthDp>theme.number.width_dp_pad then--根据窗口宽度调整卡片宽度，保证在小屏手机显示效果良好
         linearParams.width=math.dp2int(200+16*2)
        else
         linearParams.width=math.dp2int(152+16*2)
@@ -125,9 +130,9 @@ if appInfo then
     iconView.setBackgroundResource(iconResource)
     nameView.setText(content.name)
     messageView.setText(content.message)
-    if content.click then
+    if content.clickable then
       mainIconLay.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary))
-      mainIconLay.onClick=content.click
+      mainIconLay.onClick=lambda appIconGroup,mainIconLay,content: callItem(appIconGroup,mainIconLay,content)
     end
     local pain=ids.name.getPaint()
     pain.setTypeface(content.typeface or Typeface.defaultFromStyle(Typeface.BOLD))
@@ -178,6 +183,7 @@ if developers or openSourceLicenses then
     SettingsLayUtil.TITLE;
     title=R.string.jesse205_developerInfo;
   })
+
   --插入开发者
   if developers then
     for index,content in ipairs(developers) do

@@ -220,9 +220,6 @@ function managerActions.getSelectionEnd()
   return l
 end
 
-
-
-
 function managerActions.search(text,gotoNext)--搜索
   local searchActions=editorActions.search
   if searchActions then
@@ -286,7 +283,6 @@ function EditorsManager.startSearch()
   end
   if searchActions then
     local search=managerActions.search--搜索
-    local ids
     searching=true
     if searchActions.start then
       searchActions.start(editorGroupViews,editorConfig)
@@ -304,10 +300,9 @@ function EditorsManager.startSearch()
         if searchActions.finish then--结束搜索
           searchActions.finish(editorGroupViews,editorConfig)
         end
-
       end
     }
-    ids=SearchActionMode(config)
+    local ids=SearchActionMode(config)
     if searchedContent then--恢复已搜索的内容
       ids.searchEdit.text=searchedContent
       ids.searchEdit.setSelection(utf8.len(tostring(searchedContent)))
@@ -402,7 +397,6 @@ end
 --同时切换编辑器和语言，一般用于打开文本文件
 function EditorsManager.switchEditorByDecoder(decoder)
   --先切换编辑器，后切换编辑器语言，因为语言的设置是给当前正在使用的编辑器使用的
-  --print(decoder.editor)
   EditorsManager.switchEditor(decoder.editor)
   if decoder.language then
     EditorsManager.switchLanguage(decoder.language)

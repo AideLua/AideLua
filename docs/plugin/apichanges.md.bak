@@ -67,4 +67,4 @@
 16. 新增模块 `db`，[在 Github 上查看](https://github.com/limao996/LuaDB)
 17. 新增 `editorLayouts[EditorName].onTypefaceChangeListener(ids,config,editor,typeface,boldTypeface,italicTypeface)`
     * 作用：提供个性化字体
-18. 新增 `onStart` 与 `onStop` 等事件，[了解详情](/AideLua/plugin/pages/main.html#onstart)
+18. 新增 `onStart` 与 `onStop` 事件，[了解详情](/plugin/pages/main.html#onstart)

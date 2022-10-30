@@ -59,7 +59,7 @@
       local templatePath=config.templatePath
       local subTemplatePath=config.subTemplatePath
       print(templatePath,subTemplatePath)
-      
+
     end,
     onCreativePrj=function(ids,config,keys)
       print(dump(keys))
@@ -72,52 +72,44 @@
 
   },
   {
-    name="LuaJ",
+    name="LuaJ++",
     _type="luaj",
     subTemplateName="LuaJ",
     useLoadlayout2=true,
-    checkAppConfig=false,
+    checkAppConfig=true,
     helloWorld=true,--不可用标识
+    androidXState=false,--永远用不到AndroidX那就直接设置false即可
     layout={
-      LinearLayout;
+      ScrollView;
       layout_height="fill";
       layout_width="fill";
-      orientation="vertical";
       {
-        TextView;
-        gravity="center";
-        text="Hello World";
-        layout_height="fill";
+        LinearLayout;
         layout_width="fill";
+        layout_height="fill";
+        orientation="vertical";
+        layoutTransition=newLayoutTransition();
+        MyTipLayout.Builder({
+          layout_margin="16dp";
+          layout_marginTop="8dp";
+          layout_marginBottom="8dp";
+          cardBackgroundColor=theme.color.Ripple.Orange;
+          {
+            {
+              imageResource=R.drawable.ic_alert_circle_outline;
+              colorFilter=theme.color.Orange;
+            },
+            {
+              text="此模板暂时无法使用";
+              textColor=theme.color.Orange;
+            }
+          }
+        });
+        "layouts.appConfigLayout";
       };
     },
     onSelected=function(ids,config)
       --createButton.setEnabled(false)
     end
   },
---[[
-  {
-    name="ALuaJ",
-    _type="aluaj",
-    subTemplateName="ALuaJ",
-    useLoadlayout2=true,
-    checkAppConfig=false,
-    helloWorld=true,--不可用标识
-    layout={
-      LinearLayout;
-      layout_height="fill";
-      layout_width="fill";
-      orientation="vertical";
-      {
-        TextView;
-        gravity="center";
-        text="Hello World";
-        layout_height="fill";
-        layout_width="fill";
-      };
-    },
-    onSelected=function(ids,config)
-      --createButton.setEnabled(false)
-    end
-  }]]
 }

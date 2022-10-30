@@ -59,14 +59,14 @@ end
 2.当ScrollView在顶端时关闭阴影
 ]]
 MyAnimationUtil.ScrollView={}
-  function MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,actionBar,contrast,mandatory)
-    local contrast=contrast or "LastActionBarElevation"
-      if t<=0 and (_G[contrast]~=0 or mandatory) then
-        _G[contrast]=0
-        MyAnimationUtil.ActionBar.closeElevation(actionBar)
-       elseif t>0 and (_G[contrast]==0 or mandatory) then
-        _G[contrast]=theme.number.actionBarElevation
-        MyAnimationUtil.ActionBar.openElevation(actionBar)
+function MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,actionBar,contrast,mandatory)
+  local contrast=contrast or "LastActionBarElevation"
+  if t<=0 and (_G[contrast]~=0 or mandatory) then
+    _G[contrast]=0
+    MyAnimationUtil.ActionBar.closeElevation(actionBar)
+   elseif t>0 and (_G[contrast]==0 or mandatory) then
+    _G[contrast]=theme.number.actionBarElevation
+    MyAnimationUtil.ActionBar.openElevation(actionBar)
   end
 end
 
@@ -76,11 +76,11 @@ end
 1.开启/关闭ActionBar阴影
 ]]
 MyAnimationUtil.ActionBar={}
-  function MyAnimationUtil.ActionBar.openElevation(actionBar)
-    return ObjectAnimator.ofFloat(actionBar or MyAnimationUtil.actionBar, "elevation", {theme.number.actionBarElevation})
-    .setDuration(200)
-    .setInterpolator(DecelerateInterpolator())
-    .start()
+function MyAnimationUtil.ActionBar.openElevation(actionBar)
+  return ObjectAnimator.ofFloat(actionBar or MyAnimationUtil.actionBar, "elevation", {theme.number.actionBarElevation})
+  .setDuration(200)
+  .setInterpolator(DecelerateInterpolator())
+  .start()
 end
 
 function MyAnimationUtil.ActionBar.closeElevation(actionBar)

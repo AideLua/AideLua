@@ -1,7 +1,7 @@
 local MyTextInputLayout={}
-import "com.google.android.material.textfield.*"
-import "com.jesse205.layout.insertTable"
-local insertTable=insertTable
+import "com.google.android.material.textfield.TextInputEditText"
+import "com.google.android.material.textfield.TextInputLayout"
+local insertTable=require "com.jesse205.layout.insertTable"
 
 MyTextInputLayout.layout={
   TextInputLayout;

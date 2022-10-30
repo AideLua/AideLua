@@ -1,6 +1,5 @@
 local MyTipLayout={}
-import "com.jesse205.layout.insertTable"
-local insertTable=insertTable
+local insertTable=require "com.jesse205.layout.insertTable"
 
 MyTipLayout.layout={
   CardView;
@@ -33,7 +32,7 @@ MyTipLayout.layout={
 function MyTipLayout.Builder(config)--返回布局表
   local layout=table.clone(MyTipLayout.layout)
   if config then
-    MyTextInputLayout.insertTable(layout,config)
+    insertTable(layout,config)
   end
   return layout
 end
