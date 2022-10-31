@@ -19,18 +19,4 @@ public class SettingsActivity extends com.jesse205.superlua.LuaActivity {
         setCheckUpdate(true);
         super.onCreate(savedInstanceState);
     }
-    
-//    
-//    @Override
-//    public String getLuaDir() {
-//        // TODO: Implement this method
-//        return luaDir;
-//    }
-//
-//    @Override
-//    public String getLuaPath() {
-//        // TODO: Implement this method
-//        initMain();
-//        return luaDir + "/main.lua";
-//	}
 }
