@@ -14,7 +14,7 @@ export default defineUserConfig({
     ['link', { rel: 'mask-icon', sizes: "180x180", href: "/AideLua/images/icons/safari-pinned-tab.svg", color: "#5bbad5" }],
     ['link', { rel: 'manifest', href: '/AideLua/manifest.webmanifest' }],
     ['meta', { name: 'msapplication-TileColor', content: '#3f51b5' }],
-    ['meta', { name: 'theme-color', content: '#ffffff' }],
+    ['meta', { name: 'theme-color', content: '#3f51b5' }],
   ],
   base: "/AideLua/",
 
