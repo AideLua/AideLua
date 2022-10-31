@@ -1,18 +1,18 @@
 {
     "name": "Aide Lua 使用文档",
     "description": "让您在移动设备上也能享受高级的、快速的软件开发",
-    "start_url": "/",
+    "start_url": "/AideLua/",
     "display": "standalone",
     "background_color": "#ffffff",
-    "theme_color": "#ffffff",
+    "theme_color": "#3f51b5",
     "icons": [
       {
-        "src": "/images/icons/android-chrome-192x192.png",
+        "src": "/AideLua/images/icons/android-chrome-192x192.png",
         "sizes": "192x192",
         "type": "image/png"
       },
       {
-        "src": "/images/icons/android-chrome-512x512.png",
+        "src": "/AideLua/images/icons/android-chrome-512x512.png",
         "sizes": "512x512",
         "type": "image/png"
       }
