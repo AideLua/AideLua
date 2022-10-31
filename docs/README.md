@@ -9,7 +9,7 @@ Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件�
 
 [![杰西205/Aide Lua](https://gitee.com/Jesse205/AideLua/widgets/widget_card.svg?colors=4183c4,ffffff,ffffff,e3e9ed,666666,9b9b9b)](https://gitee.com/Jesse205/AideLua)
 
-## TIPS
+## 提示
 1. 本文档部分说明格式为 “__变量名__ (数据类型): 说明” 、 “__数据类型__: 说明”
 2. 标有 <Badge type="danger" text="X" vertical="middle" /> 的表示已废除，相关 API 已被删除
 3. 标有 <Badge type="danger" text="*" vertical="middle" /> 的表示必须文件、方法 或 变量
@@ -20,7 +20,7 @@ Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件�
 1. [__Gitee 下载 (推荐，更新及时)__](https://gitee.com/Jesse205/AideLua/releases)
 2. [天翼云盘 (可能更新不及时)](https://cloud.189.cn/t/ZZ7RzijyqiUv)
 3. [腾讯微云 (可能更新不及时)](https://share.weiyun.com/oLiNtxMR)
-4. [百度网盘 (可能今天下不完)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q)，密码jxnb
+4. [百度网盘 (可能今天下不完)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q) ，密码jxnb
 5. [123云盘 (可能更新不及时)](https://www.123pan.com/s/G7a9-Yzck)
 
 ## 使用须知
@@ -31,12 +31,14 @@ Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件�
 
 ## 使用教程
 由于 AIDE 的特殊性，请下载 __AIDE高级设置版__ 进行操作
-### 一、配置AIDE
+
+### 快速入门
+#### 一、配置AIDE
 1. 进入 `设置`-`高级设置`-`工程相关`
 2. 关闭 启用 `alert调试文件` ，打开 `重定义Apk构建路径`
 3. 重启 AIDE
 
-### 二、初次打包
+#### 二、初次打包
 1. 在 AideLua 点击新建项目，在填写与选择完成后点击 `新建`
 2. 用 AIDE 打开项目，点击 `构建刷新`
 3. 点击 AideLua 的 `二次打包并安装` 按钮（或 `二次打包` ，但需手动签名）并安装，测试是否可以正常打包并运行
@@ -44,7 +46,7 @@ Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件�
 
 ## 注意事项
 1. AIDE 必须使用 `AIDE高级设置版本` ，否则无法打开 `重定义Apk路径`
-2. AIDE 必须打开 `重定义Apk路径` ，否则会导致 APK 混乱
+2. AIDE 必须打开 `重定义Apk路径` ，否则会导致 APK 错误
 3. AIDE 最好关闭 `adrt调试文件` 
 4. 不是必须用 AIDE 编译，也可以使用 Android Studio 编译
 

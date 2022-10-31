@@ -264,9 +264,10 @@ function fixPath(path)
   return path:match("(.*)/")
 end
 
-function getTableIndexList(newTable)
+--获取table的index列表
+function getTableIndexList(mTable)
   local list={}
-  for index,content in pairs(newTable) do
+  for index,content in pairs(mTable) do
     table.insert(list,index)
   end
   return list

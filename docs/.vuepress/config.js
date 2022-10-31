@@ -7,7 +7,14 @@ export default defineUserConfig({
   title: 'Aide Lua Pro',
   description: '让您在移动设备上也能享受高级的、快速的软件开发',
   head: [
-    ['link', { rel: 'icon', sizes: "any", mask: "", href: "/AideLua/favicon.png" }],
+    ['link', { rel: 'icon', sizes: "any", mask: "", href: "/AideLua/favicon.ico" }],
+    ['link', { rel: 'icon', type: "image/png", sizes: "32x32", href: "/AideLua/favicon-32x32.ico" }],
+    ['link', { rel: 'icon', type: "image/png", sizes: "16x16", href: "/AideLua/favicon-16x16.ico" }],
+    ['link', { rel: 'apple-touch-icon', sizes: "180x180", href: "/AideLua/images/icons/apple-touch-icon.png" }],
+    ['link', { rel: 'mask-icon', sizes: "180x180", href: "/AideLua/images/icons/safari-pinned-tab.svg", color: "#5bbad5" }],
+    ['link', { rel: 'manifest', href: '/AideLua/manifest.webmanifest' }],
+    ['meta', { name: 'msapplication-TileColor', content: '#3f51b5' }],
+    ['meta', { name: 'theme-color', content: '#ffffff' }],
   ],
   base: "/AideLua/",
 
@@ -268,7 +275,7 @@ export default defineUserConfig({
   }),
   plugins: [
     prismjsPlugin({
-     preloadLanguages: ["lua"]
+      preloadLanguages: ["lua"]
     })
   ]
 })

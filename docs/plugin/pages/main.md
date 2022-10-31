@@ -63,7 +63,7 @@ Aide Lua 未使用标准的菜单更新方式，因此您使用 `activity.invali
 
 | 返回类型 | 说明 |
 | ---- | --- |
-| boolean | 如果返回 `true` 则停止执行接下来的操作（响应自带快捷键）。 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />|
+| boolean | 如果返回 `true` 则停止执行接下来的操作（响应自带快捷键）。 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> |
 
 代码执行顺序：
 > 调用插件事件 - 判断返回值，响应自带快捷键事件
@@ -75,6 +75,9 @@ Aide Lua 未使用标准的菜单更新方式，因此您使用 `activity.invali
 
 ### onConfigurationChanged(config)
 配置文件发生改变，常见于屏幕旋转
+| 参数 | 说明 |
+| ---- | --- |
+| config | __[Configuration](https://developer.android.google.cn/reference/android/content/res/Configuration)__: 新设备配置。此值不能为 `nil` |
 
 ### onResume() <Badge text="生命周期" vertical="middle" />
 [Activity 生命周期：onResume()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#onresume)
@@ -97,15 +100,30 @@ Activity 停止时执行，常见于关闭页面
 Activity 销毁时执行，常见于关闭页面
 
 ### onResult(name, action, content)
- 有返回参数时执行
- 
+有返回参数时执行，这里一般都是Lua页面返回的。
+
+| 参数 | 说明 |
+| ---- | --- |
+| name | 页面名称，Androlua自动赋的值，多半为 `main`，不要管 |
+| action | 事件名称，如 `project_created_successfully` |
+| content | 返回的内容，目前只能接收一个内容 |
+ ::: tip
+ 在新Lua页面中返回参数：
+ ``` lua
+ activity.result({<action>，<content>})
+ ```
+ :::
+
 ### refreshMenusState()
 刷新菜单状态
 
-## 页面API
+## 管理器、工具 API
 ### EditorsManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 | 键 | 类型 | 说明 |
 | ---- | ---- | ---- |
+| editor | View | 编辑器视图 |
+| [editorConfig](#editorlayouts) | table (map) | 编辑器配置 |
+| editorType | string | 编辑器名称（有时候叫做编辑器类型） |
 | <Badge type="danger" text="X" vertical="middle" /> keyWordsList | 忘了 | 编辑器提示词列表 |
 | <Badge type="danger" text="X" vertical="middle" /> keyWords | String[] | 编辑器默认提示词列表 |
 | <Badge type="danger" text="X" vertical="middle" /> jesse205KeyWords | String[] | Jesse205库提示词列表 |
@@ -120,6 +138,29 @@ Activity 销毁时执行，常见于关闭页面
 | switchLanguage(language) | function | 切换语言 <br> __language__ (Object): 语言 |
 | switchEditor(editorType) | function | 切换编辑器 <br> __editorType__ (string): 编辑器类型|
 | [symbolBar](#editorsmanager-symbolbar) | table (class) | 符号栏 |
+| [typefaceChangeListeners](#editorsmanager-typefacechangelisteners) | table (list) | 编辑器字体监听器 |
+| refreshEditorScrollState() | function | 刷新编辑器滚动状态，包括阴影。 |
+
+#### EditorsManager.typefaceChangeListeners <Badge text="table" vertical="middle" /> <Badge text="List" vertical="middle" /> <Badge text="Listener" vertical="middle" /> <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />
+编辑器字体监听器
+
+格式：
+``` lua
+{
+    function(typeface, boldTypeface, italicTypeface)
+        -- typeface: 支持字体
+        -- boldTypeface: 粗体
+        -- italicTypeface: 斜体 (意大利体)
+
+        -- ...
+    end,
+    -- ...
+}
+```
+
+::: tip
+在编辑器初始化时，一般不需要您刻意地把 `onTypefaceChangeListener` 添加到此列表。因为 EditorsManager 会自动帮您完成添加。
+:::
 
 #### EditorsManager.actions <Badge text="table" vertical="middle" /> <Badge text="Map" vertical="middle" />
 | 键 | 类型 | 返回类型 | 说明 |
@@ -140,7 +181,7 @@ Activity 销毁时执行，常见于关闭页面
 | ---- | ---- | ---- |
 | psButtonClick(view) | function (listener)| 符号栏按钮点击时输入符号点击事件 |
 | newPsButton(text) | function | 初始化一个符号栏按钮 |
-| refreshSymbolBar(state) | function | 刷新符号栏状态 <br> _state__ (boolean): 开关状态 |
+| refresh(state) | function | 刷新符号栏状态 <br> _state__ (boolean): 开关状态 |
 
 ### FilesBrowserManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 
@@ -148,22 +189,97 @@ Activity 销毁时执行，常见于关闭页面
 
 ### ProjectManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 
-## 其他API
-### showSnackBar(text) <Badge text="function" vertical="middle" />
-显示 SnackBar (底部提示)
+### LuaEditorHelper <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
+LuaEditor 助手
+
+## 其他 API
+### 快速检查文件是否相同
+#### isSamePathFileByPath(filePath1,filePath2)
+通过文件路径比较文件是否相同
 
 | 参数 | 说明 |
 | ---- | --- |
-| text | __string__: 显示的文字
+| filePath1 | __string__: 第一个文件路径 |
+| filePath2 | __string__: 第二个文件路径 |
 
-### openFileITPS(path) <Badge text="function" vertical="middle" />
-用外部应用打开文件
+#### isSamePathFile(file1,file2)
+通过文件本身比较文件是否相同
 
 | 参数 | 说明 |
 | ---- | --- |
-| path | __string__: 文件路径|
+| file1 | __File__: 第一个文件 |
+| file2 | __File__: 第二个文件 |
+
+### 颜色类
+#### formatColor2Hex(color)
+将 number 类型的颜色值转换为字符串的16进制 
+
+| 参数 | 说明 |
+| ---- | --- |
+| color | __number__: 颜色值 |
+
+| 返回类型 | 说明 |
+| ---- | --- |
+| string | 颜色值 |
+
+#### getColorAndHex(text)
+获取文字内颜色的数值和16进制
+
+| 参数 | 说明 |
+| ---- | --- |
+| text | __number__: 待分析的文本 |
+
+| 返回类型 | 说明 |
+| ---- | --- |
+| number | 颜色值 |
+| string | 颜色值 |
 
 ### editorLayouts <Badge text="table" vertical="middle" /> <Badge text="Map" vertical="middle" />
 编辑器布局等配置
 
+#### 格式说明
 
+#### LuaEditor 说明
+
+### showSnackBar(text)
+显示 SnackBar (底部提示)
+
+| 参数 | 说明 |
+| ---- | --- |
+| text | __string__: 显示的文字 |
+
+### openFileITPS(path)
+用外部应用打开文件
+
+| 参数 | 说明 |
+| ---- | --- |
+| path | __string__: 文件路径 |
+
+### runLuaFile(file,code)
+在单独的页面运行Lua代码
+
+| 参数 | 说明 |
+| ---- | --- |
+| file | __File__: 文件对象 |
+| code | __string__: 代码|
+
+::: warning 注意
+当 `file` 不为 `nil` ，并且此文件存在时，则直接运行此文件，否则运行 `code` 中的代码
+:::
+
+### showSnackBar(text)
+智能根据侧滑栏打开状态显示 SnackBar
+
+| 参数 | 说明 |
+| ---- | --- |
+| text | __string__: 提示的内容|
+
+### getTableIndexList(mTable)
+获取table的索引列表
+| 参数 | 说明 |
+| ---- | --- |
+| mTable | __table__: 随便的 table |
+
+| 返回类型 | 说明 |
+| ---- | --- |
+| table (list) | mTable的索引列表 |

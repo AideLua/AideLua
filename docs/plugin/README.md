@@ -8,11 +8,13 @@ Util 版本：v3.1
 ::: details 本页内容
 [[toc]]
 :::
+[插件模板](https://gitee.com/Jesse205/AideLua/tree/master/%E6%A8%A1%E7%89%88/%E6%8F%92%E4%BB%B6/com.aidelua.template)
 
-## TIPS
+## 提示
 1. 本文档部分说明格式为 “__变量名__ (数据类型): 说明” 或 “__数据类型__: 说明”
 2. 标有 <Badge type="danger" text="X" vertical="middle" /> 的表示已废除，相关 API 已被删除
 3. 标有 <Badge type="danger" text="*" vertical="middle" /> 的表示必须文件、方法 或 变量
+4. 推荐从 __v5.0.4(50499)__ 开始编写
 
 ## 手动导入
 1. 打开文件管理，进入 `内部存储/Android/media/com.Jesse205.aidelua2/files/plugins` ，没有就新建一个
@@ -41,21 +43,21 @@ Util 版本：v3.1
 | PLUGINS_PATH | __string__: 插件存放路径 |
 | PLUGINS_DATA_PATH | __string__: 插件数据存放路径 |
 
-#### PluginsUtil.getPluginDataPath(packageName) <Badge text="function" vertical="middle" />
+#### PluginsUtil.getPluginDataPath(packageName)
 获取插件数据目录
 
 | 参数 | 说明 |
 | ---- | --- |
 | packageName | __string__: 插件包名。 |
 
-#### PluginsUtil.getPluginPath(packageName) <Badge text="function" vertical="middle" />
+#### PluginsUtil.getPluginPath(packageName) 
 获取插件目录
 
 | 参数 | 说明 |
 | ---- | --- |
 | packageName | __string__: 插件包名，如果文件夹名与真正的 `init.lua` 中的 `packagename` 不同，则 `packageName` 传入文件夹名。 |
 
-#### PluginsUtil.clearOpenedPluginPaths() <Badge text="function" vertical="middle" /> <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />
+#### PluginsUtil.clearOpenedPluginPaths() <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />
 清除已启用插件列表，用于重新加载插件
 
 ### activityName <Badge text="string" vertical="middle" />
@@ -71,10 +73,10 @@ Util 版本：v3.1
 | layouthelper | 布局助手页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> |
 | javaapi | JavaAPI查看器页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> |
 
-### getPluginDataPath(packageName) <Badge text="function" vertical="middle" />
+### getPluginDataPath(packageName)
 获取插件数据目录，与 [`PluginsUtil.getPluginDataPath(packageName)`](#pluginsutil-getplugindatapath-packagename) 完全相同
 
-### getPluginPath(packageName) <Badge text="function" vertical="middle" />
+### getPluginPath(packageName)
 获取插件目录，与 [`PluginsUtil.getPluginPath(packageName)`](#pluginsutil-getpluginpath-packagename) 完全相同
 
 ## 插件文件说明: 
@@ -94,7 +96,7 @@ Util 版本：v3.1
 | mode | __string__: 模式，默认为 `"plugin"` |
 | utilversion | __string__: Util版本，此变量不起任何作用，当前为 `"3.1"` |
 | thirdplugins | __table (list)__: 需要安装的第三方库 <br > 内容: 插件的包名 |
-| \[x\] supported | __table (list)__: 支持的APP列表。此变量在 Util 版本 `3.1` 弃用。 |
+| <Badge type="danger" text="X" vertical="middle" /> supported | __table (list)__: 支持的APP列表。此变量在 Util 版本 `3.1` 弃用。 |
 | supported2 | __table (map)__: 支持的APP列表 <br > 索引: 软件代号 (`apptype`) <br > 内容: __table (map)__: 支持的版本，mincode为最低版本，targetcode为最高版本|
 | events | __table (map)__: 全局事件 |
 
