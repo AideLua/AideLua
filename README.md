@@ -28,7 +28,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 1. [Gitee 下载 (推荐，更新及时)](https://gitee.com/Jesse205/AideLua/releases)
 2. [天翼云盘 (可能更新不及时)](https://cloud.189.cn/t/ZZ7RzijyqiUv)
 3. [腾讯微云 (可能更新不及时)](https://share.weiyun.com/oLiNtxMR)
-4. [百度网盘 (可能今天下不完)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q)，密码 `jxnb`
+4. [百度网盘 (可能今天下不完)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q) ，密码 `jxnb`
 5. [123云盘 (可能更新不及时)](https://www.123pan.com/s/G7a9-Yzck)
 
 ## 使用须知

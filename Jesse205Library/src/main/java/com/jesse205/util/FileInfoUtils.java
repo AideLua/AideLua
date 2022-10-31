@@ -33,7 +33,7 @@ public class FileInfoUtils {
             else if (isDownloadsDocument(authority)) {
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O){//判断有没有超过android 8，区分开来，不然崩溃崩溃崩溃崩溃
                     final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"), Long.valueOf(docId));
+                        Uri.parse("content://downloads/public_downloads"), Long.parseLong(docId));
                     return getDataColumn(context, contentUri, null, null);
                 }else{
                     final String[] split = docId.split(":");
@@ -107,33 +107,19 @@ public class FileInfoUtils {
     }
 
     public static boolean isHuaWeiUri(String authority) {
-        return "com.huawei.hidisk.fileprovider".equals(authority)&"com.huawei.filemanager.share.fileprovider".equals(authority);
+        return "com.huawei.hidisk.fileprovider".equals(authority)||"com.huawei.filemanager.share.fileprovider".equals(authority);
     }
 
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is ExternalStorageProvider.
-     */
 
     public static boolean isExternalStorageDocument(String authority) {
         return "com.android.externalstorage.documents".equals(authority);
 
     }
 
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is DownloadsProvider.
-     */
-
     public static boolean isDownloadsDocument(String authority) {
         return "com.android.providers.downloads.documents".equals(authority);
 
     }
-
-    /**
-     * @param uri The Uri to check.
-     * @return Whether the Uri authority is MediaProvider.
-     */
 
     public static boolean isMediaDocument(String authority) {
         return "com.android.providers.media.documents".equals(authority);
@@ -143,9 +129,6 @@ public class FileInfoUtils {
     /**
      * 获取真实路径
      *
-     * @param context
-     * @param uri
-     * @return
      */
     public static String getRealFilePath(Context context, final Uri uri) {
         if (null == uri)

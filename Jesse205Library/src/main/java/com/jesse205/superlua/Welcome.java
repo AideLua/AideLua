@@ -21,28 +21,24 @@ import net.lingala.zip4j.exception.ZipException;
 
 public class Welcome extends AppCompatActivity {
 
-    private LuaApplication app;
     private String luaMdDir;
     private String localDir;
-    //private long mLastTime;
-    //private long mOldLastTime;
 
-    private PackageInfo packageInfo;
     private long lastTime;
     private String versionName;
     private SharedPreferences info;
     private String oldVersionName;
-    private long oldLastTime;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            packageInfo = getPackageManager().getPackageInfo(this.getPackageName(), 0);
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(this.getPackageName(), 0);
             lastTime = packageInfo.lastUpdateTime;//更新时间
             info = getSharedPreferences("appInfo", 0);
-            oldLastTime = info.getLong("lastUpdateTime", 0);
+            long oldLastTime = info.getLong("lastUpdateTime", 0);
 
-            app = (LuaApplication) getApplication();
+            LuaApplication app = (LuaApplication) getApplication();
 
             if (oldLastTime != lastTime) {
                 oldVersionName = info.getString("versionName", "");
@@ -82,7 +78,6 @@ public class Welcome extends AppCompatActivity {
         }
         intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
         startActivity(intent);
-        //overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out                                                                                                                 );
         finish();
 
     }
@@ -125,6 +120,7 @@ public class Welcome extends AppCompatActivity {
             LuaUtil.rmDir(file);
             ZipFile zipFile = new ZipFile(getApplicationInfo().publicSourceDir);
             zipFile.extractFile(dir, tempDir);
+            //noinspection ResultOfMethodCallIgnored
             new File(tempDir + "/" + dir).renameTo(file);
         }
 

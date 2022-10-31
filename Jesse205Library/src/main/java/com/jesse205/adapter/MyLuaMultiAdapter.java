@@ -12,7 +12,7 @@ public class MyLuaMultiAdapter extends LuaMultiAdapter {
         super(context, layout);
     }
     
-    public MyLuaMultiAdapter(LuaContext context, LuaTable data, LuaTable layout) throws LuaException {
+    public MyLuaMultiAdapter(LuaContext context, LuaTable<Integer, LuaTable<String, Object>> data, LuaTable<Integer, LuaTable> layout) throws LuaException {
         super(context, data, layout);
     }
 }

@@ -1,5 +1,6 @@
 package com.jesse205.superlua;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ public class Main extends LuaActivity
     String luaDir;
     LuaApplication app;
     
+	@SuppressLint("SuspiciousIndentation")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		app = (LuaApplication) getApplication();

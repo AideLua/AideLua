@@ -31,16 +31,16 @@ URI: %s",
     uri)
     local supported=config.supported2
     local waringId
-    if supported then
+    if supported then--插件指定了受支持的应用
       local limitVersion=supported[apptype]
-      if limitVersion then
+      if limitVersion then--支持此应用
         if limitVersion.targetcode<versionCode then
           waringId=R.string.plugins_warning_update
         end
-       else
+       else--不支持此应用
         waringId=R.string.plugins_error_unsupported
       end
-     else
+     else--没有指定，则显示警告
       waringId=R.string.plugins_warning_supported
     end
     if waringId then
@@ -87,8 +87,8 @@ function PluginsManagerUtil.installByUri(uri,callback)
   if success then--读取成功
     local supported=config.supported2
     if supported then
-      if supported[apptype] then--支持此APP
-        local limitVersion=supported[apptype]
+      local limitVersion=supported[apptype]
+      if limitVersion then--支持此APP
         if limitVersion.mincode>versionCode then--在最低版本之上
           showErrorDialog(R.string.plugins_error_update_app)
          else
@@ -105,6 +105,11 @@ function PluginsManagerUtil.installByUri(uri,callback)
   end
 end
 
+--[[PluginsManagerUtil.uninstall(path, {appname="AppName"},function(state)
+  if state=="success" then
+    elseif state=="failed" then
+  end
+end)]]
 function PluginsManagerUtil.uninstall(path,config,callback)
   local dir=File(path)
   local dirName=dir.getName()
@@ -113,9 +118,9 @@ function PluginsManagerUtil.uninstall(path,config,callback)
   .setMessage(R.string.plugins_uninstall_warning)
   .setPositiveButton(R.string.uninstall,function()
     if dir.exists() then--判断一下插件是否存在
-      LuaUtil.rmDir(dir)
-      LuaUtil.rmDir(File(PluginsUtil.getPluginDataPath(dirName)))
-      PluginsUtil.setEnabled(dirName,nil)
+      LuaUtil.rmDir(dir)--移除插件
+      LuaUtil.rmDir(File(PluginsUtil.getPluginDataPath(dirName)))--移除数据
+      PluginsUtil.setEnabled(dirName,nil)--移除启用状态
       callback("success")
      else
       callback("failed")

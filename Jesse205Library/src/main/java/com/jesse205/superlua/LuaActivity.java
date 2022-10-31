@@ -8,12 +8,16 @@ import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+
 import java.io.File;
 
 public class LuaActivity extends com.androlua.LuaActivity {
-    private long oldLastTime=0;
-    private long lastTime=0;
-    private boolean checkUpdate=false;
+    private long oldLastTime = 0;
+    private long lastTime = 0;
+    private boolean checkUpdate = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         if (checkUpdate) {
@@ -30,7 +34,7 @@ public class LuaActivity extends com.androlua.LuaActivity {
                 intent.setData(Uri.parse("file:///"));
                 setDebug(false);
             }
-			//setDebug(false);
+            //setDebug(false);
         }
 
 
@@ -59,13 +63,13 @@ public class LuaActivity extends com.androlua.LuaActivity {
     }
 
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
+    public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         // TODO: Implement this method
-		try {
-			super.onRestoreInstanceState(savedInstanceState);
-		} catch (Exception e) {
-			sendError("onRestoreInstanceState", e);
-		}
+        try {
+            super.onRestoreInstanceState(savedInstanceState);
+        } catch (Exception e) {
+            sendError("onRestoreInstanceState", e);
+        }
         runFunc("onRestoreInstanceState", savedInstanceState);
     }
 
@@ -99,7 +103,7 @@ public class LuaActivity extends com.androlua.LuaActivity {
         intent.setData(Uri.parse("file://" + path + "?documentId=" + String.valueOf(documentId)));
 
 
-        if (arg != null) 
+        if (arg != null)
             intent.putExtra("arg", arg);
 
         if (newDocument) {
@@ -121,11 +125,11 @@ public class LuaActivity extends com.androlua.LuaActivity {
         overridePendingTransition(in, out);
     }
 
-	@Override
-	public void setTaskDescription(ActivityManager.TaskDescription taskDescription) {
-		TypedArray array =this.getTheme().obtainStyledAttributes(new int[]{android.R.attr.colorPrimary});
-		taskDescription = new ActivityManager.TaskDescription(taskDescription.getLabel(), taskDescription.getIcon(), array.getColor(0, 0xFF0000));
-		array.recycle();
-		super.setTaskDescription(taskDescription);
-	}
+    @Override
+    public void setTaskDescription(ActivityManager.TaskDescription taskDescription) {
+        TypedArray array = this.getTheme().obtainStyledAttributes(new int[]{android.R.attr.colorPrimary});
+        taskDescription = new ActivityManager.TaskDescription(taskDescription.getLabel(), taskDescription.getIcon(), array.getColor(0, 0xFF0000));
+        array.recycle();
+        super.setTaskDescription(taskDescription);
+    }
 }

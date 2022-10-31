@@ -8,7 +8,7 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:exported="true"
-            android:name="com.jesse205.activity.SettingsActivity">
+            android:name="com.jesse205.app.activity.SettingsActivity">
             <intent-filter>
                 <action android:name="android.intent.action.APPLICATION_PREFERENCES"/>
                 <category android:name="android.intent.category.DEFAULT"/>
@@ -19,7 +19,7 @@
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:exported="true"
-            android:name="com.jesse205.activity.RunActivity"/>
+            android:name="com.jesse205.app.activity.RunActivity"/>
     </application>
 
 </manifest>

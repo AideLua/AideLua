@@ -124,7 +124,7 @@
 
         </provider>
 
-        <activity android:name="com.jesse205.activity.RunActivity"/>
+        <activity android:name="com.jesse205.app.activity.RunActivity"/>
 
     </application>
 
