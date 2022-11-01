@@ -2,9 +2,8 @@
     "name": "Aide Lua 使用文档",
     "description": "让您在移动设备上也能享受高级的、快速的软件开发",
     "start_url": "/AideLua/",
+    "lang": "zh-CN",
     "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#3f51b5",
     "icons": [
       {
         "src": "/AideLua/images/icons/android-chrome-192x192.png",
