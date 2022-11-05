@@ -1,7 +1,8 @@
-@font-face{
-    font-family:'Consolas Code Online';
-    src:url('/fonts/CascadiaCode.ttf');
+@font-face {
+    font-family: 'Consolas Code Online';
+    src: url('/fonts/CascadiaCode.ttf');
 }
+
 :root {
     --c-brand: #3F51B5; //主题色
     --c-brand-light: #5C6BC0; //主题亮色
@@ -11,12 +12,14 @@
 
     --c-text: black;
     --c-text-lighter: #303F9F;
+    --c-text-quote: #616161;
 
     --code-ln-wrapper-width: 2rem;
     --code-bg-color: var(--c-bg-light);
     --code-hl-bg-color: #E0E0E0 !important;
 
-    --c-border-dark: #9E9E9E  !important; //这个颜色无论哪种颜色模式都很合适
+    --c-border: #E0E0E0;
+    --c-border-dark: #E0E0E0;
 
     --c-tip: var(--c-brand) !important;
 
@@ -35,6 +38,7 @@
     --font-family-code: "Consolas Code", "Consolas Code Online", Monaco, "Andale Mono", "Ubuntu Mono", monospace;
     --font-family: system-ui, "HarmonyOS Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
         Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+    --content-width: 960px;
 }
 
 html.dark {
@@ -61,6 +65,15 @@ html.dark {
     --c-danger-bg: rgba(229, 115, 115, 0.6);
 }
 
+//缩小表格边距
+th,
+td {
+    padding: 0.6em 0.8em;
+}
+tr:nth-child(2n) {
+    background-color: #FAFAFA;
+}
+
 //给代码框设置自适应主题
 .theme-default-content pre code,
 .theme-default-content pre[class*=language-] code {
@@ -71,6 +84,30 @@ html.dark {
 .dark .theme-default-content pre[class*=language-] code {
     color: #E0E0E0;
 }
+
+//缩小代码框左边间距
+div[class*=language-].line-numbers-mode pre {
+    padding-left: 0.6rem;
+}
+
+//缩小代码行数上下边距
+div[class*=language-].line-numbers-mode .line-numbers {
+    padding-top: 0.45rem;
+}
+
+//缩小代码高亮上下边距
+div[class*=language-] .highlight-lines {
+    padding-top: 0.5rem;
+}
+
+//缩小代码框上下间距
+.theme-default-content pre,
+.theme-default-content pre[class*=language-] {
+    padding: 0.5rem 2rem;
+    margin: 0.8rem 0;
+}
+
+
 
 //代码高亮
 .token.string {
@@ -104,7 +141,7 @@ html.dark {
     color: #9E9E9E;
 }
 
-.token.comment{
+.token.comment {
     font-style: italic;
 }
 
@@ -116,6 +153,13 @@ html.dark {
 .token.builtin {
     color: #3f51b5;
     font-weight: bold;
+}
+
+.custom-container.tip,
+.custom-container.warning,
+.custom-container.danger {
+    padding: 0.1rem 1rem;
+    border-left-width: 0.4rem;
 }
 
 .custom-container.warning code {
@@ -134,12 +178,6 @@ html.dark {
     background-color: rgba(255, 255, 255, 0.133);
 }
 
-//加深一下引用
-blockquote {
-    color: var(--c-text);
-    border-left: 0.2rem solid var(--c-border-dark);
-}
-
 .custom-container.warning blockquote,
 .custom-container.danger blockquote {
     border-left: 0.2rem solid #757575;
@@ -150,11 +188,11 @@ blockquote {
     border-left: 0.2rem solid #bdbdbd;
 }
 
-.code-group__nav-tab{
+.code-group__nav-tab {
     color: var(--c-text);
 }
 
-.badge{
+.badge {
     color: white;
 }
 

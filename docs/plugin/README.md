@@ -3,6 +3,7 @@ next:
   text: main.aly 配置
   link: pages/main.md
 ---
+
 # 插件文档
 Util 版本：v3.1
 ::: details 本页内容
@@ -24,7 +25,7 @@ Util 版本：v3.1
 5. 解压插件内所有的文件，到 第4步新建的文件夹
 6. 重启 AideLua
 
-## 注意事项: 
+## 注意事项:
 1. 目标版本和最低版本请按实际情况填写，最低为 `50099`
 2. 扩展名应为 `alp` (Androlua+ 扩展) 或 `zip`
 3. 为了防止污染全局变量，插件内直接赋值为插件的局部变量。如要修改全局变量，请使用 `_G.xxx=xxx`
@@ -37,24 +38,24 @@ Util 版本：v3.1
 ### PluginsUtil <Badge text="table" vertical="middle" /> <Badge text="Util" vertical="middle" />
 插件相关 API，也是支持插件运行的模块
 
-| 变量 | 说明 |
-| ---- | --- |
-| _VERSION | __string__: Util 版本 |
-| PLUGINS_PATH | __string__: 插件存放路径 |
+| 变量                | 说明                   |
+|-------------------|----------------------|
+| _VERSION          | __string__: Util 版本  |
+| PLUGINS_PATH      | __string__: 插件存放路径   |
 | PLUGINS_DATA_PATH | __string__: 插件数据存放路径 |
 
 #### PluginsUtil.getPluginDataPath(packageName)
 获取插件数据目录
 
-| 参数 | 说明 |
-| ---- | --- |
+| 参数          | 说明                |
+|-------------|-------------------|
 | packageName | __string__: 插件包名。 |
 
-#### PluginsUtil.getPluginPath(packageName) 
+#### PluginsUtil.getPluginPath(packageName)
 获取插件目录
 
-| 参数 | 说明 |
-| ---- | --- |
+| 参数          | 说明                                                                                 |
+|-------------|------------------------------------------------------------------------------------|
 | packageName | __string__: 插件包名，如果文件夹名与真正的 `init.lua` 中的 `packagename` 不同，则 `packageName` 传入文件夹名。 |
 
 #### PluginsUtil.clearOpenedPluginPaths() <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />
@@ -63,15 +64,15 @@ Util 版本：v3.1
 ### activityName <Badge text="string" vertical="middle" />
 当前页面 (Activity) 名，可能为 `nil`
 
-| 值 | 说明 |
-| ---- | --- |
-| main | 主页面 |
-| settings | 软件设置页面 |
-| newproject | 新建工程页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> |
-| viewclass | 查看类页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> |
-| about | 关于页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> |
-| layouthelper | 布局助手页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> |
-| javaapi | JavaAPI查看器页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> |
+| 值            | 说明                                                                                |
+|--------------|-----------------------------------------------------------------------------------|
+| main         | 主页面                                                                               |
+| settings     | 软件设置页面                                                                            |
+| newproject   | 新建工程页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />       |
+| viewclass    | 查看类页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />        |
+| about        | 关于页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />         |
+| layouthelper | 布局助手页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />       |
+| javaapi      | JavaAPI查看器页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> |
 
 ### getPluginDataPath(packageName)
 获取插件数据目录，与 [`PluginsUtil.getPluginDataPath(packageName)`](#pluginsutil-getplugindatapath-packagename) 完全相同
@@ -79,12 +80,12 @@ Util 版本：v3.1
 ### getPluginPath(packageName)
 获取插件目录，与 [`PluginsUtil.getPluginPath(packageName)`](#pluginsutil-getpluginpath-packagename) 完全相同
 
-## 插件文件说明: 
+## 插件文件说明:
 ### <Badge type="danger" text="*" vertical="center" /> init.lua
 插件入口，也用于存放模块信息的文件
 
 | 变量 | 说明 |
-| ---- | --- |
+| ---- | ---- |
 | <Badge type="danger" text="*" vertical="middle" /> appname | __string__: 插件名 |
 | <Badge type="danger" text="*" vertical="middle" /> packagename | __string__: 插件包名 |
 | <Badge type="danger" text="*" vertical="middle" /> appname | __string__: 插件名 |
@@ -93,15 +94,14 @@ Util 版本：v3.1
 | <Badge type="danger" text="*" vertical="middle" /> packagename | __string__: 插件包名 |
 | <Badge type="danger" text="*" vertical="middle" /> <Badge type="danger" text="X" vertical="middle" /> minemastercode | __number__: 最低支持的APP版本号。此变量在 Util 版本 `3.1` 弃用。 |
 | <Badge type="danger" text="*" vertical="middle" /> <Badge type="danger" text="X" vertical="middle" /> targemastercode | __number__: 目标适配的APP版本号。此变量在 Util 版本 `3.1` 弃用。 |
-| mode | __string__: 模式，默认为 `"plugin"` |
-| utilversion | __string__: Util版本，此变量不起任何作用，当前为 `"3.1"` |
+| mode  | __string__: 模式，默认为 `"plugin"` |
+| utilversion | __string__: Util版本，此变量不起任何作用，当前为 `"3.1"`  |
 | thirdplugins | __table (list)__: 需要安装的第三方库 <br > 内容: 插件的包名 |
 | <Badge type="danger" text="X" vertical="middle" /> supported | __table (list)__: 支持的APP列表。此变量在 Util 版本 `3.1` 弃用。 |
-| supported2 | __table (map)__: 支持的APP列表 <br > 索引: 软件代号 (`apptype`) <br > 内容: __table (map)__: 支持的版本，mincode为最低版本，targetcode为最高版本|
+| supported2 | __table (map)__: 支持的APP列表 <br > 索引: 软件代号 (`apptype`) <br > 内容: __table (map)__: 支持的版本，mincode为最低版本，targetcode为最高版本 |
 | events | __table (map)__: 全局事件 |
 
-::: tip
-全局事件与独立事件基本一致。<br>
+::: tip 全局事件与独立事件基本一致。<br>
 但与独立的事件相比，第一个参数为页面名称，但是很可能为 `nil`）
 :::
 
@@ -110,31 +110,35 @@ Util 版本：v3.1
 :::
 
 ::: details 彩蛋
-| 软件代号 (`apptype`) | 代指软件 |
-| ---- | --- |
-| aidelua | Aide Lua (Pro) |
-| eddelua | Edde Lua (截止目前此app不支持插件) |
-| alstudio | Android Lua Studio (截止目前此app仅存于想象) |
-| yunchu_jesse205 | 云储 优化版 (截止目前此app不支持插件) |
-| eddeyunchumanager | Edde 后台管理 (截止目前此app仅存于想象) |
-| userstatistics | 用户统计 (截止目前此app仅存于想象) |
-| goapk_jesse205 | GoApk (截止目前此app仅存于想象且已停止) |
-| highapk | 良心APK (截止目前此app仅存于想象) |
-| eddebrowser | Edde 浏览器 (截止目前此app仅存于想象) |
-| eddeconnect | Edde 互联 (截止目前此app仅存于想象) |
-| eddestudy | Edde 学习桌面 (截止目前此app仅存于想象) 
-| hellotool | 哈兔Box (截止目前此app不支持此类型插件) |
+
+| 软件代号 (`apptype`)  | 代指软件 |
+|-------------------|------------------------------------|
+| aidelua           | Aide Lua (Pro)                     |
+| eddelua           | Edde Lua (截止目前此app不支持插件)           |
+| alstudio          | Android Lua Studio (截止目前此app仅存于想象) |
+| yunchu_jesse205   | 云储 优化版 (截止目前此app不支持插件)             |
+| eddeyunchumanager | Edde 后台管理 (截止目前此app仅存于想象)          |
+| userstatistics    | 用户统计 (截止目前此app仅存于想象)               |
+| goapk_jesse205    | GoApk (截止目前此app仅存于想象且已停止)          |
+| highapk           | 良心APK (截止目前此app仅存于想象)              |
+| eddebrowser       | Edde 浏览器 (截止目前此app仅存于想象)           |
+| eddeconnect       | Edde 互联 (截止目前此app仅存于想象)            |
+| eddestudy         | Edde 学习桌面 (截止目前此app仅存于想象)          |
+| hellotool         | 哈兔Box (截止目前此app不支持此类型插件)           |
+
 :::
 
 ### main.lua <Badge text="文件" vertical="middle" />
+
 插件主页面
 
-| 参数顺序 (...) | 说明 |
-| ---- | --- |
-| 1 | 项目路径 |
-| 2 | 文件路径 |
+| 参数顺序 (...)  | 说明   |
+|-------------|------|
+| 1           | 项目路径 |
+| 2           | 文件路径 |
 
 ### config/events/ <Badge text="文件夹" vertical="middle" />
+
 存放各个页面的独立事件的文件夹
 
 * 文件扩展名: `aly`

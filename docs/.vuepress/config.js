@@ -262,6 +262,16 @@ export default defineUserConfig({
             ],
           },
           {
+            text: '工程模板配置',
+            collapsible: true,
+            children: [
+              {
+                text: '概览',
+                link: '/template/',
+              },
+            ],
+          },
+          {
             text: 'API变更说明',
             link: '/plugin/apichanges.html',
           },

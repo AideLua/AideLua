@@ -14,13 +14,14 @@
 
 | 参数 | 说明 |
 | ---- | --- |
-| savedInstanceState | __Bundle__: 如果 Activity 在先前被关闭后被重新初始化，那么这个 Bundle 包含它最近在 onSaveInstanceState(Bundle) 中提供的数据。注意：默认值为空。|
+| savedInstanceState | __Bundle__: 如果 Activity 在先前被关闭后被重新初始化，那么这个 Bundle 包含它最近在 onSaveInstanceState(Bundle) 中提供的数据。注意：默认值为 `nil`。|
 
 | 返回类型 | 说明 |
 | ---- | --- |
 | boolean | 如果返回 `true` 则停止执行接下来的操作（如：自动打开工程等）。 <Badge type="warning" text="在 v5.0.3(50399) 添加" vertical="middle" />|
 
 代码执行顺序：
+
 > 调用插件事件 - 判断返回值，检测并打开项目 - 同步 `toggle` 状态
 
 ::: warning 注意
@@ -29,6 +30,7 @@
 :::
 
 ### onCreateOptionsMenu(menu)
+
 这是创建菜单时执行的事件
 
 | 参数 | 说明 |
@@ -39,6 +41,7 @@
 > 添加自带菜单 - 执行插件事件
 
 ### onOptionsItemSelected(item)
+
 这是菜单被点击时执行的事件
 
 | 参数 | 说明 |
@@ -53,8 +56,8 @@ Aide Lua 未使用标准的菜单更新方式，因此您使用 `activity.invali
 :::
 
 ### onKeyShortcut(keyCode, event)
-按键被按
-当一个快捷键事件没有被 Activity 中的任何视图处理时被调用。覆盖此方法以实现 Activity 的全局按键快捷方式。按键快捷方式也可以通过设置菜单项的快捷方式属性来实现。
+
+按键被按 当一个快捷键事件没有被 Activity 中的任何视图处理时被调用。覆盖此方法以实现 Activity 的全局按键快捷方式。按键快捷方式也可以通过设置菜单项的快捷方式属性来实现。
 
 | 参数 | 说明 |
 | ---- | --- |
@@ -74,27 +77,33 @@ Aide Lua 未使用标准的菜单更新方式，因此您使用 `activity.invali
 :::
 
 ### onConfigurationChanged(config)
+
 配置文件发生改变，常见于屏幕旋转
+
 | 参数 | 说明 |
 | ---- | --- |
-| config | __[Configuration](https://developer.android.google.cn/reference/android/content/res/Configuration)__: 新设备配置。此值不能为 `nil` |
+| config | __[Configuration](https://developer.android.google.cn/reference/android/content/res/Configuration)__:新设备配置。此值不能为 `nil` |
 
 ### onResume() <Badge text="生命周期" vertical="middle" />
+
 [Activity 生命周期：onResume()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#onresume)
 
 常见于返回到页面
 
 ### onStart() <Badge text="生命周期" vertical="middle" /> <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />
+
 [Activity 生命周期：onStart()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#onstart)
 
 Activity 开始时执行，常见于关闭页面
 
 ### onStop() <Badge text="生命周期" vertical="middle" /> <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />
+
 [Activity 生命周期：onStop()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#onstop)
 
 Activity 停止时执行，常见于关闭页面
 
 ### onDestroy() <Badge text="生命周期" vertical="middle" />
+
 [Activity 生命周期：onDestroy()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#ondestroy)
 
 Activity 销毁时执行，常见于关闭页面
@@ -102,23 +111,25 @@ Activity 销毁时执行，常见于关闭页面
 ### onResult(name, action, content)
 有返回参数时执行，这里一般都是Lua页面返回的。
 
-| 参数 | 说明 |
-| ---- | --- |
-| name | 页面名称，Androlua自动赋的值，多半为 `main`，不要管 |
+| 参数 | 说明                                    |
+| ---- |---------------------------------------|
+| name | 页面名称，Androlua 自动赋的值，多半为 `main`，不要管    |
 | action | 事件名称，如 `project_created_successfully` |
-| content | 返回的内容，目前只能接收一个内容 |
- ::: tip
- 在新Lua页面中返回参数：
- ``` lua
- activity.result({<action>，<content>})
- ```
- :::
+| content | 返回的内容，目前只能接收一个内容                      |
+
+::: tip
+在新Lua页面中返回参数：
+``` lua
+activity.result({<action>，<content>})
+```
+:::
 
 ### refreshMenusState()
 刷新菜单状态
 
 ## 管理器、工具 API
 ### EditorsManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
+
 | 键 | 类型 | 说明 |
 | ---- | ---- | ---- |
 | editor | View | 编辑器视图 |
@@ -152,7 +163,7 @@ Activity 销毁时执行，常见于关闭页面
         -- boldTypeface: 粗体
         -- italicTypeface: 斜体 (意大利体)
 
-        -- ...
+        -- 这里开始写你的代码
     end,
     -- ...
 }
@@ -163,6 +174,7 @@ Activity 销毁时执行，常见于关闭页面
 :::
 
 #### EditorsManager.actions <Badge text="table" vertical="middle" /> <Badge text="Map" vertical="middle" />
+
 | 键 | 类型 | 返回类型 | 说明 |
 | ---- | ---- | ---- | --- |
 | undo() | function | / | 撤销 |
@@ -177,6 +189,7 @@ Activity 销毁时执行，常见于关闭页面
 | search(text,gotoNext) | function | / | 搜索 <br> __text__ (number): 搜索内容 <br> __gotoNext__ (boolean): 是否搜索下一个 |
 
 #### EditorsManager.symbolBar <Badge text="table" vertical="middle" /> <Badge text="Map" vertical="middle" />
+
 | 键 | 类型 | 说明 |
 | ---- | ---- | ---- |
 | psButtonClick(view) | function (listener)| 符号栏按钮点击时输入符号点击事件 |
@@ -190,7 +203,7 @@ Activity 销毁时执行，常见于关闭页面
 ### ProjectManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 
 ### LuaEditorHelper <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
-LuaEditor 助手
+这是 LuaEditor 助手，可以方便处理很多东西
 
 ## 其他 API
 ### 快速检查文件是否相同
@@ -211,8 +224,9 @@ LuaEditor 助手
 | file2 | __File__: 第二个文件 |
 
 ### 颜色类
+
 #### formatColor2Hex(color)
-将 number 类型的颜色值转换为字符串的16进制 
+将 number 类型的颜色值转换为字符串的16进制
 
 | 参数 | 说明 |
 | ---- | --- |
@@ -238,9 +252,7 @@ LuaEditor 助手
 编辑器布局等配置
 
 #### 格式说明
-
 #### LuaEditor 说明
-
 ### showSnackBar(text)
 显示 SnackBar (底部提示)
 
@@ -276,6 +288,7 @@ LuaEditor 助手
 
 ### getTableIndexList(mTable)
 获取table的索引列表
+
 | 参数 | 说明 |
 | ---- | --- |
 | mTable | __table__: 随便的 table |

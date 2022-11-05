@@ -47,10 +47,12 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 [视频教程](https://space.bilibili.com/1229937144)
 [使用文档](https://jesse205.github.io/AideLua/)
 
+由于 AIDE 的特殊性，请下载 __AIDE高级设置版__ 进行操作
+
 ### 快速入门
 #### 一、配置AIDE
-1. 进入 `设置`-`高级设置`-`工程相关`
-2. 关闭 启用 `alert调试文件` ，打开 `重定义Apk构建路径`
+1. 进入 `设置-高级设置-工程相关`
+2. 关闭 `启用alert调试文件` ，打开 `重定义Apk构建路径`
 3. 重启 AIDE
 
 #### 二、初次打包
@@ -62,7 +64,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 ## 注意事项
 1. AIDE 必须使用 `AIDE高级设置版本` ，否则无法打开 `重定义Apk路径`
 2. AIDE 必须打开 `重定义Apk路径` ，否则会导致 APK 错误
-3. AIDE 最好关闭 `adrt调试文件` 
+3. AIDE 最好关闭 `adrt调试文件`
 4. 不是必须用 AIDE 编译，也可以使用 Android Studio 编译
 
 ## 开放源代码许可

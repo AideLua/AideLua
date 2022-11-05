@@ -7,9 +7,10 @@ android {
     defaultConfig {
         applicationId "com.jesse205.aidelua2"
         minSdkVersion 21
+        //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 29
-        versionCode 50499
-        versionName "5.0.4"
+        versionCode 51099
+        versionName "5.1.0"
     }
 
     buildTypes {

@@ -1,4 +1,5 @@
 # API变更说明
+
 更新日期：2022.11.1
 ::: details 本页内容
 [[toc]]
@@ -24,23 +25,26 @@
 6. 模块 `init.lua` 移除 `minemastercode` 、`targetmastercode` 、`supported` ，详情请见 Wiki
 7. 模块 `init.lua` 新增 `icon-night` ，自适应夜间模式图标
 
-### v5.0.4(50499)
+### v5.1.0(51099)（原v5.0.4）
 ::: details API 名称变更
 SharedData：
- 原名称 | 新名称 | 说明 |
+
+|  原名称 | 新名称 | 说明 |
 | ---- | ---- | --- |
-| Jesse205Lib_Highlight | jesse205Lib_support | Jesse205 库支持 |
-| AndroidX_Highlight | androidX_support | AndroidX 库支持 |
+| Jesse205Lib_Highlight | jesse205Lib_support | 更全面设置 Jesse205 库 |
+| AndroidX_Highlight    | androidX_support | 更全面设置 AndroidX 库 |
 
 Jesse205 库：
+
 | 原名称 | 新名称 | 说明 |
 | ---- | ---- | --- |
 | Jesse205 | jesse205 | Jesse205库基本上所有的语句 |
-| AppPath.AppSdcardCacheDataDir | AppPath.AppSdcardDataCacheDir | Android/data/`<packagename>`/cache |
-| AppPath.AppShareDir | AppPath.AppMediaDir | Android/media/`<packagename>`/cache |
-| AppPath.AppShareCacheDir | AppPath.AppMediaCacheDir | Android/media/`<packagename>`/cache |
+| AppPath.AppSdcardCacheDataDir | AppPath.AppSdcardDataCacheDir | 路径：Android/data/`<packagename>`/cache |
+| AppPath.AppShareDir | AppPath.AppMediaDir | 路径：Android/media/`<packagename>`/cache |
+| AppPath.AppShareCacheDir | AppPath.AppMediaCacheDir | 路径：Android/media/`<packagename>`/cache |
 
 其他 API：
+
 | 原名称 | 新名称 | 说明 |
 | ---- | ---- | --- |
 | RePackTool.getMainProjectName | RePackTool.getMainModuleName | 那个东西叫模块 |
@@ -48,6 +52,7 @@ Jesse205 库：
 :::
 
 ::: details 页面标识变更
+
 | 原标识 | 新标识 | 说明 |
 | ---- | ---- | --- |
 | / | newproject | 新建工程页面 |
@@ -55,19 +60,23 @@ Jesse205 库：
 | / | layouthelper | 布局助手页面 |
 | / | javaapi | JavaAPI查看器页面 |
 | / | viewclass | 查看类页面 |
+
 :::
 
 ::: details 参数变更
+
 | 函数名 | 原参数 | 新参数 | 说明 |
 | ---- | ---- | --- | --- |
 | FilesTabManager.closeFile | (lowerFilePath,`blockOpen`,changeEditor) | (lowerFilePath,`removeTab`,changeEditor) | __removeTab__: 移除文件标签，默认为`true` |
 | getFilePathCopyMenus | (inLibDirPath,filePath,fileName,isFile,fileType)  | (inLibDirPath,filePath,`fileRelativePath`,<br>fileName,isFile,`isResDir`,fileType) | |
+
 :::
 
-:::: details 废除 API
+:::: details 废除的 API
 ::: warning
 您必须及时删除这些API，否则您的插件将无法运行
 :::
+
 | 名称 | 说明 |
 | ---- | --- |
 | EditorsManager.keyWords | 默认关键词 |
@@ -75,7 +84,8 @@ Jesse205 库：
 
 ::::
 
-::: details 新增 API
+::: details 新增的 API
+
 | 名称 | 说明 |
 | ---- | --- |
 | AppPath.AppDataTempDir | /data/data/`<packagename>`/files/temp |
@@ -93,11 +103,13 @@ Jesse205 库：
 | editorLayouts[EditorName]<br>.onTypefaceChangeListener(ids,config,<br>editor,typeface,boldTypeface,italicTypeface) | 当编辑器字体发生改变时 |
 
 PluginsUtil：
+
 | 名称 | 说明 |
 | ---- | --- |
 | clearOpenedPluginPaths() | 清除已启用的插件路径列表 |
 
 类库：
+
 | 名称 | 说明 |
 | ---- | --- |
 | db | LuaDB, [在 Github 上查看](https://github.com/limao996/LuaDB) |
@@ -105,41 +117,44 @@ PluginsUtil：
 :::
 
 ::: details 新增事件
+
 | 名称 | 说明 |
 | ---- | --- |
 | onStart() | [了解详情](/AideLua/plugin/pages/main.html#onstart) |
 | onStop() | [了解详情](/AideLua/plugin/pages/main.html#onstop) |
 | onKeyShortcut(keyCode, event) | [了解详情](/AideLua/plugin/pages/main.html#onkeyshortcut-keycode-event) |
+
 :::
 
-1.  `FilesTabManager.closeFile(lowerFilePath,removeTab,changeEditor)` 第二个变量由原来没用的 `blockOpen` 改为 `removeTab` ，默认为 `true`
-2.  NoneView 将不在启动时初始化
-     * 作用：优化代码
-3.  新增 `ProjectManager.reopenProject()` ，项目可能会在未关闭旧项目的情况下打开新的
-     * 作用：刷新 `config.lua`
-4.  `EditorsManager.keyWords` 与 `EditorsManager.jesse205KeyWords` 已废除，已由 `editorLayouts.LuaEditor.packagesList` 、`editorLayouts.LuaEditor.keywordsList` 代替
-     * 作用：方便插件添加关键字
-5.  SharedData 中将 `Jesse205Lib_Highlight` 与 `AndroidX_Highlight` 已被 `jesse205Lib_support` 与 `androidX_support` 取代
-     * 作用：统一变量
-6.  页面标识新增 `newproject` ，`about` ，`layouthelper` ，`javaapi` ，`viewclass` 页面
-     * 作用：更方便地添加内容
-7.  Jesse205 库的 `Jesse205` 改为 `jesse205` ，哪里报错就看哪里吧
-     * 作用：好看
-8.  `main` 页面 `bottomAppBar` 不再固定大小
-9.  `RePackTool` 工具的 `getMainProjectName` 已更名为 `getMainModuleName`
-10.  修复 `main` 页面 `onResume` 的 `notFirstOnResume`始终为 `true` 的 bug，并且现在可以返回true阻止程序继续运行
-11.  `AppPath.AppSdcardCacheDataDir` 已更名为 `AppPath.AppSdcardDataCacheDir`，`AppPath.AppShareDir`已更名为`AppPath.AppMediaDir`，`AppPath.AppShareCacheDir `已更名为 `AppPath.AppMediaCacheDir` ，新增 `AppPath.AppSdcardDataTempDir`等路径
-12.  `main` 页面新增 `formatColor2Hex(color)` 与 `getColorAndHex(text)`
-13.  FileTemplates 新增 `enName` 与 `id`
-     * 作用：新增中文，切换语言时保持选项不变
-14.  `getFilePathCopyMenus()` 的参数改为 `(inLibDirPath,filePath,fileRelativePath,fileName,isFile,isResDir,fileType)`，新增了 `fileRelativePath` 与 `isResDir`
-     * 作用：能获取到更多的复制菜单
-15.  新增文件浏览器提供者，`FilesBrowserManager.providers`
-     * 作用：更自由添加文件菜单
-16.  新增模块 `db`，[在 Github 上查看](https://github.com/limao996/LuaDB)
+1. `FilesTabManager.closeFile(lowerFilePath,removeTab,changeEditor)` 第二个变量由原来没用的 `blockOpen` 改为 `removeTab` ，默认为 `true`
+2. NoneView 将不在启动时初始化
+    * 作用：优化代码
+3. 新增 `ProjectManager.reopenProject()` ，项目可能会在未关闭旧项目的情况下打开新的
+    * 作用：刷新 `config.lua`
+4. `EditorsManager.keyWords` 与 `EditorsManager.jesse205KeyWords` 已废除，已由 `editorLayouts.LuaEditor.packagesList`
+   、`editorLayouts.LuaEditor.keywordsList` 代替
+    * 作用：方便插件添加关键字
+5. SharedData 中将 `Jesse205Lib_Highlight` 与 `AndroidX_Highlight` 已被 `jesse205Lib_support` 与 `androidX_support` 取代
+    * 作用：统一变量
+6. 页面标识新增 `newproject` ，`about` ，`layouthelper` ，`javaapi` ，`viewclass` 页面
+    * 作用：更方便地添加内容
+7. Jesse205 库的 `Jesse205` 改为 `jesse205` ，哪里报错就看哪里吧
+    * 作用：好看
+8. `main` 页面 `bottomAppBar` 不再固定大小
+9. `RePackTool` 工具的 `getMainProjectName` 已更名为 `getMainModuleName`
+10. 修复 `main` 页面 `onResume` 的 `notFirstOnResume`始终为 `true` 的 bug，并且现在可以返回true阻止程序继续运行
+11. `AppPath.AppSdcardCacheDataDir` 已更名为 `AppPath.AppSdcardDataCacheDir`，`AppPath.AppShareDir`已更名为`AppPath.AppMediaDir`，`AppPath.AppShareCacheDir `已更名为 `AppPath.AppMediaCacheDir` ，新增 `AppPath.AppSdcardDataTempDir`等路径
+12. `main` 页面新增 `formatColor2Hex(color)` 与 `getColorAndHex(text)`
+13. FileTemplates 新增 `enName` 与 `id`
+    * 作用：新增中文，切换语言时保持选项不变
+14. `getFilePathCopyMenus()` 的参数改为 `(inLibDirPath,filePath,fileRelativePath,fileName,isFile,isResDir,fileType)`，新增了 `fileRelativePath` 与 `isResDir`
+    * 作用：能获取到更多的复制菜单
+15. 新增文件浏览器提供者，`FilesBrowserManager.providers`
+    * 作用：更自由添加文件菜单
+16. 新增模块 `db`，[在 Github 上查看](https://github.com/limao996/LuaDB)
 17. 新增 `editorLayouts[EditorName].onTypefaceChangeListener(ids,config,editor,typeface,boldTypeface,italicTypeface)`
     * 作用：提供个性化字体
-18.  新增 `onStart` 与 `onStop` 等事件，[了解详情](/AideLua/plugin/pages/main.html#onstart)
-19.  新增 `PluginsUtil.clearOpenedPluginPaths()`，清除已启用的插件路径列表
-     * 作用：方便重载插件
-20.  新增 `getTableIndexList(mTable)`，获取table的索引列表
+18. 新增 `onStart` 与 `onStop` 等事件，[了解详情](/AideLua/plugin/pages/main.html#onstart)
+19. 新增 `PluginsUtil.clearOpenedPluginPaths()`，清除已启用的插件路径列表
+    * 作用：方便重载插件
+20. 新增 `getTableIndexList(mTable)`，获取table的索引列表

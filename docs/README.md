@@ -1,4 +1,5 @@
 # Aide Lua 使用文档
+
 ## 简介
 [![QQ 群](https://img.shields.io/badge/加入-QQ_群-0099FF?logo=TencentQQ&style=flat-square)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
 [![QQ 频道](https://img.shields.io/badge/加入-QQ_频道-0099FF?logo=TencentQQ&style=flat-square)](https://pd.qq.com/s/ncghvc)
@@ -26,16 +27,16 @@ Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件�
 ## 使用须知
 1. 本软件默认开启自动保存代码且无法关闭（自动保存触发条件：切换到其他应用、点击二次打包以及打包运行、打开其他文件、关闭文件、打开侧滑（大屏除外）、点击标签栏等）
 2. 此软件不能用来开发大型项目
-3. 此软件必须搭配编译器，不管你用的是真 Gradle 还是假 Gradle（AIDE 属于假 Gradle）
-4. 要实现直接运行项目，必须导出 `LuaActivity`（默认是导出的），并成功安装项目软件（先用 AIDE 打包，然后用 Aide Lua 打包，最后安装）
+3. 此软件必须搭配编译器，不管你用的是真 Gradle 还是假 Gradle __(AIDE 属于假 Gradle)__
+4. 要实现直接运行项目，必须导出 `LuaActivity`（默认是导出的），__并成功安装项目软件（先用 AIDE 打包，然后用 Aide Lua 打包，最后安装）__
 
 ## 使用教程
 由于 AIDE 的特殊性，请下载 __AIDE高级设置版__ 进行操作
 
 ### 快速入门
 #### 一、配置AIDE
-1. 进入 `设置`-`高级设置`-`工程相关`
-2. 关闭 启用 `alert调试文件` ，打开 `重定义Apk构建路径`
+1. 进入 `设置-高级设置-工程相关`
+2. 关闭 `启用alert调试文件` ，打开 `重定义Apk构建路径`
 3. 重启 AIDE
 
 #### 二、初次打包
@@ -47,8 +48,9 @@ Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件�
 ## 注意事项
 1. AIDE 必须使用 `AIDE高级设置版本` ，否则无法打开 `重定义Apk路径`
 2. AIDE 必须打开 `重定义Apk路径` ，否则会导致 APK 错误
-3. AIDE 最好关闭 `adrt调试文件` 
+3. AIDE 最好关闭 `adrt调试文件`
 4. 不是必须用 AIDE 编译，也可以使用 Android Studio 编译
 
 ## 开放源代码许可
+
 [https://gitee.com/Jesse205/AideLua/blob/master/app/src/main/assets_bin/licences](https://gitee.com/Jesse205/AideLua/blob/master/app/src/main/assets_bin/licences)
