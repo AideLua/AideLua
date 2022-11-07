@@ -7,11 +7,13 @@ isJesse205Activity=pcall(function()
 end)
 isSupportActivity=pcall(function()
   androidx={appcompat={R=luajava.bindClass("androidx.appcompat.R")}}
+  if not(luajava.instanceof(LuaActivity,luajava.bindClass("androidx.appcompat.app.AppCompatActivity"))) then
+    error()
+  end
 end)
 isEmuiSystem=pcall(function()
   androidhwext={R=luajava.bindClass("androidhwext.R")}
 end)
-
 
 function toboolean(content)
   if content then

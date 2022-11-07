@@ -157,6 +157,7 @@ local sharedActivityPathTemplate=AppPath.Sdcard.."/Android/media/temp/%s/aidelua
 
 --更新共享Activity到目录
 function updateSharedActivity(name,sdActivityDir)
+  LuaUtil.rmDir(sdActivityDir)
   LuaUtil.copyDir(File(activity.getLuaDir("sub/"..name)),sdActivityDir)
 end
 
@@ -164,18 +165,21 @@ function checkSharedActivity(name)
   local packageName
   packageName=ProjectManager.openState and ProjectManager.nowConfig.packageName or activity.getPackageName()
   local sdActivityPath=sharedActivityPathTemplate:format(packageName,name)--AppPath.AppShareCacheDir.."/activities/"..name
-  local sdActivityMainPath=sdActivityPath.."/main.lua"
   local sdActivityDir=File(sdActivityPath)
-  local sdActivityMainFile=File(sdActivityMainPath)
-  local exists=sdActivityDir.exists()
-  local mainExists=sdActivityMainFile.isFile()--主页面是否存在
-  if not(mainExists) or true then
-    if exists then
-      LuaUtil.rmDir(sdActivityDir)
+
+  local sdActivityInitPath=sdActivityPath.."/init.lua"
+  local sdActivityInitFile=File(sdActivityInitPath)
+  local initExists=sdActivityInitFile.isFile()--主页面是否存在
+  if initExists then
+    local latestConfig=getConfigFromFile(activity.getLuaDir("sub/"..name.."/init.lua"))
+    local success,nowConfig=pcall(getConfigFromFile,sdActivityInitPath)
+    if not(success and nowConfig.appcode and latestConfig.appcode) or tonumber(latestConfig.appcode)>tonumber(nowConfig.appcode) then
+      updateSharedActivity(name,sdActivityDir)
     end
+   else
     updateSharedActivity(name,sdActivityDir)
   end
-  return sdActivityMainPath
+  return sdActivityPath.."/main.lua"
 end
 
 function refreshSubTitle(newScreenWidthDp)
