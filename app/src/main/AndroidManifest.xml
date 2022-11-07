@@ -27,7 +27,7 @@
 
     <uses-permission android:name="com.termux.permission.RUN_COMMAND"/>
 
-	<uses-permission android:name="com.huawei.permission.POPUP_BACKGROUND_WINDOW"/>
+    <uses-permission android:name="com.huawei.permission.POPUP_BACKGROUND_WINDOW"/>
 
     <supports-screens
         android:largeScreens="true"
@@ -108,6 +108,10 @@
             android:name="com.jesse205.superlua.Welcome"
             android:theme="@style/Theme.Jesse205.Welcome"/>
 
+        <activity
+			android:exported="true"
+			android:name="com.jesse205.app.activity.RunActivity"/>
+
         <service
             android:enabled="true"
             android:name="com.androlua.LuaService"/>
@@ -117,15 +121,14 @@
             android:exported="false"
             android:grantUriPermissions="true"
             android:name="android.content.FileProvider">
-
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/androlua_filepaths"/>
-
         </provider>
 
-        <activity android:name="com.jesse205.app.activity.RunActivity"/>
-
+		<meta-data
+			android:name="android.app.shortcuts"
+			android:resource="@xml/shortcuts"/>
     </application>
 
 </manifest>

@@ -94,7 +94,7 @@ function onConfigurationChanged(config)
   if landscapeState~=newLandscapeState then--因为有的时候调节的时候可能不会改变屏幕方向，所以要判断一下
     landscapeState=newLandscapeState
     local screenWidthDp=config.screenWidthDp
-    if newLandscape then--横屏时
+    if newLandscapeState then--横屏时
       LastActionBarElevation=0
       actionBar.setElevation(0)
       appBarElevationCard.setVisibility(View.VISIBLE)
