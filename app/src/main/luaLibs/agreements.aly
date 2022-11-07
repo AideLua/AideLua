@@ -12,6 +12,12 @@
     name="PrivacyPolicy",
     date="2022-08-24",
   },
+  {--不永久使用 Aide Lua 协议
+    icon=R.drawable.ic_android_debug_bridge;
+    title=R.string.noAlwaysUseApp,
+    name="NoAlwaysUseApp",
+    date="2022-11-08",
+  },
   {--第三方信息共享清单
     icon=R.drawable.ic_shield_sync_outline;
     title=R.string.jesse205_tisl,

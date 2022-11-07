@@ -59,9 +59,16 @@
   },
   {
     name="Cascadia Code",
-    message="A cool code editor library on Android with syntax-highlighting and auto-completion. (aka CodeEditor)",
-    licenseName="SIL Open Font License, Version 1.1",
+    message="This is a fun, new monospaced font that includes programming ligatures and is designed to enhance the modern look and feel of the Windows Terminal.",
+    licenseName="OFL-1.1 License",
     license="Cascadia Code License",
-    url="https://github.com/Rosemoe/sora-editor"
+    url="https://github.com/microsoft/cascadia-code"
+  },
+{
+    name="JetBrains Mono",
+    message="JetBrains Mono – the free and open-source typeface for developers",
+    licenseName="OFL-1.1 License",
+    license="JetBrains Mono License",
+    url="https://github.com/JetBrains/JetBrainsMono"
   },
 }

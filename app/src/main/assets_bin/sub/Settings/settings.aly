@@ -84,7 +84,7 @@
     title=R.string.font;
     key="editor_font";
     --summary=getSharedData("projectsDir");
-    items={"Default","Cascadia Code","System UI","Serif"},
+    items={"Default","JetBrains Mono","Cascadia Code","System UI","Serif"},
     action="singleChoose";
     hint=R.string.projects_path;
     allowNull=false;

@@ -41,6 +41,7 @@
     <string name="download">下载</string>
     <string name="checkingUpdates">正在检查更新</string>
     <string name="font">字体</string>
+    <string name="noAlwaysUseApp">不永久使用 Aide Lua 协议</string>
     
     <string name="open">打开</string>
     <string name="open_failed">打开失败</string>

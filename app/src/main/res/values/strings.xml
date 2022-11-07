@@ -42,6 +42,7 @@
     <string name="download">Download</string>
     <string name="checkingUpdates">Checking for updates</string>
     <string name="font">Font</string>
+    <string name="noAlwaysUseApp">Protocols that do not always use APP</string>
     
     <string name="open">Open</string>
     <string name="open_failed">Open failed</string>
