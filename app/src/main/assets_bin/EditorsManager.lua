@@ -111,14 +111,18 @@ local function getEditorTypefaces()
       italicTypeface=Typeface.create(typeface,Typeface.ITALIC)
     end
    elseif id==1 then
+    typeface=ResourcesCompat.getFont(activity, R.font.jetbrainsmonoregular)
+    boldTypeface=ResourcesCompat.getFont(activity, R.font.jetbrainsmonobold)
+    italicTypeface=ResourcesCompat.getFont(activity, R.font.jetbrainsmonoitalic)
+   elseif id==2 then
     typeface=ResourcesCompat.getFont(activity, R.font.cascadiacode)
     boldTypeface=Typeface.create(typeface,Typeface.BOLD)
     italicTypeface=ResourcesCompat.getFont(activity, R.font.cascadiacodeitalic)
-   elseif id==2 then
+   elseif id==3 then
     typeface=Typeface.DEFAULT
     boldTypeface=Typeface.DEFAULT_BOLD
     italicTypeface=Typeface.create(typeface,Typeface.ITALIC)
-   elseif id==3 then
+   elseif id==4 then
     typeface=Typeface.SERIF
     boldTypeface=Typeface.create(typeface,Typeface.BOLD)
     italicTypeface=Typeface.create(typeface,Typeface.ITALIC)

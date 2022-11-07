@@ -31,6 +31,13 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 4. [百度网盘 (可能今天下不完)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q) ，密码 `jxnb`
 5. [123云盘 (可能更新不及时)](https://www.123pan.com/s/G7a9-Yzck)
 
+## 构建项目
+1. 克隆本项目到本地：`git clone https://gitee.com/Jesse205/AideLua.git`
+2. 使用 Gradle 构建：`gradle build`
+3. 复制到 Android 设备的`内部存储/AppProjects/<你的项目>`
+4. 下载 Aide Lua 的发行版，进入 Aide Lua 后选择刚才复制的工程，然后依次点击 `菜单-项目...-二次打包并安装`
+
+
 ## 使用须知
 1. 本软件默认开启自动保存代码且无法关闭（自动保存触发条件：切换到其他应用、点击二次打包以及打包运行、打开文件、关闭文件）
 2. 此软件不能用来开发大型项目

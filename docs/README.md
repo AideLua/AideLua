@@ -24,6 +24,13 @@ Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件�
 4. [百度网盘 (可能今天下不完)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q) ，密码jxnb
 5. [123云盘 (可能更新不及时)](https://www.123pan.com/s/G7a9-Yzck)
 
+## 工作原理
+1. 读取 `.aidelua/config.lua` 的内容
+2. 找到 `app.apk` 的路径，并解解压到 `<主模块名称>/build/aidelua_unzip`
+3. 将 `<模块名称>/src/main/assets_bin` 等目录中的文件添加到 `aidelua_unzip` 文件夹中，并编译 Lua (编译 Lua 需要启用 `compileLua`)
+4. 压缩 `aidelua_unzip` ，并改名为 `<应用名>_v<版本号>.apk`
+5. 签名 `<应用名>_v<版本号>.apk` 到 `<应用名>_v<版本号>_sign.apk` (签名 APK 需要选择 `二次打包并安装` 菜单)
+
 ## 使用须知
 1. 本软件默认开启自动保存代码且无法关闭（自动保存触发条件：切换到其他应用、点击二次打包以及打包运行、打开其他文件、关闭文件、打开侧滑（大屏除外）、点击标签栏等）
 2. 此软件不能用来开发大型项目
