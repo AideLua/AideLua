@@ -7,6 +7,13 @@ appInfo={
     url="https://jesse205.com/aidelua",
     clickable=true;
   },
+ {
+    name="AIDE Pro",
+    message="一个经魔改过的全新版本",
+    iconResource=R.drawable.ic_androidstudio,
+    url="https://aidepro.top/",
+    clickable=true;
+  },
   {
     name=R.string.windmill,
     message="重认手机上的工具",
