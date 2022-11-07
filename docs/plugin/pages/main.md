@@ -181,7 +181,7 @@ activity.result({<action>，<content>})
 | redo() | function | / | 重做 |
 | format() | function | / |格式化 |
 | commented() | function | / |注释 |
-| getText() | function | string" | 获取编辑器文字内容 |
+| getText() | function | string | 获取编辑器文字内容 |
 | setText() | function | / | 设置编辑器文字内容 |
 | check(show) | function | / | 代码查错 <br> __show__ (string): 展示结果 |
 | paste(text) | function | / | 粘贴文字内容 <br> __text__ (string): 文字内容 |
@@ -197,10 +197,13 @@ activity.result({<action>，<content>})
 | refresh(state) | function | 刷新符号栏状态 <br> _state__ (boolean): 开关状态 |
 
 ### FilesBrowserManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
+这是文件浏览器管理器（侧滑）
 
 ### FilesTabManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
+这是标签页管理器，兼职管理文件的读取与保存
 
 ### ProjectManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
+这是项目管理器，只能管理单个项目，兼职提供文件路径的绝对路径转相对路径
 
 ### LuaEditorHelper <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 这是 LuaEditor 助手，可以方便处理很多东西

@@ -95,6 +95,16 @@ export default defineUserConfig({
               },
             ]
           },
+          {
+            text: '项目模板配置',
+            collapsible: true,
+            children: [
+              {
+                text: '概览',
+                link: '/project/template/',
+              },
+            ],
+          },
         ]
       },
       {
@@ -258,16 +268,6 @@ export default defineUserConfig({
               {
                 text: 'viewclass.aly',
                 link: '/plugin/pages/viewclass.html',
-              },
-            ],
-          },
-          {
-            text: '工程模板配置',
-            collapsible: true,
-            children: [
-              {
-                text: '概览',
-                link: '/template/',
               },
             ],
           },

@@ -4,8 +4,8 @@ tool = {
 }
 appName = "Aide Lua Pro" -- 应用名称
 packageName = "com.jesse205.aidelua2" -- 应用包名
-versionName = "1.0test" -- 重写APK的版本名
-versionName = "1.0test" -- 重写APK的版本名
+--versionName = "1.0test" -- 重写APK的版本名 (暂不支持)
+--versionCode = 1000 -- 重写APK的版本号 (暂不支持)
 
 debugActivity = "com.jesse205.activity.RunActivity" --运行Lua的Activity
 key = "JXNB" --运行Lua时传入的key，用于校验
