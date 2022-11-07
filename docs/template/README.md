@@ -37,7 +37,9 @@ Aide Lua 的模板支持字模板。因此您编写的时候可以套娃。
 
 :::
 ### config.lua
+
 ### pageConfigs.aly
+
 ### baseTemplate/
 存放基本模板的地方
 
