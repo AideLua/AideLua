@@ -31,6 +31,7 @@
           };
         };
         "layouts.appConfigLayout";
+        "layouts.appVersionsLayout";
         "layouts.androluaVersionsLayout";
         "layouts.complexLayout";
         "layouts.jarLibrariesLayout";
@@ -39,6 +40,9 @@
     },
     onInit=function(ids,config)
       --print(config.templateDirPath)
+      local templatePath=config.templatePath
+      local subTemplatePath=config.subTemplatePath
+
       local chipList={}
       config.chipList=chipList
       local androidXSwitch=ids.androidXSwitch
@@ -55,11 +59,13 @@
       end
 
       NewProjectManager.refreshState("androidx",androidXState,chipList)
-      --print(config.templatePath)
-      local templatePath=config.templatePath
-      local subTemplatePath=config.subTemplatePath
-      print(templatePath,subTemplatePath)
 
+      for index,content in ipairs(androluaVersions or {}) do
+
+      end
+
+      --print(templatePath,subTemplatePath)
+      print(subTemplatePath)
     end,
     onCreativePrj=function(ids,config,keys)
       print(dump(keys))

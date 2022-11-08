@@ -3,8 +3,8 @@
   layout_width="fill";
   orientation="vertical";
   layoutTransition=newLayoutTransition();
-  contentDescription="AndroLua 版本";
-  {--AndroLua 版本
+  contentDescription="配置版本";
+  {--配置版本
     LinearLayoutCompat;
     layout_width="fill";
     orientation="vertical";
@@ -15,7 +15,7 @@
     layout_marginRight="16dp";
     {
       AppCompatTextView;
-      text="* AndroLua 版本";
+      text="* 配置版本";
       textSize="14sp";
       typeface=Typeface.defaultFromStyle(Typeface.BOLD);
       textColor=theme.color.colorAccent;
