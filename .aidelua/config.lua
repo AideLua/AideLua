@@ -17,6 +17,6 @@ compileLua = false -- 编译Lua
 -- 相对路径位于工程根目录下
 --- 图标
 icon = {
-    day = "ic_launcher-aidelua.png", -- 图标
-    night = "ic_launcher_night-aidelua.png", -- 暗色模式图标
+    day = "app/src/main/ic_launcher-playstore.png", -- 图标
+    night = "app/src/main/ic_launcher/ic_launcher_night-playstore.png", -- 暗色模式图标
 }

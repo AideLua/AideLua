@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--为了兼容代码运行，不是真正的软件主题-->
-    <style name="AppTheme" parent="Theme.Jesse205.Default"/>
-    <style name="AppStyle" parent="AppTheme"/>
-    <style name="BaseTheme" parent="AppTheme"/>
-    <style name="BaseStyle" parent="AppTheme"/>
-        
-    <style name="Theme.Jesse205.Welcome" parent="Theme.Jesse205.Default"/>
-    
+    <style name="AppTheme" parent="Theme.Jesse205.Default" />
+
+    <style name="AppStyle" parent="AppTheme" />
+
+    <style name="BaseTheme" parent="AppTheme" />
+
+    <style name="BaseStyle" parent="AppTheme" />
+
+    <!--增加启动图-->
+    <style name="Theme.Jesse205.Welcome" parent="Theme.Jesse205.Default" />
+
 </resources>

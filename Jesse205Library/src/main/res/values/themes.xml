@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!--基础主题-->
     <style name="Base.Theme.Jesse205" parent="Theme.MaterialComponents.Light">
         <item name="colorPrimary">@color/jesse205_white</item>
@@ -10,8 +10,8 @@
         <item name="windowBackgroundColor">@color/jesse205_white</item>
         <item name="android:windowBackground">?windowBackgroundColor</item>
         <item name="android:navigationBarColor">@color/jesse205_white</item>
-        <item name="android:windowLightStatusBar">?windowLightStatusBar</item>
-        <item name="android:windowLightNavigationBar">?windowLightNavigationBar</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">?windowLightStatusBar</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">?windowLightNavigationBar</item>
         <item name="windowLightStatusBar">true</item>
         <item name="windowLightNavigationBar">true</item>
 
@@ -31,7 +31,7 @@
       
         <item name="actionOverflowMenuStyle">@style/Widget.Jesse205.PopupMenu.Overflow</item>
         <item name="popupMenuStyle">@style/Widget.Jesse205.PopupMenu</item>
-        <item name="android:contextPopupMenuStyle">@style/Widget.Jesse205.ContextPopupMenu</item>
+        <item name="android:contextPopupMenuStyle" tools:targetApi="n">@style/Widget.Jesse205.ContextPopupMenu</item>
        
         <item name="android:alertDialogTheme">@style/Base.Theme.Jesse205.Dialog.Alert</item>
         <item name="alertDialogTheme">@style/ThemeOverlay.Jesse205.Dialog.Alert</item>

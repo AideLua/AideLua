@@ -7,7 +7,7 @@ appInfo={
     url="https://jesse205.com/aidelua",
     clickable=true;
   },
- {
+  {
     name="AIDE Pro",
     message="一个经魔改过的全新版本",
     iconResource=R.drawable.ic_androidstudio,
@@ -15,9 +15,9 @@ appInfo={
     clickable=true;
   },
   {
-    name=R.string.windmill,
+    name="Windmill",
     message="重认手机上的工具",
-    iconResource=R.drawable.ic_windmill,
+    iconResource=R.mipmap.ic_launcher_windmill,
     url="https://www.coolapk.com/apk/com.agyer.windmill",
     clickable=true;
   },
