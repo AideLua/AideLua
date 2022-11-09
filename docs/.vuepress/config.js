@@ -1,6 +1,8 @@
 import { defineUserConfig } from 'vuepress'
 import { defaultTheme } from '@vuepress/theme-default'
 import { prismjsPlugin } from '@vuepress/plugin-prismjs'
+import { pwaPlugin } from '@vuepress/plugin-pwa'
+import { pwaPopupPlugin } from '@vuepress/plugin-pwa-popup'
 
 export default defineUserConfig({
   lang: 'zh-CN',
@@ -11,7 +13,7 @@ export default defineUserConfig({
     ['link', { rel: 'icon', type: "image/png", sizes: "32x32", href: "/AideLua/favicon-32x32.ico" }],
     ['link', { rel: 'icon', type: "image/png", sizes: "16x16", href: "/AideLua/favicon-16x16.ico" }],
     ['link', { rel: 'apple-touch-icon', sizes: "180x180", href: "/AideLua/images/icons/apple-touch-icon.png" }],
-    ['link', { rel: 'mask-icon', sizes: "180x180", href: "/AideLua/images/icons/safari-pinned-tab.svg", color: "#5bbad5" }],
+    ['link', { rel: 'mask-icon', sizes: "180x180", href: "/AideLua/images/icons/safari-pinned-tab.svg", color: "#3F51B5" }],
     ['link', { rel: 'manifest', href: '/AideLua/manifest.webmanifest' }],
     ['meta', { name: 'msapplication-TileColor', content: '#3f51b5' }],
   ],
@@ -285,6 +287,15 @@ export default defineUserConfig({
   plugins: [
     prismjsPlugin({
       preloadLanguages: ["lua"]
-    })
+    }),
+    pwaPlugin(),
+    pwaPopupPlugin({
+      locales: {
+        '/': {
+          message: '发现新内容可用',
+          buttonText: '刷新',
+        },
+      },
+    }),
   ]
 })

@@ -1,9 +1,11 @@
 # Aide Lua 使用文档
 
 ## 简介
-[![QQ 群](https://img.shields.io/badge/加入-QQ_群-0099FF?logo=TencentQQ&style=flat-square)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
-[![QQ 频道](https://img.shields.io/badge/加入-QQ_频道-0099FF?logo=TencentQQ&style=flat-square)](https://pd.qq.com/s/ncghvc)
-[![Gitee 发行版](https://img.shields.io/badge/Gitee-发行版-C71D23?logo=gitee&style=flat-square)](https://gitee.com/Jesse205/AideLua/releases)
+[![License](https://img.shields.io/github/license/Jesse205/AideLua?style=flat-square)](https://gitee.com/Jesse205/AideLua/blob/master/LICENSE)
+[![发行版](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=发行版&logo=gitee&style=flat-square)](https://gitee.com/Jesse205/AideLua/releases)
+
+[![QQ 群: 628045718](https://img.shields.io/badge/加QQ_群-628045718-0099FF?logo=TencentQQ&style=flat-square)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
+[![QQ 频道: t37c1u1nmw](https://img.shields.io/badge/QQ_频道-t37c1u1nmw-0099FF?logo=TencentQQ&style=flat-square)](https://pd.qq.com/s/ncghvc)
 
 Aide Lua 是一款依赖 Aide 的 Lua 编辑器<br>
 Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件开发
@@ -16,13 +18,18 @@ Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件�
 3. 标有 <Badge type="danger" text="*" vertical="middle" /> 的表示必须文件、方法 或 变量
 
 ## 下载
-[〖Aide 高级设置版〗](https://www.lanzouy.com/b00zdhbeb)
+### AIDE 高级设置版
+[![蓝奏云](https://img.shields.io/badge/蓝奏云-38.5_M-FF6600?logo=icloud&style=flat-square&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
+[![Github Releases)](https://img.shields.io/github/v/tag/AndroIDE-Pro/AidePro?color=0969DA&label=Gitee+Releases&logo=github&style=flat-square)](https://github.com/AndroIDE-Pro/AidePro/releases)
 
-1. [__Gitee 下载 (推荐，更新及时)__](https://gitee.com/Jesse205/AideLua/releases)
-2. [天翼云盘 (可能更新不及时)](https://cloud.189.cn/t/ZZ7RzijyqiUv)
-3. [腾讯微云 (可能更新不及时)](https://share.weiyun.com/oLiNtxMR)
-4. [百度网盘 (可能今天下不完)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q) ，密码jxnb
-5. [123云盘 (可能更新不及时)](https://www.123pan.com/s/G7a9-Yzck)
+### Aide Lua Pro
+[![Gitee 发行版)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+发行版&logo=gitee&style=flat-square)](https://gitee.com/Jesse205/AideLua/releases)
+
+#### 其他渠道 (可能更新不及时)
+[![天翼云盘](https://img.shields.io/badge/天翼云盘--DF9C1F?style=flat-square)](https://cloud.189.cn/t/ZZ7RzijyqiUv)
+[![腾讯微云](https://img.shields.io/badge/腾讯微云--2980ff?style=flat-square)](https://share.weiyun.com/oLiNtxMR)
+[![百度网盘](https://img.shields.io/badge/百度网盘-密码_jxnb-06a7ff?style=flat-square)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q?pwd=jxnb)
+[![123云盘](https://img.shields.io/badge/123云盘--597dfc?style=flat-square)](https://www.123pan.com/s/G7a9-Yzck)
 
 ## 工作原理
 1. 读取 `.aidelua/config.lua` 的内容
@@ -38,10 +45,10 @@ Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件�
 4. 要实现直接运行项目，必须导出 `LuaActivity`（默认是导出的），__并成功安装项目软件（先用 AIDE 打包，然后用 Aide Lua 打包，最后安装）__
 
 ## 使用教程
-由于 AIDE 的特殊性，请下载 __AIDE高级设置版__ 进行操作
+由于 AIDE 的特殊性，请下载 [__AIDE高级设置版__](https://aidepro.top/) 进行操作
 
 ### 快速入门
-#### 一、配置AIDE
+#### 一、配置 AIDE
 1. 进入 `设置-高级设置-工程相关`
 2. 关闭 `启用alert调试文件` ，打开 `重定义Apk构建路径`
 3. 重启 AIDE

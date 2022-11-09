@@ -11,7 +11,7 @@
     --c-bg-lighter: #EEEEEE; //更亮背景色，用于小代码框，代码框内高亮
 
     --c-text: black;
-    --c-text-lighter: #303F9F;
+    --c-text-lighter: #1A237E;
     --c-text-quote: #616161;
 
     --code-ln-wrapper-width: 2rem;
@@ -50,7 +50,7 @@ html.dark {
     --c-bg-lighter: #424242;
 
     --c-text: #F5F5F5;
-    --c-text-lighter: #7986CB;
+    --c-text-lighter: #C5CAE9;
 
     --code-hl-bg-color: var(--c-bg-lighter) !important;
 
@@ -199,4 +199,8 @@ div[class*=language-] .highlight-lines {
 // 官方没有给lua写上语言标注，这里补一下
 div[class*=language-].ext-lua:before {
     content: "lua";
+}
+
+div{
+    transition: background-color var(--t-color);
 }

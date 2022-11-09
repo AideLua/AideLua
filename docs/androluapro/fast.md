@@ -42,7 +42,7 @@ end
 ``` lua
 layout=LinearLayout(activity)
 ```
-用addView添加视图
+用 `addView` 添加视图
 ``` lua
 layout.addView(button)
 ```
