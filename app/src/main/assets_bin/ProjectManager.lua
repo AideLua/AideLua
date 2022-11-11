@@ -229,6 +229,61 @@ function ProjectManager.shortPath(path,max,basePath)
   end
 end
 
+--通过content.icon获取工程图标文件
+--在 v5.1.0(51099) 添加
+function ProjectManager.getExistingIconFileByContent(content,projectPath)
+  local type_=type(content)
+  local file,path
+  if type_=="string" then
+    path=rel2AbsPath(content,projectPath)
+    file=File(path)
+    return (file.isFile() and file),path
+   elseif type_=="table" then--此时content为table
+    local isNightMode=ThemeUtil.isNightMode()--获取夜间模式状态
+    --如果开启了夜间模式，并且存在night值，就使用night值，否则使用day值，如果day值没有的话，就真的没了
+    --无night值时使用day值，但无day值时不会使用night值
+    --补充知识点：and的作用是挨个取值，如果都不为nil或false，则返回第二个值。or挨个取值，哪个最先不为nil或false，就取哪个
+    --为哈非常多人连这个语法都不知道呢，只是简单认为and两边都为true返回true，or两边有一个为true就返回true
+    local autoIcon=(isNightMode and content.night) or content.day
+    if autoIcon then--如果有自动图标，那就用自动图标
+      file,path=ProjectManager.getExistingIconFileByContent(autoIcon,projectPath)
+      if file then
+        return file,path
+      end
+    end
+
+    for index=1,#content do
+      local subContent=content[index]
+      if subContent then
+        file,path=ProjectManager.getExistingIconFileByContent(subContent,projectPath)
+        if file then
+          return file,path
+        end
+      end
+    end
+  end
+end
+
+--获取图标路径
+--在 v5.1.0(51099) 添加
+function ProjectManager.getProjectIconPath(config,projectPath,mainProjectPath)
+  local iconPaths={
+    config.icon,
+    projectPath.."/ic_launcher-playstore.png",
+    projectPath.."/ic_launcher-aidelua.png",
+    mainProjectPath.."/ic_launcher-playstore.png",
+    mainProjectPath.."/ic_launcher-aidelua.png",
+    mainProjectPath.."/res/mipmap-xxxhdpi/ic_launcher_round.png",
+    mainProjectPath.."/res/mipmap-xxxhdpi/ic_launcher.png",
+    mainProjectPath.."/res/drawable/ic_launcher.png",
+    mainProjectPath.."/res/drawable/icon.png",
+  }
+
+  local file,path=ProjectManager.getExistingIconFileByContent(iconPaths,projectPath)
+  return path
+end
+
+
 function ProjectManager.getNowConfig()
   return nowConfig
 end
