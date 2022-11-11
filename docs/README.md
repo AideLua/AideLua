@@ -8,7 +8,8 @@
 [![QQ 频道: t37c1u1nmw](https://img.shields.io/badge/QQ_频道-t37c1u1nmw-0099FF?logo=TencentQQ&style=flat-square)](https://pd.qq.com/s/ncghvc)
 
 Aide Lua 是一款依赖 Aide 的 Lua 编辑器<br>
-Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件开发
+Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件开发<br>
+Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 [![杰西205/Aide Lua](https://gitee.com/Jesse205/AideLua/widgets/widget_card.svg?colors=4183c4,ffffff,ffffff,e3e9ed,666666,9b9b9b)](https://gitee.com/Jesse205/AideLua)
 

@@ -98,6 +98,7 @@ function refreshMagnifier()
     pcall(function()--放大镜
       import "android.widget.Magnifier"
       magnifier=Magnifier(editorGroup)
+      --Android开发者上面有更好的解决方案
       magnifierUpdateTi=Ticker()--放大镜的定时器，定时刷新放大镜
       magnifierUpdateTi.setPeriod(200)
       magnifierUpdateTi.onTick=function()

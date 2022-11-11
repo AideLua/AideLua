@@ -47,7 +47,7 @@ LuaEditorHelper.isNearChar2=isNearChar2
 
 
 function LuaEditorHelper.onEditorSelectionChangedListener(view,status,start,end_)
-  
+
   if not(_clipboardActionMode) and status then
     local actionMode=luajava.new(ActionMode.Callback,
     {
@@ -125,7 +125,7 @@ function LuaEditorHelper.applyPencilInput(editor,pencilEdit)
   pencilEdit.addTextChangedListener({
     onTextChanged=function(text,start,before,count)
       text=tostring(text)
-      if text~=" " then
+      if text~=" " then--华为默认会在输入法插入空格
         if text=="" then
          else
           local newText=text:match(" (.+)")
@@ -153,8 +153,7 @@ function LuaEditorHelper.applyMagnifier(editor)
   local showingMagnifier=false
   local clickingLuaEitorEvent=nil
   editor.onTouch=function(view,event)
-    --print(view.getRowWidth())
-    if magnifier and editor_magnify then
+    if editor_magnify and magnifier then--这俩是全局变量，第一个确保放大镜已打开，第二个确保可以正常加载放大镜
       local action=event.action
       local relativeCaretX=view.getCaretX()-view.getScrollX()
       local relativeCaretY=view.getCaretY()-view.getScrollY()
@@ -167,10 +166,9 @@ function LuaEditorHelper.applyMagnifier(editor)
       if action==MotionEvent.ACTION_DOWN or action==MotionEvent.ACTION_MOVE then
         if not(clickingLuaEitorEvent) or (clickingLuaEitorEvent.x~=x or clickingLuaEitorEvent.y~=y) then
           isNearChar=isNearChar2(editor,relativeCaretX,relativeCaretY,x,y)
-          clickingLuaEitorEvent={x=x,y=y}
+          clickingLuaEitorEvent={x=x,y=y}--保存
           if isNearChar then
             magnifier.show(magnifierX,magnifierY)
-            --print(magnifierX,magnifierY,x,y)
             showingMagnifier=true
             if not(magnifierUpdateTi.isRun()) then
               magnifierUpdateTi.start()
@@ -257,6 +255,10 @@ function LuaEditorHelper.initKeysTaskFunc(keysList,packagesList)
     end
   end
   local success,message=pcall(function()
+    for index,content in pairs(keysList) do
+      addWords(content,-1)
+    end
+
     for index,content in ipairs({androluaApis,systemApis}) do--插入新的names
       addWords(content,0)
     end
@@ -265,10 +267,6 @@ function LuaEditorHelper.initKeysTaskFunc(keysList,packagesList)
     if activity.getSharedData("androidX_support") then
       import "androidApis.editor.androidxApis"
       addWords(androidxApis,0)
-    end
-
-    for index,content in pairs(keysList) do
-      addWords(content,-1)
     end
 
     addPackages({"activity","application","LuaUtil","android","R"})
@@ -298,6 +296,7 @@ function LuaEditorHelper.initKeys(editor,editorParent,pencilEdit,progressBar)
     local packagesList=editorConfig.packagesList
     keywordsList.normalKeywords=editorConfig.normalKeywords
     if oldJesse205Support then--添加杰西205库
+      --现构建，因为这个要执行的东西有一点多
       keywordsList.jesse205Words=editorConfig.jesse205Keywords
       packagesList.jesse205Words=Map({
         string=String(getTableIndexList(string)),

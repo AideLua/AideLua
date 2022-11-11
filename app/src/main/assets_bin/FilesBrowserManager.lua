@@ -173,7 +173,7 @@ end
 
 
 function FilesBrowserManager.getProjectIconForGlide(projectPath,config,mainProjectPath)
-  --local mainProjectPath=ReBuildTool.getMainProjectDirByConfig(projectPath,config)
+  print(ProjectManager.getProjectIconPath(config,projectPath,mainProjectPath))
   local adaptiveIcon--自适应图标
   --判断是不是table类型，如果是则进行夜间判断，如果是字符串则直接赋值
   if type(config.icon)=="table" then
@@ -192,10 +192,10 @@ function FilesBrowserManager.getProjectIconForGlide(projectPath,config,mainProje
   --图标可能存在的目录
   local icons={
     adaptiveIcon,
-    projectPath.."/ic_launcher-aidelua.png",
     projectPath.."/ic_launcher-playstore.png",
-    mainProjectPath.."/ic_launcher-aidelua.png",
+    projectPath.."/ic_launcher-aidelua.png",
     mainProjectPath.."/ic_launcher-playstore.png",
+    mainProjectPath.."/ic_launcher-aidelua.png",
     mainProjectPath.."/res/mipmap-xxxhdpi/ic_launcher_round.png",
     mainProjectPath.."/res/mipmap-xxxhdpi/ic_launcher.png",
     mainProjectPath.."/res/drawable/ic_launcher.png",

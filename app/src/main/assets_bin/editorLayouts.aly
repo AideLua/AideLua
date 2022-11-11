@@ -150,18 +150,19 @@ import "jesse205"
 
 ]],
     --将要添加到LuaEditor的关键词列表
-    --更改后需要执行application.set("luaeditor_initialized", false)，以便在下次进入页面时更新
-    --使用activity.recreate()重启页面
-    --index为方便更改内容，请使用string类型
+    --更改后需要执行 application.set("luaeditor_initialized", false) ，以便在下次进入页面时更新
+    --使用 activity.recreate() 重启页面
+    --index 为方便更改内容，请使用 string 类型，当然 number 类型也能用
     keywordsList={
       --一些常用但不自带的类
-      otherWords=String({"PhotoView","LuaLexerIteratorBuilder"})
+      annotationsWords=String{"class","type","alias","param","return","field","generic","vararg","language","example"},
+      otherWords=String{"PhotoView","LuaLexerIteratorBuilder"},
     },
     packagesList={
-      --otherPackages=Map({hello=String({"world"}),jesse205=String({"nb"})})
+      --otherPackages=Map{hello=String{"world"},jesse205=String{"nb"}},
     },
 
-    normalKeywords=String({
+    normalKeywords=String{
       --一些事件
       "onCreate","onStart","onResume","onPause","onStop","onDestroy",
       "onActivityResult","onResult","onCreateOptionsMenu","onOptionsItemSelected",
@@ -174,8 +175,8 @@ import "jesse205"
 
       --一些自带的类或者包
       "android","R",
-    }),
-    jesse205Keywords=String({
+    },
+    jesse205Keywords=String{
       "newActivity","getSupportActionBar","getSharedData","setSharedData",
       "getString","getPackageName","getColorStateList","getNetErrorStr",
 
@@ -208,7 +209,7 @@ import "jesse205"
       table.unpack(StyleWidget.types),
 
       "FileInfoUtils",
-    }),
+    },
 
   },
   CodeEditor={

@@ -84,7 +84,7 @@ local function getEditorTypefaces()
   --常规，粗体，斜体
   local typeface,boldTypeface,italicTypeface
   local id=oldEditorFontId
-  if id==0 then
+  if id==0 then--默认，自动读取androlua字体
     local fontDir=LuaApplication.getInstance().getLuaExtDir("fonts")
 
     --常规
@@ -110,19 +110,19 @@ local function getEditorTypefaces()
      else
       italicTypeface=Typeface.create(typeface,Typeface.ITALIC)
     end
-   elseif id==1 then
+   elseif id==1 then--JetBrains Mono
     typeface=ResourcesCompat.getFont(activity, R.font.jetbrainsmonoregular)
     boldTypeface=ResourcesCompat.getFont(activity, R.font.jetbrainsmonobold)
     italicTypeface=ResourcesCompat.getFont(activity, R.font.jetbrainsmonoitalic)
-   elseif id==2 then
+   elseif id==2 then--Cascadia Code
     typeface=ResourcesCompat.getFont(activity, R.font.cascadiacode)
     boldTypeface=Typeface.create(typeface,Typeface.BOLD)
     italicTypeface=ResourcesCompat.getFont(activity, R.font.cascadiacodeitalic)
-   elseif id==3 then
+   elseif id==3 then--系统字体
     typeface=Typeface.DEFAULT
     boldTypeface=Typeface.DEFAULT_BOLD
     italicTypeface=Typeface.create(typeface,Typeface.ITALIC)
-   elseif id==4 then
+   elseif id==4 then--衬线，中文为宋体
     typeface=Typeface.SERIF
     boldTypeface=Typeface.create(typeface,Typeface.BOLD)
     italicTypeface=Typeface.create(typeface,Typeface.ITALIC)
@@ -388,6 +388,7 @@ function EditorsManager.switchEditor(newEditorType)
   editor=editorGroupViews.editor
   editorParent=editorGroupViews.editorParent
   editorGroup.addView(editorParent)
+  --必须加分号，否则编译器会认为这个括号是给上一个返回值调用的
   ;(editor or editorParent).requestFocus()
 
   if editorConfig.supportScroll then
@@ -398,7 +399,8 @@ function EditorsManager.switchEditor(newEditorType)
   PluginsUtil.callElevents("onSwitchEditor", newEditorType,editorConfig)
 end
 
---同时切换编辑器和语言，一般用于打开文本文件
+---同时切换编辑器和语言，一般用于打开文本文件
+---@param decoder FileDecoder 文件解析工具
 function EditorsManager.switchEditorByDecoder(decoder)
   --先切换编辑器，后切换编辑器语言，因为语言的设置是给当前正在使用的编辑器使用的
   EditorsManager.switchEditor(decoder.editor)
@@ -407,6 +409,7 @@ function EditorsManager.switchEditorByDecoder(decoder)
   end
 end
 
+---刷新当前编辑器滚动状态
 function EditorsManager.refreshEditorScrollState()
   if editorConfig then
     local scrollState=editorConfig.supportScroll
@@ -456,7 +459,8 @@ end
 local symbolBar={}
 EditorsManager.symbolBar=symbolBar
 
---符号栏按钮点击时输入符号
+---符号栏按钮点击时输入符号
+---@param view View 按钮视图
 function symbolBar.psButtonClick(view)
   local text=view.text
   if managerActions.paste(text) then
@@ -464,12 +468,15 @@ function symbolBar.psButtonClick(view)
   end
 end
 
---初始化一个符号栏按钮
-function symbolBar.newPsButton(text)
+---初始化一个符号栏按钮
+---@param text string 显示的文字
+---@param pasteText string 粘贴的文字，默认为显示的文字 (在 v5.1.0(51099) 上添加)
+function symbolBar.newPsButton(text,pasteText)
   local button=loadlayout2({
     AppCompatTextView;
     onClick=symbolBar.psButtonClick;
     text=text;
+    tag=pasteText or text;
     gravity="center";
     layout_height="fill";
     typeface=Typeface.DEFAULT_BOLD;--加粗一下，看的快
@@ -477,7 +484,6 @@ function symbolBar.newPsButton(text)
     paddingRight="8dp";
     minWidth="40dp";--设置最小宽度，减少误触
     allCaps=false;
-    --padding="16dp";
     focusable=true;
     textColor=theme.color.textColorPrimary;
     background=ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary)
@@ -486,12 +492,15 @@ function symbolBar.newPsButton(text)
 end
 
 local loadedSymbolBar=false
-function symbolBar.refresh(state)--刷新符号栏状态
+---刷新符号栏状态
+---@param state boolean 新状态
+function symbolBar.refresh(state)
   if state then
     if not(loadedSymbolBar) then--没有加载过符号栏，就加载一次
-      local ps={"function()","(",")","[","]","{","}","\"","=",":",".",",",";","_","+","-","*","/","\\","%","#","^","$","?","&","|","<",">","~","'"};
+      local ps={"fun()","(",")","[","]","{","}","\"","=",":",".",",",";","_","+","-","*","/","\\","%","#","^","$","?","&","|","<",">","~","'"}
+      local ps_paste={"function()"}
       for index,content in ipairs(ps) do
-        ps_bar.addView(symbolBar.newPsButton(content))
+        ps_bar.addView(symbolBar.newPsButton(content,ps_paste[index]))
       end
       ps=nil
       loadedSymbolBar=true
