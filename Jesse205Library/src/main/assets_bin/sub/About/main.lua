@@ -132,7 +132,7 @@ if appInfo then
     messageView.setText(content.message)
     if content.clickable then
       mainIconLay.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary))
-      mainIconLay.onClick=lambda appIconGroup,mainIconLay,content: callItem(appIconGroup,mainIconLay,content)
+      mainIconLay.onClick=lambda view: callItem(appIconGroup,view,content)
     end
     local pain=ids.name.getPaint()
     pain.setTypeface(content.typeface or Typeface.defaultFromStyle(Typeface.BOLD))

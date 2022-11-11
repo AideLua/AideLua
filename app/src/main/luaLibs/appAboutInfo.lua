@@ -4,13 +4,13 @@ appInfo={
     name=R.string.app_name,
     message="为更快进行移动开发",
     iconResource=R.mipmap.ic_launcher,
-    url="https://jesse205.com/aidelua",
+    url="https://jesse205.github.io/aidelua",
     clickable=true;
   },
   {
     name="AIDE Pro",
     message="一个经魔改过的全新版本",
-    iconResource=R.drawable.ic_androidstudio,
+    iconResource=R.mipmap.ic_launcher_aide,
     url="https://aidepro.top/",
     clickable=true;
   },
@@ -40,7 +40,7 @@ developers={
     message="快乐程序 运营者",
   },
   {
-    name="凌肆柒",
+    name="0047ol",
     qq=2088343717,
     message="AideLua 官网开发者",
   },
@@ -92,6 +92,10 @@ moreItem={
     icon=R.drawable.ic_wallet_giftcard;
     contextMenuEnabled=true;
     menus={
+      {
+        title="更多软件",
+        url="https://jesse205.github.io/",
+      },
       {
         title="问题反馈 (QQ频道)",
         url="https://pd.qq.com/s/97ho4f",
