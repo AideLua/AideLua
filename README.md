@@ -27,7 +27,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 ### Gradle for AIDE Pro
 ### AIDE 高级设置版
 [![蓝奏云](https://img.shields.io/badge/蓝奏云-38.5_M-FF6600?logo=icloud&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
-[![Github Releases)](https://img.shields.io/github/v/tag/AndroIDE-Pro/AidePro?color=0969DA&label=Gitee+Releases&logo=github)](https://github.com/AndroIDE-Pro/AidePro/releases)
+[![Github Releases)](https://img.shields.io/github/v/tag/AndroIDE-Pro/AidePro?color=0969DA&label=Github+Releases&logo=github)](https://github.com/AndroIDE-Pro/AidePro/releases)
 
 ### Aide Lua Pro
 [![Gitee 发行版)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+发行版&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases)
