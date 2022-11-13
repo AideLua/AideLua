@@ -63,19 +63,16 @@ local function applyTabMenu(view,tabFileConfig)
       FilesTabManager.openFile(file,fileType,true)
     end
   end
-  local startTime
   local maxY=0--最大滑动垂直距离
   view.onTouch=function(view,event)
     local action=event.getAction()
     local y=event.getY()
     local x=event.getX()
-    local time=System.currentTimeMillis()
+    local time=event.getEventTime()
     if maxY<y then
       maxY=y
     end
-    if action==MotionEvent.ACTION_DOWN then
-      startTime=time
-     elseif action==MotionEvent.ACTION_MOVE then
+    if action==MotionEvent.ACTION_MOVE then
       if not(dropMenuState) and y>filesTabLay.getHeight() then
         dropMenuState=true
         view.requestDisallowInterceptTouchEvent(true)
@@ -83,7 +80,7 @@ local function applyTabMenu(view,tabFileConfig)
         popupMenu.show()
       end
     end
-    if dropMenuState and ((time-startTime)>700 or maxY-y>math.dp2int(8)) then
+    if dropMenuState and ((time-event.getDownTime())>600 or maxY-y>math.dp2int(8)) then
       dropListener.onTouch(view,event)
     end
     if action==MotionEvent.ACTION_UP then

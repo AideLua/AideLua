@@ -255,14 +255,16 @@ function FilesBrowserManager.PathRecyclerViewBuilder(context)
   })
 end
 
+--加载更多菜单
 function FilesBrowserManager.loadMoreMenu(moreView)
   local popupMenu=PopupMenu(activity,moreView)
   moreView.setOnTouchListener(popupMenu.getDragToOpenListener())
   popupMenu.inflate(R.menu.menu_main_file_upfile)
   local menu=popupMenu.getMenu()
+  --打开当前路径菜单
   local currentFileMenu=menu.findItem(R.id.menu_openDir_currentFile)
-  FilesBrowserManager.currentFileMenu=currentFileMenu
-  currentFileMenu.setEnabled(FilesTabManager.openState)
+  FilesBrowserManager.currentFileMenu=currentFileMenu--保存一下，方便标签管理器随时禁用
+  currentFileMenu.setEnabled(FilesTabManager.openState)--万一是先打开文件后再加载的列表呢
   popupMenu.onMenuItemClick=function(item)
     local id=item.getItemId()
     local Rid=R.id
@@ -734,6 +736,8 @@ function FilesBrowserManager.init()
         end
         dropPermissions.release()
       end
+     elseif action==DragEvent.ACTION_DRAG_ENDED then
+      view.setBackgroundColor(0)
     end
     return true
   end
