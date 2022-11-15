@@ -65,7 +65,11 @@ local function askForRequestPermissions(permissionsItemsList)
       .setTitle(R.string.jesse205_permission_request)
       .setMessage(formatResStr(R.string.jesse205_permission_ask,{permissionsItem.tool,permissionsItem.name,permissionsItem.todo}))
       .setPositiveButton(android.R.string.ok,function()
-        request(permissions)
+        if permissionsItem.intent then
+          activity.startActivity(permissionsItem.intent)
+         else
+          request(permissions)
+        end
       end)
       .show()
     end

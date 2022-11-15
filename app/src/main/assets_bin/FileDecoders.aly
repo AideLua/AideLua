@@ -1,3 +1,4 @@
+---@type table<string, FileDecoder>
 {
   txt={
     editor="CodeEditor",
@@ -5,7 +6,7 @@
       local content=isBinaryFile(path)
       if content==true then
         error(getString(R.string.file_cannot_open_compiled_file))
-        end
+      end
       return content
     end,
     save=function(path,content)

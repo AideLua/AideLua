@@ -59,12 +59,13 @@
       radius="20dp";
       cardBackgroundColor=0;
       --elevation="2dp";
+      id="iconCard";
       {
         AppCompatImageView;
         id="icon";
         layout_width="fill";
         layout_height="fill";
-        elevation="1dp";
+        --elevation="4dp";
         --outlineProvider=ViewOutlineProvider.BOUNDS;
       };
     };

@@ -1,11 +1,12 @@
 require "import"
 import "jesse205"
 import "android.text.Html"
-import "com.onegravity.rteditor.RTEditorMovementMethod"
+import "com.onegravity.rteditor.RTEditorMovementMethod"--可以选择与点击的MovementMethod
 
 activity.setTitle(R.string.jesse205_htmlFileViewer)
 activity.setContentView(loadlayout2("layout"))
 actionBar.setDisplayHomeAsUpEnabled(true)
+---传入的数据
 local data=...
 
 function onOptionsItemSelected(item)
@@ -16,6 +17,7 @@ function onOptionsItemSelected(item)
 end
 
 function onConfigurationChanged(config)
+  --刷新ActionBar阴影
   MyAnimationUtil.ScrollView.onScrollChange(scrollView,scrollView.getScrollX(),scrollView.getScrollY(),0,0)
 end
 

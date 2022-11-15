@@ -35,6 +35,23 @@ local function onClick(view)
     end
   end
 end
+--拖放，有bug，用不了
+--[[
+local function onLongClick(view)
+  local data=view.tag._data
+  if data and Build.VERSION.SDK_INT>24 and false then
+    import "android.content.ClipData"
+    import "android.content.ClipDescription"
+    import "android.view.View$DragShadowBuilder"
+    import "android.content.FileProvider"
+    import "android.webkit.MimeTypeMap"
+    --local item=ClipData.Item()
+    --local clipData=ClipData("",{getMimeType(data.fileType)},item)
+    local clipData=ClipData.newUri(activity.getContentResolver(), "File", FileProvider.getUriForFile(activity,jesse205.packageName,data.file))
+    local myShadow=DragShadowBuilder(view)
+    view.startDragAndDrop(clipData,myShadow,nil,View.DRAG_FLAG_GLOBAL|View.DRAG_FLAG_GLOBAL_URI_READ)
+  end
+end]]
 
 local function fileMoreMenuClick(view)
   local tag=view.tag
@@ -73,6 +90,7 @@ return function(item)
       view.setTag(ids)
       view.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
       view.onClick=onClick
+      --view.onLongClick=onLongClick
 
       if viewType==3 then
         local moreView=ids.more
@@ -195,7 +213,8 @@ return function(item)
                 title=(config.appName or unknowString).." (Unable to get RePackTool)"
               end
               summary=config.packageName or unknowString
-              iconUrl=FilesBrowserManager.getProjectIconForGlide(filePath,config,mainProjectPath)
+              --iconUrl=FilesBrowserManager.getProjectIconForGlide(filePath,config,mainProjectPath)
+              iconUrl=ProjectManager.getProjectIconPath(config,filePath,mainProjectPath) or android.R.drawable.sym_def_app_icon
              else--文件已损坏
               title="(Unable to load config.lua)"
               summary=config
@@ -224,6 +243,7 @@ return function(item)
             local options=RequestOptions()
             options.skipMemoryCache(true)--跳过内存缓存
             options.diskCacheStrategy(DiskCacheStrategy.NONE)--不缓冲disk硬盘中
+            options.error(android.R.drawable.sym_def_app_icon)
             Glide.with(activity)
             .load(iconUrl)
             .apply(options)

@@ -88,7 +88,8 @@
       end
       LuaEditorHelper.initKeys(editor,editorParent,pencilEdit,progressBar)
       LuaEditorHelper.applyStyleToolBar(editor)
-      LuaEditorHelper.applyMagnifier(editor)
+      --LuaEditorHelper.applyMagnifier(editor)
+      LuaEditorHelper.applyTouchListener(editor)
       LuaEditorHelper.applyPencilInput(editor,pencilEdit)
     end,
     onTypefaceChangeListener=function(ids,config,editor,typeface,boldTypeface,italicTypeface)
@@ -149,15 +150,19 @@
 import "jesse205"
 
 ]],
-    --将要添加到LuaEditor的关键词列表
-    --更改后需要执行 application.set("luaeditor_initialized", false) ，以便在下次进入页面时更新
-    --使用 activity.recreate() 重启页面
-    --index 为方便更改内容，请使用 string 类型，当然 number 类型也能用
+    ---将要添加到LuaEditor的关键词列表
+    ---更改后需要执行 application.set("luaeditor_initialized", false) ，以便在下次进入页面时更新
+    ---使用 activity.recreate() 重启页面
+    ---index 为方便更改内容，请使用 string 类型，当然 number 类型也能用
+    ---@type table<string, String[]>
     keywordsList={
       --一些常用但不自带的类
       annotationsWords=String{"class","type","alias","param","return","field","generic","vararg","language","example"},
       otherWords=String{"PhotoView","LuaLexerIteratorBuilder"},
     },
+
+    ---@type table<string, String[]>
+    ---@see keywordsList
     packagesList={
       --otherPackages=Map{hello=String{"world"},jesse205=String{"nb"}},
     },
@@ -186,17 +191,19 @@ import "jesse205"
       "notLoadTheme","darkStatusBar","darkNavigationBar",
       "window","safeModeEnable","notSafeModeEnable","decorView",
 
+      --一些函数
       "theme","formatResStr","autoSetToolTip",
       "showLoadingDia","closeLoadingDia","getNowLoadingDia",
       "showErrorDialog","toboolean","rel2AbsPath","copyText",
       "newSubActivity","isDarkColor","openInBrowser","openUrl",
       "loadlayout2","showSimpleDialog","getLocalLangObj",
       "newLayoutTransition",
-
+      
+      --一些模块/类
       "AppPath","ThemeUtil","EditDialogBuilder","ImageDialogBuilder",
       "MyToast","AutoToolbarLayout","PermissionUtil",
       "AutoCollapsingToolbarLayout","SettingsLayUtil","jesse205",
-      "StyleWidget","ScreenFixUtil",
+      "StyleWidget","ScreenFixUtil","FileInfoUtils",
 
       --自定义View或者Util
       "MyTextInputLayout","MyTitleEditLayout","MyEditDialogLayout",
@@ -208,7 +215,6 @@ import "jesse205"
 
       table.unpack(StyleWidget.types),
 
-      "FileInfoUtils",
     },
 
   },
@@ -217,7 +223,6 @@ import "jesse205"
       LinearLayoutCompat;
       layout_height="fill";
       layout_width="fill";
-      --layoutTransition=newLayoutTransition();
       id="editorParent";
       {
         MyCodeEditor;

@@ -8,6 +8,12 @@ normalkeys.moreItem=true
 normalkeys.copyright=true
 normalkeys.onUpdate=true
 
+import "android.graphics.Typeface"
+import "android.text.Spannable"
+import "android.text.SpannableString"
+import "android.text.style.ForegroundColorSpan"
+import "android.text.style.StyleSpan"
+
 import "com.jesse205.layout.util.SettingsLayUtil"
 import "com.jesse205.app.dialog.ImageDialogBuilder"
 import "appAboutInfo"
@@ -85,6 +91,20 @@ function onItemClick(view,views,key,data)
     newSubActivity("HtmlFileViewer",{{title=data.title,path=data.path}})
    elseif key=="openSourceLicenses" then
     newSubActivity("OpenSourceLicenses")
+   elseif key=="thanks" then
+    local items={}
+    for index,content in pairs(data.thanks) do
+      local text=SpannableString(index..": "..table.concat(content,"、"))
+      local indexLength=utf8.len(index)
+      text.setSpan(ForegroundColorSpan(theme.color.colorAccent),0,indexLength,Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+      text.setSpan(StyleSpan(Typeface.BOLD),0,indexLength,Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
+      table.insert(items,text)
+    end
+    AlertDialog.Builder(this)
+    .setTitle(R.string.jesse205_thanksList)
+    .setItems(items,nil)
+    .setPositiveButton(android.R.string.ok,nil)
+    .show()
   end
 end
 
@@ -178,7 +198,7 @@ if agreements then
 end
 
 --开发信息
-if developers or openSourceLicenses then
+if developers or openSourceLicenses or thanks then
   table.insert(data,{
     SettingsLayUtil.TITLE;
     title=R.string.jesse205_developerInfo;
@@ -208,6 +228,17 @@ if developers or openSourceLicenses then
       icon=R.drawable.ic_github;
       key="openSourceLicenses";
       newPage=true;
+    })
+  end
+  --插入感谢名单
+  if thanks then
+    table.insert(data,{
+      SettingsLayUtil.ITEM;
+      title=R.string.jesse205_thanksList;
+      summary=R.string.jesse205_ranking_random;
+      icon=R.drawable.ic_emoticon_happy_outline;
+      key="thanks";
+      thanks=thanks;
     })
   end
 end

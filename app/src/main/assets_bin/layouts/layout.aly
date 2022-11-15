@@ -14,7 +14,7 @@
     "layouts.layout_filepicker";
   };
   {
-    LinearLayoutCompat;
+    LinearLayout;
     layout_width="fill";
     layout_height="fill";
     id="largeMainLay";

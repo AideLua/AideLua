@@ -170,12 +170,18 @@ function fiximport(code,packageName,application)
 end
 
 --延迟一毫秒隐藏悬浮球，如果不延迟的话会有动画及各种bug
-
+--[[
 Handler().postDelayed(Runnable({
   run=function()
     floatButton.hide()
   end
-}),1)
+}),1)]]
+--这种方式更可取
+floatButton.post(Runnable({
+  run=function()
+    floatButton.hide()
+  end
+}))
 
 
 activity.newTask(fiximport,function(success,content)

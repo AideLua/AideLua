@@ -49,6 +49,23 @@ developers={
 --启用开源许可
 openSourceLicenses=true
 
+--[[格式：
+{
+  {
+    name="群名称"; -- 群名称
+    qqGroup=708199076; -- 群号
+    contextMenuEnabled=true; -- 启用ContextMenu
+  },
+  {
+    name="百度", -- 显示的名称
+    url="http://www.baidu.com" -- 跳转连接
+    browserUrl="http://www.baidu.com" -- 浏览器打开链接
+    func=function(view) -- 执行的函数
+    end,
+  },
+  --以此类推
+}
+]]
 moreItem={
   {--交流群
     SettingsLayUtil.ITEM_NOSUMMARY;
@@ -112,23 +129,13 @@ moreItem={
   },
 }
 
---[[格式：
-{
-  {
-    name="群名称"; -- 群名称
-    qqGroup=708199076; -- 群号
-    contextMenuEnabled=true; -- 启用ContextMenu
-  },
-  {
-    name="百度", -- 显示的名称
-    url="http://www.baidu.com" -- 跳转连接
-    browserUrl="http://www.baidu.com" -- 浏览器打开链接
-    func=function(view) -- 执行的函数
-    end,
-  },
-  --以此类推
+--感谢名单
+thanks={
+  难忘的旋律={"PhotoView"},
+  噬心={"HtmlEditor (老版本)"},
+  dingyi={"MyLuaApp","LuaEditor","Gradle工程修复"},
+  狸猫={"提供优化后的 AndroidX 模板"},
 }
-]]
 
 --版权信息
 copyright="Copyright (c) 2020-2022, Jesse205"

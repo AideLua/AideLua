@@ -17,6 +17,7 @@
     <string name="jesse205_userAgreement">User Agreement</string>
     <string name="jesse205_tisl">Third-party information sharing list</string>
     <string name="jesse205_minorProtectionAgreement">Minor Protection Agreement</string>
+    <string name="jesse205_thanksList">List of Thanks</string>
     <string name="jesse205_developerInfo">Developer information</string>
     <string name="jesse205_moreContent">More content</string>
     <string name="jesse205_qqGroup">QQ group</string>
@@ -48,5 +49,5 @@
     <string name="jesse205_theme_teal">Teal</string>
     <string name="jesse205_theme_orange">Orange</string>
     <string name="jesse205_theme_pink">Pink</string>
-    
+    <string name="jesse205_ranking_random">In no particular order</string>
 </resources>

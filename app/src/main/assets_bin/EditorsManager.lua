@@ -462,7 +462,7 @@ EditorsManager.symbolBar=symbolBar
 ---符号栏按钮点击时输入符号
 ---@param view View 按钮视图
 function symbolBar.psButtonClick(view)
-  local text=view.text
+  local text=view.tag[1]
   if managerActions.paste(text) then
     view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
   end
@@ -472,11 +472,12 @@ end
 ---@param text string 显示的文字
 ---@param pasteText string 粘贴的文字，默认为显示的文字 (在 v5.1.0(51099) 上添加)
 function symbolBar.newPsButton(text,pasteText)
+  --print(dump(pasteText or text))
   local button=loadlayout2({
     AppCompatTextView;
     onClick=symbolBar.psButtonClick;
     text=text;
-    tag=pasteText or text;
+    tag={pasteText or text};
     gravity="center";
     layout_height="fill";
     typeface=Typeface.DEFAULT_BOLD;--加粗一下，看的快
@@ -497,12 +498,13 @@ local loadedSymbolBar=false
 function symbolBar.refresh(state)
   if state then
     if not(loadedSymbolBar) then--没有加载过符号栏，就加载一次
-      local ps={"fun()","(",")","[","]","{","}","\"","=",":",".",",",";","_","+","-","*","/","\\","%","#","^","$","?","&","|","<",">","~","'"}
+      local ps={"func()","(",")","[","]","{","}","\"","=",":",".",",",";","_","+","-","*","/","\\","%","#","^","$","?","&","|","<",">","~","'"}
       local ps_paste={"function()"}
       for index,content in ipairs(ps) do
         ps_bar.addView(symbolBar.newPsButton(content,ps_paste[index]))
       end
       ps=nil
+      ps_paste=nil
       loadedSymbolBar=true
     end
     bottomAppBar.setVisibility(View.VISIBLE)

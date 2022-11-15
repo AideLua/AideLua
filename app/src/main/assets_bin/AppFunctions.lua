@@ -93,18 +93,20 @@ end
 
 function refreshMagnifier()
   editor_magnify = getSharedData("editor_magnify")
-
   if not(magnifier) and editor_magnify then
     pcall(function()--放大镜
       import "android.widget.Magnifier"
       magnifier=Magnifier(editorGroup)
       --Android开发者上面有更好的解决方案
+      --magnifierUpdateTi 在 v5.1.0(5099) 废除
+
       magnifierUpdateTi=Ticker()--放大镜的定时器，定时刷新放大镜
-      magnifierUpdateTi.setPeriod(200)
+      magnifierUpdateTi.setPeriod(20)
       magnifierUpdateTi.onTick=function()
         magnifier.update()
       end
       magnifierUpdateTi.setEnabled(false)--先禁用放大镜
+
     end)
   end
 end
@@ -113,13 +115,19 @@ end
 local MyMimeMap={
   lua="text/plain",
 }
+
+--在 v5.1.0(51099) 添加
+function getMimeType(extensionName)
+  return MyMimeMap[extensionName] or MimeTypeMap.getSingleton().getMimeTypeFromExtension(extensionName) or "*/"
+end
+
 --用外部应用打开文件
 function openFileITPS(path)
   import "android.webkit.MimeTypeMap"
   local file=File(path)
   local name=file.getName()
   local extensionName=getFileTypeByName(name)
-  local mime=MyMimeMap[extensionName] or MimeTypeMap.getSingleton().getMimeTypeFromExtension(extensionName) or "*/"
+  local mime=getMimeType(extensionName)
   if mime then
     local intent=Intent()
     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)

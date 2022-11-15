@@ -4,10 +4,77 @@ LuaEditorHelper.removePackages(editor,packages): 移除包
   editor:com.androlua.LuaEditor
   package: table(list)
 ]]
+--混淆的配置，方便后期维护
+local M2PName={
+  ["com.myopicmobile.textwarrior.android.OnSelectionChangedListener"]={
+    _class="b.b.a.a.e",
+    onSelectionChanged="a",
+  },
+}
+
 local LuaEditorHelper={}
 local _clipboardActionMode=nil
+local removePackages,screenToViewX,screenToViewY,isNearChar,isNearChar2
 
-local function removePackages(editor,packages)
+local showingMagnifier=false
+local clickingLuaEitorEvent=nil
+
+---providers 在 v5.1.0(51099) 上添加
+local providers={
+  onTouchProviders={
+    function(view,event)--放大镜提供者
+      if editor_magnify and magnifier then--这俩是全局变量，第一个确保放大镜已打开，第二个确保可以正常加载放大镜
+        local action=event.action
+        local relativeCaretX=view.getCaretX()-view.getScrollX()
+        local relativeCaretY=view.getCaretY()-view.getScrollY()
+        local x=event.getX()
+        local y=event.getY()
+        local magnifierX=x
+        local magnifierY=relativeCaretY-view.getTextSize()/2+math.dp2int(2)
+        local isNearChar
+
+        if action==MotionEvent.ACTION_DOWN or action==MotionEvent.ACTION_MOVE then
+          if not(clickingLuaEitorEvent) or (clickingLuaEitorEvent.x~=x or clickingLuaEitorEvent.y~=y) then
+            isNearChar=isNearChar2(view,relativeCaretX,relativeCaretY,x,y)
+            clickingLuaEitorEvent={x=x,y=y}--保存
+            if isNearChar then
+              magnifier.show(magnifierX,magnifierY)
+              showingMagnifier=true
+              view.post(Runnable({
+                run=function()
+                  magnifier.update()
+                end
+              }))
+              
+              if not(magnifierUpdateTi.isRun()) then
+                magnifierUpdateTi.start()
+              end
+              if not(magnifierUpdateTi.getEnabled()) then
+                magnifierUpdateTi.setEnabled(true)
+              end
+             else
+              if showingMagnifier then
+                magnifierUpdateTi.setEnabled(false)
+                magnifier.dismiss()
+                showingMagnifier=false
+              end
+            end
+          end
+         elseif action==MotionEvent.ACTION_CANCEL or action==MotionEvent.ACTION_UP then
+          clickingLuaEitorEvent=nil
+          if showingMagnifier then
+            magnifierUpdateTi.setEnabled(false)
+            magnifier.dismiss()
+            showingMagnifier=false
+          end
+        end
+      end
+    end
+  }
+}--提供者们
+LuaEditorHelper.providers=providers
+
+function removePackages(editor,packages)
   for index,package in pairs(packages) do
     editor.removePackage(package)
   end
@@ -15,17 +82,17 @@ end
 LuaEditorHelper.removePackages=removePackages
 
 
-local function screenToViewX(_textField,x)
+function screenToViewX(_textField,x)
   return x-_textField.getPaddingLeft()+_textField.getScrollX()
 end
-local function screenToViewY(_textField,y)
+function screenToViewY(_textField,y)
   return y-_textField.getPaddingTop()+_textField.getScrollY()
 end
 LuaEditorHelper.screenToViewX=screenToViewX
 LuaEditorHelper.screenToViewY=screenToViewY
 
 
-local function isNearChar(bounds,x,y)
+function isNearChar(bounds,x,y)
   local TOUCH_SLOP=12
   return (y >= (bounds.top - TOUCH_SLOP)
   and y < (bounds.bottom + TOUCH_SLOP*2)
@@ -35,7 +102,7 @@ end
 LuaEditorHelper.isNearChar=isNearChar
 
 
-local function isNearChar2(editor,relativeCaretX,relativeCaretY,x,y)
+function isNearChar2(editor,relativeCaretX,relativeCaretY,x,y)
   local TOUCH_SLOP=editor.getTextSize()+10
   --print(TOUCH_SLOP)
   return (y >= (relativeCaretY - TOUCH_SLOP)
@@ -104,9 +171,13 @@ function LuaEditorHelper.onEditorSelectionChangedListener(view,status,start,end_
 end
 
 function LuaEditorHelper.applyStyleToolBar(editor)
-  editor.OnSelectionChangedListener=function(status,start,end_)
-    LuaEditorHelper.onEditorSelectionChangedListener(editor,status,start,end_)
-  end
+  --混淆这里有一点反混淆
+  
+  editor.setOnSelectionChangedListener({
+    [M2PName["com.myopicmobile.textwarrior.android.OnSelectionChangedListener"].onSelectionChanged]=function(active,selStart,selEnd)
+      LuaEditorHelper.onEditorSelectionChangedListener(editor,active,selStart,selEnd)
+    end
+  })
 end
 
 function LuaEditorHelper.applyPencilInput(editor,pencilEdit)
@@ -149,7 +220,26 @@ function LuaEditorHelper.applyPencilInput(editor,pencilEdit)
   pencilEdit.setBackground(nil)
 end
 
+--未完待续
+---在 v5.1.0(51099) 添加
+function LuaEditorHelper.applyTouchListener(editor)
+  local onTouchProviders=providers.onTouchProviders
+  editor.onTouch=function(view,event)
+    for index,content in pairs(onTouchProviders) do
+      content(view,event)
+    end
+  end
+  --[[
+  editor.onLongClick=function(view)
+    if editor_magnify and magnifier then--这俩是全局变量，第一个确保放大镜已打开，第二个确保可以正常加载放大镜
+      print(1)
+    end
+  end]]
+end
+
+--在 v5.1.0(51099) 废除
 function LuaEditorHelper.applyMagnifier(editor)
+  print("警告","LuaEditorHelper.applyMagnifier","此API已废除")
   local showingMagnifier=false
   local clickingLuaEitorEvent=nil
   editor.onTouch=function(view,event)

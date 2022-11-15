@@ -381,14 +381,12 @@ function onConfigurationChanged(config)
 end
 
 function onDeviceByWidthChanged(device, oldDevice)
-  --print(device, oldDevice)
   nowDevice=device
   local browserOpenState=FilesBrowserManager.openState
-  --print(browserOpenState)
-  if oldDevice == "pc" then -- 切换为手机时
-    -- 暂时关闭动画，因为动画有延迟
-    local applyLT=fixLT(deviceChangeLTFixList)
 
+  -- 暂时关闭动画，因为动画有延迟
+  local applyLT=fixLT(deviceChangeLTFixList)
+  if oldDevice == "pc" then -- 切换为手机时
     largeDrawerLay.removeView(drawerChild)
     largeMainLay.removeView(mainEditorLay)
     drawer.addView(mainEditorLay)
@@ -413,12 +411,7 @@ function onDeviceByWidthChanged(device, oldDevice)
       FilesBrowserManager.setOpenState(false)
     end
     drawerChild.setVisibility(View.VISIBLE)
-    toggle.syncState()
-
-    applyLT()
    elseif device == "pc" then -- 切换为电脑时
-    local applyLT=fixLT(deviceChangeLTFixList)
-
     drawer.removeView(mainEditorLay)
     drawer.removeView(drawerChild)
     largeDrawerLay.addView(drawerChild)
@@ -432,10 +425,9 @@ function onDeviceByWidthChanged(device, oldDevice)
      else
       drawerChild.setVisibility(View.GONE)
     end
-    toggle.syncState()
-
-    applyLT()
   end
+  toggle.syncState()
+  applyLT()
 end
 
 function onResume()

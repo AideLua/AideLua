@@ -17,6 +17,7 @@
     <string name="jesse205_userAgreement">用户协议</string>
     <string name="jesse205_tisl">第三方信息共享清单</string>
     <string name="jesse205_minorProtectionAgreement">未成年人保护协议</string>
+    <string name="jesse205_thanksList">感谢名单</string>
     <string name="jesse205_developerInfo">开发信息</string>
     <string name="jesse205_moreContent">更多内容</string>
     <string name="jesse205_qqGroup">QQ交流群</string>
@@ -28,8 +29,6 @@
     <string name="jesse205_htmlFileViewer">HTML查看器</string>
     <string name="jesse205_openSourceLicense">开源许可</string>
     <string name="jesse205_welcome">欢迎</string>
-    <!--<string name="jesse205_allReady">一切就绪</string>
-    <string name="jesse205_allReady_tips">点击“完成”按钮开始体验吧！</string>-->
     <string name="jesse205_permission">权限</string>
     <string name="jesse205_permission_request">权限申请</string>
     <string name="jesse205_permission_tips">部分权限不给予将可能导致软件出错</string>
@@ -48,4 +47,6 @@
     <string name="jesse205_theme_teal">鸭绿</string>
     <string name="jesse205_theme_orange">鲜橙</string>
     <string name="jesse205_theme_pink">嫩粉</string>
+	<string name="jesse205_ranking_random">排名不分先后顺序</string>
+	
 </resources>

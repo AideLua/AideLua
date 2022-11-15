@@ -148,6 +148,7 @@ setmetatable(fileColors,{__index=function(self,key)
     return self.normal
 end})
 
+--隐藏文件地图
 local hiddenFiles={
   gradlew=true,
   ["gradlew.bat"]=true,
@@ -162,20 +163,22 @@ local hiddenFiles={
   caches=true,
 }
 
+--将布尔值转换为透明度
 local hiddenBool2Alpha={
   ["true"]=0.5,
   ["false"]=1
 }
 
+--通过文件名获取透明度，智能判断文件名前缀
 function FilesBrowserManager.getIconAlphaByName(fileName)
   return hiddenBool2Alpha[tostring(toboolean(hiddenFiles[fileName] or fileName:find("^%.")))]
 end
 
-
+---为Gradle获取项目路径
+---在 v5.1.0(51099) 废除
 function FilesBrowserManager.getProjectIconForGlide(projectPath,config,mainProjectPath)
-  print(ProjectManager.getProjectIconPath(config,projectPath,mainProjectPath))
-  local adaptiveIcon--自适应图标
-  --判断是不是table类型，如果是则进行夜间判断，如果是字符串则直接赋值
+  print("Warning","FilesBrowserManager.getProjectIconForGlide","This API has been deprecated in v5.1.0 (51099)")
+  local adaptiveIcon
   if type(config.icon)=="table" then
     if ThemeUtil.isNightMode() then
       adaptiveIcon=config.icon.night or config.icon.day
@@ -188,8 +191,6 @@ function FilesBrowserManager.getProjectIconForGlide(projectPath,config,mainProje
   if adaptiveIcon then
     adaptiveIcon=rel2AbsPath(adaptiveIcon,projectPath)
   end
-
-  --图标可能存在的目录
   local icons={
     adaptiveIcon,
     projectPath.."/ic_launcher-playstore.png",
@@ -204,10 +205,9 @@ function FilesBrowserManager.getProjectIconForGlide(projectPath,config,mainProje
   for index,content in pairs(icons) do
     if content and File(content).isFile() then
       return content
-      --break--有图标，停止循环
     end
   end
-  return android.R.drawable.sym_def_app_icon--前面没有返回，就返回默认图标
+  return android.R.drawable.sym_def_app_icon
 end
 
 

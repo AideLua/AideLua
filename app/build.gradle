@@ -39,7 +39,7 @@ android {
 }
 
 dependencies {
-    api fileTree(dir: "libs", include: ["*.jar"])
+	api fileTree(dir: "libs", include: ["*.jar"])
     api 'androidx.viewpager2:viewpager2:1.0.0'
     //api 'androidx.preference:preference:1.0.0'
     api project(':Jesse205Library')
