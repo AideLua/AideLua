@@ -101,7 +101,7 @@ function refreshMagnifier()
       --magnifierUpdateTi 在 v5.1.0(5099) 废除
 
       magnifierUpdateTi=Ticker()--放大镜的定时器，定时刷新放大镜
-      magnifierUpdateTi.setPeriod(20)
+      magnifierUpdateTi.setPeriod(200)
       magnifierUpdateTi.onTick=function()
         magnifier.update()
       end

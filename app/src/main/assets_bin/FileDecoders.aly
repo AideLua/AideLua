@@ -15,7 +15,9 @@
         local backupFilePath=FilesTabManager.backupPath.."/"..System.currentTimeMillis().."_"..File(path).getName()
         os.rename(path, backupFilePath)
       end
-      io.open(path,"w"):write(content):close()
+      return pcall(function()
+        io.open(path,"w"):write(content):close()
+      end)
     end,
     language=EmptyLanguage(),
   },

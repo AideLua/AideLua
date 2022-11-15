@@ -41,7 +41,6 @@
     <string name="download">Download</string>
     <string name="checkingUpdates">Checking for updates</string>
     <string name="font">Font</string>
-    <string name="noAlwaysUseApp">Protocols that do not always use APP</string>
     
     <string name="open">Open</string>
     <string name="open_failed">Open failed</string>
@@ -223,5 +222,7 @@
     <string name="uninstall_withName">Uninstall %1$s</string>
     <string name="uninstall_success">Uninstall success</string>
     <string name="uninstall_failed">Uninstall failed</string>
+    
+	<string name="permission_repackApk">Use Aide Lua for repackaging</string>
     
 </resources>

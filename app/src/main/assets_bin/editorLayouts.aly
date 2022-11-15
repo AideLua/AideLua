@@ -214,7 +214,6 @@ import "jesse205"
       "LuaCustRecyclerHolder","AdapterCreator",
 
       table.unpack(StyleWidget.types),
-
     },
 
   },

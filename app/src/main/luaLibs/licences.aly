@@ -7,9 +7,6 @@
     license="AideLua license",
     url="https://gitee.com/Jesse205/AideLua",
   },
-  --Jesse205库使用的
-  table.unpack{require("com.jesse205.app.licences")},
-
   --本软件使用的
   {
     name="luaj nirenr修改版。",
@@ -46,4 +43,7 @@
     license="JetBrains Mono license",
     url="https://github.com/JetBrains/JetBrainsMono"
   },
+  --Jesse205库使用的，必须放在最后，否则无法识别
+  table.unpack(require("com.jesse205.app.licences")),
+
 }

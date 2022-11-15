@@ -242,12 +242,15 @@ function FilesTabManager.saveFile(lowerFilePath,showToast)
       if config.changed then
         local decoder=config.decoder
         local newContent = config.newContent
-
-        decoder.save(config.path,newContent)
+        local success,errMsg=decoder.save(config.path,newContent)
         config.oldContent = newContent -- 讲旧内容设置为新的内容
         config.changed=false
-        if showToast then
-          showSnackBar(R.string.save_succeed)
+        if success then
+          if showToast then
+            showSnackBar(R.string.save_succeed)
+          end
+         else
+          showErrorDialog("FilesTabManager.saveFile",errMsg)
         end
         return true -- 保存成功
        else
