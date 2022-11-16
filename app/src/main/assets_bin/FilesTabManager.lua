@@ -33,14 +33,14 @@ local openedFiles = {}
 FilesTabManager.backupPath=AppPath.AppMediaDir..os.date("/backup/%Y%m%d")
 FilesTabManager.backupDir=File(FilesTabManager.backupPath)
 
-
-local function applyTabMenu(view,tabFileConfig)
+--已知问题：切换标签图标开关后，标签无手势动作
+local function applyTabMenu(view,fileConfig)
   local popupMenu=PopupMenu(activity,view)
   popupMenu.inflate(R.menu.menu_main_filetab)
   local menu=popupMenu.getMenu()
   local dropListener=popupMenu.getDragToOpenListener()
   local dropMenuState=false--当前拉动菜单状态
-  --local menuState=false
+  local pathTipState=false
   local Rid=R.id
   popupMenu.onDismiss=function(popupMenu)
     dropMenuState=false
@@ -48,7 +48,7 @@ local function applyTabMenu(view,tabFileConfig)
   popupMenu.onMenuItemClick=function(item)
     local id=item.getItemId()
     if id==Rid.menu_close then
-      FilesTabManager.closeFile(tabFileConfig.lowerPath)
+      FilesTabManager.closeFile(fileConfig.lowerPath)
       Handler().postDelayed(Runnable({
         run = function()
           if openState then
@@ -58,7 +58,7 @@ local function applyTabMenu(view,tabFileConfig)
      elseif id==Rid.menu_close_all then
       FilesTabManager.closeAllFiles()
      elseif id==Rid.menu_close_other then
-      local file,fileType=tabFileConfig.file,tabFileConfig.fileType
+      local file,fileType=fileConfig.file,fileConfig.fileType
       FilesTabManager.closeAllFiles(false)
       FilesTabManager.openFile(file,fileType,true)
     end
@@ -72,21 +72,47 @@ local function applyTabMenu(view,tabFileConfig)
     if maxY<y then
       maxY=y
     end
-    if action==MotionEvent.ACTION_MOVE then
-      if not(dropMenuState) and y>filesTabLay.getHeight() then
-        dropMenuState=true
-        view.requestDisallowInterceptTouchEvent(true)
-        view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
-        popupMenu.show()
+    if action==MotionEvent.ACTION_DOWN then
+      pathTipState=false
+     elseif action==MotionEvent.ACTION_MOVE then
+      if not(dropMenuState) then
+        if y>filesTabLay.getHeight() then
+          dropMenuState=true
+          view.requestDisallowInterceptTouchEvent(true)
+          view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+          popupMenu.show()
+          ObjectAnimator.ofFloat(fileConfig.imageView, "rotationX", {view.getRotationX(),-60,-45,0})
+          .setDuration(500)
+          .setInterpolator(DecelerateInterpolator())
+          .start()
+          ObjectAnimator.ofFloat(fileConfig.textView, "rotationX", {view.getRotationX(),-60,-45,0})
+          .setDuration(500)
+          .setInterpolator(DecelerateInterpolator())
+          .start()
+         elseif not(pathTipState) and y<0 then
+          pathTipState=true
+          view.requestDisallowInterceptTouchEvent(true)
+          view.performLongClick(event.x,event.y)
+          ObjectAnimator.ofFloat(fileConfig.imageView, "rotationX", {view.getRotationX(),60,45,0})
+          .setDuration(500)
+          .setInterpolator(DecelerateInterpolator())
+          .start()
+          ObjectAnimator.ofFloat(fileConfig.textView, "rotationX", {view.getRotationX(),60,45,0})
+          .setDuration(500)
+          .setInterpolator(DecelerateInterpolator())
+          .start()
+        end
       end
     end
-    if dropMenuState and ((time-event.getDownTime())>600 or maxY-y>math.dp2int(8)) then
+   if dropMenuState and (((time-event.getDownTime())>600 or maxY-y>math.dp2int(8))) then
       dropListener.onTouch(view,event)
     end
     if action==MotionEvent.ACTION_UP then
-      startTime=0
       maxY=0
     end
+  end
+  view.onLongClick=function(view)
+    pathTipState=true
   end
   view.onGenericMotion=function(view,event)
     local buttonState = event.getButtonState()
@@ -102,7 +128,7 @@ local function initFileTabView(tab, fileConfig)
   view.setPadding(math.dp2int(8), math.dp2int(4), math.dp2int(8), math.dp2int(4))
   view.setGravity(Gravity.LEFT | Gravity.CENTER)
   view.tag = fileConfig
-  applyTabMenu(view,fileConfig)
+
   TooltipCompat.setTooltipText(view, fileConfig.shortFilePath)
   local imageView = view.getChildAt(0)
   local textView = view.getChildAt(1)
@@ -111,6 +137,7 @@ local function initFileTabView(tab, fileConfig)
   imageView.setPadding(math.dp2int(2), math.dp2int(2), math.dp2int(2), 0)
   textView.setAllCaps(false) -- 关闭全部大写
   .setTextSize(12)
+  applyTabMenu(view,fileConfig)
 end
 FilesTabManager.initFileTabView=initFileTabView
 

@@ -113,6 +113,7 @@
       scrollTo="default",
       selectText="default",
       setSelection="default",
+      getSelectedText="default",--在 v5.1.0(51099) 添加
       getSelectionEnd="default",
       check=function(ids,config,show)
         local editor=ids.editor

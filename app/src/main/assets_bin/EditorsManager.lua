@@ -149,6 +149,7 @@ local function generalActionEvent(name1,name2,...)
   end
 end
 
+--[[
 function managerActions.undo()--撤销
   return generalActionEvent("undo","undo")
 end
@@ -168,10 +169,9 @@ end
 function managerActions.format()--格式化
   generalActionEvent("format","format")
 end
-
 function managerActions.check(show)--查错
   return generalActionEvent("check","check",show)
-end
+end]]
 
 function managerActions.getText()--获取编辑器文字内容
   local _,text=generalActionEvent("getText","getText")
@@ -179,6 +179,7 @@ function managerActions.getText()--获取编辑器文字内容
     return tostring(text)
   end
 end
+--[[
 function managerActions.setText(...)--设置编辑器文字内容
   return generalActionEvent("setText","setText",...)
 end
@@ -205,8 +206,8 @@ end
 function managerActions.getScrollY()
   local _,y=generalActionEvent("getScrollY","getScrollY")
   return y
-end
-
+end]]
+--[[
 function managerActions.scrollTo(x,y)
   generalActionEvent("scrollTo","scrollTo",x,y)
 end
@@ -217,7 +218,7 @@ end
 
 function managerActions.setSelection(l)
   generalActionEvent("setSelection","setSelection",l)
-end
+end]]
 
 function managerActions.getSelectionEnd()
   local _,l=generalActionEvent("getSelectionEnd","getSelectionEnd")
@@ -236,6 +237,24 @@ function managerActions.search(text,gotoNext)--搜索
     end
   end
 end
+
+---通用API
+---在 v5.1.0(51099) 上添加
+setmetatable(managerActions,{__index=function(self,key)
+    local action
+    if key:sub(1,3)=="get" then
+      action=function(...)
+        local _,content= generalActionEvent(key,key,...)
+        return content
+      end
+     else
+      action=function(...)
+        return generalActionEvent(key,key,...)
+      end
+    end
+    rawset(self,key,action)
+    return action
+end})
 
 --保存到标签
 function EditorsManager.save2Tab()
@@ -348,7 +367,7 @@ function EditorsManager.switchEditor(newEditorType)
 
   --检查是不是真的存在这个编辑器
   if not(editorConfig) then
-    error("Editor not found")
+    error("编辑器不存在")
     return
   end
 
@@ -459,25 +478,48 @@ end
 local symbolBar={}
 EditorsManager.symbolBar=symbolBar
 
+---在 v5.1.0(51099) 上添加
+function EditorsManager.getReallPasteText(view)
+  local selectedText=managerActions.getSelectedText()
+  local tag=view.tag
+  local text=view.text
+  if selectedText and selectedText~="" then
+    return (tag[2] and tag[2]:format(selectedText)) or tag[1] or text
+   else
+    return tag[1] or text
+  end
+end
+
 ---符号栏按钮点击时输入符号
 ---@param view View 按钮视图
-function symbolBar.psButtonClick(view)
-  local text=view.tag[1]
-  if managerActions.paste(text) then
-    view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+function symbolBar.onButtonClickListener(view)
+  if managerActions.paste(EditorsManager.getReallPasteText(view)) then
+    view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
   end
+end
+
+---此API已在 v5.1.0(51099) 改名
+function symbolBar.psButtonClick(...)
+  print("警告","symbolBar.psButtonClick","此API已改名")
+  symbolBar.onButtonClickListener(...)
+end
+
+---在 v5.1.0(51099) 添加
+---符号栏按钮长按时提示
+function symbolBar.onButtonLongClickListener(view)
+  TooltipCompat.setTooltipText(view,EditorsManager.getReallPasteText(view))
 end
 
 ---初始化一个符号栏按钮
 ---@param text string 显示的文字
----@param pasteText string 粘贴的文字，默认为显示的文字 (在 v5.1.0(51099) 上添加)
-function symbolBar.newPsButton(text,pasteText)
-  --print(dump(pasteText or text))
+---@param pasteText string 默认粘贴的文字，默认为显示的文字 (在 v5.1.0(51099) 上添加)
+---@param pasteText2 string 已选中时粘贴的文字，默认为pasteText (在 v5.1.0(51099) 上添加)
+function symbolBar.newPsButton(text,pasteText,pasteText2)
   local button=loadlayout2({
     AppCompatTextView;
-    onClick=symbolBar.psButtonClick;
+    onClick=symbolBar.onButtonClickListener;
     text=text;
-    tag={pasteText or text};
+    tag={pasteText,pasteText2};
     gravity="center";
     layout_height="fill";
     typeface=Typeface.DEFAULT_BOLD;--加粗一下，看的快
@@ -489,6 +531,8 @@ function symbolBar.newPsButton(text,pasteText)
     textColor=theme.color.textColorPrimary;
     background=ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary)
   })
+  button.onLongClick=symbolBar.onButtonLongClickListener;
+
   return button
 end
 
@@ -500,8 +544,11 @@ function symbolBar.refresh(state)
     if not(loadedSymbolBar) then--没有加载过符号栏，就加载一次
       local ps={"func()","(",")","[","]","{","}","\"","=",":",".",",",";","_","+","-","*","/","\\","%","#","^","$","?","&","|","<",">","~","'"}
       local ps_paste={"function()"}
+      local ps_paste2={"function %s()\n\nend","(%s)","(%s)","[%s]","[%s]","{%s}","{%s}",
+        "\"%s\"",nil--[[=]],nil,nil,--[[.]]nil,nil--[[;]],nil,nil--[[+]],nil,nil--[[*]],nil,nil--[[\]],nil,nil--[[#]],nil,nil--[[$]],nil,nil--[[&]],
+        nil--[[|]],"<%s>","<%s>",nil,"'%s'"}
       for index,content in ipairs(ps) do
-        ps_bar.addView(symbolBar.newPsButton(content,ps_paste[index]))
+        ps_bar.addView(symbolBar.newPsButton(content,ps_paste[index],ps_paste2[index]))
       end
       ps=nil
       ps_paste=nil
