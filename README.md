@@ -1,5 +1,5 @@
 # Aide Lua
-[![License](https://img.shields.io/github/license/Jesse205/AideLua)](LICENSE.md)
+[![License](https://img.shields.io/github/license/Jesse205/AideLua)](LICENSE)
 [![发行版](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=发行版&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases)
 
 [![QQ 群: 628045718](https://img.shields.io/badge/QQ_群-628045718-0099FF?logo=tencentqq)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
@@ -7,9 +7,13 @@
 
 [![Gitee 仓库](https://img.shields.io/badge/Gitee-仓库-C71D23?logo=gitee)](https://gitee.com/Jesse205/AideLua/)
 [![Github 仓库](https://img.shields.io/badge/Github-仓库-0969DA?logo=github)](https://github.com/Jesse205/AideLua)
-[![使用文档](https://img.shields.io/badge/使用文档--3F51B5)](https://jesse205.github.io/AideLua/)
+[![使用文档](https://img.shields.io/badge/使用文档-中文-3F51B5)](https://jesse205.github.io/AideLua/)
 
 ![cover](images/ic_cover-aidelua.png)
+
+###### 语言 Language:
+[中文](README.md)
+[English](README-EN.md)
 
 ## 注意 Alert
 如需使用源代码，请进入 <a href="/Jesse205/AideLua/releases">发行版</a> 页面下载。<br>
@@ -25,6 +29,8 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 ## 下载
 ### Gradle for AIDE Pro
+[![123云盘](https://img.shields.io/badge/123云盘-镜像-597dfc)](https://www.123pan.com/s/G7a9-c9ek)
+
 ### AIDE 高级设置版
 [![蓝奏云](https://img.shields.io/badge/蓝奏云-38.5_M-FF6600?logo=icloud&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
 [![Github Releases)](https://img.shields.io/github/v/tag/AndroIDE-Pro/AidePro?color=0969DA&label=Github+Releases&logo=github)](https://github.com/AndroIDE-Pro/AidePro/releases)
@@ -33,23 +39,22 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 [![Gitee 发行版)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+发行版&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases)
 
 #### 其他渠道 (可能更新不及时)
+[![123云盘](https://img.shields.io/badge/123云盘--597dfc)](https://www.123pan.com/s/G7a9-Yzck)
 [![天翼云盘](https://img.shields.io/badge/天翼云盘--DF9C1F)](https://cloud.189.cn/t/ZZ7RzijyqiUv)
 [![腾讯微云](https://img.shields.io/badge/腾讯微云--2980ff)](https://share.weiyun.com/oLiNtxMR)
 [![百度网盘](https://img.shields.io/badge/百度网盘-jxnb-06a7ff)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q?pwd=jxnb)
-[![123云盘](https://img.shields.io/badge/123云盘--597dfc)](https://www.123pan.com/s/G7a9-Yzck)
 
-## 构建项目
+## 构建项目（包括衍生项目）
 1. 克隆本项目到本地：`git clone https://gitee.com/Jesse205/AideLua.git`
 2. 使用 Gradle 构建：`gradle build`
 3. 复制到 Android 设备的`内部存储/AppProjects/<你的项目>`
 4. 下载 Aide Lua 的发行版，进入 Aide Lua 后选择刚才复制的工程，然后依次点击 `菜单-项目...-二次打包并安装`
 
-
 ## 使用须知
-1. 本软件默认开启自动保存代码且无法关闭（自动保存触发条件：切换到其他应用、点击二次打包以及打包运行、打开文件、关闭文件）
+1. 本软件默认开启自动保存代码且无法关闭（自动保存触发条件：切换到其他应用、点击二次打包以及打包运行、打开其他文件、关闭文件、打开侧滑（大屏除外）、点击标签栏等）
 2. 此软件不能用来开发大型项目
-3. 此软件必须搭配编译器，不管你用的是真正的Gradle还是仿Gradle（AIDE属于仿Gradle）
-4. 要实现直接运行项目，必须导出 `LuaActivity`（默认是导出的），并成功安装项目软件（先用 AIDE 打包，然后用 Aide Lua 打包，最后安装）
+3. 此软件必须搭配编译器，不管你用的是真 Gradle 还是假 Gradle __(AIDE 属于假 Gradle)__
+4. 要实现直接运行项目，必须导出 `LuaActivity`（默认是导出的），__并成功安装项目软件（先用 AIDE 打包，然后用 Aide Lua 打包，最后安装）__
 
 ## 如何接收更新推送
 1. 首先进入 `设置`-`通知设置` ，打开 `有新的 Release`<br>
@@ -65,7 +70,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 ### 快速入门
 #### 一、配置AIDE
-1. 进入 `设置-高级设置-工程相关`
+1. 进入 `设置 - 高级设置 - 工程相关`
 2. 关闭 `启用alert调试文件` ，打开 `重定义Apk构建路径`
 3. 重启 AIDE
 

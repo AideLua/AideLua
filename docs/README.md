@@ -19,6 +19,9 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 3. 标有 <Badge type="danger" text="*" vertical="middle" /> 的表示必须文件、方法 或 变量
 
 ## 下载
+### Gradle for AIDE Pro
+[![123云盘（镜像）](https://img.shields.io/badge/123云盘-镜像-597dfc?style=flat-square)](https://www.123pan.com/s/G7a9-c9ek)
+
 ### AIDE 高级设置版
 [![蓝奏云](https://img.shields.io/badge/蓝奏云-38.5_M-FF6600?logo=icloud&style=flat-square&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
 [![Github Releases)](https://img.shields.io/github/v/tag/AndroIDE-Pro/AidePro?color=0969DA&label=Github+Releases&logo=github&style=flat-square)](https://github.com/AndroIDE-Pro/AidePro/releases)
@@ -27,10 +30,10 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 [![Gitee 发行版)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+发行版&logo=gitee&style=flat-square)](https://gitee.com/Jesse205/AideLua/releases)
 
 #### 其他渠道 (可能更新不及时)
+[![123云盘](https://img.shields.io/badge/123云盘--597dfc?style=flat-square)](https://www.123pan.com/s/G7a9-Yzck)
 [![天翼云盘](https://img.shields.io/badge/天翼云盘--DF9C1F?style=flat-square)](https://cloud.189.cn/t/ZZ7RzijyqiUv)
 [![腾讯微云](https://img.shields.io/badge/腾讯微云--2980ff?style=flat-square)](https://share.weiyun.com/oLiNtxMR)
 [![百度网盘](https://img.shields.io/badge/百度网盘-密码_jxnb-06a7ff?style=flat-square)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q?pwd=jxnb)
-[![123云盘](https://img.shields.io/badge/123云盘--597dfc?style=flat-square)](https://www.123pan.com/s/G7a9-Yzck)
 
 ## 工作原理
 1. 读取 `.aidelua/config.lua` 的内容
@@ -50,7 +53,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 ### 快速入门
 #### 一、配置 AIDE
-1. 进入 `设置-高级设置-工程相关`
+1. 进入 `设置 - 高级设置 - 工程相关`
 2. 关闭 `启用alert调试文件` ，打开 `重定义Apk构建路径`
 3. 重启 AIDE
 
