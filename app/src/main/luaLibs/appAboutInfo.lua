@@ -3,21 +3,21 @@ appInfo={
   {
     name=R.string.app_name,
     message="为更快进行移动开发",
-    iconResource=R.mipmap.ic_launcher,
+    iconResource=R.mipmap.ic_launcher_round,
     url="https://jesse205.github.io/aidelua",
     clickable=true;
   },
   {
     name="AIDE Pro",
     message="一个经魔改过的全新版本",
-    iconResource=R.mipmap.ic_launcher_aide,
+    iconResource=R.mipmap.ic_launcher_aide_round,
     url="https://aidepro.top/",
     clickable=true;
   },
   {
     name="Windmill",
     message="重认手机上的工具",
-    iconResource=R.mipmap.ic_launcher_windmill,
+    iconResource=R.mipmap.ic_launcher_windmill_round,
     url="https://www.coolapk.com/apk/com.agyer.windmill",
     clickable=true;
   },

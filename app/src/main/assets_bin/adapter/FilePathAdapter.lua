@@ -47,11 +47,11 @@ return function(item)
       local data=pathSplitList[position+1]
       local view=holder.view
       local tag=view.getTag()
-
       local titleView=tag.title
       local iconView=tag.icon
-      titleView.setText(data[1])
-      titleView.setTag(data[2])
+      local text,path=data[1],data[2]
+      titleView.setText(text)
+      titleView.setTag(path)
     end,
   }))
 

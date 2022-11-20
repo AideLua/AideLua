@@ -43,26 +43,37 @@
         minWidth=0;
         paddingLeft="8dp";
         paddingRight="8dp";
-        layout_margin="8dp";
+        --layout_margin="8dp";
         layout_marginLeft="16dp";
         layout_marginRight="16dp";
         id="previousButton";
         text=R.string.jesse205_step_previous;
       };
       {
-        MaterialButton_TextButton;
+        FrameLayout;
         layout_gravity="right|center";
-        minimumHeight="56dp";
-        minimumWidth="64dp";
-        minWidth=0;
-        padding="16dp";
-        paddingLeft="8dp";
-        paddingRight="8dp";
-        layout_margin="8dp";
+        layout_height="fill";
+        --layout_margin="8dp";
         layout_marginLeft="16dp";
         layout_marginRight="16dp";
-        id="nextButton";
-        text=R.string.jesse205_step_next;
+        {
+          ProgressBar;
+          id="enteringProgressBar";
+          visibility=View.GONE;
+          layout_gravity="center";
+        };
+        {
+          MaterialButton_TextButton;
+          layout_gravity="right|center";
+          minimumHeight="56dp";
+          minimumWidth="64dp";
+          minWidth=0;
+          padding="16dp";
+          paddingLeft="8dp";
+          paddingRight="8dp";
+          id="nextButton";
+          text=R.string.jesse205_step_next;
+        };
       };
     };
   };

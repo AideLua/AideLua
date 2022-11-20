@@ -8,43 +8,44 @@
         <item name="strokeColor">@color/jesse205_white_dark</item>
         <item name="navigationViewColorAccent">?colorAccent</item>
         <item name="windowBackgroundColor">@color/jesse205_white</item>
-        <item name="android:windowBackground">?windowBackgroundColor</item>
-        <item name="android:navigationBarColor">@color/jesse205_white</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">?windowLightStatusBar</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">?windowLightNavigationBar</item>
         <item name="windowLightStatusBar">true</item>
         <item name="windowLightNavigationBar">true</item>
+        <item name="android:windowBackground">?windowBackgroundColor</item>
+        <item name="android:colorBackground">?windowBackgroundColor</item>
+		<item name="android:navigationBarColor">@color/jesse205_white</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">?windowLightStatusBar</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">?windowLightNavigationBar</item>
 
         <!--波纹颜色-->
         <item name="rippleColorAccent">@color/jesse205_blue_ripple</item>
         <item name="rippleColorPrimary">@color/jesse205_black_ripple</item>
         <item name="android:colorEdgeEffect">@color/jesse205_grey</item>
-        
+
         <item name="actionBarTheme">@style/ThemeOverlay.Jesse205.ActionBar</item>
         <item name="actionBarWidgetTheme">@null</item>
         <item name="actionBarPopupTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
-        <item name="actionModeBackground">?colorPrimary</item>
+        <!--<item name="actionModeBackground">?colorPrimary</item>-->
         <item name="floatingActionButtonBackgroundColor">?colorBackgroundFloating</item>
         <item name="floatingActionButtonStyle">@style/Widget.Jesse205.FloatingActionButton</item>
         <item name="android:listViewStyle">@style/Widget.Jesse205.ListView</item>
         <item name="tabStyle">@style/Widget.Jesse205.TabLayout</item>
-      
+
         <item name="actionOverflowMenuStyle">@style/Widget.Jesse205.PopupMenu.Overflow</item>
         <item name="popupMenuStyle">@style/Widget.Jesse205.PopupMenu</item>
         <item name="android:contextPopupMenuStyle" tools:targetApi="n">@style/Widget.Jesse205.ContextPopupMenu</item>
-       
+
         <item name="android:alertDialogTheme">@style/Base.Theme.Jesse205.Dialog.Alert</item>
         <item name="alertDialogTheme">@style/ThemeOverlay.Jesse205.Dialog.Alert</item>
-       
+
         <item name="cardViewStyle">@style/Widget.Jesse205.CardView</item>
         <item name="materialCardViewStyle">@style/Widget.Jesse205.CardView</item>
         <item name="navigationViewStyle">@style/Widget.Jesse205.NavigationView</item>
         <item name="bottomNavigationStyle">@style/Widget.Jesse205.BottomNavigationView</item>
         <item name="chipStyle">@style/Widget.Jesse205.Chip</item>
-        
+
         <!--字体-->
         <item name="textAppearancePopupMenuHeader">@style/TextAppearance.Jesse205.Widget.PopupMenu.Header</item>
-        
+
         <!--圆角-->
         <item name="dialogCornerRadius">?cornerRadius</item>
         <item name="cardCornerRadius">?cornerRadius</item>
@@ -65,22 +66,32 @@
     <style name="Base.Theme.Jesse205.Dialog.Alert" parent="android:Theme.Material.Light.Dialog.Alert">
         <item name="android:colorAccent">?colorAccent</item>
         <item name="android:windowBackground">@drawable/dialog_background_jesse205</item>
-    </style>
+		<item name="android:backgroundDimAmount">0.4</item>
+		<item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+	</style>
 
     <style name="Base.Theme.Jesse205.Dark.Dialog.Alert" parent="android:Theme.Material.Dialog.Alert">
         <item name="android:colorAccent">?colorAccent</item>
         <item name="android:windowBackground">@drawable/dialog_background_jesse205</item>
-    </style>
-    
-    
-    <style name="ThemeOverlay.Jesse205.Dialog.Alert" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
-    </style>
+  		<item name="android:backgroundDimAmount">0.4</item>
+		<item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+	</style>
 
-    
+
+    <style name="ThemeOverlay.Jesse205.Dialog.Alert" parent="ThemeOverlay.MaterialComponents.Dialog.Alert">
+		<item name="android:windowBackground">@drawable/dialog_background_jesse205</item>
+  		<item name="android:backgroundDimAmount">0.4</item>
+		<item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+	</style>
+
+
     <style name="ThemeOverlay.Jesse205.Dark.ActionBar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
-        <item name="colorControlNormal">@color/jesse205_white</item>
+    	<item name="colorControlNormal">@color/jesse205_white</item>
         <item name="elevation">4dp</item>
-    </style>
+	   </style>
 
 
     <style name="ThemeOverlay.Jesse205.ActionBar" parent="ThemeOverlay.MaterialComponents.ActionBar">
@@ -101,7 +112,7 @@
         <item name="colorPrimary">@color/jesse205_blue_light</item>
         <item name="windowLightStatusBar">false</item>
     </style>
-    
+
     <style name="Theme.Jesse205.Default" parent="Theme.Jesse205"/>
     <style name="Theme.Jesse205.Default.DarkActionBar" parent="Theme.Jesse205.DarkActionBar"/>
 
@@ -147,7 +158,7 @@
         <item name="rippleColorAccent">@color/jesse205_pink_ripple</item>
     </style>
 
-    
+
     <!--无工具栏主题-->
     <style name="Theme.Jesse205.Default.NoActionBar" parent="Theme.Jesse205.Default">
         <item name="windowActionModeOverlay">true</item>
@@ -203,5 +214,5 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    
+
 </resources>

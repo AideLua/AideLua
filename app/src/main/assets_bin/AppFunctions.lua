@@ -327,7 +327,3 @@ function getColorAndHex(text)
     end
   end
 end
-
-
-
-

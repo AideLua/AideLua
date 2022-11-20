@@ -187,17 +187,33 @@ activity.result({<action>，<content>})
 | paste(text) | function | / | 粘贴文字内容 <br> __text__ (string): 文字内容 |
 | setTextSize(size) | function | / | 设置文字大小 <br> __size__ (number): 文字大小 |
 | search(text,gotoNext) | function | / | 搜索 <br> __text__ (number): 搜索内容 <br> __gotoNext__ (boolean): 是否搜索下一个 |
+| getSelectedText() | function | string | 获取已选择的文字 |
+| ... | function | ... | 此 table 已设置为 metatable，因此您可以 |
+
+::: tip
+如果调用非 `getXxx` 类型API时，
+:::
 
 #### EditorsManager.symbolBar <Badge text="table" vertical="middle" /> <Badge text="Map" vertical="middle" />
 
 | 键 | 类型 | 说明 |
 | ---- | ---- | ---- |
-| psButtonClick(view) | function (listener)| 符号栏按钮点击时输入符号点击事件 |
+| getReallPasteText(view) <Badge type="warning" text="在 v5.1.0(51099) 添加" vertical="middle" /> | function | 获取符号栏要粘贴到文字 |
+| onButtonClickListener(view) <Badge type="warning" text="在 v5.1.0(51099) 添加" vertical="middle" /> | function (listener)| 符号栏按钮点击时输入符号 |
+| onButtonLongClickListener(view) <Badge type="warning" text="在 v5.1.0(51099) 添加" vertical="middle" /> | function (listener)| 符号栏按钮长按时显示预览 |
+| psButtonClick(view) <Badge type="danger" text="在 v5.1.0(51099) 废除" vertical="middle" /> | function (listener)| 符号栏按钮点击时输入符号点击事件 |
 | newPsButton(text) | function | 初始化一个符号栏按钮 |
 | refresh(state) | function | 刷新符号栏状态 <br> _state__ (boolean): 开关状态 |
 
 ### FilesBrowserManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 这是文件浏览器管理器（侧滑）
+
+未完待续
+
+| 键 | 类型 | 说明 |
+| ---- | ---- | ---- |
+| providers | table (map) | 提供者地图 |
+
 
 ### FilesTabManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 这是标签页管理器，兼职管理文件的读取与保存

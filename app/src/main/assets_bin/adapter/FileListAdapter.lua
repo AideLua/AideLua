@@ -94,6 +94,7 @@ return function(item)
 
       if viewType==3 then
         local moreView=ids.more
+        moreView.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
         moreView.onClick=fileMoreMenuClick
         local popupMenu=FilesBrowserManager.loadMoreMenu(moreView)
       end

@@ -87,6 +87,7 @@ ProjectManager.updateNowConfig=updateNowConfig
 --打开项目
 function ProjectManager.openProject(path,filePath,openedDirPath)
   xpcall(function()
+    FilesBrowserManager.recordScrollPosition()
     if openedDirPath~=false then
       FilesBrowserManager.clearAdapterData()
     end

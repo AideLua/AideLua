@@ -18,9 +18,9 @@ Util 版本：v3.1
 4. 推荐从 __v5.0.4(50499)__ 开始编写
 
 ## 手动导入
-1. 打开文件管理，进入 `内部存储/Android/media/com.Jesse205.aidelua2/files/plugins` ，没有就新建一个
-2. 下载插件（通常为 zip 或 alp ）
-3. 使用 zip 格式打开插件，打开init.lua文件，复制 `packagename` (包名) 的参数（ `=` 后面，不带引号）
+1. 打开文件管理，进入 `内部存储/Android/media/com.Jesse205.aidelua2/files/plugins` ，没有就新建文件夹
+2. 下载插件（扩展名通常为 `zip` 或 `alp` ）
+3. 使用 zip 格式打开插件，打开 `init.lua` 文件，复制 `packagename` (包名) 的参数（ `=` 后面，不带引号）
 4. 在 `plugins` 文件夹 里面新建文件夹，重命名为 插件的 `packagename` (就是刚刚复制的文字)
 5. 解压插件内所有的文件，到 第4步新建的文件夹
 6. 重启 AideLua
@@ -33,6 +33,11 @@ Util 版本：v3.1
 ## 通用 API
 ::: warning
 尽量避免使用 Jesse205 库。因为 Jesse205 库每次改动都比较大，很容易引起插件报错。
+:::
+
+::: tip
+Aide Lua 的插件通常以植入代码的方式实现。<br>
+您可以在 Github 或者 Gitee 上查看此程序的源码，以便编写良好的插件。
 :::
 
 ### PluginsUtil <Badge text="table" vertical="middle" /> <Badge text="Util" vertical="middle" />

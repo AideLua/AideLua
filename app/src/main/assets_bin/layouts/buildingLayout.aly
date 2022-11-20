@@ -23,22 +23,21 @@
     layout_width="fill";
     elevation="4dp";
     radius=0;
+    cardBackgroundColor=theme.color.colorBackgroundFloating;
     {
       LinearLayout;
-      layout_margin="24dp";
+      layout_margin="16dp";
       gravity="center";
       layout_width="fill";
       id="nowStatePanel";
       {
         ProgressBar;
-        --style="?android:attr/progressBarStyleSmall";
         id="progressBar";
-        --layout_width="40dp";
-        --layout_height="40dp";
+        layout_margin="8dp";
       };
       {
         LinearLayout;
-        layout_marginLeft="24dp";
+        layout_margin="8dp";
         layout_width="fill";
         orientation="vertical";
         {

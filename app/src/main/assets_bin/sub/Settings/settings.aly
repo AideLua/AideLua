@@ -139,7 +139,7 @@
     SettingsLayUtil.ITEM;
     icon=R.drawable.ic_information_outline;
     title=R.string.jesse205_about;
-    summary=formatResStr(R.string.jesse205_nowVersion_full,{packageInfo.versionName,packageInfo.versionCode});
+    summary=formatResStr(R.string.jesse205_nowVersion_full,{BuildConfig.VERSION_NAME,BuildConfig.VERSION_CODE});
     key="about";
     newPage=true;
   };

@@ -128,23 +128,27 @@
       {
         View;
         layout_width="1dp";
-        layout_margin="8dp";
+        --layout_margin="8dp";
         layout_marginTop="16dp";
         layout_marginBottom="16dp";
         layout_height="fill";
         backgroundColor=theme.color.textColorSecondary;
       };
       {
-        MaterialButton_TextButton_Icon;
-        layout_width="40dp";
-        layout_marginRight="8dp";
-        layout_height="48dp";
-        focusable=false;
-        id="more";
-        iconResource=R.drawable.ic_dots_vertical;
+        LinearLayout;
+        layout_width="56dp";
+        layout_height="56dp";
         tooltip=getString(R.string.menu);
         contentDescription=getString(R.string.menu);
-        --longClickable=false;
+        id="more";
+        gravity="center";
+        {
+          AppCompatImageView;
+          layout_width="24dp";
+          layout_height="24dp";
+          imageResource=R.drawable.ic_dots_vertical;
+          colorFilter=theme.color.textColorPrimary;
+        };
       };
     };
   },

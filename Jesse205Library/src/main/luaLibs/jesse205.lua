@@ -86,6 +86,8 @@ if appName == nil then
 end
 jesse205.appName = appName
 jesse205.packageName = activity.getPackageName()
+BuildConfig=luajava.bindClass(jesse205.packageName..".BuildConfig")
+
 
 resources = context.getResources() -- 当前resources
 R = luajava.bindClass(context.getPackageName() .. ".R")

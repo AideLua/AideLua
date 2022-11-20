@@ -218,12 +218,12 @@ end
 
 function managerActions.setSelection(l)
   generalActionEvent("setSelection","setSelection",l)
-end]]
+end
 
 function managerActions.getSelectionEnd()
   local _,l=generalActionEvent("getSelectionEnd","getSelectionEnd")
   return l
-end
+end]]
 
 function managerActions.search(text,gotoNext)--搜索
   local searchActions=editorActions.search
@@ -479,6 +479,7 @@ local symbolBar={}
 EditorsManager.symbolBar=symbolBar
 
 ---在 v5.1.0(51099) 上添加
+---获取符号栏要粘贴到文字
 function EditorsManager.getReallPasteText(view)
   local selectedText=managerActions.getSelectedText()
   local tag=view.tag

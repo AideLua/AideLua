@@ -206,9 +206,12 @@ nextButton.onClick=function()
   local nowPage=pageView.getCurrentItem()+1
   if nowPage<maxPage then
     pageView.showPage(nowPage)
-   elseif nowPage==maxPage then
+   elseif nowPage>=maxPage then
+    enteringProgressBar.setVisibility(View.VISIBLE)
+    nextButton.setVisibility(View.INVISIBLE)
+    --nextButton.setClickable(false)
     setSharedData("welcome",true)
-    newActivity("../../main")
+    newActivity(File(activity.getLuaDir()).getParentFile().getParent())
     activity.finish()
   end
 end

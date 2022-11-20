@@ -342,11 +342,27 @@ function FilesBrowserManager.switchState()
   end
 end
 
+---记录滚动位置
+---在 v5.1.0(51099) 添加
+function FilesBrowserManager.recordScrollPosition()
+  local nowDirectoryPath=directoryFile and directoryFile.getPath() or ProjectManager.projectsPath--获取已打开文件夹路径
+  local pos=layoutManager.findFirstVisibleItemPosition()
+  local listViewFirstChild=recyclerView.getChildAt(0)--获取列表第一个控件
+  local scroll=0
+  if listViewFirstChild then--有控件
+    scroll=listViewFirstChild.getTop()--获取顶部距离
+  end
+  if pos==0 and scroll>=0 then
+    filesPositions[nowDirectoryPath]=nil
+   else
+    filesPositions[nowDirectoryPath]={pos,scroll}
+  end
+end
 
 --[[
 刷新文件夹/进入文件夹
 @param file 要刷新或者进入的文件夹
-@param upFile 是否是向上
+@param upFile 是否是向上，在 v3.1.0(31099) 作废
 @param force 强制刷新
 @param atOnce 立刻显示进度条
 ]]
@@ -377,8 +393,11 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
     end
 
 
-    if file then
-      local nowDirectoryPath=file.getPath()--获取已打开文件夹路径
+    --这些都是判断是否要清除滚动信息的，已由其他方法实现，这里已作废
+    --[[
+     if directoryFile then
+      local nowDirectoryPath=directoryFile.getPath()--获取已打开文件夹路径
+      --print(nowDirectoryPath)
       if upFile then--如果是向上
         filesPositions[nowDirectoryPath]=nil--删除当前已打开文件夹滚动
        else
@@ -394,7 +413,8 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
           filesPositions[nowDirectoryPath]={pos,scroll}
         end
       end
-    end
+    end]]
+
     activity.newTask(function(newDirectory,projectOpenState)
       require "import"
       import "java.io.File"
@@ -442,67 +462,84 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
       local path=newDirectory.getPath()
       --刷新路径指示器
       if ProjectManager.openState then
-        local oldPath
+        local oldPath=directoryFile and directoryFile.getPath()
         local nowPrjPathParent=ProjectManager.nowFile.getParent()
-        if directoryFile then
-          oldPath=directoryFile.getPath()
-          if not(String(oldPath).startsWith(nowPrjPathParent)) then
-            oldPath=nowPrjPathParent
-          end
-          if not(String(path).startsWith(nowPrjPathParent)) then
-            path=nowPrjPathParent
-          end
-         else
-          oldPath=nowPrjPathParent
-        end
+
+        local legalNewPath=String(path).startsWith(nowPrjPathParent.."/")--新路径为工程路径，也就是合法路径
+        local legalOldPath=oldPath and String(oldPath).startsWith(nowPrjPathParent.."/")--同理旧路径
+        local legalPath=oldPath and legalOldPath == legalNewPath--有旧路径并且合法性相同
 
         if oldPath~=path then
+          local anim_propertyName,anim_values
           --如果是返回
-          if String(oldPath).startsWith(path) and oldRichAnim then
+          if oldPath and String(oldPath).startsWith(path) and legalPath and oldRichAnim then
             local position=#pathSplitList
             for name in string.split(ProjectManager.shortPath(oldPath,true,path),"/") do
-              if name~="" then
-                table.remove(pathSplitList,position)
-                if position>1 then
-                  pathAdapter.notifyItemChanged(position-2)
-                end
-                pathAdapter.notifyItemRemoved(position-1)
-                position=position-1
+              --if name~="" then
+              table.remove(pathSplitList,position)
+              if position>1 then
+                pathAdapter.notifyItemChanged(position-2)
               end
+              pathAdapter.notifyItemRemoved(position-1)
+              position=position-1
+              --end
             end
+            anim_propertyName,anim_values="x", {-math.dp2int(16),0}
+            FilesBrowserManager.recordScrollPosition()
             --如果是前进
-           elseif String(path).startsWith(oldPath) and oldRichAnim then
-            local rootPath=oldPath
+           elseif oldPath and String(path).startsWith(oldPath) and legalPath and oldRichAnim then
+            local rootPath=oldPath=="/" and "" or oldPath--oldPath为/时设置为空
             local position=#pathSplitList
             for name in string.split(ProjectManager.shortPath(path,true,rootPath),"/") do
-              if name~="" then
-                rootPath=rootPath.."/"..name
-                table.insert(pathSplitList,{name,rootPath})
-                if position>0 then
-                  pathAdapter.notifyItemChanged(position-1)
-                end
-                pathAdapter.notifyItemInserted(position)
-                position=position+1
+              --if name~="" then
+              rootPath=rootPath.."/"..name
+              table.insert(pathSplitList,{name,rootPath})
+              if position>0 then
+                pathAdapter.notifyItemChanged(position-1)
               end
+              pathAdapter.notifyItemInserted(position)
+              position=position+1
+              --end
             end
-
+            anim_propertyName,anim_values="x", {math.dp2int(16),0}
+            filesPositions[oldPath]=nil--删除当前已打开文件夹滚动
             --判断不出来
            else
             table.clear(pathSplitList)
-            local rootPath=ProjectManager.nowFile.getParent()
+            local rootPath=nowPrjPathParent
+            if not legalNewPath then
+              rootPath=""
+              table.insert(pathSplitList,{"ROOT","/"})
+            end
             for name in string.split(ProjectManager.shortPath(path,true,rootPath),"/") do
-              if name~="" then
-                rootPath=rootPath.."/"..name
-                table.insert(pathSplitList,{name,rootPath})
-              end
+              rootPath=rootPath.."/"..name
+              table.insert(pathSplitList,{name,rootPath})
             end
             pathAdapter.notifyDataSetChanged()
+            --anim_propertyName,anim_values="alpha",{0,1}
+            ObjectAnimator.ofFloat(recyclerView, "alpha",{0,1})
+            .setDuration(250)
+            .setInterpolator(DecelerateInterpolator())
+            .start()
+            if oldPath then
+              FilesBrowserManager.recordScrollPosition()
+            end
+          end
+          directoryFile=newDirectory
+          if oldRichAnim and anim_propertyName and anim_values then
+            ObjectAnimator.ofFloat(recyclerViewCard, anim_propertyName,anim_values)
+            .setDuration(150)
+            .setInterpolator(DecelerateInterpolator())
+            .start()
+            ObjectAnimator.ofFloat(recyclerView, "alpha",{0,1})
+            .setDuration(250)
+            .setInterpolator(DecelerateInterpolator())
+            .start()
           end
         end
-        directoryFile=newDirectory
-       else
-        table.clear(pathSplitList)
-        directoryFile=nil
+       else--未打开工程
+        table.clear(pathSplitList)--清空路径指示器
+        directoryFile=nil--移除当前路径标识
         pathAdapter.notifyDataSetChanged()
       end
       table.clear(adapterData)
@@ -522,6 +559,7 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
        else
         layoutManager.scrollToPosition(0)
       end
+
     end).execute({file,ProjectManager.openState})
   end
 end

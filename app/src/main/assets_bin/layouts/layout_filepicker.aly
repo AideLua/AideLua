@@ -6,6 +6,7 @@
   layout_height="fill";
   id="drawerChild";
   backgroundColor=theme.color.windowBackground;
+
   {
     LinearLayoutCompat;
     layout_height="fill";
@@ -36,15 +37,28 @@
       };
     };
     {
-      SwipeRefreshLayout;
+      LinearLayoutCompat;
       layout_width="fill";
       layout_height="fill";
-      id="swipeRefresh";
       {
-        MyRecyclerView;
+        CardView;
         layout_width="fill";
         layout_height="fill";
-        id="recyclerView";
+        id="recyclerViewCard";
+        elevation="8dp";
+        radius=0;
+        {
+          SwipeRefreshLayout;
+          layout_width="fill";
+          layout_height="fill";
+          id="swipeRefresh";
+          {
+            MyRecyclerView;
+            layout_width="fill";
+            layout_height="fill";
+            id="recyclerView";
+          };
+        };
       };
     };
   };

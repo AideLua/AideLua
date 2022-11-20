@@ -38,12 +38,20 @@
     <style name="Widget.Jesse205.PopupMenu" parent="Widget.AppCompat.PopupMenu">
         <item name="android:popupBackground">@drawable/popup_background_jesse205</item>
 		<item name="android:popupElevation">8dp</item>
+		<item name="android:dropDownVerticalOffset">2dp</item>
 	</style>
     <style name="Widget.Jesse205.PopupMenu.Overflow" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="android:popupBackground">@drawable/popup_background_jesse205</item>
     	<item name="android:popupElevation">8dp</item>
-		
+		<item name="android:dropDownVerticalOffset">1dp</item>
 	</style>
+	<style name="Widget.Jesse205.ContextPopupMenu" parent="android:style/Widget.Material.ListPopupWindow">
+        <item name="android:overlapAnchor">true</item>
+        <item name="android:popupBackground">@drawable/popup_background_jesse205</item>
+		<item name="android:popupElevation">8dp</item>
+		<item name="android:dropDownVerticalOffset">1dp</item>
+	</style>
+	
     <style name="Widget.Jesse205.CardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardBackgroundColor">?windowBackgroundColor</item>
         <item name="cardCornerRadius">?cardCornerRadius</item>
@@ -64,11 +72,5 @@
     <style name="Widget.Jesse205.BottomNavigationView.Colored" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
         <item name="itemIconTint">@color/jesse205_navigation_item_icon_tint</item>
         <item name="itemTextColor">@color/jesse205_navigation_item_text_color</item>
-    </style>
-
-    <style name="Widget.Jesse205.ContextPopupMenu" parent="android:style/Widget.Material.ListPopupWindow">
-        <item name="android:overlapAnchor">true</item>
-        <item name="android:popupBackground">@drawable/popup_background_jesse205</item>
-		<item name="android:popupElevation">8dp</item>
     </style>
 </resources>

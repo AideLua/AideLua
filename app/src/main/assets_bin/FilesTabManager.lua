@@ -33,8 +33,7 @@ local openedFiles = {}
 FilesTabManager.backupPath=AppPath.AppMediaDir..os.date("/backup/%Y%m%d")
 FilesTabManager.backupDir=File(FilesTabManager.backupPath)
 
---已知问题：切换标签图标开关后，标签无手势动作
-local function applyTabMenu(view,fileConfig)
+local function applyTabMenu(view,config)
   local popupMenu=PopupMenu(activity,view)
   popupMenu.inflate(R.menu.menu_main_filetab)
   local menu=popupMenu.getMenu()
@@ -48,17 +47,18 @@ local function applyTabMenu(view,fileConfig)
   popupMenu.onMenuItemClick=function(item)
     local id=item.getItemId()
     if id==Rid.menu_close then
-      FilesTabManager.closeFile(fileConfig.lowerPath)
-      Handler().postDelayed(Runnable({
-        run = function()
+      FilesTabManager.closeFile(config.lowerPath)
+      filesTabLay.post(Runnable({
+        run=function()
           if openState then
             fileConfig.tab.select()
           end
-      end}),1)
+        end
+      }))
      elseif id==Rid.menu_close_all then
       FilesTabManager.closeAllFiles()
      elseif id==Rid.menu_close_other then
-      local file,fileType=fileConfig.file,fileConfig.fileType
+      local file,fileType=config.file,config.fileType
       FilesTabManager.closeAllFiles(false)
       FilesTabManager.openFile(file,fileType,true)
     end
@@ -81,11 +81,11 @@ local function applyTabMenu(view,fileConfig)
           view.requestDisallowInterceptTouchEvent(true)
           view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
           popupMenu.show()
-          ObjectAnimator.ofFloat(fileConfig.imageView, "rotationX", {view.getRotationX(),-60,-45,0})
+          ObjectAnimator.ofFloat(config.imageView, "rotationX", {view.getRotationX(),-60,-45,0})
           .setDuration(500)
           .setInterpolator(DecelerateInterpolator())
           .start()
-          ObjectAnimator.ofFloat(fileConfig.textView, "rotationX", {view.getRotationX(),-60,-45,0})
+          ObjectAnimator.ofFloat(config.textView, "rotationX", {view.getRotationX(),-60,-45,0})
           .setDuration(500)
           .setInterpolator(DecelerateInterpolator())
           .start()
@@ -93,18 +93,19 @@ local function applyTabMenu(view,fileConfig)
           pathTipState=true
           view.requestDisallowInterceptTouchEvent(true)
           view.performLongClick(event.x,event.y)
-          ObjectAnimator.ofFloat(fileConfig.imageView, "rotationX", {view.getRotationX(),60,45,0})
+          ObjectAnimator.ofFloat(config.imageView, "rotationX", {view.getRotationX(),60,45,0})
           .setDuration(500)
           .setInterpolator(DecelerateInterpolator())
           .start()
-          ObjectAnimator.ofFloat(fileConfig.textView, "rotationX", {view.getRotationX(),60,45,0})
+          ObjectAnimator.ofFloat(config.textView, "rotationX", {view.getRotationX(),60,45,0})
           .setDuration(500)
           .setInterpolator(DecelerateInterpolator())
           .start()
         end
       end
     end
-   if dropMenuState and (((time-event.getDownTime())>600 or maxY-y>math.dp2int(8))) then
+    --当触摸超时或者上滑时启用下拉选择
+    if dropMenuState and (((time-event.getDownTime())>600 or maxY-y>math.dp2int(8))) then
       dropListener.onTouch(view,event)
     end
     if action==MotionEvent.ACTION_UP then
@@ -353,21 +354,6 @@ function FilesTabManager.closeAllFiles(changeEditor)
   end
   openState=false
 end
-
---[=[
--- 关闭其他文件
-function FilesTabManager.closeOtherFiles()
-  --[[
-  local file,fileType=file,fileType
-  FilesTabManager.closeAllFiles(false)
-  FilesTabManager.openFile(file,fileType,true)]]
-  for index, content in pairs(openedFiles) do
-    if index~=fileConfig.lowerPath then
-      FilesTabManager.closeFile(index,false)
-    end
-  end
-end]=]
-
 
 -- 初始化 FilesTabManager
 function FilesTabManager.init()

@@ -173,7 +173,7 @@ data={
   {--软件版本
     SettingsLayUtil.ITEM;
     title=R.string.jesse205_nowVersion_app;
-    summary=("%s (%s)"):format(packageInfo.versionName,packageInfo.versionCode);
+    summary=("%s (%s)"):format(BuildConfig.VERSION_NAME,BuildConfig.VERSION_CODE);
     icon=R.drawable.ic_information_outline;
     key="version";
   };

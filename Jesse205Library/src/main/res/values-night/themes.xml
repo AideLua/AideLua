@@ -7,13 +7,14 @@
         <item name="strokeColor">@color/jesse205_grey_dark</item>
         <item name="navigationViewColorAccent">?colorAccent</item>
         <item name="windowBackgroundColor">@color/jesse205_black</item>
-        <item name="android:windowBackground">?windowBackgroundColor</item>
-        <item name="android:navigationBarColor">@color/jesse205_black</item>
-        <item name="android:windowLightStatusBar">?windowLightStatusBar</item>
-        <item name="android:windowLightNavigationBar">?windowLightNavigationBar</item>
         <item name="windowLightStatusBar">false</item>
         <item name="windowLightNavigationBar">false</item>
-		
+		<item name="android:windowBackground">?windowBackgroundColor</item>
+        <item name="android:colorBackground">?windowBackgroundColor</item>
+		<item name="android:navigationBarColor">@color/jesse205_black</item>
+        <item name="android:windowLightStatusBar">?windowLightStatusBar</item>
+        <item name="android:windowLightNavigationBar">?windowLightNavigationBar</item>
+        
         <!--波纹颜色-->
         <item name="rippleColorAccent">@color/jesse205_blue_ripple</item>
         <item name="rippleColorPrimary">@color/jesse205_white_ripple</item>
@@ -22,7 +23,7 @@
         <item name="actionBarTheme">@style/ThemeOverlay.Jesse205.Dark.ActionBar</item>
         <item name="actionBarWidgetTheme">@null</item>
         <item name="actionBarPopupTheme">@style/ThemeOverlay.MaterialComponents</item>
-        <item name="actionModeBackground">?colorPrimary</item>
+        <!--<item name="actionModeBackground">?colorPrimary</item>-->
         <item name="floatingActionButtonBackgroundColor">?colorBackgroundFloating</item>
         <item name="floatingActionButtonStyle">@style/Widget.Jesse205.FloatingActionButton.Dark</item>
         <item name="android:listViewStyle">@style/Widget.Jesse205.ListView</item>

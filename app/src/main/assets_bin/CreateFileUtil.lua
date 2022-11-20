@@ -6,8 +6,6 @@ local existsStr=getString(R.string.file_exists)
 local LuaReservedCharacters = {"switch", "if", "then", "and", "break", "do", "else", "elseif", "end", "false", "for",
   "function", "in", "local", "nil", "not", "or", "repeat", "return", "true", "until", "while"} -- lua关键字
 
-
-
 --根据文件名和扩展名获取用户真正想创建的文件路径
 local function buildReallyFilePath(name,extensionName)
   if extensionName and not(name:find("%.[^/]*$")) then
@@ -21,7 +19,7 @@ function CreateFileUtil.createFile(path,config)
   local file=File(path)
   local name=file.getName()
   local moduleName=name:match("(.+)%.") or name
-  local shoredModuleName=(moduleName:match("/(.+)") or moduleName):gsub("%.","_"):gsub("%[",""):gsub("%]",""):gsub("%:","_")
+  local shoredModuleName=moduleName:gsub("%.","_"):gsub("%[",""):gsub("%]",""):gsub("%:","_")
   if table.find(LuaReservedCharacters,shoredModuleName) then
     shoredModuleName="_"..shoredModuleName
   end
