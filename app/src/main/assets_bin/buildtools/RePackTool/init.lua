@@ -193,6 +193,8 @@ function RePackTool.repackApk_taskFunc(config,projectPath,install,sign)
       appName=config.appName or getString(android.R.string.unknownName)
       --appName=tostring(packageManager.getApplicationLabel(appApkInfo))
       appVer=config.versionName or appApkPAI.versionName
+      updateInfo("App Name: "..appName)
+      updateInfo("Version Name: v"..appVer)
 
       local binEventsPaths={RePackTool.getALPathByProjectPath(projectPath).."/bin.lua"}
       for _type,path in rePackTool.getSubprojectPathIterator(config,projectPath) do
@@ -226,6 +228,7 @@ function RePackTool.repackApk_taskFunc(config,projectPath,install,sign)
 
       --todo:编译Lua
       if config.compileLua~=false then
+        --updateInfo("Compile Lua: "..tostring(config.compileLua or false))
         updateDoing(getString(R.string.binpoject_compiling))
         autoCompileLua(tempDir)
         updateSuccess(getString(R.string.binpoject_compile_done))
@@ -253,6 +256,7 @@ function RePackTool.repackApk_taskFunc(config,projectPath,install,sign)
         local signedApkPath=binPath.."/"..signedApkName
         if Signer then--有签名工具
           updateDoing(formatResStr(R.string.binpoject_signing,{signedApkName}))
+          updateInfo("Key: Debug")
           signSucceed,signErr=pcall(Signer.sign,newApkPath,signedApkPath)
           updateSuccess(getString(R.string.binpoject_sign_done))
         end

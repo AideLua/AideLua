@@ -27,6 +27,8 @@
     {
       LinearLayout;
       layout_margin="16dp";
+      layout_marginTop="8dp";
+      layout_marginBottom="8dp";
       gravity="center";
       layout_width="fill";
       id="nowStatePanel";

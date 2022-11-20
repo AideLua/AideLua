@@ -11,8 +11,7 @@
         <item name="windowLightStatusBar">true</item>
         <item name="windowLightNavigationBar">true</item>
         <item name="android:windowBackground">?windowBackgroundColor</item>
-        <item name="android:colorBackground">?windowBackgroundColor</item>
-		<item name="android:navigationBarColor">@color/jesse205_white</item>
+        <item name="android:navigationBarColor">@color/jesse205_white</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">?windowLightStatusBar</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">?windowLightNavigationBar</item>
 
@@ -24,16 +23,16 @@
         <item name="actionBarTheme">@style/ThemeOverlay.Jesse205.ActionBar</item>
         <item name="actionBarWidgetTheme">@null</item>
         <item name="actionBarPopupTheme">@style/ThemeOverlay.MaterialComponents.Light</item>
-        <!--<item name="actionModeBackground">?colorPrimary</item>-->
-        <item name="floatingActionButtonBackgroundColor">?colorBackgroundFloating</item>
+		<item name="actionModeBackground">@drawable/jesse205_cab_background_top_material</item>
+		<item name="floatingActionButtonBackgroundColor">?colorBackgroundFloating</item>
         <item name="floatingActionButtonStyle">@style/Widget.Jesse205.FloatingActionButton</item>
         <item name="android:listViewStyle">@style/Widget.Jesse205.ListView</item>
         <item name="tabStyle">@style/Widget.Jesse205.TabLayout</item>
-
+		
         <item name="actionOverflowMenuStyle">@style/Widget.Jesse205.PopupMenu.Overflow</item>
         <item name="popupMenuStyle">@style/Widget.Jesse205.PopupMenu</item>
         <item name="android:contextPopupMenuStyle" tools:targetApi="n">@style/Widget.Jesse205.ContextPopupMenu</item>
-
+		
         <item name="android:alertDialogTheme">@style/Base.Theme.Jesse205.Dialog.Alert</item>
         <item name="alertDialogTheme">@style/ThemeOverlay.Jesse205.Dialog.Alert</item>
 

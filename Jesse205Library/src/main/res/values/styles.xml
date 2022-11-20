@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!--控件-->
-    <style name="Widget.Jesse205.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+	 <style name="Widget.Jesse205.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
         <item name="android:tint">?colorAccent</item>
         <!--<item name="colorControlNormal">?colorAccent</item>-->
         <item name="backgroundTint">?floatingActionButtonBackgroundColor</item>

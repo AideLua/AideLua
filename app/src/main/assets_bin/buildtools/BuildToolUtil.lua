@@ -23,11 +23,10 @@ function BuildingDialog:update(message,state)--state主要用来检验是否构�
   local dialog=self.dialog
   if lastMessage then
     local nowStatePanel=dialogIds.nowStatePanel
-    local icon,iconColor=0,0
-    if lastMessage=="doing" then--正正
+    local icon,iconColor=0,0--设置图标及颜色
+    if lastMessage=="doing" then--正在
       icon=R.drawable.ic_reload
       iconColor=theme.color.Blue
-      dialogIds.stateTextView.text=message
      elseif lastMessage=="info" then--信息
       icon=R.drawable.ic_information_variant
       --iconColor=theme.color.Blue
@@ -46,6 +45,12 @@ function BuildingDialog:update(message,state)--state主要用来检验是否构�
     if state==nil then
       nowStatePanel.setVisibility(View.VISIBLE)
       dialogIds.stateTextView2.text=message
+      if lastMessage=="doing" then
+        dialogIds.stateTextView.text=message
+        dialogIds.stateTextView2.setVisibility(View.GONE)
+       else
+        dialogIds.stateTextView2.setVisibility(View.VISIBLE)
+      end
      elseif state then
       dialog.setTitle(R.string.binpoject_state_succeed)
       nowStatePanel.setVisibility(View.GONE)
@@ -95,7 +100,6 @@ local function repackApk_callback(buildingDialog,success,message,apkPath,project
       negativeButton.setVisibility(View.VISIBLE)
       positiveButton.setText(R.string.install).onClick=function()
         activity.installApk(apkPath)
-        --buildingDialog.dismiss()
       end
      else
       showingText=formatResStr(R.string.binpoject_state_succeed_with_path_needSign,{shortApkPath})
