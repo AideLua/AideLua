@@ -257,7 +257,6 @@ function getFilePathCopyMenus(inLibDirPath,filePath,fileRelativePath,fileName,is
     end
    else
     addStrToTable(fileName,textList,textCheckList)
-
   end
   addStrToTable(fileRelativePath,textList,textCheckList)
   return textList

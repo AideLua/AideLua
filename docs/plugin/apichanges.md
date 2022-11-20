@@ -5,6 +5,7 @@
 [[toc]]
 :::
 
+## API变更日志
 ### v5.0.2(50299)
 1. `createVirtualClass(normalTable)` 增加 `__index` 方法
     * 作用：使 `Manager` 可以直接赋值
@@ -101,6 +102,7 @@ Jesse205 库：
 | getColorAndHex(text) | 获取文字内颜色的数值和16进制 <br> __text__ (number): 待分析的文本 <br> __return__ (number), (string): 颜色值 |
 | getTableIndexList(mTable) | 获取table的索引列表 <br> __mTable__ (table): 随便的 table <br> __return__ (table (list)): mTable的索引列表 |
 | editorLayouts[EditorName]<br>.onTypefaceChangeListener(ids,config,<br>editor,typeface,boldTypeface,italicTypeface) | 当编辑器字体发生改变时 |
+| EditorsManager.typefaceChangeListeners | 编辑器字体改变监听器 |
 
 PluginsUtil：
 
@@ -158,3 +160,8 @@ PluginsUtil：
 19. 新增 `PluginsUtil.clearOpenedPluginPaths()`，清除已启用的插件路径列表
     * 作用：方便重载插件
 20. 新增 `getTableIndexList(mTable)`，获取table的索引列表
+21. 添加 `EditorsManager.typefaceChangeListeners`
+22. `EditorsManager.actions` 自动获取编辑器事件，`getXxx` 会直接返回值，其他事件返回是否支持
+
+## 相关链接
+[应用更新日志](https://gitee.com/Jesse205/AideLua/blob/master/README.md)

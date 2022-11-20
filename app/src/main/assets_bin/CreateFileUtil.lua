@@ -14,7 +14,9 @@ local function buildReallyFilePath(name,extensionName)
   return name
 end
 
---创建文件
+---创建文件
+---@param path string 文件路径
+---@param config table 文件配置
 function CreateFileUtil.createFile(path,config)
   local file=File(path)
   local name=file.getName()
@@ -25,7 +27,7 @@ function CreateFileUtil.createFile(path,config)
   end
   file.getParentFile().mkdirs()
   file.createNewFile()
-  local fileContent=config.defaultContent:gsub("{{ShoredModuleName}}",shoredModuleName):gsub("{{ModuleName}}",moduleName)
+  local fileContent=config.content:gsub("{{ShoredModuleName}}",shoredModuleName):gsub("{{ModuleName}}",moduleName)
   io.open(path,"w"):write(fileContent):close()
 end
 

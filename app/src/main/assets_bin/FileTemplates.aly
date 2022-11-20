@@ -4,13 +4,14 @@
     enName="Lua Activity",--英文名
     id="luaactivity",--标识
     fileExtension="lua",--扩展名
-    defaultContent=[[require "import"
+    --在 v5.1.0(51099) 改名为 content
+    content=[[require "import"
 import "android.app.*"
 import "android.os.*"
 import "android.widget.*"
 import "android.view.*"
 
---activity.setTitle("Aide Lua")
+--activity.setTitle("{{ModuleName}}")
 activity.setTheme(R.style.AppTheme)
 activity.setContentView(loadlayout("layout"))
 actionBar=activity.getActionBar()
@@ -32,7 +33,7 @@ end
     id="luaactivity_android",
     fileExtension="lua",
     enabledVar="oldAndroidXSupport",
-    defaultContent=[[require "import"
+    content=[[require "import"
 --import "androidx"
 import "androidx.appcompat.app.*"
 import "androidx.appcompat.view.*"
@@ -44,7 +45,7 @@ import "android.view.*"
 
 import "androidx.coordinatorlayout.widget.CoordinatorLayout"
 
---activity.setTitle("Aide Lua")
+--activity.setTitle("{{ModuleName}}")
 --activity.setTheme(R.style.AppTheme)
 activity.setContentView(loadlayout("layout"))
 actionBar=activity.getSupportActionBar()
@@ -66,7 +67,7 @@ end
     id="luaactivity_jesse205",
     fileExtension="lua",
     enabledVar="oldJesse205Support",
-    defaultContent=[[require "import"
+    content=[[require "import"
 import "jesse205"
 
 activity.setTitle(R.string.app_name)
@@ -99,7 +100,7 @@ onConfigurationChanged(activity.getResources().getConfiguration())
     enName="Lua Layout",
     id="lualayout",
     fileExtension="aly",
-    defaultContent=[[{
+    content=[[{
   LinearLayout;
   layout_height="fill";
   layout_width="fill";
@@ -120,7 +121,7 @@ onConfigurationChanged(activity.getResources().getConfiguration())
     d="lualayout_androidx",
     fileExtension="aly",
     enabledVar="oldAndroidXSupport",
-    defaultContent=[[{
+    content=[[{
   CoordinatorLayout;
   layout_height="fill";
   layout_width="fill";
@@ -140,7 +141,7 @@ onConfigurationChanged(activity.getResources().getConfiguration())
     enName="Lua Table",
     id="luatable",
     fileExtension="aly",
-    defaultContent=[[{
+    content=[[{
   
 }]],
   },
@@ -150,7 +151,7 @@ onConfigurationChanged(activity.getResources().getConfiguration())
     enName="Lua Module",
     id="luamodule",
     fileExtension="lua",
-    defaultContent=[[local {{ShoredModuleName}}={}
+    content=[[local {{ShoredModuleName}}={}
 setmetatable({{ShoredModuleName}},{{ShoredModuleName}})
 local metatable={__index={{ShoredModuleName}}}
 
@@ -167,7 +168,7 @@ return {{ShoredModuleName}}
     enName="Empty Lua File",
     id="emptyfile_lua",
     fileExtension="lua",
-    defaultContent="",
+    content="",
   },
 
   {
@@ -175,7 +176,7 @@ return {{ShoredModuleName}}
     enName="Empty File",
     id="emptyfile",
     fileExtension="txt",
-    defaultContent="",
+    content="",
   },
 
 }

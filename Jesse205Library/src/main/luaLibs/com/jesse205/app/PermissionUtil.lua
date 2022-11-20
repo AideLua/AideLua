@@ -3,16 +3,19 @@ local grantedList={}
 PermissionUtil.grantedList=grantedList
 local context=jesse205.context--当前context
 
+--申请多个权限
 local function request(permissions)
   ActivityCompat.requestPermissions(context,String(permissions),0)
 end
 PermissionUtil.request=request
 
+---检查单个权限是否*给予
 local function checkPermission(permission)
   return ActivityCompat.checkSelfPermission(context,permission)==PackageManager.PERMISSION_GRANTED
 end
 PermissionUtil.checkPermission=checkPermission
 
+---检查多个权限是否给予
 local function check(permissions)
   for index,permission in ipairs(permissions)
     local granted=checkPermission(permission)
@@ -24,27 +27,6 @@ local function check(permissions)
 end
 PermissionUtil.check=check
 
---[[
-local function smartRequestPermission(permissions)
-  local needApply={}
-  for index,permission in ipairs(permissions)
-    local granted=grantedList[permission]
-    if not(granted) then
-      local nowGranted=checkPermission(permission)
-      if nowGranted then
-        grantedList[permission]=true
-       else
-        table.insert(needApply,permission)
-      end
-    end
-  end
-  if #needApply~=0 then
-    request(needApply)
-  end
-  needApply=nil
-end
-PermissionUtil.smartRequestPermission=smartRequestPermission
-]]
 --[[
 {
   {

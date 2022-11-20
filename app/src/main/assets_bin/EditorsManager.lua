@@ -75,7 +75,8 @@ MyCodeEditor=toCustomEditorView(CodeEditor)
 import "editorLayouts"
 
 
---字体改变监听器
+---字体改变监听器
+---在 v5.1.0(51099) 添加
 local typefaceChangeListeners={}
 EditorsManager.typefaceChangeListeners=typefaceChangeListeners
 
