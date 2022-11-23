@@ -22,7 +22,9 @@ return function(title,icon,name,date)
           layout_height="fill";
           layout_width="fill";
           textIsSelectable=true;
+          linksClickable=true;
           textColor=theme.color.textColorPrimary;
+          
           movementMethod=RTEditorMovementMethod.getInstance();
         };
       };

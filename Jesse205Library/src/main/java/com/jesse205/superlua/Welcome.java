@@ -65,8 +65,8 @@ public class Welcome extends AppCompatActivity {
         if (isUpdata) {//只有在更新资源时候或者程序启动才应该调用welcome
             Intent mIntent=getIntent();
             Bundle mBundle=mIntent.getExtras();
-            if (mBundle != null) {
-                intent = (Intent) mBundle.get("newIntent");
+	         if (mBundle != null) {
+                intent = (Intent) mBundle.get("newIntent");//使用以前的intent
             }
             if (intent == null)
                 intent = new Intent(Welcome.this, Main.class);

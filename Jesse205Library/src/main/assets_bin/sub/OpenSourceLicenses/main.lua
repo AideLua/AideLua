@@ -5,7 +5,7 @@ import "licences"
 import "item"
 
 activity.setTitle(R.string.jesse205_openSourceLicense)
-activity.setContentView(loadlayout2("layout",_ENV))
+activity.setContentView(loadlayout2("com.jesse205.layout.innocentlayout.RecyclerViewLayout",_ENV))
 actionBar.setDisplayHomeAsUpEnabled(true)
 fileBasePath=activity.getLuaPath("../../licences/%s.txt")
 

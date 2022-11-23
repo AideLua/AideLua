@@ -8,19 +8,21 @@ import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
-
 import java.io.File;
 
 public class LuaActivity extends com.androlua.LuaActivity {
-    private long oldLastTime = 0;
+	private long oldLastTime = 0;
     private long lastTime = 0;
     private boolean checkUpdate = false;
+	private String luaPath;
+	public String luaDir;
+	public boolean updating=false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        if (checkUpdate) {
+
+		if (checkUpdate) {
             try {
                 PackageInfo packageInfo = getPackageManager().getPackageInfo(this.getPackageName(), 0);
                 lastTime = packageInfo.lastUpdateTime;//更新时间
@@ -29,14 +31,10 @@ public class LuaActivity extends com.androlua.LuaActivity {
             }
             SharedPreferences info = getSharedPreferences("appInfo", 0);
             oldLastTime = info.getLong("lastUpdateTime", 0);
-            if (oldLastTime != lastTime) {
-                Intent intent = getIntent();
-                intent.setData(Uri.parse("file:///"));
-                setDebug(false);
-            }
-            //setDebug(false);
+			updating = oldLastTime != lastTime;
+            if (updating) 
+				setDebug(false);
         }
-
 
         super.onCreate(savedInstanceState);
 
@@ -47,12 +45,45 @@ public class LuaActivity extends com.androlua.LuaActivity {
             startActivity(intent);
             finish();
         }
-
     }
 
+	//Androlua本身这个仅在Main出现
+	@Override
+	protected void onNewIntent(Intent intent) {
+		runFunc("onNewIntent", intent);
+		super.onNewIntent(intent);
+	}
+
+	//检查资源更新开关
     public void setCheckUpdate(boolean state) {
         checkUpdate = state;
     }
+
+	//新的lua路径获取方法
+	@Override
+	public String getLuaPath() {
+		if (updating) {
+			luaPath = "/";//阻止软件运行
+		} else if (luaPath == null) {
+			luaPath = getIntent().getStringExtra("luaPath");
+		}
+		applyLuaDir(luaPath);
+		return luaPath;
+	}
+
+	//应用一下LuaDir
+	public void applyLuaDir(String luaPath) {
+		String parent = new File(luaPath).getParent();
+		luaDir = parent;
+		while (parent != null) {
+			if (new File(parent, "main.lua").exists() && new File(parent, "init.lua").exists()) {
+				luaDir = parent;
+				break;
+			}
+			parent = new File(parent).getParent();
+		}
+		setLuaDir(luaDir);
+	}
 
 
     @Override
@@ -73,7 +104,7 @@ public class LuaActivity extends com.androlua.LuaActivity {
         runFunc("onRestoreInstanceState", savedInstanceState);
     }
 
-
+    //重写newActivity，将目标Activity指向superlua的
     public void newActivity(String path, boolean newDocument, int documentId) {
         newActivity(1, path, null, newDocument, documentId);
     }
@@ -89,9 +120,6 @@ public class LuaActivity extends com.androlua.LuaActivity {
 
     public void newActivity(int req, String path, Object[] arg, boolean newDocument, int documentId) {
         Intent intent = new Intent(this, LuaActivity.class);
-        /*if (newDocument)
-         intent = new Intent(this, LuaActivityX.class);*/
-
         intent.putExtra("name", path);
         if (path.charAt(0) != '/')//如果不是/开头，说明是相对路径
             path = this.getLuaDir() + "/" + path;
@@ -100,16 +128,13 @@ public class LuaActivity extends com.androlua.LuaActivity {
             path += "/main.lua";
         else if (!file.isDirectory() && !path.endsWith(".lua"))
             path += ".lua";
-        intent.setData(Uri.parse("file://" + path + "?documentId=" + String.valueOf(documentId)));
-
-
+        intent.putExtra("luaPath", path);
+		intent.putExtra("documentId", documentId);
         if (arg != null)
             intent.putExtra("arg", arg);
-
         if (newDocument) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-            //intent.addFlags(Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
-            startActivity(intent);
+			startActivity(intent);
         } else
             startActivityForResult(intent, req);
     }
@@ -132,4 +157,6 @@ public class LuaActivity extends com.androlua.LuaActivity {
         array.recycle();
         super.setTaskDescription(taskDescription);
     }
+
+
 }

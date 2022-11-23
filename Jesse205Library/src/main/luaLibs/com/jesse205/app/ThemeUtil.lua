@@ -76,7 +76,6 @@ local function setStyledAttributes(contextTheme,applyTable,androidAttrs,appAttrs
    else
     array = contextTheme.obtainStyledAttributes(idList)
   end
-  print(dump(idList))
   if defaultValue==nil then
     for index=1,androidLength do
       applyTable[androidAttrs[index]]=array[getFunc](index-1)
