@@ -162,14 +162,18 @@ return function(item)
           if file.isFile() then--当前是文件
             local colorFilter
             local fileType
+            local icon
             if initData then
               filesPositions[filePath]=position
               fileType=getFileTypeByName(fileName)
+              icon=fileIcons[fileType]
               data.fileType=fileType
+              data.icon=icon
              else
               fileType=data.fileType
+              icon=data.icon
             end
-            iconView.setImageResource(fileIcons[fileType])
+            iconView.setImageResource(icon)
 
             colorFilter=fileColors[fileType and string.upper(fileType) or "normal"]
 

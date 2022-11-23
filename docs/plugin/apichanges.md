@@ -69,7 +69,7 @@ Jesse205 库：
 | 函数名 | 原参数 | 新参数 | 说明 |
 | ---- | ---- | --- | --- |
 | FilesTabManager.closeFile | (lowerFilePath,`blockOpen`,changeEditor) | (lowerFilePath,`removeTab`,changeEditor) | __removeTab__: 移除文件标签，默认为`true` |
-| getFilePathCopyMenus | (inLibDirPath,filePath,fileName,isFile,fileType)  | (inLibDirPath,filePath,`fileRelativePath`,<br>fileName,isFile,`isResDir`,fileType) | |
+| getFilePathCopyMenus | (inLibDirPath,filePath,fileName,isFile,fileType) | (inLibDirPath,filePath,`fileRelativePath`,<br>fileName,isFile,`isResDir`,fileType) | |
 
 :::
 

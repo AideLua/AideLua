@@ -8,10 +8,11 @@
     orientation="vertical";
     layout_width="fill";
     layout_height="fill";
+    --[[
     MySearchLayout.Builder({{{
           helperText=getString(R.string.support_lua_regular);
           helperTextEnabled=true;
-      }}});
+      }}});]]
     {
       FrameLayout;
       layout_width="fill";

@@ -4,8 +4,8 @@ local insertTable=require "com.jesse205.layout.insertTable"
 MyEditDialogLayout.layout=MyTextInputLayout.Builder{
   layout_margin="8dp";
   layout_width="fill";
-  layout_marginLeft="24dp";
-  layout_marginRight="24dp";
+  layout_marginLeft="22dp";
+  layout_marginRight="22dp";
   id="editLay";
   {
     inputType="text";

@@ -10,12 +10,20 @@ function EditDialogBuilder.__call(class,context)
   self.context=context
   self.buttonConfigs={}
   self.checkNullButtons={}
+  self.dialogBuilder=AlertDialog.Builder(context)
   return self
 end
 
-function EditDialogBuilder:setTitle(text)
-  self.title=text
-  return self
+function EditDialogBuilder.__index(class,key)
+  local isReturn=key:sub(1,3)=="get"
+  return function(self,...)
+    local result=rawget(self,"dialogBuilder")[key](...)
+    if isReturn then
+      return result
+     else
+      return self
+    end
+  end
 end
 
 function EditDialogBuilder:setText(text)
@@ -81,12 +89,12 @@ end
 function EditDialogBuilder:show()
   local ids={}
   self.ids=ids
-  local context,checkNullButtons,buttonConfigs=self.context,self.checkNullButtons,self.buttonConfigs
-  local text,hint,helperText=self.text,self.hint,self.helperText
+  local dialogBuilder=rawget(self,"dialogBuilder")
+  local context,checkNullButtons,buttonConfigs=rawget(self,"context"),rawget(self,"checkNullButtons"),rawget(self,"buttonConfigs")
+  local text,hint,helperText=rawget(self,"text"),rawget(self,"hint"),rawget(self,"helperText")
   local defaultFunc=self.defaultFunc
-  local dialogBuilder=AlertDialog.Builder(context)
-  .setTitle(self.title)
-  .setView(MyEditDialogLayout.load(nil,ids))
+
+  dialogBuilder.setView(MyEditDialogLayout.load(nil,ids))
 
   for index,content in pairs(buttonConfigs) do
     dialogBuilder["set"..index:gsub("^%l", string.upper).."Button"](content[1],nil)
@@ -111,7 +119,7 @@ function EditDialogBuilder:show()
 
   local edit,editLay=ids.edit,ids.editLay
   edit.requestFocus()--输入框取得焦点
-  
+
   if helperText then
     if type(helperText)=="number" then
       helperText=context.getString(helperText)

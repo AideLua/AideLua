@@ -28,11 +28,11 @@
         <item name="floatingActionButtonStyle">@style/Widget.Jesse205.FloatingActionButton</item>
         <item name="android:listViewStyle">@style/Widget.Jesse205.ListView</item>
         <item name="tabStyle">@style/Widget.Jesse205.TabLayout</item>
-		
+
         <item name="actionOverflowMenuStyle">@style/Widget.Jesse205.PopupMenu.Overflow</item>
         <item name="popupMenuStyle">@style/Widget.Jesse205.PopupMenu</item>
         <item name="android:contextPopupMenuStyle" tools:targetApi="n">@style/Widget.Jesse205.ContextPopupMenu</item>
-		
+
         <item name="android:alertDialogTheme">@style/Base.Theme.Jesse205.Dialog.Alert</item>
         <item name="alertDialogTheme">@style/ThemeOverlay.Jesse205.Dialog.Alert</item>
 
@@ -90,13 +90,17 @@
     <style name="ThemeOverlay.Jesse205.Dark.ActionBar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
     	<item name="colorControlNormal">@color/jesse205_white</item>
         <item name="elevation">4dp</item>
-	   </style>
+		<item name="cardBackgroundColor">@color/jesse205_white_ripple</item>
+		<item name="rippleColorPrimary">@color/jesse205_white_ripple</item>
+	</style>
 
 
     <style name="ThemeOverlay.Jesse205.ActionBar" parent="ThemeOverlay.MaterialComponents.ActionBar">
         <item name="colorControlNormal">@color/jesse205_black</item>
         <item name="elevation">4dp</item>
-    </style>
+		<item name="cardBackgroundColor">@color/jesse205_black_border</item>
+		<item name="rippleColorPrimary">@color/jesse205_black_ripple</item>
+	</style>
 
 
     <!--正式主题-->

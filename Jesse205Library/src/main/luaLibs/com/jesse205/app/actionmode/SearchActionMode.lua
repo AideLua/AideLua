@@ -18,10 +18,8 @@ return function(config)
   {
     onCreateActionMode=function(mode,menu)
       mode.setCustomView(MyTitleEditLayout.load({
-        {
-          hint=config.hint or activity.getString(R.string.abc_search_hint);
-          text=config.text;
-        }
+        hint=config.hint or activity.getString(R.string.abc_search_hint);
+        text=config.text;
       },ids))
       searchEdit=ids.searchEdit
 

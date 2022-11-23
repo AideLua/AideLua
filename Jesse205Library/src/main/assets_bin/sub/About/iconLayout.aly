@@ -23,7 +23,7 @@
         gravity="center|top";
         layout_width="fill";
         layout_height="fill";
-        padding="8dp";
+        padding="4dp";
         id="appIconGroup";
       };
     };

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/subMenu_copy"
-        android:title="@string/copy_popup">
+        android:id="@+id/subMenu_copy_name"
+        android:title="@string/copy_name_popup">
         <menu>
         </menu>
     </item>

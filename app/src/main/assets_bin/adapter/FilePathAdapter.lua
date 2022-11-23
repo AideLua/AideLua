@@ -24,7 +24,7 @@ return function(item)
       view.setTag(ids)
       local titleView=ids.title
       local iconView=ids.icon
-      titleView.setBackground(ThemeUtil.getRippleDrawable(ColorUtils.setAlphaComponent(theme.color.ActionBar.colorControlNormal,0x22),true))
+      titleView.setBackground(ThemeUtil.getRippleDrawable(theme.color.ActionBar.rippleColorPrimary,true))
       titleView.onClick=onClick
       titleView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL))
 

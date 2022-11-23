@@ -74,18 +74,29 @@ end})
 FilesBrowserManager.folderIcons=folderIcons
 
 local fileIcons={--各种文件的图标
+  --Lua
   lua=R.drawable.ic_language_lua,
   luac=R.drawable.ic_language_lua,
   aly=R.drawable.ic_language_lua,
+  --Java
+  java=R.drawable.ic_language_java,
+  --Python
+  py=R.drawable.ic_language_python,
+  pyw=R.drawable.ic_language_python,
+  pyc=R.drawable.ic_language_python,
+
   xml=R.drawable.ic_xml,
   json=R.drawable.ic_code_json,
-  java=R.drawable.ic_language_java,
+  --网页
   html=R.drawable.ic_language_html5,
   htm=R.drawable.ic_language_html5,
+
   txt=R.drawable.ic_file_document_outline,
+  --压缩类
   zip=R.drawable.ic_zip_box_outline,
   rar=R.drawable.ic_zip_box_outline,
   ["7z"]=R.drawable.ic_zip_box_outline,
+  --word类
   pdf=R.drawable.ic_file_pdf_box_outline,
   ppt=R.drawable.ic_file_powerpoint_box_outline,
   pptx=R.drawable.ic_file_powerpoint_box_outline,
@@ -93,16 +104,15 @@ local fileIcons={--各种文件的图标
   docx=R.drawable.ic_file_word_box_outline,
   xls=R.drawable.ic_file_table_box_outline,
   xlsx=R.drawable.ic_file_table_box_outline,
+  --图片类
   png=R.drawable.ic_image_outline,
   jpg=R.drawable.ic_image_outline,
   gif=R.drawable.ic_image_outline,
   jpeg=R.drawable.ic_image_outline,
   svg=R.drawable.ic_image_outline,
-  apk=R.drawable.ic_android_debug_bridge,
-  apks=R.drawable.ic_android_debug_bridge,
-  py=R.drawable.ic_language_python,
-  pyw=R.drawable.ic_language_python,
-  pyc=R.drawable.ic_language_python,
+  --安装包类
+  apk=R.drawable.ic_android,
+  apks=R.drawable.ic_android,
 }
 setmetatable(fileIcons,{__index=function(self,key)
     return R.drawable.ic_file_outline
@@ -469,43 +479,49 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
         local legalNewPath=String(path).startsWith(nowPrjPathParent.."/")--新路径为工程路径，也就是合法路径
         local legalOldPath=oldPath and String(oldPath).startsWith(nowPrjPathParent.."/")--同理旧路径
         local legalPath=oldPath and legalOldPath == legalNewPath--有旧路径并且合法性相同
+        local isBack,isForward=false,false
 
-        if oldPath~=path then
+        if oldPath==path then
+          FilesBrowserManager.recordScrollPosition()--路径相同，记录一下位置
+         else
           --是否返回
-          local isBack=oldPath and String(oldPath).startsWith(path)
+          isBack=oldPath and String(oldPath).startsWith(path)
           --是否前进
-          local isForward=oldPath and String(path).startsWith(oldPath)
+          isForward=oldPath and String(path).startsWith(oldPath)
           --动画参数
           local anim_propertyName,anim_values
 
-          if isBack then--后退
-            anim_propertyName,anim_values="x", {-math.dp2int(16),0}
-            filesPositions[oldPath]=nil--删除当前已打开文件夹滚动
-           elseif isForward then--前进
-            anim_propertyName,anim_values="x", {math.dp2int(16),0}
+          if isForward then--是前进就记录滚动位置
             FilesBrowserManager.recordScrollPosition()
-           else
-            anim_propertyName="alpha"
-            if oldPath then
-              FilesBrowserManager.recordScrollPosition()
-            end
+           elseif oldPath then--有oldPath，并且不是前进，说明有后退操作
+            filesPositions[oldPath]=nil--删除当前已打开文件夹滚动
           end
+
           --播放动画
-          if oldRichAnim and anim_propertyName then
-            if anim_propertyName~="alpha" then--下面就是透明动画，所以无需执行card动画
-              ObjectAnimator.ofFloat(recyclerViewCard, anim_propertyName,anim_values)
-              .setDuration(150)
+          if oldRichAnim then
+            if isBack then--后退
+              anim_propertyName,anim_values="x", {-math.dp2int(16),0}
+             elseif isForward then--前进
+              anim_propertyName,anim_values="x", {math.dp2int(16),0}
+             else
+              anim_propertyName="alpha"
+            end
+            if anim_propertyName then
+              if anim_propertyName~="alpha" then--下面就是透明动画，所以无需执行card动画
+                ObjectAnimator.ofFloat(recyclerViewCard, anim_propertyName,anim_values)
+                .setDuration(150)
+                .setInterpolator(DecelerateInterpolator())
+                .start()
+              end
+              ObjectAnimator.ofFloat(recyclerView, "alpha",{0,1})
+              .setDuration(250)
               .setInterpolator(DecelerateInterpolator())
               .start()
             end
-            ObjectAnimator.ofFloat(recyclerView, "alpha",{0,1})
-            .setDuration(250)
-            .setInterpolator(DecelerateInterpolator())
-            .start()
           end
 
           --如果是返回
-          if oldPath and isBack and legalPath and oldRichAnim then
+          if isBack and legalPath and oldRichAnim then
             local position=#pathSplitList
             for name in string.split(ProjectManager.shortPath(oldPath,true,path),"/") do
               table.remove(pathSplitList,position)
@@ -516,7 +532,7 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
               position=position-1
             end
             --如果是前进
-           elseif oldPath and isForward and legalPath and oldRichAnim then
+           elseif isForward and legalPath and oldRichAnim then
             local rootPath=oldPath=="/" and "" or oldPath--oldPath为/时设置为空
             local position=#pathSplitList
             for name in string.split(ProjectManager.shortPath(path,true,rootPath),"/") do
@@ -534,7 +550,7 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
            else
             table.clear(pathSplitList)
             local rootPath=nowPrjPathParent
-            if not legalNewPath then
+            if not legalNewPath then--新路径不合法，说明新路径不在工程内
               rootPath=""
               table.insert(pathSplitList,{"ROOT","/"})
             end
@@ -557,7 +573,7 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
       FilesBrowserManager.nowFilePosition=nil
       swipeRefresh.setRefreshing(false)
       loadingFiles=false
-      
+
       --刷新路径指示器
       adapter.notifyDataSetChanged()
       pathPlaceholderView.setVisibility(View.GONE)--用于在开启完整动画前提下快速显示列表。。。
@@ -565,7 +581,7 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
 
       --恢复到之前保存的滚动位置
       local scroll=filesPositions[path]
-      if scroll then
+      if scroll and not isForward then--前进必须不能有记录
         layoutManager.scrollToPositionWithOffset(scroll[1],scroll[2])
        else
         layoutManager.scrollToPosition(0)
@@ -623,7 +639,7 @@ function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
           end
         end
       end
-      local config={
+      local config={--主要是给提供者
         data=data,
         title=title,
         javaRReference=javaRReference,
@@ -644,20 +660,20 @@ function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
       menu.setHeaderTitle(config.title)
       local menuInflater=activity.getMenuInflater()
       menuInflater.inflate(R.menu.menu_main_file,menu)
-      local copyMenu=menu.findItem(R.id.subMenu_copy)
+      local copyNameMenu=menu.findItem(R.id.subMenu_copy_name)
       local openInNewWindowMenu=menu.findItem(Rid.menu_openInNewWindow)--新窗口打开
       local referenceMenu=menu.findItem(Rid.menu_reference)--引用资源
       local renameMenu=menu.findItem(Rid.menu_rename)--重命名
-      local copyMenuBuilder=copyMenu.getSubMenu()
+      local copyNameMenuBuilder=copyNameMenu.getSubMenu()
 
       table.foreach(providers.menuProviders,function(index,content)
         content(menu,config)
       end)
       table.foreach(providers.copyMenuProviders,function(index,content)
-        content(copyMenuBuilder,config)
+        content(copyNameMenuBuilder,config)
       end)
 
-      copyMenu.setVisible(config.copyMenuVisible)
+      copyNameMenu.setVisible(config.copyMenuVisible)
       openInNewWindowMenu.setVisible(config.openInNewWindowMenuVisible)
       referenceMenu.setVisible(config.referenceMenuVisible)
       renameMenu.setVisible(config.renameMenuVisible)

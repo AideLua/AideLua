@@ -8,7 +8,7 @@
     layout_width="fill";
     id="text";
     padding="16dp";
-    textSize="16sp";
+    textSize="14sp";
     --typeface=Typeface.DEFAULT_BOLD;
     textColor=theme.color.textColorPrimary;
   },

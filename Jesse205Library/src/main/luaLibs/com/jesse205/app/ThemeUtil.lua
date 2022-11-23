@@ -60,83 +60,91 @@ end
 ThemeUtil.isSysNightMode=isSysNightMode--这个一般用不到
 ThemeUtil.isNightMode=isSysNightMode
 
+
+local function setStyledAttributes(contextTheme,applyTable,androidAttrs,appAttrs,getFunc,defaultValue,style)
+  local idList={}
+  local androidLength,appLength=#androidAttrs,#appAttrs
+  for index=1,androidLength do
+    table.insert(idList,android.R.attr[androidAttrs[index]])
+  end
+  for index=1,appLength do
+    table.insert(idList,R.attr[appAttrs[index]])
+  end
+  local array
+  if style then
+    array = contextTheme.obtainStyledAttributes(style,idList)
+   else
+    array = contextTheme.obtainStyledAttributes(idList)
+  end
+  print(dump(idList))
+  if defaultValue==nil then
+    for index=1,androidLength do
+      applyTable[androidAttrs[index]]=array[getFunc](index-1)
+    end
+    for index=1,appLength do
+      applyTable[appAttrs[index]]=array[getFunc](index+androidLength-1)
+    end
+   else
+    for index=1,androidLength do
+      applyTable[androidAttrs[index]]=array[getFunc](index-1,defaultValue)
+    end
+    for index=1,appLength do
+      applyTable[appAttrs[index]]=array[getFunc](index+androidLength-1,defaultValue)
+    end
+  end
+  array.recycle()
+  idList=nil
+end
+
 --刷新颜色
 function ThemeUtil.refreshThemeColor()
   local contextTheme=context.getTheme()
-  local array
-  array = contextTheme.obtainStyledAttributes({
-    android.R.attr.textColorTertiary,
-    android.R.attr.textColorPrimary,--普通文字色（黑白）
-    android.R.attr.colorPrimary,
-    android.R.attr.colorPrimaryDark,
-    android.R.attr.colorAccent,--强调色
-    android.R.attr.navigationBarColor,--导航栏颜色
-    android.R.attr.statusBarColor,--状态栏颜色
-    android.R.attr.colorButtonNormal,
-    android.R.attr.windowBackground,--背景颜色
-    android.R.attr.textColorSecondary,
-    R.attr.rippleColorPrimary,--普通波纹（黑白）
-    R.attr.rippleColorAccent,--强调波纹
-    R.attr.floatingActionButtonBackgroundColor,--悬浮按钮背景
-    R.attr.colorBackgroundFloating,--悬浮的背景
-    R.attr.strokeColor,--线条颜色
-    --R.attr.titleTextColor,
-    --R.attr.subtitleTextColor,
-  })
-  local colorList=theme.color
-  colorList.textColorTertiary=array.getColor(0,0)
-  colorList.textColorPrimary=array.getColor(1,0)
-  colorList.colorPrimary=array.getColor(2,0)
-  colorList.colorPrimaryDark=array.getColor(3,0)
-  colorList.colorAccent=array.getColor(4,0)
-  colorList.navigationBarColor=array.getColor(5,0)
-  colorList.statusBarColor=array.getColor(6,0)
-  colorList.colorButtonNormal=array.getColor(7,0)
-  colorList.windowBackground=array.getColor(8,0)
-  colorList.textColorSecondary=array.getColor(9,0)
-  colorList.rippleColorPrimary=array.getColor(10,0)
-  colorList.rippleColorAccent=array.getColor(11,0)
-  colorList.floatingActionButtonBackgroundColor=array.getColor(12,0)
-  colorList.colorBackgroundFloating=array.getColor(13,0)
-  colorList.strokeColor=array.getColor(14,0)
-  array.recycle()
-
+  local nullTable={}
   local numberList=theme.number
-  array = contextTheme.obtainStyledAttributes({
-    android.R.attr.selectableItemBackgroundBorderless,
-    android.R.attr.selectableItemBackground,
-    R.attr.actionBarTheme,
-  })
-  numberList.id.selectableItemBackgroundBorderless=array.getResourceId(0,0)
-  numberList.id.selectableItemBackground=array.getResourceId(1,0)
-  numberList.id.actionBarTheme=array.getResourceId(2,0)
-  array.recycle()
+  --颜色
+  setStyledAttributes(contextTheme,theme.color,{
+    "textColorTertiary","textColorPrimary","textColorSecondary",--文字颜色
+    "colorPrimary","colorPrimaryDark","colorAccent",
+    "navigationBarColor","statusBarColor",--系统UI颜色
+    "colorButtonNormal","windowBackground"
+  },
+  {
+    "rippleColorPrimary","rippleColorAccent",--波纹颜色
+    "floatingActionButtonBackgroundColor",--悬浮球背景颜色
+    "colorBackgroundFloating","strokeColor",
+  },"getColor",0)
 
-  local booleanList=theme.boolean
-  array = contextTheme.obtainStyledAttributes({
-    R.attr.windowLightNavigationBar,
-    R.attr.windowLightStatusBar,
-  })
-  booleanList.windowLightNavigationBar=array.getBoolean(0,false)
-  booleanList.windowLightStatusBar=array.getBoolean(1,false)
-  array.recycle()--回收数组
+  setStyledAttributes(contextTheme,numberList.id,{
+    "selectableItemBackgroundBorderless","selectableItemBackground",
+  },
+  {
+    "actionBarTheme",
+  },"getResourceId",0)
 
-  local array = contextTheme.obtainStyledAttributes(numberList.id.actionBarTheme,{
-    android.R.attr.textColorSecondary,
-    R.attr.colorControlNormal,
-  })
-  local actionBarColorList=theme.color.ActionBar
-  actionBarColorList.textColorSecondary=array.getColor(0,0)
-  actionBarColorList.colorControlNormal=array.getColor(1,0)
-  array.recycle()
+  setStyledAttributes(contextTheme,theme.boolean,nullTable,{
+    "windowLightStatusBar","windowLightNavigationBar",
+  },"getBoolean",false)
 
-  array = context.getTheme().obtainStyledAttributes(numberList.id.actionBarTheme,{
-    R.attr.elevation,
+  --标题栏主题
+  setStyledAttributes(contextTheme,theme.color.ActionBar,{
+    "textColorSecondary",
+  },
+  {
+    "colorControlNormal","rippleColorPrimary","cardBackgroundColor",
+  },"getColor",0,numberList.id.actionBarTheme)
+
+  local array = context.getTheme().obtainStyledAttributes(numberList.id.actionBarTheme,{
+    R.attr.elevation
   })
   numberList.actionBarElevation=array.getDimension(0,0)
   array.recycle()
 
-  return colorList
+  --就这么神奇
+  local array = context.getTheme().obtainStyledAttributes(numberList.id.actionBarTheme,{
+    R.attr.cardBackgroundColor
+  })
+  theme.color.ActionBar.cardBackgroundColor=array.getColor(0,0)
+  array.recycle()
 end
 
 --设置状态栏颜色

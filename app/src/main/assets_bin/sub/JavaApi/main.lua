@@ -1,9 +1,11 @@
+-- 在 v5.1.0(51099) 搜索框改到标题栏内
 require "import"
 import "jesse205"
 import "android.widget.ListView"
 
 import "com.jesse205.adapter.MyLuaAdapter"
-import "com.jesse205.layout.MySearchLayout"
+--import "com.jesse205.layout.MySearchLayout"
+import "com.jesse205.layout.MyCardTitleEditLayout"
 
 import "getImportCode"
 import "showPackageMenu"
@@ -19,6 +21,8 @@ if searchWord=="nil" then
 end
 activity.setTitle(R.string.javaApiViewer)
 actionBar.setDisplayHomeAsUpEnabled(true)
+actionBar.setDisplayShowCustomEnabled(true)
+actionBar.setCustomView(loadlayout("titleLayout"))
 activity.setContentView(loadlayout2("layout"))
 
 searching=false
@@ -41,9 +45,23 @@ function onCreate()
   searchEdit.text=trueWord
 end
 
+function onCreateOptionsMenu(menu)
+  local arry=actionBar.getThemedContext().getTheme().obtainStyledAttributes({android.R.attr.textColorPrimary})
+  searchMenu=menu.add(R.string.abc_searchview_description_search)
+  searchMenu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+  searchMenu.setIcon(R.drawable.ic_magnify)
+  searchMenu.setIconTintList(arry.getColorStateList(0))
+
+  arry.recycle()
+  LoadedMenu = true
+  refreshMenusState()
+end
+
 function onOptionsItemSelected(item)
   local id=item.getItemId()
-  if id==android.R.id.home then
+  if item==searchMenu then
+    searchItem(searchEdit.text)
+   elseif id==android.R.id.home then
     activity.finish()
   end
 end
@@ -54,6 +72,11 @@ function onResult(name,err)
   end
 end
 
+function refreshMenusState()
+  if LoadedMenu then
+    searchMenu.setEnabled(not(searching))
+  end
+end
 
 function search(text,application)
   require "import"
@@ -110,10 +133,11 @@ end
 
 function searchItem(text,callback)
   if not(searching) then
-    if checkTextError(text,searchLay) then
+    if checkTextError(text) then
       return
     end
-    searchButton.clickable=false
+
+    refreshMenusState()
 
     --延迟展示进度条
     Handler().postDelayed(Runnable({
@@ -131,7 +155,7 @@ function searchItem(text,callback)
       adp.addAll(classesList)
       adp.notifyDataSetChanged()
       progressBar.setVisibility(View.GONE)
-      searchButton.clickable=true
+      --searchButton.clickable=true
       if callback then
         callback(classesList)
       end
@@ -139,17 +163,16 @@ function searchItem(text,callback)
   end
 end
 
-function checkTextError(text,searchLay)
+function checkTextError(text)
   local success,err=pcall(string.find,"",text)
   if success then
-    searchLay.setErrorEnabled(false)
-    return false
+    searchEdit
+    .setError(nil)
    else
-    searchLay
+    searchEdit
     .setError(err)
-    .setErrorEnabled(true)
-    return true
   end
+  return not success
 end
 
 datas={}
@@ -168,17 +191,13 @@ listView.onScroll=function(view,firstVisibleItem,visibleItemCount,totalItemCount
   MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount,topCard)
 end
 
-searchButton.onClick=function()
-  searchItem(searchEdit.text)
-end
-
 searchEdit.onEditorAction=function(view,i,keyEvent)
-  if searchButton.clickable then
+  if not searching then
     searchItem(view.text)
   end
   return true
 end
 
 searchEdit.addTextChangedListener({onTextChanged=function(text)
-    checkTextError(tostring(text),searchLay)
+    checkTextError(tostring(text))
 end})

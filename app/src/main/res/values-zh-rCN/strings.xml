@@ -19,7 +19,8 @@
     <string name="unknowError">未知错误</string>
     <string name="copy">复制</string>
     <string name="copy_popup">复制...</string>
-    <string name="copiedToClipboard">已复制到剪贴板。</string>
+	<string name="copy_name_popup">复制名称...</string>
+	<string name="copiedToClipboard">已复制到剪贴板。</string>
     <string name="selectAll">全选</string>
     <string name="deselectAll">取消全选</string>
     <string name="editor">编辑器</string>
@@ -77,6 +78,7 @@
     <string name="file_reopen">重新打开</string>
     <string name="file_noChange">此文件未改动</string>
     <string name="file_viewName_content">文件名：%1$s</string>
+    <string name="file_noOpen">未打开文件</string>
     
     <string name="directory">文件夹</string>
     <string name="directory_go_popup">打开目录...</string>

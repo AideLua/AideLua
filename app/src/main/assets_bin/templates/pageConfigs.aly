@@ -40,11 +40,14 @@
     },
     onInit=function(ids,config)
       --print(config.templateDirPath)
-      local templatePath=config.templatePath
-      local subTemplatePath=config.subTemplatePath
+      local templatePath=config.templatePath--主模板路径
+      local subTemplatePath=config.subTemplatePath--子模板路径
 
-      local chipList={}
-      config.chipList=chipList
+      --用于针对性停用
+      local chipsList={}
+      config.chipsList=chipsList
+
+      --安卓X开关
       local androidXSwitch=ids.androidXSwitch
       local androidXState=NewProjectManager.getSharedData(config._type,"androidxstate") or false
       androidXSwitch.setChecked(androidXState)
@@ -55,17 +58,19 @@
         androidXSwitch.setChecked(newState)
         NewProjectManager.setSharedData(config._type,"androidxstate",newState)
         config.androidXState=newState
-        NewProjectManager.refreshState("androidx",newState,chipList)
+        NewProjectManager.refreshState("androidx",newState,chipsList)
       end
 
-      NewProjectManager.refreshState("androidx",androidXState,chipList)
 
-      for index,content in ipairs(androluaVersions or {}) do
 
+      for index,content in ipairs(config.templateConfig.androluaVersions or {}) do
+        print(content)
       end
 
       --print(templatePath,subTemplatePath)
       print(subTemplatePath)
+      NewProjectManager.refreshState("androidx",androidXState,chipsList)
+
     end,
     onCreativePrj=function(ids,config,keys)
       print(dump(keys))

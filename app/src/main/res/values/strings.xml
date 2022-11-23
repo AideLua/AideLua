@@ -19,8 +19,9 @@
     <string name="unknown">(Unknow)</string>
     <string name="unknowError">Unknown error</string>
     <string name="copy">Copy</string>
-    <string name="copy_popup">Copy...</string>
-    <string name="copiedToClipboard">Copied to clipboard.</string>
+	<string name="copy_popup">Copy...</string>
+	<string name="copy_name_popup">Copy name...</string>
+	<string name="copiedToClipboard">Copied to clipboard.</string>
     <string name="selectAll">Select all</string>
     <string name="deselectAll">Deselect all</string>
     <string name="editor">Editor</string>
@@ -78,6 +79,7 @@
     <string name="file_reopen">Reopen file</string>
     <string name="file_noChange">This file has not been changed</string>
     <string name="file_viewName_content">Name: %1$s</string>
+    <string name="file_noOpen">No file opened</string>
     
     <string name="directory">Folder</string>
     <string name="directory_go_popup">Open Directory...</string>

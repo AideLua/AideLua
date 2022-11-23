@@ -311,7 +311,11 @@ end
 -- 以下为复写事件
 function onError(title, message)
   -- 报错重写
-  showErrorDialog(tostring(title), tostring(message)) -- 显示成对话框，解决安卓12的toast限制问题
+  if activity.isFinishing() then
+    print(title,message)
+   else
+    showErrorDialog(tostring(title), tostring(message)) -- 显示成对话框，解决安卓12的toast限制问题
+  end
   pcall(function()
     -- 保存到文件。有报错说明软件有问题，必须解决掉。
     local path = "/sdcard/Androlua/crash/" .. jesse205.packageName .. ".txt"

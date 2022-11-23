@@ -36,7 +36,7 @@
         };
         {
           TextView;
-          text="No files opened";
+          text=R.string.file_noOpen;
           textSize="16dp";
         };
       };
@@ -207,7 +207,7 @@ import "jesse205"
       "StyleWidget","ScreenFixUtil","FileInfoUtils",
 
       --自定义View或者Util
-      "MyTextInputLayout","MyTitleEditLayout","MyEditDialogLayout",
+      "MyTextInputLayout","MyCardTitleEditLayout","MyTitleEditLayout","MyEditDialogLayout",
       "MyTipLayout","MySearchLayout","MyAnimationUtil","MyStyleUtil",
 
       --适配器

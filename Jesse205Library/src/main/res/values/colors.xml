@@ -2,7 +2,7 @@
 <resources>
     <color name="jesse205_white">#ffffffff</color>
     <color name="jesse205_white_dark">#FFEEEEEE</color>
-    <color name="jesse205_white_ripple">#22ffffff</color>
+    <color name="jesse205_white_ripple">#44ffffff</color>
     <color name="jesse205_red">#FFD32F2F</color>
     <color name="jesse205_red_dark">#FFB71C1C</color>
     <color name="jesse205_red_ripple">#22D32F2F</color>
@@ -11,6 +11,7 @@
     <color name="jesse205_orange_ripple">#22FFA000</color>
     <color name="jesse205_orange_dark_ripple">#22F57C00</color>
     <color name="jesse205_black">#ff000000</color>
+    <color name="jesse205_black_border">#11000000</color>
     <color name="jesse205_black_ripple">#22000000</color>
     <color name="jesse205_blue">#FF3F51B5</color>
     <color name="jesse205_blue_light">#FF5C6BC0</color>

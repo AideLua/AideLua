@@ -36,7 +36,7 @@ NewProjectUtil2.buildKeyItem=buildKeyItem
 --构建内容中的key
 function NewProjectUtil2.buildKeysInContent(content,keys,reallyKeysMap)
   content:gsub("{{(.-)}}",function(key)
-    local item=reallyKeysMap[key]
+    local item=reallyKeysMap[key]--防止重复构建
     if not(item) then
       item=buildKeyItem(key,keys[key])
       reallyKeysMap[key]=item
@@ -50,6 +50,7 @@ function NewProjectUtil2.readConfig(path,basePath)
   return getConfigFromFile(basePath.."/"..path)
 end
 
+--解压文件，不解压损坏的压缩包，并且返回状态
 function NewProjectUtil2.unzip(path,unzipPath)
   File(unzipPath).mkdirs()
   local zipFile=ZipFile(path)

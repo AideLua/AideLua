@@ -2,8 +2,9 @@ local cannotBeEmptyStr=getString(R.string.jesse205_edit_error_cannotBeEmpty)
 local existsStr=getString(R.string.file_exists)
 
 function deleteFileDialog(name,file)
-  AlertDialog.Builder(this)
+  local dialog=AlertDialog.Builder(this)
   .setTitle(formatResStr(R.string.delete_withName,{name}))
+  --.setIcon(R.drawable.ic_delete_outline_colored)
   .setMessage(activity.getString(R.string.delete_warning))
   .setPositiveButton(android.R.string.ok,function()
     local succeed=LuaUtil.rmDir(file)
@@ -21,7 +22,8 @@ function deleteFileDialog(name,file)
   end)
   .setNegativeButton(android.R.string.cancel,nil)
   .show()
-
+  local okButton=dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+  okButton.setTextColor(theme.color.Red)
 end
 
 function createDirsDialog(nowDir)--创建文件夹对话框

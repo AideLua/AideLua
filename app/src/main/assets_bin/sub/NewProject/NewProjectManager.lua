@@ -170,11 +170,11 @@ function NewProjectManager.getSharedData(_type, key)
 end
 
 --刷新启用状态，比如AndroidX
-function NewProjectManager.refreshState(refreshType, state, chipList)
+function NewProjectManager.refreshState(refreshType, state, chipsList)
   local notState = not (state)
   if refreshType == "androidx" then
-    for index = 1, #chipList do
-      local chip = chipList[index]
+    for index = 1, #chipsList do
+      local chip = chipsList[index]
       local content = chip.tag
       local support = content.support
       if support then
@@ -238,10 +238,11 @@ function NewProjectManager.buildConfig(pageConfig)
     end
   end
 
+  --让系统帮你处理安卓x，但是在部分模板上可能有bug。
   local androidX = pageConfig.androidxState
   keys.androidX = androidX
 
-
+--响应构建key事件
   local onBuildConfig = pageConfig.onBuildConfig
   if onBuildConfig then
     onBuildConfig(pageConfig.ids, pageConfig, keysLists, formatList, unzipList)
@@ -263,11 +264,10 @@ function NewProjectManager.buildConfig(pageConfig)
   end
 
   local dependenciesEnd = keys.dependenciesEnd
-  if androidX then --启用AndroiX后自动追加
+  if androidX then --启用AndroiX后自动追加。这里就可能有bug
     table.insert(dependenciesEnd, "api 'androidx.appcompat:appcompat:1.0.0'")
     table.insert(dependenciesEnd, "api 'com.google.android.material:material:1.0.0'")
   end
-
 
   return keys, formatList, unzipList
 end

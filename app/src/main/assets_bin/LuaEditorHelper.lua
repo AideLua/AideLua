@@ -45,7 +45,7 @@ local providers={
                   magnifier.update()
                 end
               }))
-              
+
               if not(magnifierUpdateTi.isRun()) then
                 magnifierUpdateTi.start()
               end
@@ -172,7 +172,7 @@ end
 
 function LuaEditorHelper.applyStyleToolBar(editor)
   --混淆这里有一点反混淆
-  
+
   editor.setOnSelectionChangedListener({
     [M2PName["com.myopicmobile.textwarrior.android.OnSelectionChangedListener"].onSelectionChanged]=function(active,selStart,selEnd)
       LuaEditorHelper.onEditorSelectionChangedListener(editor,active,selStart,selEnd)
