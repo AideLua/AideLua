@@ -78,8 +78,11 @@ local fileIcons={--各种文件的图标
   lua=R.drawable.ic_language_lua,
   luac=R.drawable.ic_language_lua,
   aly=R.drawable.ic_language_lua,
+
   --Java
   java=R.drawable.ic_language_java,
+  kt=R.drawable.ic_language_kotlin,
+
   --Python
   py=R.drawable.ic_language_python,
   pyw=R.drawable.ic_language_python,
@@ -87,15 +90,19 @@ local fileIcons={--各种文件的图标
 
   xml=R.drawable.ic_xml,
   json=R.drawable.ic_code_json,
+
   --网页
   html=R.drawable.ic_language_html5,
   htm=R.drawable.ic_language_html5,
 
-  txt=R.drawable.ic_file_document_outline,
   --压缩类
   zip=R.drawable.ic_zip_box_outline,
   rar=R.drawable.ic_zip_box_outline,
   ["7z"]=R.drawable.ic_zip_box_outline,
+  jar=R.drawable.ic_zip_box_outline,
+
+  gradle=R.drawable.ic_language_gradle,
+
   --word类
   pdf=R.drawable.ic_file_pdf_box_outline,
   ppt=R.drawable.ic_file_powerpoint_box_outline,
@@ -104,15 +111,23 @@ local fileIcons={--各种文件的图标
   docx=R.drawable.ic_file_word_box_outline,
   xls=R.drawable.ic_file_table_box_outline,
   xlsx=R.drawable.ic_file_table_box_outline,
+  txt=R.drawable.ic_file_document_outline,
+  md=R.drawable.ic_language_markdown_outline,
+  markdown=R.drawable.ic_language_markdown_outline,
+
   --图片类
   png=R.drawable.ic_image_outline,
   jpg=R.drawable.ic_image_outline,
   gif=R.drawable.ic_image_outline,
   jpeg=R.drawable.ic_image_outline,
   svg=R.drawable.ic_image_outline,
+
   --安装包类
   apk=R.drawable.ic_android,
   apks=R.drawable.ic_android,
+  aab=R.drawable.ic_android,
+  hap=R.drawable.ic_android,
+
 }
 setmetatable(fileIcons,{__index=function(self,key)
     return R.drawable.ic_file_outline
@@ -128,6 +143,8 @@ local fileColors = {
   -- 按文件类型
   APK = 0xFF00E676, -- 安卓应用程序
   APKS = 0xFF00E676,
+  AAB = 0xFF00E676,
+  HAP = 0xFF00E676,
 
   LUA = 0xff2962ff,
   ALY = 0xff2196f3,
@@ -140,17 +157,29 @@ local fileColors = {
 
   DEX = 0xFF00BCD4,
   JAVA = 0xFF2962FF,
+  KT=0xff7c4dff,
   JAR = 0xffe64a19,
+
+  GRADLE = 0xFF0097A7,
+  MD=theme.color.textColorPrimary,
+  MARKDOWN=theme.color.textColorPrimary,
+
+  HTML = 0xffff5722,
+  HTM = 0xffff5722,
+  JSON = 0xffffa000,
 
   ZIP = 0xFF795548, -- 压缩文件
   ["7Z"] = 0xFF795548,
   TAR = 0xFF795548,
   RAR = 0xFF795548,
 
-  GRADLE = 0xFF0097A7,
-
-  HTML = 0xffff5722,
-  JSON = 0xffffa000,
+  DOC=0xff448aff,
+  DOCX=0xff448aff,
+  PPT=0xffff5722,
+  PPTX=0xffff5722,
+  XLS=0xff4caf50,
+  XLSX=0xff4caf50,
+  PDF=0xfff44336,
 }
 FilesBrowserManager.fileColors = fileColors
 
@@ -372,7 +401,7 @@ end
 --[[
 刷新文件夹/进入文件夹
 @param file 要刷新或者进入的文件夹
-@param upFile 是否是向上，在 v3.1.0(31099) 作废
+@param upFile 是否是向上，在 v3.1.0(31099) 作废，在之后的版本无实际作用
 @param force 强制刷新
 @param atOnce 立刻显示进度条
 ]]
@@ -401,29 +430,6 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
      else
       file=ProjectManager.projectsFile
     end
-
-
-    --这些都是判断是否要清除滚动信息的，已由其他方法实现，这里已作废
-    --[[
-     if directoryFile then
-      local nowDirectoryPath=directoryFile.getPath()--获取已打开文件夹路径
-      --print(nowDirectoryPath)
-      if upFile then--如果是向上
-        filesPositions[nowDirectoryPath]=nil--删除当前已打开文件夹滚动
-       else
-        local pos=layoutManager.findFirstVisibleItemPosition()
-        local listViewFirstChild=recyclerView.getChildAt(0)--获取列表第一个控件
-        local scroll=0
-        if listViewFirstChild then--有控件
-          scroll=listViewFirstChild.getTop()--获取顶部距离
-        end
-        if pos==0 and scroll>=0 then
-          filesPositions[nowDirectoryPath]=nil
-         else
-          filesPositions[nowDirectoryPath]={pos,scroll}
-        end
-      end
-    end]]
 
     activity.newTask(function(newDirectory,projectOpenState)
       require "import"

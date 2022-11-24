@@ -143,7 +143,6 @@ end
 FilesTabManager.initFileTabView=initFileTabView
 
 
-
 function FilesTabManager.openFile(newFile,newFileType,keepHistory)
   if openState and EditorsManager.isEditor() then
     --EditorsManager.save2Tab()
