@@ -685,7 +685,7 @@ function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
           if id==Rid.menu_delete then--删除
             deleteFileDialog(title,file)
            elseif id==Rid.menu_createCopy then
-            local newName=(fileName:match("(.+)%.") or fileName).."副本"
+            local newName=(fileName:match("(.+)%.") or fileName).." 副本"
             if fileType then
               newName=newName.."."..fileType
             end
