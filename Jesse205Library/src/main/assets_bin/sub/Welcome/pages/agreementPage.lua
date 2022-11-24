@@ -24,7 +24,6 @@ return function(title,icon,name,date)
           textIsSelectable=true;
           linksClickable=true;
           textColor=theme.color.textColorPrimary;
-          
           movementMethod=RTEditorMovementMethod.getInstance();
         };
       };
