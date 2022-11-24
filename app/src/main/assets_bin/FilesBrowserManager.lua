@@ -598,6 +598,7 @@ function FilesBrowserManager.clearAdapterData()
   adapter.notifyDataSetChanged()
 end
 
+--文件长按菜单（包括右键菜单）
 function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
   if menuInfo then
     local position=menuInfo.position
@@ -683,6 +684,19 @@ function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
           local id=item.getItemId()
           if id==Rid.menu_delete then--删除
             deleteFileDialog(title,file)
+           elseif id==Rid.menu_createCopy then
+            local newName=(fileName:match("(.+)%.") or fileName).."副本"
+            if fileType then
+              newName=newName.."."..fileType
+            end
+            local newPath=parentFile.getPath().."/"..newName
+            local newFile=File(newPath)
+            if newFile.exists() then
+              showSnackBar(R.string.file_exists)
+             else
+              LuaUtil.copyDir(file,newFile)
+              FilesBrowserManager.refresh()
+            end
            elseif id==Rid.menu_rename then--重命名
             renameDialog(file)
            elseif id==Rid.menu_openInNewWindow then--新窗口打开

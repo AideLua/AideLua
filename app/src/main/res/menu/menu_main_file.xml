@@ -6,6 +6,9 @@
         <menu>
         </menu>
     </item>
+	<item
+        android:id="@+id/menu_createCopy"
+        android:title="@string/file_createCopy"/>
     <item
         android:id="@+id/menu_rename"
         android:title="@string/rename"/>

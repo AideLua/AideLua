@@ -80,6 +80,7 @@
     <string name="file_noChange">This file has not been changed</string>
     <string name="file_viewName_content">Name: %1$s</string>
     <string name="file_noOpen">No file opened</string>
+    <string name="file_createCopy">Create a copy</string>
     
     <string name="directory">Folder</string>
     <string name="directory_go_popup">Open Directory...</string>

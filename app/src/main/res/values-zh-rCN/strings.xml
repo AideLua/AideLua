@@ -79,6 +79,7 @@
     <string name="file_noChange">此文件未改动</string>
     <string name="file_viewName_content">文件名：%1$s</string>
     <string name="file_noOpen">未打开文件</string>
+    <string name="file_createCopy">创建副本</string>
     
     <string name="directory">文件夹</string>
     <string name="directory_go_popup">打开目录...</string>
