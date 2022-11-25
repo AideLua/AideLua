@@ -1,4 +1,8 @@
-local db, sdb, stream, fw, fg, fm = {}, {}, {}, 'fw', 'fg', 'fm'
+local db, sdb, stream = {}, {}, {}
+
+local setmetatable, tostring, type, pairs, error, load = setmetatable, tostring, type, pairs, error, load
+
+local table, io, string, math = table, io, string, math
 
 local pack, unpack, packsize = string.pack, string.unpack, string.packsize
 
@@ -80,31 +84,67 @@ function db:init()
     return self
 end
 
-function db:read(fd, fmt)
-    local s = self[fd]:read(packsize(fmt))
-    if not s then
-        return nil
+function db:id(key, is)
+    if type(key) == 'table' then
+        if key.exist ~= nil then
+            local a, b, c = self:addr(key.pointer, true, key.key)
+            return a, b, c, key.key
+        end
     end
-    return unpack(fmt, s)
-end
-
-function db:addr(key)
     local level = 0
     local hash = hash(key, block_size)
     while true do
-        local pointer = self.fm:seek('set', (level * block_size) + (hash * 8))
-        local addr = self:read(fm, F.T) or 0
-        if addr == 0 then
-            return pointer, 0
-        else
-            self.fw:seek('set', addr)
-            local n = self:read(fw, F.T) or 0
-            local s = self.fw:read(n)
-            if s == tostring(key) then
-                return pointer, addr, n
-            end
+        local pointer = (level * block_size) + (hash * 8)
+        local a, b, c = self:addr(pointer, is, key)
+        if a then
+            return a, b, c, key
         end
         level = level + 1
+    end
+end
+
+function db:addr(pointer, is, key)
+    local pointer = self.fm:seek('set', pointer)
+    local addr = self.fm:read(8)
+    if addr then
+        addr = unpack(F.T, addr)
+    else
+        addr = 0
+    end
+    if addr == 0 then
+        if is then
+            return pointer, 0
+        end
+        return {
+            exist = false,
+            pointer = pointer,
+            key = key
+        }
+    else
+        self.fw:seek('set', addr)
+        local n = self.fw:read(8)
+        if n then
+            n = unpack(F.T, n)
+        else
+            n = 0
+        end
+        local s, f
+        if key then
+            s = self.fw:read(n)
+            f = s == tostring(key)
+        else
+            f = true
+        end
+        if f then
+            if is then
+                return pointer, addr, n
+            end
+            return {
+                exist = true,
+                pointer = pointer,
+                key = key
+            }
+        end
     end
 end
 
@@ -149,7 +189,7 @@ function db:add_gc(s0, e0)
 end
 
 function db:has(k)
-    local _, addr, size = self:addr(k)
+    local _, addr, size = self:id(k, true)
     if addr > 0 then
         self.fw:seek('set', addr + 8 + size)
         local tp = unpack(F.B, self.fw:read(1))
@@ -207,7 +247,7 @@ function db:put(k, v)
         error('db::不支持的类型::' .. tp)
     end
 
-    local po, addr, size = self:addr(k)
+    local po, addr, size, k = self:id(k, true)
     k = tostring(k)
     if addr == 0 then
         addr = self:scan_gc(len + 8 + #k + 1)
@@ -251,7 +291,7 @@ function db:put(k, v)
 end
 
 function db:get(k)
-    local _, addr, size = self:addr(k)
+    local _, addr, size = self:id(k, true)
     if addr == 0 then
         return
     end
@@ -279,7 +319,7 @@ function db:get(k)
 end
 
 function db:stream(k)
-    local _, addr, size = self:addr(k)
+    local _, addr, size = self:id(k, true)
     if addr == 0 then
         return
     end
@@ -323,7 +363,20 @@ function db:close()
     return self
 end
 
+function sdb:id(k)
+    if math.type(k) == 'integer' then
+        k = math.tointeger(k)
+    end
+    k = string.format('%s$%s', self.hash, k)
+    return self.parent:id(k)
+end
+
 function sdb:has(k)
+    if type(k) == 'table' then
+        if k.exist ~= nil then
+            return self.parent:has(k)
+        end
+    end
     if math.type(k) == 'integer' then
         k = math.tointeger(k)
     end
@@ -332,6 +385,11 @@ function sdb:has(k)
 end
 
 function sdb:remove(k)
+    if type(k) == 'table' then
+        if k.exist ~= nil then
+            return self.parent:remove(k)
+        end
+    end
     if math.type(k) == 'integer' then
         k = math.tointeger(k)
     end
@@ -340,6 +398,11 @@ function sdb:remove(k)
 end
 
 function sdb:stream(k)
+    if type(k) == 'table' then
+        if k.exist ~= nil then
+            return self.parent:stream(k)
+        end
+    end
     if math.type(k) == 'integer' then
         k = math.tointeger(k)
     end
@@ -348,6 +411,12 @@ function sdb:stream(k)
 end
 
 function sdb:put(k, v)
+    if type(k) == 'table' then
+        if k.exist ~= nil then
+            self.parent:put(k, v)
+            return self
+        end
+    end
     if math.type(k) == 'integer' then
         k = math.tointeger(k)
     end
@@ -357,6 +426,11 @@ function sdb:put(k, v)
 end
 
 function sdb:get(k)
+    if type(k) == 'table' then
+        if k.exist ~= nil then
+            return self.parent:get(k)
+        end
+    end
     if math.type(k) == 'integer' then
         k = math.tointeger(k)
     end
@@ -365,6 +439,12 @@ function sdb:get(k)
 end
 
 function sdb:fput(k, fmt, ...)
+    if type(k) == 'table' then
+        if k.exist ~= nil then
+            self.parent:fput(k, fmt, ...)
+            return self
+        end
+    end
     if math.type(k) == 'integer' then
         k = math.tointeger(k)
     end
@@ -374,6 +454,11 @@ function sdb:fput(k, fmt, ...)
 end
 
 function sdb:fget(k, fmt)
+    if type(k) == 'table' then
+        if k.exist ~= nil then
+            return self.parent:fget(k, fmt)
+        end
+    end
     if math.type(k) == 'integer' then
         k = math.tointeger(k)
     end
@@ -416,12 +501,18 @@ end
 
 function stream:read(fmt)
     local n = fmt
+    local e, p = self.e, self.p
     if not n then
-        n = self.e - self.p
+        n = e - p
     elseif type(fmt) == 'string' then
         n = packsize(n)
     end
-    self.fw:seek('set', self.p)
+
+    if p + n > e then
+        n = e - p
+    end
+
+    self.fw:seek('set', p)
     local s = self.fw:read(n)
     self:seek('cur', n)
 

@@ -24,6 +24,7 @@ function deleteFileDialog(name,file)
   .show()
   local okButton=dialog.getButton(AlertDialog.BUTTON_POSITIVE)
   okButton.setTextColor(theme.color.Red)
+  okButton.setRippleColor(ColorStateList({{}},{theme.color.Ripple.Red}))
 end
 
 function createDirsDialog(nowDir)--创建文件夹对话框
@@ -54,7 +55,6 @@ function createDirsDialog(nowDir)--创建文件夹对话框
     function(err)
       showErrorDialog(R.string.create_failed,err)
       errorState=true
-      --return true
     end)
     if errorState then
       return true
@@ -115,7 +115,6 @@ function renameDialog(oldFile)--重命名对话框
     function(err)
       showErrorDialog(R.string.rename_fail,err)
       errorState=true
-      --return true
     end)
     if errorState then
       return true

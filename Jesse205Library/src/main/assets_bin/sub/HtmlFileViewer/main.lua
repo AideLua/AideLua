@@ -4,7 +4,7 @@ import "android.text.Html"
 import "com.onegravity.rteditor.RTEditorMovementMethod"--可以选择与点击的MovementMethod
 
 activity.setTitle(R.string.jesse205_htmlFileViewer)
-activity.setContentView(loadlayout2("layout"))
+activity.setContentView(loadlayout2("com.jesse205.layout.innocentlayout.TextViewLayout"))
 actionBar.setDisplayHomeAsUpEnabled(true)
 ---传入的数据
 local data=...

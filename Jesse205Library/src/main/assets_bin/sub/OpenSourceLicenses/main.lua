@@ -83,7 +83,7 @@ adapter=LuaCustRecyclerAdapter(AdapterCreator({
 }))
 
 layoutManager=StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL)
-recyclerView.setPadding(0,math.dp2int(8),0,math.dp2int(8))
+recyclerView.setPadding(math.dp2int(8),0,math.dp2int(8),0)
 recyclerView.setAdapter(adapter)
 recyclerView.setLayoutManager(layoutManager)
 recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
