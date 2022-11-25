@@ -1,5 +1,5 @@
 # Aide Lua
-[![License](https://img.shields.io/github/license/Jesse205/AideLua)](LICENSE)
+[![License](https://img.shields.io/github/license/Jesse205/AideLua?label=License)](LICENSE)
 [![发行版](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=发行版&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases)
 
 [![QQ 群: 628045718](https://img.shields.io/badge/QQ_群-628045718-0099FF?logo=tencentqq)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
