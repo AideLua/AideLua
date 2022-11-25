@@ -175,7 +175,7 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
         lowerPath = lowerFilePath,
         decoder = decoder,
         tab=tab,
-        shortFilePath=ProjectManager.shortPath(filePath,true),
+        shortFilePath=ProjectManager.shortPath(filePath,true,ProjectManager.nowPath),
         deleted=false;
       }
       openedFiles[lowerFilePath] = fileConfig

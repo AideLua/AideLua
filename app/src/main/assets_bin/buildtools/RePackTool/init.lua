@@ -178,14 +178,14 @@ function RePackTool.repackApk_taskFunc(config,projectPath,install,sign)
         end
       end
     end
-    if not(appPath) then
+    if appPath then
+      updateInfo("File Name: "..appFile.getName())
+     else
       return getString(R.string.binpoject_error_notfind)
     end
 
-    --找到appPath，就告诉用户
-
+    --找到appPath，就告诉用户版本
     local packageManager=activity.getPackageManager()
-
     appApkPAI=packageManager.getPackageArchiveInfo(appPath, PackageManager.GET_ACTIVITIES)
     if appApkPAI then
       --可以解析安装包
