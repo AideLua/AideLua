@@ -1,5 +1,10 @@
+ext { 
+    androidXVersion = '1.4.0' 
+    materialVersion = '1.7.0-alpha01' 
+}
+
 buildscript {
-    ext.build_gradle_version = '4.1.2'
+    ext.build_gradle_version = '7.2.1'
 
     repositories {
         maven { url 'https://maven.aliyun.com/repository/jcenter' } 

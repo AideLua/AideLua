@@ -52,7 +52,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 由于 AIDE 的特殊性，请下载 [__AIDE高级设置版__](https://aidepro.top/) 进行操作
 
 ### 快速入门
-#### 一、配置 AIDE
+#### 一、配置 AIDE Pro
 1. 进入 `设置 - 高级设置 - 工程相关`
 2. 关闭 `启用alert调试文件` ，打开 `重定义Apk构建路径`
 3. 重启 AIDE

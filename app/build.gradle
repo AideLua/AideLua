@@ -1,8 +1,8 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 32
+    buildToolsVersion "32.0.0"
 
     defaultConfig {
         applicationId "com.jesse205.aidelua2"
@@ -27,15 +27,12 @@ android {
     sourceSets {
         main {
             //jniLibs.srcDirs = ['libs']
-        
         }
-
     }
     lintOptions {
         abortOnError false
         checkReleaseBuilds false
     }
-    
 }
 
 dependencies {

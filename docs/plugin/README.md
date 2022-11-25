@@ -15,7 +15,7 @@ Util 版本：v3.1
 1. 本文档部分说明格式为 “__变量名__ (数据类型): 说明” 或 “__数据类型__: 说明”
 2. 标有 <Badge type="danger" text="X" vertical="middle" /> 的表示已废除，相关 API 已被删除
 3. 标有 <Badge type="danger" text="*" vertical="middle" /> 的表示必须文件、方法 或 变量
-4. 推荐从 __v5.0.4(50499)__ 开始编写
+4. 推荐从 __v5.1.0(51099)__ 开始编写，因为在 v5.1.0 发生了非常大变化
 
 ## 手动导入
 1. 打开文件管理，进入 `内部存储/Android/media/com.Jesse205.aidelua2/files/plugins` ，没有就新建文件夹
