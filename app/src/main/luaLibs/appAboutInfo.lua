@@ -135,6 +135,7 @@ thanks={
   噬心={"HtmlEditor (老版本)"},
   dingyi={"MyLuaApp","LuaEditor","Gradle工程修复"},
   狸猫={"提供优化后的 AndroidX 模板"},
+  frrrrrits={"AnimeonGo（为Edde系列应用优化提供了重要参考）"}
 }
 
 --版权信息

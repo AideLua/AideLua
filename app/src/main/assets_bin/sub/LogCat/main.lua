@@ -7,7 +7,7 @@ isJesse205Activity=pcall(function()
 end)
 isSupportActivity=pcall(function()
   androidx={appcompat={R=luajava.bindClass("androidx.appcompat.R")}}
-  if not(luajava.instanceof(LuaActivity,luajava.bindClass("androidx.appcompat.app.AppCompatActivity"))) then
+  if not(luajava.instanceof(this,luajava.bindClass("androidx.appcompat.app.AppCompatActivity"))) then
     error()
   end
 end)
@@ -293,4 +293,3 @@ linearParams.width=-1
 mainLay.setLayoutParams(linearParams)
 
 actionBar.setSelectedNavigationItem(1)
-

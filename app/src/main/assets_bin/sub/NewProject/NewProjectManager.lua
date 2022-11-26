@@ -48,16 +48,16 @@ function NewProjectManager.loadTemplate(path, parentTemplateConfig)
 
   getConfigFromFile(path .. "/config.lua", config) --读取文件
   local subTemplates = config.subTemplates --获取子模板
-  local subTemplatesMap = {} --子模板地图
+  local subTemplatesMap = {} --子模板映射
   local templateType = config.templateType
   local pageConfigsListIndex = #pageConfigsList --为了按顺序添加页面
-  if templateType then --有模板类型就添加到主模板地图
+  if templateType then --有模板类型就添加到主模板映射
     templateMap[templateType] = config
   end
   configSuper.templateType = templateType --模板类型
   configSuper.templateConfig = config --模板配置
 
-  configSuper.subTemplatesMap = subTemplatesMap --子模板地图
+  configSuper.subTemplatesMap = subTemplatesMap --子模板映射
 
   setmetatable(config.keys, { __index = parentTemplateConfig.keys }) --可以直接访问父模板的变量
 
@@ -264,9 +264,14 @@ function NewProjectManager.buildConfig(pageConfig)
   end
 
   local dependenciesEnd = keys.dependenciesEnd
+  local appDependenciesEnd = keys.appDependenciesEnd
   if androidX then --启用AndroiX后自动追加。这里就可能有bug
+    if dependenciesEnd then
     table.insert(dependenciesEnd, "api 'androidx.appcompat:appcompat:1.0.0'")
-    table.insert(dependenciesEnd, "api 'com.google.android.material:material:1.0.0'")
+    end
+    if appDependenciesEnd then
+    table.insert(appDependenciesEnd, "api 'com.google.android.material:material:1.0.0'")
+    end
   end
 
   return keys, formatList, unzipList

@@ -1,6 +1,6 @@
 --[[
 FilesBrowserManager: metatable(class): 文件浏览器管理器
-FilesBrowserManager.providers：提供者地图
+FilesBrowserManager.providers：提供者映射
 FilesBrowserManager.providers.menuProviders：ContextMenu提供者列表
 FilesBrowserManager.providers.copyMenuProviders：复制菜单提供者列表
 FilesBrowserManager.openState; FilesBrowserManager.getOpenState(): boolean: 文件浏览器打开状态
@@ -187,7 +187,7 @@ setmetatable(fileColors,{__index=function(self,key)
     return self.normal
 end})
 
---隐藏文件地图
+--隐藏文件映射
 local hiddenFiles={
   gradlew=true,
   ["gradlew.bat"]=true,

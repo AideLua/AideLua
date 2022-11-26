@@ -92,8 +92,8 @@ Jesse205 库：
 | AppPath.AppDataTempDir | /data/data/`<packagename>`/files/temp |
 | AppPath.AppSdcardDataTempDir | Android/data/`<packagename>`/files/temp |
 | AppPath.AppMediaTempDir | Android/media/`<packagename>`/files/temp |
-| editorLayouts.LuaEditor.packagesList| 待加载的包地图/列表 |
-| editorLayouts.LuaEditor.keywordsList| 待加载的关键词地图/列表 |
+| editorLayouts.LuaEditor.packagesList| 待加载的包映射/列表 |
+| editorLayouts.LuaEditor.keywordsList| 待加载的关键词映射/列表 |
 | FileTemplates.enName | 模板英文名 |
 | FileTemplates.id | 模板标识 |
 | FilesBrowserManager.providers | 文件浏览器提供者 |

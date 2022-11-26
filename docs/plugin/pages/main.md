@@ -139,7 +139,7 @@ activity.result({<action>，<content>})
 | <Badge type="danger" text="X" vertical="middle" /> keyWords | String[] | 编辑器默认提示词列表 |
 | <Badge type="danger" text="X" vertical="middle" /> jesse205KeyWords | String[] | Jesse205库提示词列表 |
 | <Badge type="danger" text="X" vertical="middle" /> fileType2Language | 忘了 | 文件类型转语言索引列表 |
-| [actions](#editorsmanager-actions) | table (map) | 编辑器事件列表 |
+| [actions](#editorsmanager-actions) | table (map) | 编辑器事件映射 |
 | openNewContent(filePath,fileType,decoder) | function | 打开新内容 <br> __filePath__ (string): 文件路径 <br> __fileType__ (string): 文件扩展名 <br> __decoder__ (metatable(map)): 文件解析工具 |
 | startSearch() | function | 启动搜索 |
 | save2Tab() | function | 保存到标签 |
@@ -212,7 +212,7 @@ activity.result({<action>，<content>})
 
 | 键 | 类型 | 说明 |
 | ---- | ---- | ---- |
-| providers | table (map) | 提供者地图 |
+| providers | table (map) | 提供者映射 |
 
 
 ### FilesTabManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
