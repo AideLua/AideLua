@@ -447,7 +447,8 @@ function onResume()
     activity.recreate()
     return
   end
-  refreshMagnifier()
+  --refreshMagnifier()
+  EditorsManager.magnifier.refresh()
 
   if notFirstOnResume then
     ProjectManager.refreshProjectsPath()

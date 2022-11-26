@@ -562,6 +562,66 @@ function symbolBar.refresh(state)
   end
 end
 
+--在 5.1.0(51099) 添加
+local magnifierManager={}
+EditorsManager.magnifier=magnifierManager
+function magnifierManager.refresh()
+  magnifierManager.magnifyEnabled = getSharedData("editor_magnify")
+  if not(magnifierManager.magnifier) and magnifierManager.magnifyEnabled then
+    pcall(function()--放大镜，可能不存在，但不排除有部分ROM会自己实现
+      import "android.widget.Magnifier"
+      magnifierManager.magnifier=Magnifier(editorGroup)
+    end)
+  end
+end
+function magnifierManager.isAvailable()
+  return magnifierManager.magnifyEnabled and magnifierManager.magnifier
+end
+local magnifierAutoUpdateEnabled=false
+local skipUpdateTime=0
+function magnifierManager.show(x,y)
+  magnifierManager.magnifier.show(x,y)
+  skipUpdateTime=skipUpdateTime+1
+end
+
+local updateRunnable
+updateRunnable=Runnable({
+  run=function()
+    editorGroup.post(updateRunnable)
+    if magnifierAutoUpdateEnabled then
+      if skipUpdateTime==0 then
+        magnifierManager.magnifier.update()
+       else
+        skipUpdateTime=skipUpdateTime-1
+      end
+    end
+  end
+})
+
+function magnifierManager.startAutoUpdate()
+  if not magnifierAutoUpdateEnabled then
+    editorGroup.post(updateRunnable)
+    magnifierAutoUpdateEnabled=true
+  end
+end
+function magnifierManager.stopAutoUpdate()
+  magnifierAutoUpdateEnabled=false
+  editorGroup.removeCallbacks(updateRunnable)
+end
+
+function magnifierManager.start(x,y)
+  magnifierManager.show(x,y)
+  magnifierManager.startAutoUpdate()
+end
+function magnifierManager.stop()
+  magnifierManager.stopAutoUpdate()
+  magnifierManager.dismiss()
+end
+
+function magnifierManager.dismiss()
+  magnifierManager.magnifier.dismiss()
+end
+
 function EditorsManager.getEditor()
   return editor
 end

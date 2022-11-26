@@ -16,14 +16,14 @@ local LuaEditorHelper={}
 local _clipboardActionMode=nil
 local removePackages,screenToViewX,screenToViewY,isNearChar,isNearChar2
 
-local showingMagnifier=false
 local clickingLuaEitorEvent=nil
 
 ---providers 在 v5.1.0(51099) 上添加
 local providers={
   onTouchProviders={
     function(view,event)--放大镜提供者
-      if editor_magnify and magnifier then--这俩是全局变量，第一个确保放大镜已打开，第二个确保可以正常加载放大镜
+      local magnifierManager=EditorsManager.magnifier
+      if magnifierManager.isAvailable() then--这俩是全局变量，第一个确保放大镜已打开，第二个确保可以正常加载放大镜
         local action=event.action
         local relativeCaretX=view.getCaretX()-view.getScrollX()
         local relativeCaretY=view.getCaretY()-view.getScrollY()
@@ -38,35 +38,14 @@ local providers={
             isNearChar=isNearChar2(view,relativeCaretX,relativeCaretY,x,y)
             clickingLuaEitorEvent={x=x,y=y}--保存
             if isNearChar then
-              magnifier.show(magnifierX,magnifierY)
-              showingMagnifier=true
-              view.post(Runnable({
-                run=function()
-                  magnifier.update()
-                end
-              }))
-
-              if not(magnifierUpdateTi.isRun()) then
-                magnifierUpdateTi.start()
-              end
-              if not(magnifierUpdateTi.getEnabled()) then
-                magnifierUpdateTi.setEnabled(true)
-              end
+              magnifierManager.start(magnifierX,magnifierY)
              else
-              if showingMagnifier then
-                magnifierUpdateTi.setEnabled(false)
-                magnifier.dismiss()
-                showingMagnifier=false
-              end
+              magnifierManager.stop()
             end
           end
          elseif action==MotionEvent.ACTION_CANCEL or action==MotionEvent.ACTION_UP then
           clickingLuaEitorEvent=nil
-          if showingMagnifier then
-            magnifierUpdateTi.setEnabled(false)
-            magnifier.dismiss()
-            showingMagnifier=false
-          end
+          magnifierManager.stop()
         end
       end
     end

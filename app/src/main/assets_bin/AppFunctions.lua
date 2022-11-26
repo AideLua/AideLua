@@ -91,7 +91,9 @@ function refreshMenusState()
   end
 end
 
+---在 v5.1.0(51099) 已废除
 function refreshMagnifier()
+  print("警告","refreshMagnifier","在 v5.1.0(51099) 已废除")
   editor_magnify = getSharedData("editor_magnify")
   if not(magnifier) and editor_magnify then
     pcall(function()--放大镜
