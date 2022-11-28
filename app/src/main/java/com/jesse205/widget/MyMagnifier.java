@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.graphics.drawable.BitmapDrawable;
 import java.util.MissingResourceException;
 import android.util.DisplayMetrics;
-//感谢dingyi
+//感谢dingyi与狸猫
 public class MyMagnifier {
     private Activity mContext;
     private CardView mCardView;
@@ -29,13 +29,14 @@ public class MyMagnifier {
     public MyMagnifier(View view) {
         mView = view;
         mContext = (Activity) view.getContext();
+        DisplayMetrics displayMetrics=mContext.getResources().getDisplayMetrics();
         mCardView = new CardView(mContext);
         mImageView = new ImageView(mContext);
         mCardView.addView(mImageView);
         mCardView.setVisibility(View.GONE);
+        mCardView.setCardElevation(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, displayMetrics));
         mDecorView=(FrameLayout) mContext.getWindow().getDecorView();
         mDecorView.addView(mCardView);
-        DisplayMetrics displayMetrics=mContext.getResources().getDisplayMetrics();
         imageWidth = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, displayMetrics);
         imageHeight =  TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 48, displayMetrics);
         verticalOffset = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -42, displayMetrics);
