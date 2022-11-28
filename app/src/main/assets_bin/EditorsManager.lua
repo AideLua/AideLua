@@ -564,30 +564,33 @@ end
 
 --在 5.1.0(51099) 添加
 local magnifierManager={}
+local magnifierUpdateRunnable
+local magnifierAutoUpdateEnabled=false
+local skipUpdateTime=0
 EditorsManager.magnifier=magnifierManager
 function magnifierManager.refresh()
   magnifierManager.magnifyEnabled = getSharedData("editor_magnify")
   if not(magnifierManager.magnifier) and magnifierManager.magnifyEnabled then
-    pcall(function()--放大镜，可能不存在，但不排除有部分ROM会自己实现
+    local success=pcall(function()--放大镜，可能不存在，但不排除有部分ROM会自己实现
       import "android.widget.Magnifier"
       magnifierManager.magnifier=Magnifier(editorGroup)
     end)
+    if not success then
+      import "com.jesse205.widget.MyMagnifier"
+      magnifierManager.magnifier=MyMagnifier(editorGroup)
+    end
   end
 end
 function magnifierManager.isAvailable()
   return magnifierManager.magnifyEnabled and magnifierManager.magnifier
 end
-local magnifierAutoUpdateEnabled=false
-local skipUpdateTime=0
 function magnifierManager.show(x,y)
   magnifierManager.magnifier.show(x,y)
   skipUpdateTime=skipUpdateTime+1
 end
-
-local updateRunnable
-updateRunnable=Runnable({
+magnifierUpdateRunnable=Runnable({
   run=function()
-    editorGroup.post(updateRunnable)
+    editorGroup.post(magnifierUpdateRunnable)
     if magnifierAutoUpdateEnabled then
       if skipUpdateTime==0 then
         magnifierManager.magnifier.update()
@@ -600,13 +603,13 @@ updateRunnable=Runnable({
 
 function magnifierManager.startAutoUpdate()
   if not magnifierAutoUpdateEnabled then
-    editorGroup.post(updateRunnable)
+    editorGroup.post(magnifierUpdateRunnable)
     magnifierAutoUpdateEnabled=true
   end
 end
 function magnifierManager.stopAutoUpdate()
   magnifierAutoUpdateEnabled=false
-  editorGroup.removeCallbacks(updateRunnable)
+  editorGroup.removeCallbacks(magnifierUpdateRunnable)
 end
 
 function magnifierManager.start(x,y)

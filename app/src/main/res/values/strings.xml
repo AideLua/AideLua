@@ -175,7 +175,7 @@
     <string name="settings_support_androidx">AndroidX support</string>
     <string name="settings_support_androidx_summary">Provide Android X support. This option does not affect the New Page option.</string>
     <string name="settings_editor_magnify">Magnifier</string>
-    <string name="settings_editor_magnify_summary">Only valid for Android 9 and above</string>
+    <string name="settings_editor_magnify_summary">Better experience only in Android 9 and above.</string>
     <string name="settings_editor_symbolNar">Symbol bar</string>
     <string name="settings_tab_icon">File icon</string>
     <string name="settings_needRestart">Restart and take effect after modification</string>

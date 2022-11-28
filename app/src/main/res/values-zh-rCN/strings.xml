@@ -172,7 +172,7 @@
     <string name="settings_support_androidx">AndroidX 支持</string>
     <string name="settings_support_androidx_summary">提供 AndroidX 支持。此选项不影响新建页面选项</string>
     <string name="settings_editor_magnify">放大镜</string>
-    <string name="settings_editor_magnify_summary">仅支持安卓9及以上</string>
+    <string name="settings_editor_magnify_summary">仅在安卓9及以上拥有更好的体验</string>
     <string name="settings_editor_symbolNar">符号栏</string>
     <string name="settings_tab_icon">文件图标</string>
     <string name="settings_needRestart">修改后重启生效</string>
