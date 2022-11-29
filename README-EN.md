@@ -1,13 +1,13 @@
 # Aide Lua
-[![License](https://img.shields.io/github/license/Jesse205/AideLua)](LICENSE)
-[![Releases](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Releases&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases)
+[![license](https://img.shields.io/github/license/Jesse205/AideLua)](LICENSE)
+[![releases](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=releases&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases)
 
-[![QQ Group: 628045718](https://img.shields.io/badge/QQ_Group-628045718-0099FF?logo=tencentqq)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
-[![QQ Channel: t37c1u1nmw](https://img.shields.io/badge/QQ_Channel-t37c1u1nmw-0099FF?logo=tencentqq)](https://pd.qq.com/s/ncghvc)
+[![QQ group: 628045718](https://img.shields.io/badge/QQ_group-628045718-0099FF?logo=tencentqq)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
+[![QQ channel: t37c1u1nmw](https://img.shields.io/badge/QQ_channel-t37c1u1nmw-0099FF?logo=tencentqq)](https://pd.qq.com/s/ncghvc)
 
 [![Gitee repository](https://img.shields.io/badge/Gitee-repository-C71D23?logo=gitee)](https://gitee.com/Jesse205/AideLua/)
 [![Github repository](https://img.shields.io/badge/Github-repository-0969DA?logo=github)](https://github.com/Jesse205/AideLua)
-[![Document](https://img.shields.io/badge/Documents-Chinese-3F51B5)](https://jesse205.github.io/AideLua/)
+[![document](https://img.shields.io/badge/documents-Chinese-3F51B5)](https://jesse205.github.io/AideLua/)
 
 ![cover](images/ic_cover-aidelua.png)
 
