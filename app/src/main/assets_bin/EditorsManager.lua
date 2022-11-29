@@ -398,6 +398,7 @@ function EditorsManager.switchEditor(newEditorType)
     editorConfig.initedViews=editorGroupViews
     local onTypefaceChangeListener=editorConfig.onTypefaceChangeListener
     if onTypefaceChangeListener then
+      local editorGroupViews,editorConfig=editorGroupViews,editorConfig--因为以前这俩变量是全局变量，不可靠
       local function callOnTypefaceChangeListener(typeface,boldTypeface,italicTypeface)
         onTypefaceChangeListener(editorGroupViews,editorConfig,editorGroupViews.editor,typeface,boldTypeface,italicTypeface)
       end
