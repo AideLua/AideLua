@@ -1,10 +1,10 @@
 # Aide Lua 使用文档
 
 ## 简介
-[![License](https://img.shields.io/github/license/Jesse205/AideLua?label=License&style=flat-square)](https://gitee.com/Jesse205/AideLua/blob/master/LICENSE)
+[![license](https://img.shields.io/github/license/Jesse205/AideLua?style=flat-square)](https://gitee.com/Jesse205/AideLua/blob/master/LICENSE)
 [![发行版](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=发行版&logo=gitee&style=flat-square)](https://gitee.com/Jesse205/AideLua/releases)
 
-[![QQ 群: 628045718](https://img.shields.io/badge/加QQ_群-628045718-0099FF?logo=TencentQQ&style=flat-square)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
+[![QQ 群: 628045718](https://img.shields.io/badge/QQ_群-628045718-0099FF?logo=TencentQQ&style=flat-square)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
 [![QQ 频道: t37c1u1nmw](https://img.shields.io/badge/QQ_频道-t37c1u1nmw-0099FF?logo=TencentQQ&style=flat-square)](https://pd.qq.com/s/ncghvc)
 
 Aide Lua 是一款依赖 Aide 的 Lua 编辑器<br>
