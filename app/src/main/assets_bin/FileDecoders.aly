@@ -38,8 +38,7 @@
     language=JavaLanguage(),
   },
   svg={
-    super="java",
-    language=JavaLanguage(),
+    super="xml",
   },
   html={
     super="txt",
@@ -69,4 +68,11 @@
   },
   jpg={super="png"},
   gif={super="png"},
+  --[[
+  svg={
+    editor="PhotoView",
+    apply=function(filePath,fileType,view)
+      Sharp.loadFile(File(filePath)).into(view)
+    end,
+ },]]
 }

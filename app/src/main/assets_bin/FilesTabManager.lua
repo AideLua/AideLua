@@ -150,12 +150,12 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
   end
   local filePath = newFile.getPath()
   local decoder=FileDecoders[newFileType]
+  local fileName=newFile.getName()
   if decoder then
     openState=true
     file=newFile
     fileType=newFileType
     local lowerFilePath = string.lower(filePath) -- 小写路径
-    local fileName=newFile.getName()
     fileConfig = openedFiles[lowerFilePath]
     local tab
     if fileConfig then
@@ -167,10 +167,11 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
         tab.setIcon(FilesBrowserManager.fileIcons[fileType])
       end
     end
-    if not(fileConfig) or fileConfig.needRefresh==true
+    if not(fileConfig) or fileConfig.needRefresh==true then
       fileConfig = {
         file = file,
         fileType=newFileType,
+        fileName=fileName,
         path = filePath,
         lowerPath = lowerFilePath,
         decoder = decoder,
@@ -185,10 +186,9 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
       initFileTabView(tab,fileConfig)
     end
 
-    local failed=false
+    local success,failed=false,false
     if File(filePath).isFile() then
-      _,failed=pcall(function()
-
+      success,failed=pcall(function()
         EditorsManager.switchEditorByDecoder(decoder)
         --编辑器滚动相关在 EditorsManager.openNewContent 内
         if EditorsManager.openNewContent(filePath,newFileType,decoder,keepHistory) then
@@ -209,9 +209,11 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
           end
         end
         if not(tab.isSelected()) then--避免调用tab里面的重复点击事件
-          task(1,function()
-            tab.select()
-          end)--选中Tab
+          filesTabLay.post(Runnable({
+            run=function()
+              tab.select()
+            end
+          }))
         end
       end)
       refreshMenusState()
@@ -219,10 +221,22 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
       failed=R.string.file_not_find
     end
 
-    if failed then
+    if failed or not success then
       fileConfig.deleted=true
       FilesTabManager.closeFile(fileConfig.lowerPath)
-      showErrorDialog(nil,failed)
+      showErrorDialog(fileName,failed or R.string.unknowError)
+      --防止tab与实际打开的不一样，因为此时tab在没切换的时候就删除掉了，tab不会响应打开文件的
+      filesTabLay.post(Runnable({
+        run=function()
+          local tab=filesTabLay.getTabAt(filesTabLay.getSelectedTabPosition())
+          if tab then
+            local newFileConfig=tab.tag
+            if newFileConfig.path~=fileConfig.path then
+              FilesTabManager.openFile(newFileConfig.file,newFileConfig.fileType,false)
+            end
+          end
+        end
+      }))
       return false,false
      else
       return true,false
@@ -358,10 +372,10 @@ end
 function FilesTabManager.init()
   filesTabLay.addOnTabSelectedListener(TabLayout.OnTabSelectedListener({
     onTabSelected = function(tab)
-      local tag = tab.tag
-      local newFile = tag.file
-      if (openState and newFile.getPath()~=file.getPath()) then
-        FilesTabManager.openFile(newFile,tag.fileType)
+      local newFileConfig = tab.tag
+      local newFile = newFileConfig.file
+      if (openState and newFileConfig.path~=file.getPath()) then
+        FilesTabManager.openFile(newFile,newFileConfig.fileType)
       end
     end,
     onTabReselected = function(tab)
