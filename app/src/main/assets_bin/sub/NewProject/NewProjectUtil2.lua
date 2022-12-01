@@ -18,11 +18,11 @@ local tableConfigFormatter={
 NewProjectUtil2.tableConfigFormatter=tableConfigFormatter
 
 
-local function buildKeyItem(key,content)
+local function buildKeyItem(formatter,content)
   local text
   if type(content)=="table" then
     if #content=="" then
-      text=tableConfigFormatter[key](content)
+      text=formatter(content)
      else
       text=""
     end
@@ -35,13 +35,21 @@ NewProjectUtil2.buildKeyItem=buildKeyItem
 
 --构建内容中的key
 function NewProjectUtil2.buildKeysInContent(content,keys,reallyKeysMap)
+  local env={}
+  setmetatable(env,{__index=function(self,key)
+      local item=reallyKeysMap[key]--防止重复构建
+      if not(item) then
+        local formatter=tableConfigFormatter[key]
+        if formatter and type(formatter)=="function" then
+          item=buildKeyItem(formatter,keys[key])
+          reallyKeysMap[key]=item
+        end
+      end
+      return item
+  end})
   content:gsub("{{(.-)}}",function(key)
-    local item=reallyKeysMap[key]--防止重复构建
-    if not(item) then
-      item=buildKeyItem(key,keys[key])
-      reallyKeysMap[key]=item
-    end
-    return item
+    local content=assert(loadstring("return "..key,nil,nil,env))()
+    return content
   end)
   return content
 end

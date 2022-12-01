@@ -63,11 +63,10 @@
 
 
 
-      for index,content in ipairs(config.templateConfig.androluaVersions or {}) do
-        print(content)
+      for index,content in ipairs(config.subTemplateConfig.versions.androlua or {}) do
+        print(content[1])
       end
 
-      --print(templatePath,subTemplatePath)
       print(subTemplatePath)
       NewProjectManager.refreshState("androidx",androidXState,chipsList)
 
