@@ -56,6 +56,20 @@
     SettingsLayUtil.TITLE;
     title=R.string.editor;
   };
+  {--显示空白字符
+    SettingsLayUtil.ITEM_SWITCH;
+    icon=R.drawable.ic_keyboard_space;
+    title=R.string.settings_editor_showBlankChars;
+    key="editor_showBlankChars";
+    summary=R.string.settings_editor_showBlankChars_summary;
+  };
+  {--自动换行
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_wrap;
+    title=R.string.settings_editor_wordwrap;
+    key="editor_wordwrap";
+  };
+
   {--放大镜
     SettingsLayUtil.ITEM_SWITCH;
     icon=R.drawable.ic_magnify;
@@ -96,7 +110,6 @@
     title=R.string.settings_editor_previewButton;
     key="editor_previewButton";
   };]]
-
   {--标签栏
     SettingsLayUtil.TITLE;
     title=R.string.tab;

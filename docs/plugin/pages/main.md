@@ -149,7 +149,8 @@ activity.result({<action>，<content>})
 | switchLanguage(language) | function | 切换语言 <br> __language__ (Object): 语言 |
 | switchEditor(editorType) | function | 切换编辑器 <br> __editorType__ (string): 编辑器类型|
 | [symbolBar](#editorsmanager-symbolbar) | table (class) | 符号栏 |
-| [typefaceChangeListeners](#editorsmanager-typefacechangelisteners) | table (list) | 编辑器字体监听器 |
+| [typefaceChangeListeners](#editorsmanager-typefacechangelisteners) <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> | table (list) | 编辑器字体监听器 |
+| [sharedDataChangeListeners](#editorsmanager-sharedDatachangelisteners) <Badge type="warning" text="在 v5.1.0(51099) 添加" vertical="middle" /> | table (map) | 软件配置监听器 |
 | refreshEditorScrollState() | function | 刷新编辑器滚动状态，包括阴影。 |
 
 #### EditorsManager.typefaceChangeListeners <Badge text="table" vertical="middle" /> <Badge text="List" vertical="middle" /> <Badge text="Listener" vertical="middle" /> <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />
@@ -165,6 +166,35 @@ activity.result({<action>，<content>})
 
         -- 这里开始写你的代码
     end,
+    -- ...
+}
+```
+
+::: tip
+在编辑器初始化时，一般不需要您刻意地把 `onTypefaceChangeListener` 添加到此列表。因为 EditorsManager 会自动帮您完成添加。
+:::
+
+
+#### EditorsManager.sharedDataChangeListeners <Badge text="table" vertical="middle" /> <Badge text="Map" vertical="middle" /> <Badge text="Listener" vertical="middle" /> <Badge type="warning" text="在 v5.1.0(51099) 添加" vertical="middle" />
+编辑器字体监听器
+
+格式：
+``` lua
+{
+    key1={
+      function(newValue)
+        -- newValue: 新值
+        -- 这里开始写你的代码
+      end,
+      -- ...
+    },
+    key2={
+      function(newValue)
+        -- newValue: 新值
+        -- 这里开始写你的代码
+      end,
+      -- ...
+    }
     -- ...
 }
 ```

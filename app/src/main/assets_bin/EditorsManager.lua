@@ -38,6 +38,7 @@ EditorsManager.symbolBar.newPsButton(text): 初始化一个符号栏按钮
 EditorsManager.symbolBar.refreshSymbolBar(state): 刷新符号栏状态
   state: boolean: 开关状态
 ]]
+
 local EditorsManager={}
 local managerActions={}
 EditorsManager.actions=managerActions
@@ -78,7 +79,23 @@ import "editorLayouts"
 ---字体改变监听器
 ---在 v5.1.0(51099) 添加
 local typefaceChangeListeners={}
+
+---配置更改监听器
+---在 v5.1.0(51099) 添加
+local sharedDataChangeListeners={}
+local sharedDataCache={}
+setmetatable(sharedDataChangeListeners,{__index=function(self,key)
+    local listeners={}
+    rawset(self,key,listeners)
+    return listeners
+end})
+setmetatable(sharedDataCache,{__index=function(self,key)
+    local value=getSharedData(key)
+    rawset(self,key,value)
+    return value
+end})
 EditorsManager.typefaceChangeListeners=typefaceChangeListeners
+EditorsManager.sharedDataChangeListeners=sharedDataChangeListeners
 
 --获取字体Typeface
 local function getEditorTypefaces()
@@ -131,6 +148,37 @@ local function getEditorTypefaces()
   return typeface,boldTypeface,italicTypeface
 end
 EditorsManager.getEditorTypefaces=getEditorTypefaces
+
+---刷新字体，在 v5.1.0(51099) 添加
+function EditorsManager.refreshTypeface()
+  local typeface,boldTypeface,italicTypeface=EditorsManager.getEditorTypefaces()
+  local typefaceChangeListeners=EditorsManager.typefaceChangeListeners
+  for index=1,#typefaceChangeListeners do
+    typefaceChangeListeners[index](typeface,boldTypeface,italicTypeface)
+  end
+end
+
+--检查字体是否待刷新，是的话就手动刷新，在 v5.1.0(51099) 添加
+function EditorsManager.checkAndRefreshTypeface()
+  local newEditorFontId = getSharedData("editor_font")
+  if oldEditorFontId ~= newEditorFontId then
+    oldEditorFontId = newEditorFontId--必须先赋值，因为下面的刷新靠这个识别的
+    EditorsManager.refreshTypeface()
+  end
+end
+
+--检查并刷新SharedData监听器
+function EditorsManager.checkAndRefreshSharedDataListeners()
+  for key,listeners in pairs(sharedDataChangeListeners) do
+    local newValue=getSharedData(key)
+    if rawget(sharedDataCache,key)~=newValue then
+      sharedDataCache[key]=newValue
+      for index=1,#listeners do
+        listeners[index](newValue)
+      end
+    end
+  end
+end
 
 --默认的管理器的活动事件
 local function generalActionEvent(name1,name2,...)
@@ -396,15 +444,30 @@ function EditorsManager.switchEditor(newEditorType)
       editorConfig.init(editorGroupViews,editorConfig)
     end
     editorConfig.initedViews=editorGroupViews
+    local editorGroupViews,editorConfig=editorGroupViews,editorConfig--因为以前这俩变量是全局变量，不可靠
+    --字体改变
     local onTypefaceChangeListener=editorConfig.onTypefaceChangeListener
     if onTypefaceChangeListener then
-      local editorGroupViews,editorConfig=editorGroupViews,editorConfig--因为以前这俩变量是全局变量，不可靠
-      local function callOnTypefaceChangeListener(typeface,boldTypeface,italicTypeface)
+      local function callListener(typeface,boldTypeface,italicTypeface)
         onTypefaceChangeListener(editorGroupViews,editorConfig,editorGroupViews.editor,typeface,boldTypeface,italicTypeface)
       end
-      callOnTypefaceChangeListener(getEditorTypefaces())
-      table.insert(typefaceChangeListeners,callOnTypefaceChangeListener)
+      table.insert(typefaceChangeListeners,callListener)
+      callListener(getEditorTypefaces())--添加完再响应也不迟
     end
+
+    --配置改变
+    local onSharedDataChangeListeners=editorConfig.onSharedDataChangeListeners
+    if onSharedDataChangeListeners then
+      for key,listener in pairs(onSharedDataChangeListeners) do
+        local function callListener(newValue)
+          listener(editorGroupViews,editorConfig,editorGroupViews.editor,newValue)
+        end
+        local listeners=sharedDataChangeListeners[key]--获取key对应的列表
+        table.insert(listeners,callListener)
+        callListener(sharedDataCache[key])
+      end
+    end
+
   end
   editor=editorGroupViews.editor
   editorParent=editorGroupViews.editorParent

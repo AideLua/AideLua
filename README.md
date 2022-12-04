@@ -11,10 +11,10 @@
 
 ![cover](images/ic_cover-aidelua.png)
 
-###### 语言 Language:
+###### 语言 | Language:
 [中文](README.md) | [English](README-EN.md)
 
-## 注意 Alert
+## 注意 | Alert
 如需使用源代码，请进入 <a href="/Jesse205/AideLua/releases">发行版</a> 页面下载。<br>
 If you need to use the source code, please go to the <a href="/Jesse205/AideLua/releases">releases</a> page to download.
 

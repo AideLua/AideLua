@@ -54,7 +54,6 @@
   md={super="txt"},
   markdown={super="txt"},
 
-
   png={
     editor="PhotoView",
     apply=function(filePath,fileType,view)

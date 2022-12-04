@@ -470,21 +470,13 @@ function onResume()
         end
       end
     end
-    local newEditorFontId = getSharedData("editor_font")
-    if oldEditorFontId ~= newEditorFontId then
-      oldEditorFontId = newEditorFontId
-      local typeface,boldTypeface,italicTypeface=EditorsManager.getEditorTypefaces()
-      local typefaceChangeListeners=EditorsManager.typefaceChangeListeners
-      for index=1,#typefaceChangeListeners do
-        typefaceChangeListeners[index](typeface,boldTypeface,italicTypeface)
-      end
-    end
     local newEditorSymbolBar = getSharedData("editor_symbolBar")
     if oldEditorSymbolBar ~= newEditorSymbolBar then
       oldEditorSymbolBar = newEditorSymbolBar
       EditorsManager.symbolBar.refresh(newEditorSymbolBar)
     end
-    -- todo:更新预览，刷新代码
+    EditorsManager.checkAndRefreshTypeface()
+    EditorsManager.checkAndRefreshSharedDataListeners()
   end
   FilesBrowserManager.refresh()
   notFirstOnResume = true

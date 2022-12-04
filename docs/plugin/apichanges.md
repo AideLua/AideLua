@@ -105,7 +105,11 @@ Jesse205 库：
 | getTableIndexList(mTable) | 获取table的索引列表 <br> __mTable__ (table): 随便的 table <br> __return__ (table (list)): mTable的索引列表 |
 | editorLayouts[EditorName]<br>.onTypefaceChangeListener(ids,config,<br>editor,typeface,boldTypeface,italicTypeface) | 当编辑器字体发生改变时 |
 | EditorsManager.typefaceChangeListeners | 编辑器字体改变监听器 |
+| EditorsManager.sharedDataChangeListeners | SharedData变更监听器 |
 | EditorsManager.symbolBar.symbols | 符号栏里面的符号配置 |
+| EditorsManager.refreshTypeface() | 刷新编辑器字体 |
+| EditorsManager.checkAndRefreshTypeface() | 检查并刷新编辑器字体 |
+| EditorsManager.checkAndRefreshSharedDataListeners() | 检查并刷新SharedData监听器 |
 
 PluginsUtil：
 
@@ -168,5 +172,8 @@ PluginsUtil：
 23. 新增 `EditorsManagersymbolBar.symbols`
     * 作用：符号栏内容单独提取
 24. 废除 `EditorsManagersymbolBar.symbols.psButtonClick`
+25. 新增 `EditorsManager.sharedDataChangeListeners`
+    * 作用：更方便刷新配置
+26. 新增 `EditorsManager.refreshTypeface()` 、 `EditorsManager.checkAndRefreshTypeface()` 与 `EditorsManager.checkAndRefreshSharedDataListeners()`
 ## 相关链接
 [应用更新日志](https://gitee.com/Jesse205/AideLua/blob/master/README.md)

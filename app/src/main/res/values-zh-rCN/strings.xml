@@ -171,6 +171,9 @@
     <string name="settings_support_Jesse205Library_summary">提供 Jesse205库 支持</string>
     <string name="settings_support_androidx">AndroidX 支持</string>
     <string name="settings_support_androidx_summary">提供 AndroidX 支持。此选项不影响新建页面选项</string>
+    <string name="settings_editor_showBlankChars">显示空白字符</string>
+    <string name="settings_editor_showBlankChars_summary">比如换行、空格等</string>
+    <string name="settings_editor_wordwrap">自动换行</string>
     <string name="settings_editor_magnify">放大镜</string>
     <string name="settings_editor_magnify_summary">仅在安卓9及以上拥有更好的体验</string>
     <string name="settings_editor_symbolNar">符号栏</string>

@@ -78,6 +78,11 @@
         basewordColor=theme.color.Blue;
         userwordColor=0xff5c6bc0;
         textSize=math.dp2int(14);
+        --nonPrintingCharVisibility=true;
+        --highlightCurrentRow=false;
+        --longPressCaps=true;
+        --autoComplete=false;
+        --wordWrap=true;
         --focusableInTouchMode=false;
       };
     },
@@ -97,6 +102,14 @@
       editor.setBoldTypeface(boldTypeface)
       editor.setItalicTypeface(italicTypeface)
     end,
+    onSharedDataChangeListeners={
+      editor_showBlankChars=function(ids,config,editor,newValue)
+        editor.setNonPrintingCharVisibility(toboolean(newValue))
+      end,
+      editor_wordwrap=function(ids,config,editor,newValue)
+        editor.setWordWrap(toboolean(newValue))
+      end,
+    },
     action={
       undo="default",
       redo="default",
@@ -233,6 +246,15 @@ import "jesse205"
         nonPrintablePaintingFlags=CodeEditor.FLAG_DRAW_WHITESPACE_LEADING;
         textSize=14;
         overScrollEnabled=false;
+        --cursorWidth=100;
+        --displayLnPanel=false;
+        --highlightCurrentLine=true;
+        --highlightCurrentBlock=true;
+        --highlightSelectedText=true;
+        --lineNumberEnabled=true;
+        --symbolCompletionEnabled=true;
+        --wordwrap=true;
+        dividerWidth="1dp";
       };
     },
     init=function(ids,config)
@@ -249,9 +271,15 @@ import "jesse205"
     end,
     onTypefaceChangeListener=function(ids,config,editor,typeface,boldTypeface,italicTypeface)
       editor.setTypefaceText(typeface)
+      editor.setTypefaceLineNumber(typeface)
       --editor.setBoldTypeface(boldTypeface)
       --editor.setItalicTypeface(italicTypeface)
     end,
+    onSharedDataChangeListeners={
+      editor_wordwrap=function(ids,config,editor,newValue)
+        editor.setWordwrap(toboolean(newValue))
+      end,
+    },
     action={
       undo="default",
       redo="default",
