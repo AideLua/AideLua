@@ -33,27 +33,29 @@ local function buildKeyItem(formatter,content)
 end
 NewProjectUtil2.buildKeyItem=buildKeyItem
 
---构建内容中的key
+---构建内容中的key，从 v5.1.0(51099) 支持lua语法
+---@param content string 文件内容
+---@param keys table 那个key的映射
+---@param reallyKeysMap table 真正key的映射，一般keys不变，reallyKeysMap就不变（指的是他本身，与内容无关）
 function NewProjectUtil2.buildKeysInContent(content,keys,reallyKeysMap)
-  local env={}
-  setmetatable(env,{__index=function(self,key)
-      local item=reallyKeysMap[key]--防止重复构建
-      if not(item) then
-        local formatter=tableConfigFormatter[key]
-        if formatter and type(formatter)=="function" then
-          item=buildKeyItem(formatter,keys[key])
-          reallyKeysMap[key]=item
-        end
+  setmetatable(reallyKeysMap,{__index=function(self,key)
+      local formatter=tableConfigFormatter[key]
+      if formatter and type(formatter)=="function" then
+        local item=buildKeyItem(formatter,keys[key])
+        self[key]=item--保存到reallyKeysMap，快速响应
+        return item
       end
-      return item
   end})
   content:gsub("{{(.-)}}",function(key)
-    local content=assert(loadstring("return "..key,nil,nil,env))()
+    local content=assert(loadstring("return "..key,nil,nil,reallyKeysMap))()
     return content
   end)
   return content
 end
 
+---读取配置，就是单纯的读取文件，然后返回环境表
+---@param path string 文件相对路径
+---@param basePath string 文件夹路径
 function NewProjectUtil2.readConfig(path,basePath)
   return getConfigFromFile(basePath.."/"..path)
 end
@@ -71,7 +73,9 @@ function NewProjectUtil2.unzip(path,unzipPath)
   end
 end
 
---将 itemsTable 中的项目添加到 mainTable
+---将 itemsTable 中的项目添加到 mainTable
+---@param mainTable table 待被添加的列表
+---@param itemsTable table 待添加的值的列表
 function NewProjectUtil2.addItemsToTable(mainTable,itemsTable)
   for index=1,#itemsTable do
     table.insert(mainTable,itemsTable[index])

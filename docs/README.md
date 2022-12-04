@@ -23,8 +23,8 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 [![123云盘（镜像）](https://img.shields.io/badge/123云盘-镜像-597dfc?style=flat-square)](https://www.123pan.com/s/G7a9-c9ek)
 
 ### AIDE 高级设置版
+[![官网](https://img.shields.io/badge/官网-推荐-28B6F6)](https://www.aidepro.top/)
 [![蓝奏云](https://img.shields.io/badge/蓝奏云-38.5_M-FF6600?logo=icloud&style=flat-square&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
-[![Github Releases)](https://img.shields.io/github/v/tag/AndroIDE-Pro/AidePro?color=0969DA&label=Github+Releases&logo=github&style=flat-square)](https://github.com/AndroIDE-Pro/AidePro/releases)
 
 ### Aide Lua Pro
 [![Gitee 发行版)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+发行版&logo=gitee&style=flat-square)](https://gitee.com/Jesse205/AideLua/releases)
@@ -35,9 +35,21 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 [![腾讯微云](https://img.shields.io/badge/腾讯微云--2980ff?style=flat-square)](https://share.weiyun.com/oLiNtxMR)
 [![百度网盘](https://img.shields.io/badge/百度网盘-密码_jxnb-06a7ff?style=flat-square)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q?pwd=jxnb)
 
+### 快速入门
+#### 一、配置 AIDE Pro
+1. 进入 `设置 - 高级设置 - 工程相关`
+2. 关闭 `启用 adrt调试文件` ，打开 `重定义Apk构建路径`、`启用Gradle`（如果不使用 Gradle 则无需打开此项）
+3. 重启 AIDE
+
+#### 二、初次打包
+1. 在 AideLua 点击新建项目，在填写与选择完成后点击 `新建`
+2. 用 AIDE 打开项目，点击 `构建刷新`，`确定`（或者 `运行` ，`gradle assembleRelease`，推荐这种方法）
+3. 点击 AideLua 的 `二次打包并安装` 按钮（或 `二次打包` ，但需手动签名）并安装，测试是否可以正常打包并运行
+4. 点击 AideLua 的 `运行` 按钮，测试是否正常通过已安装的应用调试
+
 ## 工作原理
 1. 读取 `.aidelua/config.lua` 的内容
-2. 找到 `app.apk` 的路径，并解解压到 `<主模块名称>/build/aidelua_unzip`
+2. 找到 `app.apk` 的路径，并解压到 `<主模块名称>/build/aidelua_unzip`
 3. 将 `<模块名称>/src/main/assets_bin` 等目录中的文件添加到 `aidelua_unzip` 文件夹中，并编译 Lua (编译 Lua 需要启用 `compileLua`)
 4. 压缩 `aidelua_unzip` ，并改名为 `<应用名>_v<版本号>.apk`
 5. 签名 `<应用名>_v<版本号>.apk` 到 `<应用名>_v<版本号>_sign.apk` (签名 APK 需要选择 `二次打包并安装` 菜单)
@@ -50,18 +62,6 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 ## 使用教程
 由于 AIDE 的特殊性，请下载 [__AIDE高级设置版__](https://aidepro.top/) 进行操作
-
-### 快速入门
-#### 一、配置 AIDE Pro
-1. 进入 `设置 - 高级设置 - 工程相关`
-2. 关闭 `启用alert调试文件` ，打开 `重定义Apk构建路径`
-3. 重启 AIDE
-
-#### 二、初次打包
-1. 在 AideLua 点击新建项目，在填写与选择完成后点击 `新建`
-2. 用 AIDE 打开项目，点击 `构建刷新`
-3. 点击 AideLua 的 `二次打包并安装` 按钮（或 `二次打包` ，但需手动签名）并安装，测试是否可以正常打包并运行
-4. 点击 AideLua 的 `运行` 按钮，测试是否正常通过已安装的应用调试
 
 ## 注意事项
 1. AIDE 必须使用 `AIDE高级设置版本` ，否则无法打开 `重定义Apk路径`

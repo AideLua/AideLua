@@ -479,17 +479,52 @@ end
 
 local symbolBar={}
 EditorsManager.symbolBar=symbolBar
+--在 v5.1.0(51099) 添加
+symbolBar.symbols={
+  --显示,显示2(为括号而准备),粘贴(默认显示),覆盖(默认粘贴),辅助提示,辅助英文提示
+  {"func()",false,"function()","function %s()\n\nend","函数(体)","Function (Body)"},
+  {"(",")",nil,nil,"小括号","Parentheses"},
+  {"[","]",nil,nil,"中括号","Brackets"},
+  {"{","}",nil,nil,"大括号","Curly Brackets"},
+  {"\"",true,nil,nil,"双引号","Double quotation"},
+  {"=",nil,nil,nil,"等号","Equal"},
+  {":",nil,nil,nil,"冒号","Colon"},
+  {".",nil,nil,nil,"小数点","Point"},
+  {",",nil,nil,nil,"逗号","Comma"},
+  {";",nil,nil,nil,"分号","Semicolon"},
+  {"_",nil,nil,nil,"下划线","Underline"},
+  {"+",nil,nil,nil,"加号","Plus"},
+  {"-",nil,nil,nil,"减号","Minus"},
+  {"*",nil,nil,nil,"星号","Asterisk"},
+  {"/",nil,nil,nil,"斜杠","Slash"},
+  {"\\",nil,nil,nil,"反斜杠","Backslash"},
+  {"%",nil,nil,nil,"百分号","Percent"},
+  {"#",nil,nil,nil,"井号","Hashtag"},
+  {"^",nil,nil,nil,"插入符","Caret"},
+  {"$",nil,nil,nil,"美元","Dollar"},
+  {"?",nil,nil,nil,"问好","Question"},
+  {"&",nil,nil,nil,"与","And"},
+  {"|",nil,nil,nil,"或","Or"},
+  {"<",">",nil,nil,"尖括号","Angle bracket"},
+  {"~",nil,nil,nil,"波浪号","Tilde"},
+  {"'",true,nil,nil,"单引号","Single quotation"},
+}
+
+local loadedSymbolBar=false
 
 ---在 v5.1.0(51099) 上添加
 ---获取符号栏要粘贴到文字
 function EditorsManager.getReallPasteText(view)
   local selectedText=managerActions.getSelectedText()
-  local tag=view.tag
+  local config=view.tag
   local text=view.text
   if selectedText and selectedText~="" then
-    return (tag[2] and tag[2]:format(selectedText)) or tag[1] or text
+    return (config[4] and config[4]:format(selectedText)) or --识别大内容
+    (config[2] and config[1]..selectedText..config[2]) or--识别括号
+    config[3] or --识别缩写
+    text--显示的文字
    else
-    return tag[1] or text
+    return config[3] or text
   end
 end
 
@@ -501,10 +536,9 @@ function symbolBar.onButtonClickListener(view)
   end
 end
 
----此API已在 v5.1.0(51099) 改名
-function symbolBar.psButtonClick(...)
-  print("警告","symbolBar.psButtonClick","此API已改名")
-  symbolBar.onButtonClickListener(...)
+---此API已在 v5.1.0(51099) 废除
+function symbolBar.psButtonClick()
+  print("警告","symbolBar.psButtonClick","此API已废除")
 end
 
 ---在 v5.1.0(51099) 添加
@@ -515,14 +549,14 @@ end
 
 ---初始化一个符号栏按钮
 ---@param text string 显示的文字
----@param pasteText string 默认粘贴的文字，默认为显示的文字 (在 v5.1.0(51099) 上添加)
----@param pasteText2 string 已选中时粘贴的文字，默认为pasteText (在 v5.1.0(51099) 上添加)
-function symbolBar.newPsButton(text,pasteText,pasteText2)
+---@param config table 按钮配置 (在 v5.1.0(51099) 上添加)
+function symbolBar.newPsButton(text,config)
   local button=loadlayout2({
     AppCompatTextView;
     onClick=symbolBar.onButtonClickListener;
     text=text;
-    tag={pasteText,pasteText2};
+    tag=config;
+    contentDescription=config[getLocalLangObj(5, 6)];
     gravity="center";
     layout_height="fill";
     typeface=Typeface.DEFAULT_BOLD;--加粗一下，看的快
@@ -532,28 +566,37 @@ function symbolBar.newPsButton(text,pasteText,pasteText2)
     allCaps=false;
     focusable=true;
     textColor=theme.color.textColorPrimary;
-    background=ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary)
+    background=ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary);
   })
   button.onLongClick=symbolBar.onButtonLongClickListener;
-
   return button
 end
 
-local loadedSymbolBar=false
 ---刷新符号栏状态
 ---@param state boolean 新状态
 function symbolBar.refresh(state)
   if state then
-    if not(loadedSymbolBar) then--没有加载过符号栏，就加载一次
-      local ps={"func()","(",")","[","]","{","}","\"","=",":",".",",",";","_","+","-","*","/","\\","%","#","^","$","?","&","|","<",">","~","'"}
-      local ps_paste={"function()"}
-      local ps_paste2={"function %s()\n\nend","(%s)","(%s)","[%s]","[%s]","{%s}","{%s}",
-        "\"%s\"",nil--[[=]],nil,nil,--[[.]]nil,nil--[[;]],nil,nil--[[+]],nil,nil--[[*]],nil,nil--[[\]],nil,nil--[[#]],nil,nil--[[$]],nil,nil--[[&]],
-        nil--[[|]],"<%s>","<%s>",nil,"'%s'"}
-      for index,content in ipairs(ps) do
-        ps_bar.addView(symbolBar.newPsButton(content,ps_paste[index],ps_paste2[index]))
+    if not(loadedSymbolBar) then--没有加载过符号栏，就加载一次p
+      for index,group in ipairs(symbolBar.symbols) do
+        local group2
+        local second=group[2]
+        if second then--是成对符号
+          if second==true then--是相同成对符号
+            group[2]=group[1]
+           else
+            group2=table.clone(group)--配置不一样，复制一份
+            local aTIndex=getLocalLangObj(5, 6)
+            if group[aTIndex] then
+              group[aTIndex]=group[aTIndex].." ("..getLocalLangObj("左", "Left")..")"
+              group2[aTIndex]=group2[aTIndex].." ("..getLocalLangObj("右", "Right")..")"
+            end
+          end
+        end
+        ps_bar.addView(symbolBar.newPsButton(group[1],group))
+        if second and second~=true then
+          ps_bar.addView(symbolBar.newPsButton(group2[2],group2))
+        end
       end
-      ps=nil
       ps_paste=nil
       loadedSymbolBar=true
     end

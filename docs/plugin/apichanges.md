@@ -49,6 +49,7 @@ Jesse205 库：
 | 原名称 | 新名称 | 说明 |
 | ---- | ---- | --- |
 | RePackTool.getMainProjectName | RePackTool.getMainModuleName | 那个东西叫模块 |
+| EditorsManager.symbolBar.psButtonClick | EditorsManager.symbolBar.onButtonClickListener | 符号栏点击 |
 
 :::
 
@@ -82,6 +83,7 @@ Jesse205 库：
 | ---- | --- |
 | EditorsManager.keyWords | 默认关键词 |
 | EditorsManager.jesse205KeyWords | Jesse205 库关键词 |
+| EditorsManager.symbolBar.psButtonClick | 符号栏优化 |
 
 ::::
 
@@ -103,6 +105,7 @@ Jesse205 库：
 | getTableIndexList(mTable) | 获取table的索引列表 <br> __mTable__ (table): 随便的 table <br> __return__ (table (list)): mTable的索引列表 |
 | editorLayouts[EditorName]<br>.onTypefaceChangeListener(ids,config,<br>editor,typeface,boldTypeface,italicTypeface) | 当编辑器字体发生改变时 |
 | EditorsManager.typefaceChangeListeners | 编辑器字体改变监听器 |
+| EditorsManager.symbolBar.symbols | 符号栏里面的符号配置 |
 
 PluginsUtil：
 
@@ -162,6 +165,8 @@ PluginsUtil：
 20. 新增 `getTableIndexList(mTable)`，获取table的索引列表
 21. 添加 `EditorsManager.typefaceChangeListeners`
 22. `EditorsManager.actions` 自动获取编辑器事件，`getXxx` 会直接返回值，其他事件返回是否支持
-
+23. 新增 `EditorsManagersymbolBar.symbols`
+    * 作用：符号栏内容单独提取
+24. 废除 `EditorsManagersymbolBar.symbols.psButtonClick`
 ## 相关链接
 [应用更新日志](https://gitee.com/Jesse205/AideLua/blob/master/README.md)

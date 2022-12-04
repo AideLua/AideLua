@@ -202,8 +202,9 @@ activity.result({<action>，<content>})
 | onButtonClickListener(view) <Badge type="warning" text="在 v5.1.0(51099) 添加" vertical="middle" /> | function (listener)| 符号栏按钮点击时输入符号 |
 | onButtonLongClickListener(view) <Badge type="warning" text="在 v5.1.0(51099) 添加" vertical="middle" /> | function (listener)| 符号栏按钮长按时显示预览 |
 | psButtonClick(view) <Badge type="danger" text="在 v5.1.0(51099) 废除" vertical="middle" /> | function (listener)| 符号栏按钮点击时输入符号点击事件 |
-| newPsButton(text) | function | 初始化一个符号栏按钮 |
-| refresh(state) | function | 刷新符号栏状态 <br> _state__ (boolean): 开关状态 |
+| newPsButton(text,config) | function | 初始化一个符号栏按钮 <br> __config__ (table): 按钮配置 <Badge type="warning" text="在 v5.1.0(51099) 添加" vertical="middle" /> |
+| refresh(state) | function | 刷新符号栏状态 <br> __state__ (boolean): 开关状态 |
+| symbols <Badge type="warning" text="在 v5.1.0(51099) 添加" vertical="middle" /> | table (list) | 按钮配置 |
 
 ### FilesBrowserManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 这是文件浏览器管理器（侧滑）

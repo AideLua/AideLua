@@ -2,7 +2,7 @@ _G["import"] "com.jesse205.layout.MyTipLayout"
 templateType="default"
 versions={
   app={
-    {"aide(7.2.1)",721},
+    {"aide(7.2.1)",721,true},
   },--所有app版本号
 }
 --字模块列表，用于自动加载子模块

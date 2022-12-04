@@ -24,7 +24,7 @@
   };
   {
     ChipGroup;
-    id="androluaVersionsGroup";
+    id="configVersionsGroup";
     layout_width="fill";
     layoutTransition=newLayoutTransition();
     layout_marginLeft="16dp";

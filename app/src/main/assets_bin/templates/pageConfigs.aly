@@ -40,6 +40,9 @@
     },
     onInit=function(ids,config)
       --print(config.templateDirPath)
+
+      local configVersionsGroup=ids.configVersionsGroup
+      local androluaVersionsGroup=ids.androluaVersionsGroup
       local templatePath=config.templatePath--主模板路径
       local subTemplatePath=config.subTemplatePath--子模板路径
 
@@ -61,15 +64,18 @@
         NewProjectManager.refreshState("androidx",newState,chipsList)
       end
 
-
-
-      for index,content in ipairs(config.subTemplateConfig.versions.androlua or {}) do
-        print(content[1])
+      local appCheckedText=NewProjectManager.getSharedData(config._type,"appVersion")
+      for index,content in ipairs(config.templateConfig.versions.app) do
+        NewProjectManager.addSingleChip(configVersionsGroup,content,appCheckedText,config._type,chipsList)
       end
-
-      print(subTemplatePath)
+      local aluaCheckedText=NewProjectManager.getSharedData(config._type,"androluaVersion")
+      for index,content in ipairs(config.subTemplateConfig.versions.androlua) do
+        NewProjectManager.addSingleChip(androluaVersionsGroup,content,aluaCheckedText,config._type,chipsList)
+      end
+      NewProjectManager.applySingleCheckGroup(ids.configVersionsGroup,config,"appVersion")
+      NewProjectManager.applySingleCheckGroup(ids.androluaVersionsGroup,config,"androluaVersion")
+      print(dump(config.androluaVersion))
       NewProjectManager.refreshState("androidx",androidXState,chipsList)
-
     end,
     onCreativePrj=function(ids,config,keys)
       print(dump(keys))
@@ -85,6 +91,47 @@
     name="LuaJ++",
     _type="luaj",
     subTemplateName="LuaJ",
+    useLoadlayout2=true,
+    checkAppConfig=true,
+    helloWorld=true,--不可用标识
+    androidXState=false,--永远用不到AndroidX那就直接设置false即可
+    layout={
+      ScrollView;
+      layout_height="fill";
+      layout_width="fill";
+      {
+        LinearLayout;
+        layout_width="fill";
+        layout_height="fill";
+        orientation="vertical";
+        layoutTransition=newLayoutTransition();
+        MyTipLayout.Builder({
+          layout_margin="16dp";
+          layout_marginTop="8dp";
+          layout_marginBottom="8dp";
+          cardBackgroundColor=theme.color.Ripple.Orange;
+          {
+            {
+              imageResource=R.drawable.ic_alert_circle_outline;
+              colorFilter=theme.color.Orange;
+            },
+            {
+              text="此模板暂时无法使用";
+              textColor=theme.color.Orange;
+            }
+          }
+        });
+        "layouts.appConfigLayout";
+      };
+    },
+    onSelected=function(ids,config)
+      --createButton.setEnabled(false)
+    end
+  },
+  {
+    name="FusionApp v1",
+    _type="fa",
+    subTemplateName="FusionApp",
     useLoadlayout2=true,
     checkAppConfig=true,
     helloWorld=true,--不可用标识

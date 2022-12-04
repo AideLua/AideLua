@@ -12,8 +12,7 @@
 ![cover](images/ic_cover-aidelua.png)
 
 ###### Language:
-[中文](README.md)
-[English](README-EN.md)
+[中文](README.md) | [English](README-EN.md)
 
 ## Alert
 If you need to use the source code, please go to the <a href="/Jesse205/AideLua/releases">releases</a> page to download.
@@ -30,8 +29,8 @@ Aide Lua can help you transfer from Androlua+to AIDE and then to Android Studio=
 [![123 Pan](https://img.shields.io/badge/123_Pan-Image-597dfc)](https://www.123pan.com/s/G7a9-c9ek)
 
 ### AIDE Pro
+[![Offical](https://img.shields.io/badge/Offical_website-Recommend-28B6F6)](https://www.aidepro.top/)
 [![Lanzou](https://img.shields.io/badge/Lanzou-38.5_M-FF6600?logo=icloud&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
-[![Github Releases)](https://img.shields.io/github/v/tag/AndroIDE-Pro/AidePro?color=0969DA&label=Github+Releases&logo=github)](https://github.com/AndroIDE-Pro/AidePro/releases)
 
 ### Aide Lua Pro
 [![Gitee Releases)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+Releases&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases)
@@ -66,12 +65,12 @@ Due to the particularity of AIDE, please download [__AIDE Advanced Setup Version
 ### Quick Get Start
 #### 1. Configuring AIDE
 1. Enter `Settings - Advanced Settings - Project Related`.
-2. Close `Enable alert debug file`, open `Redefine Apk build path`.
+2. Close `Enable adrt debug file`, open `Redefine Apk build path`, `启用Gradle` (You do not need to open this item if you do not use Gradle)
 3. Restart AIDE.
 
 #### 2. Initial packaging
 1. Click New Project in AideLua, and click `New` after filling in and selecting.
-2. Open the project with AIDE and click `Build Refresh`.
+2. Open the project with AIDE and click `Build Refresh` (Or 'run', 'gradle assembleRelease', recommended).
 3. Click the `repack and install` button of AideLua (or `repack`, but manual signature is required) and install it. Test whether it can be packaged and run normally.
 4. Click the `Run` button of AideLua to test whether the installed application debugging passes normally.
 

@@ -12,8 +12,7 @@
 ![cover](images/ic_cover-aidelua.png)
 
 ###### 语言 Language:
-[中文](README.md)
-[English](README-EN.md)
+[中文](README.md) | [English](README-EN.md)
 
 ## 注意 Alert
 如需使用源代码，请进入 <a href="/Jesse205/AideLua/releases">发行版</a> 页面下载。<br>
@@ -32,8 +31,8 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 [![123云盘](https://img.shields.io/badge/123云盘-镜像-597dfc)](https://www.123pan.com/s/G7a9-c9ek)
 
 ### AIDE 高级设置版
-[![蓝奏云](https://img.shields.io/badge/蓝奏云-38.5_M-FF6600?logo=icloud&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
-[![Github Releases)](https://img.shields.io/github/v/tag/AndroIDE-Pro/AidePro?color=0969DA&label=Github+Releases&logo=github)](https://github.com/AndroIDE-Pro/AidePro/releases)
+[![官网](https://img.shields.io/badge/官网-推荐-28B6F6)](https://www.aidepro.top/)
+[![蓝奏云](https://img.shields.io/badge/蓝奏云--FF6600?logo=icloud&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
 
 ### Aide Lua Pro
 [![Gitee 发行版)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+发行版&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases)
@@ -70,13 +69,14 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 ### 快速入门
 #### 一、配置AIDE
+#### 一、配置 AIDE Pro
 1. 进入 `设置 - 高级设置 - 工程相关`
-2. 关闭 `启用alert调试文件` ，打开 `重定义Apk构建路径`
+2. 关闭 `启用 adrt调试文件` ，打开 `重定义Apk构建路径`、`启用Gradle`（如果不使用 Gradle 则无需打开此项）
 3. 重启 AIDE
 
 #### 二、初次打包
 1. 在 AideLua 点击新建项目，在填写与选择完成后点击 `新建`
-2. 用 AIDE 打开项目，点击 `构建刷新`
+2. 用 AIDE 打开项目，点击 `构建刷新`，`确定`（或者 `运行` ，`gradle assembleRelease`，推荐这种方法）
 3. 点击 AideLua 的 `二次打包并安装` 按钮（或 `二次打包` ，但需手动签名）并安装，测试是否可以正常打包并运行
 4. 点击 AideLua 的 `运行` 按钮，测试是否正常通过已安装的应用调试
 

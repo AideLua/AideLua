@@ -105,7 +105,10 @@ function NewProjectManager.fastCheckPackageNameError(packageName)
   return false
 end
 
---检查应用名，自动提示给用户，自动保存错误信息
+---检查应用名，自动提示给用户，自动保存错误信息
+---@param appName string 应用名
+---@param appNameLay TextInputLayout 应用名编辑框的布局，主要用来显示错误信息
+---@param config table 页面配置，用于在切换页面时的新建按钮可用判断
 function NewProjectManager.checkAppName(appName, appNameLay, config)
   local appNameError = NewProjectManager.fastCheckAppNameError(appName)
   if appNameError then
@@ -121,7 +124,7 @@ function NewProjectManager.checkAppName(appName, appNameLay, config)
   return appNameError
 end
 
---同上
+---同上
 function NewProjectManager.checkPackageName(packageName, packageNameLay, config)
   local packageNameError = NewProjectManager.fastCheckPackageNameError(packageName)
   if packageNameError then
@@ -161,15 +164,25 @@ function NewProjectManager.refreshCreateEnabled(config)
 end
 
 --为了方便存储数据
+---写入ShaedData
+---@param _type string 模板类型，建议唯一
+---@param key string 键
+---@param value Object 新值
 function NewProjectManager.setSharedData(_type, key, value)
-  return setSharedData("newproject_" .. _type .. key, value)
+  return setSharedData("newproject_" .. _type .. "_" .. key, value)
 end
 
+---读取ShaedData
+---@param _type string 模板类型，建议唯一
+---@param key string 键
 function NewProjectManager.getSharedData(_type, key)
-  return getSharedData("newproject_" .. _type .. key)
+  return getSharedData("newproject_" .. _type .. "_" .. key)
 end
 
 --刷新启用状态，比如AndroidX
+---@param refreshType string 要刷新的类型，一般为"androidx"
+---@param state boolean 状态
+---@param chipsList table Chip列表，存放单个页面上所有的Chip
 function NewProjectManager.refreshState(refreshType, state, chipsList)
   local notState = not (state)
   if refreshType == "androidx" then
@@ -190,6 +203,56 @@ function NewProjectManager.refreshState(refreshType, state, chipsList)
   end
 end
 
+---为页面添加单选Chip
+---@param group ChipGroup Chip的父布局
+---@param chipConfig table Chip信息，1为名称，2为版本号，3为默认选中（仅selectedText为nil或者false时）
+---@param selectedText string 已选中的Chip显示信息
+---@param chipList table Chip列表，用于查看是否支持AndroidX
+function NewProjectManager.addSingleChip(group,chipConfig,selectedText,_type,chipList)
+  local title=chipConfig[1]
+  local defaultChecked=chipConfig[3]
+  local chip=Chip(activity)
+  .setTag(chipConfig)
+  .setText(title)
+  .setCheckable(true)
+  .setCheckedIconEnabled(false)
+  group.addView(chip)
+  table.insert(chipList,chip)
+  if selectedText==title or selectedText==nil and defaultChecked then
+    group.check(chip.getId())
+  end
+  return chip
+end
+
+---将普通的ChipGroup添加各种逻辑，使其成为单选的ChipGroup，并不断向pageConfig同步数据
+---@param group ChipGroup 待改造的ChipGroup
+---@param pageConfig table 页面配置
+function NewProjectManager.applySingleCheckGroup(group,pageConfig,key)
+  local oldSelectedId=group.getCheckedChipId()
+  if oldSelectedId==-1 then
+    local chip=group.getChildAt(0)
+    if chip then
+      group.check(chip.getId())
+    end
+   else
+    local chip=group.findViewById(oldSelectedId)
+    pageConfig[key]=chip.getTag()--保存数据到pageConfig
+  end
+  group.setOnCheckedChangeListener{
+    onCheckedChanged=function(chipGroup, selectedId)
+      if selectedId==-1 then
+        local chip=chipGroup.findViewById(oldSelectedId)
+        group.check(oldSelectedId)
+       else
+        oldSelectedId=selectedId
+        local chip=chipGroup.findViewById(selectedId)
+        pageConfig[key]=chip.getTag()--保存数据到pageConfig
+        NewProjectManager.setSharedData(pageConfig._type, key,chip.getText())
+      end
+    end
+  }
+end
+
 --view.tag={viewIndex=index,enabledList=list}
 function NewProjectManager.onChipCheckChangedListener(view, isChecked)
   local config = view.tag
@@ -206,14 +269,17 @@ function NewProjectManager.onChipCheckChangedListener(view, isChecked)
   end
 end
 
---构建一个键，需要格式化的文件的列表
+---构建前的数据准备，会调用 pageConfig.onBuildConfig，并自动转换为纯字符串或者列表。你只管调用就行了
+---@param pageConfig table 页面配置
 function NewProjectManager.buildConfig(pageConfig)
+  --模板配置
   local templateConfig = pageConfig.templateConfig
+  --当前子模板配置
   local subTemplateConfig = pageConfig.subTemplateConfig
-
+  --所有涉及到的模板列表
   local templateConfigsList = { subTemplateConfig }
 
-  --获取所有父模板配置
+  --获取所有父模板配置，挨个添加到前面
   local localParentConfig = templateConfig --这是当前父模板
   while localParentConfig do
     table.insert(templateConfigsList, 1, localParentConfig)
@@ -242,7 +308,7 @@ function NewProjectManager.buildConfig(pageConfig)
   local androidX = pageConfig.androidxState
   keys.androidX = androidX
 
---响应构建key事件
+  --响应构建key事件
   local onBuildConfig = pageConfig.onBuildConfig
   if onBuildConfig then
     onBuildConfig(pageConfig.ids, pageConfig, keysLists, formatList, unzipList)
@@ -267,10 +333,10 @@ function NewProjectManager.buildConfig(pageConfig)
   local appDependenciesEnd = keys.appDependenciesEnd
   if androidX then --启用AndroiX后自动追加。这里就可能有bug
     if dependenciesEnd then
-    table.insert(dependenciesEnd, "api 'androidx.appcompat:appcompat:1.0.0'")
+      table.insert(dependenciesEnd, "api 'androidx.appcompat:appcompat:1.0.0'")
     end
     if appDependenciesEnd then
-    table.insert(appDependenciesEnd, "api 'com.google.android.material:material:1.0.0'")
+      table.insert(appDependenciesEnd, "api 'com.google.android.material:material:1.0.0'")
     end
   end
 
