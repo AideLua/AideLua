@@ -1,6 +1,6 @@
 {
-    "name": "AideLuaPro",
-    "name_long": "Aide Lua Pro",
+    "name": "aide-lua-pro",
+    "name_full": "Aide Lua Pro",
     "version": "5.1.0",
     "description": "依赖 Aide ，使用 Lua 快速、高效开发的工具",
     "versionCode": 51099,

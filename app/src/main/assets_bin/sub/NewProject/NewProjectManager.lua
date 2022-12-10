@@ -208,7 +208,7 @@ end
 ---@param chipConfig table Chip信息，1为名称，2为版本号，3为默认选中（仅selectedText为nil或者false时）
 ---@param selectedText string 已选中的Chip显示信息
 ---@param chipList table Chip列表，用于查看是否支持AndroidX
-function NewProjectManager.addSingleChip(group,chipConfig,selectedText,_type,chipList)
+function NewProjectManager.addSingleChip(group,chipConfig,selectedText,chipList)
   local title=chipConfig[1]
   local defaultChecked=chipConfig[3]
   local chip=Chip(activity)
@@ -221,6 +221,18 @@ function NewProjectManager.addSingleChip(group,chipConfig,selectedText,_type,chi
   if selectedText==title or selectedText==nil and defaultChecked then
     group.check(chip.getId())
   end
+  return chip
+end
+
+function NewProjectManager.addMultiChip(group,chipConfig,selected,_type,chipList)
+  local title=chipConfig[1]
+  local defaultChecked=chipConfig[3]
+  local chip=Chip(activity)
+  .setTag(chipConfig)
+  .setText(title)
+  --.setCheckedIconEnabled(false)
+  group.addView(chip)
+  table.insert(chipList,chip)
   return chip
 end
 

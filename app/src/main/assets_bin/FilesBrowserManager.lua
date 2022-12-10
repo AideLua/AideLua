@@ -21,7 +21,8 @@ FilesBrowserManager.refresh(file,upFile,force,atOnce): 刷新文件浏览器
 FilesBrowserManager.init(): 初始化管理器
 ]]
 local FilesBrowserManager = {}
-
+local lastContextMenu--上一次小ContextMenu，用于拖放时关闭Menu
+local passDragFileTime=0--拖放排除次数，因为自己本身就有拖动事件
 local providers={
   menuProviders={--参数：menuBuilder,config
   },
@@ -288,6 +289,59 @@ function FilesBrowserManager.PathRecyclerViewBuilder(context)
     onInterceptTouchEvent=function(super,event)
       if pathRecyclerView.canScrollHorizontally(1) then
         sideAppBarLayout.requestDisallowInterceptTouchEvent(true)--不能请求自己，因为会导致不滚动
+      end
+      return super(event)
+    end,
+  })
+end
+
+---在 v5.1.0(51099) 添加
+---添加了拖放的RecyclerView
+function FilesBrowserManager.FilesRecyclerViewBuilder(context)
+  return luajava.override(MyRecyclerView,{
+    onInterceptTouchEvent=function(super,event)
+      local action=event.getAction()
+      local tag=recyclerView.tag
+      local downEvent=tag.downEvent
+      local x,y=event.getX(),event.getY()
+      if action==MotionEvent.ACTION_DOWN then
+        downEvent.x,downEvent.y=x,y
+        tag.longClickedView=nil
+       elseif action==MotionEvent.ACTION_MOVE then
+        local longClickedView=tag.longClickedView
+        local relativeX,relativeY=x-downEvent.x,y-downEvent.y
+        if longClickedView then
+          --拖放，有bug，现在只能在华为文件管理使用
+          local data=longClickedView.tag._data--有数据
+          if data and Build.VERSION.SDK_INT>24 and data.file.isFile() then--系统大于安卓N，并且当前是文件
+            if relativeX>math.dp2int(16) or relativeX<-math.dp2int(16) or relativeY>math.dp2int(16) or relativeY<-math.dp2int(16) then
+              if lastContextMenu then
+                lastContextMenu.close()
+              end
+              passDragFileTime=passDragFileTime+1
+              local uri=activity.getUriForFile(data.file)
+              --授予应用权限（虽然这种方式很拉，但我可以箭头华为文件管理）
+              local intent = Intent()
+              intent.setAction("android.intent.action.SEND")
+              intent.setFlags(268435456)
+              intent.setType(activity.getContentResolver().getType(uri))
+              local infoList=activity.getPackageManager().queryIntentActivities(intent, 65536)
+              for index=0,#infoList-1 do
+                activity.grantUriPermission(infoList[index].activityInfo.packageName, uri, 3)
+              end
+              activity.grantUriPermission("com.huawei.desktop.explorer", uri, 3)
+              activity.grantUriPermission("com.huawei.desktop.systemui", uri, 3)
+              local clipData=ClipData.newUri(activity.getContentResolver(),"data", uri)
+              local myShadow=DragShadowBuilder(longClickedView)
+              longClickedView.startDrag(clipData,myShadow,"drag to other activity",View.DRAG_FLAG_GLOBAL|View.DRAG_FLAG_GLOBAL_URI_READ)
+            end
+            swipeRefresh.requestDisallowInterceptTouchEvent(true)--阻止侧滑关闭
+            return nil--阻止滚动
+          end
+        end
+       elseif action==MotionEvent.ACTION_UP or action==MotionEvent.ACTION_CANCEL then
+        downEvent.x,downEvent.y=nil,nil
+        tag.longClickedView=nil
       end
       return super(event)
     end,
@@ -606,6 +660,7 @@ end
 
 --文件长按菜单（包括右键菜单）
 function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
+  lastContextMenu=menu
   if menuInfo then
     local position=menuInfo.position
     local data=adapterData[position]
@@ -755,6 +810,7 @@ function FilesBrowserManager.init()
   recyclerView.onCreateContextMenu=function(menu,view,menuInfo)
     FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
   end
+  recyclerView.setTag({})
 
   --判断侧滑开启状态。
   --如果侧滑为开启状态，那么文件浏览器一定是开启的。
@@ -785,11 +841,15 @@ function FilesBrowserManager.init()
   recyclerView.onDrag=function(view,event)
     local action=event.getAction()
     if action==DragEvent.ACTION_DRAG_STARTED then
-      --[[
-      local desc=event.getClipDescription()--必须有描述，必须为文件
-      if not(desc and desc.getMimeTypeCount()~=0 and desc.getMimeType(0)~="text/plain") and ProjectManager.openState then
+
+      local desc=event.getClipDescription()--必须有描述
+      if not(desc and ProjectManager.openState) then
         return false
-      end]]
+      end
+      if passDragFileTime>0 then
+        passDragFileTime=passDragFileTime-1
+        return false--排除自己次数
+      end
      elseif action==DragEvent.ACTION_DRAG_ENTERED then
       view.setBackgroundColor(theme.color.rippleColorAccent)
      elseif action==DragEvent.ACTION_DRAG_EXITED then
@@ -826,6 +886,8 @@ function FilesBrowserManager.init()
     end
     return true
   end
+  local downEvent={}
+  recyclerView.tag.downEvent=downEvent
 end
 
 function FilesBrowserManager.getOpenState()

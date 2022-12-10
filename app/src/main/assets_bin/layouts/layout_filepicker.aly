@@ -53,7 +53,7 @@
           layout_height="fill";
           id="swipeRefresh";
           {
-            MyRecyclerView;
+            FilesBrowserManager.FilesRecyclerViewBuilder;
             layout_width="fill";
             layout_height="fill";
             id="recyclerView";

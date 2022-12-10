@@ -70,9 +70,11 @@ th,
 td {
     padding: 0.6em 0.8em;
 }
+
 tr:nth-child(2n) {
-    background-color: #FAFAFA;
+    background-color: rgba(0,0,0,0);
 }
+
 
 //给代码框设置自适应主题
 .theme-default-content pre code,

@@ -63,6 +63,7 @@ local function applyTabMenu(view,config)
       FilesTabManager.openFile(file,fileType,true)
     end
   end
+
   local maxY=0--最大滑动垂直距离
   view.onTouch=function(view,event)
     local action=event.getAction()

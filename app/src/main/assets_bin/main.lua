@@ -39,6 +39,12 @@ import "android.text.style.ForegroundColorSpan"
 import "android.text.style.BackgroundColorSpan"
 import "android.text.Spannable"
 
+import "android.content.ClipData"
+import "android.content.ClipDescription"
+import "android.view.View$DragShadowBuilder"
+import "android.content.FileProvider"
+import "android.webkit.MimeTypeMap"
+
 import "androidx.drawerlayout.widget.DrawerLayout"
 import "androidx.core.graphics.ColorUtils"
 import "androidx.core.content.res.ResourcesCompat"

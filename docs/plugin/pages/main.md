@@ -150,7 +150,7 @@ activity.result({<action>，<content>})
 | switchEditor(editorType) | function | 切换编辑器 <br> __editorType__ (string): 编辑器类型|
 | [symbolBar](#editorsmanager-symbolbar) | table (class) | 符号栏 |
 | [typefaceChangeListeners](#editorsmanager-typefacechangelisteners) <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> | table (list) | 编辑器字体监听器 |
-| [sharedDataChangeListeners](#editorsmanager-sharedDatachangelisteners) <Badge type="warning" text="在 v5.1.0(51099) 添加" vertical="middle" /> | table (map) | 软件配置监听器 |
+| [sharedDataChangeListeners](#editorsmanager-shareddatachangelisteners) <Badge type="warning" text="在 v5.1.0(51099) 添加" vertical="middle" /> | table (map) | 软件配置监听器 |
 | refreshEditorScrollState() | function | 刷新编辑器滚动状态，包括阴影。 |
 
 #### EditorsManager.typefaceChangeListeners <Badge text="table" vertical="middle" /> <Badge text="List" vertical="middle" /> <Badge text="Listener" vertical="middle" /> <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />

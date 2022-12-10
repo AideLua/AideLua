@@ -66,14 +66,16 @@
 
       local appCheckedText=NewProjectManager.getSharedData(config._type,"appVersion")
       for index,content in ipairs(config.templateConfig.versions.app) do
-        NewProjectManager.addSingleChip(configVersionsGroup,content,appCheckedText,config._type,chipsList)
+        NewProjectManager.addSingleChip(configVersionsGroup,content,appCheckedText,chipsList)
       end
       local aluaCheckedText=NewProjectManager.getSharedData(config._type,"androluaVersion")
       for index,content in ipairs(config.subTemplateConfig.versions.androlua) do
-        NewProjectManager.addSingleChip(androluaVersionsGroup,content,aluaCheckedText,config._type,chipsList)
+        NewProjectManager.addSingleChip(androluaVersionsGroup,content,aluaCheckedText,chipsList)
       end
       NewProjectManager.applySingleCheckGroup(ids.configVersionsGroup,config,"appVersion")
       NewProjectManager.applySingleCheckGroup(ids.androluaVersionsGroup,config,"androluaVersion")
+      
+      
       print(dump(config.androluaVersion))
       NewProjectManager.refreshState("androidx",androidXState,chipsList)
     end,
@@ -116,7 +118,7 @@
               colorFilter=theme.color.Orange;
             },
             {
-              text="此模板暂时无法使用";
+              text="此模板暂时无法使用，敬请期待";
               textColor=theme.color.Orange;
             }
           }
@@ -157,7 +159,7 @@
               colorFilter=theme.color.Orange;
             },
             {
-              text="此模板暂时无法使用";
+              text="此模板暂时无法使用，敬请期待";
               textColor=theme.color.Orange;
             }
           }

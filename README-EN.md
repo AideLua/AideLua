@@ -30,7 +30,7 @@ Aide Lua can help you transfer from Androlua+to AIDE and then to Android Studio=
 
 ### AIDE Pro
 [![Offical](https://img.shields.io/badge/Offical_website-Recommend-28B6F6)](https://www.aidepro.top/)
-[![Lanzou](https://img.shields.io/badge/Lanzou-38.5_M-FF6600?logo=icloud&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
+[![Lanzou](https://img.shields.io/badge/Lanzou-v2.6.45-FF6600?logo=icloud&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
 
 ### Aide Lua Pro
 [![Gitee Releases)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+Releases&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases)
