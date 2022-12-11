@@ -623,6 +623,7 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
           directoryFile=newDirectory
         end--路径不同判断完毕
        else--未打开工程
+        FilesBrowserManager.recordScrollPosition()
         table.clear(pathSplitList)--清空路径指示器
         directoryFile=nil--移除当前路径标识
         pathAdapter.notifyDataSetChanged()
@@ -837,11 +838,11 @@ function FilesBrowserManager.init()
     onDrawerStateChanged = function(newState)
     end
   }))
+  local dropFileFrameBackground
 
   recyclerView.onDrag=function(view,event)
     local action=event.getAction()
     if action==DragEvent.ACTION_DRAG_STARTED then
-
       local desc=event.getClipDescription()--必须有描述
       if not(desc and ProjectManager.openState) then
         return false
@@ -850,17 +851,29 @@ function FilesBrowserManager.init()
         passDragFileTime=passDragFileTime-1
         return false--排除自己次数
       end
+      if not dropFileFrameBackground then
+        import "android.graphics.drawable.GradientDrawable"
+        local dp_16=math.dp2int(16)
+        dropFileFrameBackground = GradientDrawable()
+        .setShape(GradientDrawable.RECTANGLE)
+        .setStroke(math.dp2int(4), theme.color.colorAccent)
+        .setCornerRadius(math.dp2int(16))
+      end
+      view.setBackground(dropFileFrameBackground)
      elseif action==DragEvent.ACTION_DRAG_ENTERED then
-      view.setBackgroundColor(theme.color.rippleColorAccent)
+      dropFileFrameBackground.setColor(theme.color.rippleColorAccent)
+      --view.setBackgroundColor(theme.color.rippleColorAccent)
      elseif action==DragEvent.ACTION_DRAG_EXITED then
-      view.setBackgroundColor(0)
+      dropFileFrameBackground.setColor(0)
+      --view.setBackgroundColor(0)
      elseif action==DragEvent.ACTION_DROP then
-      view.setBackgroundColor(0)
+      dropFileFrameBackground.setColor(0)
+      --view.setBackgroundColor(0)
       if ProjectManager.openState then
-        local dropPermissions=activity.requestDragAndDropPermissions(event)
         local data=event.getClipData()
         local count=data.getItemCount()
         if count>0 then
+          local dropPermissions=activity.requestDragAndDropPermissions(event)
           for index=0,count-1 do
             local uri=data.getItemAt(index).getUri()
             local inputStream=activity.getContentResolver().openInputStream(uri)
@@ -875,13 +888,14 @@ function FilesBrowserManager.init()
               local outStream=FileOutputStream(newPath)
               LuaUtil.copyFile(inputStream, outStream)
               outStream.close()
-              FilesBrowserManager.refresh()
             end
           end
+          FilesBrowserManager.refresh()
+          dropPermissions.release()
         end
-        dropPermissions.release()
       end
      elseif action==DragEvent.ACTION_DRAG_ENDED then
+      dropFileFrameBackground.setColor(0)
       view.setBackgroundColor(0)
     end
     return true
