@@ -53,8 +53,8 @@ createButton.onClick=function(view)--新建按钮
 
   local keys,formatList,unzipList=NewProjectManager.buildConfig(nowPageConfig)
 
-  if nowPageConfig.onCreativePrj then
-    nowPageConfig.onCreativePrj(nowPageConfig.ids,nowPageConfig,keys,formatList,unzipList)
+  if nowPageConfig.onCreatePrj then
+    nowPageConfig.onCreatePrj(nowPageConfig.ids,nowPageConfig,keys,formatList,unzipList)
   end
 
 end

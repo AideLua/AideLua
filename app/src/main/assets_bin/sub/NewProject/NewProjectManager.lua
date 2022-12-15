@@ -71,14 +71,16 @@ function NewProjectManager.loadTemplate(path, parentTemplateConfig)
 
   local pageConfigsPath = path .. "/pageConfigs.aly" --页面配置路径
   local pageConfigs = nil
-  if File(pageConfigsPath).isFile() then
+  if File(pageConfigsPath).isFile() then--pageConfigs允许不存在，所以先判断文件是否存在
     pageConfigs = assert(loadfile(pageConfigsPath))()
     for index = 1, #pageConfigs do
       local pageConfig = pageConfigs[index]
       setmetatable(pageConfig, configMetatable)
       local subTemplateName = pageConfig.subTemplateName
-      pageConfig.subTemplateConfig = subTemplatesMap[subTemplateName] --子模板配置
-      pageConfig.subTemplatePath = path .. "/" .. subTemplateName --子模板路径
+      if subTemplateName then
+        pageConfig.subTemplateConfig = subTemplatesMap[subTemplateName] --子模板配置
+        pageConfig.subTemplatePath = path .. "/" .. subTemplateName --子模板路径
+      end
       pageConfigsListIndex = pageConfigsListIndex + 1
       table.insert(pageConfigsList, pageConfigsListIndex, pageConfig) --添加到页面列表
     end
@@ -208,7 +210,7 @@ end
 ---@param chipConfig table Chip信息，1为名称，2为版本号，3为默认选中（仅selectedText为nil或者false时）
 ---@param selectedText string 已选中的Chip显示信息
 ---@param chipList table Chip列表，用于查看是否支持AndroidX
-function NewProjectManager.addSingleChip(group,chipConfig,selectedText,chipList)
+function NewProjectManager.addSingleChip(group,chipConfig,selectedText,chipsList)
   local title=chipConfig[1]
   local defaultChecked=chipConfig[3]
   local chip=Chip(activity)
@@ -217,22 +219,22 @@ function NewProjectManager.addSingleChip(group,chipConfig,selectedText,chipList)
   .setCheckable(true)
   .setCheckedIconEnabled(false)
   group.addView(chip)
-  table.insert(chipList,chip)
+  table.insert(chipsList,chip)
   if selectedText==title or selectedText==nil and defaultChecked then
     group.check(chip.getId())
   end
   return chip
 end
 
-function NewProjectManager.addMultiChip(group,chipConfig,selected,_type,chipList)
-  local title=chipConfig[1]
-  local defaultChecked=chipConfig[3]
+function NewProjectManager.addMultiChip(group,chipConfig,_type,chipsList)
+  --local title=chipConfig[1]
+  --local defaultChecked=chipConfig[3]
   local chip=Chip(activity)
   .setTag(chipConfig)
-  .setText(title)
+  .setText(chipConfig.title)
   --.setCheckedIconEnabled(false)
   group.addView(chip)
-  table.insert(chipList,chip)
+  table.insert(chipsList,chip)
   return chip
 end
 
@@ -240,6 +242,32 @@ end
 ---@param group ChipGroup 待改造的ChipGroup
 ---@param pageConfig table 页面配置
 function NewProjectManager.applySingleCheckGroup(group,pageConfig,key)
+  local oldSelectedId=group.getCheckedChipId()
+  if oldSelectedId==-1 then
+    local chip=group.getChildAt(0)
+    if chip then
+      group.check(chip.getId())
+    end
+   else
+    local chip=group.findViewById(oldSelectedId)
+    pageConfig[key]=chip.getTag()--保存数据到pageConfig
+  end
+  group.setOnCheckedChangeListener{
+    onCheckedChanged=function(chipGroup, selectedId)
+      if selectedId==-1 then
+        local chip=chipGroup.findViewById(oldSelectedId)
+        group.check(oldSelectedId)
+       else
+        oldSelectedId=selectedId
+        local chip=chipGroup.findViewById(selectedId)
+        pageConfig[key]=chip.getTag()--保存数据到pageConfig
+        NewProjectManager.setSharedData(pageConfig._type, key,chip.getText())
+      end
+    end
+  }
+end
+
+function NewProjectManager.applyMultiCheckGroup(group,pageConfig,key)
   local oldSelectedId=group.getCheckedChipId()
   if oldSelectedId==-1 then
     local chip=group.getChildAt(0)

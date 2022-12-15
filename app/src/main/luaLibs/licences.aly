@@ -11,37 +11,43 @@
   {
     name="luaj nirenr修改版。",
     message="Lightweight, fast, Java-centric Lua interpreter written for JME and JSE, with string, table, package, math, io, os, debug, coroutine & luajava libraries, JSR-223 bindings, all metatags, weak tables and unique direct lua-to-java-bytecode compiling.",
-    url="https://github.com/nirenr/luaj"
+    url="https://github.com/nirenr/luaj",
   },
   {
     name="LuaDB",
     message="基于 Lua 的高性能持久化 kv 数据库",
-    url="https://github.com/limao996/LuaDB"
+    url="https://github.com/limao996/LuaDB",
+  },
+  {
+    name="Sharp",
+    message="Scalable vector graphics for Android",
+    url="https://github.com/Pixplicity/sharp",
+    license="Apache-2.0 license",
   },
   {
     name="CodeEditor",
     message="A cool and optimized code editor on Android platform with good performance and nice features.",
-    url="https://github.com/Rosemoe/CodeEditor"
+    url="https://github.com/Rosemoe/CodeEditor",
   },
   {
     name="sora-editor",
     message="A cool code editor library on Android with syntax-highlighting and auto-completion. (aka CodeEditor)",
     license="LGPL-2.1 license",
-    url="https://github.com/Rosemoe/sora-editor"
+    url="https://github.com/Rosemoe/sora-editor",
   },
   {
     name="Cascadia Code",
     message="This is a fun, new monospaced font that includes programming ligatures and is designed to enhance the modern look and feel of the Windows Terminal.",
     licenseName="OFL-1.1 license",
     license="Cascadia Code license",
-    url="https://github.com/microsoft/cascadia-code"
+    url="https://github.com/microsoft/cascadia-code",
   },
   {
     name="JetBrains Mono",
     message="JetBrains Mono – the free and open-source typeface for developers",
     licenseName="OFL-1.1 license",
     license="JetBrains Mono license",
-    url="https://github.com/JetBrains/JetBrainsMono"
+    url="https://github.com/JetBrains/JetBrainsMono",
   },
   --Jesse205库使用的，必须放在最后，否则无法识别
   table.unpack(require("com.jesse205.app.licences")),

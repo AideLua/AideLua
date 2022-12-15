@@ -1,7 +1,8 @@
 --require "import"
 --import "jesse205"
-
-activity.setTitle(luajava.bindClass(activity.getPackageName()..".R").string.runCode)
+local R=luajava.bindClass(activity.getPackageName()..".R")
+activity.setTheme(R.style.Theme_AppCompat_DayNight)
+activity.setTitle(R.string.runCode)
 activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true)
 
 function onOptionsItemSelected(item)

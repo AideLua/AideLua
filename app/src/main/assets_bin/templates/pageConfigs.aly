@@ -74,12 +74,30 @@
       end
       NewProjectManager.applySingleCheckGroup(ids.configVersionsGroup,config,"appVersion")
       NewProjectManager.applySingleCheckGroup(ids.androluaVersionsGroup,config,"androluaVersion")
-      
-      
-      print(dump(config.androluaVersion))
+
+      for viewIndex,content in ipairs(luajava.astable(File(subTemplatePath.."/complexLibraries").listFiles())) do
+        if content.isDirectory() then
+          for index,content in ipairs(luajava.astable(content.listFiles())) do
+            if content.isDirectory() then
+              local path=content.getPath()
+              local chipConfig=getConfigFromFile(path.."/config.lua")
+              chipConfig.path=path
+              chipConfig.viewIndex=viewIndex
+              --content的名称代表版本
+              --print(chipConfig.name,content.getName())
+              chipConfig.title=("%s (%s)"):format(chipConfig.name,content.getName())
+              NewProjectManager.addMultiChip(ids.complexLibrariesGroup,chipConfig,config._type,chipsList)
+              --config.onCheckedChanged=onComplexLibrariesCheckChanged
+            end
+          end
+        end
+      end
+    NewProjectManager.applyMultiCheckGroup(ids.complexLibrariesGroup,config,"complexLibs")
+
+      --print(dump(config.androluaVersion))
       NewProjectManager.refreshState("androidx",androidXState,chipsList)
     end,
-    onCreativePrj=function(ids,config,keys)
+    onCreatePrj=function(ids,config,keys)
       print(dump(keys))
 
     end,
@@ -87,7 +105,6 @@
       --table.insert(keysLists,{androidX=ids.androidXSwitch.isChecked()})
       print(dump(keysLists),dump(formatList),dump(defaultUnzipList))
     end
-
   },
   {
     name="LuaJ++",
@@ -130,6 +147,7 @@
       --createButton.setEnabled(false)
     end
   },
+--[[
   {
     name="FusionApp v1",
     _type="fa",
@@ -170,5 +188,5 @@
     onSelected=function(ids,config)
       --createButton.setEnabled(false)
     end
-  },
+  },]]
 }
