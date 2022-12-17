@@ -18,8 +18,8 @@
 如需使用源代码，请进入 <a href="/Jesse205/AideLua/releases">发行版</a> 页面下载。<br>
 If you need to use the source code, please go to the <a href="/Jesse205/AideLua/releases">releases</a> page to download.
 
-尽量不要在 Github 内直接更改此仓库，因为 Github 的仓库是由 Gitee 镜像过去的。<br>
-Try not to change the repository directly in Github, because Github's repository is mirrored by Gitee。
+请不要在 Github 内直接更改此仓库，因为 Github 的仓库是由 Gitee 镜像过去的。<br>
+Please not to change the repository directly in Github, because Github's repository is mirrored by Gitee。
 
 ## 简介
 Aide Lua 是一款依赖 Aide 的 Lua 编辑器<br>
