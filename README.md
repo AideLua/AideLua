@@ -19,6 +19,7 @@
 If you need to use the source code, please go to the <a href="/Jesse205/AideLua/releases">releases</a> page to download.
 
 尽量不要在 Github 内直接更改此仓库，因为 Github 的仓库是由 Gitee 镜像过去的。<br>
+>>>>>>> branch 'master' of https://gitee.com/Jesse205/AideLua.git
 Please not to change the repository directly in Github, because Github's repository is mirrored by Gitee。
 
 ## 简介
