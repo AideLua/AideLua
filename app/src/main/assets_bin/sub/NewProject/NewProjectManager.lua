@@ -205,6 +205,23 @@ function NewProjectManager.refreshState(refreshType, state, chipsList)
   end
 end
 
+--view.tag={viewIndex=index,enabledList=list}
+
+function NewProjectManager.onChipCheckChangedListener(view, isChecked)
+  local config = view.tag
+  local viewIndex = config.viewIndex
+  local enabledList = config.enabledList
+  if view.isEnabled() then --如果是启用状态，那么是主动的，就需要保存数据
+    NewProjectManager.setSharedData(config.pageType, config.key, isChecked)
+    config.checked = isChecked
+  end
+  if isChecked then
+    enabledList[viewIndex] = config
+   else
+    enabledList[viewIndex] = nil
+  end
+end
+
 ---为页面添加单选Chip
 ---@param group ChipGroup Chip的父布局
 ---@param chipConfig table Chip信息，1为名称，2为版本号，3为默认选中（仅selectedText为nil或者false时）
@@ -227,14 +244,21 @@ function NewProjectManager.addSingleChip(group,chipConfig,selectedText,chipsList
 end
 
 function NewProjectManager.addMultiChip(group,chipConfig,_type,chipsList)
-  --local title=chipConfig[1]
-  --local defaultChecked=chipConfig[3]
+  chipConfig.pageType=_type
   local chip=Chip(activity)
   .setTag(chipConfig)
   .setText(chipConfig.title)
-  --.setCheckedIconEnabled(false)
+  .setCheckable(true)
+  .setCheckedIconEnabled(false)--这里禁用勾选图标，防止勾选时Chip乱飞
+  --.setCheckedIconResource(R.drawable.ic_check_accent)
   group.addView(chip)
+  chip.setOnCheckedChangeListener({onCheckedChanged=NewProjectManager.onChipCheckChangedListener})
   table.insert(chipsList,chip)
+
+  if NewProjectManager.getSharedData(_type, chipConfig.key) then
+    chip.setChecked(true)
+    NewProjectManager.onChipCheckChangedListener(chip,true)
+  end
   return chip
 end
 
@@ -265,48 +289,6 @@ function NewProjectManager.applySingleCheckGroup(group,pageConfig,key)
       end
     end
   }
-end
-
-function NewProjectManager.applyMultiCheckGroup(group,pageConfig,key)
-  local oldSelectedId=group.getCheckedChipId()
-  if oldSelectedId==-1 then
-    local chip=group.getChildAt(0)
-    if chip then
-      group.check(chip.getId())
-    end
-   else
-    local chip=group.findViewById(oldSelectedId)
-    pageConfig[key]=chip.getTag()--保存数据到pageConfig
-  end
-  group.setOnCheckedChangeListener{
-    onCheckedChanged=function(chipGroup, selectedId)
-      if selectedId==-1 then
-        local chip=chipGroup.findViewById(oldSelectedId)
-        group.check(oldSelectedId)
-       else
-        oldSelectedId=selectedId
-        local chip=chipGroup.findViewById(selectedId)
-        pageConfig[key]=chip.getTag()--保存数据到pageConfig
-        NewProjectManager.setSharedData(pageConfig._type, key,chip.getText())
-      end
-    end
-  }
-end
-
---view.tag={viewIndex=index,enabledList=list}
-function NewProjectManager.onChipCheckChangedListener(view, isChecked)
-  local config = view.tag
-  local viewIndex = config.viewIndex
-  local enabledList = config.enabledList
-  if view.isEnabled() then --如果是启用状态，那么是主动的，就需要保存数据
-    setSharedData("newproject_" .. config.path, isChecked)
-    config.checked = isChecked
-  end
-  if isChecked then
-    enabledList[viewIndex] = config
-   else
-    enabledList[viewIndex] = nil
-  end
 end
 
 ---构建前的数据准备，会调用 pageConfig.onBuildConfig，并自动转换为纯字符串或者列表。你只管调用就行了
@@ -346,7 +328,6 @@ function NewProjectManager.buildConfig(pageConfig)
 
   --让系统帮你处理安卓x，但是在部分模板上可能有bug。
   local androidX = pageConfig.androidxState
-  keys.androidX = androidX
 
   --响应构建key事件
   local onBuildConfig = pageConfig.onBuildConfig
@@ -368,6 +349,8 @@ function NewProjectManager.buildConfig(pageConfig)
       end
     end
   end
+
+  keys.androidX = androidX
 
   local dependenciesEnd = keys.dependenciesEnd
   local appDependenciesEnd = keys.appDependenciesEnd

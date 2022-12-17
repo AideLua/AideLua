@@ -5,10 +5,12 @@
     subTemplateName="AndroLua",--子模板文件夹名
     useLoadlayout2=true,
     checkAppConfig=true,--检查应用名与包名，应用名与包名的输入名的编辑框id必须相同
+    showElevation=false,
     layout={
       ScrollView;
       layout_height="fill";
       layout_width="fill";
+      id="scrollView";
       {
         LinearLayout;
         layout_width="fill";
@@ -54,7 +56,7 @@
       local androidXSwitch=ids.androidXSwitch
       local androidXState=NewProjectManager.getSharedData(config._type,"androidxstate") or false
       androidXSwitch.setChecked(androidXState)
-      config.androidXState=androidXState
+      config.androidxState=androidXState
       ids.androidXSwitchParent.onClick=function()
         local nowState=androidXSwitch.isChecked()
         local newState=not(nowState)
@@ -75,6 +77,14 @@
       NewProjectManager.applySingleCheckGroup(ids.configVersionsGroup,config,"appVersion")
       NewProjectManager.applySingleCheckGroup(ids.androluaVersionsGroup,config,"androluaVersion")
 
+      local enabledComplexLibs={}--复杂库
+      local enabledJarLibs={}--Jar库
+      local enabledSimpleLibs={}--简单库
+      config.enabledComplexLibs=enabledComplexLibs
+      config.enabledJarLibs=enabledJarLibs
+      config.enabledSimpleLibs=enabledSimpleLibs
+
+      --复杂库
       for viewIndex,content in ipairs(luajava.astable(File(subTemplatePath.."/complexLibraries").listFiles())) do
         if content.isDirectory() then
           for index,content in ipairs(luajava.astable(content.listFiles())) do
@@ -82,28 +92,77 @@
               local path=content.getPath()
               local chipConfig=getConfigFromFile(path.."/config.lua")
               chipConfig.path=path
+              chipConfig.key=path
               chipConfig.viewIndex=viewIndex
               --content的名称代表版本
               --print(chipConfig.name,content.getName())
               chipConfig.title=("%s (%s)"):format(chipConfig.name,content.getName())
+              chipConfig.enabledList=enabledComplexLibs
               NewProjectManager.addMultiChip(ids.complexLibrariesGroup,chipConfig,config._type,chipsList)
-              --config.onCheckedChanged=onComplexLibrariesCheckChanged
             end
           end
         end
       end
-    NewProjectManager.applyMultiCheckGroup(ids.complexLibrariesGroup,config,"complexLibs")
+
+      --Jar库
+      for viewIndex,libraryFile in ipairs(luajava.astable(File(subTemplatePath.."/jarLibraries").listFiles())) do
+        if libraryFile.isDirectory() then
+          for index,content in ipairs(luajava.astable(libraryFile.listFiles())) do
+            if content.isDirectory() then
+              local path=content.getPath()
+              local chipConfig={}
+              chipConfig.path=path
+              chipConfig.key=path
+              chipConfig.file=content
+              chipConfig.viewIndex=viewIndex
+              chipConfig.support="all"
+              chipConfig.enabledList=enabledJarLibs
+              chipConfig.title=("%s (%s)"):format(libraryFile.getName(),content.getName())
+              NewProjectManager.addMultiChip(ids.jarLibrariesGroup,chipConfig,config._type,chipsList)
+            end
+          end
+        end
+      end
+
+      --简单库
+      for viewIndex,content in ipairs(luajava.astable(File(subTemplatePath.."/simpleLibraries").listFiles())) do
+        if content.isDirectory() then
+          local chipConfig={}
+          local path=content.getPath()
+          chipConfig.path=path
+          chipConfig.key=path
+          chipConfig.viewIndex=viewIndex
+          chipConfig.support="all"
+          chipConfig.title=content.getName()
+          chipConfig.enabledList=enabledSimpleLibs
+          NewProjectManager.addMultiChip(ids.simpleLibrariesGroup,chipConfig,config._type,chipsList)
+        end
+      end
+
+
+      --页面滚动时调整阴影
+      ids.scrollView.onScrollChange=function(view,l,t,oldl,oldt)
+        MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,topCard)
+        config.showElevation=t>0
+      end
 
       --print(dump(config.androluaVersion))
       NewProjectManager.refreshState("androidx",androidXState,chipsList)
+      --print(dump(enabledComplexLibs))
     end,
     onCreatePrj=function(ids,config,keys)
       print(dump(keys))
-
     end,
     onBuildConfig=function(ids,config,keysLists,formatList,defaultUnzipList)
       --table.insert(keysLists,{androidX=ids.androidXSwitch.isChecked()})
-      print(dump(keysLists),dump(formatList),dump(defaultUnzipList))
+
+      for index,content in pairs(config.enabledComplexLibs) do
+        table.insert(keysLists,content.keys)
+      end
+
+      --print(dump(keysLists),dump(formatList),dump(defaultUnzipList))
+
+
     end
   },
   {
@@ -114,6 +173,7 @@
     checkAppConfig=true,
     helloWorld=true,--不可用标识
     androidXState=false,--永远用不到AndroidX那就直接设置false即可
+    showElevation=false,
     layout={
       ScrollView;
       layout_height="fill";
@@ -147,7 +207,7 @@
       --createButton.setEnabled(false)
     end
   },
---[[
+  --[[
   {
     name="FusionApp v1",
     _type="fa",

@@ -1,6 +1,11 @@
 require "import"
 import "android.widget.ListView"
 import "android.graphics.Typeface"
+import "android.text.Spannable"
+import "android.text.SpannableString"
+import "android.text.style.ForegroundColorSpan"
+import "android.text.style.BackgroundColorSpan"
+import "android.text.style.TypefaceSpan"
 
 isJesse205Activity=pcall(function()
   import "jesse205"
@@ -113,7 +118,16 @@ local nowPriorityIndex=2
 local isRefreshing=false
 local canCallSelected=false
 
+type2color={
+  V=0xFF000000,
+  D=0xff2196f3,
+  I=0xff4caf50,
+  W=0xffff9800,
+  E=0xfff44336
+}
+
 function onCreateOptionsMenu(menu)
+  refreshMenu=menu.add("刷新")
   clearMenu=menu.add("清空全部")
 end
 
@@ -122,6 +136,8 @@ function onOptionsItemSelected(item)
   local title=item.title
   if id==android.R.id.home then
     activity.finish()
+   elseif item==refreshMenu then
+    refreshLog()
    elseif item==clearMenu then
     runClearLog()
   end
@@ -138,15 +154,29 @@ function show(content)--展示日志
   isRefreshing=false
   if content and #content~=0 then
     local nowTitle=""
+    local nowTag=""
     local nowContent=""
     for line in content:gmatch("(.-)\n") do
       if line:find("^%-%-%-%-%-%-%-%-%- beginning of ") then
         adapter.add({__type=1,title=line})
        elseif line:find("^%[ *%d+%-%d+ *%d+:%d+:%d+%.%d+ *%d+: *%d+ *%a/[^ ]+ *%]$") then
-        if nowContent~="" then
+        local date,time,processId,threadId,logType,logTag=line:match("^%[ *(%d+%-%d+) *(%d+:%d+:%d+%.%d+) *(%d+): *(%d+) *(%a)/([^ ]+) *%]$")
+        --print(date,time,processId,threadId,logType,logTag)
+        local title
+        if logTag~="LuaInvocationHandler" then
+          title="[ "..date.." "..time.." "..processId..":"..threadId.."  "
+          local typeIndex=utf8.len(title)
+          title=title..logType.." /"..logTag.." ]"
+          title=SpannableString(title)
+          title.setSpan(BackgroundColorSpan(type2color[logType]),typeIndex-1,typeIndex+2,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+          title.setSpan(ForegroundColorSpan(0xFFFFFFFF),typeIndex-1,typeIndex+2,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+          title.setSpan(TypefaceSpan("monospace"),typeIndex-1,typeIndex+2,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+        end
+        if nowContent~="" and nowTag~="LuaInvocationHandler" then
           adapter.add({__type=2,title=nowTitle,content=String(nowContent).trim()})
         end
-        nowTitle=line
+        nowTitle=title--line
+        nowTag=logTag
         nowContent=""
        else
         nowContent=nowContent.."\n"..line
@@ -251,6 +281,7 @@ item={
       textSize="12sp";
       id="content";
       textColor=textColorPrimary;
+      --typeface=Typeface.MONOSPACE;
     };
   }
 }
@@ -259,6 +290,9 @@ listView=ListView(activity)
 listView.setFastScrollEnabled(true)
 if isJesse205Activity then--Jesse205主题没有分割线
   listView.setDivider(dividerVertical)
+  listView.onScroll=function(view,firstVisibleItem,visibleItemCount,totalItemCount)
+    MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount)
+  end
 end
 
 adapter=LuaMultiAdapter(activity,item)

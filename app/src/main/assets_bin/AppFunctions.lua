@@ -44,7 +44,6 @@ function showSnackBar(text)
   end
 end
 
-
 function isBinaryFile(filePath)
   local ioFile = io.open(filePath, "r")
   if ioFile then
@@ -184,7 +183,7 @@ function checkSharedActivity(name)
   if initExists then
     local latestConfig=getConfigFromFile(activity.getLuaDir("sub/"..name.."/init.lua"))
     local success,nowConfig=pcall(getConfigFromFile,sdActivityInitPath)
-    if not(success and nowConfig.appcode and latestConfig.appcode) or tonumber(latestConfig.appcode)>tonumber(nowConfig.appcode) then
+    if not(success and nowConfig.appcode and latestConfig.appcode) or tonumber(latestConfig.appcode)~=tonumber(nowConfig.appcode) then
       updateSharedActivity(name,sdActivityDir)
     end
    else

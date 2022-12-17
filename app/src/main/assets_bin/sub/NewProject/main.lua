@@ -159,7 +159,7 @@ viewPager.setOnPageChangeListener({
       bottomCardChild.setAlpha(positionOffsetX2-1)
       newPagePosition=position+1
     end
-  
+
     if pagePosition~=newPagePosition then
       pagePosition=newPagePosition
       setSharedData("newProject_pagePosition",newPagePosition)
@@ -170,6 +170,23 @@ viewPager.setOnPageChangeListener({
       NewProjectManager.refreshCreateEnabled(nowPageConfig,createButton)
       if nowPageConfig.onSelected then
         nowPageConfig.onSelected(nowPageConfig.ids,nowPageConfig)
+      end
+    end
+    if positionOffset>0 then
+      if toboolean(pageConfigsList[position+1].showElevation)~=toboolean(pageConfigsList[position+2].showElevation) then
+        if pageConfigsList[position+1].showElevation then
+          topCard.setElevation(theme.number.actionBarElevation*(1-positionOffset))
+         else
+          topCard.setElevation(theme.number.actionBarElevation*positionOffset)
+        end
+      end
+     else
+      if pageConfigsList[position+1].showElevation then
+        topCard.setElevation(theme.number.actionBarElevation)
+        LastActionBarElevation=theme.number.actionBarElevation
+       else
+        topCard.setElevation(0)
+        LastActionBarElevation=0
       end
     end
 

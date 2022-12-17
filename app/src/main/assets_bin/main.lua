@@ -383,6 +383,7 @@ function onConfigurationChanged(config)
   refreshSubTitle(screenWidthDp)
   --FilesTabManager.refreshMoveCloseHeight(config.screenHeightDp)
   PluginsUtil.callElevents("onConfigurationChanged", config)
+  toggle.onConfigurationChanged(config)
 end
 
 function onDeviceByWidthChanged(device, oldDevice)

@@ -1,5 +1,6 @@
 require "import"
 import "jesse205"
+import "android.text.Spannable"
 import "android.text.SpannableString"
 import "android.text.style.ForegroundColorSpan"
 import "net.lingala.zip4j.ZipFile"
@@ -190,7 +191,8 @@ function refresh()
           spannableSummary=SpannableString(summary)
           summary=nil
           for index,content in ipairs(summarySpanIndex) do
-            spannableSummary.setSpan(ForegroundColorSpan(content[1]),content[2],content[3],0)
+            --Spannable.SPAN_INCLUSIVE_INCLUSIVE
+            spannableSummary.setSpan(ForegroundColorSpan(content[1]),content[2],content[3],Spannable.SPAN_INCLUSIVE_INCLUSIVE)
           end
         end
         if ThemeUtil.isNightMode() and File(icon_night).isFile() then

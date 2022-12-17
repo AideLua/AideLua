@@ -1,6 +1,6 @@
 appname="日志猫"
-appver="2.3"
-appcode="2399"
+appver="2.5"
+appcode="2599"
 packagename="com.aidelua.logcat"
 developer="Jesse205"
 description="日志猫，像电脑一样轻松"

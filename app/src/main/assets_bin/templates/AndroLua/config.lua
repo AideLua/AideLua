@@ -13,6 +13,7 @@ keys={
   appLuaActivityX="com.androlua.LuaActivityX",
   appMainActivity="com.androlua.Main",
   appWelcomeActivity="com.androlua.Welcome",
+  appDependencies={"api project(':androlua')"}
 }
 
 tableConfigFormatter={

@@ -17,7 +17,7 @@
 ## Alert
 If you need to use the source code, please go to the <a href="/Jesse205/AideLua/releases">releases</a> page to download.
 
-Try not to change the repository directly in Github, because Github's repository is mirrored by Gitee。
+Please not to change the repository directly in Github, because Github's repository is mirrored by Gitee。
 
 ## Introduction
 Aide Lua is a Lua editor relying on Aide<br>
