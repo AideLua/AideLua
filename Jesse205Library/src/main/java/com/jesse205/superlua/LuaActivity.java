@@ -129,7 +129,8 @@ public class LuaActivity extends com.androlua.LuaActivity {
         else if (!file.isDirectory() && !path.endsWith(".lua"))
             path += ".lua";
         intent.putExtra("luaPath", path);
-		intent.putExtra("documentId", documentId);
+		intent.setData(Uri.parse("file://" + path + "?documentId=" + String.valueOf(documentId)));
+		//intent.putExtra("documentId", documentId);
         if (arg != null)
             intent.putExtra("arg", arg);
         if (newDocument) {
