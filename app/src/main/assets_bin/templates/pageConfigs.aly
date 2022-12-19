@@ -169,7 +169,7 @@
       .setTitle(activity.getString(R.string.reminder))
       .setMessage(activity.getString(R.string.project_create_tip))
       .setPositiveButton(R.string.create,function()
-        --showLoadingDia(nil,R.string.creating)
+        showLoadingDia(nil,R.string.creating)
         activity.newTask(config.newProjectFunc,config.updateFunc,config.callbackFunc)
         .execute({keys,formatList,unzipList,enabledComplexLibs,enabledJarLibs,enabledSimpleLibs,config.subTemplatePath})
       end)
@@ -195,7 +195,8 @@
         notLoadTheme=true
         require "jesse205"
         import "net.lingala.zip4j.ZipFile"
-        --print(enabledSimpleLibs)
+        this.update(activity.getString(R.string.project_create_gathering))
+
         keys=luajava.astable(keys,true)
         formatList=luajava.astable(formatList)
         unzipList=luajava.astable(unzipList)
@@ -216,10 +217,12 @@
         local mainLibsFile=File(mainLibsPath)
 
         --解压基础文件
+        this.update(activity.getString(R.string.project_create_unzip_base))
         for index,content in pairs(unzipList) do
           NewProjectUtil2.unzip(content,projectPath)
         end
 
+        this.update(activity.getString(R.string.project_create_unzip_slibs))
         for index,path in pairs(enabledSimpleLibs) do
           local file=File(path)
           if file.isFile() then
@@ -233,10 +236,12 @@
           end
         end
 
+        this.update(activity.getString(R.string.project_create_unzip_jarlibs))
         for index,content in pairs(enabledJarLibs) do
           FileUtil.copyDir(File(content),mainLibsFile,true)
         end
 
+        this.update(activity.getString(R.string.project_create_unzip_clibs))
         for index,content in pairs(enabledComplexLibs) do
           local deletePaths=content.delete
           if deletePaths then
@@ -264,11 +269,11 @@
 
           local libFormatFilesList=content.format
           if libFormatFilesList then
-            for index,content in ipairs(libFormatFilesList) do
-              table.insert(formatList,content)
-            end
+            NewProjectUtil2.addItemsToTable(formatList,libFormatFilesList)
           end
         end
+        this.update(activity.getString(R.string.project_create_write))
+
         NewProjectUtil2.loadKeysFormatter(subTemplatePath.."/keysFormatter.aly")
         local reallyKeysMap={}
         for index,content in ipairs(formatList) do
@@ -277,15 +282,17 @@
           fileContent=NewProjectUtil2.buildKeysInContent(fileContent,keys,reallyKeysMap)
           io.open(path,"w"):write(fileContent):close()
         end
+        return projectPath
       end)
+
     end,
     updateFunc=function(newValue)
-      print(newValue)
+      showLoadingDia(newValue)
     end,
     callbackFunc=function(success,value)
       closeLoadingDia()
       if success then
-        activity.result({"project_created_successfully",projectPath})
+        activity.result({"project_created_successfully",value})
        else
         AlertDialog.Builder(activity)
         .setTitle(activity.getString(R.string.project_create_failed))

@@ -215,6 +215,7 @@ return function(item)
               config={}
               iconUrl=android.R.drawable.sym_def_app_icon
             end
+            data.fileName=file.getName()
             data.title=title
             data.action="openProject"
             data.iconUrl=iconUrl
