@@ -78,7 +78,7 @@ function AndroluaProjectUtil.newProject(keys,BaseTemplateConfig,projectPath,Temp
   }
   for index,content in ipairs(unZipList) do
     if File(content).isFile() then
-    unzip(content,projectPath)
+      unzip(content,projectPath)
     end
   end
   unZipList=nil

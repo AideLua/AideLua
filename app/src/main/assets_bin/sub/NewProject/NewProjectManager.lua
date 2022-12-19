@@ -293,7 +293,7 @@ end
 
 ---构建前的数据准备，会调用 pageConfig.onBuildConfig，并自动转换为纯字符串或者列表。你只管调用就行了
 ---@param pageConfig table 页面配置
-function NewProjectManager.buildConfig(pageConfig)
+function NewProjectManager.buildConfig(pageConfig,appName,packageName)
   --模板配置
   local templateConfig = pageConfig.templateConfig
   --当前子模板配置
@@ -315,20 +315,21 @@ function NewProjectManager.buildConfig(pageConfig)
 
   local keysLists = {} --这是准备整合到keys的列表，一行一个keys
 
+  --让系统帮你处理安卓x，但是在部分模板上可能有bug。
+  local androidX = pageConfig.androidXState
+
   for index = 1, #templateConfigsList do --开始添加列表
     local config = templateConfigsList[index]
     table.insert(keysLists, config.keys)
     if config.formatList then
       NewProjectUtil2.addItemsToTable(formatList, config.formatList)
     end
-    if config.unzipList then
-      NewProjectUtil2.addItemsToTable(unzipList, config.unzipList)
+    if config.templatePath then
+      NewProjectManager.addTemplateZipsToUnzipList(unzipList,config.templatePath.."/baseTemplate",androidX)
     end
   end
-
-  --让系统帮你处理安卓x，但是在部分模板上可能有bug。
-  local androidX = pageConfig.androidxState
-
+  table.insert(keysLists,{appName=appName,appPackageName=packageName})
+  
   --响应构建key事件
   local onBuildConfig = pageConfig.onBuildConfig
   if onBuildConfig then
@@ -364,6 +365,15 @@ function NewProjectManager.buildConfig(pageConfig)
   end
 
   return keys, formatList, unzipList
+end
+
+function NewProjectManager.addTemplateZipsToUnzipList(unzipList,path,androidxState)
+  table.insert(unzipList,path.."/baseTemplate.zip")
+  if androidxState then
+    table.insert(unzipList,path.."/androidx.zip")
+   else
+    table.insert(unzipList,path.."/normal.zip")
+  end
 end
 
 return NewProjectManager

@@ -1,0 +1,12 @@
+{
+  include=function(content) -- settings.gradle中include的
+    return ",'"..table.concat(content,"','").."'"
+  end,
+  dependencies=function(content)--build.gradle/dependencies
+    content="\n    "..table.concat(content,"\n    ")
+  end,
+  appDependencies="dependencies",
+  appDependenciesEnd="dependencies",
+  dependenciesEnd="dependencies",
+  baseList="default",
+}

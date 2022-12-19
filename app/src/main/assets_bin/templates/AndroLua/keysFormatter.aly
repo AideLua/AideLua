@@ -1,0 +1,12 @@
+{
+  am_application=function(content)--AndroidManifest.xml/manifest/application
+    return "\n"..table.concat(content,"\n\n").."\n"
+  end,
+  am_activity_info=function(content)--AndroidManifest.xml/manifest/application/activity android:name
+    return "\n            "..table.concat(content,"\n            ")
+  end,
+  am_application_bottom="am_application",
+  am_welcome_info="am_activity_info",
+  am_main_info="am_activity_info",
+  baseList="../keysFormatter.aly"
+}

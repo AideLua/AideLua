@@ -40,10 +40,11 @@ createButton.onClick=function(view)--新建按钮
   if not(nowPageConfig) then
     return
   end
+  local appName,packageName
   if nowPageConfig.checkAppConfig then
     local ids=nowPageConfig.ids
-    local appName=ids.appNameEdit.text
-    local packageName=ids.packageNameEdit.text
+    appName=ids.appNameEdit.text
+    packageName=ids.packageNameEdit.text
     local appNameLay=ids.appNameLay
     local packageNameLay=ids.packageNameLay
     if NewProjectManager.checkAppConfigError(appName,packageName,appNameLay,packageNameLay,nowPageConfig) then
@@ -51,7 +52,7 @@ createButton.onClick=function(view)--新建按钮
     end
   end
 
-  local keys,formatList,unzipList=NewProjectManager.buildConfig(nowPageConfig)
+  local keys,formatList,unzipList=NewProjectManager.buildConfig(nowPageConfig,appName,packageName)
 
   if nowPageConfig.onCreatePrj then
     nowPageConfig.onCreatePrj(nowPageConfig.ids,nowPageConfig,keys,formatList,unzipList)

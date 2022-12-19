@@ -16,15 +16,3 @@ keys={
   appDependencies={"api project(':androlua')"}
 }
 
-tableConfigFormatter={
-  am_application=function(content)--AndroidManifest.xml/manifest/application
-    return "\n"..table.concat(content,"\n\n").."\n"
-  end,
-  am_activity_info=function(content)--AndroidManifest.xml/manifest/application/activity android:name
-    return "\n            "..table.concat(content,"\n            ")
-  end,
-}
-tableConfigFormatter.am_application_bottom=tableConfigFormatter.am_application
-tableConfigFormatter.am_welcome_info=tableConfigFormatter.am_activity_info
-tableConfigFormatter.am_main_info=tableConfigFormatter.am_activity_info
-

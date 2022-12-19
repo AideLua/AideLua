@@ -56,7 +56,7 @@
       local androidXSwitch=ids.androidXSwitch
       local androidXState=NewProjectManager.getSharedData(config._type,"androidxstate") or false
       androidXSwitch.setChecked(androidXState)
-      config.androidxState=androidXState
+      config.androidXState=androidXState
       ids.androidXSwitchParent.onClick=function()
         local nowState=androidXSwitch.isChecked()
         local newState=not(nowState)
@@ -150,20 +150,151 @@
       NewProjectManager.refreshState("androidx",androidXState,chipsList)
       --print(dump(enabledComplexLibs))
     end,
-    onCreatePrj=function(ids,config,keys)
-      print(dump(keys))
-    end,
-    onBuildConfig=function(ids,config,keysLists,formatList,defaultUnzipList)
-      --table.insert(keysLists,{androidX=ids.androidXSwitch.isChecked()})
+    onCreatePrj=function(ids,config,keys,formatList,unzipList)
+      --print(dump(keys))
+      local enabledComplexLibs={}--table列表，存放要用到的复杂库配置
+      local enabledJarLibs={}--string列表，存放文件夹路径
+      local enabledSimpleLibs={}--string列表，存放文件夹路径
+      for index,content in pairs(config.enabledComplexLibs) do
+        table.insert(enabledComplexLibs,{path=content.path,format=content.format,delete=content.delete})
+      end
+      for index,content in pairs(config.enabledJarLibs) do
+        table.insert(enabledJarLibs,content.path)
+      end
+      for index,content in pairs(config.enabledSimpleLibs) do
+        table.insert(enabledSimpleLibs,content.path)
+      end
 
+      AlertDialog.Builder(this)
+      .setTitle(activity.getString(R.string.reminder))
+      .setMessage(activity.getString(R.string.project_create_tip))
+      .setPositiveButton(R.string.create,function()
+        --showLoadingDia(nil,R.string.creating)
+        activity.newTask(config.newProjectFunc,config.updateFunc,config.callbackFunc)
+        .execute({keys,formatList,unzipList,enabledComplexLibs,enabledJarLibs,enabledSimpleLibs,config.subTemplatePath})
+      end)
+      .setNegativeButton(android.R.string.cancel,nil)
+      .show()
+    end,
+    onBuildConfig=function(ids,config,keysLists,formatList,unzipList)
+      local templatePath=config.templatePath
+      local subTemplatePath=config.subTemplatePath
+      local androidXState=config.androidXState
+      local appVer=config.appVersion[1]
+      local aluaVer=config.androluaVersion[1]
+      table.insert(keysLists,{androluaVersion=aluaVer,androluaVersionCode=config.androluaVersion[2]})
+      NewProjectManager.addTemplateZipsToUnzipList(unzipList,config.templatePath.."/baseTemplate/appTemplate/"..appVer,androidXState)
+      NewProjectManager.addTemplateZipsToUnzipList(unzipList,config.subTemplatePath.."/baseTemplate/appTemplate/"..aluaVer,androidXState)
       for index,content in pairs(config.enabledComplexLibs) do
         table.insert(keysLists,content.keys)
       end
+    end,
+    newProjectFunc=function(keys,formatList,unzipList,enabledComplexLibs,enabledJarLibs,enabledSimpleLibs,subTemplatePath)
+      return pcall(function()
+        require "import"
+        notLoadTheme=true
+        require "jesse205"
+        import "net.lingala.zip4j.ZipFile"
+        --print(enabledSimpleLibs)
+        keys=luajava.astable(keys,true)
+        formatList=luajava.astable(formatList)
+        unzipList=luajava.astable(unzipList)
+        enabledComplexLibs=luajava.astable(enabledComplexLibs,true)
+        enabledJarLibs=luajava.astable(enabledJarLibs)
+        enabledSimpleLibs=luajava.astable(enabledSimpleLibs)
+        import "NewProjectUtil2"
 
-      --print(dump(keysLists),dump(formatList),dump(defaultUnzipList))
+        import "com.jesse205.util.FileUtil"
 
+        --this.update(dump(keys))
+        local appName=keys.appName--文件夹名/应用名
+        local aluaVer=keys.androluaVersion
+        local projectPath=NewProjectUtil2.PRJS_PATH.."/"..appName--此工程根文件夹路径
+        local projectFile=File(projectPath)
+        local mainProjectPath=projectPath.."/app/src/main"
+        local mainLibsPath=projectPath.."/app/libs"
+        local mainLibsFile=File(mainLibsPath)
 
+        --解压基础文件
+        for index,content in pairs(unzipList) do
+          NewProjectUtil2.unzip(content,projectPath)
+        end
+
+        for index,path in pairs(enabledSimpleLibs) do
+          local file=File(path)
+          if file.isFile() then
+            NewProjectUtil2.unzip(path,mainProjectPath)
+           else
+            --通用模版
+            NewProjectUtil2.unzip(path.."/currency.zip",mainProjectPath)
+
+            --Androlua定制
+            NewProjectUtil2.unzip(("%s/%s.zip"):format(path,aluaVer),mainProjectPath)
+          end
+        end
+
+        for index,content in pairs(enabledJarLibs) do
+          FileUtil.copyDir(File(content),mainLibsFile,true)
+        end
+
+        for index,content in pairs(enabledComplexLibs) do
+          local deletePaths=content.delete
+          if deletePaths then
+            for index,content in pairs(deletePaths) do
+              LuaUtil.rmDir(File(projectPath.."/"..content))
+            end
+          end
+        end
+
+        for index,content in pairs(enabledComplexLibs) do
+          local path=content.path
+          local libProjectPath=path.."/project.zip"
+          local libAssetsPath=path.."/assets.zip"
+          local libJarPath=path.."/jarLibs.zip"
+          local libLuaLibsPath=path.."/luaLibs.zip"
+          local libJniLibsPath=path.."/jniLibs.zip"
+          local libResPath=path.."/res.zip"
+
+          NewProjectUtil2.unzip(libProjectPath,projectPath)
+          NewProjectUtil2.unzip(libAssetsPath,mainProjectPath.."/assets_bin")
+          NewProjectUtil2.unzip(libJarPath,mainLibsPath)
+          NewProjectUtil2.unzip(libLuaLibsPath,mainProjectPath.."/luaLibs")
+          NewProjectUtil2.unzip(libJniLibsPath,mainProjectPath.."/jniLibs")
+          NewProjectUtil2.unzip(libResPath,mainProjectPath.."/res")
+
+          local libFormatFilesList=content.format
+          if libFormatFilesList then
+            for index,content in ipairs(libFormatFilesList) do
+              table.insert(formatList,content)
+            end
+          end
+        end
+        NewProjectUtil2.loadKeysFormatter(subTemplatePath.."/keysFormatter.aly")
+        local reallyKeysMap={}
+        for index,content in ipairs(formatList) do
+          local path=projectPath.."/"..content
+          local fileContent=io.open(path):read("*a")
+          fileContent=NewProjectUtil2.buildKeysInContent(fileContent,keys,reallyKeysMap)
+          io.open(path,"w"):write(fileContent):close()
+        end
+      end)
+    end,
+    updateFunc=function(newValue)
+      print(newValue)
+    end,
+    callbackFunc=function(success,value)
+      closeLoadingDia()
+      if success then
+        activity.result({"project_created_successfully",projectPath})
+       else
+        AlertDialog.Builder(activity)
+        .setTitle(activity.getString(R.string.project_create_failed))
+        .setMessage(value)
+        .setPositiveButton(android.R.string.ok,nil)
+        .show()
+      end
     end
+
   },
   {
     name="LuaJ++",

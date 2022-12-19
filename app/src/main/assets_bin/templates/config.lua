@@ -35,16 +35,3 @@ keys={
   appDependenciesEnd={}, --app模块的build.prop依赖的底部
   include={}, --settings.gradle的包含的模块
 }
-
-tableConfigFormatter={
-  include=function(content) -- settings.gradle中include的
-    return ",'"..table.concat(content,"','").."'"
-  end,
-  dependencies=function(content)--build.gradle/dependencies
-    content="\n    "..table.concat(content,"\n    ")
-  end,
-}
-
-tableConfigFormatter.appDependencies=tableConfigFormatter.dependencies
-tableConfigFormatter.appDependenciesEnd=tableConfigFormatter.dependencies
-tableConfigFormatter.dependenciesEnd=tableConfigFormatter.dependencies
