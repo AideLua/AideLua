@@ -57,6 +57,7 @@ function ProjectManager.runProject(path)
         local componentName=ComponentName(nowConfig.packageName,nowConfig.debugActivity or "com.androlua.LuaActivity")
         intent.setComponent(componentName)
         intent.putExtra("key",nowConfig.key)
+        --intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
         activity.startActivity(intent)
       end)
       if not(success) then--无法通过调用其他app打开时

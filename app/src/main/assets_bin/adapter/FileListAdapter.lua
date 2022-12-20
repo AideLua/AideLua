@@ -244,6 +244,8 @@ return function(item)
               iconCard.setElevation(0)
             end
            else
+            iconCard.setRadius(0)
+            iconCard.setElevation(0)
             local options=RequestOptions()
             options.skipMemoryCache(true)--跳过内存缓存
             options.diskCacheStrategy(DiskCacheStrategy.NONE)--不缓冲disk硬盘中
@@ -263,9 +265,6 @@ return function(item)
                   and Color.alpha(bitmap.getPixel(maxX,maxY))>=0xFF then
                   iconCard.setRadius(math.dp2int(20))
                   iconCard.setElevation(math.dp2int(1))
-                 else
-                  iconCard.setRadius(0)
-                  iconCard.setElevation(0)
                 end
                 return false
               end,
@@ -273,9 +272,6 @@ return function(item)
                 if Build.VERSION.SDK_INT>=26 then--安卓8.0引入了自适应图标，因此将边框设为圆角
                   iconCard.setRadius(math.dp2int(20))
                   iconCard.setElevation(math.dp2int(1))
-                 else
-                  iconCard.setRadius(0)
-                  iconCard.setElevation(0)
                 end
               end
             })
