@@ -12,7 +12,7 @@ local keysFormatter={
     return "\nimport \""..table.concat(content,"\"\nimport \"").."\"\n"
   end,
   includeLua=function(content) -- config.lua中的
-    return "\""..table.concat(content,"\",\"").."\","
+    return ",\""..table.concat(content,"\",\"").."\""
   end,
 }
 --NewProjectUtil2.keysFormatter=keysFormatter
@@ -28,6 +28,7 @@ local function buildKeyItem(key,content)
       end
       if formatter then
         text=formatter(content)
+        --print(text,formatter,dump(content))
        else
         print("formatter not found",key,dump(content))
       end

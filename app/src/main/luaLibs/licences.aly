@@ -51,5 +51,4 @@
   },
   --Jesse205库使用的，必须放在最后，否则无法识别
   table.unpack(require("com.jesse205.app.licences")),
-
 }

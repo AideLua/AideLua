@@ -168,7 +168,7 @@ function show(content)--展示日志
           local typeIndex=utf8.len(title)
           title=title..logType.." /"..logTag.." ]"
           title=SpannableString(title)
-          title.setSpan(BackgroundColorSpan(type2color[logType]),typeIndex-1,typeIndex+2,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
+          title.setSpan(BackgroundColorSpan(type2color[logType] or 0xff9e9e9e),typeIndex-1,typeIndex+2,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
           title.setSpan(ForegroundColorSpan(0xFFFFFFFF),typeIndex-1,typeIndex+2,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
           title.setSpan(TypefaceSpan("monospace"),typeIndex-1,typeIndex+2,Spannable.SPAN_INCLUSIVE_INCLUSIVE)
         end

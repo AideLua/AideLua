@@ -121,6 +121,7 @@ local fileIcons={--各种文件的图标
   jpg=R.drawable.ic_image_outline,
   gif=R.drawable.ic_image_outline,
   jpeg=R.drawable.ic_image_outline,
+  webp=R.drawable.ic_image_outline,
   svg=R.drawable.ic_image_outline,
 
   --安装包类
@@ -152,6 +153,7 @@ local fileColors = {
 
   PNG = 0xFFF44336, -- 图片文件
   JPG = 0xFFF44336,
+  WEBP = 0xFFF44336,
 
   XML = 0xffff6f00, -- XML文件
   SVG = 0xffff6f00,
@@ -354,6 +356,7 @@ function FilesBrowserManager.loadMoreMenu(moreView)
   moreView.setOnTouchListener(popupMenu.getDragToOpenListener())
   popupMenu.inflate(R.menu.menu_main_file_upfile)
   local menu=popupMenu.getMenu()
+  menu.findItem(R.id.menu_newActivity).setEnabled(false)
   --打开当前路径菜单
   local currentFileMenu=menu.findItem(R.id.menu_openDir_currentFile)
   FilesBrowserManager.currentFileMenu=currentFileMenu--保存一下，方便标签管理器随时禁用

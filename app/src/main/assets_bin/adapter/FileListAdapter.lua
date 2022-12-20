@@ -46,6 +46,7 @@ local function fileMoreMenuClick(view)
   local tag=view.tag
   local popupMenu=tag.popupMenu
   popupMenu.show()
+
 end
 
 local openState2ViewType={
@@ -230,10 +231,18 @@ return function(item)
           end
           titleView.setText(title)
           messageView.setText(summary)
+          local iconCard=tag.iconCard
 
           --设置应用图标
           if type(iconUrl)=="number" then
             iconView.setImageResource(iconUrl)
+            if Build.VERSION.SDK_INT>=26 then--安卓8.0引入了自适应图标，因此将边框设为圆角
+              iconCard.setRadius(math.dp2int(20))
+              iconCard.setElevation(math.dp2int(1))
+             else
+              iconCard.setRadius(0)
+              iconCard.setElevation(0)
+            end
            else
             local options=RequestOptions()
             options.skipMemoryCache(true)--跳过内存缓存
@@ -242,7 +251,36 @@ return function(item)
             Glide.with(activity)
             .load(iconUrl)
             .apply(options)
+            .listener({
+              onResourceReady=function(resource, model, target, dataSource, isFirstResource)
+                local bitmap=resource.getBitmap()
+                local maxX=bitmap.getWidth()-1
+                local maxY=bitmap.getHeight()-1
+                --四周都有像素，说明是自适应图标
+                if Color.alpha(bitmap.getPixel(0,0))>=0xFF
+                  and Color.alpha(bitmap.getPixel(maxX,0))>=0xFF
+                  and Color.alpha(bitmap.getPixel(0,maxY))>=0xFF
+                  and Color.alpha(bitmap.getPixel(maxX,maxY))>=0xFF then
+                  iconCard.setRadius(math.dp2int(20))
+                  iconCard.setElevation(math.dp2int(1))
+                 else
+                  iconCard.setRadius(0)
+                  iconCard.setElevation(0)
+                end
+                return false
+              end,
+              onLoadFailed=function(e, model, target, isFirstResource)
+                if Build.VERSION.SDK_INT>=26 then--安卓8.0引入了自适应图标，因此将边框设为圆角
+                  iconCard.setRadius(math.dp2int(20))
+                  iconCard.setElevation(math.dp2int(1))
+                 else
+                  iconCard.setRadius(0)
+                  iconCard.setElevation(0)
+                end
+              end
+            })
             .into(iconView)
+
           end
 
         end

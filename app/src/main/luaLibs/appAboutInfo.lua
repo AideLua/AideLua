@@ -5,21 +5,21 @@ appInfo={
     message="为更快进行移动开发",
     iconResource=R.mipmap.ic_launcher_round,
     browserUrl="https://jesse205.github.io/aidelua",
-    clickable=true;
+    clickable=true,
   },
   {
     name="AIDE Pro",
     message="一个经魔改过的全新版本",
     iconResource=R.mipmap.ic_launcher_aide_round,
     browserUrl="https://aidepro.top/",
-    clickable=true;
+    clickable=true,
   },
   {
     name="Windmill",
     message="重认手机上的工具",
     iconResource=R.mipmap.ic_launcher_windmill_round,
     browserUrl="https://www.coolapk.com/apk/com.agyer.windmill",
-    clickable=true;
+    clickable=true,
   },
 }
 function onUpdate()

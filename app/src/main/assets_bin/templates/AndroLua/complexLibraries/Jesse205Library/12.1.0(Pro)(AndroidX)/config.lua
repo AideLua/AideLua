@@ -1,14 +1,14 @@
 name="Jesse205库"
 keys={
   appTheme="@style/Theme.Jesse205.Default",
-  appIncludeLua={"project:Jesse205Library"},
-  appInclude={":Jesse205Library"},
+  includeLua={"project:Jesse205Library"},
+  include={":Jesse205Library"},
   appDependencies={"api project(':Jesse205Library')"},
   appIcon="@mipmap/ic_launcher",
-  appLuaActivity="com.Jesse205.superlua.LuaActivity",
-  appLuaActivityX="com.Jesse205.superlua.LuaActivityX",
-  appMainActivity="com.Jesse205.superlua.Main",
-  appWelcomeActivity="com.Jesse205.superlua.Welcome",
+  appLuaActivity="com.jesse205.superlua.LuaActivity",
+  appLuaActivityX="com.jesse205.superlua.LuaActivityX",
+  appMainActivity="com.jesse205.superlua.Main",
+  appWelcomeActivity="com.jesse205.superlua.Welcome",
   am_welcome_info={"android:theme=\"@style/Theme.Jesse205.Welcome\""},
   am_main_info={"android:theme=\"@style/Theme.Jesse205.Welcome\""}
 }

@@ -67,6 +67,7 @@
   },
   jpg={super="png"},
   gif={super="png"},
+  webp={super="png"},
   --[[
   svg={
     editor="PhotoView",

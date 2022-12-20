@@ -3,7 +3,7 @@
     return ",'"..table.concat(content,"','").."'"
   end,
   dependencies=function(content)--build.gradle/dependencies
-    content="\n    "..table.concat(content,"\n    ")
+    return "\n    "..table.concat(content,"\n    ")
   end,
   appDependencies="dependencies",
   appDependenciesEnd="dependencies",

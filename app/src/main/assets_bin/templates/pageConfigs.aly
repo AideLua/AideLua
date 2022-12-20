@@ -164,14 +164,13 @@
       for index,content in pairs(config.enabledSimpleLibs) do
         table.insert(enabledSimpleLibs,content.path)
       end
-
       AlertDialog.Builder(this)
       .setTitle(activity.getString(R.string.reminder))
       .setMessage(activity.getString(R.string.project_create_tip))
       .setPositiveButton(R.string.create,function()
         showLoadingDia(nil,R.string.creating)
         activity.newTask(config.newProjectFunc,config.updateFunc,config.callbackFunc)
-        .execute({keys,formatList,unzipList,enabledComplexLibs,enabledJarLibs,enabledSimpleLibs,config.subTemplatePath})
+        .execute({keys,formatList,unzipList,enabledComplexLibs,String(enabledJarLibs),String(enabledSimpleLibs),config.subTemplatePath})
       end)
       .setNegativeButton(android.R.string.cancel,nil)
       .show()
@@ -184,7 +183,7 @@
       local aluaVer=config.androluaVersion[1]
       table.insert(keysLists,{androluaVersion=aluaVer,androluaVersionCode=config.androluaVersion[2]})
       NewProjectManager.addTemplateZipsToUnzipList(unzipList,config.templatePath.."/baseTemplate/appTemplate/"..appVer,androidXState)
-      NewProjectManager.addTemplateZipsToUnzipList(unzipList,config.subTemplatePath.."/baseTemplate/appTemplate/"..aluaVer,androidXState)
+      NewProjectManager.addTemplateZipsToUnzipList(unzipList,config.subTemplatePath.."/baseTemplate/androluaTemplate/"..aluaVer,androidXState)
       for index,content in pairs(config.enabledComplexLibs) do
         table.insert(keysLists,content.keys)
       end
@@ -201,8 +200,8 @@
         formatList=luajava.astable(formatList)
         unzipList=luajava.astable(unzipList)
         enabledComplexLibs=luajava.astable(enabledComplexLibs,true)
-        enabledJarLibs=luajava.astable(enabledJarLibs)
-        enabledSimpleLibs=luajava.astable(enabledSimpleLibs)
+        --enabledJarLibs=luajava.astable(enabledJarLibs)
+        --enabledSimpleLibs=luajava.astable(enabledSimpleLibs)
         import "NewProjectUtil2"
 
         import "com.jesse205.util.FileUtil"
@@ -223,7 +222,8 @@
         end
 
         this.update(activity.getString(R.string.project_create_unzip_slibs))
-        for index,path in pairs(enabledSimpleLibs) do
+        for index=0,#enabledSimpleLibs-1 do
+          local path=enabledSimpleLibs[index]
           local file=File(path)
           if file.isFile() then
             NewProjectUtil2.unzip(path,mainProjectPath)
@@ -235,11 +235,13 @@
             NewProjectUtil2.unzip(("%s/%s.zip"):format(path,aluaVer),mainProjectPath)
           end
         end
+        luajava.clear(enabledSimpleLibs)
 
         this.update(activity.getString(R.string.project_create_unzip_jarlibs))
-        for index,content in pairs(enabledJarLibs) do
-          FileUtil.copyDir(File(content),mainLibsFile,true)
+        for index=0,#enabledJarLibs-1 do
+          FileUtil.copyDir(File(enabledJarLibs[index]),mainLibsFile,true)
         end
+        luajava.clear(enabledJarLibs)
 
         this.update(activity.getString(R.string.project_create_unzip_clibs))
         for index,content in pairs(enabledComplexLibs) do
