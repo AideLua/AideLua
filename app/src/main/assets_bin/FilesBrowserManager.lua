@@ -70,7 +70,7 @@ local folderIcons={
   node_modules=R.drawable.ic_folder_cog_outline,
 }
 setmetatable(folderIcons,{__index=function(self,key)
-    return R.drawable.ic_folder_outline
+    return R.drawable.ic_folder_outline--默认是普通文件夹图标
 end})
 FilesBrowserManager.folderIcons=folderIcons
 
@@ -132,7 +132,7 @@ local fileIcons={--各种文件的图标
 
 }
 setmetatable(fileIcons,{__index=function(self,key)
-    return R.drawable.ic_file_outline
+    return R.drawable.ic_file_outline--默认是未知文件图标
 end})
 FilesBrowserManager.fileIcons=fileIcons
 
@@ -369,29 +369,30 @@ function FilesBrowserManager.loadMoreMenu(moreView)
       CreateFileUtil.showSelectTypeDialog(directoryFile)
      elseif id==Rid.menu_createDir then
       createDirsDialog(directoryFile)
+     elseif id==Rid.menu_newActivity then
      else
-      local nowProjectPath=ProjectManager.nowPath
-      local nowLibName,fileRelativePath
+      local nowProjectPath=ProjectManager.nowPath--当前工程路径
+      local nowModuleName,fileRelativePath--当前模块名称，文件香脆路径
       if ProjectManager.openState then
         fileRelativePath=ProjectManager.shortPath(directoryFile.getPath(),true,nowProjectPath)
-        if fileRelativePath:find("/") then
-          nowLibName=fileRelativePath:match("^(.-)/")
-         elseif #fileRelativePath~=0 then
-          nowLibName=fileRelativePath
+        if fileRelativePath:find("/") then--相对路径带有"/"，说明当前进入了字目录
+          nowModuleName=fileRelativePath:match("^(.-)/")
+         elseif #fileRelativePath~=0 then--当前长度不为0，说明当前目录名称就是模块名称
+          nowModuleName=fileRelativePath
          else
-          nowLibName="app"
+          nowModuleName="app"
         end
       end
       if id==Rid.menu_openDir_currentFile then
         openDirPath=FilesTabManager.file.getParent()
        elseif id==Rid.menu_openDir_assets then
-        openDirPath=("%s/%s/src/main/assets_bin"):format(nowProjectPath,nowLibName)
+        openDirPath=("%s/%s/src/main/assets_bin"):format(nowProjectPath,nowModuleName)
        elseif id==Rid.menu_openDir_java then
-        openDirPath=("%s/%s/src/main/java"):format(nowProjectPath,nowLibName)
+        openDirPath=("%s/%s/src/main/java"):format(nowProjectPath,nowModuleName)
        elseif id==Rid.menu_openDir_lua then
-        openDirPath=("%s/%s/src/main/luaLibs"):format(nowProjectPath,nowLibName)
+        openDirPath=("%s/%s/src/main/luaLibs"):format(nowProjectPath,nowModuleName)
        elseif id==Rid.menu_openDir_res then
-        openDirPath=("%s/%s/src/main/res"):format(nowProjectPath,nowLibName)
+        openDirPath=("%s/%s/src/main/res"):format(nowProjectPath,nowModuleName)
        elseif id==Rid.menu_openDir_projectRoot then
         openDirPath=nowProjectPath
       end
@@ -407,7 +408,6 @@ function FilesBrowserManager.loadMoreMenu(moreView)
   return popupMenu
 end
 
---FilesBrowserManager
 
 --打开文件浏览器
 function FilesBrowserManager.open()
@@ -865,13 +865,10 @@ function FilesBrowserManager.init()
       view.setBackground(dropFileFrameBackground)
      elseif action==DragEvent.ACTION_DRAG_ENTERED then
       dropFileFrameBackground.setColor(theme.color.rippleColorAccent)
-      --view.setBackgroundColor(theme.color.rippleColorAccent)
      elseif action==DragEvent.ACTION_DRAG_EXITED then
       dropFileFrameBackground.setColor(0)
-      --view.setBackgroundColor(0)
      elseif action==DragEvent.ACTION_DROP then
       dropFileFrameBackground.setColor(0)
-      --view.setBackgroundColor(0)
       if ProjectManager.openState then
         local data=event.getClipData()
         local count=data.getItemCount()
@@ -905,6 +902,22 @@ function FilesBrowserManager.init()
   end
   local downEvent={}
   recyclerView.tag.downEvent=downEvent
+end
+
+function FilesBrowserManager.getNowModuleDirName()
+  local nowProjectPath=ProjectManager.nowPath--当前工程路径
+  local nowModuleName,fileRelativePath--当前模块名称，文件香脆路径
+  if ProjectManager.openState then
+    fileRelativePath=ProjectManager.shortPath(directoryFile.getPath(),true,nowProjectPath)
+    if fileRelativePath:find("/") then--相对路径带有"/"，说明当前进入了字目录
+      nowModuleName=fileRelativePath:match("^(.-)/")
+     elseif #fileRelativePath~=0 then--当前长度不为0，说明当前目录名称就是模块名称
+      nowModuleName=fileRelativePath
+     else
+      nowModuleName="app"
+    end
+  end
+
 end
 
 function FilesBrowserManager.getOpenState()

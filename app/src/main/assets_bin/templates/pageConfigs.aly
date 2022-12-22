@@ -341,11 +341,9 @@
           }
         });
         "layouts.appConfigLayout";
+        "layouts.appVersionsLayout";
       };
     },
-    onSelected=function(ids,config)
-      --createButton.setEnabled(false)
-    end
   },
   --[[
   {

@@ -6,25 +6,23 @@ end
 function isSamePathFile(file1,file2)--通过文件本身
   return isSamePathFileByPath(file1.getPath(),file2.getPath())
 end
+
+---在 v5.1.1(51199) 返回结果改为 normalTable
 function createVirtualClass(normalTable)
-  local smartTable={}
   local metatable={
     __index=function(self,key)
-      if normalTable[key] then
-        return normalTable[key]
+      if rawget(self,key) then
+        return rawget(self,key)
        else
         local getter="get"..key:gsub("^%l",string.upper)
-        if normalTable[getter] then
-          return normalTable[getter]()
+        if rawget(self,getter) then
+          return rawget(self,getter)()
         end
       end
-    end,
-    __newindex=function(self,key,value)
-      normalTable[key]=value
     end
   }
-  setmetatable(smartTable,metatable)
-  return smartTable,metatable
+  setmetatable(normalTable,metatable)
+  return normalTable
 end
 
 function runLuaFile(file,code)

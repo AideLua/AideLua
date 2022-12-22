@@ -11,6 +11,7 @@ formatList={
 keys={
   appLuaActivity="com.androlua.LuaActivity",
   appLuaActivityX="com.androlua.LuaActivityX",
+  appDebugActivity="com.androlua.LuaActivity",
   appMainActivity="com.androlua.Main",
   appWelcomeActivity="com.androlua.Welcome",
   appDependencies={"api project(':androlua')"},

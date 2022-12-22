@@ -78,6 +78,7 @@ require "AppFunctions" -- 必须先导入这个，因为下面的导入模块要
 require "DialogFunctions"
 CreateFileUtil=require "CreateFileUtil"
 LuaEditorHelper=require "LuaEditorHelper"
+SubActivityUtil=require "SubActivityUtil"
 
 CopyMenuUtil=require "CopyMenuUtil"
 BuildToolUtil=require "buildtools.BuildToolUtil"

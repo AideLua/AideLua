@@ -32,6 +32,74 @@ end
         content=[[appname="{{ModuleName}}"
 ]],
       },
+      {
+        name="layout.aly",
+        content=[[{
+  LinearLayout;
+  layout_height="fill";
+  layout_width="fill";
+  orientation="vertical";
+  {
+    TextView;
+    gravity="center";
+    text="Hello World";
+    layout_height="fill";
+    layout_width="fill";
+  };
+}]],
+      },
+    },
+  },
+  {
+    name="普通 Activity (AndroidX)",--有enName时就是中文名，没enName时就是英文名
+    enName="Normal Activity (AndroidX)",--英文名
+    id="luaactivity_androidx",--标识
+    enabledVar="oldAndroidXSupport",
+    files={
+      {
+        name="main.lua",
+        content=[[require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+
+--activity.setTitle("{{ModuleName}}")
+activity.setTheme(R.style.AppTheme)
+activity.setContentView(loadlayout("layout"))
+actionBar=activity.getActionBar()
+actionBar.setDisplayHomeAsUpEnabled(true) 
+
+function onOptionsItemSelected(item)
+  local id=item.getItemId()
+  if id==android.R.id.home then
+    activity.finish()
+  end
+end
+
+]],
+      },
+      {
+        name="init.lua",
+        content=[[appname="{{ModuleName}}"
+]],
+      },
+      {
+        name="layout.aly",
+        content=[[{
+  CoordinatorLayout;
+  layout_height="fill";
+  layout_width="fill";
+  id="mainLay";
+  {
+    TextView;
+    gravity="center";
+    text="Hello World";
+    layout_height="fill";
+    layout_width="fill";
+  };
+}]],
+      },
     },
   },
 }

@@ -95,6 +95,10 @@ export default defineUserConfig({
                 text: 'config.lua',
                 link: '/project/aidelua/config.lua.html',
               },
+              {
+                text: 'bin.lua',
+                link: '/project/aidelua/bin.lua.html',
+              },
             ]
           },
           {

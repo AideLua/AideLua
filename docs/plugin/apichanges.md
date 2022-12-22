@@ -175,5 +175,10 @@ PluginsUtil：
 25. 新增 `EditorsManager.sharedDataChangeListeners`
     * 作用：更方便刷新配置
 26. 新增 `EditorsManager.refreshTypeface()` 、 `EditorsManager.checkAndRefreshTypeface()` 与 `EditorsManager.checkAndRefreshSharedDataListeners()`
+
+::: danger 警告
+此版本由于更改太多，文档不全，请参考 git 的变更信息
+:::
+
 ## 相关链接
 [应用更新日志](https://gitee.com/Jesse205/AideLua/blob/master/README.md)
