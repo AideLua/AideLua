@@ -139,6 +139,7 @@ screenWidthDp = 0
 
 import "FileDecoders"
 import "FileTemplates"
+import "ActivityTemplates"
 
 import "adapter.FileListAdapter"
 import "adapter.FilePathAdapter"

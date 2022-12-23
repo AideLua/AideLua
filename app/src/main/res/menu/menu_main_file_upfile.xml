@@ -32,6 +32,6 @@
         android:title="@string/directory_create"/>
     <item
         android:id="@+id/menu_newActivity"
-        android:title="@string/projects_newActivity"/>
+        android:title="@string/newActivity"/>
     
 </menu>

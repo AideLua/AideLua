@@ -118,7 +118,6 @@
     <string name="project_close">Close project</string>
     <string name="project_properties">Project properties</string>
     <string name="projects_path">Projects path</string>
-    <string name="projects_newActivity">New Activity</string>
     
     <string name="binpoject_loading">Packing...</string>
     <string name="binpoject_loading_with_parent">Packing...\n%1$s</string>
@@ -144,6 +143,8 @@
     <string name="binpoject_error_parse">Installation package (%1$s) parsing failed</string>
     <string name="binpoject_error_signer">Failed to sign, please sign manually.\nPath: %1$s</string>
     <string name="binpoject_cannotFindTool">Unable to find the corresponding version of ReBuildTool, please check if Aide Lua is updated</string>
+    
+	<string name="newActivity">New Activity</string>
     
     <string name="delete">Delete</string>
     <string name="delete_withName">Delete %1$s</string>

@@ -3,7 +3,6 @@
     SettingsLayUtil.TITLE;
     title=R.string.plugins_manager;
   };
-
   {
     SettingsLayUtil.ITEM_NOSUMMARY;
     icon=R.drawable.ic_puzzle_plus_outline;

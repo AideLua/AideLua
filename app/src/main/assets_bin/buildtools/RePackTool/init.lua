@@ -158,6 +158,7 @@ function RePackTool.repackApk_taskFunc(config,projectPath,install,sign)
       --Gradle打包
       buildPath.."/outputs/apk/release/app-release-unsigned.apk",--正式版
       buildPath.."/outputs/apk/debug/app-debug.apk",
+      mainAppPath.."/release/app-release.apk",
       --AIDE高级设置版打包
       binPath.."/app.apk",
       binPath.."/app-debug.apk",

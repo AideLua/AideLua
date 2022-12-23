@@ -20,7 +20,7 @@ end
 function CreateFileUtil.createFile(path,config)
   local file=File(path)
   local name=file.getName()
-  local moduleName=name:match("(.+)%.") or name
+  local moduleName=config.moduleName or name:match("(.+)%.") or name
   local shoredModuleName=moduleName:gsub("%.","_"):gsub("%[",""):gsub("%]",""):gsub("%:","_")
   if table.find(LuaReservedCharacters,shoredModuleName) then
     shoredModuleName="_"..shoredModuleName

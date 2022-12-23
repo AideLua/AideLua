@@ -58,6 +58,8 @@ local folderIcons={
   [".github"]=R.drawable.ic_folder_cog_outline,
   [".gradle"]=R.drawable.ic_folder_cog_outline,
   [".idea"]=R.drawable.ic_folder_cog_outline,
+  [".vscode"]=R.drawable.ic_folder_cog_outline,
+  [".obsidian"]=R.drawable.ic_folder_cog_outline,
   build=R.drawable.ic_folder_cog_outline,
   wrapper=R.drawable.ic_folder_cog_outline,
   gradle=R.drawable.ic_folder_cog_outline,
@@ -258,21 +260,21 @@ local relLibPathsMatch = {} -- 相对库路径匹配
 FilesBrowserManager.relLibPathsMatch = relLibPathsMatch
 
 local relLibPathsMatchPaths = {
-  "^.-/src/main/assets_bin/sub/.-/(.+)%.",
-  "^.-/src/main/assets_bin/sub/.-/(.+)$",
-  "^.-/src/main/assets_bin/activity/.-/(.+)%.",
-  "^.-/src/main/assets_bin/activity/.-/(.+)$",
-  "^.-/src/main/assets_bin/(.+)%.",
-  "^.-/src/main/assets_bin/(.+)$",
-  "^.-/src/main/assets/(.+)%.",
-  "^.-/src/main/assets/(.+)$",
-  "^.-/src/main/luaLibs/(.+)%.",
-  "^.-/src/main/luaLibs/(.+)$",
-  "^.-/src/main/jniLibs/.-/lib(.+)%.so",
-  "^.-/src/main/java/lua/(.+)%.",
-  "^.-/src/main/java/lua/(.+)$",
-  "^.-/src/main/java/(.+)%.java",
-  "^.-/src/main/java/(.+)%.kt",
+  "^[^/]-/src/main/assets_bin/sub/.-/(.+)%.",
+  "^[^/]-/src/main/assets_bin/sub/.-/(.+)$",
+  "^[^/]-/src/main/assets_bin/activity/.-/(.+)%.",
+  "^[^/]-/src/main/assets_bin/activity/.-/(.+)$",
+  "^[^/]-/src/main/assets_bin/(.+)%.",
+  "^[^/]-/src/main/assets_bin/(.+)$",
+  "^[^/]-/src/main/assets/(.+)%.",
+  "^[^/]-/src/main/assets/(.+)$",
+  "^[^/]-/src/main/luaLibs/(.+)%.",
+  "^[^/]-/src/main/luaLibs/(.+)$",
+  "^[^/]-/src/main/jniLibs/.-/lib(.+)%.so",
+  "^[^/]-/src/main/java/lua/(.+)%.",
+  "^[^/]-/src/main/java/lua/(.+)$",
+  "^[^/]-/src/main/java/(.+)%.java",
+  "^[^/]-/src/main/java/(.+)%.kt",
 }
 relLibPathsMatch.paths = relLibPathsMatchPaths
 
@@ -356,7 +358,7 @@ function FilesBrowserManager.loadMoreMenu(moreView)
   moreView.setOnTouchListener(popupMenu.getDragToOpenListener())
   popupMenu.inflate(R.menu.menu_main_file_upfile)
   local menu=popupMenu.getMenu()
-  menu.findItem(R.id.menu_newActivity).setEnabled(false)
+  --menu.findItem(R.id.menu_newActivity).setEnabled(false)
   --打开当前路径菜单
   local currentFileMenu=menu.findItem(R.id.menu_openDir_currentFile)
   FilesBrowserManager.currentFileMenu=currentFileMenu--保存一下，方便标签管理器随时禁用
@@ -370,8 +372,10 @@ function FilesBrowserManager.loadMoreMenu(moreView)
      elseif id==Rid.menu_createDir then
       createDirsDialog(directoryFile)
      elseif id==Rid.menu_newActivity then
+      SubActivityUtil.showSelectTypeDialog(directoryFile)
      else
       local nowProjectPath=ProjectManager.nowPath--当前工程路径
+      --[[
       local nowModuleName,fileRelativePath--当前模块名称，文件香脆路径
       if ProjectManager.openState then
         fileRelativePath=ProjectManager.shortPath(directoryFile.getPath(),true,nowProjectPath)
@@ -382,7 +386,8 @@ function FilesBrowserManager.loadMoreMenu(moreView)
          else
           nowModuleName="app"
         end
-      end
+      end]]
+      local nowModuleName=FilesBrowserManager.getNowModuleDirName()
       if id==Rid.menu_openDir_currentFile then
         openDirPath=FilesTabManager.file.getParent()
        elseif id==Rid.menu_openDir_assets then
@@ -904,20 +909,39 @@ function FilesBrowserManager.init()
   recyclerView.tag.downEvent=downEvent
 end
 
-function FilesBrowserManager.getNowModuleDirName()
+--肯定不是模块的文件夹
+local NoModuleDirMap={
+  [".aidelua"]=true,
+  [".git"]=true,
+  [".github"]=true,
+  [".gradle"]=true,
+  [".idea"]=true,
+  [".obsidian"]=true,
+  [".vscode"]=true,
+  gradle=true,
+  node_modules=true,
+  wrapper=true,
+}
+FilesBrowserManager.NoModuleDirMap=NoModuleDirMap
+
+---在 v5.1.1(51199) 添加
+function FilesBrowserManager.getNowModuleDirName(fileRelativePath)
   local nowProjectPath=ProjectManager.nowPath--当前工程路径
-  local nowModuleName,fileRelativePath--当前模块名称，文件香脆路径
+  local nowModuleName,fileRelativePath--当前模块名称，文件相对路径
   if ProjectManager.openState then
-    fileRelativePath=ProjectManager.shortPath(directoryFile.getPath(),true,nowProjectPath)
+    fileRelativePath=fileRelativePath or ProjectManager.shortPath(directoryFile.getPath(),true,nowProjectPath)
     if fileRelativePath:find("/") then--相对路径带有"/"，说明当前进入了字目录
       nowModuleName=fileRelativePath:match("^(.-)/")
      elseif #fileRelativePath~=0 then--当前长度不为0，说明当前目录名称就是模块名称
       nowModuleName=fileRelativePath
      else
-      nowModuleName="app"
+      nowModuleName=ProjectManager.nowConfig.mainModuleName
     end
   end
-
+  if NoModuleDirMap[nowModuleName] then
+    nowModuleName="app"
+  end
+  return nowModuleName
 end
 
 function FilesBrowserManager.getOpenState()

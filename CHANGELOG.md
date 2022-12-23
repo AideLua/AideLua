@@ -324,3 +324,5 @@
 ### v5.1.1
 1. 修复打开工程时的动画bug
 2. 修复Jesse205工程新建之后无法调试的bug
+3. 新增新建Activity功能
+4. 打包判断新增 app/release/app-release.apk

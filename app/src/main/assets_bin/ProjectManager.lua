@@ -94,9 +94,11 @@ function ProjectManager.openProject(path,filePath,openedDirPath)
     end
     local loadedConfig,config=pcall(RePackTool.getConfigByProjectPath,path)
     local projectMainPath,badPrj
+    local mainModuleName="app"
     if loadedConfig then
       local loadedTool,rePackTool=pcall(RePackTool.getRePackToolByConfig,config)
       if loadedTool then
+        mainModuleName=rePackTool.getMainModuleName(config)
         local mainProjectPath=RePackTool.getMainProjectDirByConfigAndRePackTool(path,config,rePackTool)
         if config.projectMainPath then
           projectMainPath=rel2AbsPath(config.projectMainPath,path)
@@ -116,6 +118,7 @@ function ProjectManager.openProject(path,filePath,openedDirPath)
     end
     config.projectMainPath=projectMainPath
     config.badPrj=badPrj
+    config.mainModuleName=mainModuleName
 
     openState=true
     nowFile=File(path)
