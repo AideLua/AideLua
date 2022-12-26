@@ -40,18 +40,14 @@ end
 function onActivityResult(requestCode,resultCode,data)
   if resultCode==Activity.RESULT_OK then
     if requestCode==REQUEST_INSTALLPLUGIN then
-      PluginsManagerUtil.installByUri(data.getData(),function(state)
-        if state=="success" then
-          MyToast(R.string.install_success)
-          PluginsUtil.clearOpenedPluginPaths()
-          refresh()
-         elseif state=="failed" then
-          MyToast(R.string.install_failed)
-        end
-      end)
+      installPlugin(data.getData())
     end
   end
 end
+--[[
+function onNewIntent(intent)
+  print(intent)
+end]]
 
 function onResume()
   refresh()
@@ -234,6 +230,22 @@ function refresh()
   adapter.notifyDataSetChanged()
 end
 
+function installPlugin(uri)
+  PluginsManagerUtil.installByUri(uri,function(state)
+    if state=="success" then
+      MyToast(R.string.install_success)
+      PluginsUtil.clearOpenedPluginPaths()
+      refresh()
+     elseif state=="failed" then
+      MyToast(R.string.install_failed)
+    end
+  end)
+end
+
+local fileUri=activity.getIntent().getExtras().get("fileUri")
+if fileUri then
+  installPlugin(fileUri)
+end
 adapter=SettingsLayUtil.newAdapter(settings2,onItemClick,onItemLongClick)
 recyclerView.setAdapter(adapter)
 layoutManager=LinearLayoutManager()

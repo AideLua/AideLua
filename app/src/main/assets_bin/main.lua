@@ -311,7 +311,7 @@ function onOptionsItemSelected(item)
    elseif id == Rid.menu_tools_luaManual_windmill then -- Lua 手册
     startWindmillActivity("手册")
    elseif id == Rid.menu_tools_manual then -- Lua 手册
-    openUrl("https://jesse205.github.io/AideLua")
+    openUrl("https://jesse205.github.io/AideLua/")
    elseif id == Rid.menu_more_settings then -- 设置
     newSubActivity("Settings")
    elseif id == Rid.menu_more_about then -- 关于

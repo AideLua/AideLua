@@ -326,3 +326,4 @@
 2. 修复Jesse205工程新建之后无法调试的bug
 3. 新增新建Activity功能
 4. 打包判断新增 app/release/app-release.apk
+5. 新建工程新增db模块

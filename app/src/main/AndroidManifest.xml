@@ -3,46 +3,32 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jesse205.aidelua2">
 
-    <!-- 读取通话状态和移动网络信息 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
-    <!-- 查看 WLAN 状态 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
-    <!-- 查看网络连接 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
-    <!-- 完全的网络访问权限 -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
-    <!-- 修改或删除 SD 卡中的内容 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
-    <!-- MANAGE_EXTERNAL_STORAGE -->
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>
 
-    <!-- READ_LOGS -->
     <uses-permission android:name="android.permission.READ_LOGS"/>
 
-    <!-- 直接下载文件而不显示通知 -->
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION"/>
 
-    <!-- 请求安装文件包 -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 
-    <!-- 运行前台服务 -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
-    <!-- 读取存储卡中的内容 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
-    <!-- Run commands in Termux environment -->
     <uses-permission android:name="com.termux.permission.RUN_COMMAND"/>
 
-    <!-- 后台弹窗 -->
     <uses-permission android:name="com.huawei.permission.POPUP_BACKGROUND_WINDOW"/>
 
-    <!-- 在其他应用之上显示内容 -->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <supports-screens
@@ -92,15 +78,10 @@
             android:name="com.jesse205.superlua.Main"
             android:exported="true"
             android:theme="@style/Theme.Jesse205.Welcome">
-
             <intent-filter>
-
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
-
             </intent-filter>
-
         </activity>
 
         <activity
@@ -135,6 +116,41 @@
         <meta-data
             android:name="android.app.shortcuts"
             android:resource="@xml/shortcuts"/>
+
+        <activity
+			android:label="@string/plugins_install"
+			android:name="com.jesse205.aidelua2.InstallPluginActivity"
+			android:exported="true">
+			<intent-filter>
+                <action
+                    android:name="android.intent.action.VIEW" />
+                <category
+                    android:name="android.intent.category.DEFAULT" />
+                <category
+                    android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data
+                    android:mimeType="application/alp" />
+                <data android:host="*" />
+                <data android:pathPattern=".*\.alp" />
+            </intent-filter>
+            <intent-filter>
+                <action
+                    android:name="android.intent.action.VIEW" />
+                <category
+                    android:name="android.intent.category.DEFAULT" />
+                <category
+                    android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:host="*" />
+                <data
+                    android:mimeType="application/octet-stream" />
+                <data
+                    android:mimeType="application/alp" />
+            </intent-filter>
+		</activity>
 
     </application>
 

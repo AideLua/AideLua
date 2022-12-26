@@ -119,7 +119,7 @@
     <string name="binpoject_loading">正在打包...</string>
     <string name="binpoject_loading_with_parent">正在打包...\n%1$s</string>
     <string name="binpoject_creating_variables">正在创建变量</string>
-    <string name="binpoject_arrangement">正在整理App</string>
+    <string name="binpoject_arrangement">正在整理 APP</string>
     <string name="binpoject_unzip">正在解压 %1$s</string>
     <string name="binpoject_unzip_done">解压完成</string>
     <string name="binpoject_copying">正在复制文件</string>
@@ -136,7 +136,7 @@
     <string name="binpoject_state_succeed_with_path">打包成功\n路径：%1$s</string>
     <string name="binpoject_state_succeed_with_path_needSign">打包成功，请手动签名\n路径：%1$s</string>
     <string name="binpoject_state_failed">打包失败</string>
-    <string name="binpoject_error_notfind">未找到 app.apk ，请先使用Aide打包。</string>
+    <string name="binpoject_error_notfind">未找到 app.apk ，请先使用 AIDE 打包。</string>
     <string name="binpoject_error_signer">签名失败，请手动签名\n路径：%1$s</string>
     <string name="binpoject_error_parse">安装包 (%1$s) 解析失败</string>
     <string name="binpoject_cannotFindTool">无法找到相应版本的 ReBuildTool，请检查 Aide Lua 是否有更新</string>

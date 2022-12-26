@@ -21,7 +21,8 @@ public class LuaActivity extends com.androlua.LuaActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
+		if (!checkUpdate)
+			checkUpdate = getIntent().getBooleanExtra("checkUpdate", false);
 		if (checkUpdate) {
             try {
                 PackageInfo packageInfo = getPackageManager().getPackageInfo(this.getPackageName(), 0);

@@ -1,7 +1,7 @@
 appname="Material Design 2 输入框"--插件名
 packagename="com.aidelua.md2edit"--插件包名
-appver="1.0"
-appcode=1099
+appver="1.1"
+appcode=1199
 mode="plugin"--模式：插件
 utilversion="3.1"--Util版本，此变量不起作用
 smallicon=true--当icon.png为小图标时，启用此项

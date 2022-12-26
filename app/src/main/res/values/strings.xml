@@ -139,7 +139,7 @@
     <string name="binpoject_state_succeed_with_path">Packaged successfully\nPath: %1$s</string>
     <string name="binpoject_state_succeed_with_path_needSign">Packaged successfully, please sign the Apk file. </string>
     <string name="binpoject_state_failed">Packaging failed</string>
-    <string name="binpoject_error_notfind">Not found app.apk, please use Aide to pack first</string>
+    <string name="binpoject_error_notfind">Not found app.apk, please use AIDE to pack first</string>
     <string name="binpoject_error_parse">Installation package (%1$s) parsing failed</string>
     <string name="binpoject_error_signer">Failed to sign, please sign manually.\nPath: %1$s</string>
     <string name="binpoject_cannotFindTool">Unable to find the corresponding version of ReBuildTool, please check if Aide Lua is updated</string>

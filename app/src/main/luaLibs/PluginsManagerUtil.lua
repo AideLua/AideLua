@@ -80,6 +80,8 @@ function PluginsManagerUtil.installByUri(uri,callback)
     File(AppPath.AppSdcardDataTempDir).mkdirs()
     local outputStream=FileOutputStream(path)
     LuaUtil.copyFile(inputStream,outputStream)
+   elseif scheme=="file" or scheme==nil then
+    path=uri.getPath()
    else
     return
   end
