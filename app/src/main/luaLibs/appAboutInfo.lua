@@ -68,8 +68,9 @@ openSourceLicenses=true
 ]]
 moreItem={
   {--交流群
-    SettingsLayUtil.ITEM_NOSUMMARY;
+    SettingsLayUtil.ITEM;
     title=R.string.jesse205_qqGroup;
+    summary="628045718",
     icon=R.drawable.ic_account_group_outline;
     newPage="newApp";
     qqGroup=628045718;
@@ -90,8 +91,9 @@ moreItem={
     };
   },
   {--频道
-    SettingsLayUtil.ITEM_NOSUMMARY;
+    SettingsLayUtil.ITEM;
     title=R.string.jesse205_qqChannel;
+    summary="t37c1u1nmw",
     icon=R.drawable.ic_qq_channel;
     newPage="newApp";
     url="https://pd.qq.com/s/n51c4k";
