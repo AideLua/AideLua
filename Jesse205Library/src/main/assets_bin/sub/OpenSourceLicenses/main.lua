@@ -1,7 +1,9 @@
 require "import"
 import "jesse205"
-import "licences"
+import "android.text.method.LinkMovementMethod"
+import "android.text.util.Linkify"
 
+import "licences"
 import "item"
 
 activity.setTitle(R.string.jesse205_openSourceLicense)
@@ -45,7 +47,7 @@ adapter=LuaCustRecyclerAdapter(AdapterCreator({
     licenseView.onClick=function(view)
       local data=ids._data
       local path=data.path
-      if path and File(path).isFile() then
+      if path then
         newSubActivity("HtmlFileViewer",{{title=data.license or data.licenseName,path=path,text=true}})
       end
     end
@@ -74,7 +76,10 @@ adapter=LuaCustRecyclerAdapter(AdapterCreator({
       licenseView.text=licenseName or license
       licenseView.setVisibility(View.VISIBLE)
       local filePath=fileBasePath:format(license or licenseName)
-      data.path=filePath
+      local paint=licenseView.getPaint()
+      if File(filePath).isFile() then
+        data.path=filePath
+      end
      else
       licenseView.setVisibility(View.GONE)
     end

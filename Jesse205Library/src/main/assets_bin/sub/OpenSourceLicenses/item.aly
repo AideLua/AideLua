@@ -31,6 +31,8 @@
           textColor=theme.color.textColorPrimary;
           id="message";
           textSize="14sp";
+          autoLinkMask=Linkify.ALL;
+          movementMethod=LinkMovementMethod.getInstance();
         };
         {
           AppCompatTextView;

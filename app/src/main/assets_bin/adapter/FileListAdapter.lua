@@ -62,6 +62,7 @@ local openState2ViewType={
 return function(item)
   return LuaCustRecyclerAdapter(AdapterCreator({
     getItemCount=function()
+      collectgarbage("collect")
       directoryFilesList=FilesBrowserManager.directoryFilesList
       if directoryFilesList then
         return #directoryFilesList+1
@@ -208,7 +209,6 @@ return function(item)
                 title=(config.appName or unknowString).." (Unable to get RePackTool)"
               end
               summary=config.packageName or unknowString
-              --iconUrl=FilesBrowserManager.getProjectIconForGlide(filePath,config,mainProjectPath)
               iconUrl=ProjectManager.getProjectIconPath(config,filePath,mainProjectPath) or android.R.drawable.sym_def_app_icon
              else--文件已损坏
               title="(Unable to load config.lua)"
@@ -223,6 +223,7 @@ return function(item)
             data.config=config
             data.rePackTool=rePackTool
             data.summary=summary
+            config,rePackTool=nil,nil
            else
             iconUrl=data.iconUrl
             config=data.config
@@ -266,6 +267,7 @@ return function(item)
                   iconCard.setRadius(math.dp2int(20))
                   iconCard.setElevation(math.dp2int(1))
                 end
+                luajava.clear(bitmap)
                 return false
               end,
               onLoadFailed=function(e, model, target, isFirstResource)
@@ -276,13 +278,9 @@ return function(item)
               end
             })
             .into(iconView)
-
           end
-
         end
       end
-
-
     end,
   }))
 

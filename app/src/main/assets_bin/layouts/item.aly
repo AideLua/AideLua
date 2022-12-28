@@ -111,7 +111,7 @@
         layout_margin="16dp";
         layout_width="24dp";
         layout_height="24dp";
-        imageResource=R.drawable.ic_folder_outline;
+        imageResource=R.drawable.ic_folder_open_outline;
         colorFilter=FilesBrowserManager.fileColors.folder;
       };
       {

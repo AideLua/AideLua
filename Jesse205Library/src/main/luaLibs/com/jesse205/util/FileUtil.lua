@@ -5,14 +5,14 @@ import "java.io.FileOutputStream"
 local FileUtil={}
 local function copyFile(fromFile,toFile,rewrite)
   local exists=toFile.exists()
-  if exists and not(rewrite) then
+  if exists and not rewrite then
     return
   end
   if exists then
     toFile.delete()
   end
   local toFileParent=toFile.getParentFile()
-  if not(toFileParent.isDirectory()) then
+  if not toFileParent.isDirectory() then
     toFileParent.mkdirs()
   end
   local fosfrom = FileInputStream(fromFile)
@@ -25,6 +25,9 @@ local function copyFile(fromFile,toFile,rewrite)
   end
   fosfrom.close()
   fosto.close()
+  luajava.clear(fosfrom)
+  luajava.clear(fosto)
+  luajava.clear(bt)
 end
 FileUtil.copyFile=copyFile
 
@@ -34,14 +37,17 @@ local function copyDir(fromFile,toFile,rewrite)
   end
   toFile.mkdirs()
   local toFilePath=toFile.getPath()
-  for index,content in ipairs(luajava.astable(fromFile.listFiles())) do
-    local newFile=File(toFilePath.."/"..content.getName())
-    if content.isFile() then
-      copyFile(content,newFile,rewrite)
+  local filesList=fromFile.listFiles()
+  for index=0,#filesList-1 do
+    local nowFile=filesList[index]
+    local newFile=File(toFilePath.."/"..nowFile.getName())
+    if nowFile.isFile() then
+      copyFile(nowFile,newFile,rewrite)
      else
-      copyDir(content,newFile,rewrite)
+      copyDir(nowFile,newFile,rewrite)
     end
   end
+  luajava.clear(filesList)
 end
 FileUtil.copyDir=copyDir
 

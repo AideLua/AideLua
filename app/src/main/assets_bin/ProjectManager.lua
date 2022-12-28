@@ -50,14 +50,12 @@ function ProjectManager.runProject(path)
   if openState then
     FilesTabManager.saveAllFiles()
     if nowConfig.badPrj then--损坏的项目
-
      elseif nowConfig.packageName then
       local success,err=pcall(function()
         local intent=Intent(Intent.ACTION_VIEW,Uri.parse(path or nowConfig.projectMainPath.."/main.lua"))
         local componentName=ComponentName(nowConfig.packageName,nowConfig.debugActivity or "com.androlua.LuaActivity")
         intent.setComponent(componentName)
         intent.putExtra("key",nowConfig.key)
-        --intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT)
         activity.startActivity(intent)
       end)
       if not(success) then--无法通过调用其他app打开时
@@ -121,6 +119,9 @@ function ProjectManager.openProject(path,filePath,openedDirPath)
     config.mainModuleName=mainModuleName
 
     openState=true
+    if nowFile then
+      luajava.clear(nowFile)
+    end
     nowFile=File(path)
     nowPath=path
 
@@ -159,6 +160,7 @@ function ProjectManager.openProject(path,filePath,openedDirPath)
   end)
   PluginsUtil.callElevents("onOpenProject", path,config)
   refreshMenusState()
+  collectgarbage("collect")
 end
 
 function ProjectManager.reopenProject()
@@ -179,15 +181,13 @@ function ProjectManager.closeProject(refreshFilesBrowser)
   FilesTabManager.closeAllFiles(false)
   if openState then
     setSharedData("openedFilePath_"..nowPath,openedFilePath)
+    luajava.clear(nowFile)
   end
   openState=false
   nowFile=nil
   nowPath=nil
   updateNowConfig(nil)
   setSharedData("openedProject",nil)
-  --FilesBrowserManager.directoryFilesList=nil
-  --FilesBrowserManager.setDirectoryFilesList({})
-
   EditorsManager.switchEditor("LuaEditor")
   local editor=EditorsManager.editor
   local defaultText=EditorsManager.editorConfig.defaultText

@@ -66,10 +66,11 @@ function RePackTool.getMainProjectDirByConfigAndRePackTool(projectDir,config,reP
   return RePackTool.getProjectDir(projectDir,rePackTool.getMainModuleName(config))
 end
 
-function RePackTool.repackApk_taskFunc(config,projectPath,install,sign)
+function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
   return pcall(function()
     require "import"
-    config=luajava.astable(config,true)
+    local config=luajava.astable(configJ,true)
+    luajava.clear(configJ)
     notLoadTheme=true
     import "jesse205"
     import "android.content.pm.PackageManager"

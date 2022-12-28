@@ -2,7 +2,7 @@
 local dp2intCache={}
 jesse205.dp2intCache=dp2intCache
 --[[清理dp2int缓存方法：
-table.clear(Jesse205.dp2int)
+table.clear(Jesse205.dp2intCache)
 ]]
 --其他关于屏幕数据获取方法已更改到ScreenFixUtil
 function math.dp2int(dpValue)

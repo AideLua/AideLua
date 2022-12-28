@@ -4,24 +4,25 @@ local SubActivityUtil={}
 local existsStr=getString(R.string.file_exists)
 local BASE_DIR_PATH="%s/%s/src/main/assets_bin/%s"
 local DIR_NAME_MATCH="^([^/]-)/src/main/assets_bin/([^/]+)"
-local DIR_NAMES_MAP={"sub","subActivity","subActivities","activity","activities"}
+local DIR_NAMES_LIST={"sub","subActivity","subActivities","activity","activities"}
 
 function SubActivityUtil.getDirPath(nowDir)
   local basePath=ProjectManager.nowPath--当前工程路径
   local fileRelativePath=ProjectManager.shortPath(nowDir.getPath(),true,basePath)
-  local moduleName,dirName=fileRelativePath:match(DIR_NAME_MATCH)
-  moduleName=moduleName or FilesBrowserManager.getNowModuleDirName(fileRelativePath)
-  if (moduleName and FilesBrowserManager.NoModuleDirMap[mainModule]) or not(dirName and table.find(DIR_NAMES_MAP,dirName)) then
-    if not moduleName or FilesBrowserManager.NoModuleDirMap[mainModule] then
-      moduleName=ProjectManager.nowConfig.mainModuleName
-    end
-    for index=1,#DIR_NAMES_MAP do
-      local path=BASE_DIR_PATH:format(basePath,moduleName,DIR_NAMES_MAP[index])
+  local moduleName,dirName=fileRelativePath:match(DIR_NAME_MATCH)--首先一键匹配模块文件夹名和活动文件夹名
+  if moduleName and not FilesBrowserManager.isModuleRootPath(nowDir.getPath().."/"..moduleName) then--非法模块名自动转为主模块
+    moduleName=ProjectManager.nowConfig.mainModuleName
+  end
+  moduleName=moduleName or FilesBrowserManager.getNowModuleDirName(fileRelativePath)--获取不到就调用单独的获取API
+  if not(dirName and table.find(DIR_NAMES_LIST,dirName)) then
+    for index=1,#DIR_NAMES_LIST do
+      local name=DIR_NAMES_LIST[index]
+      local path=BASE_DIR_PATH:format(basePath,moduleName,name)
       if File(path).isDirectory() then
-        return path,moduleName,DIR_NAMES_MAP[index]
+        return path,moduleName,name
       end
     end
-    dirName=DIR_NAMES_MAP[1]--没有任何文件夹存在，默认使用第一个
+    dirName=DIR_NAMES_LIST[1]--没有任何文件夹存在，默认使用第一个
   end
   return BASE_DIR_PATH:format(basePath,moduleName,dirName),moduleName,dirName
 end

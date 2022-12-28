@@ -58,8 +58,13 @@ function NewProjectManager.loadTemplate(path, parentTemplateConfig)
   configSuper.templateConfig = config --模板配置
 
   configSuper.subTemplatesMap = subTemplatesMap --子模板映射
-
-  setmetatable(config.keys, { __index = parentTemplateConfig.keys }) --可以直接访问父模板的变量
+  
+  --在 v5.1.1(51199) 添加空值判断
+  if config.keys then
+    setmetatable(config.keys, { __index = parentTemplateConfig.keys }) --可以直接访问父模板的变量
+    else
+    config.keys=parentTemplateConfig.keys
+  end
 
   --加载子模板
   if subTemplates then
@@ -329,7 +334,7 @@ function NewProjectManager.buildConfig(pageConfig,appName,packageName)
     end
   end
   table.insert(keysLists,{appName=appName,appPackageName=packageName})
-  
+
   --响应构建key事件
   local onBuildConfig = pageConfig.onBuildConfig
   if onBuildConfig then

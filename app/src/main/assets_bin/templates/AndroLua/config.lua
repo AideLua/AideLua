@@ -5,9 +5,11 @@ versions={
     {"5.0.18(1.1)(armeabi-v7a,arm64-v8a)",1199,true}
   }--所有androlua版本号
 }
+
 formatList={
   "androlua/build.gradle",
 }
+
 keys={
   appLuaActivity="com.androlua.LuaActivity",
   appLuaActivityX="com.androlua.LuaActivityX",

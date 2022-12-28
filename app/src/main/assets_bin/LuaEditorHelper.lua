@@ -265,7 +265,7 @@ function LuaEditorHelper.applyMagnifier(editor)
   end
 end
 
-function LuaEditorHelper.initKeysTaskFunc(keysList,packagesList)
+function LuaEditorHelper.initKeysTaskFunc(keysListJ,packagesListJ)
   require "import"
   import "androidApis.editor.androluaApis"
   import "androidApis.editor.systemApis"
@@ -280,8 +280,10 @@ function LuaEditorHelper.initKeysTaskFunc(keysList,packagesList)
     application.set("editorBaseList",names)
   end
   names=luajava.astable(names)
-  keysList=luajava.astable(keysList)
-  packagesList=luajava.astable(packagesList)
+  local keysList=luajava.astable(keysListJ)
+  local packagesList=luajava.astable(packagesListJ)
+  luajava.clear(keysListJ)
+  luajava.clear(packagesListJ)
   for index,content in ipairs(names) do--首先把已添加的标记一下
     namesCheck[content]=true
   end

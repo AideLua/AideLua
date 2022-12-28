@@ -2,14 +2,14 @@ import "GiteeUpdateUtil"
 appInfo={
   {
     name=R.string.app_name,
-    message="为更快进行移动开发",
+    message="为更快的移动开发",
     iconResource=R.mipmap.ic_launcher_round,
     browserUrl="https://jesse205.github.io/aidelua",
     clickable=true,
   },
   {
     name="AIDE Pro",
-    message="一个经魔改过的全新版本",
+    message="魔改过的全新版本",
     iconResource=R.mipmap.ic_launcher_aide_round,
     browserUrl="https://aidepro.top/",
     clickable=true,

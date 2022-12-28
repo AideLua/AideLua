@@ -133,7 +133,7 @@ function BuildToolUtil.repackApk(config,projectPath,install,sign)
       repackApk_building=false
       repackApk_callback(buildingDialog,success,message,apkPath,projectPath,install)
     end)
-    .execute({config,projectPath,install,sign})
+    .execute({HashMap(config),projectPath,install,sign})
 
     repackApk_building=true
   end

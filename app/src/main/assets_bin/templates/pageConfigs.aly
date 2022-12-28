@@ -43,6 +43,8 @@
     onInit=function(ids,config)
       --print(config.templateDirPath)
 
+      local filesList
+
       local configVersionsGroup=ids.configVersionsGroup
       local androluaVersionsGroup=ids.androluaVersionsGroup
       local templatePath=config.templatePath--主模板路径
@@ -105,9 +107,17 @@
       end
 
       --Jar库
-      for viewIndex,libraryFile in ipairs(luajava.astable(File(subTemplatePath.."/jarLibraries").listFiles())) do
+      filesList=luajava.astable(File(subTemplatePath.."/jarLibraries").listFiles())
+      table.sort(filesList,function(a,b)
+        return string.upper(a.getName())<string.upper(b.getName())
+      end)
+      for viewIndex,libraryFile in ipairs(filesList) do
         if libraryFile.isDirectory() then
-          for index,content in ipairs(luajava.astable(libraryFile.listFiles())) do
+          filesList=luajava.astable(libraryFile.listFiles())
+          table.sort(filesList,function(a,b)
+            return string.upper(a.getName())<string.upper(b.getName())
+          end)
+          for index,content in ipairs(filesList) do
             if content.isDirectory() then
               local path=content.getPath()
               local chipConfig={}
@@ -125,7 +135,11 @@
       end
 
       --简单库
-      for viewIndex,content in ipairs(luajava.astable(File(subTemplatePath.."/simpleLibraries").listFiles())) do
+      filesList=luajava.astable(File(subTemplatePath.."/simpleLibraries").listFiles())
+      table.sort(filesList,function(a,b)
+        return string.upper(a.getName())<string.upper(b.getName())
+      end)
+      for viewIndex,content in ipairs(filesList) do
         if content.isDirectory() then
           local chipConfig={}
           local path=content.getPath()
@@ -146,9 +160,7 @@
         config.showElevation=t>0
       end
 
-      --print(dump(config.androluaVersion))
       NewProjectManager.refreshState("androidx",androidXState,chipsList)
-      --print(dump(enabledComplexLibs))
     end,
     onCreatePrj=function(ids,config,keys,formatList,unzipList)
       --print(dump(keys))

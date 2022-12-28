@@ -70,6 +70,8 @@ local folderIcons={
   key=R.drawable.ic_folder_key_outline,
   keys=R.drawable.ic_folder_key_outline,
   node_modules=R.drawable.ic_folder_cog_outline,
+  assets_bin=R.drawable.ic_folder_home_outline,
+  assets=R.drawable.ic_folder_home_outline,
 }
 setmetatable(folderIcons,{__index=function(self,key)
     return R.drawable.ic_folder_outline--默认是普通文件夹图标
@@ -130,8 +132,12 @@ local fileIcons={--各种文件的图标
   apk=R.drawable.ic_android,
   apks=R.drawable.ic_android,
   aab=R.drawable.ic_android,
-  hap=R.drawable.ic_android,
+  hap=R.drawable.ic_all_application,
+  exe=R.drawable.ic_windows,
 
+  --终端脚本类(不包含py，lua)
+  sh=R.drawable.ic_terminal,
+  bat=R.drawable.ic_terminal,
 }
 setmetatable(fileIcons,{__index=function(self,key)
     return R.drawable.ic_file_outline--默认是未知文件图标
@@ -148,7 +154,8 @@ local fileColors = {
   APK = 0xFF00E676, -- 安卓应用程序
   APKS = 0xFF00E676,
   AAB = 0xFF00E676,
-  HAP = 0xFF00E676,
+  HAP = 0xff304ffe,
+  EXE = 0xff2979ff,
 
   LUA = 0xff2962ff,
   ALY = 0xff2196f3,
@@ -185,6 +192,9 @@ local fileColors = {
   XLS=0xff4caf50,
   XLSX=0xff4caf50,
   PDF=0xfff44336,
+
+  BAT=theme.color.textColorPrimary,
+  SH=theme.color.textColorPrimary,
 }
 FilesBrowserManager.fileColors = fileColors
 
@@ -460,27 +470,28 @@ function FilesBrowserManager.recordScrollPosition()
   end
 end
 
---[[
-刷新文件夹/进入文件夹
-@param file 要刷新或者进入的文件夹
-@param upFile 是否是向上，在 v3.1.0(31099) 作废，在之后的版本无实际作用
-@param force 强制刷新
-@param atOnce 立刻显示进度条
-]]
+
 local loadingFiles = false -- 正在加载文件列表
+---刷新文件夹/进入文件夹
+---@param file 要刷新或者进入的文件夹
+---@param upFile 是否是向上，在 v3.1.0(31099) 作废，在之后的版本无实际作用
+---@param force 强制刷新
+---@param atOnce 立刻显示进度条
+
+local showProgressRunnable=Runnable({
+  run = function()
+    if loadingFiles then
+      swipeRefresh.setRefreshing(true)
+    end
+  end
+})
 function FilesBrowserManager.refresh(file,upFile,force,atOnce)
   if force or not (loadingFiles) then
     loadingFiles=true
     if atOnce then
       swipeRefresh.setRefreshing(true)
      else
-      Handler().postDelayed(Runnable({
-        run = function()
-          if loadingFiles then
-            swipeRefresh.setRefreshing(true)
-          end
-        end
-      }), 100)
+      Handler().postDelayed(showProgressRunnable, 100)
     end
 
     if ProjectManager.openState then
@@ -499,9 +510,11 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
       import "java.util.Collections"
       import "java.util.Comparator"
       import "java.util.List"
-      local filesList=newDirectory.listFiles()
-      if filesList then
-        filesList=luajava.astable(filesList)--转换为LuaTable
+      local filesListJ=newDirectory.listFiles()
+      local filesList
+      if filesListJ then
+        filesList=luajava.astable(filesListJ)--转换为LuaTable
+        luajava.clear(filesListJ)
        else
         filesList={}
       end
@@ -534,7 +547,12 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
           end
         end
       end
-      return File(newList),newDirectory
+      local newListJ=File(newList)
+      newList=nil
+      filesList=nil
+      collectgarbage("collect")
+
+      return newListJ,newDirectory
     end,
     function(dataList,newDirectory)
       local path=newDirectory.getPath()
@@ -604,15 +622,15 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
             local rootPath=oldPath=="/" and "" or oldPath--oldPath为/时设置为空
             local position=#pathSplitList
             for name in string.split(ProjectManager.shortPath(path,true,rootPath),"/") do
-              --if name~="" then
-              rootPath=rootPath.."/"..name
-              table.insert(pathSplitList,{name,rootPath})
-              if position>0 then
-                pathAdapter.notifyItemChanged(position-1)
+              if name~="" then
+                rootPath=rootPath.."/"..name
+                table.insert(pathSplitList,{name,rootPath})
+                if position>0 then
+                  pathAdapter.notifyItemChanged(position-1)
+                end
+                pathAdapter.notifyItemInserted(position)
+                position=position+1
               end
-              pathAdapter.notifyItemInserted(position)
-              position=position+1
-              --end
             end
             --判断不出来
            else
@@ -638,8 +656,9 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
       end
       table.clear(adapterData)
 
+      FilesBrowserManager.clearAdapterData()
       FilesBrowserManager.directoryFilesList=dataList
-      FilesBrowserManager.nowFilePosition=nil
+      --FilesBrowserManager.nowFilePosition=nil
       swipeRefresh.setRefreshing(false)
       loadingFiles=false
 
@@ -655,16 +674,17 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
        else
         layoutManager.scrollToPosition(0)
       end
-
     end).execute({file,ProjectManager.openState})
   end
 end
 
 function FilesBrowserManager.clearAdapterData()
   table.clear(adapterData)
-  FilesBrowserManager.directoryFilesList=nil
-  FilesBrowserManager.nowFilePosition=nil
-  adapter.notifyDataSetChanged()
+  if FilesBrowserManager.directoryFilesList then
+    luajava.clear(FilesBrowserManager.directoryFilesList)
+    FilesBrowserManager.directoryFilesList=nil
+  end
+  collectgarbage("collect")
 end
 
 --文件长按菜单（包括右键菜单）
@@ -922,7 +942,13 @@ local NoModuleDirMap={
   node_modules=true,
   wrapper=true,
 }
+
+---在 v5.1.1(51199) 添加
 FilesBrowserManager.NoModuleDirMap=NoModuleDirMap
+
+function FilesBrowserManager.isModuleRootPath(path)
+  return File(path.."/build.gradle").isFile() or File(path.."/.aidelua").isDirectory()
+end
 
 ---在 v5.1.1(51199) 添加
 function FilesBrowserManager.getNowModuleDirName(fileRelativePath)
@@ -930,16 +956,11 @@ function FilesBrowserManager.getNowModuleDirName(fileRelativePath)
   local nowModuleName,fileRelativePath--当前模块名称，文件相对路径
   if ProjectManager.openState then
     fileRelativePath=fileRelativePath or ProjectManager.shortPath(directoryFile.getPath(),true,nowProjectPath)
-    if fileRelativePath:find("/") then--相对路径带有"/"，说明当前进入了字目录
-      nowModuleName=fileRelativePath:match("^(.-)/")
-     elseif #fileRelativePath~=0 then--当前长度不为0，说明当前目录名称就是模块名称
-      nowModuleName=fileRelativePath
-     else
-      nowModuleName=ProjectManager.nowConfig.mainModuleName
-    end
+    nowModuleName=fileRelativePath:match("^([^/]+)") or ProjectManager.nowConfig.mainModuleName
   end
-  if NoModuleDirMap[nowModuleName] then
-    nowModuleName="app"
+  local modulePath=nowProjectPath.."/"..nowModuleName
+  if not FilesBrowserManager.isModuleRootPath(modulePath) then
+    nowModuleName=ProjectManager.nowConfig.mainModuleName
   end
   return nowModuleName
 end
