@@ -1,6 +1,5 @@
 import { defineUserConfig } from 'vuepress'
 import { defaultTheme } from '@vuepress/theme-default'
-import { prismjsPlugin } from '@vuepress/plugin-prismjs'
 import { pwaPlugin } from '@vuepress/plugin-pwa'
 import { pwaPopupPlugin } from '@vuepress/plugin-pwa-popup'
 
@@ -18,7 +17,6 @@ export default defineUserConfig({
     ['meta', { name: 'msapplication-TileColor', content: '#3f51b5' }],
   ],
   base: "/AideLua/",
-
   theme: defaultTheme({
     // 在这里进行配置
     logo: '/images/aidelua.png',
@@ -289,9 +287,6 @@ export default defineUserConfig({
     }
   }),
   plugins: [
-    prismjsPlugin({
-      preloadLanguages: ["lua"]
-    }),
     pwaPlugin(),
     pwaPopupPlugin({
       locales: {

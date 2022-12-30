@@ -201,10 +201,11 @@ function refreshSubTitle(newScreenWidthDp)
   end
 end
 
+--啊这，扩展名写成类型了，就这样凑合用吧
 function getFileTypeByName(name)
-  local _type=name:match(".+%.(.+)")
-  if _type then
-    return string.lower(_type)
+  local extensions=name:match(".+%.(.+)")
+  if extensions then
+    return string.lower(extensions)
   end
 end
 

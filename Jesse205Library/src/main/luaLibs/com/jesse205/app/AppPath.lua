@@ -39,4 +39,10 @@ AppPath.AppMediaTempDir=mediaDirPath.."/files/temp"
 AppPath.AppDataTempDir=dataDirPath.."/files/temp"
 AppPath.AppSdcardDataTempDir=sdcardDataDirPath.."/files/temp"
 
+function AppPath.cleanTemp()
+  LuaUtil.rmDir(File(AppPath.AppMediaTempDir))
+  LuaUtil.rmDir(File(AppPath.AppDataTempDir))
+  LuaUtil.rmDir(File(AppPath.AppSdcardDataTempDir))
+end
+
 return AppPath

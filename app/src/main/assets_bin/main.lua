@@ -529,6 +529,7 @@ function onDestroy()
   if magnifierUpdateTi and magnifierUpdateTi.isRun() then
     magnifierUpdateTi.stop()
   end
+  AppPath.cleanTemp()
   PluginsUtil.callElevents("onDestroy")
 end
 

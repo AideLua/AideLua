@@ -267,7 +267,6 @@ return function(item)
                   iconCard.setRadius(math.dp2int(20))
                   iconCard.setElevation(math.dp2int(1))
                 end
-                luajava.clear(bitmap)
                 return false
               end,
               onLoadFailed=function(e, model, target, isFirstResource)
