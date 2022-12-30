@@ -334,11 +334,12 @@ function FilesBrowserManager.FilesRecyclerViewBuilder(context)
               end
               passDragFileTime=passDragFileTime+1
               local uri=activity.getUriForFile(data.file)
-              --授予应用权限（虽然这种方式很拉，但我可以箭头华为文件管理）
+              --授予应用权限（虽然这种方式很拉，但我可以兼容华为文件管理）
               local intent = Intent()
               intent.setAction("android.intent.action.SEND")
               intent.setFlags(268435456)
               intent.setType(activity.getContentResolver().getType(uri))
+              
               local infoList=activity.getPackageManager().queryIntentActivities(intent, 65536)
               for index=0,#infoList-1 do
                 activity.grantUriPermission(infoList[index].activityInfo.packageName, uri, 3)

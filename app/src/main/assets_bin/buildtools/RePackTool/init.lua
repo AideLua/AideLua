@@ -112,7 +112,6 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
            else
             updateError("Compilation failed "..err)
           end
-          --updateInfo("Compiled "..path)
           func=nil
           path=nil
          elseif content.name:find"%.aly$" then
@@ -125,7 +124,6 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
             updateError("Compilation failed "..err)
           end
           content.delete()
-          --updateInfo("Compiled "..path)
           func=nil
           path=nil
          elseif content.name==".nomedia" then

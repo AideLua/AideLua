@@ -1,9 +1,8 @@
 {
     "name": "aide-lua-pro",
-    "name_full": "Aide Lua Pro",
-    "version": "5.1.0",
+    "version": "5.1.1",
     "description": "依赖 Aide ，使用 Lua 快速、高效开发的工具",
-    "versionCode": 51099,
+    "versionCode": 51199,
     "minSdk": 21,
     "targetSdk": 29,
     "updateMsg": "太多了",
@@ -13,10 +12,9 @@
     "license": "MIT",
     "private": false,
     "devDependencies": {
-        "@vuepress/plugin-pwa": "^2.0.0-beta.53",
-        "@vuepress/plugin-pwa-popup": "^2.0.0-beta.53",
-        "add": "^2.0.6",
-        "vuepress": "^2.0.0-beta.53"
+        "@vuepress/plugin-pwa": "^2.0.0-beta.60",
+        "@vuepress/plugin-pwa-popup": "^2.0.0-beta.60",
+        "vuepress": "^2.0.0-beta.60"
     },
     "scripts": {
         "docs:dev": "vuepress dev docs",

@@ -4,65 +4,76 @@
 }
 
 :root {
-    --c-brand: #3F51B5; //主题色
-    --c-brand-light: #5C6BC0; //主题亮色
+    // brand colors
+    --c-brand: #3F51B5;
+    --c-brand-light: #5C6BC0;
 
+    // background colors
+    --c-bg: white;
     --c-bg-light: #F5F5F5; //亮背景色，用于表格，代码框，提示等
-    --c-bg-lighter: #EEEEEE; //更亮背景色，用于小代码框，代码框内高亮
+    --c-bg-lighter: #F5F5F5; //更亮背景色，用于小代码框，代码框内高亮
+    --c-bg-dark: #EEEEEE;
+    --c-bg-darker: #EEEEEE;
 
+    // text colors
     --c-text: black;
     --c-text-lighter: #1A237E;
     --c-text-quote: #616161;
 
+    // code blocks vars
     --code-ln-wrapper-width: 2rem;
     --code-bg-color: var(--c-bg-light);
-    --code-hl-bg-color: #E0E0E0 !important;
+    --code-hl-bg-color: #E0E0E0;
 
+    // border colors
     --c-border: #E0E0E0;
     --c-border-dark: #E0E0E0;
 
-    --c-tip: var(--c-brand) !important;
-
-    --c-warning: #FF6F00 !important;
-    --c-warning-text: #BF360C !important;
-    --c-warning-title: var(--c-warning) !important;
-    --c-warning-bg: rgba(255, 111, 0, 0.25);
-
-    --c-danger: #B71C1C !important;
-    --c-danger-text: #801414 !important;
-    --c-danger-title: var(--c-danger) !important;
-    --c-danger-bg: rgba(183, 28, 28, 0.25);
-
+    // custom container colors
+    --c-tip: var(--c-brand-light);
     --c-details-bg: var(--c-bg-light) !important;
 
+    // badge component colors
+    --c-badge-tip-text: white !important;
+    --c-badge-warning-text: white !important;
+    --c-badge-danger-text: white !important;
+
+    // font vars
     --font-family-code: "Consolas Code", "Consolas Code Online", Monaco, "Andale Mono", "Ubuntu Mono", monospace;
     --font-family: system-ui, "HarmonyOS Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
         Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-    --content-width: 960px;
+    // --content-width: 960px; //增大宽度
 }
 
 html.dark {
+    // brand colors
     --c-brand: #5C6BC0;
     --c-brand-light: #7986CB;
 
+    // background colors
     --c-bg: #212121;
     --c-bg-light: #303030;
-    --c-bg-lighter: #424242;
+    --c-bg-lighter: #303030;
+    --c-bg-dark: #424242;
+    --c-bg-darker: #424242;
 
+    // text colors
     --c-text: #F5F5F5;
     --c-text-lighter: #C5CAE9;
 
-    --code-hl-bg-color: var(--c-bg-lighter) !important;
+    // code blocks vars
+    --code-hl-bg-color: var(--c-bg-darker);
 
+    // border colors
     --c-border: #424242;
     --c-border-dark: #424242;
 
-    --c-details-bg: #424242;
+    // custom container colors
+    --c-tip: var(--c-brand)
+}
 
-
-    --c-warning-bg: rgba(255, 183, 77, 0.5);
-
-    --c-danger-bg: rgba(229, 115, 115, 0.6);
+.badge {
+    color: var(--c-badge-tip-text);
 }
 
 //缩小表格边距
@@ -72,7 +83,7 @@ td {
 }
 
 tr:nth-child(2n) {
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0, 0, 0, 0);
 }
 
 
@@ -110,7 +121,12 @@ div[class*=language-] .highlight-lines {
     margin: 0.8rem 0;
 }
 
-
+//缩小提示框横向边距
+.custom-container.tip,
+.custom-container.warning,
+.custom-container.danger {
+    padding: 0.1rem 1rem;
+}
 
 //代码高亮
 .token.string {
@@ -158,52 +174,12 @@ div[class*=language-] .highlight-lines {
     font-weight: bold;
 }
 
-.custom-container.tip,
-.custom-container.warning,
-.custom-container.danger {
-    padding: 0.1rem 1rem;
-    border-left-width: 0.4rem;
-}
-
-.custom-container.warning code {
-    background-color: rgba(0, 0, 0, 0.067);
-    color: var(--c-warning);
-}
-
-
-.custom-container.danger code {
-    background-color: rgba(0, 0, 0, 0.067);
-    color: var(--c-danger);
-}
-
-.dark .custom-container.warning code,
-.dark .custom-container.danger code {
-    background-color: rgba(255, 255, 255, 0.133);
-}
-
-.custom-container.warning blockquote,
-.custom-container.danger blockquote {
-    border-left: 0.2rem solid #757575;
-}
-
-.dark .custom-container.warning blockquote,
-.dark .custom-container.danger blockquote {
-    border-left: 0.2rem solid #bdbdbd;
-}
-
 .code-group__nav-tab {
     color: var(--c-text);
 }
 
-.badge {
-    color: white;
-}
-
-// 官方没有给lua写上语言标注，这里补一下
-div[class*=language-].ext-lua:before {
-    content: "lua";
-}
-
-div{
-    transition: background-color var(--t-color);
+html,
+body,
+div {
+    transition: background-color var(--t-color) !important;
 }
