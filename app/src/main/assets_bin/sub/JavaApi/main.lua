@@ -22,7 +22,7 @@ end
 activity.setTitle(R.string.javaApiViewer)
 actionBar.setDisplayHomeAsUpEnabled(true)
 actionBar.setDisplayShowCustomEnabled(true)
-actionBar.setCustomView(loadlayout("titleLayout"))
+actionBar.setCustomView(loadlayout2("titleLayout"))
 activity.setContentView(loadlayout2("layout"))
 
 searching=false
@@ -136,7 +136,6 @@ function searchItem(text,callback)
     if checkTextError(text) then
       return
     end
-
     refreshMenusState()
 
     --延迟展示进度条
@@ -174,6 +173,16 @@ function checkTextError(text)
   end
   return not success
 end
+
+ClearContentHelper.setupEditor(searchEdit,clearSearchBtn)
+
+local drawable=ThemeUtil.getRippleDrawable(theme.color.ActionBar.rippleColorPrimary)
+if Build.VERSION.SDK_INT>=23 then
+  drawable.setRadius(math.dp2int(16))
+end
+clearButton.setBackground(drawable)
+
+--clearSearchBtn.tooltip=getString(R.string.jesse205_clear)
 
 datas={}
 adp=MyLuaAdapter(activity,datas,item)

@@ -44,7 +44,8 @@ end
 refreshProjectsPath()
 ProjectManager.refreshProjectsPath=refreshProjectsPath
 
---运行项目
+---运行项目
+---@param path string 文件路径
 function ProjectManager.runProject(path)
   local code,projectMainFile
   if openState then
@@ -74,7 +75,8 @@ function ProjectManager.runProject(path)
   end
 end
 
---更新当前项目配置
+---更新当前项目配置
+---@param config table 项目config.lua配置
 local function updateNowConfig(config)
   nowConfig=config
   --做一系列刷新
@@ -83,12 +85,15 @@ end
 ProjectManager.updateNowConfig=updateNowConfig
 
 
---打开项目
-function ProjectManager.openProject(path,filePath,openedDirPath)
+---打开项目
+---@param path string 工程路径
+---@param filePath string 准备打开文件的路径，false为不打开
+---@param openDirPath string 打开文件夹路径，默认为默认打开文件的目录，没有打开文件就是工程目录，false为不刷新适配器
+function ProjectManager.openProject(path,filePath,openDirPath)
   xpcall(function()
     FilesBrowserManager.recordScrollPosition()
     if openedDirPath~=false then
-      FilesBrowserManager.clearAdapterData()
+      FilesBrowserManager.clearAdapterData(true)
     end
     local loadedConfig,config=pcall(RePackTool.getConfigByProjectPath,path)
     local projectMainPath,badPrj
@@ -128,30 +133,29 @@ function ProjectManager.openProject(path,filePath,openedDirPath)
     updateNowConfig(config)
     setSharedData("openedProject",path)
 
-    local nowBrowserDir,nowOpenedFile
+    local nowBrowserDir=nowFile
+    local nowOpenedFile
     if filePath~=false then
       filePath=filePath or getSharedData("openedFilePath_"..path)
       local defaultFile=File(config.projectMainPath.."/main.lua")
-
       if filePath then
         nowOpenedFile=File(filePath)
        elseif defaultFile.isFile() then
         nowOpenedFile=defaultFile
-       else
-        nowBrowserDir=nowFile
-      end
-      if nowOpenedFile then
-        FilesTabManager.openFile(nowOpenedFile,getFileTypeByName(nowOpenedFile.getName()), false)
-        nowBrowserDir=nowOpenedFile.getParentFile()
-       else
-        EditorsManager.switchEditor("NoneView")
       end
     end
-    if openedDirPath then
-      nowBrowserDir=File(openedDirPath)
+    if nowOpenedFile then
+      FilesTabManager.openFile(nowOpenedFile,getFileTypeByName(nowOpenedFile.getName()), false)
+      nowBrowserDir=nowOpenedFile.getParentFile()
+     else
+      EditorsManager.switchEditor("NoneView")
     end
-    if openedDirPath~=false then
-      FilesBrowserManager.refresh(nowBrowserDir,false,false,true)
+
+    if openDirPath then
+      nowBrowserDir=File(openDirPath)
+    end
+    if openDirPath~=false then
+      FilesBrowserManager.refresh(nowBrowserDir,nil,false,true)
     end
   end,
   function(err)
@@ -163,6 +167,7 @@ function ProjectManager.openProject(path,filePath,openedDirPath)
   collectgarbage("collect")
 end
 
+---重新打开工程
 function ProjectManager.reopenProject()
   if openState then
     FilesTabManager.saveFile()
@@ -171,13 +176,14 @@ function ProjectManager.reopenProject()
 end
 
 
---关闭项目
+---关闭项目
+---@param refreshFilesBrowser boolean 刷新文件浏览器，默认为true
 function ProjectManager.closeProject(refreshFilesBrowser)
   local openedFilePath
   if FilesTabManager.openState then
     openedFilePath=FilesTabManager.file.getPath()
   end
-  FilesBrowserManager.clearAdapterData()
+  FilesBrowserManager.clearAdapterData(true)
   FilesTabManager.closeAllFiles(false)
   if openState then
     setSharedData("openedFilePath_"..nowPath,openedFilePath)
@@ -196,7 +202,7 @@ function ProjectManager.closeProject(refreshFilesBrowser)
   editor.setText(defaultText)
   editor.setSelection(#defaultText)
   if refreshFilesBrowser~=false then
-    FilesBrowserManager.refresh(nil,false,false,true)
+    FilesBrowserManager.refresh(nil,nil,false,true)
   end
   PluginsUtil.callElevents("onCloseProject")
   refreshMenusState()
@@ -217,11 +223,13 @@ function ProjectManager.shortPath(path,max,basePath)
       basePath=projectsPath
     end
   end
-  if String(path).startsWith(basePath) then
+  local pathJ=String(path)
+  if pathJ.startsWith(basePath) then
     newPath=string.sub(path,string.len(basePath)+2)
    else
     newPath=path
   end
+  luajava.clear(pathJ)
   --开始检测字符串是否过长
   if max==true then
     return newPath
@@ -255,8 +263,8 @@ function ProjectManager.getExistingIconFileByContent(content,projectPath)
       if file then
         return file,path
       end
+     else
     end
-
     for index=1,#content do
       local subContent=content[index]
       if subContent then
@@ -283,7 +291,6 @@ function ProjectManager.getProjectIconPath(config,projectPath,mainProjectPath)
     mainProjectPath.."/res/drawable/ic_launcher.png",
     mainProjectPath.."/res/drawable/icon.png",
   }
-
   local file,path=ProjectManager.getExistingIconFileByContent(iconPaths,projectPath)
   return path
 end

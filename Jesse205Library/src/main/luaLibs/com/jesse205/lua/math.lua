@@ -1,4 +1,4 @@
---local resources=_G.resources
+import "android.util.TypedValue"
 local dp2intCache={}
 jesse205.dp2intCache=dp2intCache
 --[[清理dp2int缓存方法：
@@ -10,7 +10,6 @@ function math.dp2int(dpValue)
   if cache then
     return cache
    else
-    import "android.util.TypedValue"
     local cache=TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, resources.getDisplayMetrics())
     dp2intCache[dpValue]=cache
     return cache
@@ -20,5 +19,3 @@ function math.px2sp(pxValue)
   local scale=resources.getDisplayMetrics().scaledDensity
   return pxValue/scale
 end
-
---return math

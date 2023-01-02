@@ -215,14 +215,15 @@ import "jesse205"
 
       --一些模块/类
       "AppPath","ThemeUtil","EditDialogBuilder","ImageDialogBuilder",
-      "MyToast","AutoToolbarLayout","PermissionUtil",
+      "MyToast","AutoToolbarLayout","PermissionUtil","MyStyleUtil",
       "AutoCollapsingToolbarLayout","SettingsLayUtil","jesse205",
-      "StyleWidget","ScreenFixUtil","FileInfoUtils",
+      "StyleWidget","ScreenFixUtil","FileInfoUtils","ClearContentHelper",
+      "MyAnimationUtil",
 
-      --自定义View或者Util
+      --自定义View
       "MyTextInputLayout","MyCardTitleEditLayout","MyTitleEditLayout",
-      "MyEditDialogLayout","MyTipLayout","MySearchLayout","MyAnimationUtil",
-      "MyStyleUtil","MyRecyclerView",
+      "MyEditDialogLayout","MyTipLayout","MySearchLayout",
+      "MyRecyclerView",
 
       --适配器
       "MyLuaMultiAdapter","MyLuaAdapter","LuaCustRecyclerAdapter",

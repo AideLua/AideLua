@@ -19,9 +19,10 @@ FilesBrowserManager.refresh(file,upFile,force,atOnce): 刷新文件浏览器
   force: boolean: 强制刷新
   atOnce: boolean: 立刻显示进度条
 FilesBrowserManager.init(): 初始化管理器
+FilesBrowserManager.highlightIndex: 高亮显示的项目索引
 ]]
 local FilesBrowserManager = {}
-local lastContextMenu--上一次小ContextMenu，用于拖放时关闭Menu
+local lastContextMenu--上一次的ContextMenu，用于拖放时关闭Menu
 local passDragFileTime=0--拖放排除次数，因为自己本身就有拖动事件
 local providers={
   menuProviders={--参数：menuBuilder,config
@@ -231,7 +232,7 @@ end
 ---为Gradle获取项目路径
 ---在 v5.1.0(51099) 废除
 function FilesBrowserManager.getProjectIconForGlide(projectPath,config,mainProjectPath)
-  print("Warning","FilesBrowserManager.getProjectIconForGlide","This API has been deprecated in v5.1.0 (51099)")
+  print("警告:","FilesBrowserManager.getProjectIconForGlide","此API在 v5.1.0 (51099) 废弃")
   local adaptiveIcon
   if type(config.icon)=="table" then
     if ThemeUtil.isNightMode() then
@@ -257,9 +258,12 @@ function FilesBrowserManager.getProjectIconForGlide(projectPath,config,mainProje
     mainProjectPath.."/res/drawable/icon.png",
   }
   for index,content in pairs(icons) do
-    if content and File(content).isFile() then
+    local file=File(content)
+    if content and file.isFile() then
+      luajava.clear(file)
       return content
     end
+    luajava.clear(file)
   end
   return android.R.drawable.sym_def_app_icon
 end
@@ -331,6 +335,7 @@ function FilesBrowserManager.FilesRecyclerViewBuilder(context)
             if relativeX>math.dp2int(16) or relativeX<-math.dp2int(16) or relativeY>math.dp2int(16) or relativeY<-math.dp2int(16) then
               if lastContextMenu then
                 lastContextMenu.close()
+                lastContextMenu=nil
               end
               passDragFileTime=passDragFileTime+1
               local uri=activity.getUriForFile(data.file)
@@ -339,7 +344,7 @@ function FilesBrowserManager.FilesRecyclerViewBuilder(context)
               intent.setAction("android.intent.action.SEND")
               intent.setFlags(268435456)
               intent.setType(activity.getContentResolver().getType(uri))
-              
+
               local infoList=activity.getPackageManager().queryIntentActivities(intent, 65536)
               for index=0,#infoList-1 do
                 activity.grantUriPermission(infoList[index].activityInfo.packageName, uri, 3)
@@ -473,39 +478,43 @@ end
 
 
 local loadingFiles = false -- 正在加载文件列表
----刷新文件夹/进入文件夹
----@param file 要刷新或者进入的文件夹
----@param upFile 是否是向上，在 v3.1.0(31099) 作废，在之后的版本无实际作用
----@param force 强制刷新
----@param atOnce 立刻显示进度条
-
+local showProgressHandler=Handler()
 local showProgressRunnable=Runnable({
   run = function()
-    if loadingFiles then
-      swipeRefresh.setRefreshing(true)
-    end
+    swipeRefresh.setRefreshing(true)
   end
 })
-function FilesBrowserManager.refresh(file,upFile,force,atOnce)
+
+---刷新文件夹/进入文件夹
+---有内存泄露问题
+---@param file File 要刷新或者进入的文件夹
+---@param upFile boolean 是否是向上，在 v3.1.0(31099) 作废，之后的版本无实际作用
+---@param fileName string 文件名
+---@param force boolean 强制刷新
+---@param atOnce boolean 立刻显示进度条
+function FilesBrowserManager.refresh(file,fileName,force,atOnce)
   if force or not (loadingFiles) then
     loadingFiles=true
-    if atOnce then
-      swipeRefresh.setRefreshing(true)
-     else
-      Handler().postDelayed(showProgressRunnable, 100)
-    end
 
     if ProjectManager.openState then
-      file=file or directoryFile
+      file=file or directoryFile or ProjectManager.nowFile
+      --如果是工程路径的父路径，也就是用户关闭工程
       if isSamePathFileByPath(file.getPath(),ProjectManager.nowFile.getParent()) then
         ProjectManager.closeProject(false)
+        --设置文件夹为全局的工程文件夹，
         file=ProjectManager.projectsFile
       end
      else
       file=ProjectManager.projectsFile
     end
 
-    activity.newTask(function(newDirectory,projectOpenState)
+    if atOnce or isSamePathFile(file,ProjectManager.projectsFile) then
+      swipeRefresh.setRefreshing(true)
+     else
+      showProgressHandler.postDelayed(showProgressRunnable, 100)
+    end
+
+    activity.newTask(function(newDirectory,fileName,projectOpenState)
       require "import"
       import "java.io.File"
       import "java.util.Collections"
@@ -520,20 +529,32 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
         filesList={}
       end
       local newList={}--最终要返回的table
+      local itemIndex
       if projectOpenState then
         --按名称排序
         table.sort(filesList,function(a,b)
           return string.upper(a.getName())<string.upper(b.getName())
         end)
-        local folderIndex=1
+        local folderIndex=0
         for index,content in ipairs(filesList) do
+          local isMatchName=content.getName()==fileName
           if content.isDirectory() then
-            table.insert(newList,folderIndex,content)
+            if itemIndex and itemIndex>folderIndex then--项目索引比文件夹索引大，说明这个索引的是文件，要加1。因为folderIndex从0开始，itemIndex从1开始，因此不需要+1
+              itemIndex=itemIndex+1
+            end
             folderIndex=folderIndex+1
+            table.insert(newList,folderIndex,content)
+            if isMatchName then
+              itemIndex=folderIndex--因为后续还要加返回上一级项目，所以需要+1
+            end
            else
             table.insert(newList,content)
+            if isMatchName then
+              itemIndex=index--此时index就是现在文件的索引。因为后续还要加返回上一级项目，所以需要+1
+            end
           end
         end
+        folderIndex=nil
        else
         --按时间倒序(默认的就是按时间排序的)
         table.sort(filesList,function(a,b)
@@ -553,9 +574,11 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
       filesList=nil
       collectgarbage("collect")
 
-      return newListJ,newDirectory
+      return newListJ,newDirectory,itemIndex
     end,
-    function(dataList,newDirectory)
+    function(dataList,newDirectory,itemIndex)
+      showProgressHandler.removeCallbacks(showProgressRunnable)
+      swipeRefresh.setRefreshing(false)
       local path=newDirectory.getPath()
       --刷新路径指示器
       if ProjectManager.openState then
@@ -571,12 +594,19 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
         if oldPath==path then
           FilesBrowserManager.recordScrollPosition()--路径相同，记录一下位置
          else
+
+          local oldPathJ=oldPath and String(oldPath)
+          local pathJ=path and String(path)
+
           --是否返回
-          isBack=oldPath and String(oldPath).startsWith(path)
+          isBack=oldPath and oldPathJ.startsWith(path)
           --是否前进
-          isForward=oldPath and String(path).startsWith(oldPath)
+          isForward=oldPath and pathJ.startsWith(oldPath)
           --动画参数
           local anim_propertyName,anim_values
+
+          luajava.clear(oldPathJ)
+          luajava.clear(pathJ)
 
           if isForward then--是前进就记录滚动位置
             FilesBrowserManager.recordScrollPosition()
@@ -650,40 +680,52 @@ function FilesBrowserManager.refresh(file,upFile,force,atOnce)
           directoryFile=newDirectory
         end--路径不同判断完毕
        else--未打开工程
-        FilesBrowserManager.recordScrollPosition()
+        --FilesBrowserManager.recordScrollPosition()
+        local prjsPathScroll=filesPositions[path]
+        table.clear(filesPositions)
+        filesPositions[path]=prjsPathScroll
         table.clear(pathSplitList)--清空路径指示器
         directoryFile=nil--移除当前路径标识
         pathAdapter.notifyDataSetChanged()
       end
       table.clear(adapterData)
 
-      FilesBrowserManager.clearAdapterData()
+      FilesBrowserManager.clearAdapterData(false)
       FilesBrowserManager.directoryFilesList=dataList
-      --FilesBrowserManager.nowFilePosition=nil
-      swipeRefresh.setRefreshing(false)
+
+      FilesBrowserManager.highlightIndex=itemIndex
       loadingFiles=false
 
-      --刷新路径指示器
       adapter.notifyDataSetChanged()
       pathPlaceholderView.setVisibility(View.GONE)--用于在开启完整动画前提下快速显示列表。。。
       pathLayoutManager.scrollToPosition(#pathSplitList-1)
 
-      --恢复到之前保存的滚动位置
-      local scroll=filesPositions[path]
-      if scroll and not isForward then--前进必须不能有记录
-        layoutManager.scrollToPositionWithOffset(scroll[1],scroll[2])
+
+      if itemIndex then
+        layoutManager.scrollToPosition(itemIndex)
        else
-        layoutManager.scrollToPosition(0)
+        --恢复到之前保存的滚动位置
+        local scroll=filesPositions[path]
+        if scroll and not isForward then--前进必须不能有记录
+          layoutManager.scrollToPositionWithOffset(scroll[1],scroll[2])
+         else
+          layoutManager.scrollToPosition(0)
+        end
       end
-    end).execute({file,ProjectManager.openState})
+    end).execute({file,fileName,ProjectManager.openState})
   end
 end
 
-function FilesBrowserManager.clearAdapterData()
+---清空适配器数据
+---@param notify boolean 通知适配器刷新，默认为true
+function FilesBrowserManager.clearAdapterData(notify)
   table.clear(adapterData)
   if FilesBrowserManager.directoryFilesList then
     luajava.clear(FilesBrowserManager.directoryFilesList)
     FilesBrowserManager.directoryFilesList=nil
+  end
+  if notify~=false then
+    FilesBrowserManager.adapter.notifyDataSetChanged()
   end
   collectgarbage("collect")
 end
@@ -786,7 +828,7 @@ function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
               showSnackBar(R.string.file_exists)
              else
               LuaUtil.copyDir(file,newFile)
-              FilesBrowserManager.refresh()
+              FilesBrowserManager.refresh(parentFile,newName)
             end
            elseif id==Rid.menu_rename then--重命名
             renameDialog(file)
@@ -929,23 +971,6 @@ function FilesBrowserManager.init()
   local downEvent={}
   recyclerView.tag.downEvent=downEvent
 end
-
---肯定不是模块的文件夹
-local NoModuleDirMap={
-  [".aidelua"]=true,
-  [".git"]=true,
-  [".github"]=true,
-  [".gradle"]=true,
-  [".idea"]=true,
-  [".obsidian"]=true,
-  [".vscode"]=true,
-  gradle=true,
-  node_modules=true,
-  wrapper=true,
-}
-
----在 v5.1.1(51199) 添加
-FilesBrowserManager.NoModuleDirMap=NoModuleDirMap
 
 function FilesBrowserManager.isModuleRootPath(path)
   return File(path.."/build.gradle").isFile() or File(path.."/.aidelua").isDirectory()

@@ -1,6 +1,6 @@
 local pathSplitList=FilesBrowserManager.pathSplitList
 local function onClick(view)
-  FilesBrowserManager.refresh(File(view.tag),true)
+  FilesBrowserManager.refresh(File(view.tag))
 end
 
 local length=0

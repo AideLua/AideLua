@@ -247,21 +247,21 @@ function getFilePathCopyMenus(inLibDirPath,filePath,fileRelativePath,fileName,is
     addStrToTable(fileName,textList,textCheckList)
   end
   addStrToTable(fileRelativePath,textList,textCheckList)
+  --table.clear(textCheckList)
+  textCheckList=nil
   return textList
 end
 
 --这是去除./和../的
 function fixPath(path)
-  path=path.."/"
-  path=path:gsub("//","/")
-  path=path:gsub("/%./","/")
-  local newPath=path:gsub("[^/]-/%.%./","",1)--这么写是为了更快
-  while path~=newPath do
-    --print(path)
-    path=newPath
-    newPath=path:gsub("[^/]-/%.%./","",1)
-  end
-  return path:match("(.*)/")
+  path=(path.."/")
+  :gsub("//+","/")
+  :gsub("/%./","/")
+  repeat
+    local oldPath=path
+    path=oldPath:gsub("/[^/]+/%.%./","/",1)
+  until(oldPath==path)
+  return path:match("(.+)/") or "/"
 end
 
 --获取table的index列表

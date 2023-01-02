@@ -1,25 +1,27 @@
 if getSharedData("antiAddictionMode") then
-  if not application.get("antiAddictionModeReceiver") then
-    function checkTime()
-      if tonumber(os.date("%H"))~=12 or os.date("%A")~="Saturday" and os.date("%A")~="Sunday" then
-        os.exit()
-      end
+  function checkTime()
+    if tonumber(os.date("%H"))~=12 or os.date("%A")~="Saturday" and os.date("%A")~="Sunday" then
+      os.exit()
     end
-    import "android.content.BroadcastReceiver"
-    import "android.content.IntentFilter"
-    local filter = IntentFilter()
-    filter.addAction(Intent.ACTION_TIME_TICK)
-    filter.addAction(Intent.ACTION_TIME_CHANGED)
-
-    local receiver=BroadcastReceiver({
-      onReceive=function(context,intent)
-        checkTime()
-      end,
-    })
-    application.registerReceiver(receiver,filter)
-    application.set("antiAddictionModeReceiver",receiver)
-    checkTime()
   end
+  import "android.content.BroadcastReceiver"
+  import "android.content.IntentFilter"
+  local filter = IntentFilter()
+  filter.addAction(Intent.ACTION_TIME_TICK)
+  filter.addAction(Intent.ACTION_TIME_CHANGED)
+
+  local receiver
+  receiver=BroadcastReceiver({
+    onReceive=function(context,intent)
+      if activity.isFinishing() then--当activity正在退出的时候，注销广播
+        application.unregisterReceiver(receiver)
+       else
+        checkTime()
+      end
+    end,
+  })
+  application.registerReceiver(receiver,filter)
+  checkTime()
 end
 
 function getConfigFromFile(path,env)
@@ -40,10 +42,10 @@ end
 
 
 local richAnim=getSharedData("richAnim")
-local oldNewLayoutTransition=newLayoutTransition
+local newLayoutTransitionSuper=newLayoutTransition
 function newLayoutTransition()
   if richAnim then
-    return oldNewLayoutTransition()
+    return newLayoutTransitionSuper()
   end
 end
 

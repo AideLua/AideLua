@@ -41,10 +41,7 @@
       };
     },
     onInit=function(ids,config)
-      --print(config.templateDirPath)
-
       local filesList
-
       local configVersionsGroup=ids.configVersionsGroup
       local androluaVersionsGroup=ids.androluaVersionsGroup
       local templatePath=config.templatePath--主模板路径
@@ -153,7 +150,6 @@
         end
       end
 
-
       --页面滚动时调整阴影
       ids.scrollView.onScrollChange=function(view,l,t,oldl,oldt)
         MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,topCard)
@@ -163,12 +159,15 @@
       NewProjectManager.refreshState("androidx",androidXState,chipsList)
     end,
     onCreatePrj=function(ids,config,keys,formatList,unzipList)
-      --print(dump(keys))
+      local keysJ_L={}
       local enabledComplexLibs={}--table列表，存放要用到的复杂库配置
       local enabledJarLibs={}--string列表，存放文件夹路径
       local enabledSimpleLibs={}--string列表，存放文件夹路径
+      for index,content in pairs(keys)
+        keysJ_L[index]=type(content)=="table" and String(content) or content
+      end
       for index,content in pairs(config.enabledComplexLibs) do
-        table.insert(enabledComplexLibs,{path=content.path,format=content.format,delete=content.delete})
+        table.insert(enabledComplexLibs,HashMap({path=content.path,format=content.format and String(content.format),delete=content.delete and String(content.delete)}))
       end
       for index,content in pairs(config.enabledJarLibs) do
         table.insert(enabledJarLibs,content.path)
@@ -182,7 +181,7 @@
       .setPositiveButton(R.string.create,function()
         showLoadingDia(nil,R.string.creating)
         activity.newTask(config.newProjectFunc,config.updateFunc,config.callbackFunc)
-        .execute({keys,formatList,unzipList,enabledComplexLibs,String(enabledJarLibs),String(enabledSimpleLibs),config.subTemplatePath})
+        .execute({HashMap(keysJ_L),String(formatList),String(unzipList),ArrayList(enabledComplexLibs),String(enabledJarLibs),String(enabledSimpleLibs),config.subTemplatePath})
       end)
       .setNegativeButton(android.R.string.cancel,nil)
       .show()
@@ -200,25 +199,21 @@
         table.insert(keysLists,content.keys)
       end
     end,
-    newProjectFunc=function(keys,formatList,unzipList,enabledComplexLibs,enabledJarLibs,enabledSimpleLibs,subTemplatePath)
+    newProjectFunc=function(keysJ,formatListJ,unzipListJ,enabledComplexLibsJ,enabledJarLibsJ,enabledSimpleLibsJ,subTemplatePath)
       return pcall(function()
         require "import"
         notLoadTheme=true
         require "jesse205"
         import "net.lingala.zip4j.ZipFile"
-        this.update(activity.getString(R.string.project_create_gathering))
-
-        keys=luajava.astable(keys,true)
-        formatList=luajava.astable(formatList)
-        unzipList=luajava.astable(unzipList)
-        enabledComplexLibs=luajava.astable(enabledComplexLibs,true)
-        --enabledJarLibs=luajava.astable(enabledJarLibs)
-        --enabledSimpleLibs=luajava.astable(enabledSimpleLibs)
+        import "com.jesse205.util.FileUtil"
         import "NewProjectUtil2"
 
-        import "com.jesse205.util.FileUtil"
+        this.update(activity.getString(R.string.project_create_gathering))
+        local keys=luajava.astable(keysJ,true)
+        local formatList=luajava.astable(formatListJ)
+        luajava.clear(keysJ)
+        luajava.clear(formatListJ)
 
-        --this.update(dump(keys))
         local appName=keys.appName--文件夹名/应用名
         local aluaVer=keys.androluaVersion
         local projectPath=NewProjectUtil2.PRJS_PATH.."/"..appName--此工程根文件夹路径
@@ -229,13 +224,15 @@
 
         --解压基础文件
         this.update(activity.getString(R.string.project_create_unzip_base))
-        for index,content in pairs(unzipList) do
-          NewProjectUtil2.unzip(content,projectPath)
+        for index=0,#unzipListJ-1 do
+          NewProjectUtil2.unzip(unzipListJ[index],projectPath)
         end
+        luajava.clear(unzipListJ)
 
+        --解压简单库
         this.update(activity.getString(R.string.project_create_unzip_slibs))
-        for index=0,#enabledSimpleLibs-1 do
-          local path=enabledSimpleLibs[index]
+        for index=0,#enabledSimpleLibsJ-1 do
+          local path=enabledSimpleLibsJ[index]
           local file=File(path)
           if file.isFile() then
             NewProjectUtil2.unzip(path,mainProjectPath)
@@ -247,25 +244,29 @@
             NewProjectUtil2.unzip(("%s/%s.zip"):format(path,aluaVer),mainProjectPath)
           end
         end
-        luajava.clear(enabledSimpleLibs)
+        luajava.clear(enabledSimpleLibsJ)
 
         this.update(activity.getString(R.string.project_create_unzip_jarlibs))
-        for index=0,#enabledJarLibs-1 do
-          FileUtil.copyDir(File(enabledJarLibs[index]),mainLibsFile,true)
+        for index=0,#enabledJarLibsJ-1 do
+          FileUtil.copyDir(File(enabledJarLibsJ[index]),mainLibsFile,true)
         end
-        luajava.clear(enabledJarLibs)
+        luajava.clear(enabledJarLibsJ)
 
+        --解压复杂库
         this.update(activity.getString(R.string.project_create_unzip_clibs))
-        for index,content in pairs(enabledComplexLibs) do
-          local deletePaths=content.delete
+        --先删除一遍文件
+        for index=0,#enabledComplexLibsJ-1 do
+          local libConfig=enabledComplexLibsJ[index]
+          local deletePaths=libConfig.delete
           if deletePaths then
-            for index,content in pairs(deletePaths) do
-              LuaUtil.rmDir(File(projectPath.."/"..content))
+            for index=0,#deletePaths-1 do
+              LuaUtil.rmDir(File(projectPath.."/"..deletePaths[index]))
             end
           end
         end
 
-        for index,content in pairs(enabledComplexLibs) do
+        for index=0,#enabledComplexLibsJ-1 do
+          local content=enabledComplexLibsJ[index]
           local path=content.path
           local libProjectPath=path.."/project.zip"
           local libAssetsPath=path.."/assets.zip"
@@ -281,24 +282,26 @@
           NewProjectUtil2.unzip(libJniLibsPath,mainProjectPath.."/jniLibs")
           NewProjectUtil2.unzip(libResPath,mainProjectPath.."/res")
 
-          local libFormatFilesList=content.format
+          local libFormatFilesList=content.format and luajava.astable(content.format)
           if libFormatFilesList then
             NewProjectUtil2.addItemsToTable(formatList,libFormatFilesList)
           end
         end
-        this.update(activity.getString(R.string.project_create_write))
+        luajava.clear(enabledComplexLibsJ)
 
+        --格式化文件内容
+        this.update(activity.getString(R.string.project_create_write))
         NewProjectUtil2.loadKeysFormatter(subTemplatePath.."/keysFormatter.aly")
         local reallyKeysMap={}
-        for index,content in ipairs(formatList) do
-          local path=projectPath.."/"..content
+        for index=1,#formatList do
+          local path=projectPath.."/"..formatList[index]
           local fileContent=io.open(path):read("*a")
           fileContent=NewProjectUtil2.buildKeysInContent(fileContent,keys,reallyKeysMap)
           io.open(path,"w"):write(fileContent):close()
         end
+
         return projectPath
       end)
-
     end,
     updateFunc=function(newValue)
       showLoadingDia(newValue)

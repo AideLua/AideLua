@@ -24,6 +24,7 @@ local fastImport = {
   getNetErrorStr = "com.jesse205.util.getNetErrorStr",
   MyAnimationUtil = "com.jesse205.util.MyAnimationUtil",
   ScreenFixUtil = "com.jesse205.util.ScreenFixUtil",
+  ClearContentHelper = "com.jesse205.helper.ClearContentHelper",
   -- 导入各种风格的控件
   StyleWidget = "com.jesse205.widget.StyleWidget",
   MaterialButton_TextButton = "com.jesse205.widget.StyleWidget",
@@ -239,17 +240,21 @@ end
 function newSubActivity(name, ...)
   local nowDirFile = File(context.getLuaDir())
   local parentDirFile = nowDirFile.getParentFile()
+  local basePath
   if nowDirFile.getName() == "sub" then
-    newActivity(name, ...)
+    basePath="."
    elseif parentDirFile.getName() == "sub" then
-    if name:find("/") then
-      newActivity(parentDirFile.getPath() .. "/" .. name, ...)
-     else
-      newActivity(parentDirFile.getPath() .. "/" .. name .. "/main.lua", ...)
-    end
+    basePath=parentDirFile.getPath()
    else
-    newActivity("sub/" .. name, ...)
+    basePath="sub"
   end
+  if name:find("/") then
+    newActivity(basePath .. "/" .. name, ...)
+   else
+    newActivity(basePath .. "/" .. name .. "/main.lua", ...)
+  end
+  luajava.clear(nowDirFile)
+  luajava.clear(parentDirFile)
 end
 
 ---@param id number 资源ID
@@ -285,6 +290,7 @@ end
 function closeLoadingDia()
   if loadingDia then
     loadingDia.dismiss()
+    luajava.clear(loadingDia)
     loadingDia = nil
   end
 end
@@ -305,7 +311,9 @@ showErrorDialog = showSimpleDialog
 
 --- 自动初始化一个LayoutTransition
 function newLayoutTransition()
-  return LayoutTransition().enableTransitionType(LayoutTransition.CHANGING)
+  return LayoutTransition()
+  .enableTransitionType(LayoutTransition.CHANGING)
+  .setDuration(200)
 end
 
 -- 以下为复写事件

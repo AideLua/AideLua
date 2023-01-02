@@ -48,5 +48,6 @@
     <string name="jesse205_theme_orange">鲜橙</string>
     <string name="jesse205_theme_pink">嫩粉</string>
 	<string name="jesse205_ranking_random">排名不分先后顺序</string>
+	<string name="jesse205_clear">清空</string>
 	
 </resources>

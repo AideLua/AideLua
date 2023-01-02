@@ -19,52 +19,52 @@ t={
     layout_weight=1;
   };
   {
-    LinearLayout;
+    CardView;
     layout_width="fill";
-    layout_marginLeft="8dp";
-    layout_marginRight="8dp";
-    layout_margin="4dp";
+    elevation="4dp";
+    radius=0;
     {
-      MaterialButton_OutlinedButton;
-      id="formatButton";
-      text="转换",
+      LinearLayout;
       layout_width="fill";
-      layout_marginLeft="8dp";
-      layout_marginRight="8dp";
-      layout_weight=1;
-      --onClick="click";
-    } ,
-    {
-      MaterialButton_OutlinedButton;
-      id="previewButton";
-      text="预览";
-      layout_width="fill";
-      layout_marginLeft="8dp";
-      layout_marginRight="8dp";
-      layout_weight=1;
-      --onClick="click2";
+      layout_marginLeft="16dp";
+      layout_marginRight="16dp";
+      {
+        MaterialButton_TextButton_Normal;
+        id="formatButton";
+        text="转换",
+        layout_width="fill";
+        layout_weight=1;
+        minimumHeight="56dp";
+      } ,
+      {
+        MaterialButton_TextButton_Normal;
+        id="previewButton";
+        text="预览";
+        layout_width="fill";
+        layout_marginLeft="8dp";
+        layout_weight=1;
+        minimumHeight="56dp";
+      };
+      {
+        MaterialButton_TextButton_Normal;
+        id="copyButton";
+        text="复制";
+        layout_width="fill";
+        layout_marginLeft="8dp";
+        layout_weight=1;
+        minimumHeight="56dp";
+      };
+      {
+        MaterialButton_TextButton_Normal;
+        id="okButton";
+        text="确定";
+        layout_width="fill";
+        layout_marginLeft="8dp";
+        layout_weight=1;
+        minimumHeight="56dp";
+      };
     };
-    {
-      MaterialButton_OutlinedButton;
-      id="copyButton";
-      text="复制";
-      layout_width="fill";
-      layout_marginLeft="8dp";
-      layout_marginRight="8dp";
-      layout_weight=1;
-      --onClick="click3";
-    };
-    {
-      MaterialButton_OutlinedButton;
-      id="okButton";
-      text="确定";
-      layout_width="fill";
-      layout_marginLeft="8dp";
-      layout_marginRight="8dp";
-      layout_weight=1;
-      --onClick="click4";
-    } ,
-  }
+  };
 }
 
 function xml2table(xml)
@@ -159,6 +159,7 @@ previewButton.onClick=click2
 copyButton.onClick=click3
 okButton.onClick=click4
 
+edit.requestFocus()
 edit.onScrollChange=function(view,l,t,oldl,oldt)
   MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,dlg2_actionBar)
 end

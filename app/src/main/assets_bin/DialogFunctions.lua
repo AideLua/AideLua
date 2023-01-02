@@ -36,8 +36,11 @@ function createDirsDialog(nowDir)--创建文件夹对话框
   :setPositiveButton(R.string.create,function(dialog,text)
     local editLay=builder.ids.editLay
     local errorState
-    local fileName=text
-    local filePath=rel2AbsPath(fileName,nowDir.getPath())
+    local relativePath=text
+    local nowPath=nowDir.getPath()
+    local filePath=fixPath(rel2AbsPath(relativePath,nowPath))
+    local nowRelativePath=ProjectManager.shortPath(filePath,true,nowPath)
+    local nowCreatedName=nowRelativePath:match("^[^/]+")
     local file=File(filePath)
     if file.exists() then--文件不能存在
       editLay
@@ -49,7 +52,7 @@ function createDirsDialog(nowDir)--创建文件夹对话框
     xpcall(function()
       file.mkdirs()
       showSnackBar(R.string.create_success)
-      FilesBrowserManager.refresh(nowDir)
+      FilesBrowserManager.refresh(nowDir,nowCreatedName)
       --dialog.dismiss()
     end,
     function(err)
@@ -75,13 +78,13 @@ function renameDialog(oldFile)--重命名对话框
   :setPositiveButton(R.string.rename,function(dialog,text)
     local editLay=builder.ids.editLay
     local errorState
-    local newName=text
+    local relativePath=text
 
     local oldParentFile=oldFile.getParentFile()
     local oldFilePath=oldFile.getPath()
     local lowerOldFilePath=string.lower(oldFilePath)
 
-    local newFilePath=fixPath(rel2AbsPath(newName,oldParentFile.getPath()))
+    local newFilePath=fixPath(rel2AbsPath(relativePath,oldParentFile.getPath()))
     local newFile=File(newFilePath)
     local newParentFile=newFile.getParentFile()
     local lowerNewFilePath=string.lower(newFilePath)
@@ -110,7 +113,7 @@ function renameDialog(oldFile)--重命名对话框
       FilesTabManager.changePath(lowerOldFilePath,newFilePath)
 
       showSnackBar(R.string.rename_success)
-      FilesBrowserManager.refresh(newParentFile)
+      FilesBrowserManager.refresh(newParentFile,newFile.getName())
     end,
     function(err)
       showErrorDialog(R.string.rename_fail,err)

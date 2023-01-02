@@ -26,7 +26,7 @@
 6. 模块 `init.lua` 移除 `minemastercode` 、`targetmastercode` 、`supported` ，详情请见 Wiki
 7. 模块 `init.lua` 新增 `icon-night` ，自适应夜间模式图标
 
-### v5.1.0(51099)（原v5.0.4）
+### v5.1.0(51099) (原v5.0.4)
 ::: details API 名称变更
 SharedData：
 
@@ -34,6 +34,7 @@ SharedData：
 | ---- | ---- | --- |
 | Jesse205Lib_Highlight | jesse205Lib_support | 更全面设置 Jesse205 库 |
 | AndroidX_Highlight    | androidX_support | 更全面设置 AndroidX 库 |
+| ... | ... | ... |
 
 Jesse205 库：
 
@@ -43,6 +44,7 @@ Jesse205 库：
 | AppPath.AppSdcardCacheDataDir | AppPath.AppSdcardDataCacheDir | 路径：Android/data/`<packagename>`/cache |
 | AppPath.AppShareDir | AppPath.AppMediaDir | 路径：Android/media/`<packagename>`/cache |
 | AppPath.AppShareCacheDir | AppPath.AppMediaCacheDir | 路径：Android/media/`<packagename>`/cache |
+| ... | ... | ... |
 
 其他 API：
 
@@ -50,6 +52,7 @@ Jesse205 库：
 | ---- | ---- | --- |
 | RePackTool.getMainProjectName | RePackTool.getMainModuleName | 那个东西叫模块 |
 | EditorsManager.symbolBar.psButtonClick | EditorsManager.symbolBar.onButtonClickListener | 符号栏点击 |
+| ... | ... | ... |
 
 :::
 
@@ -62,6 +65,7 @@ Jesse205 库：
 | / | layouthelper | 布局助手页面 |
 | / | javaapi | JavaAPI查看器页面 |
 | / | viewclass | 查看类页面 |
+| ... | ... | ... |
 
 :::
 
@@ -71,6 +75,7 @@ Jesse205 库：
 | ---- | ---- | --- | --- |
 | FilesTabManager.closeFile | (lowerFilePath,`blockOpen`,changeEditor) | (lowerFilePath,`removeTab`,changeEditor) | __removeTab__: 移除文件标签，默认为`true` |
 | getFilePathCopyMenus | (inLibDirPath,filePath,fileName,isFile,fileType) | (inLibDirPath,filePath,`fileRelativePath`,<br>fileName,isFile,`isResDir`,fileType) | |
+| ... | ... |
 
 :::
 
@@ -84,6 +89,7 @@ Jesse205 库：
 | EditorsManager.keyWords | 默认关键词 |
 | EditorsManager.jesse205KeyWords | Jesse205 库关键词 |
 | EditorsManager.symbolBar.psButtonClick | 符号栏优化 |
+| ... | ... |
 
 ::::
 
@@ -110,18 +116,21 @@ Jesse205 库：
 | EditorsManager.refreshTypeface() | 刷新编辑器字体 |
 | EditorsManager.checkAndRefreshTypeface() | 检查并刷新编辑器字体 |
 | EditorsManager.checkAndRefreshSharedDataListeners() | 检查并刷新SharedData监听器 |
+| ... | ... |
 
 PluginsUtil：
 
 | 名称 | 说明 |
 | ---- | --- |
 | clearOpenedPluginPaths() | 清除已启用的插件路径列表 |
+| ... | ... |
 
 类库：
 
 | 名称 | 说明 |
 | ---- | --- |
 | db | LuaDB, [在 Github 上查看](https://github.com/limao996/LuaDB) |
+| ... | ... |
 
 :::
 
@@ -132,7 +141,7 @@ PluginsUtil：
 | onStart() | [了解详情](/AideLua/plugin/pages/main.html#onstart) |
 | onStop() | [了解详情](/AideLua/plugin/pages/main.html#onstop) |
 | onKeyShortcut(keyCode, event) | [了解详情](/AideLua/plugin/pages/main.html#onkeyshortcut-keycode-event) |
-
+| ... | ... |
 :::
 
 1. `FilesTabManager.closeFile(lowerFilePath,removeTab,changeEditor)` 第二个变量由原来没用的 `blockOpen` 改为 `removeTab` ，默认为 `true`
@@ -175,10 +184,20 @@ PluginsUtil：
 25. 新增 `EditorsManager.sharedDataChangeListeners`
     * 作用：更方便刷新配置
 26. 新增 `EditorsManager.refreshTypeface()` 、 `EditorsManager.checkAndRefreshTypeface()` 与 `EditorsManager.checkAndRefreshSharedDataListeners()`
+27. ......
 
 ::: danger 警告
-此版本由于更改太多，文档不全，请参考 git 的变更信息
+此版本由于更改太多，文档不全，请参考 git 的变更信息和软件源码
 :::
 
+### v5.1.1(51199)
+1. `NewProjectManager.applySingleCheckGroup()`修复未指定默认Chip时虽然有选择但是没有保存数据的bug，并弹出警告
+2. `createVirtualClass(normalTable)` 返回结果改为 normalTable
+3. 新增 `FilesBrowserManager.getNowModuleDirName(fileRelativePath)`
+4. 新增 `SubActivityUtil.lua`
+5. `NewProjectManager.loadTemplate` 允许 `keys` 为空值
+6. `MyCardTitleEditLayout.layout` 在 `CardView` 下面增加了 `FrameLayout`，并增加了清除按钮
+7. 新增 `ClearContentHelper`
+8. `FilesBrowserManager.refresh` 新增 `fileName` 参数，用于文件高亮显示
 ## 相关链接
 [应用更新日志](https://gitee.com/Jesse205/AideLua/blob/master/README.md)

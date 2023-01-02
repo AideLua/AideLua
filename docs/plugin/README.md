@@ -17,15 +17,15 @@ Util 版本：v3.1
 3. 标有 <Badge type="danger" text="*" vertical="middle" /> 的表示必须文件、方法 或 变量
 
 ::: danger 建议最低的最低适配软件版本
-我们强烈建议从 __v5.1.0(51099)或以上__ 开始适配，因为在 v5.1.0 发生了巨大变化，大到开发者自己都不知道改了啥。本文档非常多地方待修正或者补充，如果您发现了某处问题，希望您可以联系我们。
+我们强烈建议从 __v5.1.0(51099)或以上__ 开始适配，因为在 v5.1.0 发生了巨大变化，大到开发者自己都不知道改了啥。本文档有非常多地方待修正或者补充，如果您发现了某处有问题，希望您可以联系我们以修复。
 :::
 
 ## 手动导入
-1. 打开文件管理，进入 `内部存储/Android/media/com.Jesse205.aidelua2/files/plugins` ，没有就新建文件夹
-2. 下载插件（扩展名通常为 `zip` 或 `alp` ）
+1. 打开文件管理，进入 `内部存储/Android/media/com.Jesse205.aidelua2/files/plugins` ，如果没有此文件夹就手动新建一个
+2. 下载插件（扩展名通常为 `zip` 或 `alp` ，当然也不排除还有其他扩展名）
 3. 使用 zip 格式打开插件，打开 `init.lua` 文件，复制 `packagename` (包名) 的参数（ `=` 后面，不带引号）
 4. 在 `plugins` 文件夹 里面新建文件夹，重命名为 插件的 `packagename` (就是刚刚复制的文字)
-5. 解压插件内所有的文件，到 第4步新建的文件夹
+5. 解压插件内所有的文件，到*第4步*新建的文件夹
 6. 重启 AideLua
 
 ## 注意事项:
@@ -66,7 +66,7 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 |-------------|------------------------------------------------------------------------------------|
 | packageName | __string__: 插件包名，如果文件夹名与真正的 `init.lua` 中的 `packagename` 不同，则 `packageName` 传入文件夹名。 |
 
-#### PluginsUtil.clearOpenedPluginPaths() <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />
+#### PluginsUtil.clearOpenedPluginPaths() <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />
 清除已启用插件列表，用于重新加载插件
 
 ### activityName <Badge text="string" vertical="middle" />
@@ -76,11 +76,11 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 |--------------|-----------------------------------------------------------------------------------|
 | main         | 主页面                                                                               |
 | settings     | 软件设置页面                                                                            |
-| newproject   | 新建工程页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />       |
-| viewclass    | 查看类页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />        |
-| about        | 关于页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />         |
-| layouthelper | 布局助手页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" />       |
-| javaapi      | JavaAPI查看器页面 <Badge type="warning" text="在 v5.0.4(50499) 添加" vertical="middle" /> |
+| newproject   | 新建工程页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />       |
+| viewclass    | 查看类页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />        |
+| about        | 关于页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />         |
+| layouthelper | 布局助手页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />       |
+| javaapi      | JavaAPI查看器页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" /> |
 
 ### getPluginDataPath(packageName)
 获取插件数据目录，与 [`PluginsUtil.getPluginDataPath(packageName)`](#pluginsutil-getplugindatapath-packagename) 完全相同

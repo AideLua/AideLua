@@ -152,7 +152,6 @@ activity.setContentView(loadlayout2("layouts.layout"))
 actionBar.setTitle("Aide Lua")
 actionBar.setDisplayHomeAsUpEnabled(true)
 
-
 deviceChangeLTFixList={largeDrawerLay,largeMainLay,mainEditorLay,layoutTransition}
 
 function onCreate(savedInstanceState)
@@ -173,8 +172,8 @@ function onCreate(savedInstanceState)
     local filePath=savedInstanceState.getString("filepath")
     local dirPath=savedInstanceState.getString("dirpath")
     data=prjPath
-    data2=filePath
-    data3=dirPath
+    data2=filePath or false
+    data3=dirPath or false
   end
   if data then
     pathPlaceholderView.setVisibility(View.VISIBLE)
@@ -383,7 +382,6 @@ function onConfigurationChanged(config)
   drawerChild.setLayoutParams(drawerChildLinearParams)
   EditorsManager.refreshEditorScrollState()
   refreshSubTitle(screenWidthDp)
-  --FilesTabManager.refreshMoveCloseHeight(config.screenHeightDp)
   PluginsUtil.callElevents("onConfigurationChanged", config)
   toggle.onConfigurationChanged(config)
 end
@@ -456,7 +454,6 @@ function onResume()
     activity.recreate()
     return
   end
-  --refreshMagnifier()
   EditorsManager.magnifier.refresh()
 
   if notFirstOnResume then

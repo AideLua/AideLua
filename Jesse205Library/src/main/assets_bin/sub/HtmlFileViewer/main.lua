@@ -21,6 +21,9 @@ function onConfigurationChanged(config)
   MyAnimationUtil.ScrollView.onScrollChange(scrollView,scrollView.getScrollX(),scrollView.getScrollY(),0,0)
 end
 
+textView.setLinksClickable(true)
+textView.setMovementMethod(RTEditorMovementMethod.getInstance())
+textView.requestFocusFromTouch()
 if data.title then
   activity.setTitle(data.title)
 end

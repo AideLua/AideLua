@@ -17,14 +17,15 @@ return function(config)
   local actionMode=luajava.new(ActionMode.Callback,
   {
     onCreateActionMode=function(mode,menu)
-      mode.setCustomView(MyTitleEditLayout.load({
-        hint=config.hint or activity.getString(R.string.abc_search_hint);
-        text=config.text;
-      },ids))
+      mode.setCustomView(MyTitleEditLayout.load({{
+          hint=config.hint or activity.getString(R.string.abc_search_hint);
+          text=config.text;
+      }},ids))
       searchEdit=ids.searchEdit
 
       searchEdit.requestFocus()--搜索框取得焦点
       inputMethodService.showSoftInput(ids.searchEdit,InputMethodManager.SHOW_FORCED)
+      ClearContentHelper.setupEditor(searchEdit,ids.clearSearchBtn,theme.color.ActionBar.rippleColorPrimary)
 
       searchEdit.onEditorAction=function(view,actionId,event)
         if event then

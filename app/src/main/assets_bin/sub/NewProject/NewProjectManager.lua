@@ -29,10 +29,9 @@ local baseTemplateConfig = {
   }
 }
 
---[[加载模板
-path: 模板路径
-parentTemplateConfig: 父模板配置
-]]
+---加载模板
+---@param path string 模板路径
+---@param parentTemplateConfig table 父模板配置
 function NewProjectManager.loadTemplate(path, parentTemplateConfig)
   parentTemplateConfig = parentTemplateConfig or baseTemplateConfig
   local config = {}
@@ -58,11 +57,11 @@ function NewProjectManager.loadTemplate(path, parentTemplateConfig)
   configSuper.templateConfig = config --模板配置
 
   configSuper.subTemplatesMap = subTemplatesMap --子模板映射
-  
+
   --在 v5.1.1(51199) 添加空值判断
   if config.keys then
     setmetatable(config.keys, { __index = parentTemplateConfig.keys }) --可以直接访问父模板的变量
-    else
+   else
     config.keys=parentTemplateConfig.keys
   end
 
@@ -94,7 +93,8 @@ function NewProjectManager.loadTemplate(path, parentTemplateConfig)
   return config
 end
 
---仅检查工程是否存在，应用名为空等
+---仅检查工程是否存在，应用名为空等
+---@param appName string 应用名，也就是文件夹名
 function NewProjectManager.fastCheckAppNameError(appName)
   if appName == "" then
     return 1
@@ -104,7 +104,8 @@ function NewProjectManager.fastCheckAppNameError(appName)
   return false
 end
 
---仅检查包名为空等
+---仅检查包名为空等
+---@param packageName string 包名
 function NewProjectManager.fastCheckPackageNameError(packageName)
   if packageName == "" then
     return 1
@@ -115,7 +116,7 @@ end
 ---检查应用名，自动提示给用户，自动保存错误信息
 ---@param appName string 应用名
 ---@param appNameLay TextInputLayout 应用名编辑框的布局，主要用来显示错误信息
----@param config table 页面配置，用于在切换页面时的新建按钮可用判断
+---@param config table 页面配置，用于自动保存错误信息
 function NewProjectManager.checkAppName(appName, appNameLay, config)
   local appNameError = NewProjectManager.fastCheckAppNameError(appName)
   if appNameError then
@@ -131,7 +132,10 @@ function NewProjectManager.checkAppName(appName, appNameLay, config)
   return appNameError
 end
 
----同上
+---检查包名，自动提示给用户，自动保存错误信息
+---@param packageName string 包名
+---@param packageNameLay TextInputLayout 输入框布局
+---@param config table 页面配置，用于自动保存错误信息
 function NewProjectManager.checkPackageName(packageName, packageNameLay, config)
   local packageNameError = NewProjectManager.fastCheckPackageNameError(packageName)
   if packageNameError then
@@ -147,7 +151,7 @@ function NewProjectManager.checkPackageName(packageName, packageNameLay, config)
   return packageNameError
 end
 
---上面两个一块检查，包括创建按钮的状态
+---NewProjectManager.checkAppName与NewProjectManager.checkPackageName一块检查，并修改创建按钮的状态
 function NewProjectManager.checkAppConfigError(appName, packageName, appNameLay, packageNameLay, config)
   local appNameError = NewProjectManager.checkAppName(appName, appNameLay, config)
   local packageNameError = NewProjectManager.checkPackageName(packageName, packageNameLay, config)
@@ -161,7 +165,8 @@ function NewProjectManager.checkAppConfigError(appName, packageName, appNameLay,
   end
 end
 
---仅刷新创建按钮启用状态
+---仅刷新 创建按钮 的启用状态
+---@param config table 页面配置，用于获取错误信息
 function NewProjectManager.refreshCreateEnabled(config)
   if config.appNameError or config.packageNameError or config.helloWorld then
     createButton.setEnabled(false)
@@ -210,8 +215,10 @@ function NewProjectManager.refreshState(refreshType, state, chipsList)
   end
 end
 
---view.tag={viewIndex=index,enabledList=list}
-
+---普通多选Chip监听器，用于保存启用的列表
+---view.tag={viewIndex=index,enabledList=list}
+---@param view Chip
+---@param isChecked boolean 是否选中
 function NewProjectManager.onChipCheckChangedListener(view, isChecked)
   local config = view.tag
   local viewIndex = config.viewIndex
@@ -227,10 +234,13 @@ function NewProjectManager.onChipCheckChangedListener(view, isChecked)
   end
 end
 
+--不确定保存java对象之后会不会降低内存占用
+local onChipCheckChangedListenerJ=Chip.OnCheckedChangeListener{onCheckedChanged=NewProjectManager.onChipCheckChangedListener}
+
 ---为页面添加单选Chip
 ---@param group ChipGroup Chip的父布局
 ---@param chipConfig table Chip信息，1为名称，2为版本号，3为默认选中（仅selectedText为nil或者false时）
----@param selectedText string 已选中的Chip显示信息
+---@param selectedText string 已选中的Chip显示信息，用于判断该Chip是否已选中
 ---@param chipList table Chip列表，用于查看是否支持AndroidX
 function NewProjectManager.addSingleChip(group,chipConfig,selectedText,chipsList)
   local title=chipConfig[1]
@@ -248,6 +258,11 @@ function NewProjectManager.addSingleChip(group,chipConfig,selectedText,chipsList
   return chip
 end
 
+---为页面添加多选Chip
+---@param group ChipGroup Chip的父布局
+---@param chipConfig table Chip信息
+---@param _type string 页面标识，用于获取该Chip是否已选中
+---@param chipList table Chip列表，用于查看是否支持AndroidX
 function NewProjectManager.addMultiChip(group,chipConfig,_type,chipsList)
   chipConfig.pageType=_type
   local chip=Chip(activity)
@@ -257,7 +272,7 @@ function NewProjectManager.addMultiChip(group,chipConfig,_type,chipsList)
   .setCheckedIconEnabled(false)--这里禁用勾选图标，防止勾选时Chip乱飞
   --.setCheckedIconResource(R.drawable.ic_check_accent)
   group.addView(chip)
-  chip.setOnCheckedChangeListener({onCheckedChanged=NewProjectManager.onChipCheckChangedListener})
+  chip.setOnCheckedChangeListener(onChipCheckChangedListenerJ)
   table.insert(chipsList,chip)
 
   if NewProjectManager.getSharedData(_type, chipConfig.key) then
@@ -270,16 +285,22 @@ end
 ---将普通的ChipGroup添加各种逻辑，使其成为单选的ChipGroup，并不断向pageConfig同步数据
 ---@param group ChipGroup 待改造的ChipGroup
 ---@param pageConfig table 页面配置
+---@param key 该组的标识
 function NewProjectManager.applySingleCheckGroup(group,pageConfig,key)
   local oldSelectedId=group.getCheckedChipId()
-  if oldSelectedId==-1 then
-    local chip=group.getChildAt(0)
+  local chip
+  if oldSelectedId==-1 then--没有选中的Chip
+    print("警告:","单选组件",key,"未指定默认选择的 Chip")
+    chip=group.getChildAt(0)
     if chip then
-      group.check(chip.getId())
+      group.check(chip.getId())--选中第一个Chip
     end
    else
-    local chip=group.findViewById(oldSelectedId)
-    pageConfig[key]=chip.getTag()--保存数据到pageConfig
+    chip=group.findViewById(oldSelectedId)
+  end
+  --在 v5.1.1(51199) 修复未指定默认Chip时虽然有选择但是没有保存数据的bug
+  if chip then
+    pageConfig[key]=chip.getTag()--保存数据到pageConfig，因为默认勾选了的不会响应CheckedChange事件
   end
   group.setOnCheckedChangeListener{
     onCheckedChanged=function(chipGroup, selectedId)
@@ -298,6 +319,8 @@ end
 
 ---构建前的数据准备，会调用 pageConfig.onBuildConfig，并自动转换为纯字符串或者列表。你只管调用就行了
 ---@param pageConfig table 页面配置
+---@param appName string 应用名
+---@param packageName string 包名
 function NewProjectManager.buildConfig(pageConfig,appName,packageName)
   --模板配置
   local templateConfig = pageConfig.templateConfig
@@ -372,13 +395,14 @@ function NewProjectManager.buildConfig(pageConfig,appName,packageName)
   return keys, formatList, unzipList
 end
 
+---自动添加解压列表
+---@param unzipList table 解压列表
+---@param path string 单个模板路径
+---@param androidxState boolean AndroidX启用状态
 function NewProjectManager.addTemplateZipsToUnzipList(unzipList,path,androidxState)
   table.insert(unzipList,path.."/baseTemplate.zip")
-  if androidxState then
-    table.insert(unzipList,path.."/androidx.zip")
-   else
-    table.insert(unzipList,path.."/normal.zip")
-  end
+  --androidxState为true时取androidx.zip，否则取normal.zip
+  table.insert(unzipList,path..(androidxState and "/androidx.zip" or "/normal.zip"))
 end
 
 return NewProjectManager

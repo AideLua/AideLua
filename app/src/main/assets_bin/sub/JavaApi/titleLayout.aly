@@ -1,5 +1,5 @@
-MyCardTitleEditLayout.Builder({{
+MyCardTitleEditLayout.Builder({{{
     hint=activity.getString(R.string.abc_search_hint);
   --helperText=getString(R.string.support_lua_regular);
   --helperTextEnabled=true;
-}})
+}}})

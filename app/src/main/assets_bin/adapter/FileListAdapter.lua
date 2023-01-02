@@ -13,6 +13,7 @@ local refresh=FilesBrowserManager.refresh
 local getIconAlphaByName=FilesBrowserManager.getIconAlphaByName
 
 local directoryFilesList
+local highlightIndex
 
 local function onClick(view)
   local data=view.tag._data
@@ -49,8 +50,9 @@ local function fileMoreMenuClick(view)
 
 end
 
+--根据打开状态确定view类型
 local openState2ViewType={
-  ["true"]={
+  ["true"]={--index是位置索引，_else代表默认类型
     [0]=3,
     _else=4
   },
@@ -64,6 +66,7 @@ return function(item)
     getItemCount=function()
       collectgarbage("collect")
       directoryFilesList=FilesBrowserManager.directoryFilesList
+      highlightIndex=FilesBrowserManager.highlightIndex
       if directoryFilesList then
         return #directoryFilesList+1
        else
@@ -75,21 +78,27 @@ return function(item)
       return son1[position] or son1._else
     end,
     onCreateViewHolder=function(parent,viewType)
-      local ids={}
-      local view=loadlayout2(item[viewType],ids)
-      local holder=LuaCustRecyclerHolder(view)
-      view.setTag(ids)
-      view.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
-      view.onClick=onClick
-      view.onLongClick=onLongClick
+      local _,result=xpcall(function()
+        local ids={}
+        local view=loadlayout2(item[viewType],ids)
+        local holder=LuaCustRecyclerHolder(view)
+        view.setTag(ids)
+        view.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
+        view.onClick=onClick
+        view.onLongClick=onLongClick
 
-      if viewType==3 then
-        local moreView=ids.more
-        moreView.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
-        moreView.onClick=fileMoreMenuClick
-        local popupMenu=FilesBrowserManager.loadMoreMenu(moreView)
-      end
-      return holder
+        if viewType==3 then
+          local moreView=ids.more
+          moreView.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
+          moreView.onClick=fileMoreMenuClick
+          local popupMenu=FilesBrowserManager.loadMoreMenu(moreView)
+        end
+        return holder
+      end,
+      function()
+        return LuaCustRecyclerHolder(View(activity))
+      end)
+      return result
     end,
 
     onBindViewHolder=function(holder,position)
@@ -189,6 +198,9 @@ return function(item)
             highLightCard.setCardBackgroundColor(0)
             view.setSelected(false)
             data.action="openFolder"
+          end
+          if highlightIndex==position then
+            titleView.setTextColor(0xff4caf50)--下次刷新时这个view的颜色会被上面的逻辑覆盖，因此不需要担心
           end
 
          else--未打开工程

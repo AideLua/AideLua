@@ -4,7 +4,7 @@ local CreateFileUtil={}
 local cannotBeEmptyStr=getString(R.string.jesse205_edit_error_cannotBeEmpty)
 local existsStr=getString(R.string.file_exists)
 local LuaReservedCharacters = {"switch", "if", "then", "and", "break", "do", "else", "elseif", "end", "false", "for",
-  "function", "in", "local", "nil", "not", "or", "repeat", "return", "true", "until", "while"} -- lua关键字
+  "function", "in", "local", "nil", "not", "or", "repeat", "return", "true", "until", "while","goto"} -- lua关键字
 
 --根据文件名和扩展名获取用户真正想创建的文件路径
 local function buildReallyFilePath(name,extensionName)
@@ -41,8 +41,8 @@ function CreateFileUtil.showCreateFileDialog(config,nowDir)--文件名填写对�
   :setPositiveButton(R.string.create,function(dialog,text)
     local editLay=builder.ids.editLay
     local errorState
-    local fileName=buildReallyFilePath(text,fileExtension)
-    local filePath=rel2AbsPath(fileName,nowDir.getPath())
+    local relativePath=buildReallyFilePath(text,fileExtension)
+    local filePath=fixPath(rel2AbsPath(relativePath,nowDir.getPath()))
     local file=File(filePath)
     if file.exists() then--文件不能存在
       editLay
@@ -63,7 +63,7 @@ function CreateFileUtil.showCreateFileDialog(config,nowDir)--文件名填写对�
       showErrorDialog(R.string.create_failed,err)
       errorState=true
     end)
-    FilesBrowserManager.refresh(nowDir)
+    FilesBrowserManager.refresh(file.getParentFile(),file.getName())
     if errorState then
       return true--防止对话框关闭
     end

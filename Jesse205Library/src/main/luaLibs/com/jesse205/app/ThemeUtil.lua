@@ -92,6 +92,7 @@ local function setStyledAttributes(contextTheme,applyTable,androidAttrs,appAttrs
     end
   end
   array.recycle()
+  luajava.clear(array)
   idList=nil
 end
 
@@ -137,6 +138,7 @@ function ThemeUtil.refreshThemeColor()
   })
   numberList.actionBarElevation=array.getDimension(0,0)
   array.recycle()
+  luajava.clear(array)
 
   --就这么神奇
   local array = context.getTheme().obtainStyledAttributes(numberList.id.actionBarTheme,{
@@ -144,6 +146,7 @@ function ThemeUtil.refreshThemeColor()
   })
   theme.color.ActionBar.cardBackgroundColor=array.getColor(0,0)
   array.recycle()
+  luajava.clear(array)
 end
 
 --设置状态栏颜色

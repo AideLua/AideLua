@@ -21,6 +21,24 @@ function RePackTool.getSubprojectPathIterator(config,projectPath)
   end
 end
 
+function RePackTool.getSubprojectPathIteratorByJavaList(config,projectPath)
+  local index=0
+  local include=config.include
+  local max=include and (#include-1)
+  return function()
+    if index<=max then
+      local content=include[index]
+      if content then
+        index=index+1
+        local _type,name=content:match("(.-):(.+)")
+        if _type=="project" then
+          return _type,projectPath.."/"..name
+        end
+      end
+    end
+  end
+end
+
 function RePackTool.buildLuaResources(config,projectPath,outputPath,update)
   local outputDir=File(outputPath)
   local luaLibsPaths={}

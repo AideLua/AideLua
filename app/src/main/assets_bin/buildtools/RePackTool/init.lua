@@ -69,7 +69,7 @@ end
 function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
   return pcall(function()
     require "import"
-    local config=luajava.astable(configJ,true)
+    local config=luajava.astable(configJ)
     luajava.clear(configJ)
     notLoadTheme=true
     import "jesse205"
@@ -197,7 +197,7 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
       updateInfo("Version Name: v"..appVer)
 
       local binEventsPaths={RePackTool.getALPathByProjectPath(projectPath).."/bin.lua"}
-      for _type,path in rePackTool.getSubprojectPathIterator(config,projectPath) do
+      for _type,path in rePackTool.getSubprojectPathIteratorByJavaList(config,projectPath) do
         if _type=="project" then
           table.insert(binEventsPaths,RePackTool.getALPathByProjectPath(path).."/bin.lua")
         end

@@ -64,6 +64,7 @@ local function setButton(self,text,func,defaultFunc,checkNull,buttonType)
       if not(func(dialog,text)) then
         editLay.setErrorEnabled(false)
         dialog.dismiss()
+        luajava.clear(dialog)
       end
     end
   end
