@@ -61,7 +61,7 @@ Watch this project.
 [Video](https://space.bilibili.com/1229937144)
 [Text](https://jesse205.github.io/AideLua/)
 
-Due to the particularity of AIDE, please download [__AIDE Advanced Setup Version__](https://aidepro.top/) to operate.
+Due to the particularity of AIDE, please download [__AIDE Pro__](https://aidepro.top/) to operate.
 
 ### Quick Get Start
 #### 1. Configuring AIDE

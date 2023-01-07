@@ -199,5 +199,8 @@ PluginsUtil：
 6. `MyCardTitleEditLayout.layout` 在 `CardView` 下面增加了 `FrameLayout`，并增加了清除按钮
 7. 新增 `ClearContentHelper`
 8. `FilesBrowserManager.refresh` 新增 `fileName` 参数，用于文件高亮显示
+9. 新增 `onPause` 事件
+10. 废除 `symbolBar.onButtonLongClickListener` ，添加 `symbolBar.onButtonTouchListener`
+
 ## 相关链接
 [应用更新日志](https://gitee.com/Jesse205/AideLua/blob/master/README.md)

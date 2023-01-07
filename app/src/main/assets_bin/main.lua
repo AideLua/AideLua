@@ -30,6 +30,7 @@ end
 
 StatService.start(activity)
 
+import "android.animation.AnimatorSet"
 import "android.graphics.drawable.ColorDrawable"
 import "android.text.TextUtils$TruncateAt"
 import "android.content.ComponentName"
@@ -510,6 +511,7 @@ function onPause()
   if FilesTabManager.openState then
     FilesTabManager.saveFile()
   end
+  PluginsUtil.callElevents("onPause")
 end
 
 function onStart()

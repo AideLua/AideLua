@@ -591,24 +591,39 @@ function EditorsManager.getReallPasteText(view)
   end
 end
 
+---在 v5.1.0(51099) 添加
 ---符号栏按钮点击时输入符号
 ---@param view View 按钮视图
 function symbolBar.onButtonClickListener(view)
-  if managerActions.paste(EditorsManager.getReallPasteText(view)) then
+  if managerActions.paste(view.tag.reallyText) then
     view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
   end
 end
 
 ---此API已在 v5.1.0(51099) 废除
 function symbolBar.psButtonClick()
-  print("警告","symbolBar.psButtonClick","此API已废除")
+  print("警告","symbolBar.psButtonClick","此API已在 v5.1.0 废除")
 end
 
 ---在 v5.1.0(51099) 添加
+---在 v5.1.1(51199) 废除
 ---符号栏按钮长按时提示
 function symbolBar.onButtonLongClickListener(view)
-  TooltipCompat.setTooltipText(view,EditorsManager.getReallPasteText(view))
+  print("警告","symbolBar.onButtonLongClickListener","此API已在 v5.1.1 废除")
 end
+
+---在 v5.1.1(51199) 添加
+---符号栏按钮长按时提示
+symbolBar.onButtonTouchListener=View.OnTouchListener({
+  onTouch=function(view,event)
+    local action=event.getAction()
+    if action==MotionEvent.ACTION_DOWN then
+      local reallyText=EditorsManager.getReallPasteText(view)
+      TooltipCompat.setTooltipText(view,reallyText)
+      view.tag.reallyText=reallyText
+    end
+  end
+})
 
 ---初始化一个符号栏按钮
 ---@param text string 显示的文字
@@ -631,7 +646,7 @@ function symbolBar.newPsButton(text,config)
     textColor=theme.color.textColorPrimary;
     background=ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary);
   })
-  button.onLongClick=symbolBar.onButtonLongClickListener;
+  button.setOnTouchListener(symbolBar.onButtonTouchListener)
   return button
 end
 

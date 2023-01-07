@@ -1,5 +1,4 @@
 require "import"
---useCustomAppToolbar=true
 import "jesse205"
 import "android.content.pm.PackageManager"
 import "android.text.Html"
@@ -67,30 +66,19 @@ function MyPageView()
   })
 end
 
---import "pages.welcomePage"
 import "pages.agreementPage"
 import "pages.permissionPage"
 
 activity.setTitle(R.string.jesse205_welcome)
 activity.setContentView(loadlayout2("layout"))
 
---toolbar=activity.findViewById(R.id.toolbar)
---activity.setSupportActionBar(toolbar)
 actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true)
---actionBar.setDisplayShowHomeEnabled(true)
---actionBar.setDisplayUseLogoEnabled(true)
---actionBar.setHomeButtonEnabled(false)
---actionBar.setDisplayShowCustomEnabled(true)
---actionBar.setHomeActionContentDescription(0)
 
 ScreenFixContent={
   layoutManagers={},
   orientation={
-    --identical={mainLay2},
-    --different={buttonBar},
   },
-  --fillParentViews={buttonBar},
 }
 
 pages={}
@@ -103,11 +91,8 @@ end
 function onOptionsItemSelected(item)
   local id=item.getItemId()
   if id==android.R.id.home then
-    --activity.finish()
     onKeyDown(KeyEvent.KEYCODE_BACK)
-    if not(onKeyUp(KeyEvent.KEYCODE_BACK)) then
-      activity.finish()
-    end
+    onKeyUp(KeyEvent.KEYCODE_BACK)
   end
 end
 

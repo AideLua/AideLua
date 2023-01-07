@@ -58,14 +58,14 @@ local function setLayoutsSize(lays,height,width)
   if lays then
     for index=1,#lays do
       local content=lays[index]
-      local linearParams=content.getLayoutParams()
+      local params=content.getLayoutParams()
       if height then
-        linearParams.height=height
+        params.height=height
       end
       if width then
-        linearParams.width=width
+        params.width=width
       end
-      content.setLayoutParams(linearParams)
+      content.setLayoutParams(params)
     end
   end
 end

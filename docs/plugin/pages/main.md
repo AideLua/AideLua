@@ -90,17 +90,23 @@ Aide Lua 未使用标准的菜单更新方式，因此您使用 `activity.invali
 
 常见于返回到页面
 
+### onPause() <Badge text="生命周期" vertical="middle" /> <Badge text="在 v5.1.1(51199) 添加" vertical="middle" />
+
+[Activity 生命周期：onPause()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#onpause)
+
+Activity 暂停时执行，常见于切到后台
+
 ### onStart() <Badge text="生命周期" vertical="middle" /> <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />
 
 [Activity 生命周期：onStart()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#onstart)
 
-Activity 开始时执行，常见于关闭页面
+Activity 开始时执行，常见于回到页面
 
 ### onStop() <Badge text="生命周期" vertical="middle" /> <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />
 
 [Activity 生命周期：onStop()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#onstop)
 
-Activity 停止时执行，常见于关闭页面
+Activity 停止时执行，常见于切到后台
 
 ### onDestroy() <Badge text="生命周期" vertical="middle" />
 

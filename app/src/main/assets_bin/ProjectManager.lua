@@ -64,7 +64,6 @@ function ProjectManager.runProject(path)
         setAction(R.string.viewError, function(view)
           showErrorDialog("Run Error",err)
         end)
-        --print(err)
       end
      else
       showSnackBar(R.string.runCode_noPackageName)
@@ -124,9 +123,6 @@ function ProjectManager.openProject(path,filePath,openDirPath)
     config.mainModuleName=mainModuleName
 
     openState=true
-    if nowFile then
-      luajava.clear(nowFile)
-    end
     nowFile=File(path)
     nowPath=path
 
@@ -265,8 +261,7 @@ function ProjectManager.getExistingIconFileByContent(content,projectPath)
       end
      else
     end
-    for index=1,#content do
-      local subContent=content[index]
+    for index,subContent in pairs(content) do
       if subContent then
         file,path=ProjectManager.getExistingIconFileByContent(subContent,projectPath)
         if file then

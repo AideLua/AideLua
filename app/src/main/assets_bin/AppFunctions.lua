@@ -149,7 +149,7 @@ function startWindmillActivity(toolName)
 end
 
 --公共Activity
-local sharedActivityPathTemplate=AppPath.Sdcard.."/Android/media/temp/%s/aidelua/activities/%s"
+local sharedActivityPathTemplate=AppPath.Sdcard.."/Android/media/%s/temp/aidelua/activities/%s"
 
 --更新共享Activity到目录
 function updateSharedActivity(name,sdActivityDir)
