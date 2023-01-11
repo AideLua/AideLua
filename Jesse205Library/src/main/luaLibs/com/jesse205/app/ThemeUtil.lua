@@ -156,11 +156,23 @@ function ThemeUtil.setStatusBarColor(color)
   return color
 end
 
---设置导航栏颜色
+---设置导航栏颜色
+---@param color number 颜色值
 function ThemeUtil.setNavigationbarColor(color)
   theme.color.navigationBarColor=color--保存导航栏颜色
   window.setNavigationBarColor(color)--设置导航栏颜色
   return color
+end
+
+--透明系统栏
+function ThemeUtil.applyAplhaSystemBar()
+  decorView.setSystemUiVisibility(
+  decorView.getSystemUiVisibility()|
+  View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+  |View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+  |View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
+  window.setStatusBarColor(0)
+  window.setNavigationBarColor(0)
 end
 
 --获取波纹Drawable

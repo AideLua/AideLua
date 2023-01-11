@@ -15,7 +15,7 @@
 [中文](README.md) | [English](README-EN.md)
 
 ## Alert
-If you need to use the source code, please go to the <a href="/Jesse205/AideLua/releases">releases</a> page to download.
+If you need to use the source code, please go to the [releases (Github)](https://github.com/Jesse205/AideLua/releases/latest) page to download.
 
 Please not to change the repository directly in Github, because Github's repository is mirrored by Gitee。
 
@@ -34,7 +34,7 @@ Aide Lua can help you transfer from Androlua+to AIDE and then to Android Studio=
 [![Lanzou (Offical)](https://img.shields.io/badge/Lanzou-v2.6.45-FF6600?logo=icloud&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
 
 ### Aide Lua Pro
-[![Gitee Releases)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+Releases&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases)
+[![Gitee Releases)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+Releases&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases/latest)
 
 #### Other channels (may not be updated in time)
 [![123 Pan](https://img.shields.io/badge/123_Pan--597dfc)](https://www.123pan.com/s/G7a9-Yzck)

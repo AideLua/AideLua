@@ -39,7 +39,7 @@ local Glide = bindClass("com.bumptech.glide.Glide")
 
 local TooltipCompat = bindClass("androidx.appcompat.widget.TooltipCompat")
 
-local SDK_INT = luajava.bindClass("android.os.Build").VERSION.SDK_INT
+local SDK_INT = bindClass("android.os.Build").VERSION.SDK_INT
 
 -- 当前运行路径
 local luadir = context.getLuaDir()
@@ -310,7 +310,6 @@ local function checkNumber(var)
       return TypedValue.applyDimension(ty, n, dm)
     end
   end
-  -- return var
 end
 
 local function checkValue(var)
@@ -479,9 +478,10 @@ local function getRealClass(class)
 end
 
 local function loadlayout(t, root, group)
-  if type(t) == "string" then
+  local tType=type(t)
+  if tType == "string" then
     t = require(t)
-   elseif type(t) ~= "table" then
+   elseif tType ~= "table" then
     error(string.format("loadlayout error: Fist value Must be a table, checked import layout.", 0))
   end
   root = root or _G
@@ -525,36 +525,28 @@ local function loadlayout(t, root, group)
     t.paddingEnd or t.padding or 0, t.paddingBottom or t.padding or 0))
   end
 
-  local instanceofAdapterView
+  --local instanceofAdapterView
   for k, v in pairs(t) do
-    if k~=1 and type(k)=="number" then -- 创建子view
-      if instanceofAdapterView==nil then
-        instanceofAdapterView=luajava.instanceof(view, AdapterView)
-      end
-      if instanceofAdapterView then
-        if type(v) == "string" then
-          v = require(v)
-        end
-        view.adapter = LuaAdapter(context, v)
-       else
+    if k~=1 then
+      if type(k)=="number" then -- 创建子view
+        --取消了对适配器的兼容
         view.addView(loadlayout(v, root, viewClass))
-      end
-     elseif k == "id" then -- 创建view的全局变量
-      rawset(root, v, view)
-      local id = ids.id
-      ids.id = ids.id + 1
-      view.setId(id)
-      ids[v] = id
-     else
-
-      local e, s = pcall(setattribute, root, view, params, k, v, ids)
-      if not e then
-        local _, i = s:find(":%d+:")
-        s = s:sub(i or 1, -1)
-        local t, du = pcall(dump2, t)
-        error(
-        string.format("loadlayout error %s \n\tat %s\n\tat  key=%s value=%s\n\tat %s", s, view.toString(),
-        k, v, du or ""), 0)
+       elseif k == "id" then -- 创建view的全局变量
+        rawset(root, v, view)
+        local id = ids.id
+        ids.id = ids.id + 1
+        view.setId(id)
+        ids[v] = id
+       else
+        local e, s = pcall(setattribute, root, view, params, k, v, ids)
+        if not e then
+          local _, i = s:find(":%d+:")
+          s = s:sub(i or 1, -1)
+          local t, du = pcall(dump2, t)
+          error(
+          string.format("loadlayout error %s \n\tat %s\n\tat  key=%s value=%s\n\tat %s", s, view.toString(),
+          k, v, du or ""), 0)
+        end
       end
     end
   end

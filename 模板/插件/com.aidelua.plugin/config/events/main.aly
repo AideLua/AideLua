@@ -1,0 +1,8 @@
+{
+  onCreate=function(savedInstanceState)
+    print("进入主页面")
+    print(appname,"加载成功")
+    print("插件路径",getPluginPath(packagename))
+    print("插件数据路径",getPluginDataPath(packagename))
+  end,
+}

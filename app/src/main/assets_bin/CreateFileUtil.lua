@@ -1,12 +1,21 @@
 local CreateFileUtil={}
---local ids
---local dia
+
+---不能为空的字符串
+---@type string
 local cannotBeEmptyStr=getString(R.string.jesse205_edit_error_cannotBeEmpty)
+
+---文件已存在的字符串
+---@type string
 local existsStr=getString(R.string.file_exists)
+
+---Lua关键字列表
+---@type table
 local LuaReservedCharacters = {"switch", "if", "then", "and", "break", "do", "else", "elseif", "end", "false", "for",
   "function", "in", "local", "nil", "not", "or", "repeat", "return", "true", "until", "while","goto"} -- lua关键字
 
---根据文件名和扩展名获取用户真正想创建的文件路径
+---根据文件名和扩展名获取用户真正想创建的文件路径
+---@param name string 用户输入的名称
+---@param extensionName 扩展名
 local function buildReallyFilePath(name,extensionName)
   if extensionName and not(name:find("%.[^/]*$")) then
     return name.."."..extensionName
@@ -31,6 +40,9 @@ function CreateFileUtil.createFile(path,config)
   io.open(path,"w"):write(fileContent):close()
 end
 
+---展示创建文件对话框
+---@param config table 模板配置
+---@param nowDir File 当前文件夹对象，用于判断文件是否存在
 function CreateFileUtil.showCreateFileDialog(config,nowDir)--文件名填写对话框
   local builder
   local fileExtension=config.fileExtension
@@ -78,7 +90,7 @@ function CreateFileUtil.showCreateFileDialog(config,nowDir)--文件名填写对�
   editLay.setHelperText(formatResStr(R.string.file_viewName_content,{"."..fileExtension}))--设置初始显示的名字，因为刚进入时没有提示错误
   edit.addTextChangedListener({
     onTextChanged=function(text,start,before,count)
-      text=tostring(text)--获取到的text是java类型的
+      text=tostring(text)--获取到的text是java类型的，所以要转换成string
       if text~="" then
         local fileName=File(buildReallyFilePath(text,fileExtension)).getName()
         if lastErtor then
@@ -95,6 +107,8 @@ function CreateFileUtil.showCreateFileDialog(config,nowDir)--文件名填写对�
   })
 end
 
+---展示选择类型对话框
+---@param nowDir File 文件夹对象
 function CreateFileUtil.showSelectTypeDialog(nowDir)--模版选择对话框
   local choice=activity.getSharedData("createfile_type")
   local nowDir=nowDir or FilesBrowserManager.directoryFile

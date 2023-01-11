@@ -65,8 +65,6 @@
         id="icon";
         layout_width="fill";
         layout_height="fill";
-        --elevation="4dp";
-        --outlineProvider=ViewOutlineProvider.BOUNDS;
       };
     };
     {

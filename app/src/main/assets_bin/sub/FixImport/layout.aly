@@ -26,6 +26,7 @@
     FloatingActionButton;
     id="floatButton";
     layout_gravity="bottom|right";
+    --layout_anchorGravity="bottom|right";
     layout_margin="16dp";
     imageResource=R.drawable.ic_content_copy;
     tooltip=getString(R.string.copy);

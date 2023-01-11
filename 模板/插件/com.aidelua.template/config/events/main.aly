@@ -1,0 +1,5 @@
+{
+  onCreate=function(savedInstanceState)
+    -- 从这里开始写
+  end,
+}

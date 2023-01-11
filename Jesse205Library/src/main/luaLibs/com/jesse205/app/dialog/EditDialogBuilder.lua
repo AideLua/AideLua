@@ -119,8 +119,13 @@ function EditDialogBuilder:show()
   self.dialog=dialog
 
   local edit,editLay=ids.edit,ids.editLay
-  edit.requestFocus()--输入框取得焦点
-
+  
+  edit.post(Runnable({
+    run=function()
+      edit.requestFocus()--输入框取得焦点
+      inputMethodService.showSoftInput(edit,InputMethodManager.SHOW_FORCED)
+    end
+  }))
   if helperText then
     if type(helperText)=="number" then
       helperText=context.getString(helperText)

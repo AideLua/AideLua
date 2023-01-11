@@ -6,7 +6,6 @@
   layout_height="fill";
   id="drawerChild";
   backgroundColor=theme.color.windowBackground;
-
   {
     LinearLayoutCompat;
     layout_height="fill";

@@ -1,0 +1,11 @@
+appname="未打开文件放鞭炮"--插件名
+packagename="com.jesse205.bianpao"--插件包名
+appver="1.1"
+appcode=1199
+mode="plugin"--模式：插件
+utilversion="3.1"--Util版本，此变量不起作用
+smallicon=false--当icon.png为小图标时，启用此项
+supported2={--支持的APP
+  aidelua={mincode=51099,targetcode=59999}
+}
+thirdplugins={}

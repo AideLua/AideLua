@@ -17,7 +17,7 @@ local function getAppPublicPath(name)--获取自身公共路径
   return sdcardPath.."/"..name.."/Edde software/"..jesse205.appName
 end
 
-AppPath.Sdcard=sdcardPath 
+AppPath.Sdcard=sdcardPath
 
 AppPath.Temp=context.getLuaExtDir("temp")--临时目录
 
@@ -35,9 +35,9 @@ AppPath.AppMediaCacheDir=mediaDirPath.."/cache"
 AppPath.AppDataCacheDir=dataDirPath.."/cache"
 AppPath.AppSdcardDataCacheDir=sdcardDataDirPath.."/cache"
 
-AppPath.AppMediaTempDir=mediaDirPath.."/files/temp"
-AppPath.AppDataTempDir=dataDirPath.."/files/temp"
-AppPath.AppSdcardDataTempDir=sdcardDataDirPath.."/files/temp"
+AppPath.AppMediaTempDir=mediaDirPath.."/cache/temp"
+AppPath.AppDataTempDir=dataDirPath.."/cache/temp"
+AppPath.AppSdcardDataTempDir=sdcardDataDirPath.."/cache/temp"
 
 function AppPath.cleanTemp()
   LuaUtil.rmDir(File(AppPath.AppMediaTempDir))

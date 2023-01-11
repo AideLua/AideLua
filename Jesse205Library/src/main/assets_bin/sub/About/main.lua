@@ -111,15 +111,16 @@ end
 function onConfigurationChanged(config)
   screenConfigDecoder:decodeConfiguration(config)
   local newLandscapeState=config.orientation==Configuration.ORIENTATION_LANDSCAPE--新的横屏状态
-  if landscapeState~=newLandscapeState then--因为有的时候调节的时候可能不会改变屏幕方向，所以要判断一下
+  if landscapeState~=newLandscapeState then--因为有时候的调节可能不是屏幕方向改变，所以要判断一下
     landscapeState=newLandscapeState
     local screenWidthDp=config.screenWidthDp
     if newLandscapeState then--横屏时
+      --将工具栏阴影设置为0，启用虚拟阴影区域
       LastActionBarElevation=0
       actionBar.setElevation(0)
       appBarElevationCard.setVisibility(View.VISIBLE)
       local linearParams=iconLayout.getLayoutParams()
-      if screenWidthDp>theme.number.width_dp_pad then--根据窗口宽度调整卡片宽度，保证在小屏手机显示效果良好
+      if screenWidthDp>theme.number.width_dp_pc then--根据窗口宽度调整卡片宽度，保证在小屏手机显示效果良好
         linearParams.width=math.dp2int(200+16*2)
        else
         linearParams.width=math.dp2int(152+16*2)
@@ -128,6 +129,7 @@ function onConfigurationChanged(config)
       portraitCardParent.removeView(iconLayout)
       mainLayChild.addView(iconLayout,0)
      else
+      --将虚拟阴影设置为0，启用工具栏阴影
       appBarElevationCard.setVisibility(View.GONE)
       local linearParams=iconLayout.getLayoutParams()
       linearParams.width=-1
@@ -319,7 +321,7 @@ end
 
 recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
   onScrolled=function(view,dx,dy)
-    if landscape then
+    if landscapeState then
       MyAnimationUtil.RecyclerView.onScroll(view,dx,dy,appBarElevationCard,"LastCard2Elevation")
      else
       MyAnimationUtil.RecyclerView.onScroll(view,dx,dy)

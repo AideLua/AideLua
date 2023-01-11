@@ -9,15 +9,20 @@ import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import com.luajava.LuaObject;
+import com.luajava.LuaState;
 import java.io.File;
 
 public class LuaActivity extends com.androlua.LuaActivity {
 	private long oldLastTime = 0;
     private long lastTime = 0;
+    public boolean updating=false;
     private boolean checkUpdate = false;
+
 	private String luaPath;
-	public String luaDir;
-	public boolean updating=false;
+    public String luaDir;
+    private LuaState L;
+    private LuaObject mOnBackPressed;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,11 @@ public class LuaActivity extends com.androlua.LuaActivity {
             startActivity(intent);
             finish();
         }
+        L = getLuaState();
+        mOnBackPressed = L.getLuaObject("onKeyDown");
+        if (mOnBackPressed.isNil())
+            mOnBackPressed = null;
+
     }
 
 	//Androlua本身这个仅在Main出现
@@ -92,6 +102,16 @@ public class LuaActivity extends com.androlua.LuaActivity {
         // TODO: Implement this method
         super.onSaveInstanceState(outState);
         runFunc("onSaveInstanceState", outState);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mOnBackPressed != null) {
+            Object ret = mOnBackPressed.call();
+            if (ret != null && ret.getClass() == Boolean.class && (Boolean) ret)
+                return ;
+        }
+        super.onBackPressed();
     }
 
     @Override

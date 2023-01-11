@@ -13,7 +13,7 @@ function SubActivityUtil.getDirPath(nowDir)
   if moduleName and not FilesBrowserManager.isModuleRootPath(nowDir.getPath().."/"..moduleName) then--非法模块名自动转为主模块
     moduleName=ProjectManager.nowConfig.mainModuleName
   end
-  moduleName=moduleName or FilesBrowserManager.getNowModuleDirName(fileRelativePath)--获取不到就调用单独的获取API
+  moduleName=moduleName or FilesBrowserManager.getNowModuleDirName(fileRelativePath) or ProjectManager.nowConfig.mainModuleName--获取不到就调用单独的获取API
   if not(dirName and table.find(DIR_NAMES_LIST,dirName)) then
     for index=1,#DIR_NAMES_LIST do
       local name=DIR_NAMES_LIST[index]

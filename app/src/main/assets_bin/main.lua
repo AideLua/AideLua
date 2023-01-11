@@ -366,10 +366,10 @@ function onKeyShortcut(keyCode, event)
   end
 end
 
-function onConfigurationChanged(config)
-  screenConfigDecoder:decodeConfiguration(config)
-  local smallestScreenWidthDp = config.smallestScreenWidthDp
-  screenWidthDp = config.screenWidthDp--设置为全局变量，其他地方要用到
+function onConfigurationChanged(newConfig)
+  screenConfigDecoder:decodeConfiguration(newConfig)
+  local smallestScreenWidthDp = newConfig.smallestScreenWidthDp
+  screenWidthDp = newConfig.screenWidthDp--设置为全局变量，其他地方要用到
   local drawerChildLinearParams = drawerChild.getLayoutParams()
   if screenWidthDp < 448 then
     drawerChildLinearParams.width = -1
@@ -383,9 +383,10 @@ function onConfigurationChanged(config)
   drawerChild.setLayoutParams(drawerChildLinearParams)
   EditorsManager.refreshEditorScrollState()
   refreshSubTitle(screenWidthDp)
-  PluginsUtil.callElevents("onConfigurationChanged", config)
-  toggle.onConfigurationChanged(config)
+  PluginsUtil.callElevents("onConfigurationChanged", newConfig)
+  toggle.onConfigurationChanged(newConfig)
 end
+
 
 function onDeviceByWidthChanged(device, oldDevice)
   nowDevice=device
@@ -492,6 +493,7 @@ end
 function onResult(name, action, content)
   local processed=false
   if action == "project_created_successfully" then
+    FilesBrowserManager.refresh(nil,File(content).getName())
     showSnackBar(R.string.create_success).setAction(R.string.open, function(view)
       if ProjectManager.openState then -- 已打开项目
         ProjectManager.closeProject(false)
@@ -578,6 +580,10 @@ function onKeyUp(keyCode, event)
       end
     end
   end
+end
+
+function onBackPressed()
+  print("返回")
 end
 
 function onRestoreInstanceState(savedInstanceState)

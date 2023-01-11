@@ -1,12 +1,12 @@
 -- 在 v5.1.0(51099) 搜索框改到标题栏内
 require "import"
+--useCustomAppToolbar=true
 import "jesse205"
 import "android.widget.ListView"
 
 import "com.jesse205.adapter.MyLuaAdapter"
 --import "com.jesse205.layout.MySearchLayout"
 import "com.jesse205.layout.MyCardTitleEditLayout"
-
 import "getImportCode"
 import "showPackageMenu"
 
@@ -19,11 +19,15 @@ searchWord=tostring(searchWord)
 if searchWord=="nil" then
   searchWord=nil
 end
+
 activity.setTitle(R.string.javaApiViewer)
+activity.setContentView(loadlayout2("layout"))
 actionBar.setDisplayHomeAsUpEnabled(true)
 actionBar.setDisplayShowCustomEnabled(true)
 actionBar.setCustomView(loadlayout2("titleLayout"))
-activity.setContentView(loadlayout2("layout"))
+import "android.graphics.drawable.ColorDrawable"
+--actionBar.setBackgroundDrawable(ColorDrawable(0))
+
 
 searching=false
 
@@ -181,8 +185,21 @@ if Build.VERSION.SDK_INT>=23 then
   drawable.setRadius(math.dp2int(16))
 end
 clearSearchBtn.setBackground(drawable)
+--[[
+import "androidx.core.view.ViewCompat"
+import "androidx.core.view.WindowInsetsCompat"
+ViewCompat.setOnApplyWindowInsetsListener(mainLay,function(view,windowInsets)
+  local insets=windowInsets.getSystemWindowInsets()
+  appBar.setPadding(insets.left,insets.top,insets.right,0)
+  listView.setPadding(insets.left,insets.top,insets.right,insets.bottom)
+  return WindowInsetsCompat.CONSUMED
+end)
 
---clearSearchBtn.tooltip=getString(R.string.jesse205_clear)
+ViewCompat.setOnApplyWindowInsetsListener(appBar,function(view,windowInsets)
+  local insets=windowInsets.getSystemWindowInsets()
+  view.setPadding(insets.left,insets.top,insets.right,0)
+  return WindowInsetsCompat.CONSUMED
+end)]]
 
 datas={}
 adp=MyLuaAdapter(activity,datas,item)
@@ -197,7 +214,7 @@ listView.onItemLongClick=function(id,v,zero,one)
   return true
 end
 listView.onScroll=function(view,firstVisibleItem,visibleItemCount,totalItemCount)
-  MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount,topCard)
+  MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount)
 end
 
 searchEdit.onEditorAction=function(view,i,keyEvent)

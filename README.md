@@ -15,10 +15,10 @@
 [中文](README.md) | [English](README-EN.md)
 
 ## 注意 | Alert
-如需使用源代码，请进入 <a href="/Jesse205/AideLua/releases">发行版</a> 页面下载。<br>
-If you need to use the source code, please go to the <a href="/Jesse205/AideLua/releases">releases</a> page to download.
+如需使用源代码，请进入 [发行版 (Gitee)](https://gitee.com/Jesse205/AideLua/releases/latest) 页面下载。<br>
+If you need to use the source code, please go to the [releases (Github)](https://github.com/Jesse205/AideLua/releases/latest) page to download.
 
-尽量不要在 Github 内直接更改此仓库，因为 Github 的仓库是由 Gitee 镜像过去的。<br>
+请不要在 Github 内直接更改此仓库，因为 Github 的仓库是由 Gitee 镜像过去的。<br>
 Please not to change the repository directly in Github, because Github's repository is mirrored by Gitee。
 
 ## 简介
@@ -36,7 +36,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 [![蓝奏云 (官方)](https://img.shields.io/badge/蓝奏云-v2.6.45-FF6600?logo=icloud&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
 
 ### Aide Lua Pro
-[![Gitee 发行版)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+发行版&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases)
+[![Gitee 发行版)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+发行版&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases/latest)
 
 #### 其他渠道 (可能更新不及时)
 [![123云盘](https://img.shields.io/badge/123云盘--597dfc)](https://www.123pan.com/s/G7a9-Yzck)

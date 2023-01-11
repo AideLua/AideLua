@@ -50,7 +50,7 @@ local function alyloader(path)
   f:close()
   if string.sub(s,1,4)=="\27Lua" then
     return assert(loadfile(path)),path
-  else
+   else
     --return assert(loadstring("return "..s, path:match("[^/]+/[^/]+$"),"bt")),path
     local f,st=loadstring("return "..s, path:match("[^/]+/[^/]+$"),"bt")
     if st then
@@ -266,9 +266,9 @@ local function checkPercent(v)
   local n,ty=string.match(v,"^(%-?[%.%d]+)%%([wh])$")
   if ty==nil then
     return nil
-  elseif ty=="w" then
+   elseif ty=="w" then
     return tonumber(n)*W/100
-  elseif ty=="h" then
+   elseif ty=="h" then
     return tonumber(n)*H/100
   end
 end
@@ -295,7 +295,7 @@ local function checkint(s)
   for n in split(s,"|") do
     if toint[n] then
       ret=ret | toint[n]
-    else
+     else
       return nil
     end
   end
@@ -308,7 +308,7 @@ local function checkNumber(var)
   if type(var) == "string" then
     if var=="true" then
       return true
-    elseif var=="false" then
+     elseif var=="false" then
       return false
     end
 
@@ -332,10 +332,10 @@ local function checkNumber(var)
       if c then
         if #h<=6 then
           return c-0x1000000
-        elseif #h<=8 then
+         elseif #h<=8 then
           if c>0x7fffffff then
             return c-0x100000000
-          else
+           else
             return c
           end
         end
@@ -385,7 +385,7 @@ local function dump2 (t)
   for k,v in pairs(t) do
     if type(v)=="table" then
       table.insert(_t,"\t\t"..tostring(k).."={"..tostring(v[1]).." ...}")
-    else
+     else
       table.insert(_t,"\t\t"..tostring(k).."="..tostring(v))
     end
   end
@@ -398,7 +398,7 @@ local ver = luajava.bindClass("android.os.Build").VERSION.SDK_INT;
 local function setBackground(view,bg)
   if ver<16 then
     view.setBackgroundDrawable(bg)
-  else
+   else
     view.setBackground(bg)
   end
 end
@@ -406,144 +406,144 @@ end
 local function setattribute(root,view,params,k,v,ids)
   if k=="layout_x" then
     params.x=checkValue(v)
-  elseif k=="layout_y" then
+   elseif k=="layout_y" then
     params.y=checkValue(v)
-  elseif k=="layout_weight" then
+   elseif k=="layout_weight" then
     params.weight=checkValue(v)
-  elseif k=="layout_gravity" then
+   elseif k=="layout_gravity" then
     params.gravity=checkValue(v)
-  elseif k=="layout_marginStart" then
+   elseif k=="layout_marginStart" then
     params.setMarginStart(checkValue(v))
-  elseif k=="layout_marginEnd" then
+   elseif k=="layout_marginEnd" then
     params.setMarginEnd(checkValue(v))
-  elseif rules[k] and (v==true or v=="true") then
+   elseif rules[k] and (v==true or v=="true") then
     params.addRule(rules[k])
-  elseif rules[k] then
+   elseif rules[k] then
     params.addRule(rules[k],ids[v])
-  elseif k=="items" then --创建列表项目
+   elseif k=="items" then --创建列表项目
     if type(v)=="table" then
       if view.adapter then
         view.adapter.addAll(v)
-      else
+       else
         local adapter=ArrayListAdapter(context,android_R.layout.simple_list_item_1, String(v))
         view.setAdapter(adapter)
       end
-    elseif type(v)=="function" then
+     elseif type(v)=="function" then
       if view.adapter then
         view.adapter.addAll(v())
-      else
+       else
         local adapter=ArrayListAdapter(context,android_R.layout.simple_list_item_1, String(v()))
         view.setAdapter(adapter)
       end
-    elseif type(v)=="string" then
+     elseif type(v)=="string" then
       local v=rawget(root,v) or rawget(_G,v)
       if view.adapter then
         view.adapter.addAll(v())
-      else
+       else
         local adapter=ArrayListAdapter(context,android_R.layout.simple_list_item_1, String(v()))
         view.setAdapter(adapter)
       end
     end
-  elseif k=="pages" and type(v)=="table" then --创建页项目
+   elseif k=="pages" and type(v)=="table" then --创建页项目
     local ps={}
     for n,o in ipairs(v) do
       local tp=type(o)
       if tp=="string" or tp=="table" then
         table.insert(ps,loadlayout(o,root))
-      else
+       else
         table.insert(ps,o)
       end
     end
     local adapter=ArrayPageAdapter(View(ps))
     view.setAdapter(adapter)
-  elseif k=="textSize" then
+   elseif k=="textSize" then
     if tonumber(v) then
       view.setTextSize(tonumber(v))
-    elseif type(v)=="string" then
+     elseif type(v)=="string" then
       local n,ty=checkType(v)
       if ty then
         view.setTextSize(ty,n)
-      else
+       else
         view.setTextSize(v)
       end
-    else
+     else
       view.setTextSize(v)
     end
-  elseif k=="textAppearance" then
+   elseif k=="textAppearance" then
     view.setTextAppearance(context,checkattr(v))
-  elseif k=="ellipsize" then
+   elseif k=="ellipsize" then
     view.setEllipsize(TruncateAt[string.upper(v)])
-  elseif k=="url" then
+   elseif k=="url" then
     view.loadUrl(url)
-  elseif k=="src" then
+   elseif k=="src" then
     if v:find("^%?") then
       view.setImageResource(getIdentifier(v:sub(2,-1)))
-    elseif v:find("^https?://") then
+     elseif v:find("^https?://") then
       task([[require "import" url=... return loadbitmap(url)]],v,function(bmp)view.setImageBitmap(bmp)end)
-    else
+     else
       view.setImageBitmap(loadbitmap(v))
     end
-  elseif k=="scaleType" then
+   elseif k=="scaleType" then
     view.setScaleType(scaleTypes[scaleType[v]])
-  elseif k=="background" then
+   elseif k=="background" then
     if type(v)=="string" then
       if v:find("^%?") then
         view.setBackgroundResource(getIdentifier(v:sub(2,-1)))
-      elseif v:find("^#") then
+       elseif v:find("^#") then
         view.setBackgroundColor(checkNumber(v))
-      elseif rawget(root,v) or rawget(_G,v) then
+       elseif rawget(root,v) or rawget(_G,v) then
         v=rawget(root,v) or rawget(_G,v)
         if type(v)=="function" then
           setBackground(view,LuaDrawable(v))
-        elseif type(v)=="userdata" then
+         elseif type(v)=="userdata" then
           setBackground(view,v)
         end
-      else
+       else
         if (not v:find("^/")) and luadir then
           v=luadir..v
         end
         if v:find("%.9%.png") then
           setBackground(view,NineBitmapDrawable(loadbitmap(v)))
-        else
+         else
           setBackground(view,LuaBitmapDrawable(context,v))
         end
       end
-    elseif type(v)=="userdata" then
+     elseif type(v)=="userdata" then
       setBackground(view,v)
-    elseif type(v)=="number" then
+     elseif type(v)=="number" then
       setBackground(view,v)
     end
-  elseif k=="onClick" then --设置onClick事件接口
+   elseif k=="onClick" then --设置onClick事件接口
     local listener
     if type(v)=="function" then
       listener=OnClickListener{onClick=v}
-    elseif type(v)=="userdata" then
+     elseif type(v)=="userdata" then
       listener=v
-    elseif type(v)=="string" then
+     elseif type(v)=="string" then
       if ltrs[v] then
         listener=ltrs[v]
-      else
+       else
         local l=rawget(root,v) or rawget(_G,v)
         if type(l)=="function" then
           listener=OnClickListener{onClick=l}
-        elseif type(l)=="userdata" then
+         elseif type(l)=="userdata" then
           listener=l
-        else
+         else
           listener=OnClickListener{onClick=function(a)(root[v] or _G[v])(a)end}
         end
         ltrs[v]=listener
       end
     end
     view.setOnClickListener(listener)
-  elseif k=="password" and (v=="true" or v==true) then
+   elseif k=="password" and (v=="true" or v==true) then
     view.setInputType(0x81)
-  elseif type(k)=="string" and not(k:find("layout_")) and not(k:find("padding")) and k~="style" then --设置属性
+   elseif type(k)=="string" and not(k:find("layout_")) and not(k:find("padding")) and k~="style" then --设置属性
     k=string.gsub(k,"^(%w)",function(s)return string.upper(s)end)
     if k=="Text" or k=="Title" or k=="Subtitle" then
       view["set"..k](v)
-    elseif not k:find("^On") and not k:find("^Tag") and type(v)=="table" then
+     elseif not k:find("^On") and not k:find("^Tag") and type(v)=="table" then
       view["set"..k](checkValues(unpack(v)))
-    else
+     else
       view["set"..k](checkValue(v))
     end
   end
@@ -552,7 +552,7 @@ end
 local function copytable(f,t,b)
   for k,v in pairs(f) do
     if k==1 then
-    elseif b or t[k]==nil then
+     elseif b or t[k]==nil then
       t[k]=v
     end
   end
@@ -563,11 +563,11 @@ local function setstyle(c,t,root,view,params,ids)
   local mt=getmetatable(t)
   if not mt or not mt.__index then
     return
-    end
+  end
   local m=mt.__index
   if c[m] then
     return
-    end
+  end
   c[m]=true
   for k,v in pairs(m) do
     if not rawget(c,k) then
@@ -582,21 +582,21 @@ end
 local function loadlayout(t,root,group)
   if type(t)=="string" then
     t=require(t)
-  elseif type(t)~="table" then
+   elseif type(t)~="table" then
     error(string.format("loadlayout error: Fist value Must be a table, checked import layout.",0))
-    end
+  end
   root=root or _G
   local view,style
 
   if t.style then
     if t.style:find("^%?") then
       style=getIdentifier(t.style:sub(2,-1))
-    else
+     else
       local st,sty=pcall(require,t.style)
       if st then
         --copytable(sty,t)
         setmetatable(t,{__index=sty})
-      else
+       else
         style=checkattr(t.style)
       end
     end
@@ -607,7 +607,7 @@ local function loadlayout(t,root,group)
 
   if style then
     view = t[1](context,nil,style)
-  else
+   else
     view = t[1](context) --创建view
   end
 
@@ -624,7 +624,7 @@ local function loadlayout(t,root,group)
   --设置padding属性
   if t.padding and type(t.padding)=="table" then
     view.setPadding(checkValues(unpack(t.padding)))
-  elseif t.padding or t.paddingLeft or t.paddingTop or t.paddingRight or t.paddingBottom then
+   elseif t.padding or t.paddingLeft or t.paddingTop or t.paddingRight or t.paddingBottom then
     view.setPadding(checkValues(t.paddingLeft or t.padding or 0, t.paddingTop or t.padding or 0, t.paddingRight or t.padding or 0, t.paddingBottom or t.padding or 0))
   end
   if t.paddingStart or t.paddingEnd then
@@ -642,17 +642,16 @@ local function loadlayout(t,root,group)
           v=require(v)
         end
         view.adapter=LuaAdapter(context,v)
-      else
+       else
         view.addView(loadlayout(v,root,t[1]))
       end
-    elseif k=="id" then --创建view的全局变量
+     elseif k=="id" then --创建view的全局变量
       rawset(root,v,view)
       local id=ids.id
       ids.id=ids.id+1
       view.setId(id)
       ids[v]=id
-
-    else
+     else
       local e,s=pcall(setattribute,root,view,params,k,v,ids)
       if not e then
         local _,i=s:find(":%d+:")

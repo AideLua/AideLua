@@ -190,7 +190,7 @@ import "jesse205"
 
       "onClick","onTouch","onLongClick","onItemClick","onItemLongClick",
       "onContextClick","onScroll","onScrollChange","onNewIntent",
-      "onSaveInstanceState",
+      "onSaveInstanceState","onBackPressed",
 
       --一些自带的类或者包
       "android","R",

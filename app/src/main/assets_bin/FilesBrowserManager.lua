@@ -374,7 +374,6 @@ function FilesBrowserManager.loadMoreMenu(moreView)
   moreView.setOnTouchListener(popupMenu.getDragToOpenListener())
   popupMenu.inflate(R.menu.menu_main_file_upfile)
   local menu=popupMenu.getMenu()
-  --menu.findItem(R.id.menu_newActivity).setEnabled(false)
   --打开当前路径菜单
   local currentFileMenu=menu.findItem(R.id.menu_openDir_currentFile)
   FilesBrowserManager.currentFileMenu=currentFileMenu--保存一下，方便标签管理器随时禁用
@@ -391,19 +390,7 @@ function FilesBrowserManager.loadMoreMenu(moreView)
       SubActivityUtil.showSelectTypeDialog(directoryFile)
      else
       local nowProjectPath=ProjectManager.nowPath--当前工程路径
-      --[[
-      local nowModuleName,fileRelativePath--当前模块名称，文件香脆路径
-      if ProjectManager.openState then
-        fileRelativePath=ProjectManager.shortPath(directoryFile.getPath(),true,nowProjectPath)
-        if fileRelativePath:find("/") then--相对路径带有"/"，说明当前进入了字目录
-          nowModuleName=fileRelativePath:match("^(.-)/")
-         elseif #fileRelativePath~=0 then--当前长度不为0，说明当前目录名称就是模块名称
-          nowModuleName=fileRelativePath
-         else
-          nowModuleName="app"
-        end
-      end]]
-      local nowModuleName=FilesBrowserManager.getNowModuleDirName()
+      local nowModuleName=FilesBrowserManager.getNowModuleDirName() or ProjectManager.nowConfig.mainModuleName
       if id==Rid.menu_openDir_currentFile then
         openDirPath=FilesTabManager.file.getParent()
        elseif id==Rid.menu_openDir_assets then
@@ -566,6 +553,9 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
           local aideluaDir=contentPath.."/.aidelua"
           if content.isDirectory() and File(aideluaDir).isDirectory() then
             table.insert(newList,content)
+            if content.getName()==fileName then
+              itemIndex=table.size(newList)
+            end
           end
         end
       end
@@ -913,7 +903,8 @@ function FilesBrowserManager.init()
 
   recyclerView.onDrag=function(view,event)
     local action=event.getAction()
-    if action==DragEvent.ACTION_DRAG_STARTED then
+    switch action do
+     case DragEvent.ACTION_DRAG_STARTED then
       local desc=event.getClipDescription()--必须有描述
       if not(desc and ProjectManager.openState) then
         return false
@@ -931,11 +922,11 @@ function FilesBrowserManager.init()
         .setCornerRadius(math.dp2int(16))
       end
       view.setBackground(dropFileFrameBackground)
-     elseif action==DragEvent.ACTION_DRAG_ENTERED then
+     case DragEvent.ACTION_DRAG_ENTERED then
       dropFileFrameBackground.setColor(theme.color.rippleColorAccent)
-     elseif action==DragEvent.ACTION_DRAG_EXITED then
+     case DragEvent.ACTION_DRAG_EXITED then
       dropFileFrameBackground.setColor(0)
-     elseif action==DragEvent.ACTION_DROP then
+     case DragEvent.ACTION_DROP then
       dropFileFrameBackground.setColor(0)
       if ProjectManager.openState then
         local data=event.getClipData()
@@ -962,7 +953,7 @@ function FilesBrowserManager.init()
           dropPermissions.release()
         end
       end
-     elseif action==DragEvent.ACTION_DRAG_ENDED then
+     case DragEvent.ACTION_DRAG_ENDED then
       dropFileFrameBackground.setColor(0)
       view.setBackgroundColor(0)
     end
@@ -972,11 +963,16 @@ function FilesBrowserManager.init()
   recyclerView.tag.downEvent=downEvent
 end
 
+---判断是不是模块根路径
+---@param path 路径
 function FilesBrowserManager.isModuleRootPath(path)
   return File(path.."/build.gradle").isFile() or File(path.."/.aidelua").isDirectory()
 end
 
 ---在 v5.1.1(51199) 添加
+---获取当前模块目录名称，如果当前路径不在模块内，则返回主模块名称
+---@param fileRelativePath string 相对与项目的路径
+---@return string 模块目录名称
 function FilesBrowserManager.getNowModuleDirName(fileRelativePath)
   local nowProjectPath=ProjectManager.nowPath--当前工程路径
   local nowModuleName,fileRelativePath--当前模块名称，文件相对路径
@@ -986,7 +982,7 @@ function FilesBrowserManager.getNowModuleDirName(fileRelativePath)
   end
   local modulePath=nowProjectPath.."/"..nowModuleName
   if not FilesBrowserManager.isModuleRootPath(modulePath) then
-    nowModuleName=ProjectManager.nowConfig.mainModuleName
+    nowModuleName=nil
   end
   return nowModuleName
 end

@@ -1,0 +1,11 @@
+appname="插件模板Lite"--插件名
+packagename="com.aidelua.template"--插件包名
+appver="3.1"
+appcode=3199
+mode="plugin"--模式：插件
+utilversion="3.1"--Util版本，此变量不起作用
+smallicon=true--当icon.png为小图标时，启用此项
+supported2={--支持的APP
+  aidelua={mincode=50399,targetcode=59999}
+}
+thirdplugins={}

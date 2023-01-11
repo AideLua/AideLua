@@ -22,11 +22,15 @@ return function(config)
           text=config.text;
       }},ids))
       searchEdit=ids.searchEdit
-
-      searchEdit.requestFocus()--搜索框取得焦点
-      inputMethodService.showSoftInput(ids.searchEdit,InputMethodManager.SHOW_FORCED)
+      
       ClearContentHelper.setupEditor(searchEdit,ids.clearSearchBtn,theme.color.ActionBar.rippleColorPrimary)
-
+      searchEdit.post(Runnable({
+        run=function()
+          searchEdit.requestFocus()--搜索框取得焦点
+          inputMethodService.showSoftInput(searchEdit,InputMethodManager.SHOW_FORCED)
+        end
+      }))
+    
       searchEdit.onEditorAction=function(view,actionId,event)
         if event then
           onSearch(tostring(view.text))

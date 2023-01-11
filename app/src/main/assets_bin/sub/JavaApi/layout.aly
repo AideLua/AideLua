@@ -4,6 +4,28 @@
   layout_height="fill";
   id="mainLay";
   {
+    ListView;
+    id="listView";
+    fastScrollEnabled=true;
+    layout_width="fill";
+    layout_height="fill";
+    --fitsSystemWindows=true;
+    --clipToPadding=false;
+    --scrollBarStyle=View.SCROLLBARS_OUTSIDE_OVERLAY;
+  };
+  {
+    ProgressBar;
+    id="progressBar";
+    indeterminate=true;
+    layout_width="fill";
+    paddingTop="-8dp";
+    paddingBottom="-8dp";
+    layout_height="4dp";
+    visibility=View.GONE;
+    style=android.R.attr.progressBarStyleHorizontal;
+  };
+  --[=[
+  {
     LinearLayout;
     orientation="vertical";
     layout_width="fill";
@@ -13,28 +35,17 @@
           helperText=getString(R.string.support_lua_regular);
           helperTextEnabled=true;
       }}});]]
+    --[[
+    {
+      AutoToolbarLayout;
+      id="appBar";
+    };]]
     {
       FrameLayout;
       layout_width="fill";
       layout_height="fill";
-      {
-        ProgressBar;
-        id="progressBar";
-        indeterminate=true;
-        layout_width="fill";
-        paddingTop="-8dp";
-        paddingBottom="-8dp";
-        layout_height="4dp";
-        visibility=View.GONE;
-        style=android.R.attr.progressBarStyleHorizontal;
-      };
-      {
-        ListView;
-        id="listView";
-        fastScrollEnabled=true;
-        layout_width="fill";
-        layout_height="fill";
-      };
+
+
     };
-  };
+  };]=]
 };

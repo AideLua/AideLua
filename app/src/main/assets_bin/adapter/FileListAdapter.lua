@@ -36,18 +36,18 @@ local function onClick(view)
     end
   end
 end
+local onClickListener=View.OnClickListener({onClick=onClick})
 
 local function onLongClick(view)
   --准备拖放
   recyclerView.tag.longClickedView=view
-  local data=view.tag._data
 end
+local onLongClickListener=View.OnLongClickListener({onLongClick=onLongClick})
 
 local function fileMoreMenuClick(view)
   local tag=view.tag
   local popupMenu=tag.popupMenu
   popupMenu.show()
-
 end
 
 --根据打开状态确定view类型
@@ -84,8 +84,8 @@ return function(item)
         local holder=LuaCustRecyclerHolder(view)
         view.setTag(ids)
         view.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
-        view.onClick=onClick
-        view.onLongClick=onLongClick
+        view.setOnClickListener(onClickListener)
+        view.setOnLongClickListener(onLongClickListener)
 
         if viewType==3 then
           local moreView=ids.more
@@ -199,7 +199,7 @@ return function(item)
             view.setSelected(false)
             data.action="openFolder"
           end
-          if highlightIndex==position then
+          if highlightIndex and highlightIndex==position then
             titleView.setTextColor(0xff4caf50)--下次刷新时这个view的颜色会被上面的逻辑覆盖，因此不需要担心
           end
 
@@ -245,6 +245,11 @@ return function(item)
           titleView.setText(title)
           messageView.setText(summary)
           local iconCard=tag.iconCard
+          if highlightIndex and highlightIndex==position then
+            titleView.setTextColor(0xff4caf50)
+           else
+            titleView.setTextColor(theme.color.textColorPrimary)
+          end
 
           --设置应用图标
           if type(iconUrl)=="number" then

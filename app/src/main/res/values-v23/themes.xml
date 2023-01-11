@@ -2,7 +2,9 @@
 <resources>
     <style name="Theme.Jesse205.Welcome" parent="Theme.Jesse205.Default.NoActionBar" >
         <item name="android:windowIsTranslucent">false</item>
-        <item name="android:windowBackground">@drawable/welcome</item>
+        <item name="android:windowBackground">@drawable/launcher_screen</item>
         <item name="android:windowDisablePreview">false</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 </resources>
