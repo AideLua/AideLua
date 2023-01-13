@@ -72,6 +72,13 @@ html.dark {
     --c-tip: var(--c-brand)
 }
 
+.pictureName {
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.5;
+    margin-top: 0;
+}
+
 .badge {
     color: var(--c-badge-tip-text);
 }

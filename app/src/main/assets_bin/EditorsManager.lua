@@ -319,7 +319,7 @@ end
 function EditorsManager.openNewContent(filePath,fileType,decoder,keepHistory)
   if EditorsManager.isEditor() then
     local fileConfig=FilesTabManager.fileConfig
-    local content=decoder.read(filePath)
+    local content,err=decoder.read(filePath)
     if content then
       if fileConfig.oldContent~=content or not(keepHistory) then
         fileConfig.oldContent=content
@@ -338,7 +338,7 @@ function EditorsManager.openNewContent(filePath,fileType,decoder,keepHistory)
       end
       return true
      else
-      return false
+      return false,err
     end
    else
     decoder.apply(filePath,fileType,editor)

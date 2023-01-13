@@ -1,7 +1,6 @@
 local ImageDialogBuilder={}
 setmetatable(ImageDialogBuilder,ImageDialogBuilder)
 
-
 function ImageDialogBuilder.setImage(self,id)
   self.image=id
   return self

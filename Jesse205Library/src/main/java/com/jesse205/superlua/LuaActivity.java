@@ -52,7 +52,7 @@ public class LuaActivity extends com.androlua.LuaActivity {
             finish();
         }
         L = getLuaState();
-        mOnBackPressed = L.getLuaObject("onKeyDown");
+        mOnBackPressed = L.getLuaObject("onBackPressed");
         if (mOnBackPressed.isNil())
             mOnBackPressed = null;
 

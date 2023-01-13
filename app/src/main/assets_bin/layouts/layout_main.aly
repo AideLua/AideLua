@@ -24,26 +24,7 @@
       id="appBarLinearLayout";
       layoutTransition=newLayoutTransition();
       {
-        function(context)--适配了菜单的TabLayout，平衡下拉与滚动的冲突
-          local startX=0
-          return luajava.override(TabLayout,{
-            onInterceptTouchEvent=function(super,event)
-              local action=event.getAction()
-              local x=event.getX()
-              if action==MotionEvent.ACTION_DOWN then
-                startX=x--记录按下位置
-               elseif action==MotionEvent.ACTION_MOVE then
-                if (startX-x)>math.dp2int(18) or (x-startX)>math.dp2int(18) then--偏移18dp，就说明要横向滚动了
-                  return super(event)
-                 else
-                  filesTabLay.onTouchEvent(event)--这时候可能要下拉，但是为了提升滚动灵敏度要绕过super执行onTouchEvent
-                  return nil
-                end
-              end
-              return super(event)
-            end,
-          })
-        end;
+        FilesTabManager.FilesTabLayoutBuilder;
         layout_width="fill";
         tabMode=TabLayout.MODE_SCROLLABLE;
         layout_height="32dp";

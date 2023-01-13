@@ -18,7 +18,6 @@
     layout_height="fill";
     id="largeMainLay";
     visibility=View.GONE;
-    --layoutTransition=newLayoutTransition();
     {
       CardView;
       layout_height="fill";

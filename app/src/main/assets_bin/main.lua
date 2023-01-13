@@ -49,6 +49,7 @@ import "android.webkit.MimeTypeMap"
 import "androidx.drawerlayout.widget.DrawerLayout"
 import "androidx.core.graphics.ColorUtils"
 import "androidx.core.content.res.ResourcesCompat"
+import "androidx.slidingpanelayout.widget.SlidingPaneLayout"
 
 import "com.google.android.material.tabs.TabLayout"
 import "com.google.android.material.chip.Chip"
@@ -584,6 +585,7 @@ end
 
 function onBackPressed()
   print("返回")
+  --return true
 end
 
 function onRestoreInstanceState(savedInstanceState)

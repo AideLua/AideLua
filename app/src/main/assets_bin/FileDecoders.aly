@@ -5,7 +5,7 @@
     read=function(path)
       local content=isBinaryFile(path)
       if content==true then
-        error(getString(R.string.file_cannot_open_compiled_file))
+        return nil,getString(R.string.file_cannot_open_compiled_file)
       end
       return content
     end,

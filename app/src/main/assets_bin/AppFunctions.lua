@@ -314,3 +314,18 @@ function getColorAndHex(text)
     end
   end
 end
+
+---适配SEND应用权限，适配华为文件管理
+---@param uri Uri
+function authorizeHWApplicationPermissions(uri)
+  local intent = Intent()
+  intent.setAction("android.intent.action.SEND")
+  intent.setFlags(268435456)
+  intent.setType(activity.getContentResolver().getType(uri))
+  local infoList=activity.getPackageManager().queryIntentActivities(intent, 65536)
+  for index=0,#infoList-1 do
+    activity.grantUriPermission(infoList[index].activityInfo.packageName, uri, 3)
+  end
+  activity.grantUriPermission("com.huawei.desktop.explorer", uri, 3)
+  activity.grantUriPermission("com.huawei.desktop.systemui", uri, 3)
+end

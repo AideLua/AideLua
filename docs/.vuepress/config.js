@@ -14,7 +14,6 @@ export default defineUserConfig({
         ['link', { rel: 'apple-touch-icon', sizes: "180x180", href: "/AideLua/images/icons/apple-touch-icon.png" }],
         ['link', { rel: 'mask-icon', sizes: "180x180", href: "/AideLua/images/icons/safari-pinned-tab.svg", color: "#3F51B5" }],
         ['link', { rel: 'manifest', href: '/AideLua/manifest.webmanifest' }],
-        ['meta', { name: 'msapplication-TileColor', content: '#3f51b5' }],
     ],
     theme: defaultTheme({
         logo: '/images/aidelua.png',
@@ -56,6 +55,16 @@ export default defineUserConfig({
             {
                 text: '使用文档',
                 link: '/',
+            },
+            {
+                text: '用户交互',
+                collapsible: true,
+                children: [
+                    {
+                        text: '概览',
+                        link: '/userinteraction/',
+                    },
+                ]
             },
             {
                 text: '功能介绍',

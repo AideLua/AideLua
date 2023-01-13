@@ -303,28 +303,31 @@ relLibPathsMatch.types = relLibPathsMatchTypes
 
 --路径RecyclerView，解决与侧滑手势的冲突
 function FilesBrowserManager.PathRecyclerViewBuilder(context)
-  return luajava.override(RecyclerView,{
+  local view
+  view=luajava.override(RecyclerView,{
     onInterceptTouchEvent=function(super,event)
-      if pathRecyclerView.canScrollHorizontally(1) then
+      if view.canScrollHorizontally(1) then
         sideAppBarLayout.requestDisallowInterceptTouchEvent(true)--不能请求自己，因为会导致不滚动
       end
       return super(event)
     end,
   })
+  return view
 end
 
 ---在 v5.1.0(51099) 添加
 ---添加了拖放的RecyclerView
 function FilesBrowserManager.FilesRecyclerViewBuilder(context)
-  return luajava.override(MyRecyclerView,{
+  local view
+  view=luajava.override(MyRecyclerView,{
     onInterceptTouchEvent=function(super,event)
       local action=event.getAction()
-      local tag=recyclerView.tag
+      local tag=view.tag
       local downEvent=tag.downEvent
       local x,y=event.getX(),event.getY()
       if action==MotionEvent.ACTION_DOWN then
         downEvent.x,downEvent.y=x,y
-        tag.longClickedView=nil
+        tag.longClickedView=nil--刚按下时不可能有正在长按的view，但可能有记录过的view，所以先清空一下记录
        elseif action==MotionEvent.ACTION_MOVE then
         local longClickedView=tag.longClickedView
         local relativeX,relativeY=x-downEvent.x,y-downEvent.y
@@ -339,21 +342,14 @@ function FilesBrowserManager.FilesRecyclerViewBuilder(context)
               end
               passDragFileTime=passDragFileTime+1
               local uri=activity.getUriForFile(data.file)
-              --授予应用权限（虽然这种方式很拉，但我可以兼容华为文件管理）
-              local intent = Intent()
-              intent.setAction("android.intent.action.SEND")
-              intent.setFlags(268435456)
-              intent.setType(activity.getContentResolver().getType(uri))
 
-              local infoList=activity.getPackageManager().queryIntentActivities(intent, 65536)
-              for index=0,#infoList-1 do
-                activity.grantUriPermission(infoList[index].activityInfo.packageName, uri, 3)
-              end
-              activity.grantUriPermission("com.huawei.desktop.explorer", uri, 3)
-              activity.grantUriPermission("com.huawei.desktop.systemui", uri, 3)
+              --授予应用权限（虽然这种方式很拉，但我可以兼容华为文件管理）
+              pcall(authorizeHWApplicationPermissions,uri)
+
               local clipData=ClipData.newUri(activity.getContentResolver(),"data", uri)
-              local myShadow=DragShadowBuilder(longClickedView)
-              longClickedView.startDrag(clipData,myShadow,"drag to other activity",View.DRAG_FLAG_GLOBAL|View.DRAG_FLAG_GLOBAL_URI_READ)
+              local shadow=DragShadowBuilder(longClickedView)
+              --local shadow=DragShadowBuilder(shadowView)
+              longClickedView.startDrag(clipData,shadow,"drag to other activity",View.DRAG_FLAG_GLOBAL|View.DRAG_FLAG_GLOBAL_URI_READ)
             end
             swipeRefresh.requestDisallowInterceptTouchEvent(true)--阻止侧滑关闭
             return nil--阻止滚动
@@ -366,6 +362,7 @@ function FilesBrowserManager.FilesRecyclerViewBuilder(context)
       return super(event)
     end,
   })
+  return view
 end
 
 --加载更多菜单
@@ -840,12 +837,12 @@ end
 
 --初始化
 function FilesBrowserManager.init()
-  --directoryFile=ProjectManager.projectsFile
-  swipeRefresh.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
-    onRefresh = function()
-      FilesBrowserManager.refresh()
-    end
-  })
+  --设置下拉刷新监听器
+  swipeRefresh.onRefresh = function()
+    FilesBrowserManager.refresh()
+  end
+
+  --应用下拉刷新风格
   MyStyleUtil.applyToSwipeRefreshLayout(swipeRefresh)
 
   adapter=FileListAdapter(item)
@@ -862,12 +859,15 @@ function FilesBrowserManager.init()
       MyAnimationUtil.RecyclerView.onScroll(recyclerView, 0, 0, sideAppBarLayout, "LastSideActionBarElevation")
   end})
 
+  --路径查看器
   pathAdapter=FilePathAdapter(pathItem)
   pathRecyclerView.setAdapter(pathAdapter)
   pathLayoutManager = LinearLayoutManager()
   pathLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL)
   --pathLayoutManager.setStackFromEnd(true)
   pathRecyclerView.setLayoutManager(pathLayoutManager)
+
+  --长按菜单
   activity.registerForContextMenu(recyclerView)
   recyclerView.onCreateContextMenu=function(menu,view,menuInfo)
     FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
@@ -961,6 +961,7 @@ function FilesBrowserManager.init()
   end
   local downEvent={}
   recyclerView.tag.downEvent=downEvent
+
 end
 
 ---判断是不是模块根路径

@@ -6,7 +6,7 @@ FilesTabManager.fileConfig; FilesTabManager.getFileConfig(): table(map): 现在�
 FilesTabManager.fileType; FilesTabManager.getFileType(): string: 现在打开的文件扩展名
 FilesTabManager.openedFiles; FilesTabManager.getOpenedFiles(): table(map): 已打开的文件列表，以lowerPath作为键
   数据格式:{
-   ["/path1.lua"]={
+   ["/绝对路径.lua"]={
      file=File(),
      path="/path1.lua",
      oldContent="content1",
@@ -32,6 +32,31 @@ local openState, file, fileConfig,fileType = false, nil, nil, nil
 local openedFiles = {}
 FilesTabManager.backupPath=AppPath.AppMediaDir..os.date("/backup/%Y%m%d")
 FilesTabManager.backupDir=File(FilesTabManager.backupPath)
+
+---在 v5.1.1(51199) 添加
+---适配了菜单的TabLayout，平衡下拉与滚动的冲突
+function FilesTabManager.FilesTabLayoutBuilder(context)
+  local startX=0
+  local view
+  view=luajava.override(TabLayout,{
+    onInterceptTouchEvent=function(super,event)
+      local action=event.getAction()
+      local x=event.getX()
+      if action==MotionEvent.ACTION_DOWN then
+        startX=x--记录按下位置
+       elseif action==MotionEvent.ACTION_MOVE then
+        if (startX-x)>math.dp2int(18) or (x-startX)>math.dp2int(18) then--偏移18dp，就说明要横向滚动了
+          return super(event)
+         else
+          filesTabLay.onTouchEvent(event)--这时候可能要下拉，但是为了提升滚动灵敏度要绕过super执行onTouchEvent
+          return nil
+        end
+      end
+      return super(event)
+    end,
+  })
+  return view
+end
 
 local function applyTabMenu(view,config)
   local popupMenu=PopupMenu(activity,view)
@@ -189,12 +214,13 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
       initFileTabView(tab,fileConfig)
     end
 
-    local success,failed=false,false
+    local success,failed,toast=false,false,false
     if File(filePath).isFile() then
       success,failed=pcall(function()
         EditorsManager.switchEditorByDecoder(decoder)
         --编辑器滚动相关在 EditorsManager.openNewContent 内
-        if EditorsManager.openNewContent(filePath,newFileType,decoder,keepHistory) then
+        local succes,err=EditorsManager.openNewContent(filePath,newFileType,decoder,keepHistory)
+        if succes then
           setSharedData("openedFilePath_"..ProjectManager.nowPath,filePath)
           --更新文件浏览器显示内容
           local browserAdapter=FilesBrowserManager.adapter
@@ -210,6 +236,9 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
           if currentFileMenu then
             currentFileMenu.setEnabled(true)
           end
+         else
+          toast=true
+          return err
         end
         if not(tab.isSelected()) then--避免调用tab里面的重复点击事件
           filesTabLay.post(Runnable({
@@ -221,13 +250,18 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
       end)
       refreshMenusState()
      else
+      toast=true
       failed=R.string.file_not_find
     end
 
     if failed or not success then
       fileConfig.deleted=true
       FilesTabManager.closeFile(fileConfig.lowerPath)
-      showErrorDialog(fileName,failed or R.string.unknowError)
+      if toast then
+        showSnackBar(failed or R.string.unknowError)
+       else
+        showErrorDialog(fileName,failed or R.string.unknowError)
+      end
       --防止tab与实际打开的不一样，因为此时tab在没切换的时候就删除掉了，tab不会响应打开文件的
       filesTabLay.post(Runnable({
         run=function()

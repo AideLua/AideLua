@@ -1,4 +1,5 @@
 import "com.jesse205.layout.MyEditDialogLayout"
+--好像有内存溢出的问题
 local EditDialogBuilder={}
 setmetatable(EditDialogBuilder,EditDialogBuilder)
 local metatable={__index=EditDialogBuilder}
@@ -15,13 +16,13 @@ function EditDialogBuilder.__call(class,context)
 end
 
 function EditDialogBuilder.__index(class,key)
-  local isReturn=key:sub(1,3)=="get"
+  --local isReturn=key:sub(1,3)=="get"
   return function(self,...)
     local result=rawget(self,"dialogBuilder")[key](...)
-    if isReturn then
-      return result
-     else
+    if result==rawget(self,"dialogBuilder") then
       return self
+     else
+      return result
     end
   end
 end
@@ -46,6 +47,13 @@ function EditDialogBuilder:setAllowNull(state)
   return self
 end
 
+---设置按钮
+---@param self table 
+---@param text string|number 显示的文字
+---@param func function 回调函数
+---@param defaultFunc boolean 设置为默认，用户按下回车执行
+---@param checkNull boolean 检查是不是空
+---@param buttonType string 按钮类型
 local function setButton(self,text,func,defaultFunc,checkNull,buttonType)
   local onClick
   if func then
@@ -53,6 +61,7 @@ local function setButton(self,text,func,defaultFunc,checkNull,buttonType)
       local dialog=self.dialog
       local text=self.ids.edit.text
       local editLay=self.ids.editLay
+      --检查空并且不允许空
       if checkNull and self.allowNull==false then
         if text=="" then
           editLay
@@ -65,6 +74,8 @@ local function setButton(self,text,func,defaultFunc,checkNull,buttonType)
         editLay.setErrorEnabled(false)
         dialog.dismiss()
         luajava.clear(dialog)
+        table.clear(self)
+        self=nil
       end
     end
   end
@@ -72,6 +83,7 @@ local function setButton(self,text,func,defaultFunc,checkNull,buttonType)
   if defaultFunc then--按回车键默认执行
     self.defaultFunc=onClick
   end
+  onClick=nil
   return self
 end
 
@@ -97,10 +109,13 @@ function EditDialogBuilder:show()
 
   dialogBuilder.setView(MyEditDialogLayout.load(nil,ids))
 
+  --要设置按钮，必须先在builder里面设置
   for index,content in pairs(buttonConfigs) do
     dialogBuilder["set"..index:gsub("^%l", string.upper).."Button"](content[1],nil)
   end
+  --显示真正的对话框
   local dialog=dialogBuilder.show()
+  --是否有默认文字
   local textState=toboolean(text==nil or text=="")
 
   for index,content in pairs(buttonConfigs) do
@@ -119,13 +134,15 @@ function EditDialogBuilder:show()
   self.dialog=dialog
 
   local edit,editLay=ids.edit,ids.editLay
-  
+
+  --弹出输入法
   edit.post(Runnable({
     run=function()
       edit.requestFocus()--输入框取得焦点
       inputMethodService.showSoftInput(edit,InputMethodManager.SHOW_FORCED)
     end
   }))
+  --设置默认帮助文字
   if helperText then
     if type(helperText)=="number" then
       helperText=context.getString(helperText)
@@ -133,6 +150,7 @@ function EditDialogBuilder:show()
     editLay.setHelperText(helperText)
     editLay.setHelperTextEnabled(true)
   end
+  --设置默认内容
   if text then
     edit.setText(text)
     edit.setSelection(utf8.len(text))--光标后置
