@@ -152,4 +152,11 @@ function main()
     summary=PluginsUtil._VERSION;
     icon=R.drawable.ic_puzzle_outline;
   })
+  table.insert(data,6,{--PluginsUtil 版本
+    SettingsLayUtil.ITEM_NOSUMMARY;
+    title=getLocalLangObj("更新日志","Change Log");
+    url="https://gitee.com/Jesse205/AideLua/blob/master/CHANGELOG.md",
+    icon=R.drawable.ic_history;
+    newPage="newApp";
+  })
 end

@@ -365,13 +365,17 @@ function NewProjectManager.buildConfig(pageConfig,appName,packageName)
   end
 
   --把keysLists整合到keys
-  for index, content in pairs(keysLists) do --遍历列表
-    for index, content in pairs(content) do --遍历Keys
-      local oldContentList = keys[index]
-      local _type = type(oldContentList)
+  for index, keysList in pairs(keysLists) do --遍历列表
+    for index, content in pairs(keysList) do --遍历Keys
+      local _type = type(content)
       if _type == "table" then
-        for index, content in ipairs(content) do
-          table.insert(oldContentList, content)
+        local oldContentList = keys[index]
+        if not oldContentList then
+          oldContentList={}
+          keys[index]=oldContentList
+        end
+        for index, subContent in ipairs(content) do
+          table.insert(oldContentList, subContent)
         end --将新的值追加到原列表
        else
         keys[index] = content --覆盖原有值
@@ -399,10 +403,10 @@ end
 ---@param unzipList table 解压列表
 ---@param path string 单个模板路径
 ---@param androidxState boolean AndroidX启用状态
-function NewProjectManager.addTemplateZipsToUnzipList(unzipList,path,androidxState)
+function NewProjectManager.addTemplateZipsToUnzipList(unzipList,path,androidXState)
   table.insert(unzipList,path.."/baseTemplate.zip")
   --androidxState为true时取androidx.zip，否则取normal.zip
-  table.insert(unzipList,path..(androidxState and "/androidx.zip" or "/normal.zip"))
+  table.insert(unzipList,path..(androidXState and "/androidx.zip" or "/normal.zip"))
 end
 
 return NewProjectManager

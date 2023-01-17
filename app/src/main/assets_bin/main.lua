@@ -542,50 +542,50 @@ end
 function onKeyUp(keyCode, event)
   if touchingKey then
     touchingKey=false
-    if keyCode == KeyEvent.KEYCODE_BACK then -- 返回键事件
-      if FilesBrowserManager.openState and nowDevice ~= "pc" then -- 没有打开键盘且已打开侧滑，且设备为手机
-        if ProjectManager.openState then
-          -- todo:转到上一级文件夹
-          local directoryFile=FilesBrowserManager.directoryFile
-          local directoryPath=directoryFile.getPath()
-          if directoryPath=="/" or isSamePathFileByPath(directoryPath,ProjectManager.nowPath) then
-            ProjectManager.closeProject()
-           else
-            FilesBrowserManager.refresh(directoryFile.getParentFile())
-          end
-         else
-          FilesBrowserManager.close()
+    local success,result=pcall(function()--华为MPencil双击功能
+      if keyCode==KeyEvent.KEYCODE_F20 then
+        if (System.currentTimeMillis() - lastPencilkeyTime) < 2000 then
+          ProjectManager.runProject()
         end
+        lastPencilkeyTime = System.currentTimeMillis()
         return true
-        -- todo:elseif 已打开预览模式
-        -- todo:关闭预览模式
-       else -- 啥都没打开
-        if (System.currentTimeMillis() - lastBackTime) > 2000 then
-          showSnackBar(R.string.exit_toast)
-          lastBackTime = System.currentTimeMillis()
-          return true
-        end
       end
-     else
-      local success,result=pcall(function()--华为MPencil双击功能
-        if keyCode==KeyEvent.KEYCODE_F20 then
-          if (System.currentTimeMillis() - lastPencilkeyTime) < 2000 then
-            ProjectManager.runProject()
-          end
-          lastPencilkeyTime = System.currentTimeMillis()
-          return true
-        end
-      end)
-      if success then
-        return result
-      end
+    end)
+    if success then
+      return result
     end
   end
 end
 
 function onBackPressed()
-  print("返回")
-  --return true
+  if FilesBrowserManager.openState and nowDevice ~= "pc" then -- 没有打开键盘且已打开侧滑，且设备为手机
+    if ProjectManager.openState then
+      -- todo:转到上一级文件夹
+      local directoryFile=FilesBrowserManager.directoryFile
+      local directoryPath=directoryFile.getPath()
+      if directoryPath=="/" or isSamePathFileByPath(directoryPath,ProjectManager.nowPath) then
+        ProjectManager.closeProject()
+       else
+        FilesBrowserManager.refresh(directoryFile.getParentFile())
+      end
+     else
+      FilesBrowserManager.close()
+    end
+    return true
+    -- todo:elseif 已打开预览模式
+    -- todo:关闭预览模式
+   else -- 啥都没打开
+    if (System.currentTimeMillis() - lastBackTime) > 2000 then
+      showSnackBar(R.string.exit_toast)
+      .addCallback(Snackbar.BaseCallback({
+        onDismissed=function()
+          lastBackTime=0
+        end
+      }))
+      lastBackTime = System.currentTimeMillis()
+      return true
+    end
+  end
 end
 
 function onRestoreInstanceState(savedInstanceState)

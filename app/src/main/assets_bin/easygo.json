@@ -1,6 +1,6 @@
 {
     "easyGoVersion": "1.0",
-    "client": "com.Jesse205.aidelua2",
+    "client": "com.jesse205.aidelua2",
     "logicEntities": [
         {
             "head": {
@@ -11,11 +11,11 @@
                 "mode": "1",
                 "activityPairs": [
                     {
-                        "from": "com.Jesse205.superlua.Main",
+                        "from": "com.jesse205.superlua.Main",
                         "to": "*"
                     },
                     {
-                        "from": "com.Jesse205.superlua.LuaActivityX",
+                        "from": "com.jesse205.superlua.LuaActivityX",
                         "to": "*"
                     }
                 ],

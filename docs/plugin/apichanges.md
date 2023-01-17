@@ -191,16 +191,61 @@ PluginsUtil：
 :::
 
 ### v5.1.1(51199)
-1. `NewProjectManager.applySingleCheckGroup()`修复未指定默认Chip时虽然有选择但是没有保存数据的bug，并弹出警告
-2. `createVirtualClass(normalTable)` 返回结果改为 normalTable
-3. 新增 `FilesBrowserManager.getNowModuleDirName(fileRelativePath)`
-4. 新增 `SubActivityUtil.lua`
-5. `NewProjectManager.loadTemplate` 允许 `keys` 为空值
-6. `MyCardTitleEditLayout.layout` 在 `CardView` 下面增加了 `FrameLayout`，并增加了清除按钮
-7. 新增 `ClearContentHelper`
-8. `FilesBrowserManager.refresh` 新增 `fileName` 参数，用于文件高亮显示
-9. 新增 `onPause` 事件
-10. 废除 `symbolBar.onButtonLongClickListener` ，添加 `symbolBar.onButtonTouchListener`
+::: details 变更
+PluginsManagerUtil
+| 方法 | 说明 |
+| ---- | ---- |
+| uninstall | 在成功之后自动执行 `PluginsManagerUtil.clearOpenedPluginPaths()` |
+| showInstallDialog | 在成功之后自动执行 `PluginsManagerUtil.clearOpenedPluginPaths()` |
+| installByUri | 见 `PluginsManagerUtil.showInstallDialog` |
+
+NewProjectManager
+| 方法 | 说明 |
+| ---- | ---- |
+| applySingleCheckGroup | 修复未指定默认Chip时虽然有选择但是没有保存数据的bug，并弹出警告 |
+
+FilesBrowserManager
+| 方法 | 说明 |
+| ---- | ---- |
+| refresh | 新增 `fileName` 参数，用于文件高亮显示 |
+
+其他
+| 方法 | 说明 |
+| ---- | ---- |
+| createVirtualClass | 返回结果改为 `normalTable` |
+| NewProjectManager.loadTemplate | 允许 `keys` 为空值 |
+| MyCardTitleEditLayout.layout | `CardView` 下面增加了 `FrameLayout`，并增加了清除按钮 |
+:::
+
+::: details 新增
+文件
+| 文件名 | 说明 |
+| ---- | ---- |
+| SubActivityUtil.lua | 子页面相关 |
+| ClearContentHelper.lua | 清空按钮 |
+
+NewProjectManager
+| 方法 | 说明 |
+| ---- | ---- |
+| getNowModuleDirName(fileRelativePath) | 获取当前模块目录名称，如果当前路径不在模块内，则返回主模块名称 |
+
+事件
+| 事件 | 说明 |
+| ---- | ---- |
+| onPause | 生命周期：暂停 |
+
+其他方法
+| 方法 | 说明 |
+| ---- | ---- |
+| authorizeHWApplicationPermissions(uri) | 适配华为文件管理 |
+:::
+
+::: details 废除
+EditorManager.symbolBar
+| 老方法 | 新方法 |
+| ---- | ---- |
+| onButtonLongClickListener | symbolBar.onButtonTouchListener |
+:::
 
 ## 相关链接
 [应用更新日志](https://gitee.com/Jesse205/AideLua/blob/master/README.md)

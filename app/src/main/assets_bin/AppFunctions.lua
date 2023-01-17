@@ -149,7 +149,7 @@ function startWindmillActivity(toolName)
 end
 
 --公共Activity
-local sharedActivityPathTemplate=AppPath.Sdcard.."/Android/media/%s/temp/aidelua/activities/%s"
+local sharedActivityPathTemplate=AppPath.Sdcard.."/Android/media/%s/cache/temp/aidelua/activities/%s"
 
 --更新共享Activity到目录
 function updateSharedActivity(name,sdActivityDir)
@@ -315,6 +315,7 @@ function getColorAndHex(text)
   end
 end
 
+---在 v5.1.1(51199) 添加
 ---适配SEND应用权限，适配华为文件管理
 ---@param uri Uri
 function authorizeHWApplicationPermissions(uri)

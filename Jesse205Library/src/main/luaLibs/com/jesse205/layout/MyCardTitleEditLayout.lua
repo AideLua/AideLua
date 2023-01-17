@@ -8,16 +8,17 @@ MyCardTitleEditLayout.layout={
   cardBackgroundColor=theme.color.ActionBar.cardBackgroundColor;
   radius="8dp";
   {
-    FrameLayout;
+    LinearLayout;
     layout_width="fill";
     layout_height="fill";
     {
       AppCompatEditText;
       layout_width="fill";
       layout_height="fill";
+      layout_weight=1;
       padding=0;
       paddingLeft="8dp";
-      paddingRight="8dp";
+      --paddingRight="8dp";
       id="searchEdit";
       imeOptions="actionSearch";
       backgroundColor=0;

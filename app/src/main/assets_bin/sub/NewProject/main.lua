@@ -25,10 +25,18 @@ activity.setTitle(R.string.project_create)
 activity.setContentView(loadlayout2("layouts.layout"))
 actionBar.setDisplayHomeAsUpEnabled(true)
 
+function onCreateOptionsMenu(menu)
+  helpMenu=menu.add(R.string.help)
+  helpMenu.setIcon(R.drawable.ic_help_circle_outline)
+  helpMenu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
+end
+
 function onOptionsItemSelected(item)
   local id=item.getItemId()
   if id==android.R.id.home then
     activity.finish()
+   elseif item==helpMenu then
+    openUrl("https://jesse205.github.io/AideLua/function/newproject.html")
   end
 end
 

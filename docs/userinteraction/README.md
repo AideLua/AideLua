@@ -2,10 +2,9 @@
 Aide Lua 为用户提供更好的用户交互体验
 
 ## 页面
-* 主页面 Main
+* [主页面 Main](main.md)
 * 新建工程 NewProject
 * 设置 Settings
-* 关于 About
 * 关于 About
 
 ## 全局特性
@@ -33,7 +32,7 @@ Aide Lua 为用户提供更好的用户交互体验
 在大宽度模式下，滑动列表的两侧依旧可以滚动列表。<br>
 如果您发现此操作无法被响应，那么这是一个 Bug，欢迎向我们[提供反馈](https://gitee.com/Jesse205/AideLua/issues)。
 ![](/images/ui/autowidth/list_wide_scroll.gif)
-<p class="pictureName">[图片] 滑动外部可滚动列表</p>
+<p class="pictureName">[动图] 滑动外部可滚动列表</p>
 :::
 
 #### 网格

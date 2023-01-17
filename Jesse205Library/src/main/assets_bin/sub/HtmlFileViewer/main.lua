@@ -24,11 +24,13 @@ end
 textView.setLinksClickable(true)
 textView.setMovementMethod(RTEditorMovementMethod.getInstance())
 textView.requestFocusFromTouch()
+
 if data.title then
   activity.setTitle(data.title)
 end
 
 local path=data.path
+local url=data.url
 if path then
   local content=io.open(path,"r"):read("*a")
   if tostring(data.text)=="true" then

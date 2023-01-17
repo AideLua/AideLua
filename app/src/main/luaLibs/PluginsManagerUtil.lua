@@ -13,7 +13,7 @@ end
 PluginsManagerUtil.getAlpInfo=getAlpInfo
 
 
-function showInstallDialog(path,uri,config,callback)
+function showInstallDialog(path,uri,config,callback,deleteFile)
   local mode=config.mode
   if mode=="plugin" or mode==nil then
     local packageName=config.packagename
@@ -58,10 +58,12 @@ URI: %s",
           LuaUtil.rmDir(extractDir)
         end
         zipFile.extractAll(extractPath)
+        PluginsUtil.clearOpenedPluginPaths()
         callback("success")
        else
         callback("failed")
       end
+      LuaUtil.rmDir(File(path))
     end)
     .setNegativeButton(android.R.string.cancel,nil)
     .show()
@@ -73,15 +75,17 @@ PluginsManagerUtil.showInstallDialog=showInstallDialog
 
 function PluginsManagerUtil.installByUri(uri,callback)
   local scheme=uri.getScheme()
-  local path
+  local path,deleteFile
   if scheme=="content" then
     local inputStream=activity.getContentResolver().openInputStream(uri)
     path=AppPath.AppSdcardDataTempDir.."/"..System.currentTimeMillis()..".zip"
     File(AppPath.AppSdcardDataTempDir).mkdirs()
     local outputStream=FileOutputStream(path)
     LuaUtil.copyFile(inputStream,outputStream)
+    deleteFile=true
    elseif scheme=="file" or scheme==nil then
     path=uri.getPath()
+    deleteFile=false
    else
     return
   end
@@ -94,13 +98,13 @@ function PluginsManagerUtil.installByUri(uri,callback)
         if limitVersion.mincode>versionCode then--在最低版本之上
           showErrorDialog(R.string.plugins_error_update_app)
          else
-          showInstallDialog(path,uri,config,callback)
+          showInstallDialog(path,uri,config,callback,deleteFile)
         end
        else
         showErrorDialog(R.string.plugins_error_unsupported)
       end
      else
-      showInstallDialog(path,uri,config,callback)
+      showInstallDialog(path,uri,config,callback,deleteFile)
     end
    else--读取失败
     showErrorDialog(R.string.open_failed,config)
@@ -123,6 +127,7 @@ function PluginsManagerUtil.uninstall(path,config,callback)
       LuaUtil.rmDir(dir)--移除插件
       LuaUtil.rmDir(File(PluginsUtil.getPluginDataPath(dirName)))--移除数据
       PluginsUtil.setEnabled(dirName,nil)--移除启用状态
+      PluginsUtil.clearOpenedPluginPaths()
       callback("success")
      else
       callback("failed")

@@ -1,3 +1,6 @@
+---
+title: false
+---
 # Aide Lua 使用文档
 
 ## 简介
@@ -47,6 +50,10 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 2. 用 AIDE 打开项目，点击 `构建刷新`，`确定`（或者 `运行` ，`gradle assembleRelease`，推荐这种方法）
 3. 点击 AideLua 的 `二次打包并安装` 按钮（或 `二次打包` ，但需手动签名）并安装，测试是否可以正常打包并运行
 4. 点击 AideLua 的 `运行` 按钮，测试是否正常通过已安装的应用调试
+
+::: tip
+您也可以使用[此工具](https://www.123pan.com/s/G7a9-c1ek)将现有 AndroLua+ 工程转换为 Aide Lua 项目
+:::
 
 ## 工作原理
 1. 读取 `.aidelua/config.lua` 的内容

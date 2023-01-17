@@ -216,6 +216,7 @@
 
         local appName=keys.appName--文件夹名/应用名
         local aluaVer=keys.androluaVersion
+        local androidXState=keys.androidX
         local projectPath=NewProjectUtil2.PRJS_PATH.."/"..appName--此工程根文件夹路径
         local projectFile=File(projectPath)
         local mainProjectPath=projectPath.."/app/src/main"
@@ -233,8 +234,7 @@
         this.update(activity.getString(R.string.project_create_unzip_slibs))
         for index=0,#enabledSimpleLibsJ-1 do
           local path=enabledSimpleLibsJ[index]
-          local file=File(path)
-          if file.isFile() then
+          if File(path).isFile() then
             NewProjectUtil2.unzip(path,mainProjectPath)
            else
             --通用模版
@@ -242,6 +242,16 @@
 
             --Androlua定制
             NewProjectUtil2.unzip(("%s/%s.zip"):format(path,aluaVer),mainProjectPath)
+
+            --AndroidX
+            local androidXPath=path..(androidXState and "/androidx" or "/normal")
+            if File(androidXPath).isFile() then
+              --通用模版
+              NewProjectUtil2.unzip(androidXPath.."/currency.zip",mainProjectPath)
+
+              --Androlua定制
+              NewProjectUtil2.unzip(("%s/%s.zip"):format(androidXPath,aluaVer),mainProjectPath)
+            end
           end
         end
         luajava.clear(enabledSimpleLibsJ)

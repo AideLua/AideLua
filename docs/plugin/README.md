@@ -13,15 +13,16 @@ Util 版本：v3.1
 
 ## 提示
 1. 本文档部分说明格式为 “__变量名__ (数据类型): 说明” 或 “__数据类型__: 说明”
-2. 标有 <Badge type="danger" text="X" vertical="middle" /> 的表示已废除，相关 API 已被删除
+2. 标有 <Badge type="danger" text="X" vertical="middle" /> 的表示在未知版本已废除，相关 API 已被删除
 3. 标有 <Badge type="danger" text="*" vertical="middle" /> 的表示必须文件、方法 或 变量
+4. 软件写的比较随意，因此您可以随意调用API，就像是修改软件本身一样，此文档只是起帮助理解的作用。
 
 ::: danger 建议最低的最低适配软件版本
 我们强烈建议从 __v5.1.0(51099)或以上__ 开始适配，因为在 v5.1.0 发生了巨大变化，大到开发者自己都不知道改了啥。本文档有非常多地方待修正或者补充，如果您发现了某处有问题，希望您可以联系我们以修复。
 :::
 
 ## 手动导入
-1. 打开文件管理，进入 `内部存储/Android/media/com.Jesse205.aidelua2/files/plugins` ，如果没有此文件夹就手动新建一个
+1. 打开文件管理，进入 `内部存储/Android/media/com.jesse205.aidelua2/files/plugins` ，如果没有此文件夹就手动新建一个
 2. 下载插件（扩展名通常为 `zip` 或 `alp` ，当然也不排除还有其他扩展名）
 3. 使用 zip 格式打开插件，打开 `init.lua` 文件，复制 `packagename` (包名) 的参数（ `=` 后面，不带引号）
 4. 在 `plugins` 文件夹 里面新建文件夹，重命名为 插件的 `packagename` (就是刚刚复制的文字)
@@ -46,24 +47,24 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 ### PluginsUtil <Badge text="table" vertical="middle" /> <Badge text="Util" vertical="middle" />
 插件相关 API，也是支持插件运行的模块
 
-| 变量                | 说明                   |
-|-------------------|----------------------|
-| _VERSION          | __string__: Util 版本  |
-| PLUGINS_PATH      | __string__: 插件存放路径   |
+| 变量 | 说明 |
+| ---- | ---- |
+| _VERSION | __string__: Util 版本 |
+| PLUGINS_PATH | __string__: 插件存放路径 |
 | PLUGINS_DATA_PATH | __string__: 插件数据存放路径 |
 
 #### PluginsUtil.getPluginDataPath(packageName)
 获取插件数据目录
 
-| 参数          | 说明                |
-|-------------|-------------------|
+| 参数 | 说明 |
+| ------------- | ---- |
 | packageName | __string__: 插件包名。 |
 
 #### PluginsUtil.getPluginPath(packageName)
 获取插件目录
 
-| 参数          | 说明                                                                                 |
-|-------------|------------------------------------------------------------------------------------|
+| 参数 | 说明 |
+| ---- | ---- |
 | packageName | __string__: 插件包名，如果文件夹名与真正的 `init.lua` 中的 `packagename` 不同，则 `packageName` 传入文件夹名。 |
 
 #### PluginsUtil.clearOpenedPluginPaths() <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />
@@ -72,15 +73,15 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 ### activityName <Badge text="string" vertical="middle" />
 当前页面 (Activity) 名，可能为 `nil`
 
-| 值            | 说明                                                                                |
-|--------------|-----------------------------------------------------------------------------------|
-| main         | 主页面                                                                               |
-| settings     | 软件设置页面                                                                            |
-| newproject   | 新建工程页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />       |
-| viewclass    | 查看类页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />        |
-| about        | 关于页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />         |
-| layouthelper | 布局助手页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />       |
-| javaapi      | JavaAPI查看器页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" /> |
+| 值 | 说明 |
+| ---- | ----- |
+| main | 主页面 |
+| settings | 软件设置页面 |
+| newproject | 新建工程页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" /> |
+| viewclass | 查看类页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" /> |
+| about | 关于页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" /> |
+| layouthelper | 布局助手页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" /> |
+| javaapi | JavaAPI查看器页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" /> |
 
 ### getPluginDataPath(packageName)
 获取插件数据目录，与 [`PluginsUtil.getPluginDataPath(packageName)`](#pluginsutil-getplugindatapath-packagename) 完全相同
@@ -120,19 +121,19 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 ::: details 彩蛋
 
 | 软件代号 (`apptype`)  | 代指软件 |
-|-------------------|------------------------------------|
-| aidelua           | Aide Lua (Pro)                     |
-| eddelua           | Edde Lua (截止目前此app不支持插件)           |
-| alstudio          | Android Lua Studio (截止目前此app仅存于想象) |
-| yunchu_jesse205   | 云储 优化版 (截止目前此app不支持插件)             |
-| eddeyunchumanager | Edde 后台管理 (截止目前此app仅存于想象)          |
-| userstatistics    | 用户统计 (截止目前此app仅存于想象)               |
-| goapk_jesse205    | GoApk (截止目前此app仅存于想象且已停止)          |
-| highapk           | 良心APK (截止目前此app仅存于想象)              |
-| eddebrowser       | Edde 浏览器 (截止目前此app仅存于想象)           |
-| eddeconnect       | Edde 互联 (截止目前此app仅存于想象)            |
-| eddestudy         | Edde 学习桌面 (截止目前此app仅存于想象)          |
-| hellotool         | 哈兔Box (截止目前此app不支持此类型插件)           |
+| ---- | ---- |
+| aidelua | Aide Lua (Pro) |
+| eddelua | Edde Lua (截止目前此app不支持插件) |
+| alstudio | Android Lua Studio (截止目前此app仅存于想象) |
+| yunchu_jesse205 | 云储 优化版 (截止目前此app不支持插件) |
+| eddeyunchumanager | Edde 后台管理 (截止目前此app仅存于想象) |
+| userstatistics | 用户统计 (截止目前此app仅存于想象) |
+| goapk_jesse205 | GoApk (截止目前此app仅存于想象且已停止) |
+| highapk | 良心APK (截止目前此app仅存于想象) |
+| eddebrowser | Edde 浏览器 (截止目前此app仅存于想象) |
+| eddeconnect | Edde 互联 (截止目前此app仅存于想象) |
+| eddestudy | Edde 学习桌面 (截止目前此app仅存于想象) |
+| hellotool | 哈兔Box (截止目前此app不支持此类型插件) |
 
 :::
 
@@ -140,16 +141,16 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 
 插件主页面
 
-| 参数顺序 (...)  | 说明   |
-|-------------|------|
-| 1           | 项目路径 |
-| 2           | 文件路径 |
+| 参数顺序 (...) | 说明 |
+| ---- | ---- |
+| 1 | 项目路径 |
+| 2 | 文件路径 |
 
 ### config/events/ <Badge text="文件夹" vertical="middle" />
 
 存放各个页面的独立事件的文件夹
 
-* 文件扩展名: `aly`
-* 文件名称: `<页面名称>.aly`
-* 文件示例: `main.aly` `settings.aly`
+* 文件扩展名: `aly` (不支持 `lua` )
+* 文件名称: `<页面标识>.aly`
+* 文件示例: `main.aly`、`settings.aly` ......
 * 更多请见 [`page` 目录](pages/main.md)

@@ -18,7 +18,7 @@
 
 | 返回类型 | 说明 |
 | ---- | --- |
-| boolean | 如果返回 `true` 则停止执行接下来的操作（如：自动打开工程等）。 <Badge text="在 v5.0.3(50399) 添加" vertical="middle" />|
+| boolean | 如果返回 `true` 则停止执行接下来的操作（如：自动打开工程等）。 <Badge text="v5.0.3+" vertical="middle" />|
 
 代码执行顺序：
 
@@ -66,7 +66,7 @@ Aide Lua 未使用标准的菜单更新方式，因此您使用 `activity.invali
 
 | 返回类型 | 说明 |
 | ---- | --- |
-| boolean | 如果返回 `true` 则停止执行接下来的操作（响应自带快捷键）。 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" /> |
+| boolean | 如果返回 `true` 则停止执行接下来的操作（响应自带快捷键）。 <Badge text="v5.0.4+" vertical="middle" /> |
 
 代码执行顺序：
 > 调用插件事件 - 判断返回值，响应自带快捷键事件
@@ -90,19 +90,19 @@ Aide Lua 未使用标准的菜单更新方式，因此您使用 `activity.invali
 
 常见于返回到页面
 
-### onPause() <Badge text="生命周期" vertical="middle" /> <Badge text="在 v5.1.1(51199) 添加" vertical="middle" />
+### onPause() <Badge text="生命周期" vertical="middle" /> <Badge text="v5.1.1+" vertical="middle" />
 
 [Activity 生命周期：onPause()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#onpause)
 
 Activity 暂停时执行，常见于切到后台
 
-### onStart() <Badge text="生命周期" vertical="middle" /> <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />
+### onStart() <Badge text="生命周期" vertical="middle" /> <Badge text="v5.0.4+" vertical="middle" />
 
 [Activity 生命周期：onStart()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#onstart)
 
 Activity 开始时执行，常见于回到页面
 
-### onStop() <Badge text="生命周期" vertical="middle" /> <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />
+### onStop() <Badge text="生命周期" vertical="middle" /> <Badge text="v5.0.4+" vertical="middle" />
 
 [Activity 生命周期：onStop()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#onstop)
 
@@ -155,11 +155,11 @@ activity.result({<action>，<content>})
 | switchLanguage(language) | function | 切换语言 <br> __language__ (Object): 语言 |
 | switchEditor(editorType) | function | 切换编辑器 <br> __editorType__ (string): 编辑器类型|
 | [symbolBar](#editorsmanager-symbolbar) | table (class) | 符号栏 |
-| [typefaceChangeListeners](#editorsmanager-typefacechangelisteners) <Badge text="在 v5.0.4(50499) 添加" vertical="middle" /> | table (list) | 编辑器字体监听器 |
-| [sharedDataChangeListeners](#editorsmanager-shareddatachangelisteners) <Badge text="在 v5.1.0(51099) 添加" vertical="middle" /> | table (map) | 软件配置监听器 |
+| [typefaceChangeListeners](#editorsmanager-typefacechangelisteners) <Badge text="v5.0.4+" vertical="middle" /> | table (list) | 编辑器字体监听器 |
+| [sharedDataChangeListeners](#editorsmanager-shareddatachangelisteners) <Badge text="v5.1.0+" vertical="middle" /> | table (map) | 软件配置监听器 |
 | refreshEditorScrollState() | function | 刷新编辑器滚动状态，包括阴影。 |
 
-#### EditorsManager.typefaceChangeListeners <Badge text="table" vertical="middle" /> <Badge text="List" vertical="middle" /> <Badge text="Listener" vertical="middle" /> <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />
+#### EditorsManager.typefaceChangeListeners <Badge text="table" vertical="middle" /> <Badge text="List" vertical="middle" /> <Badge text="Listener" vertical="middle" /> <Badge text="v5.0.4+" vertical="middle" />
 编辑器字体监听器
 
 格式：
@@ -181,7 +181,7 @@ activity.result({<action>，<content>})
 :::
 
 
-#### EditorsManager.sharedDataChangeListeners <Badge text="table" vertical="middle" /> <Badge text="Map" vertical="middle" /> <Badge text="Listener" vertical="middle" /> <Badge text="在 v5.1.0(51099) 添加" vertical="middle" />
+#### EditorsManager.sharedDataChangeListeners <Badge text="table" vertical="middle" /> <Badge text="Map" vertical="middle" /> <Badge text="Listener" vertical="middle" /> <Badge text="v5.1.0+" vertical="middle" />
 编辑器字体监听器
 
 格式：
@@ -224,7 +224,7 @@ activity.result({<action>，<content>})
 | setTextSize(size) | function | / | 设置文字大小 <br> __size__ (number): 文字大小 |
 | search(text,gotoNext) | function | / | 搜索 <br> __text__ (number): 搜索内容 <br> __gotoNext__ (boolean): 是否搜索下一个 |
 | getSelectedText() | function | string | 获取已选择的文字 |
-| ... | function | ... | 此 table 已设置为 metatable，因此您可以 |
+| ... | function | ... | 此 table 已设置为 metatable，因此您可以像调用 View 一样调用编辑器 |
 
 ::: tip
 如果调用 `getXxx` 类型以外的 API 时，第一个返回值为编辑器是否支持该功能的 Boolean 值
@@ -234,13 +234,13 @@ activity.result({<action>，<content>})
 
 | 键 | 类型 | 说明 |
 | ---- | ---- | ---- |
-| getReallPasteText(view) <Badge text="在 v5.1.0(51099) 添加" vertical="middle" /> | function | 获取符号栏要粘贴到文字 |
-| onButtonClickListener(view) <Badge text="在 v5.1.0(51099) 添加" vertical="middle" /> | function (listener)| 符号栏按钮点击时输入符号 |
-| onButtonLongClickListener(view) <Badge text="在 v5.1.0(51099) 添加" vertical="middle" /> | function (listener)| 符号栏按钮长按时显示预览 |
-| psButtonClick(view) <Badge type="danger" text="在 v5.1.0(51099) 废除" vertical="middle" /> | function (listener)| 符号栏按钮点击时输入符号点击事件 |
-| newPsButton(text,config) | function | 初始化一个符号栏按钮 <br> __config__ (table): 按钮配置 <Badge text="在 v5.1.0(51099) 添加" vertical="middle" /> |
+| getReallPasteText(view) <Badge text="v5.1.0+" vertical="middle" /> | function | 获取符号栏要粘贴到文字 |
+| onButtonClickListener(view) <Badge text="v5.1.0+" vertical="middle" /> | function (listener)| 符号栏按钮点击时输入符号 |
+| onButtonLongClickListener(view) <Badge text="v5.1.0+" vertical="middle" /> | function (listener)| 符号栏按钮长按时显示预览 |
+| psButtonClick(view) <Badge type="danger" text="v5.1.0+废除" vertical="middle" /> | function (listener)| 符号栏按钮点击时输入符号点击事件 |
+| newPsButton(text,config) | function | 初始化一个符号栏按钮 <br> __config__ (table): 按钮配置 <Badge text="v5.1.0+" vertical="middle" /> |
 | refresh(state) | function | 刷新符号栏状态 <br> __state__ (boolean): 开关状态 |
-| symbols <Badge text="在 v5.1.0(51099) 添加" vertical="middle" /> | table (list) | 按钮配置 |
+| symbols <Badge text="v5.1.0+" vertical="middle" /> | table (list) | 按钮配置 |
 
 ### FilesBrowserManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 这是文件浏览器管理器（侧滑）
@@ -251,6 +251,11 @@ activity.result({<action>，<content>})
 | ---- | ---- | ---- |
 | providers | table (map) | 提供者映射 |
 | highlightIndex | number | 高亮显示的项目索引（从0开始） |
+
+| 方法 | 说明 |
+| ---- | ---- |
+| isModuleRootPath(path) <Badge text="v5.1.1+" vertical="middle" />| 判断是不是模块根路径 |
+| getNowModuleDirName(fileRelativePath) <Badge text="v5.1.1+" vertical="middle" />| 获取当前模块目录名称，如果当前路径不在模块内，则返回主模块名称<br> __fileRelativePath__ (string): 相对与项目的路径 |
 
 
 ### FilesTabManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
@@ -353,3 +358,8 @@ activity.result({<action>，<content>})
 | 返回类型 | 说明 |
 | ---- | --- |
 | table (list) | mTable的索引列表 |
+
+### authorizeHWApplicationPermissions(uri) <Badge text="v5.1.0+" vertical="middle" />
+目的是兼容华为文件管理的拖拽功能。
+
+授予 Action 为 `android.intent.action.SEND` 并且 Flag 为 `268435456`的所有应用、`com.huawei.desktop.systemui` 和 `com.huawei.desktop.explorer` `uri` 的权限（自动获取类型）。

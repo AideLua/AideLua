@@ -40,6 +40,8 @@ dependencies {
     api 'androidx.viewpager2:viewpager2:1.0.0'
     api "androidx.drawerlayout:drawerlayout:1.1.1"
     //api 'androidx.preference:preference:1.0.0'
+    api "androidx.recyclerview:recyclerview:1.2.1"
+    api "androidx.browser:browser:1.0.0"
     api project(':Jesse205Library')
     api project(':androlua')
     api project(':sharp')
@@ -47,8 +49,7 @@ dependencies {
     //api 'io.github.Rosemoe.sora-editor:editor:0.16.4'
     api 'androidx.appcompat:appcompat:1.0.0'
     api 'com.google.android.material:material:1.0.0'
-    api "androidx.recyclerview:recyclerview:1.2.1"
-    api "androidx.browser:browser:1.0.0"
+
     //api "io.github.Rosemoe.sora-editor:bom:‎0.20.1"
     //api "io.github.Rosemoe.sora-editor:editor"
 }

@@ -104,8 +104,13 @@ local function applyTabMenu(view,config)
       if not(dropMenuState) then
         if y>filesTabLay.getHeight() then
           dropMenuState=true
+          --阻止事件传递
           view.requestDisallowInterceptTouchEvent(true)
-          view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+          if Build.VERSION.SDK_INT>=30 then
+            view.performHapticFeedback(HapticFeedbackConstants.GESTURE_END)
+           else
+            view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+          end
           popupMenu.show()
           local objectAnimator1=ObjectAnimator.ofFloat(config.imageView, "rotationX", {view.getRotationX(),-60,-45,0})
           local objectAnimator2=ObjectAnimator.ofFloat(config.textView, "rotationX", {view.getRotationX(),-60,-45,0})

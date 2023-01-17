@@ -134,6 +134,13 @@ function search(text,application)
   return findClasses
 end
 
+local showProgressBarRunnable=Runnable({
+  run=function()
+    if searching then
+      progressBar.setVisibility(View.VISIBLE)
+    end
+  end
+})
 
 function searchItem(text,callback)
   if not(searching) then
@@ -143,13 +150,7 @@ function searchItem(text,callback)
     refreshMenusState()
 
     --延迟展示进度条
-    Handler().postDelayed(Runnable({
-      run=function()
-        if searching then
-          progressBar.setVisibility(View.VISIBLE)
-        end
-      end
-    }),100)
+    Handler().postDelayed(showProgressBarRunnable,100)
 
     activity.newTask(search,function(classesList)
       searching=false

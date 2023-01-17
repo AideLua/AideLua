@@ -3,7 +3,7 @@
     icon=R.drawable.ic_shield_account_outline;
     title=R.string.jesse205_userAgreement,
     name="UserAgreement",
-    date="2022-11-23",
+    date="2023-1-18",
   },
   {--隐私政策
     icon=R.drawable.ic_file_lock_outline;

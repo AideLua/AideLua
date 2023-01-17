@@ -148,14 +148,16 @@ local pluginEnvTable={
   getPluginPath=getPluginPath,
   getPluginDataPath=getPluginDataPath,
 }
+setmetatable(pluginEnvTable,{__index=_G})
 
+local pluginEnvMetaTable={__index = pluginEnvTable}
 
 function getConfig(configs,path)
   local config=configs[path]
   if not(config) then
     config = getConfigFromFile(path .. "/init.lua") -- init.lua内容
     config.pluginPath = path
-    setmetatable(config, {__index = pluginEnvTable})--设置环境变量
+    setmetatable(config, pluginEnvMetaTable)--设置环境变量
     configs[path]=config
   end
   return config
@@ -168,20 +170,23 @@ function onPluginError(titleName,packageName,message,funcName)
   end)
 end
 
-setmetatable(pluginEnvTable,{__index=_G})
 
 function loadPlugins()
   plugins = {}
+  --已启用的插件列表
   enabledPluginPaths=application.get("plugin_enabledpaths")
-  --enabledPluginPaths={}
+  --插件全局事件
   local pluginsEvents = {}
   local pluginsEventsName = {}
   local pluginsEventsPackageName = {}
+  --插件独立事件
   local pluginsEvents2 = {}
   local pluginsEventsName2 = {}
   local pluginsEventsPackageName2 = {}
+  --插件页面
   local pluginsActivities = {}
   local pluginsActivitiesName = {}
+  --配置
   local configs={}
   plugins.events = pluginsEvents
   plugins.eventsName = pluginsEventsName
@@ -192,6 +197,7 @@ function loadPlugins()
   plugins.activities = pluginsActivities
   plugins.activitiesName = pluginsActivitiesName
   plugins.configs=configs
+  --没有保存的值，就刷新一遍
   if not(enabledPluginPaths) then
     enabledPluginPaths={}
     local pluginsFile = File(PLUGINS_PATH)
@@ -201,9 +207,8 @@ function loadPlugins()
         local file = fileList[index]
         local path = file.getPath()
         local dirName = file.getName()
-
+        --获取当前状态
         local defaultEnabled = getEnabled(dirName)
-
         if defaultEnabled then -- 检测是否开启
           local initPath = path .. "/init.lua"
           if File(initPath).isFile() then -- 存在init.lua
@@ -214,7 +219,7 @@ function loadPlugins()
               config.pluginPath = path
               setmetatable(config, {__index = pluginEnvTable})--设置环境变量
               configs[path]=config
-
+              --判断版本号有没有超出限制
               if getReallyEnabled(defaultEnabled,config) then
                 local err=false
                 local thirdPlugins = config.thirdplugins
@@ -248,10 +253,16 @@ function loadPlugins()
     local file=File(path)
     local dirName = file.getName()
     local config=getConfig(configs,path)
+
+    --main.lua 路径
     local mainPath = path .. "/main.lua"
+
+    --config 文件夹路径
     local configDirPath = path .. "/config"
+    --events 文件夹路径
     local eventsDirPath = configDirPath .. "/events"
 
+    --MyPlugin(com.mycompany.myplugin)
     local name = ("%s (%s)"):format(config.appname, config.packagename or dirName)
     local fileEvents=config.events
     if fileEvents then

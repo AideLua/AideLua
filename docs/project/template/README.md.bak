@@ -18,19 +18,19 @@ templates   <-- 模板根文件夹
 │     │  baseTemplate.zip   <-- 子模版基础资源文件
 │     │  normal.zip   <-- 子模版非 AndroidX 资源文件（自动识别）
 │     │
-│     └─androluaTemplate   <-- 页面 AndroLua+ 模块的模板
-│         └─5.0.18(1.1)(armeabi-v7a,arm64-v8a)   <-- 模块版本号对应的文件夹
-│               androidx.zip   <-- 模块的 AndroidX 资源文件（自动识别）
-│               baseTemplate.zip   <-- 模块基础资源文件
-│               normal.zip   <-- 模块的非 AndroidX 资源文件（自动识别）
+│     └─androluaTemplate   <-- 页面指定的某个模块的模板
+│         └─5.0.18(1.1)(armeabi-v7a,arm64-v8a)   <-- 此模块的版本号对应的文件夹
+│               androidx.zip   <-- 此模块的 AndroidX 资源文件（自动识别）
+│               baseTemplate.zip   <-- 此模块的基础资源文件
+│               normal.zip   <-- 此模块的非 AndroidX 资源文件（自动识别）
 │
 ├─baseTemplate   <-- 模版基础资源文件夹
 │  │  baseTemplate.zip   <-- 模版基础资源文件
 │  │  ...
 │  │
-│  └─appTemplate   <-- 页面通用模块的模板
-│      └─aide(2.1)   <-- 模块版本号对应的文件夹
-│              baseTemplate.zip   <-- 模块基础资源文件
+│  └─appTemplate   <-- 页面指定的某个模块的模板
+│      └─aide(2.1)
+│              baseTemplate.zip   <-- 此模块的基础资源文件
 │              ...
 │
 └─LuaJ   <-- LuaJ++ 子模板文件夹

@@ -964,6 +964,7 @@ function FilesBrowserManager.init()
 
 end
 
+---在 v5.1.1(51199) 添加
 ---判断是不是模块根路径
 ---@param path 路径
 function FilesBrowserManager.isModuleRootPath(path)

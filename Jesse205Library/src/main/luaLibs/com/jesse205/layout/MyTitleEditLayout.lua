@@ -2,13 +2,14 @@ local MyTitleEditLayout={}
 local insertTable=require "com.jesse205.layout.insertTable"
 
 MyTitleEditLayout.layout={
-  FrameLayout;
+  LinearLayout;
   layout_width="fill";
   layout_height="fill";
   {
     AppCompatEditText;
     layout_width="fill";
     layout_height="fill";
+    layout_weight=1;
     padding=0;
     id="searchEdit";
     imeOptions="actionSearch";

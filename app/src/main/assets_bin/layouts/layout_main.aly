@@ -6,7 +6,6 @@
   --backgroundColor=theme.color.windowBackground;
   layoutTransition=newLayoutTransition();
   id="mainEditorLay";
-  --fitsSystemWindows=true;
   {--顶部操作栏
     CardView;
     layout_width="fill";

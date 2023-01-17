@@ -596,7 +596,7 @@ end
 ---@param view View 按钮视图
 function symbolBar.onButtonClickListener(view)
   if managerActions.paste(view.tag.reallyText) then
-    view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+    view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
   end
 end
 
@@ -614,6 +614,7 @@ end
 
 ---在 v5.1.1(51199) 添加
 ---符号栏按钮长按时提示
+--@type View.OnTouchListener
 symbolBar.onButtonTouchListener=View.OnTouchListener({
   onTouch=function(view,event)
     local action=event.getAction()

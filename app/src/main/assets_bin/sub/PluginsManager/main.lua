@@ -234,7 +234,6 @@ function installPlugin(uri)
   PluginsManagerUtil.installByUri(uri,function(state)
     if state=="success" then
       MyToast(R.string.install_success)
-      PluginsUtil.clearOpenedPluginPaths()
       refresh()
      elseif state=="failed" then
       MyToast(R.string.install_failed)
@@ -246,6 +245,7 @@ local fileUri=activity.getIntent().getExtras().get("fileUri")
 if fileUri then
   installPlugin(fileUri)
 end
+
 adapter=SettingsLayUtil.newAdapter(settings2,onItemClick,onItemLongClick)
 recyclerView.setAdapter(adapter)
 layoutManager=LinearLayoutManager()

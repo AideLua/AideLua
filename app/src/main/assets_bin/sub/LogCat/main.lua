@@ -1,4 +1,9 @@
 require "import"
+import "android.app.*"
+import "android.os.*"
+import "android.widget.*"
+import "android.view.*"
+import "android.content.*"
 import "android.widget.ListView"
 import "android.graphics.Typeface"
 import "android.text.Spannable"
@@ -6,96 +11,9 @@ import "android.text.SpannableString"
 import "android.text.style.ForegroundColorSpan"
 import "android.text.style.BackgroundColorSpan"
 import "android.text.style.TypefaceSpan"
+import "themeutil"
 
-isJesse205Activity=pcall(function()
-  import "jesse205"
-end)
-isSupportActivity=pcall(function()
-  androidx={appcompat={R=luajava.bindClass("androidx.appcompat.R")}}
-  if not(luajava.instanceof(this,luajava.bindClass("androidx.appcompat.app.AppCompatActivity"))) then
-    error()
-  end
-end)
-isEmuiSystem=pcall(function()
-  androidhwext={R=luajava.bindClass("androidhwext.R")}
-end)
-
-function toboolean(content)
-  if content then
-    return true
-   else
-    return false
-  end
-end
-function setTheme(success,func)
-  if not(success) then
-    success=pcall(func)
-  end
-  return toboolean(success)
-end
-
-function getActionBarState()
-  local array = activity.getTheme().obtainStyledAttributes({
-    android.R.attr.windowActionBar
-  })
-  local windowActionBar=array.getBoolean(0,false)
-  array.recycle()
-  return windowActionBar
-end
-function getSupportActionBarState()
-  local array = activity.getTheme().obtainStyledAttributes({
-    androidx.appcompat.R.attr.windowActionBar
-  })
-  local windowActionBar=array.getBoolean(0,false)
-  array.recycle()
-  return windowActionBar
-end
-
-local dp2intCache={}
-function math.dp2int(dpValue)
-  local cache=dp2intCache[dpValue]
-  if cache then
-    return cache
-   else
-    import "android.util.TypedValue"
-    local cache=TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, activity.resources.getDisplayMetrics())
-    dp2intCache[dpValue]=cache
-    return cache
-  end
-end
-
-
---设置主题
-if not(isJesse205Activity) then
-  import "android.app.*"
-  import "android.os.*"
-  import "android.widget.*"
-  import "android.view.*"
-  import "android.content.*"
-  local success=false
-  if isSupportActivity then
-    success=setTheme(getSupportActionBarState(),function()
-      activity.setTheme(androidx.appcompat.R.style.Theme_AppCompat_DayNight)
-    end)
-    actionBar=activity.getSupportActionBar()
-   else
-    setTheme(getActionBarState(),function()
-      success=setTheme(success,function()
-        activity.setTheme(androidhwext.R.style.Theme_Emui)
-      end)
-      success=setTheme(success,function()
-        activity.setTheme(android.R.style.Theme_DeviceDefault_DayNight)
-      end)
-      success=setTheme(success,function()
-        activity.setTheme(android.R.style.Theme_Material_Light)
-      end)
-      success=setTheme(success,function()
-        activity.setTheme(android.R.style.Theme_Holo)
-      end)
-    end)
-    actionBar=activity.getActionBar()
-  end
-end
+themeutil.applyTheme()
 
 local array = activity.getTheme().obtainStyledAttributes({
   android.R.attr.textColorPrimary,
@@ -288,7 +206,7 @@ item={
 
 listView=ListView(activity)
 listView.setFastScrollEnabled(true)
-if isJesse205Activity then--Jesse205主题没有分割线
+if themeutil.isJesse205Activity then--Jesse205主题没有分割线
   listView.setDivider(dividerVertical)
   listView.onScroll=function(view,firstVisibleItem,visibleItemCount,totalItemCount)
     MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount)
@@ -305,6 +223,7 @@ if CoordinatorLayout then
 end
 
 mainLay.addView(listView)
+
 local linearParams=listView.getLayoutParams()
 linearParams.height=-1
 linearParams.width=-1

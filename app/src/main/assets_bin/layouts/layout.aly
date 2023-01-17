@@ -3,7 +3,6 @@
   layout_height="fill";
   layout_width="fill";
   id="mainLay";
-  fitsSystemWindows=true;
   {
     DrawerLayout;
     layout_width="fill";
