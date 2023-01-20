@@ -25,7 +25,7 @@ function RePackTool.getRePackToolByVer(version)
     setmetatable(rePackool,{__index=RePackTool
     })
    elseif rePackool==nil then
-    error(activity.getString(R.string.binpoject_cannotFindTool))
+    error(activity.getString(R.string.binproject_cannotFindTool))
   end
   return rePackool
 end
@@ -142,7 +142,7 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
       end
     end
 
-    --this.update(activity.getString(R.string.binpoject_creating_variables))
+    --this.update(activity.getString(R.string.binproject_creating_variables))
     local mainAppPath=("%s/%s"):format(projectPath,rePackTool.getMainModuleName(config))
     local buildPath=mainAppPath.."/build"
     local binPath=buildPath.."/bin"
@@ -181,7 +181,7 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
     if appPath then
       updateInfo("File Name: "..appFile.getName())
      else
-      return getString(R.string.binpoject_error_notfind)
+      return getString(R.string.binproject_error_notfind)
     end
 
     --找到appPath，就告诉用户版本
@@ -216,22 +216,22 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
       end
       binEventsPaths=nil
       --解压安装包
-      updateDoing(formatResStr(R.string.binpoject_unzip,{appFile.getName()}))
+      updateDoing(formatResStr(R.string.binproject_unzip,{appFile.getName()}))
       binDir.mkdirs()
       LuaUtil.rmDir(tempDir)
       LuaUtil.unZip(appPath,tempPath)
-      updateSuccess(getString(R.string.binpoject_unzip_done))
+      updateSuccess(getString(R.string.binproject_unzip_done))
 
-      updateDoing(getString(R.string.binpoject_copying))
+      updateDoing(getString(R.string.binproject_copying))
       rePackTool.buildLuaResources(config,projectPath,tempPath,updateInfo)
-      updateSuccess(getString(R.string.binpoject_copy_done))
+      updateSuccess(getString(R.string.binproject_copy_done))
 
       --todo:编译Lua
       if config.compileLua~=false then
         --updateInfo("Compile Lua: "..tostring(config.compileLua or false))
-        updateDoing(getString(R.string.binpoject_compiling))
+        updateDoing(getString(R.string.binproject_compiling))
         autoCompileLua(tempDir)
-        updateSuccess(getString(R.string.binpoject_compile_done))
+        updateSuccess(getString(R.string.binproject_compile_done))
       end
 
 
@@ -239,15 +239,15 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
       newApkBaseName=appName.."_v"..appVer..os.date("_%Y%m%d%H%M%S")
       newApkName=newApkBaseName..".apk"
       newApkPath=binPath.."/"..newApkName
-      updateDoing(formatResStr(R.string.binpoject_zip,{newApkName}))
+      updateDoing(formatResStr(R.string.binproject_zip,{newApkName}))
       runBinEvent("beforePack",tempPath)
       LuaUtil.zip(tempPath,binPath,newApkName)
-      updateSuccess(getString(R.string.binpoject_zip_done))
+      updateSuccess(getString(R.string.binproject_zip_done))
 
 
-      updateDoing(getString(R.string.binpoject_deleting))
+      updateDoing(getString(R.string.binproject_deleting))
       LuaUtil.rmDir(tempDir)
-      updateSuccess(getString(R.string.binpoject_delete_done))
+      updateSuccess(getString(R.string.binproject_delete_done))
 
       --签名
       if sign then
@@ -255,23 +255,23 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
         local signedApkName=newApkBaseName.."_autosigned.apk"
         local signedApkPath=binPath.."/"..signedApkName
         if Signer then--有签名工具
-          updateDoing(formatResStr(R.string.binpoject_signing,{signedApkName}))
+          updateDoing(formatResStr(R.string.binproject_signing,{signedApkName}))
           updateInfo("Key: Debug")
           signSucceed,signErr=pcall(Signer.sign,newApkPath,signedApkPath)
-          updateSuccess(getString(R.string.binpoject_sign_done))
+          updateSuccess(getString(R.string.binproject_sign_done))
         end
         if signSucceed then--签名成功
           File(newApkPath).delete()
           return true,signedApkPath
          else
-          return formatResStr(R.string.binpoject_error_signer,{newApkPath})
+          return formatResStr(R.string.binproject_error_signer,{newApkPath})
         end
        else
         return true,newApkPath
       end
      else
       --无法解析安装包
-      return formatResStr(R.string.binpoject_error_parse,{appFile.getName()})
+      return formatResStr(R.string.binproject_error_parse,{appFile.getName()})
     end
   end)
 end

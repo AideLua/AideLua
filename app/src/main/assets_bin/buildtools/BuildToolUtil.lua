@@ -52,10 +52,10 @@ function BuildingDialog:update(message,state)--state主要用来检验是否构�
         dialogIds.stateTextView2.setVisibility(View.VISIBLE)
       end
      elseif state then
-      dialog.setTitle(R.string.binpoject_state_succeed)
+      dialog.setTitle(R.string.binproject_state_succeed)
       nowStatePanel.setVisibility(View.GONE)
      else
-      dialog.setTitle(R.string.binpoject_state_failed)
+      dialog.setTitle(R.string.binproject_state_failed)
       nowStatePanel.setVisibility(View.GONE)
     end
     dialogIds.listView.setSelection(adapter.getCount()-1)
@@ -70,7 +70,7 @@ function BuildingDialog:show()
   table.clear(dialogIds)
   local adapter=LuaAdapter(activity,infoItem)
   local dialog=AlertDialog.Builder(this)
-  .setTitle(R.string.binpoject_loading)
+  .setTitle(R.string.binproject_loading)
   .setView(loadlayout(buildingLayout,dialogIds))
   .setPositiveButton(android.R.string.ok,nil)
   .setNegativeButton(android.R.string.cancel,nil)
@@ -95,14 +95,14 @@ local function repackApk_callback(buildingDialog,success,message,apkPath,project
   if message==true then
     local shortApkPath=activity.getString(R.string.project).."/"..ProjectManager.shortPath(apkPath,true,projectPath)--转换成相对路径
     if install then
-      showingText=formatResStr(R.string.binpoject_state_succeed_with_path,{shortApkPath})
+      showingText=formatResStr(R.string.binproject_state_succeed_with_path,{shortApkPath})
       positiveButton.setVisibility(View.VISIBLE)
       negativeButton.setVisibility(View.VISIBLE)
       positiveButton.setText(R.string.install).onClick=function()
         activity.installApk(apkPath)
       end
      else
-      showingText=formatResStr(R.string.binpoject_state_succeed_with_path_needSign,{shortApkPath})
+      showingText=formatResStr(R.string.binproject_state_succeed_with_path_needSign,{shortApkPath})
       positiveButton.setVisibility(View.VISIBLE)
     end
     buildingDialog:update("success")
@@ -122,7 +122,7 @@ end
 local repackApk_building=false
 function BuildToolUtil.repackApk(config,projectPath,install,sign)
   if repackApk_building then
-    MyToast.showToast(R.string.binpoject_loading)
+    MyToast.showToast(R.string.binproject_loading)
    else
     local buildingDialog=BuildingDialog()
     buildingDialog:show()

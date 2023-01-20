@@ -62,6 +62,8 @@ import "com.bumptech.glide.request.RequestListener"
 
 import "com.nwdxlgzs.view.photoview.PhotoView"
 import "com.pixplicity.sharp.Sharp"
+import "com.termux.shared.termux.TermuxConstants"
+local RUN_COMMAND_SERVICE=TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE
 
 import "com.jesse205.widget.MyRecyclerView"
 import "com.jesse205.layout.MyEditDialogLayout"
@@ -73,8 +75,10 @@ import "com.jesse205.util.ScreenFixUtil"
 import "com.jesse205.util.FileInfoUtils"
 import "com.jesse205.util.ColorUtil"
 
-db=require "db"--LuaDB模块仓库：https://github.com/limao996/LuaDB
-db.byte_order = '='
+--https://github.com/limao996/LuaDB
+db=require "db"
+--db.byte_order = '='
+filesScrollingDB=db.open(AppPath.AppSdcardDataDir..'/filesScrolling.db')
 
 require "AppFunctions" -- 必须先导入这个，因为下面的导入模块要直接使用
 require "DialogFunctions"
@@ -104,8 +108,8 @@ plugins = PluginsUtil.getPlugins()
 --请求权限
 PermissionUtil.askForRequestPermissions({
   {
-    name=getString(R.string.jesse205_permission_storage),
-    tool=getString(R.string.app_name),
+    name=R.string.jesse205_permission_storage,
+    tool=R.string.app_name,
     todo=getLocalLangObj("获取文件列表，读取文件和保存文件","get file list, read file and save file"),
     permissions={"android.permission.WRITE_EXTERNAL_STORAGE","android.permission.READ_EXTERNAL_STORAGE"};
   },
@@ -218,7 +222,7 @@ function onCreateOptionsMenu(menu)
   StateByNotBadPrjMenus = {runMenu,binMenu,binRunMenu}
 
   projectPropertiesMenu.setEnabled(false)
-  buildMenu.setEnabled(false)
+  --buildMenu.setEnabled(false)
 
   screenConfigDecoder.events.menus = { -- 自动刷新菜单显示
     [600] = {codeMenu, toolsMenu},
@@ -257,39 +261,65 @@ function onOptionsItemSelected(item)
   local Rid = R.id
   local aRid = android.R.id
   local editorActions = EditorsManager.actions
-  if id == aRid.home then -- 菜单键
+  switch id do
+   case aRid.home then -- 菜单键
     FilesBrowserManager.switchState()
-   elseif id == Rid.menu_undo then -- 撤销
+   case Rid.menu_undo then -- 撤销
     editorActions.undo()
-   elseif id == Rid.menu_redo then -- 重装
+   case Rid.menu_redo then -- 重装
     editorActions.redo()
-   elseif id == Rid.menu_run then -- 运行
+   case Rid.menu_run then -- 运行
     ProjectManager.runProject()
-   elseif id == Rid.menu_project_bin_run then -- 二次打包
+   case Rid.menu_project_bin_run then -- 二次打包
     if ProjectManager.openState then
       FilesTabManager.saveAllFiles()
       BuildToolUtil.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,true,true)
     end
-   elseif id == Rid.menu_project_bin then -- 二次打包
+   case Rid.menu_project_bin then -- 二次打包
     if ProjectManager.openState then
       FilesTabManager.saveAllFiles()
       BuildToolUtil.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,false,false)
     end
-   elseif id == Rid.menu_project_reopen then -- 重新打开项目
+   case Rid.menu_project_build then
+
+    if PermissionUtil.checkPermission("com.termux.permission.RUN_COMMAND") then
+      local intent=Intent()
+      intent.setClassName(TermuxConstants.TERMUX_PACKAGE_NAME, TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE_NAME);
+      intent.setAction(RUN_COMMAND_SERVICE.ACTION_RUN_COMMAND)
+      intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_COMMAND_PATH,"/data/data/com.termux/files/usr/bin/gradle")
+      intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_ARGUMENTS,String{"assembleRelease"})
+      intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_BACKGROUND, false)
+      intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_WORKDIR, ProjectManager.nowPath)
+      local resultIntent=activity.buildNewActivityIntent(0,"sub/TermuxResult/main.lua",nil,true,0)
+      resultIntent.putExtra("title",getString(R.string.project_build))
+      local pendingIntent = PendingIntent.getActivity(activity, 1, resultIntent, PendingIntent.FLAG_ONE_SHOT)
+      intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_PENDING_INTENT, pendingIntent)
+      activity.startService(intent)
+     else
+      PermissionUtil.askForRequestPermissions({
+        {
+          name=R.string.permission_termux_runCode,
+          tool=R.string.project_build,
+          todo=getLocalLangObj("支持 Gradle 运行","Support gradle running"),
+          permissions={"com.termux.permission.RUN_COMMAND"};
+        },
+      })
+    end
+   case Rid.menu_project_reopen then -- 重新打开项目
     ProjectManager.reopenProject()--函数内已判断打开状态
-   elseif id == Rid.menu_project_close then -- 关闭项目
+   case Rid.menu_project_close then -- 关闭项目
     ProjectManager.closeProject()
-   elseif id == Rid.menu_file_save then -- 保存
+   case Rid.menu_file_save then -- 保存
     FilesTabManager.saveAllFiles(true)
-   elseif id == Rid.menu_file_reopen then -- 重新打开文件
+   case Rid.menu_file_reopen then -- 重新打开文件
     FilesTabManager.reopenFile()--函数内已判断打开状态
-   elseif id == Rid.menu_file_close then -- 关闭文件
+   case Rid.menu_file_close then -- 关闭文件
     FilesTabManager.closeFile()
-   elseif id == Rid.menu_code_format then -- 格式化
+   case Rid.menu_code_format then -- 格式化
     editorActions.format()
-   elseif id == Rid.menu_code_search then -- 代码搜索
+   case Rid.menu_code_search then -- 代码搜索
     EditorsManager.startSearch()
-   elseif id == Rid.menu_code_checkImport then -- 检查导入
+   case Rid.menu_code_checkImport then -- 检查导入
     if EditorsManager.isEditor() then
       local packageName=activity.getPackageName()
       if ProjectManager.openState then--打开了工程
@@ -297,29 +327,29 @@ function onOptionsItemSelected(item)
       end
       newSubActivity("FixImport",{EditorsManager.actions.getText(),packageName})
     end
-   elseif id == Rid.menu_tools_javaApiViewer then -- JavaAPI浏览器
+   case Rid.menu_tools_javaApiViewer then -- JavaAPI浏览器
     newSubActivity("JavaApi",true)
-   elseif id == Rid.menu_tools_javaApiViewer_windmill then -- JavaAPI浏览器
+   case Rid.menu_tools_javaApiViewer_windmill then -- JavaAPI浏览器
     startWindmillActivity("Java API")
-   elseif id == Rid.menu_tools_logCat then -- 日志猫
+   case Rid.menu_tools_logCat then -- 日志猫
     if ProjectManager.openState then
       ProjectManager.runProject(checkSharedActivity("LogCat"))
      else
       newSubActivity("LogCat",true)
     end
-   elseif id == Rid.menu_tools_httpDebugging_windmill then -- Http 调试
+   case Rid.menu_tools_httpDebugging_windmill then -- Http 调试
     startWindmillActivity("Http 调试")
-   elseif id == Rid.menu_tools_luaManual_windmill then -- Lua 手册
+   case Rid.menu_tools_luaManual_windmill then -- Lua 手册
     startWindmillActivity("手册")
-   elseif id == Rid.menu_tools_manual then -- Lua 手册
+   case Rid.menu_tools_manual then -- Lua 手册
     openUrl("https://jesse205.github.io/AideLua/")
-   elseif id == Rid.menu_more_settings then -- 设置
+   case Rid.menu_more_settings then -- 设置
     newSubActivity("Settings")
-   elseif id == Rid.menu_more_about then -- 关于
+   case Rid.menu_more_about then -- 关于
     newSubActivity("About")
-   elseif id == Rid.menu_code_checkCode then -- 代码查错
+   case Rid.menu_code_checkCode then -- 代码查错
     editorActions.check(true)
-   elseif id == Rid.menu_tools_layoutHelper then -- 布局助手
+   case Rid.menu_tools_layoutHelper then -- 布局助手
     FilesTabManager.saveFile()
     local prjPath,filePath
     if ProjectManager.openState then
@@ -329,7 +359,7 @@ function onOptionsItemSelected(item)
       filePath=FilesTabManager.file.getPath()
     end
     newSubActivity("LayoutHelper",{prjPath,filePath})
-   elseif id == Rid.menu_more_openNewWindow then -- 打开新窗口
+   case Rid.menu_more_openNewWindow then -- 打开新窗口
     activity.newActivity("main",{"projectPicker"},true,int(System.currentTimeMillis()))
   end
   PluginsUtil.callElevents("onOptionsItemSelected", item)
@@ -532,6 +562,7 @@ function onDestroy()
     magnifierUpdateTi.stop()
   end
   AppPath.cleanTemp()
+  filesScrollingDB:close()
   PluginsUtil.callElevents("onDestroy")
 end
 

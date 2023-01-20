@@ -195,6 +195,15 @@ function getLocalLangObj(zh, en)
   end
 end
 
+function autoId2str(text)
+  local _type=type(text)
+  if _type=="number" then
+    return getString(text)
+   else
+    return text
+  end
+end
+
 -- 复制文字
 function copyText(text)
   context.getSystemService(Context.CLIPBOARD_SERVICE).setText(text)

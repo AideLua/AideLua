@@ -269,7 +269,7 @@ import "jesse205"
        else
         editor.setColorScheme(SchemeGitHub())
       end
-
+      
     end,
     onTypefaceChangeListener=function(ids,config,editor,typeface,boldTypeface,italicTypeface)
       editor.setTypefaceText(typeface)
@@ -291,11 +291,35 @@ import "jesse205"
         local editor=ids.editor
         editor.cursor.onCommitText(text)
       end,
-      setTextSize=nil,
-      getTextSize=nil,
-      getScrollX=nil,
-      getScrollY=nil,
-      scrollTo="default",
+      setTextSize=function(ids,config,size)
+        local editor=ids.editor
+        editor.setTextSizePx(size)
+        return true
+      end,
+      getTextSize=function(ids,config)
+        local editor=ids.editor
+        return true,editor.getTextSizePx()
+      end,
+      scrollTo=function(ids,config,x,y)
+        local editor=ids.editor
+        local scroller=editor.getScroller()
+        --scroller.setFinalX(x)
+        --scroller.setFinalY(y)
+        scroller.startScroll(scroller.getCurrX(),
+        scroller.getCurrY(),
+        x - scroller.getCurrX(),
+        y - scroller.getCurrY(), 0)
+        scroller.abortAnimation()
+        return true
+      end,
+      getScrollX=function(ids,config)
+        local editor=ids.editor
+        return true,editor.getScroller().getCurrX()
+      end,
+      getScrollY=function(ids,config)
+        local editor=ids.editor
+        return true,editor.getScroller().getCurrY()
+      end,
       search={
         start=function(ids)
           ids.editor.mStartedActionMode=1
@@ -318,7 +342,7 @@ import "jesse205"
         ids.editor.setText(text)
       end,
     },
-    supportScroll=false;
+    supportScroll=true;
   },
   PhotoView={
     layout={

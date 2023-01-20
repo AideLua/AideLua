@@ -567,6 +567,7 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
       showProgressHandler.removeCallbacks(showProgressRunnable)
       swipeRefresh.setRefreshing(false)
       local path=newDirectory.getPath()
+      local isBack,isForward=false,false
       --刷新路径指示器
       if ProjectManager.openState then
         local oldPath=directoryFile and directoryFile.getPath()
@@ -576,7 +577,6 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
         local legalNewPath=String(path).startsWith(nowPrjPathParent.."/")--新路径为工程路径，也就是合法路径
         local legalOldPath=oldPath and String(oldPath).startsWith(nowPrjPathParent.."/")--同理旧路径
         local legalPath=oldPath and legalOldPath == legalNewPath--有旧路径并且合法性相同
-        local isBack,isForward=false,false
 
         if oldPath==path then
           FilesBrowserManager.recordScrollPosition()--路径相同，记录一下位置
@@ -667,10 +667,15 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
           directoryFile=newDirectory
         end--路径不同判断完毕
        else--未打开工程
+        if directoryFile then
+          local scroll=filesPositions[path]
+          table.clear(filesPositions)
+          filesPositions[path]=scroll
+         else
+          table.clear(filesPositions)
+          FilesBrowserManager.recordScrollPosition()
+        end
         --FilesBrowserManager.recordScrollPosition()
-        local prjsPathScroll=filesPositions[path]
-        table.clear(filesPositions)
-        filesPositions[path]=prjsPathScroll
         table.clear(pathSplitList)--清空路径指示器
         directoryFile=nil--移除当前路径标识
         pathAdapter.notifyDataSetChanged()

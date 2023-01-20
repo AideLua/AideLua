@@ -12,10 +12,10 @@ MyEditDialogLayout.layout=MyTextInputLayout.Builder{
     lines=1;
     id="edit";
     focusable=true;
+    showSoftInputOnFocus=true;
+    selectAllOnFocus=true;
   };
 }
-
-
 
 --MyEditDialogLayout.insertTable=insertTable
 

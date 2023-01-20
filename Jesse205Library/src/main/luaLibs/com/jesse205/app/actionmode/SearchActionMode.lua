@@ -14,23 +14,24 @@ return function(config)
 
   local ids={}
   local searchMenu,searchEdit
-  local actionMode=luajava.new(ActionMode.Callback,
-  {
+  local actionMode=ActionMode.Callback({
     onCreateActionMode=function(mode,menu)
       mode.setCustomView(MyTitleEditLayout.load({{
           hint=config.hint or activity.getString(R.string.abc_search_hint);
           text=config.text;
+          showSoftInputOnFocus=true;
       }},ids))
       searchEdit=ids.searchEdit
-      
+
       ClearContentHelper.setupEditor(searchEdit,ids.clearSearchBtn,theme.color.ActionBar.rippleColorPrimary)
-      searchEdit.post(Runnable({
+
+      searchEdit.postDelayed(Runnable({
         run=function()
           searchEdit.requestFocus()--搜索框取得焦点
           inputMethodService.showSoftInput(searchEdit,InputMethodManager.SHOW_FORCED)
         end
-      }))
-    
+      }),100)
+
       searchEdit.onEditorAction=function(view,actionId,event)
         if event then
           onSearch(tostring(view.text))

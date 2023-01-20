@@ -116,30 +116,30 @@
     <string name="project_properties">项目属性</string>
     <string name="projects_path">项目路径</string>
 	
-    <string name="binpoject_loading">正在打包...</string>
-    <string name="binpoject_loading_with_parent">正在打包...\n%1$s</string>
-    <string name="binpoject_creating_variables">正在创建变量</string>
-    <string name="binpoject_arrangement">正在整理 APP</string>
-    <string name="binpoject_unzip">正在解压 %1$s</string>
-    <string name="binpoject_unzip_done">解压完成</string>
-    <string name="binpoject_copying">正在复制文件</string>
-    <string name="binpoject_copy_done">复制完成</string>
-    <string name="binpoject_compiling">正在编译文件</string>
-    <string name="binpoject_compile_done">编译完成</string>
-    <string name="binpoject_deleting">正在删除临时文件夹</string>
-    <string name="binpoject_delete_done">删除完成</string>
-    <string name="binpoject_signing">正在签名到 %1$s</string>
-    <string name="binpoject_sign_done">签名完成</string>
-    <string name="binpoject_zip">正在打包到 %1$s</string>
-	<string name="binpoject_zip_done">打包完成</string>
-	<string name="binpoject_state_succeed">打包成功</string>
-    <string name="binpoject_state_succeed_with_path">打包成功\n路径：%1$s</string>
-    <string name="binpoject_state_succeed_with_path_needSign">打包成功，请手动签名\n路径：%1$s</string>
-    <string name="binpoject_state_failed">打包失败</string>
-    <string name="binpoject_error_notfind">未找到 app.apk ，请先使用 AIDE 打包。</string>
-    <string name="binpoject_error_signer">签名失败，请手动签名\n路径：%1$s</string>
-    <string name="binpoject_error_parse">安装包 (%1$s) 解析失败</string>
-    <string name="binpoject_cannotFindTool">无法找到相应版本的 ReBuildTool，请检查 Aide Lua 是否有更新</string>
+    <string name="binproject_loading">正在打包...</string>
+    <string name="binproject_loading_with_parent">正在打包...\n%1$s</string>
+    <string name="binproject_creating_variables">正在创建变量</string>
+    <string name="binproject_arrangement">正在整理 APP</string>
+    <string name="binproject_unzip">正在解压 %1$s</string>
+    <string name="binproject_unzip_done">解压完成</string>
+    <string name="binproject_copying">正在复制文件</string>
+    <string name="binproject_copy_done">复制完成</string>
+    <string name="binproject_compiling">正在编译文件</string>
+    <string name="binproject_compile_done">编译完成</string>
+    <string name="binproject_deleting">正在删除临时文件夹</string>
+    <string name="binproject_delete_done">删除完成</string>
+    <string name="binproject_signing">正在签名到 %1$s</string>
+    <string name="binproject_sign_done">签名完成</string>
+    <string name="binproject_zip">正在打包到 %1$s</string>
+	<string name="binproject_zip_done">打包完成</string>
+	<string name="binproject_state_succeed">打包成功</string>
+    <string name="binproject_state_succeed_with_path">打包成功\n路径：%1$s</string>
+    <string name="binproject_state_succeed_with_path_needSign">打包成功，请手动签名\n路径：%1$s</string>
+    <string name="binproject_state_failed">打包失败</string>
+    <string name="binproject_error_notfind">未找到 app.apk ，请先使用 AIDE 打包。</string>
+    <string name="binproject_error_signer">签名失败，请手动签名\n路径：%1$s</string>
+    <string name="binproject_error_parse">安装包 (%1$s) 解析失败</string>
+    <string name="binproject_cannotFindTool">无法找到相应版本的 ReBuildTool，请检查 Aide Lua 是否有更新</string>
     
 	<string name="newActivity">新建 Activity</string>
     
@@ -228,5 +228,6 @@
     <string name="uninstall_failed">卸载失败</string>
     
 	<string name="permission_repackApk">使用 Aide Lua 进行二次打包</string>
+    <string name="permission_termux_runCode">在 Termux 环境中运行命令</string>
     
 </resources>

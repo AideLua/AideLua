@@ -4,8 +4,8 @@ PermissionUtil.grantedList=grantedList
 local context=jesse205.context--当前context
 
 --申请多个权限
-local function request(permissions)
-  ActivityCompat.requestPermissions(context,String(permissions),0)
+local function request(permissions,requestCode)
+  ActivityCompat.requestPermissions(context,String(permissions),requestCode or 0)
 end
 PermissionUtil.request=request
 
@@ -37,7 +37,7 @@ PermissionUtil.check=check
     permissions={"android.permission.WRITE_EXTERNAL_STORAGE","android.permission.READ_EXTERNAL_STORAGE"};
   }
 }]]
-local function askForRequestPermissions(permissionsItemsList)
+local function askForRequestPermissions(permissionsItemsList,requestCode)
   for index=1,#permissionsItemsList do
     local permissionsItem=permissionsItemsList[index]
     local permissions=permissionsItem.permissions
@@ -45,12 +45,12 @@ local function askForRequestPermissions(permissionsItemsList)
       AlertDialog.Builder(this)
       .setIcon(permissionsItem.icon)
       .setTitle(R.string.jesse205_permission_request)
-      .setMessage(formatResStr(R.string.jesse205_permission_ask,{permissionsItem.tool,permissionsItem.name,permissionsItem.todo}))
+      .setMessage(formatResStr(R.string.jesse205_permission_ask,{autoId2str(permissionsItem.tool),autoId2str(permissionsItem.name),autoId2str(permissionsItem.todo)}))
       .setPositiveButton(android.R.string.ok,function()
         if permissionsItem.intent then
           activity.startActivity(permissionsItem.intent)
          else
-          request(permissions)
+          request(permissions,requestCode)
         end
       end)
       .show()

@@ -54,24 +54,38 @@ import "io.github.rosemoe.editor.langs.java.JavaLanguage"
 import "io.github.rosemoe.editor.langs.python.PythonLanguage"
 import "io.github.rosemoe.editor.langs.universal.UniversalLanguage"
 
+local onKeyShortcut=function(super,keyCode,event)
+  local filteredMetaState = event.getMetaState() & ~KeyEvent.META_CTRL_MASK;
+  if (KeyEvent.metaStateHasNoModifiers(filteredMetaState)) then
+    if keyCode==KeyEvent.KEYCODE_C or keyCode==KeyEvent.KEYCODE_V or keyCode==KeyEvent.KEYCODE_X or keyCode==KeyEvent.KEYCODE_A then
+      return super(keyCode,event)
+    end
+  end
+  return onKeyShortcut(keyCode,event)
+end
+
 local function toCustomEditorView(CodeEditor)
   return function(context)
     return luajava.override(CodeEditor,{
-      onKeyShortcut=function(super,keyCode,event)
-        local filteredMetaState = event.getMetaState() & ~KeyEvent.META_CTRL_MASK;
-        if (KeyEvent.metaStateHasNoModifiers(filteredMetaState)) then
-          if keyCode==KeyEvent.KEYCODE_C or keyCode==KeyEvent.KEYCODE_V or keyCode==KeyEvent.KEYCODE_X or keyCode==KeyEvent.KEYCODE_A then
-            return super(keyCode,event)
-          end
-        end
-        return onKeyShortcut(keyCode,event)
-      end,
+      onKeyShortcut=onKeyShortcut,
     })
   end
 end
 EditorsManager.toCustomEditorView=toCustomEditorView
 MyLuaEditor=toCustomEditorView(LuaEditor)
-MyCodeEditor=toCustomEditorView(CodeEditor)
+MyCodeEditor=function(context)
+  local scroller
+  local view
+  view=luajava.override(CodeEditor,{
+    onKeyShortcut=onKeyShortcut,
+    computeScroll=function(super)
+      MyAnimationUtil.ScrollView.onScrollChange(view,scroller.getCurrX(),scroller.getCurrY(),0,0,appBarLayout)
+      super()
+    end
+  })
+  scroller=view.getScroller()
+  return view
+end
 
 import "editorLayouts"
 
@@ -293,7 +307,7 @@ setmetatable(managerActions,{__index=function(self,key)
     local action
     if key:sub(1,3)=="get" then
       action=function(...)
-        local _,content= generalActionEvent(key,key,...)
+        local _,content=generalActionEvent(key,key,...)
         return content
       end
      else
@@ -331,10 +345,18 @@ function EditorsManager.openNewContent(filePath,fileType,decoder,keepHistory)
          else
           managerActions.setText(content)
         end
-        local scrollConfig=assert(loadstring(getSharedData("scroll_"..filePath) or "{}"))()
-        managerActions.setSelection(scrollConfig.selection or 0)
-        managerActions.setTextSize(scrollConfig.size or math.dp2int(14))
-        managerActions.scrollTo(scrollConfig.x or 0,scrollConfig.y or 0)
+        local scrollConfig=filesScrollingDB:get(filePath)
+        if scrollConfig then
+          managerActions.setSelection(scrollConfig.selection or 0)
+          managerActions.setTextSize(scrollConfig.size or math.dp2int(14))
+          managerActions.scrollTo(scrollConfig.x or 0,scrollConfig.y or 0)
+        end
+      
+        if editorConfig.supportScroll then
+          MyAnimationUtil.ScrollView.onScrollChange(editor,managerActions.getScrollX(),managerActions.getScrollY(),0,0,appBarLayout,nil)
+         else
+          MyAnimationUtil.ScrollView.onScrollChange(editor,0,0,0,0,appBarLayout,nil)
+        end
       end
       return true
      else
@@ -475,11 +497,6 @@ function EditorsManager.switchEditor(newEditorType)
   --必须加分号，否则编译器会认为这个括号是给上一个返回值调用的
   ;(editor or editorParent).requestFocus()
 
-  if editorConfig.supportScroll then
-    MyAnimationUtil.ScrollView.onScrollChange(editor,editor.getScrollX(),editor.getScrollY(),0,0,appBarLayout,nil)
-   else
-    MyAnimationUtil.ScrollView.onScrollChange(editor,0,0,0,0,appBarLayout,nil)
-  end
   PluginsUtil.callElevents("onSwitchEditor", newEditorType,editorConfig)
 end
 

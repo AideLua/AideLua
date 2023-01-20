@@ -306,6 +306,7 @@ function FilesTabManager.saveFile(lowerFilePath,showToast)
     config=fileConfig
   end
   if config then
+
     if config.deleted==false then
       local managerActions=EditorsManager.actions
       --保存编辑器滚动
@@ -316,9 +317,9 @@ function FilesTabManager.saveFile(lowerFilePath,showToast)
         selection=managerActions.getSelectionEnd()
       }
       if table.size(editorStateConfig)==0 then
-        setSharedData("scroll_"..config.path,nil)
+        filesScrollingDB:del(config.path)
        else
-        setSharedData("scroll_"..config.path,dump(editorStateConfig))
+        filesScrollingDB:set(config.path,editorStateConfig)
       end
       EditorsManager.save2Tab()--实际上不应该在这里调用
 
@@ -330,15 +331,18 @@ function FilesTabManager.saveFile(lowerFilePath,showToast)
         config.changed=false
         if success then
           if showToast then
-            showSnackBar(R.string.save_succeed)
+            showSnackBar(getString(R.string.save_succeed))
+          end
+          if errMsg then
+            showSnackBar(config.fileName..": "..errMsg)
           end
          else
-          showErrorDialog("FilesTabManager.saveFile",errMsg)
+          showErrorDialog("FilesTabManager.saveFile: "..config.fileName,errMsg)
         end
         return true -- 保存成功
        else
         if showToast then
-          showSnackBar(R.string.file_noChange)
+          showSnackBar(getString(R.string.file_noChange))
         end
       end
     end

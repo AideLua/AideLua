@@ -75,19 +75,37 @@ end
 效果：
 1.开启/关闭ActionBar阴影
 ]]
+local lastActionBarAnimators={}
 MyAnimationUtil.ActionBar={}
+function MyAnimationUtil.ActionBar.cancelAnimator(actionBar)
+  if lastActionBarAnimators[actionBar] then
+    lastActionBarAnimators[actionBar].cancel()
+    lastActionBarAnimators[actionBar]=nil
+  end
+end
+
 function MyAnimationUtil.ActionBar.openElevation(actionBar)
-  return ObjectAnimator.ofFloat(actionBar or MyAnimationUtil.actionBar, "elevation", {theme.number.actionBarElevation})
+  actionBar=actionBar or MyAnimationUtil.actionBar
+  MyAnimationUtil.ActionBar.cancelAnimator(actionBar)
+  local animator=ObjectAnimator.ofFloat(actionBar, "elevation", {theme.number.actionBarElevation})
   .setDuration(200)
   .setInterpolator(DecelerateInterpolator())
   .start()
+  lastActionBarAnimators[actionBar]=animator
+  return animator
 end
 
 function MyAnimationUtil.ActionBar.closeElevation(actionBar)
-  return ObjectAnimator.ofFloat(actionBar or MyAnimationUtil.actionBar, "elevation", {0})
+  actionBar=actionBar or MyAnimationUtil.actionBar
+  MyAnimationUtil.ActionBar.cancelAnimator(actionBar)
+  local animator=ObjectAnimator.ofFloat(actionBar, "elevation", {0})
   .setDuration(200)
   .setInterpolator(AccelerateInterpolator())
   .start()
+  lastActionBarAnimators[actionBar]=animator
+  return animator
 end
+
+
 
 return MyAnimationUtil

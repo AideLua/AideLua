@@ -53,7 +53,7 @@
         {
           TextView;
           id="stateTextView2";
-          text=R.string.binpoject_loading;
+          text=R.string.binproject_loading;
           layout_width="fill";
         };
       };

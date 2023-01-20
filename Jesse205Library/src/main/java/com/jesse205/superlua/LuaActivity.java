@@ -124,6 +124,25 @@ public class LuaActivity extends com.androlua.LuaActivity {
         }
         runFunc("onRestoreInstanceState", savedInstanceState);
     }
+    public Intent buildNewActivityIntent(int req, String path, Object[] arg, boolean newDocument, int documentId) {
+        Intent intent = new Intent(this, LuaActivity.class);
+        intent.putExtra("name", path);
+        if (path.charAt(0) != '/')//如果不是/开头，说明是相对路径
+            path = this.getLuaDir() + "/" + path;
+        File file = new File(path);
+        if (file.isDirectory() && new File(path + "/main.lua").exists())
+            path += "/main.lua";
+        else if (!file.isDirectory() && !path.endsWith(".lua"))
+            path += ".lua";
+        intent.putExtra("luaPath", path);
+        intent.setData(Uri.parse("file://" + path + "?documentId=" + String.valueOf(documentId)));
+        //intent.putExtra("documentId", documentId);
+        if (arg != null)
+            intent.putExtra("arg", arg);
+        if (newDocument) 
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
+        return intent;
+    }
 
     //重写newActivity，将目标Activity指向superlua的
     public void newActivity(String path, boolean newDocument, int documentId) {
@@ -140,23 +159,9 @@ public class LuaActivity extends com.androlua.LuaActivity {
     }
 
     public void newActivity(int req, String path, Object[] arg, boolean newDocument, int documentId) {
-        Intent intent = new Intent(this, LuaActivity.class);
-        intent.putExtra("name", path);
-        if (path.charAt(0) != '/')//如果不是/开头，说明是相对路径
-            path = this.getLuaDir() + "/" + path;
-        File file = new File(path);
-        if (file.isDirectory() && new File(path + "/main.lua").exists())
-            path += "/main.lua";
-        else if (!file.isDirectory() && !path.endsWith(".lua"))
-            path += ".lua";
-        intent.putExtra("luaPath", path);
-		intent.setData(Uri.parse("file://" + path + "?documentId=" + String.valueOf(documentId)));
-		//intent.putExtra("documentId", documentId);
-        if (arg != null)
-            intent.putExtra("arg", arg);
+        Intent intent = buildNewActivityIntent(req,  path, arg,  newDocument,  documentId);
         if (newDocument) {
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-			startActivity(intent);
+            startActivity(intent);
         } else
             startActivityForResult(intent, req);
     }

@@ -22,6 +22,5 @@ public class InstallPluginActivity extends Activity {
 		intent.setData(Uri.parse("file://" + luaPath + "?documentId=0"));
 		startActivity(intent);
 		finish();
-
 	}
 }
