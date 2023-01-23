@@ -329,7 +329,6 @@ recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
   end
 })
 
-
 screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
   orientation={
     different={appIconGroup},

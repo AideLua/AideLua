@@ -5,8 +5,8 @@
   {
     AppCompatTextView;
     id="title";
-    padding="8dp";
     textSize="14sp";
+    padding="8dp";
   };
   {
     AppCompatImageView;

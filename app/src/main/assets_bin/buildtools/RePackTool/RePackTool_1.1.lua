@@ -21,12 +21,16 @@ function RePackTool.getSubprojectPathIterator(config,projectPath)
   end
 end
 
-function RePackTool.getSubprojectPathIteratorByJavaList(config,projectPath)
-  local index=0
+--v5.1.1(51099)+
+function RePackTool.getSubprojectPathIteratorByList(config,projectPath)
+  local index=1
   local include=config.include
-  local max=include and (#include-1)
+  if type(include)=="userdata" then
+    include=luajava.astable(include)
+  end
+  local max=include and #include
   return function()
-    if index<=max then
+    if include and index<=max then
       local content=include[index]
       if content then
         index=index+1

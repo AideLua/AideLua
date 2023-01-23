@@ -64,7 +64,7 @@
       id="bottomAppBarLinearLayout";
       layoutTransition=newLayoutTransition();
       {--符号栏
-        HorizontalScrollView;
+        EditorsManager.PSBarHorizontalScrollView;
         horizontalScrollBarEnabled=false;
         layout_width="fill";
         paddingLeft="8dp";
@@ -78,5 +78,6 @@
         };
       };
     };
+
   };
 };

@@ -151,7 +151,8 @@
     <string name="delete_warning">Are you sure you want to delete? It cannot be restored after deletion.</string>
     <string name="delete_succeed">Deletion succeed</string>
     <string name="delete_failed">Deletion failed</string>
-
+    <string name="deleted_withName">Deleted %1$s</string>
+    
     <string name="javaApiViewer">Java API Viewer</string>
     <string name="javaApiViewer_windmill">Java API Viewer (Windmill)</string>
     <string name="javaApiViewer_viewApi">View API</string>

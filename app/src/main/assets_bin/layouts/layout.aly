@@ -8,7 +8,11 @@
     layout_width="fill";
     layout_height="fill";
     id="drawer";
-    "layouts.layout_main";
+    {
+      MyFullDraggableContainer;
+      id="drawerContainer";
+      "layouts.layout_main";
+    };
     "layouts.layout_filepicker";
   };
   {

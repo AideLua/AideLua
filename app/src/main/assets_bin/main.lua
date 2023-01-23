@@ -64,6 +64,8 @@ import "com.nwdxlgzs.view.photoview.PhotoView"
 import "com.pixplicity.sharp.Sharp"
 import "com.termux.shared.termux.TermuxConstants"
 local RUN_COMMAND_SERVICE=TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE
+import "com.drakeet.drawer.FullDraggableContainer"
+import "me.zhanghai.android.fastscroll.FastScrollerBuilder"
 
 import "com.jesse205.widget.MyRecyclerView"
 import "com.jesse205.layout.MyEditDialogLayout"
@@ -281,7 +283,9 @@ function onOptionsItemSelected(item)
       BuildToolUtil.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,false,false)
     end
    case Rid.menu_project_build then
-
+    if not ProjectManager.openState then
+      return
+    end
     if PermissionUtil.checkPermission("com.termux.permission.RUN_COMMAND") then
       local intent=Intent()
       intent.setClassName(TermuxConstants.TERMUX_PACKAGE_NAME, TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE_NAME);
@@ -289,12 +293,21 @@ function onOptionsItemSelected(item)
       intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_COMMAND_PATH,"/data/data/com.termux/files/usr/bin/gradle")
       intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_ARGUMENTS,String{"assembleRelease"})
       intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_BACKGROUND, false)
-      intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_WORKDIR, ProjectManager.nowPath)
+      intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_WORKDIR, ProjectManager.nowPath.."/"..ProjectManager.nowConfig.mainModuleName)
+      intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_COMMAND_LABEL, "Building "..ProjectManager.nowConfig.appName)
       local resultIntent=activity.buildNewActivityIntent(0,"sub/TermuxResult/main.lua",nil,true,0)
       resultIntent.putExtra("title",getString(R.string.project_build))
       local pendingIntent = PendingIntent.getActivity(activity, 1, resultIntent, PendingIntent.FLAG_ONE_SHOT)
       intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_PENDING_INTENT, pendingIntent)
-      activity.startService(intent)
+      if Build.VERSION.SDK_INT >= 26 then
+        activity.startForegroundService(intent)
+       else
+        activity.startService(intent)
+      end
+      local manager = activity.getPackageManager()
+      local intent = manager.getLaunchIntentForPackage(TermuxConstants.TERMUX_PACKAGE_NAME)
+      activity.startActivity(intent)
+
      else
       PermissionUtil.askForRequestPermissions({
         {
@@ -428,7 +441,7 @@ function onDeviceByWidthChanged(device, oldDevice)
   if oldDevice == "pc" then -- 切换为手机时
     largeDrawerLay.removeView(drawerChild)
     largeMainLay.removeView(mainEditorLay)
-    drawer.addView(mainEditorLay)
+    drawerContainer.addView(mainEditorLay)
     drawer.addView(drawerChild)
 
     local linearParams = drawerChild.getLayoutParams()
@@ -451,7 +464,7 @@ function onDeviceByWidthChanged(device, oldDevice)
     end
     drawerChild.setVisibility(View.VISIBLE)
    elseif device == "pc" then -- 切换为电脑时
-    drawer.removeView(mainEditorLay)
+    drawerContainer.removeView(mainEditorLay)
     drawer.removeView(drawerChild)
     largeDrawerLay.addView(drawerChild)
     largeMainLay.addView(mainEditorLay)
@@ -639,7 +652,6 @@ function onSaveInstanceState(savedInstanceState)
     savedInstanceState.putString("filepath",FilesTabManager.file.getPath())
   end
 end
-
 
 toggle = ActionBarDrawerToggle(activity, drawer, R.string.drawer_open, R.string.drawer_close)
 drawer.addDrawerListener(toggle)

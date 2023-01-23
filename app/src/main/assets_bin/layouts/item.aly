@@ -127,9 +127,9 @@
         View;
         layout_width="1dp";
         --layout_margin="8dp";
-        layout_marginTop="16dp";
-        layout_marginBottom="16dp";
-        layout_height="fill";
+        --layout_marginTop="16dp";
+        --layout_marginBottom="16dp";
+        layout_height="32dp";
         backgroundColor=theme.color.textColorSecondary;
       };
       {
@@ -140,6 +140,7 @@
         contentDescription=getString(R.string.menu);
         id="more";
         gravity="center";
+        --layout_marginRight="8dp";
         {
           AppCompatImageView;
           layout_width="24dp";

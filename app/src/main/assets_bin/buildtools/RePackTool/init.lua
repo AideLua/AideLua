@@ -66,10 +66,54 @@ function RePackTool.getMainProjectDirByConfigAndRePackTool(projectDir,config,reP
   return RePackTool.getProjectDir(projectDir,rePackTool.getMainModuleName(config))
 end
 
+---自动编译Lua (v5.1.1+)
+---@param compileDir File 文件夹对象
+function RePackTool.autoCompileLua(compileDir,onCompileListener)
+  for index,content in ipairs(luajava.astable(compileDir.listFiles())) do
+    local name=content.name
+    if content.isDirectory() then
+      RePackTool.autoCompileLua(content,onCompileListener)
+     elseif name:find"%.lua$" then
+      local path=content.getPath()
+      local func,err=loadfile(path)
+      if func then
+        io.open(path,"w"):write(string.dump(func,true)):close()
+       else
+        if onCompileListener and onCompileListener.onError then
+          onCompileListener.onError("Compilation failed "..err)
+        end
+      end
+      func=nil
+      path=nil
+     elseif name:find"%.aly$" then
+      local path=content.getPath()
+      local func,err=loadfile(path)
+      local path=path:match("(.+)%.aly")..".lua"
+      if func then
+        io.open(path,"w")
+        :write(string.dump(func,true))
+        :close()
+       else
+        if onCompileListener and onCompileListener.onError then
+          onCompileListener.onError("Compilation failed "..err)
+        end
+      end
+      content.delete()
+      func=nil
+      path=nil
+     elseif name==".nomedia" or name==".outside" or name==".hidden" then
+      content.delete()
+      if onCompileListener and onCompileListener.onDeleted then
+        onCompileListener.onDeleted("Deleted "..content.getPath())
+      end
+    end
+  end
+end
+
 function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
   return pcall(function()
     require "import"
-    local config=luajava.astable(configJ)
+    local config=luajava.astable(configJ,true)
     luajava.clear(configJ)
     notLoadTheme=true
     import "jesse205"
@@ -77,7 +121,9 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
     import "net.lingala.zip4j.ZipFile"
     import "apksigner.*"
     import "com.jesse205.util.FileUtil"
+
     RePackTool=require "buildtools.RePackTool"
+
     local rePackTool=RePackTool.getRePackToolByConfig(config)
     local binEventsList={}
 
@@ -100,38 +146,10 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
       this.update(message)
     end
 
-    local function autoCompileLua(compileDir)
-      for index,content in ipairs(luajava.astable(compileDir.listFiles())) do
-        if content.isDirectory() then
-          autoCompileLua(content)
-         elseif content.name:find"%.lua$" then
-          local path=content.getPath()
-          local func,err=loadfile(path)
-          if func then
-            io.open(path,"w"):write(string.dump(func,true)):close()
-           else
-            updateError("Compilation failed "..err)
-          end
-          func=nil
-          path=nil
-         elseif content.name:find"%.aly$" then
-          local path=content.getPath()
-          local func,err=loadfile(path)
-          local path=path:match("(.+)%.aly")..".lua"
-          if func then
-            io.open(path,"w"):write(string.dump(func,true)):close()
-           else
-            updateError("Compilation failed "..err)
-          end
-          content.delete()
-          func=nil
-          path=nil
-         elseif content.name==".nomedia" then
-          content.delete()
-          updateInfo("Deleted "..content.getPath())
-        end
-      end
-    end
+    local onCompileListener={}
+    onCompileListener.onError=updateError
+    onCompileListener.onDeleted=updateInfo
+
     function runBinEvent(name,...)
       for index=1,#binEventsList do
         local binEvents=binEventsList[index]
@@ -197,7 +215,7 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
       updateInfo("Version Name: v"..appVer)
 
       local binEventsPaths={RePackTool.getALPathByProjectPath(projectPath).."/bin.lua"}
-      for _type,path in rePackTool.getSubprojectPathIteratorByJavaList(config,projectPath) do
+      for _type,path in rePackTool.getSubprojectPathIteratorByList(config,projectPath) do
         if _type=="project" then
           table.insert(binEventsPaths,RePackTool.getALPathByProjectPath(path).."/bin.lua")
         end
@@ -226,11 +244,10 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
       rePackTool.buildLuaResources(config,projectPath,tempPath,updateInfo)
       updateSuccess(getString(R.string.binproject_copy_done))
 
-      --todo:编译Lua
+      --编译Lua，默认true
       if config.compileLua~=false then
-        --updateInfo("Compile Lua: "..tostring(config.compileLua or false))
         updateDoing(getString(R.string.binproject_compiling))
-        autoCompileLua(tempDir)
+        RePackTool.autoCompileLua(tempDir,onCompileListener)
         updateSuccess(getString(R.string.binproject_compile_done))
       end
 

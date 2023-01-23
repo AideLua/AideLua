@@ -98,6 +98,9 @@ function ProjectManager.openProject(path,filePath,openDirPath)
     local projectMainPath,badPrj
     local mainModuleName="app"
     if loadedConfig then
+      if not config.appName then
+        config.appName=getString(R.string.unknown)
+      end
       local loadedTool,rePackTool=pcall(RePackTool.getRePackToolByConfig,config)
       if loadedTool then
         mainModuleName=rePackTool.getMainModuleName(config)

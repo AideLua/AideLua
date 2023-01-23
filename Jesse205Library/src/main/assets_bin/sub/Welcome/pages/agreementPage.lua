@@ -9,7 +9,7 @@ return function(title,icon,name,date)
       orientation="vertical";
       --buildTitlebar(icon,title);
       {
-        ScrollView;
+        FastScrollScrollView;
         layout_height="fill";
         layout_width="fill";
         layout_weight=1;
@@ -22,9 +22,7 @@ return function(title,icon,name,date)
           layout_height="fill";
           layout_width="fill";
           textIsSelectable=true;
-          linksClickable=true;
           textColor=theme.color.textColorPrimary;
-          movementMethod=RTEditorMovementMethod.getInstance();
         };
       };
       {
@@ -38,12 +36,12 @@ return function(title,icon,name,date)
       };
     },
     onInitLayout=function(self)
-      local textView,checkBox=self.textView,self.checkBox
+      local textView,scrollView,checkBox=self.textView,self.scrollView,self.checkBox
       textView.setText(Html.fromHtml(io.open(activity.getLuaPath(("../../agreements/%s.html"):format(name)),"r"):read("*a")))
       local contrast="LastActionBarElevation_"..name
       _G[contrast]=0
       self.elevationKey=contrast
-      self.scrollView.onScrollChange=function(view,l,t,oldl,oldt)
+      scrollView.onScrollChange=function(view,l,t,oldl,oldt)
         MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,nil,contrast)
       end
       local agree=toboolean(getSharedData(name)==date)
@@ -52,6 +50,11 @@ return function(title,icon,name,date)
       checkBox.setOnCheckedChangeListener({onCheckedChanged=function()
           self:refresh()
       end})
+      textView.setLinksClickable(true)
+      textView.setMovementMethod(RTEditorMovementMethod.getInstance())
+      textView.requestFocusFromTouch()
+      FastScrollerBuilder(scrollView).useMd2Style().build()
+
     end,
     refresh=function(self)
       local checkBox=self.checkBox

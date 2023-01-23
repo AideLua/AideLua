@@ -19,6 +19,13 @@
     url="https://github.com/limao996/LuaDB",
   },
   {
+    name="FullDraggableDrawer",
+    message="Make Android DrawerLayout can be dragged out in real-time within the range of fullscreen",
+    license="Apache-2.0 license",
+    url="https://github.com/PureWriter/FullDraggableDrawer",
+  },
+
+  {
     name="Sharp",
     message="Scalable vector graphics for Android",
     url="https://github.com/Pixplicity/sharp",

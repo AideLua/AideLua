@@ -3,7 +3,10 @@ apply plugin: 'com.android.library'
 android {
     compileSdkVersion 32
     buildToolsVersion "32.0.0"
-
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 29
@@ -34,4 +37,5 @@ dependencies {
     api project(':androlua')
     api 'androidx.appcompat:appcompat:1.0.0'
     api 'com.google.android.material:material:1.0.0'
+    api 'me.zhanghai.android.fastscroll:library:1.2.0'
 }

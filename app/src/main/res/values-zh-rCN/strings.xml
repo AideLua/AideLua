@@ -148,7 +148,8 @@
     <string name="delete_warning">确定删除？删除后不可恢复。</string>
     <string name="delete_succeed">删除成功</string>
     <string name="delete_failed">删除失败</string>
-
+    <string name="deleted_withName">已删除 %1$s</string>
+    
     <string name="javaApiViewer">Java API 浏览器</string>
     <string name="javaApiViewer_windmill">Java API 浏览器 (快乐程序)</string>
     <string name="javaApiViewer_viewApi">查看API</string>

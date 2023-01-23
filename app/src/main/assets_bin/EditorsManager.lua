@@ -87,6 +87,41 @@ MyCodeEditor=function(context)
   return view
 end
 
+EditorsManager.PSBarHorizontalScrollView={
+  _baseClass=HorizontalScrollView,
+  __call=function(self,context)
+    local view
+    local isBarTop=false
+    local initialMotionX
+    view=luajava.override(HorizontalScrollView,{
+      onInterceptTouchEvent=function(super,event)
+        local action=event.getAction()
+        local x=event.getX();
+        if action==MotionEvent.ACTION_DOWN then
+          isBarTop=view.getScrollX()<=0
+          initialMotionX=x
+          super(event)
+          if isBarTop then
+            drawerContainer.onInterceptTouchEvent(event)
+          end
+        end
+        if isBarTop and initialMotionX<=x then
+          drawerContainer.onInterceptTouchEvent(event)
+          if view.getScrollX()<=0 then
+            drawerContainer.onTouchEvent(event)
+          end
+         else
+          return super(event)
+        end
+        --super(event)
+      end
+    },context)
+    return view
+  end,
+}
+setmetatable(EditorsManager.PSBarHorizontalScrollView,EditorsManager.PSBarHorizontalScrollView)
+
+
 import "editorLayouts"
 
 
@@ -143,8 +178,8 @@ local function getEditorTypefaces()
       italicTypeface=Typeface.create(typeface,Typeface.ITALIC)
     end
    elseif id==1 then--JetBrains Mono
-    typeface=ResourcesCompat.getFont(activity, R.font.jetbrainsmonoregular)
-    boldTypeface=ResourcesCompat.getFont(activity, R.font.jetbrainsmonobold)
+    typeface=ResourcesCompat.getFont(activity, R.font.jetbrainsmono)
+    boldTypeface=Typeface.create(typeface,Typeface.BOLD)
     italicTypeface=ResourcesCompat.getFont(activity, R.font.jetbrainsmonoitalic)
    elseif id==2 then--Cascadia Code
     typeface=ResourcesCompat.getFont(activity, R.font.cascadiacode)
@@ -351,7 +386,7 @@ function EditorsManager.openNewContent(filePath,fileType,decoder,keepHistory)
           managerActions.setTextSize(scrollConfig.size or math.dp2int(14))
           managerActions.scrollTo(scrollConfig.x or 0,scrollConfig.y or 0)
         end
-      
+
         if editorConfig.supportScroll then
           MyAnimationUtil.ScrollView.onScrollChange(editor,managerActions.getScrollX(),managerActions.getScrollY(),0,0,appBarLayout,nil)
          else
@@ -696,9 +731,9 @@ function symbolBar.refresh(state)
       ps_paste=nil
       loadedSymbolBar=true
     end
-    bottomAppBar.setVisibility(View.VISIBLE)
+    ps_bar.parent.setVisibility(View.VISIBLE)
    else
-    bottomAppBar.setVisibility(View.GONE)
+    ps_bar.parent.setVisibility(View.GONE)
   end
 end
 

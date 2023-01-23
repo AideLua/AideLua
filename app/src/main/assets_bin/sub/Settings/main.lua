@@ -106,6 +106,8 @@ recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
     MyAnimationUtil.RecyclerView.onScroll(recyclerView,0,0)
   end
 })
+
+
 mainLay.onTouch=function(view,...)
   recyclerView.onTouchEvent(...)
 end

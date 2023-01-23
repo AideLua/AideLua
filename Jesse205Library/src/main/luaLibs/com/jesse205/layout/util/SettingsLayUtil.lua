@@ -127,7 +127,7 @@ local itemsLay={
   {--标题
     LinearLayoutCompat;
     layout_width="fill";
-    focusable=false;
+    focusable=true;
     {
       AppCompatTextView;
       id="title";
@@ -158,7 +158,6 @@ local itemsLay={
     oneLineLay;
     rightNewPageIconLay;
   };
-
 
   {--设置项(图片,标题,简介,开关)
     LinearLayoutCompat;

@@ -272,11 +272,13 @@ recyclerView.onCreateContextMenu=function(menu,view,menuInfo)
     end
   end
 end
+
 recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
   onScrolled=function(view,dx,dy)
     MyAnimationUtil.RecyclerView.onScroll(view,dx,dy)
   end
 })
+
 recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
   onGlobalLayout=function()
     if activity.isFinishing() then
@@ -285,6 +287,7 @@ recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
     MyAnimationUtil.RecyclerView.onScroll(recyclerView,0,0)
   end
 })
+
 mainLay.onTouch=function(view,...)
   recyclerView.onTouchEvent(...)
 end

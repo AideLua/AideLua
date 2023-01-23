@@ -54,7 +54,7 @@ function FilesTabManager.FilesTabLayoutBuilder(context)
       end
       return super(event)
     end,
-  })
+  },context)
   return view
 end
 
@@ -306,7 +306,6 @@ function FilesTabManager.saveFile(lowerFilePath,showToast)
     config=fileConfig
   end
   if config then
-
     if config.deleted==false then
       local managerActions=EditorsManager.actions
       --保存编辑器滚动

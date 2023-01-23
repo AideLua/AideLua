@@ -311,7 +311,7 @@ function FilesBrowserManager.PathRecyclerViewBuilder(context)
       end
       return super(event)
     end,
-  })
+  },context)
   return view
 end
 
@@ -360,8 +360,8 @@ function FilesBrowserManager.FilesRecyclerViewBuilder(context)
         tag.longClickedView=nil
       end
       return super(event)
-    end,
-  })
+    end
+  },context)
   return view
 end
 
@@ -966,7 +966,7 @@ function FilesBrowserManager.init()
   end
   local downEvent={}
   recyclerView.tag.downEvent=downEvent
-
+  --FastScrollerBuilder(recyclerView).useMd2Style().build();
 end
 
 ---在 v5.1.1(51199) 添加

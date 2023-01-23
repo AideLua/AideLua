@@ -1,5 +1,7 @@
 require "import"
 import "jesse205"
+import "me.zhanghai.android.fastscroll.FastScrollerBuilder"
+import "me.zhanghai.android.fastscroll.FastScrollScrollView"
 import "com.termux.shared.termux.TermuxConstants"
 local TERMUX_SERVICE=TermuxConstants.TERMUX_APP.TERMUX_SERVICE
 
@@ -15,6 +17,8 @@ function onOptionsItemSelected(item)
   end
 end
 
+FastScrollerBuilder(scrollView).useMd2Style().build()
+
 resultBundle = intent.getBundleExtra(TERMUX_SERVICE.EXTRA_PLUGIN_RESULT_BUNDLE)
 if (resultBundle == nil) then
   textView.setText("The intent does not contain the result bundle at the \"" + TERMUX_SERVICE.EXTRA_PLUGIN_RESULT_BUNDLE + "\" key.")
@@ -23,7 +27,7 @@ end
 
 stdout=resultBundle.getString(TERMUX_SERVICE.EXTRA_PLUGIN_RESULT_BUNDLE_STDOUT, "")
 stderr=resultBundle.getString(TERMUX_SERVICE.EXTRA_PLUGIN_RESULT_BUNDLE_STDERR, "")
-
+errmsg=resultBundle.getString(TERMUX_SERVICE.EXTRA_PLUGIN_RESULT_BUNDLE_ERRMSG, "")
 textView.setText(stdout.."\n"..stderr)
 --[[
 Log.e(LOG_TAG, "Execution id " + executionId + " result:\n" +

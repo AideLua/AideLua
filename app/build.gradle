@@ -1,9 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion "32.0.0"
-
+    compileSdkVersion 33
+    buildToolsVersion "33.0.0"
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
     defaultConfig {
         applicationId "com.jesse205.aidelua2"
         minSdkVersion 21
@@ -49,6 +52,8 @@ dependencies {
     //api 'io.github.Rosemoe.sora-editor:editor:0.16.4'
     api 'androidx.appcompat:appcompat:1.0.0'
     api 'com.google.android.material:material:1.0.0'
+    api 'com.drakeet.drawer:drawer:1.0.3'
+    api 'me.zhanghai.android.fastscroll:library:1.2.0'
     //api "io.github.Rosemoe.sora-editor:bom:‎0.20.1"
     //api "io.github.Rosemoe.sora-editor:editor"
 }

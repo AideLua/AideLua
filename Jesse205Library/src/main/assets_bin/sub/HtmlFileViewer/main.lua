@@ -2,6 +2,8 @@ require "import"
 import "jesse205"
 import "android.text.Html"
 import "com.onegravity.rteditor.RTEditorMovementMethod"--可以选择与点击的MovementMethod
+import "me.zhanghai.android.fastscroll.FastScrollerBuilder"
+import "me.zhanghai.android.fastscroll.FastScrollScrollView"
 
 activity.setTitle(R.string.jesse205_htmlFileViewer)
 activity.setContentView(loadlayout2("com.jesse205.layout.innocentlayout.TextViewLayout"))
@@ -24,6 +26,8 @@ end
 textView.setLinksClickable(true)
 textView.setMovementMethod(RTEditorMovementMethod.getInstance())
 textView.requestFocusFromTouch()
+
+FastScrollerBuilder(scrollView).useMd2Style().build()
 
 if data.title then
   activity.setTitle(data.title)

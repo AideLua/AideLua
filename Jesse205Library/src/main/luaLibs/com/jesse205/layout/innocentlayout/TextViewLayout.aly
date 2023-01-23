@@ -4,7 +4,7 @@
   layout_height="fill";
   layout_width="fill";
   {
-    ScrollView;
+    rawget(_ENV,"FastScrollScrollView") or ScrollView;
     layout_height="fill";
     layout_width="fill";
     id="scrollView";

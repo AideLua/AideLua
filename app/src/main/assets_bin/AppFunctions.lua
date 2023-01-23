@@ -1,4 +1,25 @@
 --此文件内为此页面的部分函数
+
+
+MyFullDraggableContainer={
+  _baseClass=FullDraggableContainer,
+  __call=function(self,context)
+    local view,initialMotionX
+    view=luajava.override(FullDraggableContainer,{
+      onInterceptTouchEvent=function(super,event)
+        super(event)
+        return false
+        --super(event)
+        --view.onTouchEvent(event)
+      end
+    },context)
+    return view
+  end,
+}
+setmetatable(MyFullDraggableContainer,MyFullDraggableContainer)
+
+
+
 --检查是不是路径相同的文件
 function isSamePathFileByPath(filePath1,filePath2)--通过文件路径
   return string.lower(filePath1)==string.lower(filePath2)
