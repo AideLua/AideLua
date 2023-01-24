@@ -35,7 +35,6 @@
     <string name="commentedCode">注释代码</string>
     <string name="uncommentedCode">取消注释代码</string>
     <string name="logCat">日志猫</string>
-    <string name="help">帮助</string>
     <string name="viewError">查看错误</string>
     <string name="openInAndroidDeveloper">在“Android 开发者”上打开</string>
     <string name="download">下载</string>

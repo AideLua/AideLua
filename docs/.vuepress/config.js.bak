@@ -78,10 +78,6 @@ export default defineUserConfig({
                         text: '安全调试',
                         link: '/function/safedebug.html',
                     },
-                    {
-                        text: '构建项目',
-                        link: '/function/build.html',
-                    },
                 ]
             },
             {

@@ -247,81 +247,12 @@ local function generalActionEvent(name1,name2,...)
   end
 end
 
---[[
-function managerActions.undo()--撤销
-  return generalActionEvent("undo","undo")
-end
-
-function managerActions.redo()--重做
-  return generalActionEvent("redo","redo")
-end
-
-function managerActions.format()--格式化
-  return generalActionEvent("format","format")
-end
-
-function managerActions.commented()--注释
-  return generalActionEvent("commented","commented")
-end
-
-function managerActions.format()--格式化
-  generalActionEvent("format","format")
-end
-function managerActions.check(show)--查错
-  return generalActionEvent("check","check",show)
-end]]
-
 function managerActions.getText()--获取编辑器文字内容
   local _,text=generalActionEvent("getText","getText")
   if text then
     return tostring(text)
   end
 end
---[[
-function managerActions.setText(...)--设置编辑器文字内容
-  return generalActionEvent("setText","setText",...)
-end
-
-function managerActions.paste(text)--粘贴文字内容
-  return generalActionEvent("paste","paste",text)
-end
-
-function managerActions.getTextSize()--获取文字大小
-  local _,size=generalActionEvent("getTextSize","getTextSize")
-  return size
-end
-
-function managerActions.setTextSize(size)--设置文字大小
-  generalActionEvent("setTextSize","setTextSize",size)
-end
-
-function managerActions.getScrollX()
-  local _,x=generalActionEvent("getScrollX","getScrollX")
-  return x
-end
-
-
-function managerActions.getScrollY()
-  local _,y=generalActionEvent("getScrollY","getScrollY")
-  return y
-end]]
---[[
-function managerActions.scrollTo(x,y)
-  generalActionEvent("scrollTo","scrollTo",x,y)
-end
-
-function managerActions.selectText(select)
-  generalActionEvent("selectText","selectText",select)
-end
-
-function managerActions.setSelection(l)
-  generalActionEvent("setSelection","setSelection",l)
-end
-
-function managerActions.getSelectionEnd()
-  local _,l=generalActionEvent("getSelectionEnd","getSelectionEnd")
-  return l
-end]]
 
 function managerActions.search(text,gotoNext)--搜索
   local searchActions=editorActions.search

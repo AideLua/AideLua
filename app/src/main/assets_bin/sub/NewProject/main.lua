@@ -26,7 +26,7 @@ activity.setContentView(loadlayout2("layouts.layout"))
 actionBar.setDisplayHomeAsUpEnabled(true)
 
 function onCreateOptionsMenu(menu)
-  helpMenu=menu.add(R.string.help)
+  helpMenu=menu.add(R.string.jesse205_getHelp)
   helpMenu.setIcon(R.drawable.ic_help_circle_outline)
   helpMenu.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
 end

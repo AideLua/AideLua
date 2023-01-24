@@ -42,7 +42,7 @@ local function askForRequestPermissions(permissionsItemsList,requestCode)
     local permissionsItem=permissionsItemsList[index]
     local permissions=permissionsItem.permissions
     if not(check(permissions)) then
-      AlertDialog.Builder(this)
+      local builder=AlertDialog.Builder(this)
       .setIcon(permissionsItem.icon)
       .setTitle(R.string.jesse205_permission_request)
       .setMessage(formatResStr(R.string.jesse205_permission_ask,{autoId2str(permissionsItem.tool),autoId2str(permissionsItem.name),autoId2str(permissionsItem.todo)}))
@@ -53,7 +53,16 @@ local function askForRequestPermissions(permissionsItemsList,requestCode)
           request(permissions,requestCode)
         end
       end)
-      .show()
+      if permissionsItem.helpUrl then
+        builder.setNeutralButton(R.string.jesse205_getHelp,nil)
+      end
+      local dialog=builder.show()
+      local neutralButton=dialog.getButton(AlertDialog.BUTTON_NEUTRAL)
+      if permissionsItem.helpUrl then
+        neutralButton.onClick=function()
+          openUrl(permissionsItem.helpUrl)
+        end
+      end
     end
   end
 end

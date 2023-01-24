@@ -36,7 +36,6 @@
     <string name="commentedCode">Commented code</string>
     <string name="uncommentedCode">Uncomment code</string>
     <string name="logCat">Log Cat</string>
-    <string name="help">Help</string>
     <string name="viewError">View Error</string>
     <string name="openInAndroidDeveloper">Open in \"Android Developer\"</string>
     <string name="download">Download</string>

@@ -314,7 +314,8 @@ function onOptionsItemSelected(item)
           name=R.string.permission_termux_runCode,
           tool=R.string.project_build,
           todo=getLocalLangObj("支持 Gradle 运行","Support gradle running"),
-          permissions={"com.termux.permission.RUN_COMMAND"};
+          permissions={"com.termux.permission.RUN_COMMAND"},
+          helpUrl="https://jesse205.github.io/AideLua/function/build.html",
         },
       })
     end

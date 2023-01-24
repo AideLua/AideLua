@@ -589,8 +589,6 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
           isBack=oldPath and oldPathJ.startsWith(path)
           --是否前进
           isForward=oldPath and pathJ.startsWith(oldPath)
-          --动画参数
-          local anim_propertyName,anim_values
 
           luajava.clear(oldPathJ)
           luajava.clear(pathJ)
@@ -599,29 +597,6 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
             FilesBrowserManager.recordScrollPosition()
            elseif oldPath then--有oldPath，并且不是前进，说明有后退操作
             filesPositions[oldPath]=nil--删除当前已打开文件夹滚动
-          end
-
-          --播放动画
-          if oldRichAnim then
-            if isBack then--后退
-              anim_propertyName,anim_values="x", {-math.dp2int(16),0}
-             elseif isForward then--前进
-              anim_propertyName,anim_values="x", {math.dp2int(16),0}
-             else
-              anim_propertyName="alpha"
-            end
-            if anim_propertyName then
-              if anim_propertyName~="alpha" then--下面就是透明动画，所以无需执行card动画
-                ObjectAnimator.ofFloat(recyclerViewCard, anim_propertyName,anim_values)
-                .setDuration(150)
-                .setInterpolator(DecelerateInterpolator())
-                .start()
-              end
-              ObjectAnimator.ofFloat(recyclerView, "alpha",{0,1})
-              .setDuration(250)
-              .setInterpolator(DecelerateInterpolator())
-              .start()
-            end
           end
 
           --如果是返回
@@ -664,6 +639,32 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
             end
             pathAdapter.notifyDataSetChanged()
           end
+
+          --动画参数
+          local anim_propertyName,anim_values
+          --播放动画
+          if oldRichAnim then
+            if isBack then--后退
+              anim_propertyName,anim_values="x", {-math.dp2int(16),0}
+             elseif isForward then--前进
+              anim_propertyName,anim_values="x", {math.dp2int(16),0}
+             else
+              anim_propertyName="alpha"
+            end
+            if anim_propertyName then
+              if anim_propertyName~="alpha" then--下面就是透明动画，所以无需执行card动画
+                ObjectAnimator.ofFloat(recyclerViewCard, anim_propertyName,anim_values)
+                .setDuration(150)
+                .setInterpolator(DecelerateInterpolator())
+                .start()
+              end
+              ObjectAnimator.ofFloat(recyclerView, "alpha",{0,1})
+              .setDuration(250)
+              .setInterpolator(DecelerateInterpolator())
+              .start()
+            end
+          end
+
           directoryFile=newDirectory
         end--路径不同判断完毕
        else--未打开工程
@@ -675,7 +676,6 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
           table.clear(filesPositions)
           FilesBrowserManager.recordScrollPosition()
         end
-        --FilesBrowserManager.recordScrollPosition()
         table.clear(pathSplitList)--清空路径指示器
         directoryFile=nil--移除当前路径标识
         pathAdapter.notifyDataSetChanged()
