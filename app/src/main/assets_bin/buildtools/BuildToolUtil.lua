@@ -52,7 +52,7 @@ function BuildToolUtil.repackApk(config,projectPath,install,sign)
    else
     local buildingDialog=BuildingDialogBuilder()
     buildingDialog:show()
-    
+
     activity.newTask(RePackTool.repackApk_taskFunc,function(...)
       buildingDialog:update(...)
     end,
@@ -63,6 +63,10 @@ function BuildToolUtil.repackApk(config,projectPath,install,sign)
     .execute({HashMap(config),projectPath,install,sign})
     repackApk_building=true
   end
+end
+
+function BuildToolUtil.runProject(config)
+
 end
 
 return BuildToolUtil

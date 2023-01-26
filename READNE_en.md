@@ -12,7 +12,7 @@
 ![cover](images/ic_cover-aidelua.png)
 
 ###### Language:
-[中文](README.md) | [English](README-EN.md)
+[中文](README.md) | English
 
 ## Alert
 If you need to use the source code, please go to the [releases (Github)](https://github.com/Jesse205/AideLua/releases/latest) page to download.

@@ -29,6 +29,13 @@
   };
   {--Jesse205库支持
     SettingsLayUtil.ITEM_SWITCH;
+    --icon=R.drawable.ic_tooltip_minus_outline;
+    title="比较完整的运行 More complete run";
+    key="moreCompleteRun";
+    summary="将 lua 资源整合后再运行，而不是直接运行";
+  };
+  {--Jesse205库支持
+    SettingsLayUtil.ITEM_SWITCH;
     icon=R.drawable.ic_tooltip_minus_outline;
     title=R.string.settings_support_Jesse205Library;
     key="jesse205Lib_support";
@@ -103,13 +110,13 @@
     hint=R.string.projects_path;
     allowNull=false;
   };
-  --[[
+  
   {
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
     icon=R.drawable.ic_file_eye_outline;
     title=R.string.settings_editor_previewButton;
     key="editor_previewButton";
-  };]]
+  };
   {--标签栏
     SettingsLayUtil.TITLE;
     title=R.string.tab;

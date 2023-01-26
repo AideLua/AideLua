@@ -113,7 +113,7 @@ end
 function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
   return pcall(function()
     require "import"
-    local config=luajava.astable(configJ,true)
+    local config=luajava.astable(configJ)
     luajava.clear(configJ)
     notLoadTheme=true
     import "jesse205"
@@ -122,33 +122,11 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
     import "apksigner.*"
     import "com.jesse205.util.FileUtil"
 
+    import "buildtools.BuildHelper"
     RePackTool=require "buildtools.RePackTool"
 
     local rePackTool=RePackTool.getRePackToolByConfig(config)
     local binEventsList={}
-
-    local function updateInfo(message)
-      this.update("info")
-      this.update(message)
-    end
-    local function updateDoing(message)
-      this.update("doing")
-      this.update(message)
-    end
-
-    local function updateSuccess(message)
-      this.update("success")
-      this.update(message)
-    end
-
-    local function updateError(message)
-      this.update("error")
-      this.update(message)
-    end
-
-    local onCompileListener={}
-    onCompileListener.onError=updateError
-    onCompileListener.onDeleted=updateInfo
 
     function runBinEvent(name,...)
       for index=1,#binEventsList do
@@ -160,7 +138,6 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
       end
     end
 
-    --this.update(activity.getString(R.string.binproject_creating_variables))
     local mainAppPath=("%s/%s"):format(projectPath,rePackTool.getMainModuleName(config))
     local buildPath=mainAppPath.."/build"
     local binPath=buildPath.."/bin"
@@ -169,6 +146,7 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
     local tempDir=File(tempPath)
     local appName,appVer,appApkPAI,appApkInfo
     local newApkName,newApkBaseName,newApkPath
+
     --开始查找app.apk
     local appPathList={
       config.appApkPath,
@@ -247,7 +225,7 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
       --编译Lua，默认true
       if config.compileLua~=false then
         updateDoing(getString(R.string.binproject_compiling))
-        RePackTool.autoCompileLua(tempDir,onCompileListener)
+        RePackTool.autoCompileLua(tempDir,BuildHelper.onCompileListener)
         updateSuccess(getString(R.string.binproject_compile_done))
       end
 

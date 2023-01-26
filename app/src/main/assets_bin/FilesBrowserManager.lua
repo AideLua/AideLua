@@ -1,3 +1,4 @@
+---@class FilesBrowserManager
 --[[
 FilesBrowserManager: metatable(class): 文件浏览器管理器
 FilesBrowserManager.providers：提供者映射
@@ -330,11 +331,11 @@ function FilesBrowserManager.FilesRecyclerViewBuilder(context)
         tag.longClickedView=nil--刚按下时不可能有正在长按的view，但可能有记录过的view，所以先清空一下记录
        elseif action==MotionEvent.ACTION_MOVE then
         local longClickedView=tag.longClickedView
-        local relativeX,relativeY=x-downEvent.x,y-downEvent.y
         if longClickedView then
+          local relativeX,relativeY=x-downEvent.x,y-downEvent.y
           --拖放，有bug，现在只能在华为文件管理使用
           local data=longClickedView.tag._data--有数据
-          if data and Build.VERSION.SDK_INT>24 and data.file.isFile() then--系统大于安卓N，并且当前是文件
+          if data and Build.VERSION.SDK_INT>24 and data.file and data.file.isFile() then--系统大于安卓N，并且当前是文件
             if relativeX>math.dp2int(16) or relativeX<-math.dp2int(16) or relativeY>math.dp2int(16) or relativeY<-math.dp2int(16) then
               if lastContextMenu then
                 lastContextMenu.close()

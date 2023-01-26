@@ -301,16 +301,18 @@ function EditorsManager.openNewContent(filePath,fileType,decoder,keepHistory)
     local fileConfig=FilesTabManager.fileConfig
     local content,err=decoder.read(filePath)
     if content then
-      if fileConfig.oldContent~=content or not(keepHistory) then
+      --fileConfig.newContent~=content
+      if tostring(managerActions.getText())~=content or not(keepHistory) then
         fileConfig.oldContent=content
         fileConfig.newContent=content
         fileConfig.changed=false
         if keepHistory then
           managerActions.selectText(false)
-          managerActions.setText(content,true)
+          assert(managerActions.setText(content,true),"The editor failed to set the text. Please pay attention to backup data.")
          else
-          managerActions.setText(content)
+          assert(managerActions.setText(content),"The editor failed to set the text. Please pay attention to backup data.")
         end
+        --编辑器滚动历史
         local scrollConfig=filesScrollingDB:get(filePath)
         if scrollConfig then
           managerActions.setSelection(scrollConfig.selection or 0)
@@ -383,14 +385,20 @@ end
 --切换预览
 function EditorsManager.switchPreview(state)
   --todo: 切换预览
-  print("警告：未切换预览")
+  FilesTabManager.saveFile()
+  local fileConfig=FilesTabManager.fileConfig
+  local decoder=fileConfig.decoder
+  local nowDecoder=state and decoder.preview or decoder
+  EditorsManager.switchEditorByDecoder(nowDecoder)
+  assert(EditorsManager.openNewContent(fileConfig.path,fileConfig.fileType,nowDecoder,true))
 end
 
 function EditorsManager.switchLanguage(language)
   editor.setEditorLanguage(language)
 end
 
---切换编辑器
+---切换编辑器。不考虑预览功能
+---@param newEditorType string 新编辑器名称（虽然变量名上写的是类型，但其实是一个东西）
 function EditorsManager.switchEditor(newEditorType)
   if editorType==newEditorType then--如果已经是当前编辑器，则不需要再切换一次了
     --print("警告：编辑器无效切换")
@@ -512,6 +520,7 @@ function EditorsManager.init()
 
   editChip.onClick=function()
     EditorsManager.switchPreview(false)
+
   end
   previewChip.onClick=function()
     EditorsManager.switchPreview(true)

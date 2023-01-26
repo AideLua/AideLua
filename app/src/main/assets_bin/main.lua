@@ -79,7 +79,6 @@ import "com.jesse205.util.ColorUtil"
 
 --https://github.com/limao996/LuaDB
 db=require "db"
---db.byte_order = '='
 filesScrollingDB=db.open(AppPath.AppSdcardDataDir..'/filesScrolling.db')
 
 require "AppFunctions" -- 必须先导入这个，因为下面的导入模块要直接使用
@@ -112,7 +111,7 @@ PermissionUtil.askForRequestPermissions({
   {
     name=R.string.jesse205_permission_storage,
     tool=R.string.app_name,
-    todo=getLocalLangObj("获取文件列表，读取文件和保存文件","get file list, read file and save file"),
+    todo=getLocalLangObj("获取文件列表，读取文件和保存文件","Get file list, read file and save file"),
     permissions={"android.permission.WRITE_EXTERNAL_STORAGE","android.permission.READ_EXTERNAL_STORAGE"};
   },
 })

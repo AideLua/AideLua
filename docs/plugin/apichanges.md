@@ -245,6 +245,10 @@ EditorManager.symbolBar
 | 老方法 | 新方法 |
 | ---- | ---- |
 | onButtonLongClickListener | symbolBar.onButtonTouchListener |
+
+| 老支持库 | 新支持库 |
+| ---- | ---- |
+| sharp | androidsvg |
 :::
 
 ## 相关链接

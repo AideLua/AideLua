@@ -32,7 +32,16 @@
     editor="LuaEditor",
     language=false,
   },
-  aly={super="lua"},
+  aly={
+    super="lua",
+    preview={
+      editor="FrameView",
+      apply=function(filePath,fileType,view)
+        view.removeAllViews()
+        
+      end,
+    },
+  },
 
   xml={
     super="txt",
@@ -41,9 +50,6 @@
   java={
     super="txt",
     language=JavaLanguage(),
-  },
-  svg={
-    super="xml",
   },
   html={
     super="txt",
@@ -80,4 +86,13 @@
       Sharp.loadFile(File(filePath)).into(view)
     end,
  },]]
+  svg={
+    super="xml",
+    preview={
+      editor="PhotoView",
+      apply=function(filePath,fileType,view)
+        Sharp.loadFile(File(filePath)).into(view)
+      end,
+    },
+  },
 }

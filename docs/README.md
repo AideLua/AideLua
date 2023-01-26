@@ -40,6 +40,9 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 [![百度网盘](https://img.shields.io/badge/百度网盘-密码_jxnb-06a7ff?style=flat-square)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q?pwd=jxnb)
 
 ### 快速入门
+::: tip
+如果您只有 AndroLua+ 基础，那么您可以阅读[《快速使用》](/quickly/README.md)
+:::
 #### 一、配置 AIDE Pro
 1. 进入 `设置 - 高级设置 - 工程相关`
 2. 关闭 `启用 adrt调试文件` ，打开 `重定义Apk构建路径`、`启用Gradle`（如果不使用 Gradle 则无需打开此项）

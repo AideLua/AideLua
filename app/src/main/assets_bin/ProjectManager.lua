@@ -85,13 +85,14 @@ ProjectManager.updateNowConfig=updateNowConfig
 
 
 ---打开项目
+---潜在bug表象：重新打开工程会保存文件
 ---@param path string 工程路径
 ---@param filePath string 准备打开文件的路径，false为不打开
 ---@param openDirPath string 打开文件夹路径，默认为默认打开文件的目录，没有打开文件就是工程目录，false为不刷新适配器
 function ProjectManager.openProject(path,filePath,openDirPath)
   xpcall(function()
     FilesBrowserManager.recordScrollPosition()
-    if openedDirPath~=false then
+    if openDirPath~=false then
       FilesBrowserManager.clearAdapterData(true)
     end
     local loadedConfig,config=pcall(RePackTool.getConfigByProjectPath,path)
@@ -142,12 +143,12 @@ function ProjectManager.openProject(path,filePath,openDirPath)
        elseif defaultFile.isFile() then
         nowOpenedFile=defaultFile
       end
-    end
-    if nowOpenedFile then
-      FilesTabManager.openFile(nowOpenedFile,getFileTypeByName(nowOpenedFile.getName()), false)
-      nowBrowserDir=nowOpenedFile.getParentFile()
-     else
-      EditorsManager.switchEditor("NoneView")
+      if nowOpenedFile then
+        FilesTabManager.openFile(nowOpenedFile,getFileTypeByName(nowOpenedFile.getName()), false)
+        nowBrowserDir=nowOpenedFile.getParentFile()
+       else
+        EditorsManager.switchEditor("NoneView")
+      end
     end
 
     if openDirPath then
@@ -156,12 +157,12 @@ function ProjectManager.openProject(path,filePath,openDirPath)
     if openDirPath~=false then
       FilesBrowserManager.refresh(nowBrowserDir,nil,false,true)
     end
+    PluginsUtil.callElevents("onOpenProject", path,config)
   end,
   function(err)
     ProjectManager.closeProject(true)
     showErrorDialog("Open project",err)
   end)
-  PluginsUtil.callElevents("onOpenProject", path,config)
   refreshMenusState()
   collectgarbage("collect")
 end

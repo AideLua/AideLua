@@ -64,3 +64,27 @@ end
 :::
 
 ## 符号栏
+符号栏为方便触屏用户快速输入符号而设计。
+
+### 自动化
+Aide Lua 的符号栏会自动根据用户是否选择了文字而适当改变点击后插入的内容
+
+Aide Lua 的内容变化不会复杂，只有两种状态：已选中和未选中
+
+当用户已选中文字时，插入的内容会自动包裹选中的文字。
+
+假如当前选择了 `hello`，符号 `(` 和 `)` 插入的内容会自动变为 `(hello)` 。
+
+![](/images/ui/main/psbar_normal.jpg)
+<p class="pictureName">[图片] 未选中时插入的内容</p>
+
+![](/images/ui/main/psbar_selected.jpg)
+<p class="pictureName">[图片] 已选中时插入的内容</p>
+
+::: tip
+该特性目前只支持 Lua Editor，也就是只支持 `lua` 和 `aly` 文件
+:::
+### 手势
+符号栏仅有一个向右滑动打开侧滑栏的手势
+![](/images/ui/main/psbar_scroll_right.jpg)
+<p class="pictureName">[图片] 在任意位置向右滑动</p>

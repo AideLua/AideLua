@@ -1,3 +1,4 @@
+---@class FilesTabManager
 --[[
 FilesTabManager: metatable(class): 文件标签管理器，兼职管理文件的读写与保存
 FilesTabManager.openState; FilesTabManager.getOpenState(): boolean: 文件打开状态
@@ -175,7 +176,11 @@ local function initFileTabView(tab, fileConfig)
 end
 FilesTabManager.initFileTabView=initFileTabView
 
-
+---打开文件，兼职预览切换功能
+---潜在bug表象：当编辑器错误地切换到其他编辑器，再次打开会丢源码
+---@param newFile File 要打开的文件
+---@param newFileType string 新打开文件扩展名（变量名写错了）
+---@param keepHistory boolean 保持撤销历史
 function FilesTabManager.openFile(newFile,newFileType,keepHistory)
   if openState and EditorsManager.isEditor() then
     --EditorsManager.save2Tab()
@@ -229,11 +234,12 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
           setSharedData("openedFilePath_"..ProjectManager.nowPath,filePath)
           --更新文件浏览器显示内容
           local browserAdapter=FilesBrowserManager.adapter
-          if FilesBrowserManager.nowFilePosition then
-            browserAdapter.notifyItemChanged(FilesBrowserManager.nowFilePosition)
-          end
+          local oldFilePosition=FilesBrowserManager.nowFilePosition
           local newFilePosition=FilesBrowserManager.filesPositions[filePath]
           FilesBrowserManager.nowFilePosition=newFilePosition
+          if oldFilePosition then
+            browserAdapter.notifyItemChanged(oldFilePosition)
+          end
           if newFilePosition then
             browserAdapter.notifyItemChanged(newFilePosition)
           end
@@ -251,6 +257,13 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
               tab.select()
             end
           }))
+        end
+        local previewDecoder=decoder.preview
+        if previewDecoder then
+          previewChipCardView.setVisibility(View.VISIBLE)
+          editChip.setChecked(true)
+         else
+          previewChipCardView.setVisibility(View.GONE)
         end
       end)
       refreshMenusState()
@@ -296,15 +309,18 @@ function FilesTabManager.reopenFile()
   end
 end
 
--- 保存当前打开的文件，由于当前没有编辑器监听能力，保存文件需要直接从编辑器获取
+--- 保存当前打开的文件，由于当前没有编辑器监听能力，保存文件需要直接从编辑器获取
+---@param lowerFilePath string 小写文件路径
 function FilesTabManager.saveFile(lowerFilePath,showToast)
   --print("警告：保存文件",lowerFilePath)
-  local config
+  local config--这才是真正的文件信息
   if lowerFilePath then
     config=openedFiles[lowerFilePath]
    else
     config=fileConfig
   end
+  lowerFilePath=nil--这只是个参数，因此要赋值为空，避免调用
+
   if config then
     if config.deleted==false then
       local managerActions=EditorsManager.actions
@@ -321,12 +337,11 @@ function FilesTabManager.saveFile(lowerFilePath,showToast)
         filesScrollingDB:set(config.path,editorStateConfig)
       end
       EditorsManager.save2Tab()--实际上不应该在这里调用
-
       if config.changed then
         local decoder=config.decoder
         local newContent = config.newContent
         local success,errMsg=decoder.save(config.path,newContent)
-        config.oldContent = newContent -- 讲旧内容设置为新的内容
+        config.oldContent = newContent -- 将旧内容设置为新的内容
         config.changed=false
         if success then
           if showToast then
@@ -378,10 +393,11 @@ function FilesTabManager.closeFile(lowerFilePath,removeTab,changeEditor)
     if removeTab~=false then
       filesTabLay.removeTab(config.tab)
     end
-    if table.size(openedFiles)==0 then
+    if table.size(openedFiles)==0 then--关闭的是最后一个文件
       openState = false
       file=nil
       fileConfig=nil
+      previewChipCardView.setVisibility(View.GONE)
 
       setSharedData("openedFilePath_"..ProjectManager.nowPath,nil)
       --更新文件浏览器显示内容
@@ -428,12 +444,21 @@ function FilesTabManager.init()
     onTabUnselected = function(tab)
     end
   }))
-  --filesTabLay.onTouch = onFileTabLayTouch
-
+  --metatable复用
+  local metatables={}
+  setmetatable(metatables,{__index=function(self,key)
+      local mMetatable={__index=FileDecoders[key]}
+      rawset(self,key,mMetatable)
+      return mMetatable
+  end})
   for index,content in pairs(FileDecoders) do
     local superType=content.super
     if superType then
-      setmetatable(content,{__index=FileDecoders[superType]})
+      setmetatable(content,metatables[superType])
+    end
+    local previewSuper=content.preview and content.preview.super
+    if previewSuper then--如果有预览的父解析器，那么就一定有预览解析器
+      setmetatable(content.preview,metatables[previewSuper])
     end
   end
 

@@ -269,7 +269,7 @@ import "jesse205"
        else
         editor.setColorScheme(SchemeGitHub())
       end
-      
+
     end,
     onTypefaceChangeListener=function(ids,config,editor,typeface,boldTypeface,italicTypeface)
       editor.setTypefaceText(typeface)
@@ -290,6 +290,7 @@ import "jesse205"
       paste=function(ids,config,text)
         local editor=ids.editor
         editor.cursor.onCommitText(text)
+        return true
       end,
       setTextSize=function(ids,config,size)
         local editor=ids.editor
@@ -340,6 +341,7 @@ import "jesse205"
       getText="default",
       setText=function(ids,config,text)
         ids.editor.setText(text)
+        return true
       end,
     },
     supportScroll=true;
@@ -367,5 +369,19 @@ import "jesse205"
       format=nil,
       search=nil,
     },]]
-  }
+  },
+  FrameView={
+    layout={
+      LinearLayoutCompat;
+      layout_height="fill";
+      layout_width="fill";
+      id="editorParent";
+      {
+        FrameLayout;
+        layout_height="fill";
+        id="editor";
+        layout_width="fill";
+      };
+    },
+  },
 }

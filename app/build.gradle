@@ -47,13 +47,13 @@ dependencies {
     api "androidx.browser:browser:1.0.0"
     api project(':Jesse205Library')
     api project(':androlua')
-    api project(':sharp')
     api project(':soraeditor')
     //api 'io.github.Rosemoe.sora-editor:editor:0.16.4'
     api 'androidx.appcompat:appcompat:1.0.0'
     api 'com.google.android.material:material:1.0.0'
     api 'com.drakeet.drawer:drawer:1.0.3'
     api 'me.zhanghai.android.fastscroll:library:1.2.0'
+    api 'com.caverock:androidsvg-aar:1.4'
     //api "io.github.Rosemoe.sora-editor:bom:‎0.20.1"
     //api "io.github.Rosemoe.sora-editor:editor"
 }

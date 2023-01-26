@@ -12,7 +12,7 @@
 ![cover](images/ic_cover-aidelua.png)
 
 ###### 语言 | Language:
-[中文](README.md) | [English](README-EN.md)
+中文 | [English](READNE_en.md)
 
 ## 注意 | Alert
 如需使用源代码，请进入 [发行版 (Gitee)](https://gitee.com/Jesse205/AideLua/releases/latest) 页面下载。<br>
@@ -86,6 +86,12 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 2. AIDE 必须打开 `重定义Apk路径` ，否则会导致 APK 错误
 3. AIDE 最好关闭 `adrt调试文件`
 4. 不是必须用 AIDE 编译，也可以使用 Android Studio 编译
+
+## 参与贡献
+1. Fork 本仓库
+2. 新建 Feat_xxx 分支
+3. 提交代码
+4. 新建 Pull Request
 
 ## 开放源代码许可
 [https://gitee.com/Jesse205/AideLua/blob/master/app/src/main/assets_bin/licences](https://gitee.com/Jesse205/AideLua/blob/master/app/src/main/assets_bin/licences)

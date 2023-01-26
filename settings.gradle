@@ -1,2 +1,2 @@
-include ':app',':androlua',':Jesse205Library',':sharp',':soraeditor'
+include ':app',':androlua',':Jesse205Library',':soraeditor'
 rootProject.name = "Aide Lua Pro"
