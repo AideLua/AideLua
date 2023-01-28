@@ -122,6 +122,4 @@ local p={
   "com.google.android.material.transformation.*" ;
 }
 
-for k,v pairs(p)
-  import(v)
-end
+return p

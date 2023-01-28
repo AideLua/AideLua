@@ -118,7 +118,7 @@ function LuaEditorHelper.onEditorSelectionChangedListener(view,status,start,end_
           EditorsManager.actions.commented()
          elseif id==R.id.menu_code_viewApi then
           local selectedText=view.getSelectedText()
-          newSubActivity("JavaApi",{selectedText})
+          newSubActivity("JavaApi",{selectedText},true)
         end
         return false;
       end,

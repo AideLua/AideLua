@@ -181,13 +181,17 @@ FilesTabManager.initFileTabView=initFileTabView
 ---@param newFile File 要打开的文件
 ---@param newFileType string 新打开文件扩展名（变量名写错了）
 ---@param keepHistory boolean 保持撤销历史
-function FilesTabManager.openFile(newFile,newFileType,keepHistory)
-  if openState and EditorsManager.isEditor() then
+function FilesTabManager.openFile(newFile,newFileType,keepHistory,saveFile,preview)
+  if openState and EditorsManager.isEditor() and saveFile~=false then
     --EditorsManager.save2Tab()
     FilesTabManager.saveFile(nil,false)
   end
   local filePath = newFile.getPath()
   local decoder=FileDecoders[newFileType]
+  local nowDecoder=decoder
+  if preview then
+    nowDecoder=decoder.preview
+  end
   local fileName=newFile.getName()
   if decoder then
     openState=true
@@ -227,9 +231,9 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
     local success,failed,toast=false,false,false
     if File(filePath).isFile() then
       success,failed=pcall(function()
-        EditorsManager.switchEditorByDecoder(decoder)
+        EditorsManager.switchEditorByDecoder(nowDecoder)
         --编辑器滚动相关在 EditorsManager.openNewContent 内
-        local succes,err=EditorsManager.openNewContent(filePath,newFileType,decoder,keepHistory)
+        local succes,err=EditorsManager.openNewContent(filePath,newFileType,nowDecoder,keepHistory)
         if succes then
           setSharedData("openedFilePath_"..ProjectManager.nowPath,filePath)
           --更新文件浏览器显示内容
@@ -258,13 +262,8 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory)
             end
           }))
         end
-        local previewDecoder=decoder.preview
-        if previewDecoder then
-          previewChipCardView.setVisibility(View.VISIBLE)
-          editChip.setChecked(true)
-         else
-          previewChipCardView.setVisibility(View.GONE)
-        end
+        EditorsManager.switchPreviewState(preview)
+        EditorsManager.refreshPreviewButtonVisibility()
       end)
       refreshMenusState()
      else
@@ -305,7 +304,8 @@ end
 
 function FilesTabManager.reopenFile()
   if openState then
-    FilesTabManager.openFile(file,fileType,true)
+    local isPreviewing=EditorsManager.isPreviewing
+    FilesTabManager.openFile(file,fileType,true,false,isPreviewing)
   end
 end
 
@@ -331,10 +331,11 @@ function FilesTabManager.saveFile(lowerFilePath,showToast)
         y=managerActions.getScrollY(),
         selection=managerActions.getSelectionEnd()
       }
+      local key=FilesTabManager.getScrollDbKeyByPath(config.path)
       if table.size(editorStateConfig)==0 then
-        filesScrollingDB:del(config.path)
+        filesScrollingDB:del(key)
        else
-        filesScrollingDB:set(config.path,editorStateConfig)
+        filesScrollingDB:set(key,editorStateConfig)
       end
       EditorsManager.save2Tab()--实际上不应该在这里调用
       if config.changed then
@@ -397,7 +398,8 @@ function FilesTabManager.closeFile(lowerFilePath,removeTab,changeEditor)
       openState = false
       file=nil
       fileConfig=nil
-      previewChipCardView.setVisibility(View.GONE)
+      EditorsManager.switchPreviewState(false)
+      EditorsManager.refreshPreviewButtonVisibility()
 
       setSharedData("openedFilePath_"..ProjectManager.nowPath,nil)
       --更新文件浏览器显示内容
@@ -507,6 +509,11 @@ function FilesTabManager.changePath(lowerPath,newPath)
       FilesTabManager.closeFile(lowerPath)
     end
   end
+end
+
+--v5.1.1+
+function FilesTabManager.getScrollDbKeyByPath(path)
+  return path.."-"..EditorsManager.editorType
 end
 
 

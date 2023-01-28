@@ -20,6 +20,14 @@
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:exported="true"
             android:name="com.jesse205.app.activity.RunActivity"/>
+
+        <activity 
+            android:name="com.jesse205.app.activity.StartLuaActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:exported="true"/>
+
     </application>
 
 </manifest>

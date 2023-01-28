@@ -1,30 +1,61 @@
 {
-  CoordinatorLayout;
+  LinearLayout;
   layout_width="fill";
   layout_height="fill";
-  id="mainLay";
+  --fitsSystemWindows=true;
   {
-    ListView;
-    id="listView";
-    fastScrollEnabled=true;
+    CoordinatorLayout;
     layout_width="fill";
     layout_height="fill";
+    id="mainLay";
     --fitsSystemWindows=true;
-    --clipToPadding=false;
-    --scrollBarStyle=View.SCROLLBARS_OUTSIDE_OVERLAY;
-  };
-  {
-    ProgressBar;
-    id="progressBar";
-    indeterminate=true;
-    layout_width="fill";
-    paddingTop="-8dp";
-    paddingBottom="-8dp";
-    layout_height="4dp";
-    visibility=View.GONE;
-    style=android.R.attr.progressBarStyleHorizontal;
-  };
-  --[=[
+    {
+      ListView;
+      id="listView";
+      fastScrollEnabled=true;
+      layout_width="fill";
+      layout_height="fill";
+      --fitsSystemWindows=true;
+      --paddingTop="64dp";
+      clipToPadding=false;
+      --fitsSystemWindows=true;
+      --scrollBarStyle=View.SCROLLBARS_OUTSIDE_OVERLAY;
+    };
+    --[[
+    {
+      LinearLayout;
+      layout_height="4dp";
+      layout_width="fill";
+      {
+        CardView;
+        layout_height=1;
+        layout_width="fill";
+        id="appBarElevationCard";
+        radius=0;
+        elevation="4dp";
+      };
+    };]]
+    {
+      View;
+      layout_height=0;
+      layout_width="fill";
+      id="appBarSpaceView";
+      --elevation="4dp";
+    };
+    MySearchLayout.Builder();
+    --"titleLayout";
+    {
+      ProgressBar;
+      id="progressBar";
+      indeterminate=true;
+      layout_width="fill";
+      paddingTop="-8dp";
+      paddingBottom="-8dp";
+      layout_height="4dp";
+      visibility=View.GONE;
+      style=android.R.attr.progressBarStyleHorizontal;
+    };
+    --[=[
   {
     LinearLayout;
     orientation="vertical";
@@ -48,4 +79,5 @@
 
     };
   };]=]
+  };
 };

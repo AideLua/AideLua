@@ -38,7 +38,7 @@ return function(item)
         end
        else
         titleView.setTextColor(theme.color.ActionBar.textColorSecondary)
-        iconView.setAlpha(Color.alpha(theme.color.ActionBar.textColorSecondary)/255)
+        --iconView.setAlpha(Color.alpha(theme.color.ActionBar.textColorSecondary)/255)
       end
       return holder
     end,

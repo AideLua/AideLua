@@ -8,7 +8,7 @@ local function onTextChangedListener(text,clearButton)
   end
 end
 
-function ClearContentHelper.setupEditor(editText,clearButton,color)
+function ClearContentHelper.setupEditor(editText,clearButton,color,radius)
   editText.addTextChangedListener({
     onTextChanged=function(text,start,before,count)
       onTextChangedListener(tostring(text),clearButton)
@@ -21,10 +21,14 @@ function ClearContentHelper.setupEditor(editText,clearButton,color)
   if color then
     local drawable=ThemeUtil.getRippleDrawable(color)
     if Build.VERSION.SDK_INT>=23 then
-      drawable.setRadius(math.dp2int(20))
+      drawable.mutate().setRadius(radius or math.dp2int(20))
     end
     clearButton.setBackground(drawable)
   end
+end
+
+function ClearContentHelper.setupCardTitleEditor(editText,clearButton,color)
+  ClearContentHelper.setupEditor(editText,clearButton,color,math.dp2int(16))
 end
 
 return ClearContentHelper

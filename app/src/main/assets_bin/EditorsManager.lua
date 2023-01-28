@@ -313,7 +313,7 @@ function EditorsManager.openNewContent(filePath,fileType,decoder,keepHistory)
           assert(managerActions.setText(content),"The editor failed to set the text. Please pay attention to backup data.")
         end
         --编辑器滚动历史
-        local scrollConfig=filesScrollingDB:get(filePath)
+        local scrollConfig=filesScrollingDB:get(FilesTabManager.getScrollDbKeyByPath(filePath))
         if scrollConfig then
           managerActions.setSelection(scrollConfig.selection or 0)
           managerActions.setTextSize(scrollConfig.size or math.dp2int(14))
@@ -332,6 +332,11 @@ function EditorsManager.openNewContent(filePath,fileType,decoder,keepHistory)
     end
    else
     decoder.apply(filePath,fileType,editor)
+    if editorConfig.supportScroll then
+      MyAnimationUtil.ScrollView.onScrollChange(editor,managerActions.getScrollX(),managerActions.getScrollY(),0,0,appBarLayout,nil)
+     else
+      MyAnimationUtil.ScrollView.onScrollChange(editor,0,0,0,0,appBarLayout,nil)
+    end
     return true
   end
 end
@@ -382,15 +387,42 @@ function EditorsManager.isEditor()
   return EditorsManager.checkEditorSupport("setText")
 end
 
+EditorsManager.isPreviewing=false
+---v5.1.1+
+function EditorsManager.switchPreviewState(state)
+  if state then
+    previewChip.setChecked(true)
+   else
+    editChip.setChecked(true)
+  end
+  EditorsManager.isPreviewing=state
+end
+
 --切换预览
 function EditorsManager.switchPreview(state)
   --todo: 切换预览
   FilesTabManager.saveFile()
+  EditorsManager.switchPreviewState(state)
   local fileConfig=FilesTabManager.fileConfig
   local decoder=fileConfig.decoder
   local nowDecoder=state and decoder.preview or decoder
   EditorsManager.switchEditorByDecoder(nowDecoder)
-  assert(EditorsManager.openNewContent(fileConfig.path,fileConfig.fileType,nowDecoder,true))
+  local success1,success2,msg=pcall(function()
+    return assert(EditorsManager.openNewContent(fileConfig.path,fileConfig.fileType,nowDecoder,true))
+  end)
+  if not success1 then
+    showSimpleDialog("Preview failed",success2)
+   elseif not success2 then
+    showSimpleDialog("Preview failed",msg)
+  end
+end
+
+function EditorsManager.refreshPreviewButtonVisibility()
+  if FilesTabManager.openState and FilesTabManager.fileConfig.decoder.preview and getSharedData("editor_previewButton") then
+    previewChipCardView.setVisibility(View.VISIBLE)
+   else
+    previewChipCardView.setVisibility(View.GONE)
+  end
 end
 
 function EditorsManager.switchLanguage(language)

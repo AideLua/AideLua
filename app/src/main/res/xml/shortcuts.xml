@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
     <shortcut
-        android:shortcutId="javaapi"
-        android:shortcutShortLabel="@string/javaApiViewer"
-        android:shortcutLongLabel="@string/javaApiViewer"
-		android:shortcutDisabledMessage="@string/javaApiViewer"
+        android:shortcutId="manual"
+        android:shortcutShortLabel="@string/manual"
+        android:shortcutLongLabel="@string/manual"
+		android:shortcutDisabledMessage="@string/manual"
         android:enabled="true"
-        android:icon="@drawable/ic_android">
+        android:icon="@mipmap/ic_launcher">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://jesse205.github.io/AideLua/"/>
+        <categories android:name="android.shortcut.conversation" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="plugins_manager"
+        android:shortcutShortLabel="@string/plugins_manager"
+        android:shortcutLongLabel="@string/plugins_manager"
+        android:shortcutDisabledMessage="@string/plugins_manager"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher">
         <intent
             android:action="android.intent.action.VIEW"
             android:targetPackage="com.jesse205.aidelua2"
-            android:targetClass="com.jesse205.superlua.Main"/>
+            android:targetClass="com.jesse205.app.activity.StartLuaActivity">
+            <extra
+                android:name="name"
+                android:value="PluginsManager"/>
+        </intent>
         <categories android:name="android.shortcut.conversation" />
     </shortcut>
 </shortcuts>

@@ -113,7 +113,7 @@ end
 function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
   return pcall(function()
     require "import"
-    local config=luajava.astable(configJ)
+    local config=luajava.astable(configJ,true)
     luajava.clear(configJ)
     notLoadTheme=true
     import "jesse205"
@@ -137,8 +137,9 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
         end
       end
     end
-
-    local mainAppPath=("%s/%s"):format(projectPath,rePackTool.getMainModuleName(config))
+    local mainModuleName=rePackTool.getMainModuleName(config)
+    updateInfo("Main Module Name: "..mainModuleName)
+    local mainAppPath=("%s/%s"):format(projectPath,mainModuleName)
     local buildPath=mainAppPath.."/build"
     local binPath=buildPath.."/bin"
     local binDir=File(binPath)
@@ -229,7 +230,6 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
         updateSuccess(getString(R.string.binproject_compile_done))
       end
 
-
       --压缩
       newApkBaseName=appName.."_v"..appVer..os.date("_%Y%m%d%H%M%S")
       newApkName=newApkBaseName..".apk"
@@ -238,7 +238,6 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
       runBinEvent("beforePack",tempPath)
       LuaUtil.zip(tempPath,binPath,newApkName)
       updateSuccess(getString(R.string.binproject_zip_done))
-
 
       updateDoing(getString(R.string.binproject_deleting))
       LuaUtil.rmDir(tempDir)
@@ -251,7 +250,7 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
         local signedApkPath=binPath.."/"..signedApkName
         if Signer then--有签名工具
           updateDoing(formatResStr(R.string.binproject_signing,{signedApkName}))
-          updateInfo("Key: Debug")
+          updateInfo("Key Store: Debug")
           signSucceed,signErr=pcall(Signer.sign,newApkPath,signedApkPath)
           updateSuccess(getString(R.string.binproject_sign_done))
         end

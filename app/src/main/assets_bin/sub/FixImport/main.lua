@@ -169,20 +169,12 @@ function fiximport(code,packageName,application)
   end)
 end
 
---延迟一毫秒隐藏悬浮球，如果不延迟的话会有动画及各种bug
---[[
-Handler().postDelayed(Runnable({
-  run=function()
-    floatButton.hide()
-  end
-}),1)]]
---这种方式更可取
+--直接隐藏会有bug
 floatButton.post(Runnable({
   run=function()
     floatButton.hide()
   end
 }))
-
 
 activity.newTask(fiximport,function(success,content)
   progressBar.setVisibility(View.GONE)
@@ -196,7 +188,6 @@ activity.newTask(fiximport,function(success,content)
     showErrorDialog("onAnalysis",content)
   end
   refreshMenusState()
-
 end).execute({code,packageName,application})
 
 listView.onItemClick=function(parent,view,position,id)

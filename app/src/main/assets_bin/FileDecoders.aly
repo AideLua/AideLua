@@ -37,8 +37,21 @@
     preview={
       editor="FrameView",
       apply=function(filePath,fileType,view)
-        view.removeAllViews()
-        
+        if _warnedAlyPreview then
+          view.removeAllViews()
+          view.addView(safeLoadLayout(filePath,view.getClass()))
+         else
+          EditorsManager.switchPreview(false)
+          AlertDialog.Builder(this)
+          .setTitle(getLocalLangObj("ALY 布局预览警告","ALY Layout Preview Warning"))
+          .setMessage(getLocalLangObj("ALY布局预览仅可以预览特定的布局。您的布局无法预览属于正常现象。","ALY layout preview can only preview specific layouts. If your layout cannot be previewed, please do not panic."))
+          .setPositiveButton(R.string.preview,function()
+            _warnedAlyPreview=true
+            EditorsManager.switchPreview(true)
+          end)
+          .setNegativeButton(android.R.string.cancel,nil)
+          .show()
+        end
       end,
     },
   },
@@ -59,11 +72,31 @@
     super="txt",
     language=JavaLanguage(),
   },
+  js={super="txt"},
   gradle={super="txt"},
   bat={super="txt"},
   properties={super="txt"},
-  md={super="txt"},
-  markdown={super="txt"},
+  md={
+    super="txt",
+    preview={
+      editor="WebView",
+      apply=function(filePath,fileType,view)
+
+        view.loadUrl("file://"..activity.getLuaDir().."/showdown/index.html")
+        view.reload()
+        task(500,function()
+          view.evaluateJavascript([[
+        return showdown;
+let converter = new showdown.Converter()
+document.body.innerHTML = converter.makeHtml("。。。"]]..[[);
+return true;]],function(...)
+            print(...)
+          end)
+        end)
+      end,
+    },
+  },
+  markdown={super="md"},
 
   png={
     editor="PhotoView",
@@ -89,10 +122,36 @@
   svg={
     super="xml",
     preview={
+      editor="WebView",
+      apply=function(filePath,fileType,view)
+        view.loadUrl("file://"..filePath)
+      end
+    },
+    --[[
+    preview={
       editor="PhotoView",
       apply=function(filePath,fileType,view)
-        Sharp.loadFile(File(filePath)).into(view)
+        -- Read an SVG from the assets folder
+        local svg = SVG.getFromInputStream(FileInputStream(filePath))
+        -- Create a canvas to draw onto
+        if svg.getDocumentWidth()~=-1 then
+          local newBM = Bitmap.createBitmap(Math.ceil(svg.getDocumentWidth()),
+          Math.ceil(svg.getDocumentHeight()), Bitmap.Config.ARGB_8888)
+          local bmcanvas=Canvas(newBM)
+          -- Clear background to white
+          bmcanvas.drawRGB(255, 255, 255)
+          -- Render our document onto our canvas
+          svg.renderToCanvas(bmcanvas)
+
+          local options=RequestOptions()
+          options.skipMemoryCache(true)--跳过内存缓存
+          options.diskCacheStrategy(DiskCacheStrategy.NONE)--不缓冲disk硬盘中
+          Glide.with(activity).load(newBM).apply(options).into(view)
+         else
+          error("File read failed")
+        end
+        -- Sharp.loadFile(File(filePath)).into(view)
       end,
-    },
+    },]]
   },
 }

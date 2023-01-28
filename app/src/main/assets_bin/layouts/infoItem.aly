@@ -21,5 +21,4 @@
     textColor=theme.color.textColorPrimary;
     textSize="16sp";
   };
-
 }

@@ -141,10 +141,6 @@ activity.result({<action>，<content>})
 | editor | View | 编辑器视图 |
 | [editorConfig](#editorlayouts) | table (map) | 编辑器配置 |
 | editorType | string | 编辑器名称（有时候叫做编辑器类型） |
-| <Badge type="danger" text="X" vertical="middle" /> keyWordsList | 忘了 | 编辑器提示词列表 |
-| <Badge type="danger" text="X" vertical="middle" /> keyWords | String[] | 编辑器默认提示词列表 |
-| <Badge type="danger" text="X" vertical="middle" /> jesse205KeyWords | String[] | Jesse205库提示词列表 |
-| <Badge type="danger" text="X" vertical="middle" /> fileType2Language | 忘了 | 文件类型转语言索引列表 |
 | [actions](#editorsmanager-actions) | table (map) | 编辑器事件映射 |
 | openNewContent(filePath,fileType,decoder) | function | 打开新内容 <br> __filePath__ (string): 文件路径 <br> __fileType__ (string): 文件扩展名 <br> __decoder__ (metatable(map)): 文件解析工具 |
 | startSearch() | function | 启动搜索 |
@@ -158,6 +154,17 @@ activity.result({<action>，<content>})
 | [typefaceChangeListeners](#editorsmanager-typefacechangelisteners) <Badge text="v5.0.4+" vertical="middle" /> | table (list) | 编辑器字体监听器 |
 | [sharedDataChangeListeners](#editorsmanager-shareddatachangelisteners) <Badge text="v5.1.0+" vertical="middle" /> | table (map) | 软件配置监听器 |
 | refreshEditorScrollState() | function | 刷新编辑器滚动状态，包括阴影。 |
+
+:::: details 已废除
+
+| 键 | 类型 | 说明 |
+| ---- | ---- | ---- |
+| keyWordsList | 忘了 | 编辑器提示词列表 |
+| keyWords | String[] | 编辑器默认提示词列表 |
+| jesse205KeyWords | String[] | Jesse205库提示词列表 |
+| fileType2Language | 忘了 | 文件类型转语言索引列表 |
+
+::::
 
 #### EditorsManager.typefaceChangeListeners <Badge text="table" vertical="middle" /> <Badge text="List" vertical="middle" /> <Badge text="Listener" vertical="middle" /> <Badge text="v5.0.4+" vertical="middle" />
 编辑器字体监听器
@@ -250,7 +257,10 @@ activity.result({<action>，<content>})
 | 键 | 类型 | 说明 |
 | ---- | ---- | ---- |
 | providers | table (map) | 提供者映射 |
-| highlightIndex | number | 高亮显示的项目索引（从0开始） |
+| highlightIndex | number | 高亮显示的项目索引（从 0 开始） |
+| openState | boolean | 侧滑打开状态 |
+| directoryFile | File | 当前文件浏览器文件夹，未打开工程时为 `nil` |
+
 
 | 方法 | 说明 |
 | ---- | ---- |
@@ -260,6 +270,11 @@ activity.result({<action>，<content>})
 
 ### FilesTabManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 这是标签页管理器，兼职管理文件的读取与保存
+
+| 方法 | 说明 |
+| ---- | ---- |
+| getScrollDbKeyByPath(path) <Badge text="v5.1.1+" vertical="middle" /> | 自动通过当前编辑器获取滚动的数据库的键 |
+
 
 ### ProjectManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 这是项目管理器，只能管理单个项目，兼职提供文件路径的绝对路径转相对路径

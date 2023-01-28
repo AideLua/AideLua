@@ -16,5 +16,6 @@
     imageResource=R.drawable.ic_chevron_right;
     colorFilter=theme.color.ActionBar.colorControlNormal;
     padding="-4dp";
+    alpha=Color.alpha(theme.color.ActionBar.textColorSecondary)/255;
   };
 }

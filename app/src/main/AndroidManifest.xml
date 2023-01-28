@@ -79,6 +79,10 @@
             android:exported="true"
             android:theme="@style/Theme.Jesse205.Welcome">
 
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts"/>
+
             <intent-filter>
 
                 <action android:name="android.intent.action.MAIN"/>
@@ -117,10 +121,6 @@
         <service
             android:enabled="true"
             android:name="com.androlua.LuaService"/>
-
-        <meta-data
-            android:name="android.app.shortcuts"
-            android:resource="@xml/shortcuts"/>
 
         <activity
             android:label="@string/plugins_manager"

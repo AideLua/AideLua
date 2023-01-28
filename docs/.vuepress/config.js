@@ -16,8 +16,6 @@ export default defineUserConfig({
         ['link', { rel: 'manifest', href: '/AideLua/manifest.webmanifest' }],
     ],
     theme: defaultTheme({
-        logo: '/images/aidelua.png',
-        logoDark: '/images/aidelua-night.png',
         docsDir: "docs",
         docsRepo: "https://gitee.com/Jesse205/AideLua",
         docsBranch: "master",

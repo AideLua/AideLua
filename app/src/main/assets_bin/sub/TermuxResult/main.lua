@@ -39,3 +39,6 @@ Log.e(LOG_TAG, "Execution id " + executionId + " result:\n" +
 "errCode: `" + resultBundle.getInt(TERMUX_SERVICE.EXTRA_PLUGIN_RESULT_BUNDLE_ERR) + "`\n" +
 "errmsg: `" + resultBundle.getString(TERMUX_SERVICE.EXTRA_PLUGIN_RESULT_BUNDLE_ERRMSG, "") + "`");
 ]]
+scrollView.onScrollChange=function(view,l,t,oldl,oldt)
+  MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt)
+end

@@ -29,7 +29,7 @@ public class RunActivity extends Activity {
 			}else{
 				TextView textView=new TextView(this);
 				setContentView(textView);
-				textView.setText(String.format("%s: %s", key, keyMd5));//将文字显示在屏幕上，方便对比值
+				textView.setText(String.format("key=%s, trueMd5=%s", key, keyMd5));//将文字显示在屏幕上，方便对比值
 			}
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();

@@ -25,9 +25,6 @@ end
 function RePackTool.getSubprojectPathIteratorByList(config,projectPath)
   local index=1
   local include=config.include
-  if type(include)=="userdata" then
-    include=luajava.astable(include)
-  end
   local max=include and #include
   return function()
     if include and index<=max then

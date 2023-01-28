@@ -15,7 +15,7 @@ public class InstallPluginActivity extends Activity {
         LuaApplication application=(LuaApplication) getApplication();
 		String luaPath=application.getLocalDir() + "/sub/PluginsManager/main.lua";
 		Intent intent = new Intent(this, LuaActivity.class);
-		intent.putExtra("name", luaPath);
+		intent.putExtra("name", "PluginsManager");
 		intent.putExtra("luaPath", luaPath);
 		intent.putExtra("checkUpdate", true);
 		intent.putExtra("fileUri", getIntent().getData());

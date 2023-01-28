@@ -6,7 +6,8 @@
         android:color="?rippleColorAccent" />
 	<item
         android:state_enabled="true"
-        android:color="?windowBackgroundColor" />
+        android:color="?windowBackgroundColor" 
+        android:alpha="0.5"/>
 	<item
         android:color="?rippleColorPrimary" />
 </selector>

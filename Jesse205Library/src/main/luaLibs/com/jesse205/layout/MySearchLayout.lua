@@ -4,38 +4,54 @@ local insertTable=require "com.jesse205.layout.insertTable"
 MySearchLayout.layout={
   CardView;
   layout_width="fill";
-  id="topCard";
-  elevation=0;
-  background=GradientDrawable()
-  .setShape(GradientDrawable.RECTANGLE)
-  .setColor(theme.color.windowBackground)
-  .setCornerRadii({0,0,0,0,math.dp2int(8),math.dp2int(8),math.dp2int(8),math.dp2int(8)});
+  layout_height="48dp";
+  layout_marginTop="8dp";
+  layout_marginBottom="8dp";
+  layout_margin="16dp";
+  elevation="3dp";
+  id="titleLay";
   {
-    LinearLayoutCompat;
-    orientation="horizontal";
+    FrameLayout;
     layout_width="fill";
-    gravity="center";
-    MyTextInputLayout.Builder{
-      layout_margin="8dp";
-      layout_weight=1;
-      layout_marginLeft="16dp";
-      hint=getString(R.string.abc_search_hint);
-      id="searchLay";
-      {
-        inputType="text";
-        lines=1;
-        id="searchEdit";
-        imeOptions="actionSearch";
-      };
+    layout_height="fill";
+    {
+      AppCompatEditText;
+      layout_width="fill";
+      layout_height="fill";
+      id="searchEdit";
+      hint=activity.getString(R.string.abc_search_hint);
+      padding=0;
+      backgroundColor=0;
+      lines=1;
+      inputType="text";
+      textSize="18sp";
+      imeOptions="actionSearch";
+      paddingLeft="56dp";
+      paddingRight="48dp";
+      hintTextColor=theme.color.textColorSecondary;
     };
     {
-      MaterialButton_OutlinedButton;
-      layout_margin="8dp";
-      layout_marginRight="16dp";
+      ImageView;
+      layout_width="48dp";
+      layout_height="48dp";
+      padding="12dp";
+      layout_gravity="center|left";
+      layout_margin="4dp";
+      imageResource=R.drawable.ic_magnify;
+      colorFilter=theme.color.textColorPrimary;
       id="searchButton";
-      minimumWidth="48dp";
-      minWidth=0;
-      text=R.string.search_menu_title;
+      alpha=Color.alpha(theme.color.textColorSecondary)/255;
+    };
+    {
+      ImageView;
+      layout_width="48dp";
+      layout_height="48dp";
+      padding="12dp";
+      imageResource=R.drawable.ic_close_circle_outline;
+      id="clearSearchBtn";
+      layout_gravity="center|right";
+      colorFilter=theme.color.textColorPrimary;
+      tooltip=getString(R.string.jesse205_clear);
     };
   };
 }

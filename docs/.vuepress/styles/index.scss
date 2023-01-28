@@ -8,13 +8,13 @@
     // background colors
     --c-bg: white;
     --c-bg-light: #F5F5F5; //亮背景色，用于表格，代码框，提示等
-    --c-bg-lighter: #F5F5F5; //更亮背景色，用于小代码框，代码框内高亮
-    --c-bg-dark: #EEEEEE;
-    --c-bg-darker: #EEEEEE;
+    --c-bg-lighter: #EEEEEE; //更亮背景色，用于小代码框，代码框内高亮
+    --c-bg-dark: #E0E0E0;
+    --c-bg-darker: #E0E0E0;
 
     // text colors
     --c-text: black;
-    --c-text-lighter: #1A237E;
+    --c-text-lighter: #1A2364;
     --c-text-quote: #616161;
 
     // code blocks vars
@@ -87,9 +87,12 @@ td {
 }
 
 tr:nth-child(2n) {
-    background-color: rgba(0, 0, 0, 0);
+    //background-color: rgba(0, 0, 0, 0);
 }
 
+code {
+    padding: 0.2em 0.4em;
+}
 
 //给代码框设置自适应主题
 .theme-default-content pre code,

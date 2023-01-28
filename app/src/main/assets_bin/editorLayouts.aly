@@ -148,7 +148,8 @@
         if #selectedText~=0 then
           if selectedText:find("\n") then
             local equals=""
-            while selectedText:find("]"..equals.."]") do
+            local selectedTextJ=String(selectedText)
+            while (selectedTextJ.indexOf("]"..equals.."]")~=-1 or selectedTextJ.indexOf("["..equals.."[")~=-1) do
               equals=equals.."="
             end
             editor.paste("--["..equals.."["..selectedText.."]"..equals.."]")
@@ -379,9 +380,56 @@ import "jesse205"
       {
         FrameLayout;
         layout_height="fill";
-        id="editor";
         layout_width="fill";
+        id="editor";
       };
     },
+  },
+  WebView={
+    layout={
+      LinearLayoutCompat;
+      layout_height="fill";
+      layout_width="fill";
+      id="editorParent";
+      {
+        LuaWebView;
+        layout_height="fill";
+        layout_width="fill";
+        id="editor";
+      };
+    },
+    init=function(ids,config)
+      local editor=ids.editor
+      local webViewSettings=editor.getSettings()
+      webViewSettings
+      .setDisplayZoomControls(false)--隐藏自带的右下角缩放控件
+      .setSupportZoom(true)--支持网页缩放
+      .setDomStorageEnabled(true)--dom储存数据
+      .setDatabaseEnabled(true)--数据库
+      .setAppCacheEnabled(true)--启用缓存
+      .setUseWideViewPort(true)
+      .setAllowFileAccess(true)--允许访问文件
+      .setBuiltInZoomControls(true)--缩放
+      .setLoadWithOverviewMode(true)
+      .setLoadsImagesAutomatically(true)--图片自动加载
+      .setSaveFormData(true)--保存表单数据，就是输入框的内容，但并不是全部输入框都会储存
+      .setAllowContentAccess(true)--允许访问内容
+      .setJavaScriptEnabled(true)--支持js脚本
+      .setUseWideViewPort(true) --图片自适应
+      .setAcceptThirdPartyCookies(true) --接受第三方cookie
+      .setCacheMode(webViewSettings.LOAD_DEFAULT)--设置缓存加载方式
+      .setLayoutAlgorithm(webViewSettings.LayoutAlgorithm.SINGLE_COLUMN)--支持重新布局
+      .setPluginsEnabled(true)--支持插件
+      .setMixedContentMode(webViewSettings.MIXED_CONTENT_COMPATIBILITY_MODE)--允许https中加载http资源
+      editor.onScrollChange=function(view,l,t,oldl,oldt)
+        MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,appBarLayout)
+      end
+
+    end,
+    action={
+      getScrollX="default",
+      getScrollY="default",
+    },
+    supportScroll=true;
   },
 }

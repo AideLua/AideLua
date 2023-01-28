@@ -4,9 +4,8 @@
   layout_gravity="right";
   visibility=View.GONE;
   layout_margin="4dp";
-  elevation="4dp";
-  --alpha=0.8;
-  --layoutTransition=newLayoutTransition();
+  elevation="2dp";
+  cardBackgroundColor=theme.color.windowBackground;
   {
     ChipGroup;
     id="previewChipGroup";

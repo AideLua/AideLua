@@ -215,6 +215,7 @@ FilesBrowserManager
 | createVirtualClass | 返回结果改为 `normalTable` |
 | NewProjectManager.loadTemplate | 允许 `keys` 为空值 |
 | MyCardTitleEditLayout.layout | `CardView` 下面增加了 `FrameLayout`，并增加了清除按钮 |
+| RePackTool.getSubprojectPathIteratorByList(config,projectPath) | api 去处 Java字符 |
 :::
 
 ::: details 新增

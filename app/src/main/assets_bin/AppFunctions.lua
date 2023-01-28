@@ -230,13 +230,18 @@ function getFileTypeByName(name)
   end
 end
 
+--修复因LayoutTransition导致的布局延迟
+--修复逻辑：先去除LayoutTransition，再设置回来
+--[[使用方法：
+local applyLT=fixLT({view1,view2})
+applyLT()
+]]
 function fixLT(list)
   local lTList={}
   for index=1,#list do
     local view=list[index]
     lTList[index]=view.getLayoutTransition()
     view.setLayoutTransition(nil)
-    --print(view)
   end
   return function()
     for index=1,#list do
@@ -351,3 +356,29 @@ function authorizeHWApplicationPermissions(uri)
   activity.grantUriPermission("com.huawei.desktop.explorer", uri, 3)
   activity.grantUriPermission("com.huawei.desktop.systemui", uri, 3)
 end
+
+---v5.1.1+
+function safeLoadLayout(path,parent)
+  local env={}
+  setmetatable(env,{__index=function(self,key)
+      local globalVar=rawget(_G,key)
+      if globalVar then
+        rawset(self,key,globalVar)
+        return globalVar
+      end
+      for index=1,#androidx do
+        local classStr=androidx[index]:gsub("%*",key)
+        local success,content=pcall(luajava.bindClass,classStr)
+        if success then
+          rawset(self,key,content)
+          return content
+        end
+      end
+  end})
+  local file=io.open(path)
+  local fileContent=file:read("*a")
+  file:close()
+  local layout=assert(loadstring("return "..fileContent,nil,"bt",env))()
+  return loadlayout(layout,{},parent)
+end
+

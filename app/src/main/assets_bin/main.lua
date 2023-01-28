@@ -39,6 +39,8 @@ import "android.text.SpannableString"
 import "android.text.style.ForegroundColorSpan"
 import "android.text.style.BackgroundColorSpan"
 import "android.text.Spannable"
+import "android.graphics.Bitmap"
+import "android.graphics.Canvas"
 
 import "android.content.ClipData"
 import "android.content.ClipDescription"
@@ -61,11 +63,12 @@ import "com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions"
 import "com.bumptech.glide.request.RequestListener"
 
 import "com.nwdxlgzs.view.photoview.PhotoView"
-import "com.pixplicity.sharp.Sharp"
+import "com.caverock.androidsvg.SVG"
 import "com.termux.shared.termux.TermuxConstants"
 local RUN_COMMAND_SERVICE=TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE
 import "com.drakeet.drawer.FullDraggableContainer"
 import "me.zhanghai.android.fastscroll.FastScrollerBuilder"
+import "org.apache.http.util.EncodingUtils"
 
 import "com.jesse205.widget.MyRecyclerView"
 import "com.jesse205.layout.MyEditDialogLayout"
@@ -80,6 +83,8 @@ import "com.jesse205.util.ColorUtil"
 --https://github.com/limao996/LuaDB
 db=require "db"
 filesScrollingDB=db.open(AppPath.AppSdcardDataDir..'/filesScrolling.db')
+
+import "androidx"
 
 require "AppFunctions" -- 必须先导入这个，因为下面的导入模块要直接使用
 require "DialogFunctions"
@@ -504,7 +509,7 @@ function onResume()
 
   if notFirstOnResume then
     ProjectManager.refreshProjectsPath()
-    FilesTabManager.reopenFile()
+    FilesTabManager.reopenFile()--包含了刷新预览按钮
     local newTabIcon = getSharedData("tab_icon") -- 刷新标签栏按钮状态
     if oldTabIcon ~= newTabIcon then
       oldTabIcon = newTabIcon
@@ -616,8 +621,9 @@ function onBackPressed()
       FilesBrowserManager.close()
     end
     return true
-    -- todo:elseif 已打开预览模式
-    -- todo:关闭预览模式
+   elseif EditorsManager.isPreviewing then
+    EditorsManager.switchPreview(false)
+    return true
    else -- 啥都没打开
     if (System.currentTimeMillis() - lastBackTime) > 2000 then
       showSnackBar(R.string.exit_toast)
