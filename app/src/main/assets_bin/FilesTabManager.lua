@@ -331,6 +331,7 @@ function FilesTabManager.saveFile(lowerFilePath,showToast)
         y=managerActions.getScrollY(),
         selection=managerActions.getSelectionEnd()
       }
+      --滚动到已保存进度的位置
       local key=FilesTabManager.getScrollDbKeyByPath(config.path)
       if table.size(editorStateConfig)==0 then
         filesScrollingDB:del(key)

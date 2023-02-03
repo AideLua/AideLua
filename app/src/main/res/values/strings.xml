@@ -116,6 +116,7 @@
     <string name="project_reopen">Reopen project</string>
     <string name="project_close">Close project</string>
     <string name="project_properties">Project properties</string>
+    <string name="project_addLibraries">Add libraries</string>
     <string name="projects_path">Projects path</string>
     
     <string name="binproject_loading">Packing...</string>

@@ -25,13 +25,6 @@ Aide Lua allows you to enjoy advanced and rapid software development on mobile d
 Aide Lua can help you transfer from Androlua+to AIDE and then to Android Studio=
 
 ## Download
-### Gradle for AIDE Pro
-[![189 Cloud (Offical)](https://img.shields.io/badge/189_Cloud-Offical-DF9C1F?style=flat-square)](https://cloud.189.cn/t/jAFR7vAVniuu)
-[![123 Pan (Image)](https://img.shields.io/badge/123_Pan-Image-597dfc)](https://www.123pan.com/s/G7a9-c9ek)
-
-### AIDE Pro
-[![Offical (Recommend)](https://img.shields.io/badge/Offical_website-Recommend-28B6F6)](https://aidepro.netlify.app/)
-[![Lanzou (Offical)](https://img.shields.io/badge/Lanzou-v2.6.45-FF6600?logo=icloud&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
 
 ### Aide Lua Pro
 [![Gitee Releases)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+Releases&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases/latest)
@@ -41,6 +34,14 @@ Aide Lua can help you transfer from Androlua+to AIDE and then to Android Studio=
 [![189 Cloud](https://img.shields.io/badge/189_Cloud--DF9C1F)](https://cloud.189.cn/t/ZZ7RzijyqiUv)
 [![Weiyun](https://img.shields.io/badge/Weiyun--2980ff)](https://share.weiyun.com/oLiNtxMR)
 [![Baidu Netdisk](https://img.shields.io/badge/Baidu_Netdisk-jxnb-06a7ff)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q?pwd=jxnb)
+
+### Gradle for AIDE Pro
+[![189 Cloud (Offical)](https://img.shields.io/badge/189_Cloud-Offical-DF9C1F?style=flat-square)](https://cloud.189.cn/t/jAFR7vAVniuu)
+[![123 Pan (Image)](https://img.shields.io/badge/123_Pan-Image-597dfc)](https://www.123pan.com/s/G7a9-c9ek)
+
+### AIDE Pro
+[![Offical (Recommend)](https://img.shields.io/badge/Offical_website-Recommend-28B6F6)](https://aidepro.netlify.app/)
+[![Lanzou (Offical)](https://img.shields.io/badge/Lanzou-v2.6.45-FF6600?logo=icloud&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
 
 ## Build project (including derivative projects)
 1. Clone this project locally: `git clone https://gitee.com/Jesse205/AideLua.git` .

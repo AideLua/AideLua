@@ -385,7 +385,7 @@ import "jesse205"
       };
     },
   },
-  WebView={
+  WebEditor={
     layout={
       LinearLayoutCompat;
       layout_height="fill";
@@ -429,6 +429,12 @@ import "jesse205"
     action={
       getScrollX="default",
       getScrollY="default",
+      evaluateJavascript="default",
+      destroy="default",
+      applyMarkdown=function(ids,config,text)
+        local jsCode=("loadContent('%s')"):format(utf8ToUnicode(text))
+        ids.editor.evaluateJavascript(jsCode,nil)
+      end,
     },
     supportScroll=true;
   },

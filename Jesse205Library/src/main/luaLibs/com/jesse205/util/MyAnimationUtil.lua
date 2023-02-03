@@ -15,15 +15,15 @@ LastActionBarElevation=0
 2.当ListView在顶端时关闭阴影
 ]]
 MyAnimationUtil.ListView={}
-function MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount,actionBar,contrast,mandatory)
+function MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount,actionBar,contrast,mandatory,paddingTop)
   local contrast=contrast or "LastActionBarElevation"
   local childView=view.getChildAt(0)
   if childView then
     local top=childView.getTop()
-    if (top>=0 and firstVisibleItem==0) and (_G[contrast]~=0 or mandatory) then
+    if (top>=(paddingTop or 0) and firstVisibleItem==0) and (_G[contrast]~=0 or mandatory) then
       _G[contrast]=0
       MyAnimationUtil.ActionBar.closeElevation(actionBar)
-     elseif (top<0 or firstVisibleItem>0) and (_G[contrast]==0 or mandatory) then
+     elseif (top<(paddingTop or 0) or firstVisibleItem>0) and (_G[contrast]==0 or mandatory) then
       _G[contrast]=theme.number.actionBarElevation
       MyAnimationUtil.ActionBar.openElevation(actionBar)
     end

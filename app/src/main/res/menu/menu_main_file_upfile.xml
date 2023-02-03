@@ -33,5 +33,8 @@
     <item
         android:id="@+id/menu_newActivity"
         android:title="@string/newActivity"/>
+    <item
+        android:id="@+id/menu_addLibraries"
+        android:title="@string/project_addLibraries"/>
     
 </menu>

@@ -15,34 +15,24 @@
       fastScrollEnabled=true;
       layout_width="fill";
       layout_height="fill";
-      --fitsSystemWindows=true;
-      --paddingTop="64dp";
       clipToPadding=false;
-      --fitsSystemWindows=true;
-      --scrollBarStyle=View.SCROLLBARS_OUTSIDE_OVERLAY;
     };
-    --[[
-    {
-      LinearLayout;
-      layout_height="4dp";
-      layout_width="fill";
-      {
-        CardView;
-        layout_height=1;
-        layout_width="fill";
-        id="appBarElevationCard";
-        radius=0;
-        elevation="4dp";
-      };
-    };]]
+
     {
       View;
       layout_height=0;
       layout_width="fill";
       id="appBarSpaceView";
-      --elevation="4dp";
     };
-    MySearchLayout.Builder();
+    MySearchLayout.Builder({
+      {
+        {
+          AppCompatAutoCompleteTextView;
+          threshold=0;
+          dropDownHeight="224dp";
+        }
+      }
+    });
     --"titleLayout";
     {
       ProgressBar;

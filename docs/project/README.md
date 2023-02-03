@@ -16,6 +16,7 @@ Aide Lua 项目使用 Gradle 项目，所以不仅仅只有 AIDE 能编译，理
 
 [查看详情](aidelua/bin.lua.md)
 
-## 参考链接
-[新建项目](/function/newproject.md) <br>
-[项目模板介绍](template/README.md)
+## 相关链接
+
+* [新建项目](/function/newproject.md)
+* [项目模板介绍](template/README.md)

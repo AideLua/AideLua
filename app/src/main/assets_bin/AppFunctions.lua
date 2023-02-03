@@ -284,8 +284,8 @@ function fixPath(path)
   :gsub("//+","/")
   :gsub("/%./","/")
   repeat
-    local oldPath=path
-    path=oldPath:gsub("/[^/]+/%.%./","/",1)
+  local oldPath=path
+  path=oldPath:gsub("/[^/]+/%.%./","/",1)
   until(oldPath==path)
   return path:match("(.+)/") or "/"
 end
@@ -382,3 +382,12 @@ function safeLoadLayout(path,parent)
   return loadlayout(layout,{},parent)
 end
 
+function utf8ToUnicode(inStr)
+  local inStr=String(inStr)
+  local myBuffer=inStr.toCharArray()--数组
+  local sb =StringBuffer()
+  for i=0,inStr.length()-1 do
+    sb.append(string.format("\\u%04x",myBuffer[i]))
+  end
+  return sb.toString()
+end

@@ -18,20 +18,26 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 ## 提示
 1. 本文档部分说明格式为 “__变量名__ (数据类型): 说明” 、 “__数据类型__: 说明”
-2. 标有 <Badge type="danger" text="X" vertical="middle" /> 的表示已废除，相关 API 已被删除
-3. 标有 <Badge type="danger" text="*" vertical="middle" /> 的表示必须文件、方法 或 变量
 
 ## 下载
-### Gradle for AIDE Pro
-[![天翼云盘 (官方)](https://img.shields.io/badge/天翼云盘-官方-DF9C1F?style=flat-square)](https://cloud.189.cn/t/jAFR7vAVniuu)
-[![123云盘 (镜像)](https://img.shields.io/badge/123云盘-镜像-597dfc?style=flat-square)](https://www.123pan.com/s/G7a9-c9ek)
+
+### Aide Lua Pro
+[![Gitee 发行版)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+发行版&logo=gitee&style=flat-square)](https://gitee.com/Jesse205/AideLua/releases/latest)
 
 ### AIDE 高级设置版
 [![官网 (推荐)](https://img.shields.io/badge/官网-推荐-28B6F6?style=flat-square)](https://aidepro.netlify.app/)
 [![蓝奏云 (官方)](https://img.shields.io/badge/蓝奏云-v2.6.45-FF6600?logo=icloud&style=flat-square&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
 
-### Aide Lua Pro
-[![Gitee 发行版)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+发行版&logo=gitee&style=flat-square)](https://gitee.com/Jesse205/AideLua/releases/latest)
+### Gradle for AIDE Pro
+
+您可以使用 Gradle 来提供完整的编译功能。如果您不需要则可以忽略。
+
+[![天翼云盘 (官方)](https://img.shields.io/badge/天翼云盘-官方-DF9C1F?style=flat-square)](https://cloud.189.cn/t/jAFR7vAVniuu)
+[![123云盘 (镜像)](https://img.shields.io/badge/123云盘-镜像-597dfc?style=flat-square)](https://www.123pan.com/s/G7a9-c9ek)
+
+## 安装软件
+
+我正在制作[《刷机指南》](https://efadg.netlify.app/)，后续有安装第三方软件的教程，敬请期待☺️
 
 #### 其他渠道 (可能更新不及时)
 [![123云盘](https://img.shields.io/badge/123云盘--597dfc?style=flat-square)](https://www.123pan.com/s/G7a9-Yzck)

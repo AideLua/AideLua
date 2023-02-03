@@ -41,8 +41,12 @@ EditorsManager.symbolBar.refreshSymbolBar(state): 刷新符号栏状态
 
 local EditorsManager={}
 local managerActions={}
+---v5.1.1+
+local managerActionsWithEditor={}
+
 EditorsManager.actions=managerActions
---EditorsManager.language=nil
+EditorsManager.actionsWithEditor=managerActionsWithEditor
+
 --编辑器活动(事件)，视图列表(table)，编辑器(View)，编辑器类型(String) 编辑器配置(table)
 local editorActions,editorGroupViews,editor,editorParent,editorType,editorConfig
 
@@ -72,6 +76,7 @@ local function toCustomEditorView(CodeEditor)
   end
 end
 EditorsManager.toCustomEditorView=toCustomEditorView
+
 MyLuaEditor=toCustomEditorView(LuaEditor)
 MyCodeEditor=function(context)
   local scroller
@@ -96,7 +101,7 @@ EditorsManager.PSBarHorizontalScrollView={
     view=luajava.override(HorizontalScrollView,{
       onInterceptTouchEvent=function(super,event)
         local action=event.getAction()
-        local x=event.getX();
+        local x=event.getX()
         if action==MotionEvent.ACTION_DOWN then
           isBarTop=view.getScrollX()<=0
           initialMotionX=x
@@ -229,6 +234,68 @@ function EditorsManager.checkAndRefreshSharedDataListeners()
   end
 end
 
+
+
+
+
+--默认的管理器的活动事件
+local function generalActionEvent(editorConfig,name1,name2,...)
+  local func=editorConfig.action[name1]
+  if func then--func不为nil，说明编辑器支持此功能
+    local editorGroupViews=editorConfig.initedViews
+    if func=="default" then
+      return true,editorGroupViews.editor[name2](...)
+     else
+      return func(editorGroupViews,editorConfig,...)
+    end
+   elseif func==false then
+    showSnackBar("The editor does not support this operation")
+    return false
+   else
+    --print("警告：编辑器不支持的调用",name1)
+    return nil
+  end
+end
+
+function managerActionsWithEditor.getText(editorConfig)--获取编辑器文字内容
+  local _,text=generalActionEvent(editorConfig,"getText","getText")
+  if text then
+    return tostring(text)
+  end
+end
+
+function managerActionsWithEditor.search(editorConfig,text,gotoNext)--搜索
+  local searchActions=editorConfig.action.search
+  if searchActions then
+    local editorGroupViews=editorConfig.initedViews
+    if searchActions=="default" or searchActions.search=="default" then
+      if gotoNext then
+        editorGroupViews.editor.findNext(text)
+      end
+     elseif searchActions.search then
+      searchActions.search(editorGroupViews,editorConfig,text,gotoNext)
+    end
+  end
+end
+
+---通用api
+setmetatable(managerActionsWithEditor,{__index=function(self,key)
+    local action
+    if key:sub(1,3)=="get" then
+      action=function(editorConfig,...)
+        local _,content=generalActionEvent(editorConfig,key,key,...)
+        return content
+      end
+     else
+      action=function(editorConfig,...)
+        return generalActionEvent(editorConfig,key,key,...)
+      end
+    end
+    rawset(self,key,action)
+    return action
+end})
+
+
 --默认的管理器的活动事件
 local function generalActionEvent(name1,name2,...)
   local func=editorActions[name1]
@@ -247,39 +314,12 @@ local function generalActionEvent(name1,name2,...)
   end
 end
 
-function managerActions.getText()--获取编辑器文字内容
-  local _,text=generalActionEvent("getText","getText")
-  if text then
-    return tostring(text)
-  end
-end
-
-function managerActions.search(text,gotoNext)--搜索
-  local searchActions=editorActions.search
-  if searchActions then
-    if searchActions=="default" or searchActions.search=="default" then
-      if gotoNext then
-        editor.findNext(text)
-      end
-     elseif searchActions.search then
-      searchActions.search(editorGroupViews,editorConfig,text,gotoNext)
-    end
-  end
-end
-
 ---通用API
 ---在 v5.1.0(51099) 上添加
 setmetatable(managerActions,{__index=function(self,key)
-    local action
-    if key:sub(1,3)=="get" then
-      action=function(...)
-        local _,content=generalActionEvent(key,key,...)
-        return content
-      end
-     else
-      action=function(...)
-        return generalActionEvent(key,key,...)
-      end
+    local actionWithEditor=managerActionsWithEditor[key]
+    local action=function(...)
+      return actionWithEditor(editorConfig,...)
     end
     rawset(self,key,action)
     return action
@@ -320,11 +360,7 @@ function EditorsManager.openNewContent(filePath,fileType,decoder,keepHistory)
           managerActions.scrollTo(scrollConfig.x or 0,scrollConfig.y or 0)
         end
 
-        if editorConfig.supportScroll then
-          MyAnimationUtil.ScrollView.onScrollChange(editor,managerActions.getScrollX(),managerActions.getScrollY(),0,0,appBarLayout,nil)
-         else
-          MyAnimationUtil.ScrollView.onScrollChange(editor,0,0,0,0,appBarLayout,nil)
-        end
+        EditorsManager.refreshEditorScrollState()
       end
       return true
      else
@@ -332,11 +368,7 @@ function EditorsManager.openNewContent(filePath,fileType,decoder,keepHistory)
     end
    else
     decoder.apply(filePath,fileType,editor)
-    if editorConfig.supportScroll then
-      MyAnimationUtil.ScrollView.onScrollChange(editor,managerActions.getScrollX(),managerActions.getScrollY(),0,0,appBarLayout,nil)
-     else
-      MyAnimationUtil.ScrollView.onScrollChange(editor,0,0,0,0,appBarLayout,nil)
-    end
+    EditorsManager.refreshEditorScrollState()
     return true
   end
 end
@@ -449,10 +481,6 @@ function EditorsManager.switchEditor(newEditorType)
   end
 
   --首先把已添加到视图的编辑器移除
-  --[[
-  if editorParent then
-    editorGroup.removeViewAt(0)
-  end]]
   editorGroup.removeAllViews()
 
   editorType=newEditorType
@@ -502,6 +530,7 @@ function EditorsManager.switchEditor(newEditorType)
   editorGroup.addView(editorParent)
   --必须加分号，否则编译器会认为这个括号是给上一个返回值调用的
   ;(editor or editorParent).requestFocus()
+  EditorsManager.refreshEditorScrollState()
 
   PluginsUtil.callElevents("onSwitchEditor", newEditorType,editorConfig)
 end
@@ -521,11 +550,11 @@ function EditorsManager.refreshEditorScrollState()
   if editorConfig then
     local scrollState=editorConfig.supportScroll
     if scrollState==true then
-      MyAnimationUtil.ScrollView.onScrollChange(editor,editor.getScrollX(),editor.getScrollY(),0,0,appBarLayout,nil)
+      MyAnimationUtil.ScrollView.onScrollChange(editor,managerActions.getScrollX(),managerActions.getScrollY(),0,0,appBarLayout,nil)
      elseif scrollState then
       scrollState(editorGroupViews,editorConfig)
      else
-      appBarLayout.setElevation(0)
+      MyAnimationUtil.ScrollView.onScrollChange(editor,0,0,0,0,appBarLayout,nil)
     end
   end
 end
@@ -709,7 +738,9 @@ function symbolBar.refresh(state)
   end
 end
 
---在 5.1.0(51099) 添加
+---v5.1.0(51099)+
+---放大镜管理器
+---@type MagnifierManager
 local magnifierManager={}
 local magnifierUpdateRunnable
 local magnifierAutoUpdateEnabled=false

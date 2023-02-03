@@ -8,9 +8,9 @@ templates   <-- 模板根文件夹
 │  config.lua   <-- * 模板配置文件
 │  keys.txt   <-- 用于格式化的字符串说明
 │  pageConfigs.aly   <-- * 模板页面文件
-│  keysFormatter.aly   <-- * key的格式化器映射
+│  keysFormatter.aly   <-- * key的格式化器字典
 │
-├─AndroLua   <-- AndroLua+ 子模板文件夹
+├─AndroLua   <-- AndroLua+ 子模板文件夹（名字可以随意起）
 │  │  config.lua   <-- * 子模版配置文件
 │  │
 │  └─baseTemplate   <-- 子模版基础资源文件夹
@@ -55,6 +55,7 @@ templates   <-- 模板根文件夹
 
 ## 从插件中加载模板
 
-## 参考链接
-[工程介绍](/project/README.md) <br>
-[新建项目](/functiom/newproject.md)
+## 相关链接
+
+* [工程介绍](/project/README.md)
+* [新建项目](/functiom/newproject.md)

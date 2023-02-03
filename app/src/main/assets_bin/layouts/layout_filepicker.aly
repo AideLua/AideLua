@@ -41,7 +41,7 @@
       layout_height="fill";
       layoutTransition=newLayoutTransition();
       {
-        CardView;
+        FilesBrowserManager.RecyclerViewCardView;
         layout_width="fill";
         layout_height="fill";
         id="recyclerViewCard";

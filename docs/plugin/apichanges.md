@@ -219,26 +219,37 @@ FilesBrowserManager
 :::
 
 ::: details 新增
-文件
+文件：
+
 | 文件名 | 说明 |
 | ---- | ---- |
 | SubActivityUtil.lua | 子页面相关 |
 | ClearContentHelper.lua | 清空按钮 |
 
-NewProjectManager
+NewProjectManager：
+
 | 方法 | 说明 |
 | ---- | ---- |
 | getNowModuleDirName(fileRelativePath) | 获取当前模块目录名称，如果当前路径不在模块内，则返回主模块名称 |
 
-事件
+事件：
+
 | 事件 | 说明 |
 | ---- | ---- |
 | onPause | 生命周期：暂停 |
 
-其他方法
+其他方法：
+
 | 方法 | 说明 |
 | ---- | ---- |
 | authorizeHWApplicationPermissions(uri) | 适配华为文件管理 |
+
+编辑器：
+
+| 名称 | 说明 |
+| ---- | ---- |
+| WebEditor | 其实就是个浏览器 |
+
 :::
 
 ::: details 废除
@@ -253,4 +264,4 @@ EditorManager.symbolBar
 :::
 
 ## 相关链接
-[应用更新日志](https://gitee.com/Jesse205/AideLua/blob/master/README.md)
+* [应用更新日志](https://gitee.com/Jesse205/AideLua/blob/master/README.md)

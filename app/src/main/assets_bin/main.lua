@@ -267,6 +267,7 @@ function onOptionsItemSelected(item)
   local Rid = R.id
   local aRid = android.R.id
   local editorActions = EditorsManager.actions
+  --小心switch的bug
   switch id do
    case aRid.home then -- 菜单键
     FilesBrowserManager.switchState()
@@ -579,8 +580,9 @@ function onDestroy()
   if magnifierUpdateTi and magnifierUpdateTi.isRun() then
     magnifierUpdateTi.stop()
   end
-  AppPath.cleanTemp()
   filesScrollingDB:close()
+  AppPath.cleanTemp()
+
   PluginsUtil.callElevents("onDestroy")
 end
 
@@ -650,10 +652,12 @@ end
 
 function onSaveInstanceState(savedInstanceState)
   savedInstanceState.putBoolean("filebrowser_openstate",FilesBrowserManager.openState)
+  --只有当d打开了工程才保存工程路径
   if ProjectManager.openState and FilesBrowserManager.directoryFile then
     savedInstanceState.putString("prjpath",ProjectManager.nowPath)
     savedInstanceState.putString("dirpath",FilesBrowserManager.directoryFile.getPath())
   end
+  --只有当打开了文件z才保存文件路径
   if FilesTabManager.openState then
     savedInstanceState.putString("filepath",FilesTabManager.file.getPath())
   end

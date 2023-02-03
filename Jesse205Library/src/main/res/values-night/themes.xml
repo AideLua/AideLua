@@ -27,7 +27,8 @@
         <item name="floatingActionButtonStyle">@style/Widget.Jesse205.FloatingActionButton.Dark</item>
         <item name="android:listViewStyle">@style/Widget.Jesse205.ListView</item>
         <item name="tabStyle">@style/Widget.Jesse205.TabLayout.Colored</item>
-    
+        <item name="autoCompleteTextViewStyle">@style/Widget.Jesse205.AutoCompleteTextView</item>
+        
 		<item name="actionOverflowMenuStyle">@style/Widget.Jesse205.PopupMenu.Overflow</item>
         <item name="popupMenuStyle">@style/Widget.Jesse205.PopupMenu</item>
 		<item name="android:contextPopupMenuStyle">@style/Widget.Jesse205.ContextPopupMenu</item>

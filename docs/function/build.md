@@ -4,7 +4,7 @@
 Aide Lua 的构建项目是通过调用 Termux 来实现的。因此，您需要手动配置环境。
 
 ## 下载 Termux
-Aide Lua 将终端应用写死为 `com.termux.permission` ，因此您必须使用此包名的终端应用才可以直接从 Aide Lua 构建应用。
+Aide Lua 将终端应用写死为 `com.termux` ，因此您必须使用此包名的终端应用才可以直接从 Aide Lua 构建应用。
 
 Termux 有三个官方下载渠道
 
@@ -19,6 +19,7 @@ Termux 有三个官方下载渠道
 ## 安装 Gradle 与 Java
 
 [使用Termux构建Android Studio项目](https://www.coolapk.com/feed/19454309?shareKey=ODEwZWY2ZDg0YjQ3NjNjZjRlNTc~&shareUid=1432137&shareFrom=com.coolapk.market_13.0.1)
+
 ## 允许第三方应用执行命令
 1. 下载 [质感文件](https://www.coolapk.com/apk/me.zhanghai.android.files) 与 [App Manager](https://f-droid.org/packages/io.github.muntashirakon.AppManager/)
 2. 打开 AOSP 的“文件”应用程序

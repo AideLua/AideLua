@@ -177,7 +177,7 @@ import "java.io.File"
 
 import "com.bumptech.glide.Glide" -- 导入Glide
 
-inputMethodService = activity.getSystemService(Context.INPUT_METHOD_SERVICE) -- 获取输入法服务
+inputMethodService = context.getSystemService(Context.INPUT_METHOD_SERVICE) -- 获取输入法服务
 
 
 --- 自动获取当地语言的对象
@@ -195,6 +195,8 @@ function getLocalLangObj(zh, en)
   end
 end
 
+---自动识别资源id和字符串，并自动获取字符串
+---@param text string|number
 function autoId2str(text)
   local _type=type(text)
   if _type=="number" then
@@ -211,14 +213,16 @@ end
 
 -- 通过id格式化字符串
 function formatResStr(id, values)
-  return String.format(context.getString(id), values)
+  return String.format(getString(id), values)
 end
 
 --- 在浏览器打开链接
 ---@param url string 网页链接
 function openInBrowser(url)
-  local viewIntent = Intent("android.intent.action.VIEW", Uri.parse(url))
-  activity.startActivity(viewIntent)
+  local intent = Intent("android.intent.action.VIEW", Uri.parse(url))
+  if intent.resolveActivity(context.getPackageManager()) then
+    context.startActivity(intent)
+  end
 end
 
 openUrl = openInBrowser -- 通常情况下，应用不自带内置浏览器
@@ -285,11 +289,11 @@ function showLoadingDia(message, title, cancelable)
     loadingDia.setTitle(title or context.getString(R.string.jesse205_loading)) -- 标题
     loadingDia.setCancelable(cancelable or false) -- 是否可以取消
     loadingDia.setCanceledOnTouchOutside(cancelable or false) -- 是否可以点击外面取消
-    loadingDia.setOnCancelListener {
+    loadingDia.setOnCancelListener ({
       onCancel = function()
         loadingDia = nil -- 如果取消了，就把 loadingDia 赋值为空，视为没有正在展示的加载中对话框
       end
-    }
+    })
     loadingDia.show()
   end
   loadingDia.setMessage(message or context.getString(R.string.jesse205_loading))
@@ -312,7 +316,10 @@ end
 ---@param title string 标题
 ---@param message string 信息
 function showSimpleDialog(title, message)
-  return AlertDialog.Builder(context).setTitle(title).setMessage(message).setPositiveButton(android.R.string.ok, nil)
+  return AlertDialog.Builder(context)
+  .setTitle(title)
+  .setMessage(message)
+  .setPositiveButton(android.R.string.ok, nil)
   .show()
 end
 

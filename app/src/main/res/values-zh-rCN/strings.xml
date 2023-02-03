@@ -113,6 +113,7 @@
     <string name="project_reopen">重新打开</string>
     <string name="project_close">关闭项目</string>
     <string name="project_properties">项目属性</string>
+    <string name="project_addLibraries">添加库</string>
     <string name="projects_path">项目路径</string>
 	
     <string name="binproject_loading">正在打包...</string>

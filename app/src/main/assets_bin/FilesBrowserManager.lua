@@ -225,6 +225,33 @@ local hiddenBool2Alpha={
   ["false"]=1
 }
 
+local loadingFiles = false -- 正在加载文件列表
+local showProgressHandler=Handler()
+local showProgressRunnable=Runnable({
+  run = function()
+    swipeRefresh.setRefreshing(true)
+  end
+})
+
+local recyclerViewCardTranslationXAnimator
+local recyclerViewAlphaAnimator
+local homingRunnable=Runnable({
+  run = function()
+    if recyclerViewCard.getTranslationX()~=0 then
+      recyclerViewCardTranslationXAnimator=ObjectAnimator.ofFloat(recyclerViewCard,"translationX",{0})
+      .setDuration(200)
+      .setInterpolator(DecelerateInterpolator())
+      .start()
+    end
+    if recyclerView.getAlpha()~=1 then
+      recyclerViewAlphaAnimator=ObjectAnimator.ofFloat(recyclerView,"alpha",{1})
+      .setDuration(200)
+      .setInterpolator(DecelerateInterpolator())
+      .start()
+    end
+  end
+})
+
 --通过文件名获取透明度，智能判断文件名前缀
 function FilesBrowserManager.getIconAlphaByName(fileName)
   return hiddenBool2Alpha[tostring(toboolean(hiddenFiles[fileName] or fileName:find("^%.")))]
@@ -356,6 +383,7 @@ function FilesBrowserManager.FilesRecyclerViewBuilder(context)
             return nil--阻止滚动
           end
         end
+
        elseif action==MotionEvent.ACTION_UP or action==MotionEvent.ACTION_CANCEL then
         downEvent.x,downEvent.y=nil,nil
         tag.longClickedView=nil
@@ -365,6 +393,80 @@ function FilesBrowserManager.FilesRecyclerViewBuilder(context)
   },context)
   return view
 end
+
+FilesBrowserManager.RecyclerViewCardView={
+  _baseClass=CardView,
+  __call=function(self,context)
+    local view
+    local initialMotionX
+    local lastOffset,lastBackState
+    view=luajava.override(CardView,{
+      onInterceptTouchEvent=function(super,event)
+        local action=event.getAction()
+        local x=event.getRawX()
+        if action==MotionEvent.ACTION_DOWN then
+          initialMotionX=x
+          if view.getTranslationX()~=0 then
+            initialMotionX=initialMotionX-math.pow(view.getTranslationX(),10/8)
+          end
+          lastBackState=false
+          lastOffset=0
+        end
+        local offset=x-initialMotionX
+        if offset<0 then
+          offset=0
+        end
+        if ProjectManager.openState and offset>math.dp2int(32) then
+          initialMotionX=x-math.pow(view.getTranslationX(),10/8)
+          if recyclerViewAlphaAnimator then
+            recyclerViewAlphaAnimator.cancel()
+          end
+          if recyclerViewCardTranslationXAnimator then
+            recyclerViewCardTranslationXAnimator.cancel()
+          end
+          showProgressHandler.removeCallbacks(homingRunnable)
+          --view.parent.requestDisallowInterceptTouchEvent(true)--不能请求自己，因为会导致不滚动
+          return true
+        end
+        return super(event)
+      end,
+      onTouchEvent=function(super,event)
+        local action=event.getAction()
+        local x=event.getRawX()
+        local offset=math.pow(x-initialMotionX,0.8)
+        if offset<0 or tostring(offset)=="nan" then
+          offset=0
+        end
+        if action==MotionEvent.ACTION_MOVE then
+          view.setTranslationX(offset)
+          recyclerView.setAlpha(math.dp2int(16)/offset)
+          local nowBackState=offset>math.dp2int(16)
+          if lastBackState~=nowBackState then
+            view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+            lastBackState=nowBackState
+          end
+          lastOffset=offset
+         elseif action==MotionEvent.ACTION_UP or action==MotionEvent.ACTION_CANCEL then
+          if offset>math.dp2int(16) and action==MotionEvent.ACTION_UP then
+            local directoryFile=FilesBrowserManager.directoryFile
+            if directoryFile then
+              FilesBrowserManager.refresh(directoryFile.getParentFile())
+            end
+          end
+        end
+        if action==MotionEvent.ACTION_UP and oldRichAnim then
+          showProgressHandler.postDelayed(homingRunnable, 100)
+         elseif action==MotionEvent.ACTION_CANCEL or action==MotionEvent.ACTION_UP then
+          homingRunnable.run()
+        end
+        return true
+      end
+    },context)
+    return view
+  end,
+}
+setmetatable(FilesBrowserManager.RecyclerViewCardView,FilesBrowserManager.RecyclerViewCardView)
+
 
 --加载更多菜单
 function FilesBrowserManager.loadMoreMenu(moreView)
@@ -461,15 +563,6 @@ function FilesBrowserManager.recordScrollPosition()
   end
 end
 
-
-local loadingFiles = false -- 正在加载文件列表
-local showProgressHandler=Handler()
-local showProgressRunnable=Runnable({
-  run = function()
-    swipeRefresh.setRefreshing(true)
-  end
-})
-
 ---刷新文件夹/进入文件夹
 ---有内存泄露问题
 ---@param file File 要刷新或者进入的文件夹
@@ -560,12 +653,12 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
       local newListJ=File(newList)
       newList=nil
       filesList=nil
-      collectgarbage("collect")
 
       return newListJ,newDirectory,itemIndex
     end,
     function(dataList,newDirectory,itemIndex)
       showProgressHandler.removeCallbacks(showProgressRunnable)
+      showProgressHandler.removeCallbacks(homingRunnable)
       swipeRefresh.setRefreshing(false)
       local path=newDirectory.getPath()
       local isBack,isForward=false,false
@@ -574,18 +667,17 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
         local oldPath=directoryFile and directoryFile.getPath()
         local nowPrjPathParent=ProjectManager.nowFile.getParent()
 
+        local oldPathJ=oldPath and String(oldPath)
+        local pathJ=String(path)
+
         --判断合法路径，用于按需显示路径
-        local legalNewPath=String(path).startsWith(nowPrjPathParent.."/")--新路径为工程路径，也就是合法路径
-        local legalOldPath=oldPath and String(oldPath).startsWith(nowPrjPathParent.."/")--同理旧路径
+        local legalNewPath=pathJ.startsWith(nowPrjPathParent.."/")--新路径为工程路径，也就是合法路径
+        local legalOldPath=oldPathJ and oldPathJ.startsWith(nowPrjPathParent.."/")--同理旧路径
         local legalPath=oldPath and legalOldPath == legalNewPath--有旧路径并且合法性相同
 
         if oldPath==path then
           FilesBrowserManager.recordScrollPosition()--路径相同，记录一下位置
          else
-
-          local oldPathJ=oldPath and String(oldPath)
-          local pathJ=path and String(path)
-
           --是否返回
           isBack=oldPath and oldPathJ.startsWith(path)
           --是否前进
@@ -654,12 +746,19 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
             end
             if anim_propertyName then
               if anim_propertyName~="alpha" then--下面就是透明动画，所以无需执行card动画
-                ObjectAnimator.ofFloat(recyclerViewCard, anim_propertyName,anim_values)
+                --先取消动画，防止多个动画同时播放
+                if recyclerViewCardTranslationXAnimator then
+                  recyclerViewCardTranslationXAnimator.cancel()
+                end
+                recyclerViewCardTranslationXAnimator=ObjectAnimator.ofFloat(recyclerViewCard, anim_propertyName,anim_values)
                 .setDuration(150)
                 .setInterpolator(DecelerateInterpolator())
                 .start()
               end
-              ObjectAnimator.ofFloat(recyclerView, "alpha",{0,1})
+              if recyclerViewAlphaAnimator then
+                recyclerViewAlphaAnimator.cancel()
+              end
+              recyclerViewAlphaAnimator=ObjectAnimator.ofFloat(recyclerView, "alpha",{0,1})
               .setDuration(250)
               .setInterpolator(DecelerateInterpolator())
               .start()
@@ -676,6 +775,11 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
          else
           table.clear(filesPositions)
           FilesBrowserManager.recordScrollPosition()
+        end
+        --把文件浏览器位置摆正
+        if oldRichAnim then--此修复无需在精简动画下生效
+          recyclerViewCard.setTranslationX(0)
+          recyclerView.setAlpha(1)
         end
         table.clear(pathSplitList)--清空路径指示器
         directoryFile=nil--移除当前路径标识
@@ -720,7 +824,6 @@ function FilesBrowserManager.clearAdapterData(notify)
   if notify~=false then
     FilesBrowserManager.adapter.notifyDataSetChanged()
   end
-  collectgarbage("collect")
 end
 
 --文件长按菜单（包括右键菜单）

@@ -9,7 +9,7 @@ MySearchLayout.layout={
   layout_marginBottom="8dp";
   layout_margin="16dp";
   elevation="3dp";
-  id="titleLay";
+  id="searchLayout";
   {
     FrameLayout;
     layout_width="fill";
@@ -38,9 +38,8 @@ MySearchLayout.layout={
       layout_gravity="center|left";
       layout_margin="4dp";
       imageResource=R.drawable.ic_magnify;
-      colorFilter=theme.color.textColorPrimary;
+      colorFilter=theme.color.colorAccent;
       id="searchButton";
-      alpha=Color.alpha(theme.color.textColorSecondary)/255;
     };
     {
       ImageView;

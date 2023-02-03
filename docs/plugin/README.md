@@ -94,7 +94,7 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 获取插件目录，与 [`PluginsUtil.getPluginPath(packageName)`](#pluginsutil-getpluginpath-packagename) 完全相同
 
 ## 插件文件说明:
-### <Badge type="danger" text="*" vertical="center" /> init.lua
+### <Badge type="danger" text="*" vertical="middle" /> init.lua <Badge text="文件" vertical="middle" />
 插件入口，也用于存放模块信息的文件
 
 | 变量 | 说明 |
@@ -105,14 +105,21 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 | <Badge type="danger" text="*" vertical="middle" /> appver | __string__: 插件版本名 |
 | <Badge type="danger" text="*" vertical="middle" /> appcode | __number__: 插件版本号 |
 | <Badge type="danger" text="*" vertical="middle" /> packagename | __string__: 插件包名 |
-| <Badge type="danger" text="*" vertical="middle" /> <Badge type="danger" text="X" vertical="middle" /> minemastercode | __number__: 最低支持的APP版本号。此变量在 Util 版本 `3.1` 弃用。 |
-| <Badge type="danger" text="*" vertical="middle" /> <Badge type="danger" text="X" vertical="middle" /> targemastercode | __number__: 目标适配的APP版本号。此变量在 Util 版本 `3.1` 弃用。 |
 | mode  | __string__: 模式，默认为 `"plugin"` |
 | utilversion | __string__: Util版本，此变量不起任何作用，当前为 `"3.1"`  |
 | thirdplugins | __table (list)__: 需要安装的第三方库 <br > 内容: 插件的包名 |
 | <Badge type="danger" text="X" vertical="middle" /> supported | __table (list)__: 支持的APP列表。此变量在 Util 版本 `3.1` 弃用。 |
 | supported2 | __table (map)__: 支持的APP列表 <br > 索引: 软件代号 (`apptype`) <br > 内容: __table (map)__: 支持的版本，mincode为最低版本，targetcode为最高版本 |
 | events | __table (map)__: 全局事件 |
+
+::: details 已弃用
+
+| 变量 | 说明 |
+| ---- | ---- |
+| <Badge type="danger" text="*" vertical="middle" /> minemastercode <Badge type="danger" text="Util 版本 v3.1 废除" /> | __number__: 最低支持的APP版本号。 |
+| <Badge type="danger" text="*" vertical="middle" /> targemastercode <Badge type="danger" text="Util 版本 v3.1 废除" /> | __number__: 目标适配的APP版本号。 |
+
+:::
 
 ::: tip 全局事件与独立事件基本一致。<br>
 但与独立的事件相比，第一个参数为页面名称，但是很可能为 `nil`）
