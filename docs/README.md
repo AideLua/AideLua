@@ -10,14 +10,17 @@ title: false
 [![QQ 群: 628045718](https://img.shields.io/badge/QQ_群-628045718-0099FF?logo=TencentQQ&style=flat-square)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
 [![QQ 频道: t37c1u1nmw](https://img.shields.io/badge/QQ_频道-t37c1u1nmw-0099FF?logo=TencentQQ&style=flat-square)](https://pd.qq.com/s/ncghvc)
 
-Aide Lua 是一款依赖 Aide 的 Lua 编辑器<br>
-Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件开发<br>
+Aide Lua 是一款依赖 Aide 的 Lua 编辑器   
+Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件开发   
 Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 [![杰西205/Aide Lua](https://gitee.com/Jesse205/AideLua/widgets/widget_card.svg?colors=4183c4,ffffff,ffffff,e3e9ed,666666,9b9b9b)](https://gitee.com/Jesse205/AideLua)
 
-## 提示
-1. 本文档部分说明格式为 “__变量名__ (数据类型): 说明” 、 “__数据类型__: 说明”
+::: tip
+
+1. 本文档部分说明格式为 「__变量名__ (数据类型): 说明」、「__数据类型__: 说明」
+
+:::
 
 ## 下载
 
@@ -25,7 +28,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 [![Gitee 发行版)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+发行版&logo=gitee&style=flat-square)](https://gitee.com/Jesse205/AideLua/releases/latest)
 
 ### AIDE 高级设置版
-[![官网 (推荐)](https://img.shields.io/badge/官网-推荐-28B6F6?style=flat-square)](https://aidepro.netlify.app/)
+[![官网 (推荐)](https://img.shields.io/badge/官网-推荐-28B6F6?style=flat-square)](https://www.aidepro.top/)
 [![蓝奏云 (官方)](https://img.shields.io/badge/蓝奏云-v2.6.45-FF6600?logo=icloud&style=flat-square&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
 
 ### Gradle for AIDE Pro

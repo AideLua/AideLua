@@ -6,6 +6,7 @@
   layout_margin="4dp";
   elevation="2dp";
   cardBackgroundColor=theme.color.windowBackground;
+  alpha=0.9;
   {
     ChipGroup;
     id="previewChipGroup";

@@ -11,7 +11,7 @@ appInfo={
     name="AIDE Pro",
     message="魔改过的全新版本",
     iconResource=R.mipmap.ic_launcher_aide_round,
-    browserUrl="https://aidepro.netlify.app/",
+    browserUrl="https://www.aidepro.top/",
     clickable=true,
   },
   {

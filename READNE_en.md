@@ -20,9 +20,9 @@ If you need to use the source code, please go to the [releases (Github)](https:/
 Please not to change the repository directly in Github, because Github's repository is mirrored by Gitee。
 
 ## Introduction
-Aide Lua is a Lua editor relying on Aide<br>
-Aide Lua allows you to enjoy advanced and rapid software development on mobile devices<br>
-Aide Lua can help you transfer from Androlua+to AIDE and then to Android Studio=
+Aide Lua is a Lua editor relying on Aide   
+Aide Lua allows you to enjoy advanced and rapid software development on mobile devices   
+Aide Lua can help you transfer from Androlua+to AIDE and then to Android Studio
 
 ## Download
 
@@ -36,11 +36,11 @@ Aide Lua can help you transfer from Androlua+to AIDE and then to Android Studio=
 [![Baidu Netdisk](https://img.shields.io/badge/Baidu_Netdisk-jxnb-06a7ff)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q?pwd=jxnb)
 
 ### Gradle for AIDE Pro
-[![189 Cloud (Offical)](https://img.shields.io/badge/189_Cloud-Offical-DF9C1F?style=flat-square)](https://cloud.189.cn/t/jAFR7vAVniuu)
+[![189 Cloud (Offical)](https://img.shields.io/badge/189_Cloud-Offical-DF9C1F)](https://cloud.189.cn/t/jAFR7vAVniuu)
 [![123 Pan (Image)](https://img.shields.io/badge/123_Pan-Image-597dfc)](https://www.123pan.com/s/G7a9-c9ek)
 
 ### AIDE Pro
-[![Offical (Recommend)](https://img.shields.io/badge/Offical_website-Recommend-28B6F6)](https://aidepro.netlify.app/)
+[![Offical (Recommend)](https://img.shields.io/badge/Offical_website-Recommend-28B6F6)](https://www.aidepro.top/)
 [![Lanzou (Offical)](https://img.shields.io/badge/Lanzou-v2.6.45-FF6600?logo=icloud&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
 
 ## Build project (including derivative projects)

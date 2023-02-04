@@ -382,6 +382,7 @@ function safeLoadLayout(path,parent)
   return loadlayout(layout,{},parent)
 end
 
+--v5.1.1+
 function utf8ToUnicode(inStr)
   local inStr=String(inStr)
   local myBuffer=inStr.toCharArray()--数组

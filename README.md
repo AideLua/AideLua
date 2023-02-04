@@ -15,15 +15,15 @@
 中文 | [English](READNE_en.md)
 
 ## 注意 | Alert
-如需使用源代码，请进入 [发行版 (Gitee)](https://gitee.com/Jesse205/AideLua/releases/latest) 页面下载。<br>
+如需使用源代码，请进入 [发行版 (Gitee)](https://gitee.com/Jesse205/AideLua/releases/latest) 页面下载。   
 If you need to use the source code, please go to the [releases (Github)](https://github.com/Jesse205/AideLua/releases/latest) page to download.
 
-请不要在 Github 内直接更改此仓库，因为 Github 的仓库是由 Gitee 镜像过去的。<br>
+请不要在 Github 内直接更改此仓库，因为 Github 的仓库是由 Gitee 镜像过去的。   
 Please not to change the repository directly in Github, because Github's repository is mirrored by Gitee。
 
 ## 简介
-Aide Lua 是一款依赖 Aide 的 Lua 编辑器<br>
-Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件开发<br>
+Aide Lua 是一款依赖 Aide 的 Lua 编辑器   
+Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件开发   
 Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 ## 下载
@@ -39,15 +39,15 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 
 ### AIDE 高级设置版
-[![官网 (推荐)](https://img.shields.io/badge/官网-推荐-28B6F6?style=flat-square)](https://aidepro.netlify.app/)
-[![蓝奏云 (官方)](https://img.shields.io/badge/蓝奏云-v2.6.45-FF6600?logo=icloud&style=flat-square&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
+[![官网 (推荐)](https://img.shields.io/badge/官网-推荐-28B6F6)](https://www.aidepro.top/)
+[![蓝奏云 (官方)](https://img.shields.io/badge/蓝奏云-v2.6.45-FF6600?logo=icloud&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
 
 ### Gradle for AIDE Pro
 
 您可以使用 Gradle 来提供完整的编译功能。如果您不需要则可以忽略。
 
-[![天翼云盘 (官方)](https://img.shields.io/badge/天翼云盘-官方-DF9C1F?style=flat-square)](https://cloud.189.cn/t/jAFR7vAVniuu)
-[![123云盘 (镜像)](https://img.shields.io/badge/123云盘-镜像-597dfc?style=flat-square)](https://www.123pan.com/s/G7a9-c9ek)
+[![天翼云盘 (官方)](https://img.shields.io/badge/天翼云盘-官方-DF9C1F)](https://cloud.189.cn/t/jAFR7vAVniuu)
+[![123云盘 (镜像)](https://img.shields.io/badge/123云盘-镜像-597dfc)](https://www.123pan.com/s/G7a9-c9ek)
 
 ## 构建项目（包括衍生项目）
 1. 克隆本项目到本地：`git clone https://gitee.com/Jesse205/AideLua.git`
@@ -68,7 +68,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 ![步骤2](images/releases/step2.jpg)
 
 ## 使用教程
-[视频教程](https://space.bilibili.com/1229937144)
+[视频教程](https://space.bilibili.com/1229937144) |
 [使用文档](https://jesse205.github.io/AideLua/)
 
 由于 AIDE 的特殊性，请下载 [__AIDE高级设置版__](https://aidepro.top/) 进行操作

@@ -38,6 +38,7 @@
 | menu | __Menu__: 你在其中放置项目的选项菜单。|
 
 代码执行顺序：
+
 > 添加自带菜单 - 执行插件事件
 
 ### onOptionsItemSelected(item)
@@ -49,10 +50,11 @@
 | item | __MenuItem__: 被选中的菜单项。此值不能为空。|
 
 代码执行顺序：
+
 > 添加自带菜单 - 调用插件事件 - 标记 `LoadedMenu` 为 `true` - 刷新菜单状态
 
 ::: warning
-Aide Lua 未使用标准的菜单更新方式，因此您使用 `activity.invalidateOptionsMenu()` 无法刷新菜单显示
+Aide Lua 未使用标准的菜单更新方式，因此您使用 `activity.invalidateOptionsMenu()` 无法刷新菜单显示。相反，您应该使用 `refreshMenusState()` 来刷新菜单显示。
 :::
 
 ### onKeyShortcut(keyCode, event)
@@ -292,11 +294,15 @@ activity.result({<action>，<content>})
 这是项目管理器，只能管理单个项目，兼职提供文件路径的绝对路径转相对路径
 
 ### LuaEditorHelper <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
+
 这是 LuaEditor 助手，可以方便处理很多东西
 
 ## 其他 API
+
 ### 快速检查文件是否相同
+
 #### isSamePathFileByPath(filePath1,filePath2)
+
 通过文件路径比较文件是否相同
 
 | 参数 | 说明 |
@@ -305,6 +311,7 @@ activity.result({<action>，<content>})
 | filePath2 | __string__: 第二个文件路径 |
 
 #### isSamePathFile(file1,file2)
+
 通过文件本身比较文件是否相同
 
 | 参数 | 说明 |
@@ -315,6 +322,7 @@ activity.result({<action>，<content>})
 ### 颜色类
 
 #### formatColor2Hex(color)
+
 将 number 类型的颜色值转换为字符串的16进制
 
 | 参数 | 说明 |
@@ -341,8 +349,68 @@ activity.result({<action>，<content>})
 编辑器布局等配置
 
 #### 格式说明
+``` lua
+EditorViewName={
+  layout={ -- 编辑器布局
+    -- ...
+  },
+  action={ -- 编辑器的各种事件
+    undo="default",
+    redo="default",
+    format="default",
+    search="default",
+    getText="default",
+    setText="default",
+    -- ...
+  },
+  init=function(ids,config)
+    -- 初始化事件
+    -- ...
+  end,
+  onTypefaceChangeListener=function(ids,config,editor,typeface,boldTypeface,italicTypeface)
+    -- typeface: 正常字体
+    -- boldTypeface: 加粗字体
+    -- italicTypeface: 意大利体（斜体）
+    -- ...
+  end,
+  onSharedDataChangeListeners={
+    editor_wordwrap=function(ids,config,editor,newValue)
+      -- ...
+    end,
+    -- ...
+  },
+  supportScroll=false;-- 支持滚动
+},
+```
 #### LuaEditor 说明
+
+在 `LuaEditor` 下面，还有
+
+``` lua
+---将要添加到LuaEditor的关键词列表
+---更改后需要执行 application.set("luaeditor_initialized", false) ，以便在下次进入页面时更新
+---使用 activity.recreate() 重启页面
+---index 为方便更改内容，请使用 string 类型，当然 number 类型也能用
+---@type table<string, String[]>
+keywordsList={
+  --一些常用但不自带的类
+  annotationsWords=String{"class","type","alias","param","return","field","generic","vararg","language","example"},
+  otherWords=String{"PhotoView","LuaLexerIteratorBuilder"},
+},
+
+---@type table<string, String[]>
+---@see keywordsList
+packagesList={
+  --otherPackages=Map{hello=String{"world"},jesse205=String{"nb"}},
+},
+```
+
+::: warning
+除此之外还有`jesse205Keywords`与`normalKeywords`，这些是编辑器默认的关键字，您不应该动这些东西
+:::
+
 ### showSnackBar(text)
+
 显示 SnackBar (底部提示)
 
 | 参数 | 说明 |

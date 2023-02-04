@@ -1,19 +1,6 @@
-{--各种编辑器，编辑器的id将被赋予成局部变量
-  --[[
-格式：
-  EditorViewName={
-    layout={layout},
-    action={
-      undo="default",
-      redo="default",
-      format="default",
-      search="default",
-      getText="default",
-      setText="default",
-    },
-  },
-  
-]]
+{
+  --格式：https://jesse205.github.io/AideLua/plugin/pages/main.html#editorlayouts
+
   NoneView={
     layout={
       LinearLayout;
@@ -93,7 +80,6 @@
       end
       LuaEditorHelper.initKeys(editor,editorParent,pencilEdit,progressBar)
       LuaEditorHelper.applyStyleToolBar(editor)
-      --LuaEditorHelper.applyMagnifier(editor)
       LuaEditorHelper.applyTouchListener(editor)
       LuaEditorHelper.applyPencilInput(editor,pencilEdit)
     end,
@@ -396,6 +382,7 @@ import "jesse205"
         layout_height="fill";
         layout_width="fill";
         id="editor";
+        backgroundColor=theme.color.windowBackground;
       };
     },
     init=function(ids,config)
@@ -421,9 +408,83 @@ import "jesse205"
       .setLayoutAlgorithm(webViewSettings.LayoutAlgorithm.SINGLE_COLUMN)--支持重新布局
       .setPluginsEnabled(true)--支持插件
       .setMixedContentMode(webViewSettings.MIXED_CONTENT_COMPATIBILITY_MODE)--允许https中加载http资源
+
       editor.onScrollChange=function(view,l,t,oldl,oldt)
         MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,appBarLayout)
       end
+      import "android.webkit.WebViewClient"
+      editor.setWebViewClient(luajava.override(WebViewClient,{
+        shouldOverrideUrlLoading=function(super,view,request)
+          local url
+          --有两个shouldOverrideUrlLoading方法
+          if type(request)=="string" then
+            url=Uri.parse(request)
+           else
+            url=request.getUrl()
+          end
+
+          if url.getScheme()=="file" then
+            local path=url.getPath()
+            FilesTabManager.openFile(File(path),getFileTypeByName(path),false)
+           else
+            openUrl(tostring(url))
+          end
+          return true
+        end,
+        onPageStarted=function(super,view,url,favicon)
+          if url:find("%.md") or url:find("%.markdown") then
+            --加载Showdown
+            local showdownFile=io.open(activity.getLuaDir().."/showdown/showdown.min.js","r")
+            local showdownJs=showdownFile:read("*a")
+            showdownFile:close()
+            local styleFile=io.open(activity.getLuaDir().."/showdown/index.css","r")
+            local styleCss=styleFile:read("*a")
+            styleFile:close()
+            styleCss=styleCss:gsub("{{(.-)}}",function(key)
+              return assert(loadstring("return "..key))()
+            end)
+            view.evaluateJavascript(showdownJs,nil)
+            view.evaluateJavascript([[
+var head = document.head || document.getElementsByTagName('head')[0];
+var style = document.createElement('style');
+style.innerHTML=']]..utf8ToUnicode(styleCss)..[['
+head.appendChild(style);
+]],nil)
+            --适配手机尺寸和utf8
+            view.evaluateJavascript([[
+var head = document.head || document.getElementsByTagName('head')[0];
+var viewportMeta = document.createElement('meta');
+viewportMeta.setAttribute('name', 'viewport')
+viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0')
+head.appendChild(viewportMeta);
+var charsetMeta = document.createElement('meta');
+charsetMeta.setAttribute('charset', 'utf-8')
+head.appendChild(charsetMeta);
+]],nil)
+
+            view.stopLoading()
+            if url:find("%.md") or url:find("%.markdown") then
+              local file=io.open(Uri.parse(url).getPath(),"r")
+              local content=file:read("*a")
+              file:close()
+              editor.evaluateJavascript([[
+let converter = new showdown.Converter();
+converter.setOption("tables",true);
+converter.setOption("emoji",true);
+converter.setOption("noHeaderId",true);
+converter.setOption("strikethrough",true);
+converter.setOption("tasklists",true);
+converter.setOption("requireSpaceBeforeHeadingText",true);
+converter.setOption("encodeEmails",true);
+document.body.innerHTML = converter.makeHtml(']]..utf8ToUnicode(content)..[[');
+]],nil)
+            end
+          end
+        end,
+        onPageFinished=function(super,view,url)
+          --加载Eruda
+          --view.evaluateJavascript([[(function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.appendChild(script); script.onload = function () { eruda.init() } })();]],nil)
+      end}))
 
     end,
     action={
@@ -431,10 +492,11 @@ import "jesse205"
       getScrollY="default",
       evaluateJavascript="default",
       destroy="default",
+      --[[
       applyMarkdown=function(ids,config,text)
         local jsCode=("loadContent('%s')"):format(utf8ToUnicode(text))
         ids.editor.evaluateJavascript(jsCode,nil)
-      end,
+      end,]]
     },
     supportScroll=true;
   },

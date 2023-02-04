@@ -108,20 +108,22 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 | mode  | __string__: 模式，默认为 `"plugin"` |
 | utilversion | __string__: Util版本，此变量不起任何作用，当前为 `"3.1"`  |
 | thirdplugins | __table (list)__: 需要安装的第三方库 <br > 内容: 插件的包名 |
-| <Badge type="danger" text="X" vertical="middle" /> supported | __table (list)__: 支持的APP列表。此变量在 Util 版本 `3.1` 弃用。 |
 | supported2 | __table (map)__: 支持的APP列表 <br > 索引: 软件代号 (`apptype`) <br > 内容: __table (map)__: 支持的版本，mincode为最低版本，targetcode为最高版本 |
 | events | __table (map)__: 全局事件 |
 
 ::: details 已弃用
 
-| 变量 | 说明 |
-| ---- | ---- |
-| <Badge type="danger" text="*" vertical="middle" /> minemastercode <Badge type="danger" text="Util 版本 v3.1 废除" /> | __number__: 最低支持的APP版本号。 |
-| <Badge type="danger" text="*" vertical="middle" /> targemastercode <Badge type="danger" text="Util 版本 v3.1 废除" /> | __number__: 目标适配的APP版本号。 |
+| 变量 | 说明 | 原因 |
+| ---- | ---- | ---- |
+| <Badge type="danger" text="*" vertical="middle" /> minemastercode <Badge type="danger" text="Util v3.1 废除" vertical="middle" /> | __number__: 最低支持的APP版本号。 | 多个宿主只能使用相同的版本 |
+| <Badge type="danger" text="*" vertical="middle" /> targemastercode <Badge type="danger" text="Util v3.1 废除" vertical="middle" /> | __number__: 目标适配的APP版本号。 | 多个宿主只能使用相同的版本 |
+| supported <Badge type="danger" text="Util v3.1 废除" vertical="middle" /> | __table (list)__: 支持的APP列表。此变量在 Util 版本 `3.1` 弃用。 | 未指定宿主版本 |
 
 :::
 
-::: tip 全局事件与独立事件基本一致。<br>
+::: tip 
+全局事件与独立事件基本一致。
+
 但与独立的事件相比，第一个参数为页面名称，但是很可能为 `nil`）
 :::
 
@@ -131,7 +133,7 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 
 ::: details 彩蛋
 
-| 软件代号 (`apptype`)  | 代指软件 |
+| 软件代号 ( `apptype` )  | 代指软件 |
 | ---- | ---- |
 | aidelua | Aide Lua (Pro) |
 | eddelua | Edde Lua (截止目前此app不支持插件) |
@@ -144,7 +146,11 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 | eddebrowser | Edde 浏览器 (截止目前此app仅存于想象) |
 | eddeconnect | Edde 互联 (截止目前此app仅存于想象) |
 | eddestudy | Edde 学习桌面 (截止目前此app仅存于想象) |
+| eddemusic | Edde 音乐(截止目前此app仅存于想象) |
+| eddevideo | Edde 视频(截止目前此app仅存于想象) |
+| eddebook | Edde 阅读(截止目前此app仅存于想象) |
 | hellotool | 哈兔Box (截止目前此app不支持此类型插件) |
+| androidbox | 安卓工具箱 (截止目前此app仅存于想象) |
 
 :::
 

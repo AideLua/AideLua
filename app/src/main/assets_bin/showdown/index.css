@@ -1,0 +1,47 @@
+:root{
+    --accent: rgb({{Color.red(theme.color.colorAccent)..","..Color.green(theme.color.colorAccent)..","..Color.blue(theme.color.colorAccent)}});
+    --background-color: rgb({{Color.red(theme.color.windowBackground)..","..Color.green(theme.color.windowBackground)..","..Color.blue(theme.color.windowBackground)}});
+    --text-color: rgb({{Color.red(theme.color.textColorPrimary)..","..Color.green(theme.color.textColorPrimary)..","..Color.blue(theme.color.textColorPrimary)}});
+    --stroke-color: rgb({{Color.red(theme.color.strokeColor)..","..Color.green(theme.color.strokeColor)..","..Color.blue(theme.color.strokeColor)}});
+}
+
+html,
+body {
+    background: var(--background-color);
+    color: var(--text-color);;
+}
+
+body {
+    padding: 16px;
+    margin: 0px;
+}
+
+img {
+    max-width: 100%;
+    border-radius: 4px;
+}
+
+a {
+    word-break: break-all;
+    color: var(--accent);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+code {
+    background: var(--stroke-color);
+    padding: 2px 4px;
+    border-radius: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        color-scheme: dark;
+    }
+}
+
+

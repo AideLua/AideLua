@@ -39,7 +39,11 @@
       apply=function(filePath,fileType,view)
         if _warnedAlyPreview then
           view.removeAllViews()
-          view.addView(safeLoadLayout(filePath,view.getClass()))
+          xpcall(function()
+            view.addView(safeLoadLayout(filePath,view.getClass()))
+            end,function(err)
+            view.addView(TextView(activity).setText(err).setTextColor(theme.color.textColorPrimary).setPadding(math.dp2int(8),math.dp2int(8),math.dp2int(8),math.dp2int(8)))
+          end)
          else
           EditorsManager.switchPreview(false)
           AlertDialog.Builder(this)
@@ -81,10 +85,10 @@
     preview={
       editor="WebEditor",
       apply=function(filePath,fileType,view)
-        view.addJavascriptInterface(activity,"activity")
-        view.loadUrl("file://"..activity.getLuaDir().."/showdown/index.html")
-        --
-        --view.loadDataWithBaseURL("file://"..filePath,io.open(activity.getLuaDir().."/showdown/index.html"):read("*a"),"text/html","utf8",nil)
+        view.loadUrl("file://"..filePath)
+        task(500,function()
+          view.clearHistory()
+        end)
       end,
     },
   },
@@ -117,6 +121,9 @@
       editor="WebEditor",
       apply=function(filePath,fileType,view)
         view.loadUrl("file://"..filePath)
+        task(500,function()
+          view.clearHistory()
+        end)
       end
     },
     --[[

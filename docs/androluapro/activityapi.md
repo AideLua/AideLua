@@ -73,3 +73,6 @@
 新建一个定时器，在线程中运行func函数，可以以表的形式传入arg，在 `func` 以 `unpack` 形式接收
 
 调用定时器的 `start(delay, period)` 开始定时器，`stop()` 停止定时器，`Enabled` 暂停恢复定时器，Period属性改变定时器间隔
+
+## 其他 API
+您可以访问 [Android 开发者官网](https://developer.android.google.cn/reference/android/app/Activity)了解更多内容
