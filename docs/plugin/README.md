@@ -5,6 +5,7 @@ next:
 ---
 
 # 插件文档
+
 Util 版本：v3.1
 ::: details 本页内容
 [[toc]]
@@ -12,6 +13,7 @@ Util 版本：v3.1
 [插件模板](https://gitee.com/Jesse205/AideLua/tree/master/%E6%A8%A1%E7%89%88/%E6%8F%92%E4%BB%B6/com.aidelua.template)
 
 ## 提示
+
 1. 本文档部分说明格式为 “__变量名__ (数据类型): 说明” 或 “__数据类型__: 说明”
 2. 标有 <Badge type="danger" text="X" vertical="middle" /> 的表示已废除，相关 API 已被移除
 3. 标有 <Badge type="danger" text="*" vertical="middle" /> 的表示必须文件、方法 或 变量
@@ -26,6 +28,7 @@ Util 版本：v3.1
 :::
 
 ## 手动导入
+
 1. 打开文件管理，进入 `内部存储/Android/media/com.jesse205.aidelua2/files/plugins` ，如果没有此文件夹就手动新建一个
 2. 下载插件（扩展名通常为 `zip` 或 `alp` ，当然也不排除还有其他扩展名）
 3. 使用 zip 格式打开插件，打开 `init.lua` 文件，复制 `packagename` (包名) 的参数（ `=` 后面，不带引号）
@@ -34,11 +37,13 @@ Util 版本：v3.1
 6. 重启 AideLua
 
 ## 注意事项:
+
 1. 目标版本和最低版本请按实际情况填写，最低为 `50099`
 2. 扩展名应为 `alp` (Androlua+ 扩展) 或 `zip`
 3. 为了防止污染全局变量，插件内直接赋值为插件的局部变量。如要修改全局变量，请使用 `_G.xxx=xxx`
 
 ## 通用 API
+
 ::: warning
 尽量避免使用 Jesse205 库。因为 Jesse205 库每次改动都比较大，很容易引起插件报错。
 :::
@@ -49,6 +54,7 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 :::
 
 ### PluginsUtil <Badge text="table" vertical="middle" /> <Badge text="Util" vertical="middle" />
+
 插件相关 API，也是支持插件运行的模块
 
 | 变量 | 说明 |
@@ -58,6 +64,7 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 | PLUGINS_DATA_PATH | __string__: 插件数据存放路径 |
 
 #### PluginsUtil.getPluginDataPath(packageName)
+
 获取插件数据目录
 
 | 参数 | 说明 |
@@ -65,6 +72,7 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 | packageName | __string__: 插件包名。 |
 
 #### PluginsUtil.getPluginPath(packageName)
+
 获取插件目录
 
 | 参数 | 说明 |
@@ -72,29 +80,35 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 | packageName | __string__: 插件包名，如果文件夹名与真正的 `init.lua` 中的 `packagename` 不同，则 `packageName` 传入文件夹名。 |
 
 #### PluginsUtil.clearOpenedPluginPaths() <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />
+
 清除已启用插件列表，用于重新加载插件
 
 ### activityName <Badge text="string" vertical="middle" />
+
 当前页面 (Activity) 名，可能为 `nil`
 
 | 值 | 说明 |
 | ---- | ----- |
 | main | 主页面 |
 | settings | 软件设置页面 |
-| newproject | 新建工程页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" /> |
-| viewclass | 查看类页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" /> |
-| about | 关于页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" /> |
-| layouthelper | 布局助手页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" /> |
-| javaapi | JavaAPI查看器页面 <Badge text="在 v5.0.4(50499) 添加" vertical="middle" /> |
+| newproject | 新建工程页面 <Badge text="v5.0.4+" vertical="middle" /> |
+| viewclass | 查看类页面 <Badge text="v5.0.4+" vertical="middle" /> |
+| about | 关于页面 <Badge text="v5.0.4+" vertical="middle" /> |
+| layouthelper | 布局助手页面 <Badge text="v5.0.4+" vertical="middle" /> |
+| javaapi | JavaAPI查看器页面 <Badge text="v5.0.4+" vertical="middle" /> |
 
 ### getPluginDataPath(packageName)
+
 获取插件数据目录，与 [`PluginsUtil.getPluginDataPath(packageName)`](#pluginsutil-getplugindatapath-packagename) 完全相同
 
 ### getPluginPath(packageName)
+
 获取插件目录，与 [`PluginsUtil.getPluginPath(packageName)`](#pluginsutil-getpluginpath-packagename) 完全相同
 
-## 插件文件说明:
+## 插件文件说明
+
 ### <Badge type="danger" text="*" vertical="middle" /> init.lua <Badge text="文件" vertical="middle" />
+
 插件入口，也用于存放模块信息的文件
 
 | 变量 | 说明 |

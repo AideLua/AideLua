@@ -1,8 +1,13 @@
 # 主题测试页面
+
 ## Title 2
+
 ### Title 3
+
 #### Title 4
+
 ##### Title 5
+
 ###### Title 6
 
 - VuePress - <Badge type="tip" text="v2" vertical="top" />
@@ -21,7 +26,9 @@ for index1 = 1, 9 do
     text=text .. (index1 ~= 9 and "\n" or "")
 end
 print(text)
+
 ```
+
 :::
 ::: code-group-item Java
 
@@ -32,6 +39,7 @@ class HelloJava{
     }
 }
 ```
+
 :::
 ::: code-group-item Python
 
@@ -43,11 +51,12 @@ for index1 in range(1, 10):
     text = text + ("\n" if index1 != 9 else "")
 print(text)
 ```
+
 ::::
 
 这是独立的代码块：
 
-``` lua 
+``` lua
 local text = ""
 for index1 = 1, 9 do
     for index2 = 1, index1 do
@@ -209,7 +218,6 @@ abcdefgABCDEFG
 这是 `代码`
 
 >我是引用
-
 
 ::: tip
 这是一个 `提示`

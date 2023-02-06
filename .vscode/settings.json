@@ -1,5 +1,9 @@
 {
     "emmylua.spell.dict": [
         "luajava"
-    ]
+    ],
+    "cSpell.words": [
+        "Giscus"
+    ],
+    
 }

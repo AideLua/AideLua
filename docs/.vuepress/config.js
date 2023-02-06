@@ -1,6 +1,14 @@
 import { defineUserConfig, defaultTheme } from 'vuepress'
 //import { pwaPlugin } from '@vuepress/plugin-pwa'
 //import { pwaPopupPlugin } from '@vuepress/plugin-pwa-popup'
+import { searchPlugin } from '@vuepress/plugin-search'
+// https://plugin-pwa2.vuejs.press/zh/
+import { pwaPlugin } from "vuepress-plugin-pwa2"
+// https://plugin-copy-code2.vuejs.press/zh/
+import { copyCodePlugin } from "vuepress-plugin-copy-code2";
+// https://plugin-comment2.vuejs.press/zh/
+import { commentPlugin } from "vuepress-plugin-comment2";
+
 
 export default defineUserConfig({
     base: "/AideLua/",
@@ -15,6 +23,7 @@ export default defineUserConfig({
         ['link', { rel: 'mask-icon', sizes: "180x180", href: "/AideLua/images/icons/safari-pinned-tab.svg", color: "#3F51B5" }],
         ['link', { rel: 'manifest', href: '/AideLua/manifest.webmanifest' }],
     ],
+    shouldPrefetch: false,
     theme: defaultTheme({
         docsDir: "docs",
         docsRepo: "https://gitee.com/Jesse205/AideLua",
@@ -294,5 +303,25 @@ export default defineUserConfig({
         themePlugins: {
             backToTop: false,
         }
-    })
+    }),
+    plugins: [
+        searchPlugin({
+            // 配置项
+        }),
+        pwaPlugin({
+            // 配置项
+        }),
+        copyCodePlugin({
+            showInMobile: true,
+            pure: true,
+            delay: 100,
+        }),
+        commentPlugin({
+            provider: "Giscus",
+            repo: "Jesse205/AideLua",
+            repoId: "R_kgDOHfPX_g",
+            category: "DocumentGiscus",
+            categoryId: "DIC_kwDOHfPX_s4CUCDx",
+        }),
+    ],
 })
