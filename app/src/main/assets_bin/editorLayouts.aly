@@ -396,7 +396,7 @@ import "jesse205"
       .setAppCacheEnabled(true)--启用缓存
       .setUseWideViewPort(true)
       .setAllowFileAccess(true)--允许访问文件
-      .setBuiltInZoomControls(true)--缩放
+      .setBuiltInZoomControls(false)--缩放
       .setLoadWithOverviewMode(true)
       .setLoadsImagesAutomatically(true)--图片自动加载
       .setSaveFormData(true)--保存表单数据，就是输入框的内容，但并不是全部输入框都会储存
@@ -413,6 +413,8 @@ import "jesse205"
         MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,appBarLayout)
       end
       import "android.webkit.WebViewClient"
+      import "android.webkit.WebResourceResponse"
+
       editor.setWebViewClient(luajava.override(WebViewClient,{
         shouldOverrideUrlLoading=function(super,view,request)
           local url
@@ -433,6 +435,7 @@ import "jesse205"
         end,
         onPageStarted=function(super,view,url,favicon)
           if url:find("%.md") or url:find("%.markdown") then
+            view.stopLoading()
             --加载Showdown
             local showdownFile=io.open(activity.getLuaDir().."/showdown/showdown.min.js","r")
             local showdownJs=showdownFile:read("*a")
@@ -462,12 +465,10 @@ charsetMeta.setAttribute('charset', 'utf-8')
 head.appendChild(charsetMeta);
 ]],nil)
 
-            view.stopLoading()
-            if url:find("%.md") or url:find("%.markdown") then
-              local file=io.open(Uri.parse(url).getPath(),"r")
-              local content=file:read("*a")
-              file:close()
-              editor.evaluateJavascript([[
+            local file=io.open(Uri.parse(url).getPath(),"r")
+            local content=file:read("*a")
+            file:close()
+            editor.evaluateJavascript([[
 let converter = new showdown.Converter();
 converter.setOption("tables",true);
 converter.setOption("emoji",true);
@@ -476,9 +477,8 @@ converter.setOption("strikethrough",true);
 converter.setOption("tasklists",true);
 converter.setOption("requireSpaceBeforeHeadingText",true);
 converter.setOption("encodeEmails",true);
-document.body.innerHTML = converter.makeHtml(']]..utf8ToUnicode(content)..[[');
+document.body.innerHTML = converter.makeHtml(']]..utf8ToUnicode(vuepressMd2NormalMd(content))..[[');
 ]],nil)
-            end
           end
         end,
         onPageFinished=function(super,view,url)

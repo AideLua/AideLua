@@ -277,7 +277,7 @@ function onOptionsItemSelected(item)
    case Rid.menu_redo then -- 重装
     editorActions.redo()
    case Rid.menu_run then -- 运行
-    ProjectManager.runProject()
+    ProjectManager.smartRunProject()
    case Rid.menu_project_bin_run then -- 二次打包
     if ProjectManager.openState then
       FilesTabManager.saveAllFiles()

@@ -27,12 +27,12 @@
     SettingsLayUtil.TITLE;
     title=R.string.project;
   };
-  {--Jesse205库支持
+  {--比较完整的运行
     SettingsLayUtil.ITEM_SWITCH;
-    --icon=R.drawable.ic_tooltip_minus_outline;
-    title="比较完整的运行 More complete run";
+    icon=R.drawable.ic_play_outline;
+    title=R.string.settings_moreCompleteRun;
     key="moreCompleteRun";
-    summary="将 lua 资源整合后再运行，而不是直接运行";
+    summary=R.string.settings_moreCompleteRun_summary;
   };
   {--Jesse205库支持
     SettingsLayUtil.ITEM_SWITCH;

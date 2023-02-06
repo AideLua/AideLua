@@ -190,6 +190,8 @@
     <string name="settings_editor_automaticallyBackupOriginalFiles">Automatically backup the original files</string>
     <string name="settings_editor_automaticallyBackupOriginalFiles_summary">Automatically backup the original file when saving\nTo switch states, please use setSharedData("editor_autobackuporiginalfiles", boolean)</string>
     <string name="settings_autoCheckUpdate">Automatic check for updates</string>
+    <string name="settings_moreCompleteRun">More complete run</string>
+    <string name="settings_moreCompleteRun_summary">Integrate lua resources before running them, rather than running them directly.</string>
     
     <string name="window_openNew">New window</string>
     <string name="window_openInNewWindow">Open in a new window</string>

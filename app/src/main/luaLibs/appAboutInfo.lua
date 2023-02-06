@@ -146,13 +146,23 @@ copyright="Copyright (c) 2020-2022, Jesse205"
 PluginsUtil.setActivityName("about")
 
 function main()
-  table.insert(data,4,{--PluginsUtil 版本
+  import "db"
+  local index=4
+  table.insert(data,index,{--PluginsUtil 版本
     SettingsLayUtil.ITEM;
     title=getLocalLangObj("PluginsUtil 版本","PluginsUtil version");
     summary=PluginsUtil._VERSION;
     icon=R.drawable.ic_puzzle_outline;
   })
-  table.insert(data,6,{--PluginsUtil 版本
+  index=index+1
+  table.insert(data,index,{--luaDB 版本
+    SettingsLayUtil.ITEM;
+    title=getLocalLangObj("LuaDB 版本","LuaDB version");
+    summary=tostring(db.ver);
+    icon=R.drawable.ic_database_outline;
+  })
+  index=index+2
+  table.insert(data,index,{--更新日志
     SettingsLayUtil.ITEM_NOSUMMARY;
     title=getLocalLangObj("更新日志","Change Log");
     url="https://gitee.com/Jesse205/AideLua/blob/master/CHANGELOG.md",

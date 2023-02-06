@@ -12,7 +12,7 @@
 :::: code-group
 ::: code-group-item Lua
 
-``` lua ts{4,6}
+```lua ts{4,6}
 local text = ""
 for index1 = 1, 9 do
     for index2 = 1, index1 do
@@ -185,6 +185,7 @@ const line3 = 'This is line 3'
 字体测试
 --0123456789
 --abcdefgABCDEFG
+0123456789
 abcdefgABCDEFG
 -- --- == === != !== =!=
 =:= =/= <= >= && &&& &= ++

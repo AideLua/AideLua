@@ -206,6 +206,7 @@ function showActionBar(force)
     end
     actionBarAnimator = ObjectAnimator.ofFloat(mContainerView,"translationY",{0})
     .setDuration(200)
+    .setAutoCancel(true)
     .addUpdateListener({
       onAnimationUpdate=function(animator)
         onAnimUpdate(animator.getAnimatedValue())
@@ -223,6 +224,7 @@ function hideActionBar(force)
     end
     actionBarAnimator = ObjectAnimator.ofFloat(mContainerView,"translationY",{-mContainerView.getHeight()})
     .setDuration(200)
+    .setAutoCancel(true)
     .addUpdateListener({
       onAnimationUpdate=function(animator)
         onAnimUpdate(animator.getAnimatedValue())
@@ -260,6 +262,9 @@ topLayoutOnTouchListener=View.OnTouchListener{
     local action=event.getAction()
     local actionBarHeight=mContainerView.getHeight()
     if action==MotionEvent.ACTION_DOWN then
+      if actionBarAnimator then
+        actionBarAnimator.cancel()
+      end
       searchEditDownYWithOffset=y-searchLayout.getTranslationY()
       canPlayActionBarAnimation=false
      elseif action==MotionEvent.ACTION_MOVE then
@@ -271,7 +276,7 @@ topLayoutOnTouchListener=View.OnTouchListener{
       end
       onAnimUpdate(offset)
      elseif action==MotionEvent.ACTION_UP or action==MotionEvent.ACTION_CANCEL then
-     canPlayActionBarAnimation=true
+      canPlayActionBarAnimation=true
       local offset=y-searchEditDownYWithOffset
       --播放释放动画
       if offset>=0 then
@@ -318,9 +323,9 @@ listView.onScroll=function(view,firstVisibleItem,visibleItemCount,totalItemCount
     hideActionBar()
    elseif firstVisibleItem<oldFirstVisibleItem then
     showActionBar()
-    elseif oldFirstViewTop>firstViewTop then
+   elseif oldFirstViewTop>firstViewTop then
     hideActionBar()
-    elseif oldFirstViewTop<firstViewTop then
+   elseif oldFirstViewTop<firstViewTop then
     showActionBar()
   end
   oldFirstVisibleItem=firstVisibleItem

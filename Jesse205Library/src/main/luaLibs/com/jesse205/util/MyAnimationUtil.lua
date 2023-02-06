@@ -90,6 +90,7 @@ function MyAnimationUtil.ActionBar.openElevation(actionBar)
   local animator=ObjectAnimator.ofFloat(actionBar, "elevation", {theme.number.actionBarElevation})
   .setDuration(200)
   .setInterpolator(DecelerateInterpolator())
+  .setAutoCancel(true)
   .start()
   lastActionBarAnimators[actionBar]=animator
   return animator
@@ -101,6 +102,7 @@ function MyAnimationUtil.ActionBar.closeElevation(actionBar)
   local animator=ObjectAnimator.ofFloat(actionBar, "elevation", {0})
   .setDuration(200)
   .setInterpolator(AccelerateInterpolator())
+  .setAutoCancel(true)
   .start()
   lastActionBarAnimators[actionBar]=animator
   return animator

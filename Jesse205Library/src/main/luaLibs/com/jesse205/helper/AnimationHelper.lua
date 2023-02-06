@@ -39,6 +39,7 @@ AnimationHelper.scrollListenerForElevation=function(view,sideViewMap,sideStateMa
       ObjectAnimator.ofFloat(sideView, "elevation", {newState and theme.number.actionBarElevation or 0})
       .setDuration(200)
       .setInterpolator(DecelerateInterpolator())
+      .setAutoCancel(true)
       .start()
       lastElevationStateMap[side]=newState
     end

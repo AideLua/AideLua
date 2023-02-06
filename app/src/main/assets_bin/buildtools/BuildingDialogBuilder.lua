@@ -37,10 +37,12 @@ function BuildingDialogBuilder:update(message,state)--state主要用来检验是
   end
 end
 
-function BuildingDialogBuilder:print(iconName,message)
+---v5.1.1+ 新增state
+function BuildingDialogBuilder:print(iconName,message,state)
   local adapter=self.adapter
   local dialogIds=self.dialogIds
   local nowStatePanel=dialogIds.nowStatePanel
+  local dialog=self.dialog
 
   local icon,iconColor=0,0--设置图标及颜色
   switch iconName do
@@ -73,6 +75,14 @@ function BuildingDialogBuilder:print(iconName,message)
     dialogIds.stateTextView2.setVisibility(View.VISIBLE)
   end
   dialogIds.listView.setSelection(adapter.getCount()-1)
+  if state then
+    dialog.setTitle(R.string.binproject_state_succeed)
+    nowStatePanel.setVisibility(View.GONE)
+   elseif state==false then
+    dialog.setTitle(R.string.binproject_state_failed)
+    nowStatePanel.setVisibility(View.GONE)
+  end
+
 end
 
 function BuildingDialogBuilder:show()
@@ -86,7 +96,7 @@ function BuildingDialogBuilder:show()
   .setNegativeButton(android.R.string.cancel,nil)
   .setCancelable(false)
   .show()
-  
+
   self.adapter=adapter
   self.dialog=dialog
   dialog.getButton(AlertDialog.BUTTON_POSITIVE).setVisibility(View.GONE)

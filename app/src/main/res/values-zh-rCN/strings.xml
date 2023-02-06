@@ -187,6 +187,8 @@
     <string name="settings_editor_automaticallyBackupOriginalFiles">自动备份原文件</string>
     <string name="settings_editor_automaticallyBackupOriginalFiles_summary">当保存时自动备份原文件\n如需切换状态，请使用 setSharedData("editor_autoBackupOriginalFiles", boolean)</string>
     <string name="settings_autoCheckUpdate">自动检查更新</string>
+    <string name="settings_moreCompleteRun">比较完整的运行</string>
+    <string name="settings_moreCompleteRun_summary">将 lua 资源整合后再运行，而不是直接运行</string>
     
     <string name="window_openNew">新建窗口</string>
     <string name="window_openInNewWindow">在新窗口打开</string>

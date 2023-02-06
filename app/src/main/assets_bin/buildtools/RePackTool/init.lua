@@ -110,7 +110,7 @@ function RePackTool.autoCompileLua(compileDir,onCompileListener)
   end
 end
 
-function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
+function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign,runMode)
   return pcall(function()
     require "import"
     local config=luajava.astable(configJ,true)
@@ -143,7 +143,12 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
     local buildPath=mainAppPath.."/build"
     local binPath=buildPath.."/bin"
     local binDir=File(binPath)
-    local tempPath=binPath.."/aidelua_unzip"
+    local tempPath
+    if runMode then
+      tempPath=AppPath.Sdcard.."/Android/media/"..(config.packageName or activity.getPackageName()).."/cache/temp/aidelua_unzip"
+     else
+      tempPath=binPath.."/.debugApk"
+    end
     local tempDir=File(tempPath)
     local appName,appVer,appApkPAI,appApkInfo
     local newApkName,newApkBaseName,newApkPath
@@ -214,7 +219,7 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
       binEventsPaths=nil
       --解压安装包
       updateDoing(formatResStr(R.string.binproject_unzip,{appFile.getName()}))
-      binDir.mkdirs()
+      tempDir.getParentFile().mkdirs()
       LuaUtil.rmDir(tempDir)
       LuaUtil.unZip(appPath,tempPath)
       updateSuccess(getString(R.string.binproject_unzip_done))
@@ -228,6 +233,11 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign)
         updateDoing(getString(R.string.binproject_compiling))
         RePackTool.autoCompileLua(tempDir,BuildHelper.onCompileListener)
         updateSuccess(getString(R.string.binproject_compile_done))
+      end
+
+      if runMode then
+        --如果是运行模式，那么apkPath就是apk解包路径
+        return true,tempPath
       end
 
       --压缩

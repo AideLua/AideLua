@@ -4,6 +4,7 @@ title: false
 # Aide Lua 使用文档
 
 ## 简介
+
 [![license](https://img.shields.io/github/license/Jesse205/AideLua?style=flat-square)](https://gitee.com/Jesse205/AideLua/blob/master/LICENSE)
 [![发行版](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=发行版&logo=gitee&style=flat-square)](https://gitee.com/Jesse205/AideLua/releases)
 
@@ -25,9 +26,11 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 ## 下载
 
 ### Aide Lua Pro
+
 [![Gitee 发行版)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+发行版&logo=gitee&style=flat-square)](https://gitee.com/Jesse205/AideLua/releases/latest)
 
 ### AIDE 高级设置版
+
 [![官网 (推荐)](https://img.shields.io/badge/官网-推荐-28B6F6?style=flat-square)](https://www.aidepro.top/)
 [![蓝奏云 (官方)](https://img.shields.io/badge/蓝奏云-v2.6.45-FF6600?logo=icloud&style=flat-square&logoColor=white)](https://www.lanzouy.com/b00zdhbeb)
 
@@ -38,29 +41,34 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 [![天翼云盘 (官方)](https://img.shields.io/badge/天翼云盘-官方-DF9C1F?style=flat-square)](https://cloud.189.cn/t/jAFR7vAVniuu)
 [![123云盘 (镜像)](https://img.shields.io/badge/123云盘-镜像-597dfc?style=flat-square)](https://www.123pan.com/s/G7a9-c9ek)
 
-## 安装软件
-
-我正在制作[《刷机指南》](https://efadg.netlify.app/)，后续有安装第三方软件的教程，敬请期待☺️
-
 #### 其他渠道 (可能更新不及时)
+
 [![123云盘](https://img.shields.io/badge/123云盘--597dfc?style=flat-square)](https://www.123pan.com/s/G7a9-Yzck)
 [![天翼云盘](https://img.shields.io/badge/天翼云盘--DF9C1F?style=flat-square)](https://cloud.189.cn/t/ZZ7RzijyqiUv)
 [![腾讯微云](https://img.shields.io/badge/腾讯微云--2980ff?style=flat-square)](https://share.weiyun.com/oLiNtxMR)
 [![百度网盘](https://img.shields.io/badge/百度网盘-密码_jxnb-06a7ff?style=flat-square)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q?pwd=jxnb)
 
+## 安装软件
+
+我正在制作[《刷机指南》](https://efadg.netlify.app/)，后续有安装第三方软件的教程，敬请期待☺️
+
 ### 快速入门
+
 ::: tip
 如果您只有 AndroLua+ 基础，那么您可以阅读[《快速使用》](/quickly/README.md)
 :::
+
 #### 一、配置 AIDE Pro
-1. 进入 `设置 - 高级设置 - 工程相关`
+
+1. 进入 `设置 - 高级设置 - 构建 & 运行`
 2. 关闭 `启用 adrt调试文件` ，打开 `重定义Apk构建路径`、`启用Gradle`（如果不使用 Gradle 则无需打开此项）
 3. 重启 AIDE
 
 #### 二、初次打包
+
 1. 在 AideLua 点击新建项目，在填写与选择完成后点击 `新建`
 2. 用 AIDE 打开项目，点击 `构建刷新`，`确定`（或者 `运行` ，`gradle assembleRelease`，推荐这种方法）
-3. 点击 AideLua 的 `二次打包并安装` 按钮（或 `二次打包` ，但需手动签名）并安装，测试是否可以正常打包并运行
+3. 点击 AideLua 的 `二次打包并安装` 按钮（或 `二次打包` ，然后手动签名）并安装，测试是否可以正常打包并运行
 4. 点击 AideLua 的 `运行` 按钮，测试是否正常通过已安装的应用调试
 
 ::: tip
@@ -68,6 +76,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 :::
 
 ## 工作原理
+
 1. 读取 `.aidelua/config.lua` 的内容
 2. 找到 `app.apk` 的路径，并解压到 `<主模块名称>/build/aidelua_unzip`
 3. 将 `<模块名称>/src/main/assets_bin` 等目录中的文件添加到 `aidelua_unzip` 文件夹中，并编译 Lua (编译 Lua 需要启用 `compileLua`)
@@ -75,15 +84,18 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 5. 签名 `<应用名>_v<版本号>.apk` 到 `<应用名>_v<版本号>_sign.apk` (签名 APK 需要选择 `二次打包并安装` 菜单)
 
 ## 使用须知
+
 1. 本软件默认开启自动保存代码且无法关闭（自动保存触发条件：切换到其他应用、点击二次打包以及打包运行、打开其他文件、关闭文件、打开侧滑（大屏除外）、点击标签栏等）
 2. 此软件不能用来开发大型项目
 3. 此软件必须搭配编译器，不管你用的是真 Gradle 还是假 Gradle __(AIDE 属于假 Gradle)__
 4. 要实现直接运行项目，必须导出 `LuaActivity`（默认是导出的），__并成功安装项目软件（先用 AIDE 打包，然后用 Aide Lua 打包，最后安装）__
 
 ## 使用教程
+
 由于 AIDE 的特殊性，请下载 [__AIDE高级设置版__](https://aidepro.top/) 进行操作
 
 ## 注意事项
+
 1. AIDE 必须使用 `AIDE高级设置版本` ，否则无法打开 `重定义Apk路径`
 2. AIDE 必须打开 `重定义Apk路径` ，否则会导致 APK 错误
 3. AIDE 最好关闭 `adrt调试文件`

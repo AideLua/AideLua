@@ -225,7 +225,7 @@ local hiddenBool2Alpha={
   ["false"]=1
 }
 
-local loadingFiles = false -- 正在加载文件列表
+local loadingDir = false -- 正在加载文件列表
 local showProgressHandler=Handler()
 local showProgressRunnable=Runnable({
   run = function()
@@ -394,6 +394,7 @@ function FilesBrowserManager.FilesRecyclerViewBuilder(context)
   return view
 end
 
+local BACK_OFFSET=math.dp2int(16)
 FilesBrowserManager.RecyclerViewCardView={
   _baseClass=CardView,
   __call=function(self,context)
@@ -406,7 +407,8 @@ FilesBrowserManager.RecyclerViewCardView={
         local x=event.getRawX()
         if action==MotionEvent.ACTION_DOWN then
           initialMotionX=x
-          if view.getTranslationX()~=0 then
+          local translationX=view.getTranslationX()
+          if translationX~=0 and translationX<BACK_OFFSET then
             initialMotionX=initialMotionX-math.pow(view.getTranslationX(),10/8)
           end
           lastBackState=false
@@ -566,13 +568,12 @@ end
 ---刷新文件夹/进入文件夹
 ---有内存泄露问题
 ---@param file File 要刷新或者进入的文件夹
----@param upFile boolean 是否是向上，在 v3.1.0(31099) 作废，之后的版本无实际作用
+---@param upFile boolean 是否是向上，在 v3.1.0(31099) 移除，之后的版本无实际作用
 ---@param fileName string 文件名
 ---@param force boolean 强制刷新
 ---@param atOnce boolean 立刻显示进度条
 function FilesBrowserManager.refresh(file,fileName,force,atOnce)
-  if force or not (loadingFiles) then
-    loadingFiles=true
+  if force or not (loadingDir) then
 
     if ProjectManager.openState then
       file=file or directoryFile or ProjectManager.nowFile
@@ -585,6 +586,7 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
      else
       file=ProjectManager.projectsFile
     end
+    loadingDir=file
 
     if atOnce or isSamePathFile(file,ProjectManager.projectsFile) then
       swipeRefresh.setRefreshing(true)
@@ -653,10 +655,13 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
       local newListJ=File(newList)
       newList=nil
       filesList=nil
-
+      --Thread.sleep(5000)
       return newListJ,newDirectory,itemIndex
     end,
     function(dataList,newDirectory,itemIndex)
+      if loadingDir~=newDirectory then--当前刷新的文件列表不是现在获取到的文件列表，数据作废
+        return
+      end
       showProgressHandler.removeCallbacks(showProgressRunnable)
       showProgressHandler.removeCallbacks(homingRunnable)
       swipeRefresh.setRefreshing(false)
@@ -791,7 +796,7 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
       FilesBrowserManager.directoryFilesList=dataList
 
       FilesBrowserManager.highlightIndex=itemIndex
-      loadingFiles=false
+      loadingDir=false
 
       adapter.notifyDataSetChanged()
       pathPlaceholderView.setVisibility(View.GONE)--用于在开启完整动画前提下快速显示列表。。。

@@ -46,22 +46,23 @@ ProjectManager.refreshProjectsPath=refreshProjectsPath
 
 ---运行项目
 ---@param path string 文件路径
-function ProjectManager.runProject(path)
+function ProjectManager.runProject(path,config)
   local code,projectMainFile
+  config=config or nowConfig
   if openState then
     FilesTabManager.saveAllFiles()
-    if nowConfig.badPrj then--损坏的项目
-     elseif nowConfig.packageName then
+    if config.badPrj then--损坏的项目
+     elseif config.packageName then
       local success,err=pcall(function()
-        local intent=Intent(Intent.ACTION_VIEW,Uri.parse(path or nowConfig.projectMainPath.."/main.lua"))
-        local componentName=ComponentName(nowConfig.packageName,nowConfig.debugActivity or "com.androlua.LuaActivity")
+        local intent=Intent(Intent.ACTION_VIEW,Uri.parse(path or config.projectMainPath.."/main.lua"))
+        local componentName=ComponentName(config.packageName,config.debugActivity or "com.androlua.LuaActivity")
         intent.setComponent(componentName)
-        intent.putExtra("key",nowConfig.key)
+        intent.putExtra("key",config.key)
         activity.startActivity(intent)
       end)
       if not(success) then--无法通过调用其他app打开时
-        showSnackBar(R.string.runCode_noApp).
-        setAction(R.string.viewError, function(view)
+        showSnackBar(R.string.runCode_noApp)
+        .setAction(R.string.viewError, function(view)
           showErrorDialog("Run Error",err)
         end)
       end
@@ -71,6 +72,17 @@ function ProjectManager.runProject(path)
    else
     local code=EditorsManager.actions.getText()
     runLuaFile(nil,code)
+  end
+end
+
+function ProjectManager.smartRunProject()
+  if openState then
+    FilesTabManager.saveAllFiles()
+    if getSharedData("moreCompleteRun") then
+      BuildToolUtil.runProject(ProjectManager.nowConfig,ProjectManager.nowPath)
+     else
+      ProjectManager.runProject()
+    end
   end
 end
 
@@ -155,7 +167,7 @@ function ProjectManager.openProject(path,filePath,openDirPath)
       nowBrowserDir=File(openDirPath)
     end
     if openDirPath~=false then
-      FilesBrowserManager.refresh(nowBrowserDir,nil,false,true)
+      FilesBrowserManager.refresh(nowBrowserDir,nil,true,true)
     end
     PluginsUtil.callElevents("onOpenProject", path,config)
   end,
@@ -202,7 +214,7 @@ function ProjectManager.closeProject(refreshFilesBrowser)
   editor.setText(defaultText)
   editor.setSelection(#defaultText)
   if refreshFilesBrowser~=false then
-    FilesBrowserManager.refresh(nil,nil,false,true)
+    FilesBrowserManager.refresh(nil,nil,true,true)
   end
   PluginsUtil.callElevents("onCloseProject")
   refreshMenusState()
