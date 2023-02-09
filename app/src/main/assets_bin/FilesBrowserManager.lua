@@ -146,9 +146,9 @@ setmetatable(fileIcons,{__index=function(self,key)
 end})
 FilesBrowserManager.fileIcons=fileIcons
 
-
+--print(Color.alpha(theme.color.textColorSecondary))
 local fileColors = {
-  normal = 0xFF9E9E9E, -- 普通颜色
+  normal = 0xff757575, -- 普通颜色
   active = theme.color.colorAccent, -- 一已打开文件颜色
   folder = 0xFFF9A825, -- 文件夹颜色
 
@@ -345,6 +345,9 @@ end
 
 ---在 v5.1.0(51099) 添加
 ---添加了拖放的RecyclerView
+local SRC_ROOT_KEY = "dragAndDropMgr:srcRoot"
+local SRC_PARENT_KEY = "clipper:srcParent"
+local OP_TYPE_KEY = "clipper:opType"
 function FilesBrowserManager.FilesRecyclerViewBuilder(context)
   local view
   view=luajava.override(MyRecyclerView,{
@@ -361,9 +364,12 @@ function FilesBrowserManager.FilesRecyclerViewBuilder(context)
         if longClickedView then
           local relativeX,relativeY=x-downEvent.x,y-downEvent.y
           --拖放，有bug，现在只能在华为文件管理使用
-          local data=longClickedView.tag._data--有数据
+          local ids=longClickedView.tag
+          local data=ids._data--有数据
           if data and Build.VERSION.SDK_INT>24 and data.file and data.file.isFile() then--系统大于安卓N，并且当前是文件
             if relativeX>math.dp2int(16) or relativeX<-math.dp2int(16) or relativeY>math.dp2int(16) or relativeY<-math.dp2int(16) then
+              import "com.android.documentsui.DragShadowBuilder"
+              import "android.os.PersistableBundle"
               if lastContextMenu then
                 lastContextMenu.close()
                 lastContextMenu=nil
@@ -372,12 +378,25 @@ function FilesBrowserManager.FilesRecyclerViewBuilder(context)
               local uri=activity.getUriForFile(data.file)
 
               --授予应用权限（虽然这种方式很拉，但我可以兼容华为文件管理）
-              pcall(authorizeHWApplicationPermissions,uri)
-
+              authorizeHWApplicationPermissions(uri)
+              authorizeGApplicationPermissions(uri)
+              
               local clipData=ClipData.newUri(activity.getContentResolver(),"data", uri)
-              local shadow=DragShadowBuilder(longClickedView)
-              --local shadow=DragShadowBuilder(shadowView)
-              longClickedView.startDrag(clipData,shadow,"drag to other activity",View.DRAG_FLAG_GLOBAL|View.DRAG_FLAG_GLOBAL_URI_READ)
+              local description=clipData.getDescription()
+              
+              local bundle=PersistableBundle()
+              bundle.putString(SRC_ROOT_KEY,tostring(activity.getUriForFile(data.file.getParentFile())))
+              bundle.putInt(OP_TYPE_KEY,-1)
+              bundle.putString(SRC_PARENT_KEY,tostring(activity.getUriForFile(data.file.getParentFile())))
+              description.setExtras(bundle)
+              
+              --拖放阴影
+              local shadow=DragShadowBuilder(activity)
+              shadow.updateTitle(data.title)
+              shadow.updateIcon(resources.getDrawable(data.icon).setTintList(ColorStateList({{}},{fileColors[data.fileType and string.upper(data.fileType)]})))
+
+              local flag=View.DRAG_FLAG_GLOBAL|View.DRAG_FLAG_OPAQUE|View.DRAG_FLAG_GLOBAL_URI_READ|View.DRAG_FLAG_GLOBAL_URI_WRITE
+              longClickedView.startDrag(clipData,shadow,activity,flag)
             end
             swipeRefresh.requestDisallowInterceptTouchEvent(true)--阻止侧滑关闭
             return nil--阻止滚动
@@ -394,6 +413,7 @@ function FilesBrowserManager.FilesRecyclerViewBuilder(context)
   return view
 end
 
+--滑动返回偏移量
 local BACK_OFFSET=math.dp2int(16)
 FilesBrowserManager.RecyclerViewCardView={
   _baseClass=CardView,
@@ -407,10 +427,6 @@ FilesBrowserManager.RecyclerViewCardView={
         local x=event.getRawX()
         if action==MotionEvent.ACTION_DOWN then
           initialMotionX=x
-          local translationX=view.getTranslationX()
-          if translationX~=0 and translationX<BACK_OFFSET then
-            initialMotionX=initialMotionX-math.pow(view.getTranslationX(),10/8)
-          end
           lastBackState=false
           lastOffset=0
         end
@@ -418,6 +434,7 @@ FilesBrowserManager.RecyclerViewCardView={
         if offset<0 then
           offset=0
         end
+        --偏移32dp时响应
         if ProjectManager.openState and offset>math.dp2int(32) then
           initialMotionX=x-math.pow(view.getTranslationX(),10/8)
           if recyclerViewAlphaAnimator then
@@ -441,15 +458,16 @@ FilesBrowserManager.RecyclerViewCardView={
         end
         if action==MotionEvent.ACTION_MOVE then
           view.setTranslationX(offset)
-          recyclerView.setAlpha(math.dp2int(16)/offset)
-          local nowBackState=offset>math.dp2int(16)
+          --在允许返回之后逐渐透明
+          recyclerView.setAlpha(BACK_OFFSET/2/offset)
+          local nowBackState=offset>BACK_OFFSET
           if lastBackState~=nowBackState then
             view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
             lastBackState=nowBackState
           end
           lastOffset=offset
          elseif action==MotionEvent.ACTION_UP or action==MotionEvent.ACTION_CANCEL then
-          if offset>math.dp2int(16) and action==MotionEvent.ACTION_UP then
+          if offset>BACK_OFFSET and action==MotionEvent.ACTION_UP then
             local directoryFile=FilesBrowserManager.directoryFile
             if directoryFile then
               FilesBrowserManager.refresh(directoryFile.getParentFile())
@@ -1023,9 +1041,10 @@ function FilesBrowserManager.init()
       if not(desc and ProjectManager.openState) then
         return false
       end
+      --排除自己次数
       if passDragFileTime>0 then
         passDragFileTime=passDragFileTime-1
-        return false--排除自己次数
+        return false
       end
       if not dropFileFrameBackground then
         import "android.graphics.drawable.GradientDrawable"
@@ -1049,19 +1068,8 @@ function FilesBrowserManager.init()
           local dropPermissions=activity.requestDragAndDropPermissions(event)
           for index=0,count-1 do
             local uri=data.getItemAt(index).getUri()
-            local inputStream=activity.getContentResolver().openInputStream(uri)
-            local name=File(uri.getPath()).getName()
-            pcall(function()
-              name=File(FileInfoUtils.getPath(activity,uri)).getName()
-            end)
-            local newPath=directoryFile.getPath().."/"..name
-            if File(newPath).exists() then
-              showSnackBar(R.string.file_exists)
-             else
-              local outStream=FileOutputStream(newPath)
-              LuaUtil.copyFile(inputStream, outStream)
-              outStream.close()
-            end
+            local documentFile=DocumentFile.fromSingleUri(activity,uri)
+            copyFilesFromDocumentFile(documentFile,directoryFile.getPath())
           end
           FilesBrowserManager.refresh()
           dropPermissions.release()
@@ -1073,7 +1081,7 @@ function FilesBrowserManager.init()
     end
     return true
   end
-  local downEvent={}
+  local downEvent={}--按下时记录的x,y
   recyclerView.tag.downEvent=downEvent
   --FastScrollerBuilder(recyclerView).useMd2Style().build();
 end

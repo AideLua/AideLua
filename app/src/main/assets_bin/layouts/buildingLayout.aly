@@ -3,8 +3,6 @@
   layout_width="fill";
   orientation="vertical";
   layout_height="fill";
-  --minimumHeight="512dp";
-  
   {
     ListView;
     layout_weight=1;

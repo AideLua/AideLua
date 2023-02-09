@@ -279,6 +279,7 @@ function managerActionsWithEditor.search(editorConfig,text,gotoNext)--搜索
 end
 
 ---通用api
+---v5.1.1+
 setmetatable(managerActionsWithEditor,{__index=function(self,key)
     local action
     if key:sub(1,3)=="get" then
@@ -297,6 +298,7 @@ end})
 
 
 --默认的管理器的活动事件
+--[[
 local function generalActionEvent(name1,name2,...)
   local func=editorActions[name1]
   if func then--func不为nil，说明编辑器支持此功能
@@ -312,7 +314,7 @@ local function generalActionEvent(name1,name2,...)
     --print("警告：编辑器不支持的调用",name1)
     return nil
   end
-end
+end]]
 
 ---通用API
 ---在 v5.1.0(51099) 上添加
@@ -367,7 +369,8 @@ function EditorsManager.openNewContent(filePath,fileType,decoder,keepHistory)
       return false,err
     end
    else
-    decoder.apply(filePath,fileType,editor)
+    --v5.1.1新增editorConfig
+    decoder.apply(filePath,fileType,editor,editorConfig)
     EditorsManager.refreshEditorScrollState()
     return true
   end

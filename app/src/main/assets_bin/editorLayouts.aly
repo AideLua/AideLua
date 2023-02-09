@@ -371,6 +371,7 @@ import "jesse205"
       };
     },
   },
+  --v5.1.1+
   WebEditor={
     layout={
       LinearLayoutCompat;
@@ -408,7 +409,6 @@ import "jesse205"
       .setLayoutAlgorithm(webViewSettings.LayoutAlgorithm.SINGLE_COLUMN)--支持重新布局
       .setPluginsEnabled(true)--支持插件
       .setMixedContentMode(webViewSettings.MIXED_CONTENT_COMPATIBILITY_MODE)--允许https中加载http资源
-
       editor.onScrollChange=function(view,l,t,oldl,oldt)
         MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,appBarLayout)
       end
@@ -464,21 +464,12 @@ var charsetMeta = document.createElement('meta');
 charsetMeta.setAttribute('charset', 'utf-8')
 head.appendChild(charsetMeta);
 ]],nil)
-
+            config.action.applyMarkdownFile(ids,config,Uri.parse(url).getPath())
+            --[[
             local file=io.open(Uri.parse(url).getPath(),"r")
             local content=file:read("*a")
             file:close()
-            editor.evaluateJavascript([[
-let converter = new showdown.Converter();
-converter.setOption("tables",true);
-converter.setOption("emoji",true);
-converter.setOption("noHeaderId",true);
-converter.setOption("strikethrough",true);
-converter.setOption("tasklists",true);
-converter.setOption("requireSpaceBeforeHeadingText",true);
-converter.setOption("encodeEmails",true);
-document.body.innerHTML = converter.makeHtml(']]..utf8ToUnicode(vuepressMd2NormalMd(content))..[[');
-]],nil)
+            config.action.applyMarkdown(ids,config,content)]]
           end
         end,
         onPageFinished=function(super,view,url)
@@ -492,11 +483,31 @@ document.body.innerHTML = converter.makeHtml(']]..utf8ToUnicode(vuepressMd2Norma
       getScrollY="default",
       evaluateJavascript="default",
       destroy="default",
-      --[[
       applyMarkdown=function(ids,config,text)
-        local jsCode=("loadContent('%s')"):format(utf8ToUnicode(text))
-        ids.editor.evaluateJavascript(jsCode,nil)
-      end,]]
+        ids.editor.evaluateJavascript([[
+var converter = new showdown.Converter();
+converter.setOption("tables",true);
+converter.setOption("emoji",true);
+converter.setOption("noHeaderId",true);
+converter.setOption("strikethrough",true);
+converter.setOption("tasklists",true);
+converter.setOption("requireSpaceBeforeHeadingText",true);
+converter.setOption("encodeEmails",true);
+console.log("refreshed");
+document.body.innerHTML = converter.makeHtml(']]..utf8ToUnicode(vuepressMd2NormalMd(text))..[[');
+]],nil)
+      end,
+      applyMarkdownFile=function(ids,config,path)
+        local nowUrl=ids.editor.getUrl()
+        if not nowUrl or Uri.parse(nowUrl).getPath()~=path then
+          ids.editor.loadUrl("file://"..path)
+          return
+        end
+        local file=io.open(path,"r")
+        local content=file:read("*a")
+        file:close()
+        config.action.applyMarkdown(ids,config,content)
+      end
     },
     supportScroll=true;
   },

@@ -110,7 +110,7 @@
     hint=R.string.projects_path;
     allowNull=false;
   };
-  
+
   {
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
     icon=R.drawable.ic_file_eye_outline;
@@ -127,8 +127,6 @@
     title=R.string.settings_tab_icon;
     key="tab_icon";
   };
-
-
   {--软件
     SettingsLayUtil.TITLE;
     title=R.string.jesse205_app;

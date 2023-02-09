@@ -53,6 +53,7 @@ import "androidx.drawerlayout.widget.DrawerLayout"
 import "androidx.core.graphics.ColorUtils"
 import "androidx.core.content.res.ResourcesCompat"
 import "androidx.slidingpanelayout.widget.SlidingPaneLayout"
+import "androidx.documentfile.provider.DocumentFile"
 
 import "com.google.android.material.tabs.TabLayout"
 import "com.google.android.material.chip.Chip"

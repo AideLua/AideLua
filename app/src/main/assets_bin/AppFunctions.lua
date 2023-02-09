@@ -345,16 +345,23 @@ end
 ---适配SEND应用权限，适配华为文件管理
 ---@param uri Uri
 function authorizeHWApplicationPermissions(uri)
+  local flag=Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION
   local intent = Intent()
   intent.setAction("android.intent.action.SEND")
   intent.setFlags(268435456)
   intent.setType(activity.getContentResolver().getType(uri))
   local infoList=activity.getPackageManager().queryIntentActivities(intent, 65536)
   for index=0,#infoList-1 do
-    activity.grantUriPermission(infoList[index].activityInfo.packageName, uri, 3)
+    activity.grantUriPermission(infoList[index].activityInfo.packageName, uri, flag)
   end
-  activity.grantUriPermission("com.huawei.desktop.explorer", uri, 3)
-  activity.grantUriPermission("com.huawei.desktop.systemui", uri, 3)
+  activity.grantUriPermission("com.huawei.desktop.explorer", uri, flag)
+  activity.grantUriPermission("com.huawei.desktop.systemui", uri, flag)
+end
+
+function authorizeGApplicationPermissions(uri)
+  local flag=Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION
+  activity.grantUriPermission("com.android.documentsui", uri, flag)
+  activity.grantUriPermission("com.google.android.documentsui", uri, flag)
 end
 
 ---v5.1.1+
@@ -430,4 +437,34 @@ function vuepressMd2NormalMd(content)
     end)
   end
   return content
+end
+
+--v5.1.1+
+function copyFilesFromDocumentFile(documentFile,targetPath)
+
+  if documentFile.isDirectory() then
+    --[[
+    local list=documentFile.listFiles()
+    for index=0,#list-1 do
+      local name=documentFile.getName()
+      copyFilesFromDocumentFile(documentFile,targetPath.."/"..name)
+    end]]
+   else
+    local uri=documentFile.getUri()
+    local inputStream=activity.getContentResolver().openInputStream(uri)
+    --[[
+    local name=File(uri.getPath()).getName()
+    pcall(function()
+      name=File(FileInfoUtils.getPath(activity,uri)).getName()
+    end)]]
+    local name=documentFile.getName()
+    local newPath=targetPath.."/"..name
+    if File(newPath).exists() then
+      showSnackBar(name..": "..getString(R.string.file_exists))
+     else
+      local outStream=FileOutputStream(newPath)
+      LuaUtil.copyFile(inputStream, outStream)
+      outStream.close()
+    end
+  end
 end

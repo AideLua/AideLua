@@ -262,7 +262,11 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign,runMode)
           updateDoing(formatResStr(R.string.binproject_signing,{signedApkName}))
           updateInfo("Key Store: Debug")
           signSucceed,signErr=pcall(Signer.sign,newApkPath,signedApkPath)
-          updateSuccess(getString(R.string.binproject_sign_done))
+          if signSucceed then
+            updateSuccess(getString(R.string.binproject_sign_done))
+           else
+            return false,signSucceed
+          end
         end
         if signSucceed then--签名成功
           File(newApkPath).delete()

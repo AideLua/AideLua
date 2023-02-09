@@ -334,18 +334,18 @@ end
 
 -- 以下为复写事件
 function onError(title, message)
-  -- 报错重写
-  if activity.isFinishing() then
-    print(title,message)
-   else
-    showErrorDialog(tostring(title), tostring(message)) -- 显示成对话框，解决安卓12的toast限制问题
-  end
   pcall(function()
     -- 保存到文件。有报错说明软件有问题，必须解决掉。
     local path = "/sdcard/Androlua/crash/" .. jesse205.packageName .. ".txt"
     local content = tostring(title) .. os.date(" %Y-%m-%d %H:%M:%S") .. "\n" .. tostring(message) .. "\n\n"
     io.open(path, "a"):write(content):close()
   end)
+  -- 报错重写
+  if activity.isFinishing() then
+    print(title,message)
+   else
+    showErrorDialog(tostring(title), tostring(message)) -- 显示成对话框，解决安卓12的toast限制问题
+  end
   return true
 end
 

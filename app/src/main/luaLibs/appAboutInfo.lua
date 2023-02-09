@@ -155,7 +155,7 @@ function main()
     icon=R.drawable.ic_puzzle_outline;
   })
   index=index+1
-  table.insert(data,index,{--luaDB 版本
+  table.insert(data,index,{--LuaDB 版本
     SettingsLayUtil.ITEM;
     title=getLocalLangObj("LuaDB 版本","LuaDB version");
     summary=tostring(db.ver);

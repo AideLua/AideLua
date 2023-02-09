@@ -32,6 +32,11 @@
     license="Apache-2.0 license",
   },
   {
+    name="android_packages_apps_DocumentsUI",
+    url="https://github.com/LineageOS/android_packages_apps_DocumentsUI",
+    license="Apache-2.0 license",
+  },
+  {
     name="CodeEditor",
     message="A cool and optimized code editor on Android platform with good performance and nice features.",
     url="https://github.com/Rosemoe/CodeEditor",

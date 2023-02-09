@@ -175,7 +175,7 @@ return function(item)
             end
             iconView.setImageResource(icon)
 
-            colorFilter=fileColors[fileType and string.upper(fileType) or "normal"]
+            colorFilter=fileColors[fileType and string.upper(fileType)]
 
             if FilesTabManager.openState and FilesTabManager.file.getPath()==filePath then
               titleView.setTextColor(theme.color.colorAccent)

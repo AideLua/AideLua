@@ -84,8 +84,10 @@
     super="txt",
     preview={
       editor="WebEditor",
-      apply=function(filePath,fileType,view)
-        view.loadUrl("file://"..filePath)
+      apply=function(filePath,fileType,view,editorConfig)
+        
+        --view.loadUrl("file://"..filePath)
+        EditorsManager.actionsWithEditor.applyMarkdownFile(editorConfig,filePath)
         task(500,function()
           view.clearHistory()
         end)
