@@ -1,0 +1,1 @@
+const a=JSON.parse('{"key":"v-2e4aa5c4","path":"/androluapro/fast.html","title":"快速入门","lang":"zh-CN","frontmatter":{},"headers":[],"git":{"updatedTime":1675519217000,"contributors":[{"name":"Jesse205","email":"2055675594@qq.com","commits":2},{"name":"DESKTOP-9PJHLMI\\\\USER","email":"2055675594@qq.com","commits":1}]},"filePathRelative":"androluapro/fast.md"}');export{a as data};

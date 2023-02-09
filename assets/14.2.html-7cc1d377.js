@@ -1,0 +1,1 @@
+const t=JSON.parse('{"key":"v-416cfd33","path":"/androluapro/14.2.html","title":"OpenGL 模块","lang":"zh-CN","frontmatter":{},"headers":[],"git":{"updatedTime":1666699297000,"contributors":[{"name":"DESKTOP-9PJHLMI\\\\USER","email":"2055675594@qq.com","commits":2}]},"filePathRelative":"androluapro/14.2.md"}');export{t as data};

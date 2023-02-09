@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-97f4d9fa","path":"/aidelua.html","title":"首页跳转桥","lang":"zh-CN","frontmatter":{},"headers":[],"git":{"updatedTime":1675697137000,"contributors":[{"name":"Jesse205","email":"2055675594@qq.com","commits":6},{"name":"DESKTOP-9PJHLMI\\\\USER","email":"2055675594@qq.com","commits":1}]},"filePathRelative":"aidelua.md"}');export{e as data};

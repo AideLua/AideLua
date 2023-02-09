@@ -1,0 +1,33 @@
+import{_ as n,p as s,q as a,a1 as t}from"./framework-ea2a9e6e.js";const p={},e=t(`<h1 id="canvas-模块" tabindex="-1"><a class="header-anchor" href="#canvas-模块" aria-hidden="true">#</a> canvas 模块</h1><div class="language-lua line-numbers-mode" data-ext="lua"><pre class="language-lua"><code>require <span class="token string">&quot;import&quot;</span>
+import <span class="token string">&quot;canvas&quot;</span>
+import <span class="token string">&quot;android.app.*&quot;</span>
+import <span class="token string">&quot;android.os.*&quot;</span>
+import <span class="token string">&quot;android.widget.*&quot;</span>
+import <span class="token string">&quot;android.view.*&quot;</span>
+import <span class="token string">&quot;android.graphics.*&quot;</span>
+activity<span class="token punctuation">.</span><span class="token function">setTitle</span><span class="token punctuation">(</span><span class="token string">&#39;AndroLua&#39;</span><span class="token punctuation">)</span>
+
+paint<span class="token operator">=</span><span class="token function">Paint</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+paint<span class="token punctuation">.</span><span class="token function">setARGB</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">250</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">)</span>
+paint<span class="token punctuation">.</span><span class="token function">setStrokeWidth</span><span class="token punctuation">(</span><span class="token number">20</span><span class="token punctuation">)</span>
+paint<span class="token punctuation">.</span><span class="token function">setTextSize</span><span class="token punctuation">(</span><span class="token number">28</span><span class="token punctuation">)</span>
+
+sureface <span class="token operator">=</span> <span class="token function">SurfaceView</span><span class="token punctuation">(</span>activity<span class="token punctuation">)</span><span class="token punctuation">;</span>
+callback<span class="token operator">=</span><span class="token function">SurfaceHolder_Callback</span><span class="token punctuation">{</span>
+    surfaceChanged<span class="token operator">=</span><span class="token keyword">function</span><span class="token punctuation">(</span>holder<span class="token punctuation">,</span>format<span class="token punctuation">,</span>width<span class="token punctuation">,</span>height<span class="token punctuation">)</span>
+        <span class="token keyword">end</span><span class="token punctuation">,</span>
+    surfaceCreated<span class="token operator">=</span><span class="token keyword">function</span><span class="token punctuation">(</span>holder<span class="token punctuation">)</span>
+        ca<span class="token operator">=</span>canvas<span class="token punctuation">.</span><span class="token function">lockCanvas</span><span class="token punctuation">(</span>holder<span class="token punctuation">)</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>ca<span class="token operator">~=</span><span class="token keyword">nil</span><span class="token punctuation">)</span> <span class="token keyword">then</span>
+            ca<span class="token punctuation">:</span><span class="token function">drawRGB</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">79</span><span class="token punctuation">,</span><span class="token number">90</span><span class="token punctuation">)</span>
+            ca<span class="token punctuation">:</span><span class="token function">drawRect</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">200</span><span class="token punctuation">,</span><span class="token number">300</span><span class="token punctuation">,</span>paint<span class="token punctuation">)</span>
+            <span class="token keyword">end</span>
+        canvas<span class="token punctuation">.</span><span class="token function">unlockCanvasAndPost</span><span class="token punctuation">(</span>holder<span class="token punctuation">,</span>ca<span class="token punctuation">)</span>
+        <span class="token keyword">end</span><span class="token punctuation">,</span>
+    surfaceDestroyed<span class="token operator">=</span><span class="token keyword">function</span><span class="token punctuation">(</span>holder<span class="token punctuation">)</span>
+        <span class="token keyword">end</span>
+    <span class="token punctuation">}</span>
+holder<span class="token operator">=</span>sureface<span class="token punctuation">.</span><span class="token function">getHolder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+holder<span class="token punctuation">.</span><span class="token function">addCallback</span><span class="token punctuation">(</span>callback<span class="token punctuation">)</span>
+activity<span class="token punctuation">.</span><span class="token function">setContentView</span><span class="token punctuation">(</span>sureface<span class="token punctuation">)</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div><div class="line-number"></div></div></div>`,2),o=[e];function c(i,u){return s(),a("div",null,o)}const r=n(p,[["render",c],["__file","14.1.html.vue"]]);export{r as default};

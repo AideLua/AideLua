@@ -1,0 +1,47 @@
+[
+    {
+        "name": "SharedData 管理器",
+        "packageName": "com.Jesse205.plugin.shareddatamanager",
+        "description": "管理Androlua+的SharedData",
+        "versionCode": 1399,
+        "versionName": "1.3",
+        "utilVersion": "3.1",
+        "minVersionCode": 50499,
+        "targetVersionCode": 59999,
+        "updateLog": "修复设置页面图标问题，新增快速滚动",
+        "size": "14.8 KB",
+        "developer": "Jesse205",
+        "updateDate": "2022-10-07",
+        "url": "https://gitee.com/Jesse205/AideLua/blob/master/app/plugins/SharedData 管理器_v1.3_5.0.4_plugin.alp"
+    },
+    {
+        "name": "底线",
+        "packageName": "com.aidelua.bottomline",
+        "description": "字面意思",
+        "versionCode": 1099,
+        "versionName": "1.0",
+        "utilVersion": "3.1",
+        "minVersionCode": 50499,
+        "targetVersionCode": 59999,
+        "updateLog": null,
+        "size": "1.78 KB",
+        "developer": "Jesse205",
+        "updateDate": "2022-09-27",
+        "url": "https://gitee.com/Jesse205/AideLua/blob/master/app/plugins/底线_v1.0_5.0.4_plugin.zip"
+    },
+    {
+        "name": "命令栏",
+        "packageName": "com.aidelua.commandBar",
+        "description": "",
+        "versionCode": 3199,
+        "versionName": "3.1",
+        "utilVersion": "3.1",
+        "minVersionCode": 50499,
+        "targetVersionCode": 59999,
+        "updateLog": "优化水波纹",
+        "size": "1.36 KB",
+        "developer": "Jesse205",
+        "updateDate": "2022-09-15",
+        "url": "https://gitee.com/Jesse205/AideLua/blob/master/app/plugins/命令栏_v3.1_plugin.zip"
+    }
+]

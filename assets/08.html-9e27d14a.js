@@ -1,0 +1,1 @@
+const a=JSON.parse('{"key":"v-37527f32","path":"/androluapro/08.html","title":"按键与触控","lang":"zh-CN","frontmatter":{},"headers":[],"git":{"updatedTime":1675519217000,"contributors":[{"name":"DESKTOP-9PJHLMI\\\\USER","email":"2055675594@qq.com","commits":2},{"name":"Jesse205","email":"2055675594@qq.com","commits":1}]},"filePathRelative":"androluapro/08.md"}');export{a as data};
