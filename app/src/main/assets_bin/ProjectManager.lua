@@ -26,19 +26,33 @@ ProjectManager._ENV=_ENV
 local sdPath=AppPath.Sdcard
 local openState,nowConfig=false,nil
 local projectsFile,projectsPath,nowFile,nowPath
+--v5.1.1+
+local projectsFiles,projectsPaths={},{}--多文件夹
 
 --刷新项目存放路径
-local function refreshProjectsPath()
+local function refreshProjectsPath(autoFix)
   xpcall(function()--防呆设计
-    projectsPath=getSharedData("projectsDir")--所有项目路径
+    local orignalProjectsPaths=getSharedData("projectsDirs")
+    table.clear(projectsPaths)
+    table.clear(projectsFiles)
+    for path in utf8.gmatch(orignalProjectsPaths..";","([^;]-);") do
+      if path and path~="" then
+        table.insert(projectsPaths,path)
+        table.insert(projectsFiles,File(path))
+      end
+    end
+    projectsPath=projectsPaths[0] or getSharedData("projectsDir") or ""--所有项目路径
     projectsFile=File(projectsPath)
-    projectsPath=projectsFile.getPath()--修复一下路径
+    --projectsPath=projectsFile.getPath()--修复一下路径，不知道修复了什么
   end,
   function()--手贱乱输造成报错
-    projectsPath=sdPath.."/AppProjects"
-    projectsFile=File(projectsPath)
-    setSharedData("projectsDir",projectsPath)
-    MyToast("项目路径出错，已恢复默认设置")
+    if autoFix~=false then
+      setSharedData("projectsDirs",
+      AppPath.Sdcard.."/AppProjects;"
+      ..AppPath.Sdcard.."/AndroidIDEProjects;")
+      refreshProjectsPath(false)
+      MyToast("项目路径出错，已恢复默认设置")
+    end
   end)
 end
 refreshProjectsPath()
@@ -318,6 +332,12 @@ function ProjectManager.getProjectsFile()
 end
 function ProjectManager.getProjectsPath()
   return projectsPath
+end
+function ProjectManager.getProjectsFiles()
+  return projectsFiles
+end
+function ProjectManager.getProjectsPaths()
+  return projectsPaths
 end
 function ProjectManager.getNowFile()
   return nowFile

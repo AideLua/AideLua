@@ -50,8 +50,13 @@ if getSharedData("editor_autoBackupOriginalFiles")==nil then
   setSharedData("editor_autoBackupOriginalFiles",true)
 end
 
-if getSharedData("projectsDir")==nil then
-  setSharedData("projectsDir",Environment.getExternalStorageDirectory().getPath().."/AppProjects")
+local sdcardPath=Environment.getExternalStorageDirectory().getPath()
+
+--多工程目录
+if getSharedData("projectsDirs")==nil then
+  setSharedData("projectsDirs",
+  sdcardPath.."/AppProjects;"
+  ..sdcardPath.."/AndroidIDEProjects;")
 end
 
 if getSharedData("autoCheckUpdate")==nil then

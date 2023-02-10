@@ -233,20 +233,25 @@ local showProgressRunnable=Runnable({
   end
 })
 
+--侧滑动画
 local recyclerViewCardTranslationXAnimator
 local recyclerViewAlphaAnimator
+--归位动画Runnable
 local homingRunnable=Runnable({
   run = function()
+    FilesBrowserManager.cancelBrowserAnimators()
     if recyclerViewCard.getTranslationX()~=0 then
       recyclerViewCardTranslationXAnimator=ObjectAnimator.ofFloat(recyclerViewCard,"translationX",{0})
       .setDuration(200)
       .setInterpolator(DecelerateInterpolator())
+      .setAutoCancel(true)
       .start()
     end
     if recyclerView.getAlpha()~=1 then
       recyclerViewAlphaAnimator=ObjectAnimator.ofFloat(recyclerView,"alpha",{1})
       .setDuration(200)
       .setInterpolator(DecelerateInterpolator())
+      .setAutoCancel(true)
       .start()
     end
   end
@@ -380,23 +385,23 @@ function FilesBrowserManager.FilesRecyclerViewBuilder(context)
               --授予应用权限（虽然这种方式很拉，但我可以兼容华为文件管理）
               authorizeHWApplicationPermissions(uri)
               authorizeGApplicationPermissions(uri)
-              
+
               local clipData=ClipData.newUri(activity.getContentResolver(),"data", uri)
               local description=clipData.getDescription()
-              
+
               local bundle=PersistableBundle()
               bundle.putString(SRC_ROOT_KEY,tostring(activity.getUriForFile(data.file.getParentFile())))
               bundle.putInt(OP_TYPE_KEY,-1)
               bundle.putString(SRC_PARENT_KEY,tostring(activity.getUriForFile(data.file.getParentFile())))
               description.setExtras(bundle)
-              
+
               --拖放阴影
               local shadow=DragShadowBuilder(activity)
               shadow.updateTitle(data.title)
               shadow.updateIcon(resources.getDrawable(data.icon).setTintList(ColorStateList({{}},{fileColors[data.fileType and string.upper(data.fileType)]})))
 
               local flag=View.DRAG_FLAG_GLOBAL|View.DRAG_FLAG_OPAQUE|View.DRAG_FLAG_GLOBAL_URI_READ|View.DRAG_FLAG_GLOBAL_URI_WRITE
-              longClickedView.startDrag(clipData,shadow,activity,flag)
+              longClickedView.startDrag(clipData,shadow,nil,flag)
             end
             swipeRefresh.requestDisallowInterceptTouchEvent(true)--阻止侧滑关闭
             return nil--阻止滚动
@@ -437,12 +442,7 @@ FilesBrowserManager.RecyclerViewCardView={
         --偏移32dp时响应
         if ProjectManager.openState and offset>math.dp2int(32) then
           initialMotionX=x-math.pow(view.getTranslationX(),10/8)
-          if recyclerViewAlphaAnimator then
-            recyclerViewAlphaAnimator.cancel()
-          end
-          if recyclerViewCardTranslationXAnimator then
-            recyclerViewCardTranslationXAnimator.cancel()
-          end
+          FilesBrowserManager.cancelBrowserAnimators()
           showProgressHandler.removeCallbacks(homingRunnable)
           --view.parent.requestDisallowInterceptTouchEvent(true)--不能请求自己，因为会导致不滚动
           return true
@@ -583,9 +583,101 @@ function FilesBrowserManager.recordScrollPosition()
   end
 end
 
+---取消文件浏览器动画
+---v5.1.1+
+function FilesBrowserManager.cancelBrowserAnimators()
+  if recyclerViewAlphaAnimator then
+    recyclerViewAlphaAnimator.cancel()
+  end
+  if recyclerViewCardTranslationXAnimator then
+    recyclerViewCardTranslationXAnimator.cancel()
+  end
+end
+
+--刷新文件浏览器的线程
+local function refreshTaskFunc(newDirectory,fileName,projectOpenState)
+  return pcall(function()
+    require "import"
+    import "java.io.File"
+    import "java.util.Collections"
+    import "java.util.Comparator"
+    import "java.util.List"
+    local filesList={}
+    function insertFiles(file,list)
+      --判断是不是列表
+      if file.getClass()==File[0].getClass() then
+        for index=0,#file-1 do
+          insertFiles(file[index],list)
+        end
+       else
+        local filesListJ=file.listFiles()
+        if filesListJ then
+          for index=0,#filesListJ-1 do
+            table.insert(list,filesListJ[index])
+          end
+          luajava.clear(filesListJ)
+         else
+        end
+      end
+    end
+
+    insertFiles(newDirectory,filesList)
+
+    local newList={}--最终要返回的table
+    local itemIndex
+    if projectOpenState then
+      --按名称排序
+      table.sort(filesList,function(a,b)
+        return string.upper(a.getName())<string.upper(b.getName())
+      end)
+      local folderIndex=0
+      for index,content in ipairs(filesList) do
+        local isMatchName=content.getName()==fileName
+        if content.isDirectory() then
+          if itemIndex and itemIndex>folderIndex then--项目索引比文件夹索引大，说明这个索引的是文件，要加1。因为folderIndex从0开始，itemIndex从1开始，因此不需要+1
+            itemIndex=itemIndex+1
+          end
+          folderIndex=folderIndex+1
+          table.insert(newList,folderIndex,content)
+          if isMatchName then
+            itemIndex=folderIndex--因为后续还要加返回上一级项目，所以需要+1
+          end
+         else
+          table.insert(newList,content)
+          if isMatchName then
+            itemIndex=index--此时index就是现在文件的索引。因为后续还要加返回上一级项目，所以需要+1
+          end
+        end
+      end
+      folderIndex=nil
+     else
+      --按时间倒序(默认的就是按时间排序的)
+      table.sort(filesList,function(a,b)
+        return a.lastModified()>b.lastModified()
+      end)
+
+      for index,content in ipairs(filesList) do
+        local contentPath=content.getPath()
+        local aideluaDir=contentPath.."/.aidelua"
+        if content.isDirectory() and File(aideluaDir).isDirectory() then
+          table.insert(newList,content)
+          if content.getName()==fileName then
+            itemIndex=table.size(newList)
+          end
+        end
+      end
+    end
+    local newListJ=File(newList)
+    newList=nil
+    filesList=nil
+    return newListJ,newDirectory,itemIndex
+  end)
+end
+
+
 ---刷新文件夹/进入文件夹
 ---有内存泄露问题
----@param file File 要刷新或者进入的文件夹
+---@param file File | File[] 要刷新或者进入的文件夹
 ---@param upFile boolean 是否是向上，在 v3.1.0(31099) 移除，之后的版本无实际作用
 ---@param fileName string 文件名
 ---@param force boolean 强制刷新
@@ -593,100 +685,54 @@ end
 function FilesBrowserManager.refresh(file,fileName,force,atOnce)
   if force or not (loadingDir) then
 
+    local isProjectsLostMode=false
+
     if ProjectManager.openState then
       file=file or directoryFile or ProjectManager.nowFile
       --如果是工程路径的父路径，也就是用户关闭工程
       if isSamePathFileByPath(file.getPath(),ProjectManager.nowFile.getParent()) then
         ProjectManager.closeProject(false)
         --设置文件夹为全局的工程文件夹，
-        file=ProjectManager.projectsFile
+        --转换成java列表
+        file=File(ProjectManager.projectsFiles)
+        isProjectsLostMode=true
       end
      else
-      file=ProjectManager.projectsFile
+      file=File(ProjectManager.projectsFiles)
+      isProjectsLostMode=true
     end
     loadingDir=file
 
-    if atOnce or isSamePathFile(file,ProjectManager.projectsFile) then
+    if atOnce or isProjectsLostMode then
       swipeRefresh.setRefreshing(true)
      else
       showProgressHandler.postDelayed(showProgressRunnable, 100)
     end
 
-    activity.newTask(function(newDirectory,fileName,projectOpenState)
-      require "import"
-      import "java.io.File"
-      import "java.util.Collections"
-      import "java.util.Comparator"
-      import "java.util.List"
-      local filesListJ=newDirectory.listFiles()
-      local filesList
-      if filesListJ then
-        filesList=luajava.astable(filesListJ)--转换为LuaTable
-        luajava.clear(filesListJ)
-       else
-        filesList={}
-      end
-      local newList={}--最终要返回的table
-      local itemIndex
-      if projectOpenState then
-        --按名称排序
-        table.sort(filesList,function(a,b)
-          return string.upper(a.getName())<string.upper(b.getName())
-        end)
-        local folderIndex=0
-        for index,content in ipairs(filesList) do
-          local isMatchName=content.getName()==fileName
-          if content.isDirectory() then
-            if itemIndex and itemIndex>folderIndex then--项目索引比文件夹索引大，说明这个索引的是文件，要加1。因为folderIndex从0开始，itemIndex从1开始，因此不需要+1
-              itemIndex=itemIndex+1
-            end
-            folderIndex=folderIndex+1
-            table.insert(newList,folderIndex,content)
-            if isMatchName then
-              itemIndex=folderIndex--因为后续还要加返回上一级项目，所以需要+1
-            end
-           else
-            table.insert(newList,content)
-            if isMatchName then
-              itemIndex=index--此时index就是现在文件的索引。因为后续还要加返回上一级项目，所以需要+1
-            end
-          end
-        end
-        folderIndex=nil
-       else
-        --按时间倒序(默认的就是按时间排序的)
-        table.sort(filesList,function(a,b)
-          return a.lastModified()>b.lastModified()
-        end)
-
-        for index,content in ipairs(filesList) do
-          local contentPath=content.getPath()
-          local aideluaDir=contentPath.."/.aidelua"
-          if content.isDirectory() and File(aideluaDir).isDirectory() then
-            table.insert(newList,content)
-            if content.getName()==fileName then
-              itemIndex=table.size(newList)
-            end
-          end
-        end
-      end
-      local newListJ=File(newList)
-      newList=nil
-      filesList=nil
-      --Thread.sleep(5000)
-      return newListJ,newDirectory,itemIndex
-    end,
-    function(dataList,newDirectory,itemIndex)
-      if loadingDir~=newDirectory then--当前刷新的文件列表不是现在获取到的文件列表，数据作废
+    activity.newTask(refreshTaskFunc,
+    function(success,dataList,newDirectory,itemIndex)
+      if newDirectory and loadingDir~=newDirectory then--当前刷新的文件列表不是现在获取到的文件列表，数据作废
         return
       end
       showProgressHandler.removeCallbacks(showProgressRunnable)
       showProgressHandler.removeCallbacks(homingRunnable)
+      loadingDir=false
       swipeRefresh.setRefreshing(false)
-      local path=newDirectory.getPath()
+      if not success then
+        showErrorDialog("FilesBrowserManager.refresh",dataList)
+        return true
+      end
+      local pathTag
+
+      --判断前进后退需要用到。默认为false
       local isBack,isForward=false,false
+
       --刷新路径指示器
       if ProjectManager.openState then
+        --新文件夹路径
+        local path=newDirectory.getPath()
+        pathTag=path
+
         local oldPath=directoryFile and directoryFile.getPath()
         local nowPrjPathParent=ProjectManager.nowFile.getParent()
 
@@ -768,39 +814,38 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
               anim_propertyName="alpha"
             end
             if anim_propertyName then
+              FilesBrowserManager.cancelBrowserAnimators()
               if anim_propertyName~="alpha" then--下面就是透明动画，所以无需执行card动画
-                --先取消动画，防止多个动画同时播放
-                if recyclerViewCardTranslationXAnimator then
-                  recyclerViewCardTranslationXAnimator.cancel()
-                end
                 recyclerViewCardTranslationXAnimator=ObjectAnimator.ofFloat(recyclerViewCard, anim_propertyName,anim_values)
                 .setDuration(150)
                 .setInterpolator(DecelerateInterpolator())
+                .setAutoCancel(true)
                 .start()
-              end
-              if recyclerViewAlphaAnimator then
-                recyclerViewAlphaAnimator.cancel()
               end
               recyclerViewAlphaAnimator=ObjectAnimator.ofFloat(recyclerView, "alpha",{0,1})
               .setDuration(250)
               .setInterpolator(DecelerateInterpolator())
+              .setAutoCancel(true)
               .start()
             end
           end
 
           directoryFile=newDirectory
         end--路径不同判断完毕
+
        else--未打开工程
+        pathTag="PROJECTS_DIRS"
         if directoryFile then
-          local scroll=filesPositions[path]
+          local scroll=filesPositions[pathTag]
           table.clear(filesPositions)
-          filesPositions[path]=scroll
+          filesPositions[pathTag]=scroll
          else
           table.clear(filesPositions)
           FilesBrowserManager.recordScrollPosition()
         end
         --把文件浏览器位置摆正
         if oldRichAnim then--此修复无需在精简动画下生效
+          FilesBrowserManager.cancelBrowserAnimators()
           recyclerViewCard.setTranslationX(0)
           recyclerView.setAlpha(1)
         end
@@ -814,18 +859,16 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
       FilesBrowserManager.directoryFilesList=dataList
 
       FilesBrowserManager.highlightIndex=itemIndex
-      loadingDir=false
 
       adapter.notifyDataSetChanged()
       pathPlaceholderView.setVisibility(View.GONE)--用于在开启完整动画前提下快速显示列表。。。
       pathLayoutManager.scrollToPosition(#pathSplitList-1)
 
-
       if itemIndex then
         layoutManager.scrollToPosition(itemIndex)
        else
         --恢复到之前保存的滚动位置
-        local scroll=filesPositions[path]
+        local scroll=filesPositions[pathTag]
         if scroll and not isForward then--前进必须不能有记录
           layoutManager.scrollToPositionWithOffset(scroll[1],scroll[2])
          else

@@ -50,6 +50,56 @@ local function fileMoreMenuClick(view)
   popupMenu.show()
 end
 
+---加载工程图标
+---@param iconUrl number|string
+---@param iconView ImageView
+---@param iconCard CardView
+function loadPrjIcon(iconUrl,iconView,iconCard)
+  if type(iconUrl)=="number" then
+    iconView.setImageResource(iconUrl)
+    if Build.VERSION.SDK_INT>=26 then--安卓8.0引入了自适应图标，因此将边框设为圆角
+      iconCard.setRadius(math.dp2int(20))
+      iconCard.setElevation(math.dp2int(1))
+     else
+      iconCard.setRadius(0)
+      iconCard.setElevation(0)
+    end
+   else
+    iconCard.setRadius(0)
+    iconCard.setElevation(0)
+    local options=RequestOptions()
+    options.skipMemoryCache(true)--跳过内存缓存
+    options.diskCacheStrategy(DiskCacheStrategy.NONE)--不缓冲disk硬盘中
+    options.error(android.R.drawable.sym_def_app_icon)
+    Glide.with(activity)
+    .load(iconUrl)
+    .apply(options)
+    .listener({
+      onResourceReady=function(resource, model, target, dataSource, isFirstResource)
+        local bitmap=resource.getBitmap()
+        local maxX=bitmap.getWidth()-1
+        local maxY=bitmap.getHeight()-1
+        --四周都有像素，说明是自适应图标
+        if Color.alpha(bitmap.getPixel(0,0))>=0xFF
+          and Color.alpha(bitmap.getPixel(maxX,0))>=0xFF
+          and Color.alpha(bitmap.getPixel(0,maxY))>=0xFF
+          and Color.alpha(bitmap.getPixel(maxX,maxY))>=0xFF then
+          iconCard.setRadius(math.dp2int(20))
+          iconCard.setElevation(math.dp2int(1))
+        end
+        return false
+      end,
+      onLoadFailed=function(e, model, target, isFirstResource)
+        if Build.VERSION.SDK_INT>=26 then--安卓8.0引入了自适应图标，因此将边框设为圆角
+          iconCard.setRadius(math.dp2int(20))
+          iconCard.setElevation(math.dp2int(1))
+        end
+      end
+    })
+    .into(iconView)
+  end
+end
+
 --根据打开状态确定view类型
 local openState2ViewType={
   ["true"]={--index是位置索引，_else代表默认类型
@@ -64,7 +114,6 @@ local openState2ViewType={
 return function(item)
   return LuaCustRecyclerAdapter(AdapterCreator({
     getItemCount=function()
-      collectgarbage("collect")
       directoryFilesList=FilesBrowserManager.directoryFilesList
       highlightIndex=FilesBrowserManager.highlightIndex
       if directoryFilesList then
@@ -95,7 +144,8 @@ return function(item)
         end
         return holder
       end,
-      function()
+      function(err)
+        showErrorDialog(err)
         return LuaCustRecyclerHolder(View(activity))
       end)
       return result
@@ -103,6 +153,7 @@ return function(item)
 
     onBindViewHolder=function(holder,position)
       local view=holder.view
+      --tag就是装有view的字典
       local tag=view.getTag()
       local data=adapterData[position]
       local initData=false
@@ -177,11 +228,12 @@ return function(item)
 
             colorFilter=fileColors[fileType and string.upper(fileType)]
 
-            if FilesTabManager.openState and FilesTabManager.file.getPath()==filePath then
+            if FilesTabManager.openState and FilesTabManager.file==file then
               titleView.setTextColor(theme.color.colorAccent)
               iconView.setColorFilter(theme.color.colorAccent)
               highLightCard.setCardBackgroundColor(theme.color.rippleColorAccent)
               view.setSelected(true)
+              --保存一下当前打开文件的位置，方便后期切换文件
               FilesBrowserManager.nowFilePosition=position
              else
               titleView.setTextColor(theme.color.textColorPrimary)
@@ -204,12 +256,12 @@ return function(item)
           end
 
          else--未打开工程
-
-          local loadedConfig,config,iconUrl,title,summary
+          local pathView=tag.path
+          local isLoadedConfig,config,iconUrl,title,summary
           if initData then
-            loadedConfig,config=pcall(RePackTool.getConfigByProjectPath,filePath)
+            isLoadedConfig,config=pcall(RePackTool.getConfigByProjectPath,filePath)
             local loadedRePackTool,rePackTool
-            if loadedConfig then--文件没有损坏
+            if isLoadedConfig then--文件没有损坏
               loadedRePackTool,rePackTool=pcall(RePackTool.getRePackToolByConfig,config)
               local mainProjectPath
               if loadedRePackTool then--可以加载二次打包工具
@@ -244,6 +296,15 @@ return function(item)
           end
           titleView.setText(title)
           messageView.setText(summary)
+          --按需显示工程存放位置
+          --当工程路径为第一个工程路径，则不显示
+          if file.getParent()==ProjectManager.projectsPath then
+            pathView.setVisibility(View.GONE)
+           else
+            pathView.setText(filePath)
+            pathView.setVisibility(View.VISIBLE)
+          end
+
           local iconCard=tag.iconCard
           if highlightIndex and highlightIndex==position then
             titleView.setTextColor(0xff4caf50)
@@ -251,50 +312,8 @@ return function(item)
             titleView.setTextColor(theme.color.textColorPrimary)
           end
 
-          --设置应用图标
-          if type(iconUrl)=="number" then
-            iconView.setImageResource(iconUrl)
-            if Build.VERSION.SDK_INT>=26 then--安卓8.0引入了自适应图标，因此将边框设为圆角
-              iconCard.setRadius(math.dp2int(20))
-              iconCard.setElevation(math.dp2int(1))
-             else
-              iconCard.setRadius(0)
-              iconCard.setElevation(0)
-            end
-           else
-            iconCard.setRadius(0)
-            iconCard.setElevation(0)
-            local options=RequestOptions()
-            options.skipMemoryCache(true)--跳过内存缓存
-            options.diskCacheStrategy(DiskCacheStrategy.NONE)--不缓冲disk硬盘中
-            options.error(android.R.drawable.sym_def_app_icon)
-            Glide.with(activity)
-            .load(iconUrl)
-            .apply(options)
-            .listener({
-              onResourceReady=function(resource, model, target, dataSource, isFirstResource)
-                local bitmap=resource.getBitmap()
-                local maxX=bitmap.getWidth()-1
-                local maxY=bitmap.getHeight()-1
-                --四周都有像素，说明是自适应图标
-                if Color.alpha(bitmap.getPixel(0,0))>=0xFF
-                  and Color.alpha(bitmap.getPixel(maxX,0))>=0xFF
-                  and Color.alpha(bitmap.getPixel(0,maxY))>=0xFF
-                  and Color.alpha(bitmap.getPixel(maxX,maxY))>=0xFF then
-                  iconCard.setRadius(math.dp2int(20))
-                  iconCard.setElevation(math.dp2int(1))
-                end
-                return false
-              end,
-              onLoadFailed=function(e, model, target, isFirstResource)
-                if Build.VERSION.SDK_INT>=26 then--安卓8.0引入了自适应图标，因此将边框设为圆角
-                  iconCard.setRadius(math.dp2int(20))
-                  iconCard.setElevation(math.dp2int(1))
-                end
-              end
-            })
-            .into(iconView)
-          end
+          loadPrjIcon(iconUrl,iconView,iconCard)
+
         end
       end
     end,

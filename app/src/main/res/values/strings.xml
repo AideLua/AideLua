@@ -118,7 +118,9 @@
     <string name="project_properties">Project properties</string>
     <string name="project_addLibraries">Add libraries</string>
     <string name="projects_path">Projects path</string>
-    
+    <string name="projects_paths">Projects path</string>
+	<string name="projects_paths_summary">Multiple paths are supported. Use ";" to split paths.</string>
+	
     <string name="binproject_loading">Packing...</string>
     <string name="binproject_loading_with_parent">Packing...\n%1$s</string>
     <string name="binproject_creating_variables">Creating variables</string>

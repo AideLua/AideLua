@@ -21,7 +21,6 @@
         elevation=0;
         {
           AppCompatImageView;
-          --id="icon";
           layout_width="24dp";
           layout_height="24dp";
           layout_gravity="center";
@@ -32,12 +31,10 @@
     };
     {
       AppCompatTextView;
-      --id="title";
       textSize="16sp";
       layout_margin="16dp";
       layout_marginLeft=0;
       layout_weight=1;
-      --typeface=Typeface.DEFAULT_BOLD;
       text=activity.getString(R.string.project_create);
       textColor=theme.color.textColorPrimary;
     };
@@ -58,7 +55,6 @@
       layout_height="40dp";
       radius="20dp";
       cardBackgroundColor=0;
-      --elevation="2dp";
       id="iconCard";
       {
         AppCompatImageView;
@@ -79,20 +75,25 @@
         AppCompatTextView;
         id="title";
         textSize="16sp";
-        --typeface=Typeface.DEFAULT_BOLD;
         textColor=theme.color.textColorPrimary;
       };
       {
         AppCompatTextView;
         id="message";
         textSize="12sp";
-        --typeface=Typeface.DEFAULT_BOLD;
-        --textColor=theme.color.textColorPrimary;
+      };
+      {
+        AppCompatTextView;
+        id="path";
+        textSize="10sp";
+        lines=1;
+        ellipsize="start";
+        alpha=0.6;
       };
     };
   },
 
-  --顶部文件夹带菜单
+  --返回上一级
   {
     LinearLayout;
     layout_width="fill";

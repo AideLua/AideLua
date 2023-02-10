@@ -16,7 +16,9 @@ if layoutContent then
   layoutContent=defaultLayout
   editFileMode=false
 end
-activity.setLuaDir(projectPath)
+
+
+--activity.setLuaDir(projectPath)
 
 
 function onOptionsItemSelected(item)
@@ -47,11 +49,6 @@ function(err)
 end)
 
 print(layoutContent,editFileMode)
-
-
-
-
-
 
 
 

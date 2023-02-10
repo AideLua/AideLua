@@ -595,7 +595,8 @@ end
 function onKeyUp(keyCode, event)
   if touchingKey then
     touchingKey=false
-    local success,result=pcall(function()--华为MPencil双击功能
+    --华为MPencil双击功能
+    local success,result=pcall(function()
       if keyCode==KeyEvent.KEYCODE_F20 then
         if (System.currentTimeMillis() - lastPencilkeyTime) < 2000 then
           ProjectManager.runProject()
@@ -615,8 +616,12 @@ function onBackPressed()
     if ProjectManager.openState then
       -- todo:转到上一级文件夹
       local directoryFile=FilesBrowserManager.directoryFile
-      local directoryPath=directoryFile.getPath()
-      if directoryPath=="/" or isSamePathFileByPath(directoryPath,ProjectManager.nowPath) then
+      --当工程打开，但没有directoryFile的情况：打开工程后没有来得及*加载文件列表，然后按返回键
+      --关闭工程的情况：
+      --没有directoryFile
+      --directoryFile为根目录
+      --directoryFile为工程路径的上一层文件夹
+      if not directoryFile or directoryFile.getPath()=="/" or directoryFile==ProjectManager.nowFile then
         ProjectManager.closeProject()
        else
         FilesBrowserManager.refresh(directoryFile.getParentFile())
