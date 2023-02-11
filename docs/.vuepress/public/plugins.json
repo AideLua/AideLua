@@ -12,7 +12,7 @@
         "size": "14.8 KB",
         "developer": "Jesse205",
         "updateDate": "2022-10-07",
-        "url": "https://gitee.com/Jesse205/AideLua/blob/master/app/plugins/SharedData 管理器_v1.3_5.0.4_plugin.alp"
+        "url": "https://gitee.com/AideLua/AideLua/blob/master/app/plugins/SharedData 管理器_v1.3_5.0.4_plugin.alp"
     },
     {
         "name": "底线",
@@ -27,7 +27,7 @@
         "size": "1.78 KB",
         "developer": "Jesse205",
         "updateDate": "2022-09-27",
-        "url": "https://gitee.com/Jesse205/AideLua/blob/master/app/plugins/底线_v1.0_5.0.4_plugin.zip"
+        "url": "https://gitee.com/AideLua/AideLua/blob/master/app/plugins/底线_v1.0_5.0.4_plugin.zip"
     },
     {
         "name": "命令栏",
@@ -42,6 +42,6 @@
         "size": "1.36 KB",
         "developer": "Jesse205",
         "updateDate": "2022-09-15",
-        "url": "https://gitee.com/Jesse205/AideLua/blob/master/app/plugins/命令栏_v3.1_plugin.zip"
+        "url": "https://gitee.com/AideLua/AideLua/blob/master/app/plugins/命令栏_v3.1_plugin.zip"
     }
 ]

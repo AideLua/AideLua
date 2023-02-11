@@ -1,14 +1,14 @@
 # Aide Lua
 
-[![license](https://img.shields.io/github/license/Jesse205/AideLua)](LICENSE)
-[![发行版](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=发行版&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases)
+[![license](https://img.shields.io/github/license/AideLua/AideLua)](LICENSE)
+[![发行版](https://img.shields.io/github/v/tag/AideLua/AideLua?color=C71D23&label=发行版&logo=gitee)](https://gitee.com/AideLua/AideLua/releases)
 
 [![QQ 群: 628045718](https://img.shields.io/badge/QQ_群-628045718-0099FF?logo=tencentqq)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
 [![QQ 频道: t37c1u1nmw](https://img.shields.io/badge/QQ_频道-t37c1u1nmw-0099FF?logo=tencentqq)](https://pd.qq.com/s/ncghvc)
 
-[![Gitee 仓库](https://img.shields.io/badge/Gitee-仓库-C71D23?logo=gitee)](https://gitee.com/Jesse205/AideLua/)
-[![Github 仓库](https://img.shields.io/badge/Github-仓库-0969DA?logo=github)](https://github.com/Jesse205/AideLua)
-[![使用文档](https://img.shields.io/badge/使用文档-中文-3F51B5)](https://jesse205.github.io/AideLua/)
+[![Gitee 仓库](https://img.shields.io/badge/Gitee-仓库-C71D23?logo=gitee)](https://gitee.com/AideLua/AideLua/)
+[![Github 仓库](https://img.shields.io/badge/Github-仓库-0969DA?logo=github)](https://github.com/AideLua/AideLua)
+[![使用文档](https://img.shields.io/badge/使用文档-中文-3F51B5)](https://aidelua.github.io/AideLua/)
 
 ![cover](images/ic_cover-aidelua.png)
 
@@ -18,8 +18,8 @@
 
 ## 注意 | Alert
 
-如需使用源代码，请进入 [发行版 (Gitee)](https://gitee.com/Jesse205/AideLua/releases/latest) 页面下载。   
-If you need to use the source code, please go to the [releases (Github)](https://github.com/Jesse205/AideLua/releases/latest) page to download.
+如需使用源代码，请进入 [发行版 (Gitee)](https://gitee.com/AideLua/AideLua/releases/latest) 页面下载。   
+If you need to use the source code, please go to the [releases (Github)](https://github.com/AideLua/AideLua/releases/latest) page to download.
 
 请不要在 Github 内直接更改此仓库，因为 Github 的仓库是由 Gitee 镜像过去的。   
 Please not to change the repository directly in Github, because Github's repository is mirrored by Gitee。
@@ -34,7 +34,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 ### Aide Lua Pro
 
-[![Gitee 发行版)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+发行版&logo=gitee&style=flat-square)](https://gitee.com/Jesse205/AideLua/releases/latest)
+[![Gitee 发行版)](https://img.shields.io/github/v/tag/AideLua/AideLua?color=C71D23&label=Gitee+发行版&logo=gitee&style=flat-square)](https://gitee.com/AideLua/AideLua/releases/latest)
 
 #### 其他渠道 (可能更新不及时)
 
@@ -42,7 +42,6 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 [![天翼云盘](https://img.shields.io/badge/天翼云盘--DF9C1F)](https://cloud.189.cn/t/ZZ7RzijyqiUv)
 [![腾讯微云](https://img.shields.io/badge/腾讯微云--2980ff)](https://share.weiyun.com/oLiNtxMR)
 [![百度网盘](https://img.shields.io/badge/百度网盘-jxnb-06a7ff)](https://pan.baidu.com/s/1j1RwisPR8iq1fPS3O_fl7Q?pwd=jxnb)
-
 
 ### AIDE 高级设置版
 
@@ -57,18 +56,21 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 [![123云盘 (镜像)](https://img.shields.io/badge/123云盘-镜像-597dfc)](https://www.123pan.com/s/G7a9-c9ek)
 
 ## 构建项目（包括衍生项目）
-1. 克隆本项目到本地：`git clone https://gitee.com/Jesse205/AideLua.git`
+
+1. 克隆本项目到本地：`git clone https://gitee.com/AideLua/AideLua.git`
 2. 使用 Gradle 构建：`gradle build`
 3. 复制到 Android 设备的`内部存储/AppProjects/<你的项目>`
 4. 下载 Aide Lua 的发行版，进入 Aide Lua 后选择刚才复制的工程，然后依次点击 `菜单-项目...-二次打包并安装`
 
 ## 使用须知
+
 1. 本软件默认开启自动保存代码且无法关闭（自动保存触发条件：切换到其他应用、点击二次打包以及打包运行、打开其他文件、关闭文件、打开侧滑（大屏除外）、点击标签栏等）
 2. 此软件不能用来开发大型项目
 3. 此软件必须搭配编译器，不管你用的是真 Gradle 还是假 Gradle __(AIDE 属于假 Gradle)__
 4. 要实现直接运行项目，必须导出 `LuaActivity`（默认是导出的），__并成功安装项目软件（先用 AIDE 打包，然后用 Aide Lua 打包，最后安装）__
 
 ## 如何接收更新推送
+
 1. 首先进入 `设置`-`通知设置` ，打开 `有新的 Release`<br>
 ![步骤1](images/releases/step1.jpg)
 2. 然后点击仓库右上角 `Watch`，然后点击 `关注所有动态`<br>
@@ -110,4 +112,4 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 4. 新建 Pull Request
 
 ## 开放源代码许可
-<https://gitee.com/Jesse205/AideLua/blob/master/app/src/main/assets_bin/licences>
+<https://gitee.com/AideLua/AideLua/blob/master/app/src/main/assets_bin/licences>

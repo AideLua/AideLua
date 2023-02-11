@@ -1,6 +1,7 @@
 --文档Url
 DOCS_URL="https://aidelua.github.io/AideLua/"
-REPOSITORY_URL="https://gitee.com/Jesse205/AideLua"
+REPOSITORY_URL="https://gitee.com/AideLua/AideLua"
+PAGE_URL="https://aidelua.github.io/"
 
 if getSharedData("antiAddictionMode") then
   function checkTime()

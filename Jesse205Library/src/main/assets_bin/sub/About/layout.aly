@@ -7,7 +7,6 @@
     LinearLayoutCompat;
     layout_height="fill";
     layout_width="fill";
-    --orientation="vertical";
     id="mainLayChild";
     {
       LinearLayoutCompat;

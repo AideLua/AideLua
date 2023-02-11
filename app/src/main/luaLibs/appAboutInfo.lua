@@ -4,7 +4,7 @@ appInfo={
     name=R.string.app_name,
     message="为更快的移动开发",
     iconResource=R.mipmap.ic_launcher_round,
-    browserUrl="https://jesse205.github.io/aidelua",
+    browserUrl="https://aidelua.github.io/",
     clickable=true,
   },
   {
@@ -67,6 +67,13 @@ openSourceLicenses=true
 }
 ]]
 moreItem={
+  {--仓库
+    SettingsLayUtil.ITEM_NOSUMMARY;
+    title=R.string.open_source_repository;
+    icon=R.drawable.ic_github;
+    newPage="newApp";
+    browserUrl=REPOSITORY_URL;
+  },
   {--交流群
     SettingsLayUtil.ITEM;
     title=R.string.jesse205_qqGroup;

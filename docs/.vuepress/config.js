@@ -26,7 +26,7 @@ export default defineUserConfig({
     shouldPrefetch: false,
     theme: defaultTheme({
         docsDir: "docs",
-        docsRepo: "https://gitee.com/Jesse205/AideLua",
+        docsRepo: "https://gitee.com/AideLua/AideLua",
         docsBranch: "master",
         editLinkText: "编辑此页",
         editLinkPattern: ":repo/edit/:branch/:path",
@@ -43,7 +43,7 @@ export default defineUserConfig({
         navbar: [
             {
                 text: '首页',
-                link: '/aidelua.html',
+                link: '/home.html',
             },
             {
                 text: '使用文档',
@@ -51,11 +51,11 @@ export default defineUserConfig({
             },
             {
                 text: 'Gitee 仓库',
-                link: 'https://gitee.com/Jesse205/AideLua',
+                link: 'https://gitee.com/AideLua/AideLua',
             },
             {
                 text: 'Github 仓库',
-                link: 'https://github.com/Jesse205/AideLua',
+                link: 'https://github.com/AideLua/AideLua',
             },
         ],
         sidebar: [
@@ -318,7 +318,7 @@ export default defineUserConfig({
         }),
         commentPlugin({
             provider: "Giscus",
-            repo: "Jesse205/AideLua",
+            repo: "AideLua/AideLua",
             repoId: "R_kgDOHfPX_g",
             category: "DocumentGiscus",
             categoryId: "DIC_kwDOHfPX_s4CUCDx",

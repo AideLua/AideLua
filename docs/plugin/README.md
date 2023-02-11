@@ -10,7 +10,7 @@ Util 版本：v3.1
 ::: details 本页内容
 [[toc]]
 :::
-[插件模板](https://gitee.com/Jesse205/AideLua/tree/master/%E6%A8%A1%E7%89%88/%E6%8F%92%E4%BB%B6/com.aidelua.template)
+[插件模板](https://gitee.com/AideLua/AideLua/tree/master/app/plugins/templates/)
 
 ## 提示
 

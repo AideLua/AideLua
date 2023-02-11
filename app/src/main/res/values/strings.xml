@@ -41,6 +41,7 @@
     <string name="download">Download</string>
     <string name="checkingUpdates">Checking for updates</string>
     <string name="font">Font</string>
+    <string name="open_source_repository">Open source repository</string>
     
     <string name="open">Open</string>
     <string name="open_failed">Open failed</string>

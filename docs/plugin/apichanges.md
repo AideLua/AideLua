@@ -264,4 +264,4 @@ EditorManager.symbolBar
 :::
 
 ## 相关链接
-* [应用更新日志](https://gitee.com/Jesse205/AideLua/blob/master/README.md)
+* [应用更新日志](https://gitee.com/AideLua/AideLua/blob/master/README.md)

@@ -1,14 +1,14 @@
 # Aide Lua
 
-[![license](https://img.shields.io/github/license/Jesse205/AideLua)](LICENSE)
-[![releases](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=releases&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases)
+[![license](https://img.shields.io/github/license/AideLua/AideLua)](LICENSE)
+[![releases](https://img.shields.io/github/v/tag/AideLua/AideLua?color=C71D23&label=releases&logo=gitee)](https://gitee.com/AideLua/AideLua/releases)
 
 [![QQ group: 628045718](https://img.shields.io/badge/QQ_group-628045718-0099FF?logo=tencentqq)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
 [![QQ channel: t37c1u1nmw](https://img.shields.io/badge/QQ_channel-t37c1u1nmw-0099FF?logo=tencentqq)](https://pd.qq.com/s/ncghvc)
 
-[![Gitee repository](https://img.shields.io/badge/Gitee-repository-C71D23?logo=gitee)](https://gitee.com/Jesse205/AideLua/)
-[![Github repository](https://img.shields.io/badge/Github-repository-0969DA?logo=github)](https://github.com/Jesse205/AideLua)
-[![document](https://img.shields.io/badge/documents-Chinese-3F51B5)](https://jesse205.github.io/AideLua/)
+[![Gitee repository](https://img.shields.io/badge/Gitee-repository-C71D23?logo=gitee)](https://gitee.com/AideLua/AideLua/)
+[![Github repository](https://img.shields.io/badge/Github-repository-0969DA?logo=github)](https://github.com/AideLua/AideLua)
+[![document](https://img.shields.io/badge/documents-Chinese-3F51B5)](https://aidelua.github.io/AideLua/)
 
 ![cover](images/ic_cover-aidelua.png)
 
@@ -32,7 +32,7 @@ Aide Lua can help you transfer from Androlua+to AIDE and then to Android Studio
 
 ### Aide Lua Pro
 
-[![Gitee Releases)](https://img.shields.io/github/v/tag/Jesse205/AideLua?color=C71D23&label=Gitee+Releases&logo=gitee)](https://gitee.com/Jesse205/AideLua/releases/latest)
+[![Gitee Releases)](https://img.shields.io/github/v/tag/AideLua/AideLua?color=C71D23&label=Gitee+Releases&logo=gitee)](https://gitee.com/AideLua/AideLua/releases/latest)
 
 #### Other channels (may not be updated in time)
 
@@ -53,9 +53,9 @@ Aide Lua can help you transfer from Androlua+to AIDE and then to Android Studio
 
 ## Build project (including derivative projects)
 
-1. Clone this project locally: `git clone https://gitee.com/Jesse205/AideLua.git` .
+1. Clone this project locally: `git clone https://gitee.com/AideLua/AideLua.git` .
 2. Build with Gradle: `gradle build` .
-3. Copy to `internal storage/AppProjects/<your project>` on your Android device.
+3. Copy to `<internal-storage>/AppProjects/<your project>` on your Android device.
 4. Download the Aide Lua distribution, go to Aide Lua and select the project you just copied, then click `menu-projects... -repack and install` .
 
 ## Instructions
@@ -71,7 +71,7 @@ Watch this project.
 
 ## Documents
 
-[Video](https://space.bilibili.com/1229937144)
+[Video](https://space.bilibili.com/1229937144) |
 [Text](https://jesse205.github.io/AideLua/)
 
 Due to the particularity of AIDE, please download [__AIDE Pro__](https://aidepro.top/) to operate.

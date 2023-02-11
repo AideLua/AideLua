@@ -4,7 +4,7 @@
 
 ## 下载软件
 
-请前往 [Gitee 发行版](https://gitee.com/Jesse205/AideLua/releases/latest)下载最新版 Aide Lua。
+请前往 [Gitee 发行版](https://gitee.com/AideLua/AideLua/releases/latest)下载最新版 Aide Lua。
 
 ## 安装软件
 
