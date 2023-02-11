@@ -1,3 +1,7 @@
+--文档Url
+DOCS_URL="https://aidelua.github.io/AideLua/"
+REPOSITORY_URL="https://gitee.com/Jesse205/AideLua"
+
 if getSharedData("antiAddictionMode") then
   function checkTime()
     if tonumber(os.date("%H"))~=12 or os.date("%A")~="Saturday" and os.date("%A")~="Sunday" then

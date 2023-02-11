@@ -103,7 +103,7 @@ moreItem={
     title=R.string.app_documnet;
     icon=R.drawable.ic_file_document_outline;
     newPage="newApp";
-    url="https://jesse205.github.io/AideLua";
+    url=DOCS_URL;
   },
   {--支持
     SettingsLayUtil.ITEM_NOSUMMARY;
@@ -121,11 +121,11 @@ moreItem={
       },
       {
         title="问题反馈 (Gitee)",
-        url="https://gitee.com/Jesse205/AideLua/issues",
+        url=REPOSITORY_URL.."/issues",
       },
       {
         title="参与开发",
-        url="https://gitee.com/Jesse205/AideLua",
+        url=REPOSITORY_URL,
       },
     };
   },
@@ -165,7 +165,7 @@ function main()
   table.insert(data,index,{--更新日志
     SettingsLayUtil.ITEM_NOSUMMARY;
     title=getLocalLangObj("更新日志","Change Log");
-    url="https://gitee.com/Jesse205/AideLua/blob/master/CHANGELOG.md",
+    url=REPOSITORY_URL.."/blob/master/CHANGELOG.md",
     icon=R.drawable.ic_history;
     newPage="newApp";
   })

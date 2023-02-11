@@ -1,5 +1,5 @@
 {
-  --格式：https://jesse205.github.io/AideLua/plugin/pages/main.html#editorlayouts
+  --格式：https://aidelua.github.io/AideLua/plugin/pages/main.html#editorlayouts
 
   NoneView={
     layout={

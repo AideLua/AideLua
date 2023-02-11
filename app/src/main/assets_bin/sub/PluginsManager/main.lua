@@ -33,7 +33,7 @@ function onOptionsItemSelected(item)
   if id==android.R.id.home then
     activity.finish()
    elseif item==helpMenu then
-    openUrl("https://jesse205.github.io/AideLua/plugin/")
+    openUrl(DOCS_URL.."/AideLua/plugin/")
   end
 end
 

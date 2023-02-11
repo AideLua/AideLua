@@ -36,7 +36,7 @@ function onOptionsItemSelected(item)
   if id==android.R.id.home then
     activity.finish()
    elseif item==helpMenu then
-    openUrl("https://jesse205.github.io/AideLua/function/newproject.html")
+    openUrl(DOCS_URL.."/function/newproject.html")
   end
 end
 
@@ -59,6 +59,21 @@ createButton.onClick=function(view)--新建按钮
       return
     end
   end
+
+  local prjPaths={}
+  local orignalProjectsPaths=getSharedData("projectsDirs")
+  for path in utf8.gmatch(orignalProjectsPaths..";","([^;]-);") do
+    if path and path~="" then
+      table.insert(prjPaths,path)
+    end
+  end
+
+  AlertDialog.Builder(this)
+  .setTitle("列表对话框")
+  .setSingleChoiceItems(prjPaths,-1,function(dialogInterface,index)
+    print(prjPaths[index+1])
+  end)
+  .show()
 
   local keys,formatList,unzipList=NewProjectManager.buildConfig(nowPageConfig,appName,packageName)
 

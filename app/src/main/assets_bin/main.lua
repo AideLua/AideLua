@@ -363,7 +363,7 @@ function onOptionsItemSelected(item)
    case Rid.menu_tools_luaManual_windmill then -- Lua 手册
     startWindmillActivity("手册")
    case Rid.menu_tools_manual then -- Lua 手册
-    openUrl("https://jesse205.github.io/AideLua/")
+    openUrl(DOCS_URL)
    case Rid.menu_more_settings then -- 设置
     newSubActivity("Settings")
    case Rid.menu_more_about then -- 关于
@@ -425,9 +425,9 @@ function onConfigurationChanged(newConfig)
   local drawerChildLinearParams = drawerChild.getLayoutParams()
   if screenWidthDp < 448 then
     drawerChildLinearParams.width = -1
-   elseif screenWidthDp <800 then
+   elseif screenWidthDp < 800 then
     drawerChildLinearParams.width = math.dp2int(448-56)
-   elseif screenWidthDp <1176 then
+   elseif screenWidthDp < 1176 then
     drawerChildLinearParams.width = math.dp2int(328)
    else
     drawerChildLinearParams.width = math.dp2int(392)
