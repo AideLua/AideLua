@@ -36,7 +36,7 @@ function onOptionsItemSelected(item)
   if id==android.R.id.home then
     activity.finish()
    elseif item==helpMenu then
-    openUrl(DOCS_URL.."/function/newproject.html")
+    openUrl(DOCS_URL.."function/newproject.html")
   end
 end
 
@@ -48,39 +48,41 @@ createButton.onClick=function(view)--新建按钮
   if not(nowPageConfig) then
     return
   end
-  local appName,packageName
-  if nowPageConfig.checkAppConfig then
-    local ids=nowPageConfig.ids
-    appName=ids.appNameEdit.text
-    packageName=ids.packageNameEdit.text
-    local appNameLay=ids.appNameLay
-    local packageNameLay=ids.packageNameLay
-    if NewProjectManager.checkAppConfigError(appName,packageName,appNameLay,packageNameLay,nowPageConfig) then
-      return
-    end
-  end
+  local pageConfig=nowPageConfig
+  local prjsPaths=NewProjectUtil2.PRJS_PATHS
+  local savedPrjsPath=getSharedData("projectsDir")
+  prjsPaths[-1]=savedPrjsPath
+  local choice=(table.find(prjsPaths,savedPrjsPath) or 0)-1--因为choice是java索引，所以要减去1
 
-  local prjPaths={}
-  local orignalProjectsPaths=getSharedData("projectsDirs")
-  for path in utf8.gmatch(orignalProjectsPaths..";","([^;]-);") do
-    if path and path~="" then
-      table.insert(prjPaths,path)
-    end
-  end
-
-  AlertDialog.Builder(this)
-  .setTitle("列表对话框")
-  .setSingleChoiceItems(prjPaths,-1,function(dialogInterface,index)
-    print(prjPaths[index+1])
+  AlertDialog.Builder(activity)
+  .setTitle(R.string.projects_path_select)
+  .setSingleChoiceItems(prjsPaths,choice,function(dialogInterface,index)
+    choice=index
+    setSharedData("projectsDir",prjsPaths[index+1])
   end)
+  .setPositiveButton(android.R.string.ok,function()
+    local path=prjsPaths[choice+1]
+    if path then
+      local appName,packageName
+      if pageConfig.checkAppConfig then
+        local ids=pageConfig.ids
+        appName=ids.appNameEdit.text
+        packageName=ids.packageNameEdit.text
+        local appNameLay=ids.appNameLay
+        local packageNameLay=ids.packageNameLay
+        if NewProjectManager.checkAppConfigError(appName,packageName,appNameLay,packageNameLay,pageConfig,path) then
+          return
+        end
+      end
+      --v5.1.1添加path
+      local keys,formatList,unzipList=NewProjectManager.buildConfig(pageConfig,appName,packageName,path)
+      if pageConfig.onCreatePrj then
+        pageConfig.onCreatePrj(pageConfig.ids,pageConfig,keys,formatList,unzipList,path)
+      end
+    end
+  end)
+  .setNegativeButton(android.R.string.cancel,nil)
   .show()
-
-  local keys,formatList,unzipList=NewProjectManager.buildConfig(nowPageConfig,appName,packageName)
-
-  if nowPageConfig.onCreatePrj then
-    nowPageConfig.onCreatePrj(nowPageConfig.ids,nowPageConfig,keys,formatList,unzipList)
-  end
-
 end
 
 NewProjectManager.loadTemplate(NewProjectUtil2.TEMPLATES_DIR_PATH)

@@ -39,8 +39,8 @@ function createDirsDialog(nowDir)--创建文件夹对话框
     local relativePath=text
     local nowPath=nowDir.getPath()
     local filePath=fixPath(rel2AbsPath(relativePath,nowPath))
-    local nowRelativePath=ProjectManager.shortPath(filePath,true,nowPath)
-    local nowCreatedName=nowRelativePath:match("^[^/]+")
+    --local nowRelativePath=ProjectManager.shortPath(filePath,true,nowPath)
+    --local nowCreatedName=nowRelativePath:match("^[^/]+")
     local file=File(filePath)
     if file.exists() then--文件不能存在
       editLay
@@ -52,7 +52,7 @@ function createDirsDialog(nowDir)--创建文件夹对话框
     xpcall(function()
       file.mkdirs()
       showSnackBar(R.string.create_success)
-      FilesBrowserManager.refresh(nowDir,nowCreatedName)
+      FilesBrowserManager.refresh(nowDir,filePath)
       --dialog.dismiss()
     end,
     function(err)

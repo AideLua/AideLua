@@ -1,10 +1,21 @@
 --主要给在线程里面使用
 local NewProjectUtil2={}
 local TEMPLATES_DIR_PATH=activity.getLuaDir("../../templates")--模板路径
-local PRJS_PATH=getSharedData("projectsDir")--项目路径
+--local PRJS_PATH=getSharedData("projectsDir")--项目路径
+
+local PRJS_PATHS={}
+local orignalProjectsPaths=getSharedData("projectsDirs")
+for path in utf8.gmatch(orignalProjectsPaths..";","([^;]-);") do
+  if path and path~="" then
+    table.insert(PRJS_PATHS,path)
+  end
+end
+--第一个路径为默认路径
+local PRJS_PATH=PRJS_PATHS[1] or getSharedData("projectsDir") or ""
 
 NewProjectUtil2.TEMPLATES_DIR_PATH=TEMPLATES_DIR_PATH
 NewProjectUtil2.PRJS_PATH=PRJS_PATH
+NewProjectUtil2.PRJS_PATHS=PRJS_PATHS
 
 --格式化信息用的，必须在线程内使用，且必须设置metatable
 local keysFormatter={

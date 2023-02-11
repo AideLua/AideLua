@@ -41,7 +41,7 @@ local function refreshProjectsPath(autoFix)
         table.insert(projectsFiles,File(path))
       end
     end
-    projectsPath=projectsPaths[0] or getSharedData("projectsDir") or ""--所有项目路径
+    projectsPath=projectsPaths[1] or getSharedData("projectsDir") or ""--所有项目路径
     projectsFile=File(projectsPath)
     --projectsPath=projectsFile.getPath()--修复一下路径，不知道修复了什么
   end,

@@ -149,7 +149,6 @@
     summary="限制仅在周末 12:00 到 13:00 使用本APP，超时将强制停止，且不会保存当前数据。如果您想关闭，你可以修改时间到允许使用的时候，然后关闭此开关。";
     key="antiAddictionMode";
   };
-  --[[
   {--工程路径
     SettingsLayUtil.ITEM;
     icon=R.drawable.ic_folder_cog_outline;
@@ -160,7 +159,7 @@
     hint=R.string.projects_path;
     --helperText=R.string.settings_needRestart;
     allowNull=false;
-  };]]
+  };
   {--工程路径，多路径
     SettingsLayUtil.ITEM;
     icon=R.drawable.ic_folder_cog_outline;

@@ -116,7 +116,8 @@
     <string name="project_properties">项目属性</string>
     <string name="project_addLibraries">添加库</string>
     <string name="projects_path">项目路径</string>
-	<string name="projects_paths">项目路径</string>
+	<string name="projects_path_select">选择项目路径</string>
+    <string name="projects_paths">项目路径</string>
 	<string name="projects_paths_summary">支持多个路径。路径之间使用“;”分割</string>
 	
     <string name="binproject_loading">正在打包...</string>

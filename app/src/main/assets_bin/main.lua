@@ -545,7 +545,7 @@ end
 function onResult(name, action, content)
   local processed=false
   if action == "project_created_successfully" then
-    FilesBrowserManager.refresh(nil,File(content).getName())
+    FilesBrowserManager.refresh(nil,content)
     showSnackBar(R.string.create_success).setAction(R.string.open, function(view)
       if ProjectManager.openState then -- 已打开项目
         ProjectManager.closeProject(false)

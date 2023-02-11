@@ -291,7 +291,12 @@ activity.result({<action>，<content>})
 
 
 ### ProjectManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
+
 这是项目管理器，只能管理单个项目，兼职提供文件路径的绝对路径转相对路径
+
+| 方法 | 说明 |
+| ---- | ---- |
+| refreshProjectsPath(autoFix) | 刷新工程路径<br>__autoFix__ (boolean): 是否自动修复路径错误，默认为 `true` |
 
 ### LuaEditorHelper <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 

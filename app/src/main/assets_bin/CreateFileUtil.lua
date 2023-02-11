@@ -75,7 +75,7 @@ function CreateFileUtil.showCreateFileDialog(config,nowDir)--文件名填写对�
       showErrorDialog(R.string.create_failed,err)
       errorState=true
     end)
-    FilesBrowserManager.refresh(file.getParentFile(),file.getName())
+    FilesBrowserManager.refresh(file.getParentFile(),filePath)
     if errorState then
       return true--防止对话框关闭
     end
@@ -130,10 +130,10 @@ function CreateFileUtil.showSelectTypeDialog(nowDir)--模版选择对话框
 
   AlertDialog.Builder(activity)
   .setTitle(R.string.file_create)
-  .setSingleChoiceItems(names,choice,{onClick=function(dialogInterface,index)
+  .setSingleChoiceItems(names,choice,function(dialogInterface,index)
       choice=index
       activity.setSharedData("createfile_type",templates[index+1].id)
-  end})
+  end)
   .setPositiveButton(android.R.string.ok,function()
     local template=templates[choice+1]
     if template then

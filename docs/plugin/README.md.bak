@@ -79,7 +79,7 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 | ---- | ---- |
 | packageName | __string__: 插件包名，如果文件夹名与真正的 `init.lua` 中的 `packagename` 不同，则 `packageName` 传入文件夹名。 |
 
-#### PluginsUtil.clearOpenedPluginPaths() <Badge text="v5.0.4(50499)+" vertical="middle" />
+#### PluginsUtil.clearOpenedPluginPaths() <Badge text="在 v5.0.4(50499) 添加" vertical="middle" />
 
 清除已启用插件列表，用于重新加载插件
 

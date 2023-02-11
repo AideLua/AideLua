@@ -158,7 +158,7 @@
 
       NewProjectManager.refreshState("androidx",androidXState,chipsList)
     end,
-    onCreatePrj=function(ids,config,keys,formatList,unzipList)
+    onCreatePrj=function(ids,config,keys,formatList,unzipList,prjsPath)
       local keysJ_L={}
       local enabledComplexLibs={}--table列表，存放要用到的复杂库配置
       local enabledJarLibs={}--string列表，存放文件夹路径
@@ -167,7 +167,10 @@
         keysJ_L[index]=type(content)=="table" and String(content) or content
       end
       for index,content in pairs(config.enabledComplexLibs) do
-        table.insert(enabledComplexLibs,HashMap({path=content.path,format=content.format and String(content.format),delete=content.delete and String(content.delete)}))
+        table.insert(enabledComplexLibs,HashMap({
+          path=content.path,
+          format=content.format and String(content.format),
+          delete=content.delete and String(content.delete)}))
       end
       for index,content in pairs(config.enabledJarLibs) do
         table.insert(enabledJarLibs,content.path)
@@ -181,12 +184,12 @@
       .setPositiveButton(R.string.create,function()
         showLoadingDia(nil,R.string.creating)
         activity.newTask(config.newProjectFunc,config.updateFunc,config.callbackFunc)
-        .execute({HashMap(keysJ_L),String(formatList),String(unzipList),ArrayList(enabledComplexLibs),String(enabledJarLibs),String(enabledSimpleLibs),config.subTemplatePath})
+        .execute({HashMap(keysJ_L),String(formatList),String(unzipList),ArrayList(enabledComplexLibs),String(enabledJarLibs),String(enabledSimpleLibs),config.subTemplatePath,prjsPath})
       end)
       .setNegativeButton(android.R.string.cancel,nil)
       .show()
     end,
-    onBuildConfig=function(ids,config,keysLists,formatList,unzipList)
+    onBuildConfig=function(ids,config,keysLists,formatList,unzipList,prjsPath)
       local templatePath=config.templatePath
       local subTemplatePath=config.subTemplatePath
       local androidXState=config.androidXState
@@ -199,7 +202,7 @@
         table.insert(keysLists,content.keys)
       end
     end,
-    newProjectFunc=function(keysJ,formatListJ,unzipListJ,enabledComplexLibsJ,enabledJarLibsJ,enabledSimpleLibsJ,subTemplatePath)
+    newProjectFunc=function(keysJ,formatListJ,unzipListJ,enabledComplexLibsJ,enabledJarLibsJ,enabledSimpleLibsJ,subTemplatePath,prjsPath)
       return pcall(function()
         require "import"
         notLoadTheme=true
@@ -217,7 +220,7 @@
         local appName=keys.appName--文件夹名/应用名
         local aluaVer=keys.androluaVersion
         local androidXState=keys.androidX
-        local projectPath=NewProjectUtil2.PRJS_PATH.."/"..appName--此工程根文件夹路径
+        local projectPath=prjsPath.."/"..appName--此工程根文件夹路径
         local projectFile=File(projectPath)
         local mainProjectPath=projectPath.."/app/src/main"
         local mainLibsPath=projectPath.."/app/libs"

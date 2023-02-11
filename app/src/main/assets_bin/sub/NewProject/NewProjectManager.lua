@@ -95,10 +95,11 @@ end
 
 ---仅检查工程是否存在，应用名为空等
 ---@param appName string 应用名，也就是文件夹名
-function NewProjectManager.fastCheckAppNameError(appName)
+---@param prjsPath string 所有工程路径
+function NewProjectManager.fastCheckAppNameError(appName,prjsPath)
   if appName == "" then
     return 1
-   elseif File(PRJS_PATH .. "/" .. appName).exists() then
+   elseif prjsPath and File(prjsPath .. "/" .. appName).exists() then
     return 2
   end
   return false
@@ -117,8 +118,8 @@ end
 ---@param appName string 应用名
 ---@param appNameLay TextInputLayout 应用名编辑框的布局，主要用来显示错误信息
 ---@param config table 页面配置，用于自动保存错误信息
-function NewProjectManager.checkAppName(appName, appNameLay, config)
-  local appNameError = NewProjectManager.fastCheckAppNameError(appName)
+function NewProjectManager.checkAppName(appName, appNameLay, config, prjsPath)
+  local appNameError = NewProjectManager.fastCheckAppNameError(appName,prjsPath)
   if appNameError then
     appNameLay
     .setError(errorCode2String[appNameError])
@@ -152,23 +153,25 @@ function NewProjectManager.checkPackageName(packageName, packageNameLay, config)
 end
 
 ---NewProjectManager.checkAppName与NewProjectManager.checkPackageName一块检查，并修改创建按钮的状态
-function NewProjectManager.checkAppConfigError(appName, packageName, appNameLay, packageNameLay, config)
-  local appNameError = NewProjectManager.checkAppName(appName, appNameLay, config)
+function NewProjectManager.checkAppConfigError(appName, packageName, appNameLay, packageNameLay, config, prjsPath)
+  local appNameError = NewProjectManager.checkAppName(appName, appNameLay, config, prjsPath)
   local packageNameError = NewProjectManager.checkPackageName(packageName, packageNameLay, config)
-
+  --[[
   if appNameError or packageNameError then
     createButton.setEnabled(false)
     return true
    else
     createButton.setEnabled(true)
     return false
-  end
+  end]]
+  return appNameError or packageNameError
 end
 
 ---仅刷新 创建按钮 的启用状态
 ---@param config table 页面配置，用于获取错误信息
 function NewProjectManager.refreshCreateEnabled(config)
-  if config.appNameError or config.packageNameError or config.helloWorld then
+  --config.appNameError or config.packageNameError or
+  if config.helloWorld then
     createButton.setEnabled(false)
    else
     createButton.setEnabled(true)
@@ -321,7 +324,8 @@ end
 ---@param pageConfig table 页面配置
 ---@param appName string 应用名
 ---@param packageName string 包名
-function NewProjectManager.buildConfig(pageConfig,appName,packageName)
+---@param prjsPath string 选择的工程路径，v5.1.1+
+function NewProjectManager.buildConfig(pageConfig,appName,packageName,prjsPath)
   --模板配置
   local templateConfig = pageConfig.templateConfig
   --当前子模板配置
@@ -361,7 +365,7 @@ function NewProjectManager.buildConfig(pageConfig,appName,packageName)
   --响应构建key事件
   local onBuildConfig = pageConfig.onBuildConfig
   if onBuildConfig then
-    onBuildConfig(pageConfig.ids, pageConfig, keysLists, formatList, unzipList)
+    onBuildConfig(pageConfig.ids, pageConfig, keysLists, formatList, unzipList,prjsPath)
   end
 
   --把keysLists整合到keys

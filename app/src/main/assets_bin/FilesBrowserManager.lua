@@ -595,7 +595,7 @@ function FilesBrowserManager.cancelBrowserAnimators()
 end
 
 --刷新文件浏览器的线程
-local function refreshTaskFunc(newDirectory,fileName,projectOpenState)
+local function refreshTaskFunc(newDirectory,highlightPath,projectOpenState)
   return pcall(function()
     require "import"
     import "java.io.File"
@@ -632,7 +632,7 @@ local function refreshTaskFunc(newDirectory,fileName,projectOpenState)
       end)
       local folderIndex=0
       for index,content in ipairs(filesList) do
-        local isMatchName=content.getName()==fileName
+        local isMatchName=highlightPath and content.getPath()==highlightPath
         if content.isDirectory() then
           if itemIndex and itemIndex>folderIndex then--项目索引比文件夹索引大，说明这个索引的是文件，要加1。因为folderIndex从0开始，itemIndex从1开始，因此不需要+1
             itemIndex=itemIndex+1
@@ -661,7 +661,7 @@ local function refreshTaskFunc(newDirectory,fileName,projectOpenState)
         local aideluaDir=contentPath.."/.aidelua"
         if content.isDirectory() and File(aideluaDir).isDirectory() then
           table.insert(newList,content)
-          if content.getName()==fileName then
+          if highlightPath and content.getPath()==highlightPath then
             itemIndex=table.size(newList)
           end
         end
@@ -678,11 +678,11 @@ end
 ---刷新文件夹/进入文件夹
 ---有内存泄露问题
 ---@param file File | File[] 要刷新或者进入的文件夹
----@param upFile boolean 是否是向上，在 v3.1.0(31099) 移除，之后的版本无实际作用
----@param fileName string 文件名
+---@param upFile boolean 是否是向上，在 v5.1.0(51099) 移除，之后的版本无实际作用
+---@param highlightPath string 文件名，在v5.1.1添加
 ---@param force boolean 强制刷新
 ---@param atOnce boolean 立刻显示进度条
-function FilesBrowserManager.refresh(file,fileName,force,atOnce)
+function FilesBrowserManager.refresh(file,highlightPath,force,atOnce)
   if force or not (loadingDir) then
 
     local isProjectsLostMode=false
@@ -875,7 +875,7 @@ function FilesBrowserManager.refresh(file,fileName,force,atOnce)
           layoutManager.scrollToPosition(0)
         end
       end
-    end).execute({file,fileName,ProjectManager.openState})
+    end).execute({file,highlightPath,ProjectManager.openState})
   end
 end
 

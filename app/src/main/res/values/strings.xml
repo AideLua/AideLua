@@ -119,6 +119,7 @@
     <string name="project_properties">Project properties</string>
     <string name="project_addLibraries">Add libraries</string>
     <string name="projects_path">Projects path</string>
+    <string name="projects_path_select">Select project path</string>
     <string name="projects_paths">Projects path</string>
 	<string name="projects_paths_summary">Multiple paths are supported. Use ";" to split paths.</string>
 	
