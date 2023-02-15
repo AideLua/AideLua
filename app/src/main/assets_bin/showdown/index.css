@@ -1,8 +1,8 @@
 :root{
-    --color-accent: rgb({{Color.red(theme.color.colorAccent)..","..Color.green(theme.color.colorAccent)..","..Color.blue(theme.color.colorAccent)}});
-    --color-background: rgb({{Color.red(theme.color.windowBackground)..","..Color.green(theme.color.windowBackground)..","..Color.blue(theme.color.windowBackground)}});
-    --color-text: rgb({{Color.red(theme.color.textColorPrimary)..","..Color.green(theme.color.textColorPrimary)..","..Color.blue(theme.color.textColorPrimary)}});
-    --color-border: rgb({{Color.red(theme.color.strokeColor)..","..Color.green(theme.color.strokeColor)..","..Color.blue(theme.color.strokeColor)}});
+    --color-accent: {{color2CssRGB(res.color.attr.colorAccent)}};
+    --color-background: {{color2CssRGB(res.color.attr.windowBackgroundColor)}};
+    --color-text: {{color2CssRGB(android.res.color.attr.textColorPrimary)}};
+    --color-border: {{color2CssRGB(res.color.attr.strokeColor)}};
 }
 
 html,

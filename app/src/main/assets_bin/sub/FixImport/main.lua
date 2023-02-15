@@ -15,7 +15,6 @@ import "androidx.coordinatorlayout.widget.CoordinatorLayout"
 import "com.google.android.material.floatingactionbutton.FloatingActionButton"
 --import "android.content.res.ColorStateList"
 
-import "getImportCode"
 import "addCopyPackageMenu"
 import "CopyMenuUtil"
 
@@ -39,7 +38,7 @@ end
 function copyImports()
   local imports={}
   for index,content in pairs(data) do
-    table.insert(imports,getImportCode(index))--把代码添加到list
+    table.insert(imports,CodeHelper.getImportCode(index))--把代码添加到list
   end
   table.sort(imports,function(a,b)
     return string.lower(a)<string.lower(b)
@@ -97,8 +96,9 @@ end
 function fiximport(code,packageName,application)
   return pcall(function()
     require "import"
-    notLoadTheme=true
-    import "jesse205"
+    --notLoadTheme=true
+    --import "jesse205"
+    import "helper.CodeHelper"
 
     local allClasses=application.get("classes_table_fiximport")
     if not(allClasses) then
@@ -146,7 +146,7 @@ function fiximport(code,packageName,application)
     local buf={}
     local last=nil
 
-    for advance,text,column in LuaLexerIteratorBuilder(code)
+    for advance,text,column in CodeHelper.LuaLexerIteratorBuilder(code)
       if last~=LuaTokenTypes.DOT and advance==LuaTokenTypes.NAME then
         if not(buf[text]) then
           buf[text]=true

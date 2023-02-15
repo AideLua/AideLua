@@ -267,7 +267,7 @@ function getFilePathCopyMenus(inLibDirPath,filePath,fileRelativePath,fileName,is
     addStrToTable(fileName:match("(.+)%.") or fileName,textList,textCheckList)
     addStrToTable(callLibPath,textList,textCheckList)
     if fileType=="aly" or fileType=="lua" or fileType=="java" or fileType=="kt" or File(filePath.."/init.lua").isFile() then
-      addStrToTable(getImportCode(callLibPath),textList,textCheckList)
+      addStrToTable(CodeHelper.getImportCode(callLibPath),textList,textCheckList)
     end
    else
     addStrToTable(fileName,textList,textCheckList)
@@ -358,12 +358,6 @@ function authorizeHWApplicationPermissions(uri)
   activity.grantUriPermission("com.huawei.desktop.systemui", uri, flag)
 end
 
-function authorizeGApplicationPermissions(uri)
-  local flag=Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION
-  activity.grantUriPermission("com.android.documentsui", uri, flag)
-  activity.grantUriPermission("com.google.android.documentsui", uri, flag)
-end
-
 ---v5.1.1+
 function safeLoadLayout(path,parent)
   local env={}
@@ -441,8 +435,18 @@ end
 
 --v5.1.1+
 function copyFilesFromDocumentFile(documentFile,targetPath)
-
+  import "com.jesse205.util.FileInfoUtils"
+  local uri=documentFile.getUri()
+  local name=documentFile.getName()
+  local newPath=targetPath.."/"..name
   if documentFile.isDirectory() then
+    local isGetPathSucceeded,reallyPath=pcall(FileInfoUtils.getPath,activity,uri)
+    if isGetPathSucceeded then
+      local isCpSucceeded,content=pcall(FileUtil.copyDir, File(reallyPath), File(newPath))
+      if not isCpSucceeded then
+        showErrorDialog(name,content)
+      end
+    end
     --[[
     local list=documentFile.listFiles()
     for index=0,#list-1 do
@@ -450,21 +454,64 @@ function copyFilesFromDocumentFile(documentFile,targetPath)
       copyFilesFromDocumentFile(documentFile,targetPath.."/"..name)
     end]]
    else
-    local uri=documentFile.getUri()
-    local inputStream=activity.getContentResolver().openInputStream(uri)
-    --[[
-    local name=File(uri.getPath()).getName()
-    pcall(function()
-      name=File(FileInfoUtils.getPath(activity,uri)).getName()
-    end)]]
-    local name=documentFile.getName()
-    local newPath=targetPath.."/"..name
     if File(newPath).exists() then
       showSnackBar(name..": "..getString(R.string.file_exists))
      else
+      local inputStream=activity.getContentResolver().openInputStream(uri)
       local outStream=FileOutputStream(newPath)
-      LuaUtil.copyFile(inputStream, outStream)
+      --LuaUtil.copyFile(inputStream, outStream)
+      local success,content=pcall(FileUtil.copyFileStream,inputStream, outStream)
+      if not success then
+        showErrorDialog(name,content)
+      end
+      inputStream.close()
       outStream.close()
     end
   end
+end
+
+---v5.1.1+
+---在Termux内运行代码
+function runInTermux(cmd,args,config)
+  if PermissionUtil.checkPermission("com.termux.permission.RUN_COMMAND") then
+    if cmd:sub(1,1)~="/" then
+      cmd="/data/data/com.termux/files/usr/bin/"..cmd
+    end
+    config=config or {}
+    local intent=Intent()
+    intent.setClassName(TermuxConstants.TERMUX_PACKAGE_NAME, TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE_NAME)
+    intent.setAction(RUN_COMMAND_SERVICE.ACTION_RUN_COMMAND)
+    intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_COMMAND_PATH,cmd)
+    intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_ARGUMENTS,String(args))
+    intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_BACKGROUND, false)
+    intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_WORKDIR, config.workDir or ProjectManager.nowPath.."/"..ProjectManager.nowConfig.mainModuleName)
+    --显示结果
+    if config.showResult then
+      local resultIntent=activity.buildNewActivityIntent(0,"sub/TermuxResult/main.lua",nil,true,0)
+      resultIntent.putExtra("title",config.title)
+      local pendingIntent = PendingIntent.getActivity(activity, 1, resultIntent, PendingIntent.FLAG_ONE_SHOT)
+      intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_PENDING_INTENT, pendingIntent)
+      if Build.VERSION.SDK_INT >= 26 then
+        activity.startForegroundService(intent)
+       else
+        activity.startService(intent)
+      end
+    end
+    local manager = activity.getPackageManager()
+    local intent = manager.getLaunchIntentForPackage(TermuxConstants.TERMUX_PACKAGE_NAME)
+    activity.startActivity(intent)
+  end
+end
+
+--v5.1.1+
+function path2DocumentUri(path)
+  if String(path).startsWith(AppPath.Sdcard) then
+    local relativePath=string.sub(path,string.len(AppPath.Sdcard)+2):gsub("/","%%2f")
+    return Uri.parse("content://com.android.externalstorage.documents/document/primary:"..relativePath)
+  end
+end
+
+--供css使用，将颜色转换为css的rgb颜色
+function color2CssRGB(color)
+  return "rgb("..Color.red(color)..","..Color.green(color)..","..Color.blue(color)..")"
 end

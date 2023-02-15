@@ -14,8 +14,8 @@
     layout_height="16dp";
     layout_width="16dp";
     imageResource=R.drawable.ic_chevron_right;
-    colorFilter=theme.color.ActionBar.colorControlNormal;
+    colorFilter=res(res.id.attr.actionBarTheme).color.attr.colorControlNormal;
     padding="-4dp";
-    alpha=Color.alpha(theme.color.ActionBar.textColorSecondary)/255;
+    alpha=Color.alpha(android.res(res.id.attr.actionBarTheme).color.attr.textColorSecondary)/255;
   };
 }

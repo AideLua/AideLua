@@ -101,34 +101,50 @@ local fileIcons={--各种文件的图标
   --网页
   html=R.drawable.ic_language_html5,
   htm=R.drawable.ic_language_html5,
+  css=R.drawable.ic_language_css3,
+  js=R.drawable.ic_language_javascript,
+  ts=R.drawable.ic_language_typescript,
+
 
   --压缩类
   zip=R.drawable.ic_zip_box_outline,
   rar=R.drawable.ic_zip_box_outline,
   ["7z"]=R.drawable.ic_zip_box_outline,
   jar=R.drawable.ic_zip_box_outline,
+  alp=R.drawable.ic_zip_box_outline,
 
   gradle=R.drawable.ic_language_gradle,
 
   --word类
-  pdf=R.drawable.ic_file_pdf_box_outline,
-  ppt=R.drawable.ic_file_powerpoint_box_outline,
-  pptx=R.drawable.ic_file_powerpoint_box_outline,
-  doc=R.drawable.ic_file_word_box_outline,
-  docx=R.drawable.ic_file_word_box_outline,
-  xls=R.drawable.ic_file_table_box_outline,
-  xlsx=R.drawable.ic_file_table_box_outline,
+  pdf=R.drawable.ic_file_pdf_outline,
+  ppt=R.drawable.ic_file_powerpoint_outline,
+  pptx=R.drawable.ic_file_powerpoint_outline,
+  doc=R.drawable.ic_file_word_outline,
+  docx=R.drawable.ic_file_word_outline,
+  xls=R.drawable.ic_file_excel_outline,
+  xlsx=R.drawable.ic_file_excel_outline,
   txt=R.drawable.ic_file_document_outline,
   md=R.drawable.ic_language_markdown_outline,
   markdown=R.drawable.ic_language_markdown_outline,
 
   --图片类
-  png=R.drawable.ic_image_outline,
-  jpg=R.drawable.ic_image_outline,
-  gif=R.drawable.ic_image_outline,
-  jpeg=R.drawable.ic_image_outline,
-  webp=R.drawable.ic_image_outline,
-  svg=R.drawable.ic_image_outline,
+  png=R.drawable.ic_file_image_outline,
+  jpg=R.drawable.ic_file_image_outline,
+  gif=R.drawable.ic_file_image_outline,
+  jpeg=R.drawable.ic_file_image_outline,
+  webp=R.drawable.ic_file_image_outline,
+  svg=R.drawable.ic_file_image_outline,
+  bmp=R.drawable.ic_file_image_outline,
+  tif=R.drawable.ic_file_image_outline,
+
+  --音视频
+  wav=R.drawable.ic_file_music_outline,
+  mp3=R.drawable.ic_file_music_outline,
+  mid=R.drawable.ic_file_music_outline,
+  mp4=R.drawable.ic_file_video_outline,
+  avi=R.drawable.ic_file_video_outline,
+  mov=R.drawable.ic_file_video_outline,
+  mpg=R.drawable.ic_file_video_outline,
 
   --安装包类
   apk=R.drawable.ic_android,
@@ -146,25 +162,46 @@ setmetatable(fileIcons,{__index=function(self,key)
 end})
 FilesBrowserManager.fileIcons=fileIcons
 
---print(Color.alpha(theme.color.textColorSecondary))
+local typeColors={
+  android=0xFF00E676,
+
+  picture=0xff448aff,
+  music=0xff9c27b0,
+  video=0xff4caf50,
+
+  word=0xff5c6bc0,
+  ppt=0xffff5722,
+  xls=0xff4caf50,
+}
+
 local fileColors = {
   normal = 0xff757575, -- 普通颜色
   active = theme.color.colorAccent, -- 一已打开文件颜色
   folder = 0xFFF9A825, -- 文件夹颜色
 
   -- 按文件类型
-  APK = 0xFF00E676, -- 安卓应用程序
-  APKS = 0xFF00E676,
-  AAB = 0xFF00E676,
+  APK = typeColors.android, -- 安卓应用程序
+  APKS = typeColors.android,
+  AAB = typeColors.android,
   HAP = 0xff304ffe,
   EXE = 0xff2979ff,
 
-  LUA = 0xff2962ff,
-  ALY = 0xff2196f3,
+  LUA = 0xff448aff,
+  ALY = 0xff29b6f6,
 
-  PNG = 0xFFF44336, -- 图片文件
-  JPG = 0xFFF44336,
-  WEBP = 0xFFF44336,
+  PNG = typeColors.picture, -- 图片文件
+  JPG = typeColors.picture,
+  WEBP = typeColors.picture,
+  BMP = typeColors.picture,
+  TIF = typeColors.picture,
+
+  MP4 = typeColors.video, -- 音视频
+  AVI = typeColors.video,
+  MOV = typeColors.video,
+  MPG = typeColors.video,
+  WAV = typeColors.music,
+  MP3 = typeColors.music,
+  MID = typeColors.music,
 
   XML = 0xffff6f00, -- XML文件
   SVG = 0xffff6f00,
@@ -178,8 +215,12 @@ local fileColors = {
   MD=theme.color.textColorPrimary,
   MARKDOWN=theme.color.textColorPrimary,
 
-  HTML = 0xffff5722,
+  HTML = 0xffff5722,--网页
   HTM = 0xffff5722,
+  CSS = 0xff1565c0,
+  JS = 0xfffbc02d,
+  TS = 0xff1565c0,
+
   JSON = 0xffffa000,
 
   ZIP = 0xFF795548, -- 压缩文件
@@ -187,12 +228,12 @@ local fileColors = {
   TAR = 0xFF795548,
   RAR = 0xFF795548,
 
-  DOC=0xff448aff,
-  DOCX=0xff448aff,
-  PPT=0xffff5722,
-  PPTX=0xffff5722,
-  XLS=0xff4caf50,
-  XLSX=0xff4caf50,
+  DOC=typeColors.word,--Office
+  DOCX=typeColors.word,
+  PPT=typeColors.ppt,
+  PPTX=typeColors.ppt,
+  XLS=typeColors.xls,
+  XLSX=typeColors.xls,
   PDF=0xfff44336,
 
   BAT=theme.color.textColorPrimary,
@@ -351,6 +392,7 @@ end
 ---在 v5.1.0(51099) 添加
 ---添加了拖放的RecyclerView
 local SRC_ROOT_KEY = "dragAndDropMgr:srcRoot"
+local SRC_PATH_KEY = "srcPath"
 local SRC_PARENT_KEY = "clipper:srcParent"
 local OP_TYPE_KEY = "clipper:opType"
 function FilesBrowserManager.FilesRecyclerViewBuilder(context)
@@ -371,43 +413,24 @@ function FilesBrowserManager.FilesRecyclerViewBuilder(context)
           --拖放，有bug，现在只能在华为文件管理使用
           local ids=longClickedView.tag
           local data=ids._data--有数据
-          if data and Build.VERSION.SDK_INT>24 and data.file and data.file.isFile() then--系统大于安卓N，并且当前是文件
-            if relativeX>math.dp2int(16) or relativeX<-math.dp2int(16) or relativeY>math.dp2int(16) or relativeY<-math.dp2int(16) then
-              import "com.android.documentsui.DragShadowBuilder"
-              import "android.os.PersistableBundle"
+          --data.file.isFile()
+          if Build.VERSION.SDK_INT>24 and data and data.file and data.file.isFile() then--系统大于安卓N
+            if relativeX>math.dp2int(16)
+              or relativeX<-math.dp2int(16)
+              or relativeY>math.dp2int(16)
+              or relativeY<-math.dp2int(16) then
+              --or data.upFile then
+              --关闭菜单
               if lastContextMenu then
                 lastContextMenu.close()
                 lastContextMenu=nil
               end
-              passDragFileTime=passDragFileTime+1
-              local uri=activity.getUriForFile(data.file)
-
-              --授予应用权限（虽然这种方式很拉，但我可以兼容华为文件管理）
-              authorizeHWApplicationPermissions(uri)
-              authorizeGApplicationPermissions(uri)
-
-              local clipData=ClipData.newUri(activity.getContentResolver(),"data", uri)
-              local description=clipData.getDescription()
-
-              local bundle=PersistableBundle()
-              bundle.putString(SRC_ROOT_KEY,tostring(activity.getUriForFile(data.file.getParentFile())))
-              bundle.putInt(OP_TYPE_KEY,-1)
-              bundle.putString(SRC_PARENT_KEY,tostring(activity.getUriForFile(data.file.getParentFile())))
-              description.setExtras(bundle)
-
-              --拖放阴影
-              local shadow=DragShadowBuilder(activity)
-              shadow.updateTitle(data.title)
-              shadow.updateIcon(resources.getDrawable(data.icon).setTintList(ColorStateList({{}},{fileColors[data.fileType and string.upper(data.fileType)]})))
-
-              local flag=View.DRAG_FLAG_GLOBAL|View.DRAG_FLAG_OPAQUE|View.DRAG_FLAG_GLOBAL_URI_READ|View.DRAG_FLAG_GLOBAL_URI_WRITE
-              longClickedView.startDrag(clipData,shadow,nil,flag)
+              FilesBrowserManager.startDragAndDrop(longClickedView,data.file,data.icon,data.iconColor)
             end
             swipeRefresh.requestDisallowInterceptTouchEvent(true)--阻止侧滑关闭
             return nil--阻止滚动
           end
         end
-
        elseif action==MotionEvent.ACTION_UP or action==MotionEvent.ACTION_CANCEL then
         downEvent.x,downEvent.y=nil,nil
         tag.longClickedView=nil
@@ -487,6 +510,48 @@ FilesBrowserManager.RecyclerViewCardView={
 }
 setmetatable(FilesBrowserManager.RecyclerViewCardView,FilesBrowserManager.RecyclerViewCardView)
 
+---v5.1.1+
+---开始拖放
+---@param view View
+---@param file File
+---@param icon number 图片资源ID
+---@param iconColor number
+function FilesBrowserManager.startDragAndDrop(view,file,icon,iconColor)
+  import "com.android.documentsui.DragShadowBuilder"
+  import "android.os.PersistableBundle"
+  local filePath=file.getPath()
+  local fileName=file.getName()
+
+  local uri=activity.getUriForFile(file)
+  --授予应用权限（虽然这种方式很拉，但我可以兼容华为文件管理）
+  authorizeHWApplicationPermissions(uri)
+
+  local clipData=ClipData.newUri(activity.getContentResolver(),"file", uri)
+  local description=clipData.getDescription()
+
+  --防止AOSP文件管理闪退
+  local bundle=PersistableBundle()
+  bundle.putString(SRC_ROOT_KEY,tostring(activity.getUriForFile(file.getParentFile())))
+  bundle.putString(SRC_PATH_KEY,filePath)
+  description.setExtras(bundle)
+
+  --拖放阴影
+  local shadow=DragShadowBuilder(activity)
+  shadow.updateTitle(fileName)
+  local iconDrawable
+  if icon then
+    iconDrawable=resources.getDrawable(icon)
+    if iconColor then
+      local iconColorStateList=ColorStateList({{}},{iconColor})
+      iconDrawable.setTintList(iconColorStateList)
+    end
+  end
+  shadow.updateIcon(iconDrawable)
+
+  local flag=View.DRAG_FLAG_GLOBAL|View.DRAG_FLAG_OPAQUE|View.DRAG_FLAG_GLOBAL_URI_READ|View.DRAG_FLAG_GLOBAL_URI_WRITE
+  view.startDrag(clipData,shadow,"aidelua",flag)
+  passDragFileTime=passDragFileTime+1
+end
 
 --加载更多菜单
 function FilesBrowserManager.loadMoreMenu(moreView)
@@ -523,6 +588,13 @@ function FilesBrowserManager.loadMoreMenu(moreView)
         openDirPath=("%s/%s/src/main/res"):format(nowProjectPath,nowModuleName)
        elseif id==Rid.menu_openDir_projectRoot then
         openDirPath=nowProjectPath
+       elseif id==Rid.menu_addLibraries then
+        --TODO: 实现添加库
+        AlertDialog.Builder(this)
+        .setTitle(R.string.project_addLibraries)
+        .setMessage("您可以新建一个新工程后手动把对应的库文件复制过来，因为我懒得实现这个功能。\nYou can create a new project and copy the corresponding library file manually, because I am too lazy to implement this function.")
+        .setPositiveButton(android.R.string.ok,nil)
+        .show()
       end
     end
     if openDirPath then
@@ -567,7 +639,7 @@ function FilesBrowserManager.switchState()
 end
 
 ---记录滚动位置
----在 v5.1.0(51099) 添加
+---v5.1.0(51099)+
 function FilesBrowserManager.recordScrollPosition()
   local nowDirectoryPath=directoryFile and directoryFile.getPath() or ProjectManager.projectsPath--获取已打开文件夹路径
   local pos=layoutManager.findFirstVisibleItemPosition()
@@ -1074,8 +1146,8 @@ function FilesBrowserManager.init()
     onDrawerStateChanged = function(newState)
     end
   }))
-  local dropFileFrameBackground
 
+  local dropFileFrameBackground
   recyclerView.onDrag=function(view,event)
     local action=event.getAction()
     switch action do
@@ -1094,8 +1166,8 @@ function FilesBrowserManager.init()
         local dp_16=math.dp2int(16)
         dropFileFrameBackground = GradientDrawable()
         .setShape(GradientDrawable.RECTANGLE)
-        .setStroke(math.dp2int(4), theme.color.colorAccent)
-        .setCornerRadius(math.dp2int(16))
+        .setStroke(math.dp2int(3), theme.color.colorAccent)
+        --.setCornerRadius(math.dp2int(16))
       end
       view.setBackground(dropFileFrameBackground)
      case DragEvent.ACTION_DRAG_ENTERED then
@@ -1179,5 +1251,3 @@ function FilesBrowserManager.setDirectoryFilesList(list)
 end
 
 return createVirtualClass(FilesBrowserManager)
-
-

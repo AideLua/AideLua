@@ -1,4 +1,3 @@
-import "getImportCode"
 --local directoryFilesList=FilesBrowserManager.directoryFilesList
 local filesPositions=FilesBrowserManager.filesPositions
 local adapterData=FilesBrowserManager.adapterData
@@ -54,7 +53,7 @@ end
 ---@param iconUrl number|string
 ---@param iconView ImageView
 ---@param iconCard CardView
-function loadPrjIcon(iconUrl,iconView,iconCard)
+local function loadPrjIcon(iconUrl,iconView,iconCard)
   if type(iconUrl)=="number" then
     iconView.setImageResource(iconUrl)
     if Build.VERSION.SDK_INT>=26 then--安卓8.0引入了自适应图标，因此将边框设为圆角
@@ -100,6 +99,45 @@ function loadPrjIcon(iconUrl,iconView,iconCard)
   end
 end
 
+function loadPrjCfg(initData,data,file,filePath)
+  local isLoadedConfig,config,iconUrl,title,summary
+  if initData then
+    isLoadedConfig,config=pcall(RePackTool.getConfigByProjectPath,filePath)
+    local loadedRePackTool,rePackTool
+    if isLoadedConfig then--文件没有损坏
+      loadedRePackTool,rePackTool=pcall(RePackTool.getRePackToolByConfig,config)
+      local mainProjectPath
+      if loadedRePackTool then--可以加载二次打包工具
+        mainProjectPath=RePackTool.getMainProjectDirByConfigAndRePackTool(filePath,config,rePackTool)
+        title=(config.appName or unknowString)
+       else--无法加载二次打包工具
+        rePackTool=nil
+        mainProjectPath=filePath.."/app/src/main"
+        title=(config.appName or unknowString).." (Unable to get RePackTool)"
+      end
+      summary=config.packageName or unknowString
+      iconUrl=ProjectManager.getProjectIconPath(config,filePath,mainProjectPath) or android.R.drawable.sym_def_app_icon
+     else--文件已损坏
+      title="(Unable to load config.lua)"
+      summary=config
+      config={}
+      iconUrl=android.R.drawable.sym_def_app_icon
+    end
+    data.title=title
+    data.action="openProject"
+    data.iconUrl=iconUrl
+    data.config=config
+    data.rePackTool=rePackTool
+    data.summary=summary
+   else
+    iconUrl=data.iconUrl
+    config=data.config
+    title=data.title
+    summary=data.summary
+  end
+  return iconUrl,title,summary
+end
+
 --根据打开状态确定view类型
 local openState2ViewType={
   ["true"]={--index是位置索引，_else代表默认类型
@@ -136,7 +174,7 @@ return function(item)
         view.setOnClickListener(onClickListener)
         view.setOnLongClickListener(onLongClickListener)
 
-        if viewType==3 then
+        if viewType==3 then--项目带有菜单按钮
           local moreView=ids.more
           moreView.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
           moreView.onClick=fileMoreMenuClick
@@ -157,143 +195,108 @@ return function(item)
       local tag=view.getTag()
       local data=adapterData[position]
       local initData=false
-      if not(data) then--没有data 说明需要初始化
+      if not data then--没有data 说明需要初始化
         data={position=position}
         adapterData[position]=data
         initData=true
       end
       tag._data=data
+      --视图
       local titleView=tag.title
       local iconView=tag.icon
       local messageView=tag.message
 
-      local file,filePath
+      local file,filePath,fileName
 
       local projectOpenState=ProjectManager.openState
       if position==0 then--是第一项，就是新建项目或者返回上一目录
-        if projectOpenState then--项目已打开，就是返回上一级
-          if initData then
+        if initData then
+          if projectOpenState then--项目已打开，就是返回上一级
             file=FilesBrowserManager.directoryFile.getParentFile()
-            if not(file) then--根目录的上一级是工程文件夹
-              file=ProjectManager.projectsFile
-            end
+            or ProjectManager.projectsFile--根目录的上一级是工程文件夹
             data.file=file
+            data.fileName=file.getName()
             data.upFile=true
+            data.icon=R.drawable.ic_folder_outline
+            data.iconColor=fileColors.folder
             data.action="openFolder"
+           else--项目没打开，就是创建项目选项
+            data.action="createProject"
           end
-         else--项目没打开，就是创建项目选项
-          data.action="createProject"
         end
        else--不是第一项
+        local titleColor=theme.color.textColorPrimary
         if initData then
           file=directoryFilesList[position-1]
           filePath=file.getPath()
+          fileName=file.getName()
           data.file=file
           data.filePath=filePath
+          data.fileName=fileName
          else
           file=data.file
           filePath=data.filePath
+          fileName=data.fileName
         end
 
         if projectOpenState then
+          --视图
           local highLightCard=tag.highLightCard
-          local fileName
-
-          titleView.setText(fileName)
+          --取data的变量。这些变量会多次使用，或者可能不想与data保持一致。
+          local isFile,fileType,title,iconColor
+          local cardBgColor=0
+          local selected=false
           if initData then
-            fileName=file.getName()
-            data.title=fileName
-            data.fileName=fileName
+            isFile=file.isFile()
+            title=fileName
+            data.iconAlpha=getIconAlphaByName(fileName)
+            if isFile then
+              fileType=getFileTypeByName(fileName)
+              data.icon=fileIcons[fileType]
+              iconColor=fileColors[fileType and string.upper(fileType)]
+              data.action="openFile"
+             else
+              fileType=nil--文件夹根本就没有文件类型
+              data.icon=folderIcons[fileName]
+              iconColor=fileColors.folder
+              data.action="openFolder"
+            end
+            data.isFile=isFile
+            data.title=title
+            data.fileType=fileType
+            data.iconColor=iconColor
            else
-            fileName=data.fileName
+            isFile=data.isFile
+            title=data.title
+            iconColor=data.iconColor
           end
-          titleView.setText(fileName)
-          iconView.setAlpha(getIconAlphaByName(fileName))
+          titleView.setText(data.title)
+          iconView.setAlpha(data.iconAlpha)
+          iconView.setImageResource(data.icon)
 
-          if file.isFile() then--当前是文件
-            local colorFilter
-            local fileType
-            local icon
+          if isFile then--当前是文件
             if initData then
               filesPositions[filePath]=position
-              fileType=getFileTypeByName(fileName)
-              icon=fileIcons[fileType]
-              data.fileType=fileType
-              data.icon=icon
-             else
-              fileType=data.fileType
-              icon=data.icon
             end
-            iconView.setImageResource(icon)
-
-            colorFilter=fileColors[fileType and string.upper(fileType)]
-
-            if FilesTabManager.openState and FilesTabManager.file==file then
-              titleView.setTextColor(theme.color.colorAccent)
-              iconView.setColorFilter(theme.color.colorAccent)
-              highLightCard.setCardBackgroundColor(theme.color.rippleColorAccent)
-              view.setSelected(true)
+            --是不是正在浏览的文件
+            local isNowFile=FilesTabManager.openState and FilesTabManager.file==file
+            view.setSelected(isNowFile)
+            if isNowFile then
+              titleColor=theme.color.colorAccent
+              iconColor=theme.color.colorAccent
+              cardBgColor=theme.color.rippleColorAccent
               --保存一下当前打开文件的位置，方便后期切换文件
               FilesBrowserManager.nowFilePosition=position
-             else
-              titleView.setTextColor(theme.color.textColorPrimary)
-              iconView.setColorFilter(colorFilter)
-              highLightCard.setCardBackgroundColor(0)
-              view.setSelected(false)
             end
-            data.fileType=fileType
-            data.action="openFile"
            else--当前是文件夹
-            titleView.setTextColor(theme.color.textColorPrimary)
-            iconView.setImageResource(folderIcons[fileName])
-            iconView.setColorFilter(fileColors.folder)
-            highLightCard.setCardBackgroundColor(0)
             view.setSelected(false)
-            data.action="openFolder"
           end
-          if highlightIndex and highlightIndex==position then
-            titleView.setTextColor(0xff4caf50)--下次刷新时这个view的颜色会被上面的逻辑覆盖，因此不需要担心
-          end
-
+          iconView.setColorFilter(iconColor)
+          highLightCard.setCardBackgroundColor(cardBgColor)
+  
          else--未打开工程
           local pathView=tag.path
-          local isLoadedConfig,config,iconUrl,title,summary
-          if initData then
-            isLoadedConfig,config=pcall(RePackTool.getConfigByProjectPath,filePath)
-            local loadedRePackTool,rePackTool
-            if isLoadedConfig then--文件没有损坏
-              loadedRePackTool,rePackTool=pcall(RePackTool.getRePackToolByConfig,config)
-              local mainProjectPath
-              if loadedRePackTool then--可以加载二次打包工具
-                mainProjectPath=RePackTool.getMainProjectDirByConfigAndRePackTool(filePath,config,rePackTool)
-                title=(config.appName or unknowString)
-               else--无法加载二次打包工具
-                rePackTool=nil
-                mainProjectPath=filePath.."/app/src/main"
-                title=(config.appName or unknowString).." (Unable to get RePackTool)"
-              end
-              summary=config.packageName or unknowString
-              iconUrl=ProjectManager.getProjectIconPath(config,filePath,mainProjectPath) or android.R.drawable.sym_def_app_icon
-             else--文件已损坏
-              title="(Unable to load config.lua)"
-              summary=config
-              config={}
-              iconUrl=android.R.drawable.sym_def_app_icon
-            end
-            data.fileName=file.getName()
-            data.title=title
-            data.action="openProject"
-            data.iconUrl=iconUrl
-            data.config=config
-            data.rePackTool=rePackTool
-            data.summary=summary
-            config,rePackTool=nil,nil
-           else
-            iconUrl=data.iconUrl
-            config=data.config
-            title=data.title
-            summary=data.summary
-          end
+          local iconUrl,title,summary=loadPrjCfg(initData,data,file,filePath)
           titleView.setText(title)
           messageView.setText(summary)
           --按需显示工程存放位置
@@ -304,16 +307,14 @@ return function(item)
             pathView.setText(filePath)
             pathView.setVisibility(View.VISIBLE)
           end
-
-          local iconCard=tag.iconCard
-          if highlightIndex and highlightIndex==position then
-            titleView.setTextColor(0xff4caf50)
-           else
-            titleView.setTextColor(theme.color.textColorPrimary)
-          end
-
-          loadPrjIcon(iconUrl,iconView,iconCard)
-
+          loadPrjIcon(iconUrl,iconView,tag.iconCard)
+          titleColor=theme.color.textColorPrimary
+        end
+        --文件提示，仿MT管理器
+        if highlightIndex and highlightIndex==position then
+          titleView.setTextColor(0xff4caf50)--下次刷新时这个view的颜色会被上面的逻辑覆盖，因此不需要担心
+         else
+          titleView.setTextColor(titleColor)
         end
       end
     end,

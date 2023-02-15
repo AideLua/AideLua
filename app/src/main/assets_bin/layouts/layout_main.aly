@@ -10,7 +10,7 @@
     CardView;
     layout_width="fill";
     id="appBarLayout";
-    backgroundColor=theme.color.colorPrimary;
+    backgroundColor=res.color.attr.colorPrimary;
     radius=0;
     minimumHeight=1;
     elevation=0;
@@ -53,7 +53,7 @@
     CardView;
     layout_width="fill";
     id="bottomAppBar";
-    backgroundColor=theme.color.windowBackground;
+    backgroundColor=res.color.attr.windowBackgroundColor;
     elevation="4dp";
     radius=0;
     {

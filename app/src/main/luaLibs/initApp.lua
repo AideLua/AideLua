@@ -28,14 +28,14 @@ if getSharedData("editor_magnify")==nil then
     setSharedData("editor_magnify",false)
   end
 end
---[[
+
 if getSharedData("editor_previewButton")==nil then
   if SDK_INT>=28 then
     setSharedData("editor_previewButton",true)
    else
     setSharedData("editor_previewButton",false)
   end
-end]]
+end
 
 if getSharedData("editor_font")==nil then
   setSharedData("editor_font",1)
@@ -51,7 +51,9 @@ if getSharedData("editor_autoBackupOriginalFiles")==nil then
 end
 
 local sdcardPath=Environment.getExternalStorageDirectory().getPath()
-
+if getSharedData("projectsDir")==nil then
+  setSharedData("projectsDir",sdcardPath.."/AppProjects")
+end
 --多工程目录
 if getSharedData("projectsDirs")==nil then
   setSharedData("projectsDirs",

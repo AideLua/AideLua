@@ -12,7 +12,7 @@ local PLUGINS_PATH = AppPath.AppMediaDir .. "/plugins"
 local PLUGINS_DATA_PATH = AppPath.AppMediaDir .. "/data/plugins"
 PluginsUtil.PLUGINS_PATH = PLUGINS_PATH
 PluginsUtil.PLUGINS_DATA_PATH = PLUGINS_DATA_PATH
-PluginsUtil._VERSION="3.1"
+PluginsUtil._VERSION="3.1.2"
 
 local appPackageName = activity.getPackageName()
 local packInfo = activity.PackageManager.getPackageInfo(appPackageName, 0)

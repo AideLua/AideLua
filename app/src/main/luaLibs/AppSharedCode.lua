@@ -35,17 +35,6 @@ function getConfigFromFile(path,env)
   return env
 end
 
-function LuaLexerIteratorBuilder(code)
-  local lexer=LuaLexer(code)
-  return function()
-    local advance=lexer.advance()
-    local text=lexer.yytext()
-    local column=lexer.yycolumn()
-    return advance,text,column
-  end
-end
-
-
 local richAnim=getSharedData("richAnim")
 local newLayoutTransitionSuper=newLayoutTransition
 function newLayoutTransition()

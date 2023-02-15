@@ -9,6 +9,7 @@ AndroLua+ 的每一个 lua 页面都是 LuaActivity 以及他的子类。
 比如：
 :::: code-group
 ::: code-group-item activity
+
 ``` lua
 import "android.view.View"
 import "android.widget.LinearLayout"
@@ -22,8 +23,10 @@ layout.addView(textView)
 -- 将layout加载到根view上
 activity.setContentView(layout)
 ```
+
 :::
 ::: code-group-item this
+
 ``` lua
 import "android.view.View"
 import "android.widget.LinearLayout"
@@ -36,6 +39,8 @@ layout = LinearLayout(this)
 layout.addView(textView)
 -- 将layout加载到根view上
 this.setContentView(layout)
+```
+
 :::
 ::::
 

@@ -1,3 +1,4 @@
+import "helper.CodeHelper"
 local function showPackageMenu(name,view,mainLay)
   local pop=PopupMenu(activity,view)
   local menu=pop.Menu
@@ -13,7 +14,7 @@ local function showPackageMenu(name,view,mainLay)
   copyClassPathMenu.title=name
   copyNameMenu.setVisible(notSinglename)
   copyClassPath2Menu.title="L"..name:gsub("%.","/")..";"
-  copyImportMenu.title=getImportCode(name)
+  copyImportMenu.title=CodeHelper.getImportCode(name)
   pop.show()
   pop.onMenuItemClick=function(item)
     local id=item.getItemId()

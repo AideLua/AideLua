@@ -1,73 +1,28 @@
 {
-  LinearLayout;
+  CoordinatorLayout;
   layout_width="fill";
   layout_height="fill";
+  id="mainLay";
   --fitsSystemWindows=true;
   {
-    CoordinatorLayout;
+    ListView;
+    id="listView";
+    fastScrollEnabled=true;
     layout_width="fill";
     layout_height="fill";
-    id="mainLay";
-    --fitsSystemWindows=true;
-    {
-      ListView;
-      id="listView";
-      fastScrollEnabled=true;
-      layout_width="fill";
-      layout_height="fill";
-      clipToPadding=false;
-    };
-
-    {
-      View;
-      layout_height=0;
-      layout_width="fill";
-      id="appBarSpaceView";
-    };
-    MySearchLayout.Builder({
-      {
-        {
-          AppCompatAutoCompleteTextView;
-          threshold=0;
-          dropDownHeight="224dp";
-        }
-      }
-    });
-    --"titleLayout";
-    {
-      ProgressBar;
-      id="progressBar";
-      indeterminate=true;
-      layout_width="fill";
-      paddingTop="-8dp";
-      paddingBottom="-8dp";
-      layout_height="4dp";
-      visibility=View.GONE;
-      style=android.R.attr.progressBarStyleHorizontal;
-    };
-    --[=[
+    clipToPadding=false;
+  };
+  "titleLayout";
   {
-    LinearLayout;
-    orientation="vertical";
+    ProgressBar;
+    id="progressBar";
+    indeterminate=true;
     layout_width="fill";
-    layout_height="fill";
-    --[[
-    MySearchLayout.Builder({{{
-          helperText=getString(R.string.support_lua_regular);
-          helperTextEnabled=true;
-      }}});]]
-    --[[
-    {
-      AutoToolbarLayout;
-      id="appBar";
-    };]]
-    {
-      FrameLayout;
-      layout_width="fill";
-      layout_height="fill";
-
-
-    };
-  };]=]
+    paddingTop="-8dp";
+    paddingBottom="-8dp";
+    layout_height="3dp";
+    visibility=View.GONE;
+    layout_gravity="top";
+    style=android.R.attr.progressBarStyleHorizontal;
   };
 };

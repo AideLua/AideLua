@@ -21,7 +21,7 @@
     layout_width="fill";
     elevation="4dp";
     radius=0;
-    cardBackgroundColor=theme.color.colorBackgroundFloating;
+    cardBackgroundColor=res.color.attr.colorBackgroundFloating;
     {
       LinearLayout;
       layout_margin="16dp";

@@ -24,6 +24,7 @@ local fastImport = {
   getNetErrorStr = "com.jesse205.util.getNetErrorStr",
   MyAnimationUtil = "com.jesse205.util.MyAnimationUtil",
   ScreenFixUtil = "com.jesse205.util.ScreenFixUtil",
+  FileUtil = "com.jesse205.util.FileUtil",
   ClearContentHelper = "com.jesse205.helper.ClearContentHelper",
   -- 导入各种风格的控件
   StyleWidget = "com.jesse205.widget.StyleWidget",
@@ -102,7 +103,7 @@ end
 
 -- JavaAPI转LuaAPI
 local activity2luaApi = { "newActivity", "getSupportActionBar", "getSharedData", "setSharedData", "getString",
-  "getPackageName" }
+"getPackageName" }
 for _, content in ipairs(activity2luaApi) do
   _G[content] = function(...)
     return context[content](...) -- 直接赋值会出错
@@ -334,19 +335,21 @@ end
 
 -- 以下为复写事件
 function onError(title, message)
-  pcall(function()
-    -- 保存到文件。有报错说明软件有问题，必须解决掉。
-    local path = "/sdcard/Androlua/crash/" .. jesse205.packageName .. ".txt"
-    local content = tostring(title) .. os.date(" %Y-%m-%d %H:%M:%S") .. "\n" .. tostring(message) .. "\n\n"
-    io.open(path, "a"):write(content):close()
-  end)
-  -- 报错重写
+pcall(function()
+  -- 保存到文件。有报错说明软件有问题，必须解决掉。
+  local path = "/sdcard/Androlua/crash/" .. jesse205.packageName .. ".txt"
+  local content = tostring(title) .. os.date(" %Y-%m-%d %H:%M:%S") .. "\n" .. tostring(message) .. "\n\n"
+  io.open(path, "a"):write(content):close()
+end)
+-- 报错重写
+pcall(function()
   if activity.isFinishing() then
     print(title,message)
    else
     showErrorDialog(tostring(title), tostring(message)) -- 显示成对话框，解决安卓12的toast限制问题
   end
   return true
+end)
 end
 
 if initApp then
@@ -357,6 +360,7 @@ end
 -- 加载主题
 -- 在get某东西（ActionBar等）前必须把主题搞定
 if not notLoadTheme then
+  import "com.jesse205.app.res"
   theme = {
     color = {
       Ripple = {},

@@ -1,4 +1,9 @@
+--v5.1.1+
 local CodeHelper={}
+
+function CodeHelper.getImportCode(className)
+  return string.format("import \"%s\"",className)
+end
 
 function CodeHelper.LuaLexerIteratorBuilder(code)
   local lexer=LuaLexer(code)

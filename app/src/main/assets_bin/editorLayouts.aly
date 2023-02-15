@@ -159,7 +159,7 @@ import "jesse205"
     keywordsList={
       --一些常用但不自带的类
       annotationsWords=String{"class","type","alias","param","return","field","generic","vararg","language","example"},
-      otherWords=String{"PhotoView","LuaLexerIteratorBuilder"},
+      otherWords=String{"PhotoView","Glide"},
     },
 
     ---@type table<string, String[]>
@@ -205,7 +205,7 @@ import "jesse205"
       "MyToast","AutoToolbarLayout","PermissionUtil","MyStyleUtil",
       "AutoCollapsingToolbarLayout","SettingsLayUtil","jesse205",
       "StyleWidget","ScreenFixUtil","FileInfoUtils","ClearContentHelper",
-      "MyAnimationUtil",
+      "MyAnimationUtil","FileUtil",
 
       --自定义View
       "MyTextInputLayout","MyCardTitleEditLayout","MyTitleEditLayout",
@@ -412,8 +412,6 @@ import "jesse205"
       editor.onScrollChange=function(view,l,t,oldl,oldt)
         MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,appBarLayout)
       end
-      import "android.webkit.WebViewClient"
-      import "android.webkit.WebResourceResponse"
 
       editor.setWebViewClient(luajava.override(WebViewClient,{
         shouldOverrideUrlLoading=function(super,view,request)

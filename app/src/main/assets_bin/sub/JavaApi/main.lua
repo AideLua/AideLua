@@ -1,6 +1,6 @@
 -- 在 v5.1.0(51099) 搜索框改到标题栏内
 require "import"
---useCustomAppToolbar=true
+useCustomAppToolbar=true
 import "jesse205"
 import "android.widget.ListView"
 import "androidx.core.view.ViewCompat"
@@ -8,56 +8,55 @@ import "androidx.core.view.WindowInsetsCompat"
 import "androidx.core.graphics.ColorUtils"
 import "android.graphics.drawable.ColorDrawable"
 import "android.animation.ObjectAnimator"
+import "com.google.android.material.appbar.AppBarLayout"
 
+import "com.jesse205.widget.AutoToolbarLayout"
 import "com.jesse205.adapter.MyLuaAdapter"
 import "com.jesse205.layout.MySearchLayout"
-import "getImportCode"
+import "androidApis.editor.systemApis"
 import "showPackageMenu"
 
 import "item"
 
 PluginsUtil.setActivityName("javaapi")
 
-searchWord=...
-searchWord=tostring(searchWord)
-if searchWord=="nil" then
-  searchWord=nil
-end
+searching=false
 
 activity.setTitle(R.string.javaApiViewer)
 activity.setContentView(loadlayout2("layout"))
+
+activity.setSupportActionBar(toolbar)
+actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true)
-
-searching=false
-ThemeUtil.applyAplhaSystemBar()
-window.setStatusBarColor(0)
-actionBar.setBackgroundDrawable(ColorDrawable(0))
-appBarSpaceView.setBackgroundColor(theme.color.colorPrimary)
-
---反射工具栏
-local field=actionBar.getClass().getDeclaredField("mContainerView")
-field.setAccessible(true)
-local mContainerView=field.get(actionBar)
 
 
 function onCreate(savedInstanceState)
   PluginsUtil.callElevents("onCreate", savedInstanceState)
-  local trueWord=""
-  if searchWord then
-    trueWord="%."..searchWord.."$"
-  end
-  searchItem(trueWord,function(classesList)
-    if searchWord then
-      if #classesList==1 then
-        newSubActivity("ViewClass",{searchWord})
-       elseif #classesList==2 then
-        newSubActivity("ViewClass",{classesList[2].text})
-      end
-    end
-  end)
-  searchEdit.text=trueWord
+  onNewIntent(activity.getIntent())
+  search("")
 end
 
+function onNewIntent(intent)
+  local bundle=intent.getExtras()
+  local arg=bundle.get("arg")
+  if arg then
+    local searchWord=arg[0]
+    local trueWord=""
+    if searchWord then
+      trueWord="%."..searchWord.."$"
+    end
+    search(trueWord,function(classesList)
+      if searchWord then
+        if #classesList==1 then
+          newSubActivity("ViewClass",{searchWord})
+         elseif #classesList==2 then
+          newSubActivity("ViewClass",{classesList[2].text})
+        end
+      end
+    end)
+    searchEdit.text=trueWord
+  end
+end
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()
@@ -72,7 +71,7 @@ function onResult(name,err)
   end
 end
 
-function search(text,application)
+function searchTaskFunc(text,application)
   require "import"
   local allClasses=application.get("classes_table")
   if allClasses then
@@ -123,17 +122,6 @@ function search(text,application)
   return findClasses
 end
 
-searchButton.onClick=function()
-  searchItem(searchEdit.text)
-end
-
---搜索按钮波纹
-local drawable=ThemeUtil.getRippleDrawable(theme.color.ActionBar.rippleColorPrimary)
-if Build.VERSION.SDK_INT>=23 then
-  drawable.mutate().setRadius(math.dp2int(20))
-end
-searchButton.setBackground(drawable)
-
 
 local showProgressBarHandler=Handler()
 local showProgressBarRunnable=Runnable({
@@ -144,15 +132,16 @@ local showProgressBarRunnable=Runnable({
   end
 })
 
-function searchItem(text,callback)
+function search(text,callback)
   if not(searching) then
     if checkTextError(text) then
       return
     end
+    searching=true
     --延迟展示进度条
     showProgressBarHandler.postDelayed(showProgressBarRunnable,100)
 
-    activity.newTask(search,function(classesList)
+    activity.newTask(searchTaskFunc,function(classesList)
       searching=false
       local classesList=luajava.astable(classesList)
       adp.clear()
@@ -180,19 +169,19 @@ function checkTextError(text)
 end
 
 function onAnimUpdate(hideOffset)
-  local actionBarHeight=mContainerView.getHeight()
+  local actionBarHeight=toolBarLayout.getHeight()
   local progress=1+hideOffset/actionBarHeight
-  mContainerView.setAlpha(progress*progress)
-  mContainerView.setTranslationY(hideOffset)
-  appBarSpaceView.setTranslationY(hideOffset)
-  searchLayout.setTranslationY(hideOffset)
+  toolbar.setAlpha(progress*progress)
+  --toolBar.setTranslationY(hideOffset)
+  toolBarLayout.setTranslationY(hideOffset)
+  progressBar.setTranslationY(hideOffset)
   if hideOffset==-actionBarHeight then
-    mContainerView.setVisibility(View.INVISIBLE)
+    toolbar.setVisibility(View.INVISIBLE)
    else
-    mContainerView.setVisibility(View.VISIBLE)
+    toolbar.setVisibility(View.VISIBLE)
   end
-  --appBarSpaceView的高度不完全等于mContainerView的高度
-  MyAnimationUtil.ListView.onScroll(listView,listView.getFirstVisiblePosition(),nil,nil,appBarSpaceView,nil,false,appBarSpaceView.getHeight()+hideOffset)
+  --listView.setPadding(0,toolBarLayout.getHeight()+toolBarLayout.getTranslationY(),0,0)
+  MyAnimationUtil.ListView.onScroll(listView,listView.getFirstVisiblePosition(),nil,nil,appBarLayout,nil,false,appBarLayout.getHeight()+hideOffset)
 end
 
 local actionBarState=true
@@ -204,7 +193,7 @@ function showActionBar(force)
     if actionBarAnimator then
       actionBarAnimator.cancel()
     end
-    actionBarAnimator = ObjectAnimator.ofFloat(mContainerView,"translationY",{0})
+    actionBarAnimator = ObjectAnimator.ofFloat(toolBarLayout,"translationY",{0})
     .setDuration(200)
     .setAutoCancel(true)
     .addUpdateListener({
@@ -222,7 +211,7 @@ function hideActionBar(force)
     if actionBarAnimator then
       actionBarAnimator.cancel()
     end
-    actionBarAnimator = ObjectAnimator.ofFloat(mContainerView,"translationY",{-mContainerView.getHeight()})
+    actionBarAnimator = ObjectAnimator.ofFloat(toolBarLayout,"translationY",{-appBarLayout.getHeight()})
     .setDuration(200)
     .setAutoCancel(true)
     .addUpdateListener({
@@ -234,50 +223,55 @@ function hideActionBar(force)
   end
 end
 
-ClearContentHelper.setupEditor(searchEdit,clearSearchBtn,theme.color.ActionBar.rippleColorPrimary)
 
-import "androidApis.editor.systemApis"
-searchAdapter=ArrayAdapter(activity,android.R.layout.simple_dropdown_item_1line,systemApis)
-searchEdit.setAdapter(searchAdapter)
+local oldToolBarHeight=0
+searchLayout.getViewTreeObserver().addOnGlobalLayoutListener({
+  onGlobalLayout=function()
+    if activity.isFinishing() then
+      return
+    end
 
-ViewCompat.setOnApplyWindowInsetsListener(mainLay,function(view,windowInsets)
-  local insets=windowInsets.getSystemWindowInsets()
-  local params=searchLayout.getLayoutParams()
-  params.setMargins(insets.left+math.dp2int(16),insets.top+math.dp2int(8),insets.right+math.dp2int(16),math.dp2int(8))
-  searchLayout.setLayoutParams(params)
-  local params=appBarSpaceView.getLayoutParams()
-  params.height=insets.top
-  appBarSpaceView.setLayoutParams(params)
+    local toolBarHeight=toolBarLayout.getHeight()
+    if oldToolBarHeight~=toolBarHeight then
+      oldToolBarHeight=toolBarHeight
+      local params=progressBar.getLayoutParams()
+      --减去2dp，使滚动条在工具栏上方
+      params.setMargins(0,appBarLayout.getHeight(),0,0)
+      progressBar.setLayoutParams(params)
+      listView.setPadding(0,toolBarHeight,0,0)
+    end
+  end
+})
 
-  listView.setPadding(insets.left,insets.top+math.dp2int(64),insets.right,0)
-  listView.parent.setPadding(0,0,0,insets.bottom)
-  return WindowInsetsCompat.CONSUMED
-end)
-
-local searchEditDownYWithOffset=0
+local searchEditDownY=0
+local searchEditDownOffset=0
 --拽拖顶栏触摸事件
 topLayoutOnTouchListener=View.OnTouchListener{
   onTouch=function(view,event)
     local y=event.getRawY()
     local action=event.getAction()
-    local actionBarHeight=mContainerView.getHeight()
+    local actionBarHeight=appBarLayout.getHeight()
     if action==MotionEvent.ACTION_DOWN then
       if actionBarAnimator then
         actionBarAnimator.cancel()
       end
-      searchEditDownYWithOffset=y-searchLayout.getTranslationY()
+      searchEditDownY=y
+      searchEditDownOffset=toolBarLayout.getTranslationY()
       canPlayActionBarAnimation=false
      elseif action==MotionEvent.ACTION_MOVE then
-      local offset=y-searchEditDownYWithOffset
+      local offset=y-searchEditDownY+searchEditDownOffset
       if offset>0 then
         offset=0
        elseif offset<-actionBarHeight
         offset=-actionBarHeight
       end
       onAnimUpdate(offset)
+      if searchEditDownY~=y then
+        view.cancelLongPress()
+      end
      elseif action==MotionEvent.ACTION_UP or action==MotionEvent.ACTION_CANCEL then
       canPlayActionBarAnimation=true
-      local offset=y-searchEditDownYWithOffset
+      local offset=y-searchEditDownY+searchEditDownOffset
       --播放释放动画
       if offset>=0 then
         actionBarState=true
@@ -295,11 +289,21 @@ topLayoutOnTouchListener=View.OnTouchListener{
   end
 }
 
-mContainerView.getChildAt(0).setOnTouchListener(topLayoutOnTouchListener)
+ClearContentHelper.setupEditor(searchEdit,clearSearchBtn,res.color.attr.rippleColorPrimary)
+
+--搜索按钮波纹
+local drawable=ThemeUtil.getRippleDrawable(res.color.attr.rippleColorAccent)
+if Build.VERSION.SDK_INT>=23 then
+  drawable.mutate().setRadius(math.dp2int(20))
+end
+searchButton.setBackground(drawable)
+
+searchAdapter=ArrayAdapter(activity,android.R.layout.simple_dropdown_item_1line,systemApis)
+searchEdit.setAdapter(searchAdapter)
+
+toolbar.setOnTouchListener(topLayoutOnTouchListener)
 searchEdit.setOnTouchListener(topLayoutOnTouchListener)
 searchLayout.setOnTouchListener(topLayoutOnTouchListener)
-
-
 
 datas={}
 adp=MyLuaAdapter(activity,datas,item)
@@ -316,7 +320,7 @@ end
 local oldFirstVisibleItem=0
 local oldFirstViewTop=0
 listView.onScroll=function(view,firstVisibleItem,visibleItemCount,totalItemCount)
-  MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount,appBarSpaceView,nil,false,appBarSpaceView.getHeight()+appBarSpaceView.getTranslationY())
+  MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount,appBarLayout,nil,false,appBarLayout.getHeight()+toolBarLayout.getTranslationY())
   local firstView=view.getChildAt(0)
   local firstViewTop=firstView and firstView.getTop() or 0
   if firstVisibleItem>oldFirstVisibleItem then
@@ -332,75 +336,13 @@ listView.onScroll=function(view,firstVisibleItem,visibleItemCount,totalItemCount
   oldFirstViewTop=firstViewTop
 end
 
-
---[[import "me.zhanghai.android.fastscroll.FastScrollerBuilder"
-import "me.zhanghai.android.fastscroll.FastScrollScrollView"
-FastScrollerBuilder(listView).useMd2Style().build()
-]]
-
---[[
-local oldFirstVisiblePosition,touchedBar
-local hideOffset=0
-local oldY,startScrollY
-listView.onTouch=function(view,event)
-  local action=event.action
-  local y=event.getRawY()
-  local firstVisiblePosition=view.getFirstVisiblePosition()
-  switch (action) do
-   case MotionEvent.ACTION_DOWN then
-    startScrollY=y
-    --touchedBar=false
-    touchedBar=(view.getWidth()-y)>math.dp2int(16)
-   case MotionEvent.ACTION_MOVE then
-    hideOffset=hideOffset+y-oldY
-    local actionBarHeight=mContainerView.getHeight()
-    --特殊情况判断，仅在没有触摸到滚动条或者当前位置不一样时执行
-    if not(touchedBar) or firstVisiblePosition~=oldFirstVisiblePosition then
-      if oldY>y and touchedBar then
-        hideOffset=0
-       elseif oldY<y and touchedBar then
-        hideOffset=-actionBarHeight
-       else
-        if hideOffset>0 then
-          hideOffset=0
-         elseif hideOffset<-actionBarHeight then
-          hideOffset=-actionBarHeight
-        end
-      end
-      local progress=1+hideOffset/actionBarHeight
-      mContainerView.setAlpha(progress)
-      mContainerView.setTranslationY(hideOffset)
-      appBarSpaceView.setTranslationY(hideOffset)
-      appBarElevationCard.parent.setTranslationY(hideOffset)
-      titleLay.setTranslationY(hideOffset)
-    end
-  end
-  oldY=y
-  oldFirstVisiblePosition=firstVisiblePosition
-end]]
-
---[[
-local field=actionBar.getClass().getDeclaredField("mUpdateListener")
-field.setAccessible(true)
-local oldUpdateListener=field.get(actionBar)
-local method=oldUpdateListener.getClass().getMethod("onAnimationUpdate",{View})
---print(method)
-import "androidx.core.view.ViewPropertyAnimatorUpdateListener"
-local updateListener=ViewPropertyAnimatorUpdateListener({
-  onAnimationUpdate=function(view)
-    if oldEvent and (oldEvent.getAction()==MotionEvent.ACTION_DOWN or oldEvent.getAction()==MotionEvent.ACTION_MOVE) then
-      --print(1)
-      listView.onTouchEvent(oldEvent)
-    end
-    oldUpdateListener.onAnimationUpdate(view)
-  end,
-})
-field.set(actionBar,updateListener)]]
---print(actionBar.mHideListener)
+searchButton.onClick=function()
+  search(searchEdit.text)
+end
 
 searchEdit.onEditorAction=function(view,i,keyEvent)
   if not searching then
-    searchItem(view.text)
+    search(view.text)
   end
   return true
 end

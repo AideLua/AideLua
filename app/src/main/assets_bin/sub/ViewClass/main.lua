@@ -37,8 +37,6 @@ developerClassesRegularTable={
 
 PageTypes={"parents","constructors","events","fields","methods"}
 
-import "getImportCode"
-
 import "showPackageMenu"
 import "showConstructorMenu"
 import "showFieldMenu"

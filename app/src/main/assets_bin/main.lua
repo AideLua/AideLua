@@ -48,6 +48,8 @@ import "android.view.View$DragShadowBuilder"
 import "android.content.FileProvider"
 import "android.webkit.MimeTypeMap"
 import "android.webkit.WebView"
+import "android.webkit.WebViewClient"
+import "android.webkit.WebResourceResponse"
 
 import "androidx.drawerlayout.widget.DrawerLayout"
 import "androidx.core.graphics.ColorUtils"
@@ -90,6 +92,7 @@ import "androidx"
 
 require "AppFunctions" -- 必须先导入这个，因为下面的导入模块要直接使用
 require "DialogFunctions"
+CodeHelper=require "helper.CodeHelper"
 CreateFileUtil=require "CreateFileUtil"
 LuaEditorHelper=require "LuaEditorHelper"
 SubActivityUtil=require "SubActivityUtil"

@@ -1,54 +1,29 @@
 {
-  CardView;
+  LinearLayout;
   layout_width="fill";
-  layout_height="48dp";
-  layout_marginTop="8dp";
-  layout_marginBottom="8dp";
-  layout_margin="16dp";
-  elevation="3dp";
-  id="titleLay";
+  orientation="vertical";
+  id="toolBarLayout";
   {
-    FrameLayout;
+    AppBarLayout;
+    id="appBarLayout",
     layout_width="fill";
-    layout_height="fill";
+    layout_weight=1;
     {
-      AppCompatEditText;
+      Toolbar;
+      id="toolbar";
       layout_width="fill";
-      layout_height="fill";
-      id="searchEdit";
-      hint=activity.getString(R.string.abc_search_hint);
-      padding=0;
-      backgroundColor=0;
-      lines=1;
-      inputType="text";
-      textSize="18sp";
-      imeOptions="actionSearch";
-      paddingLeft="56dp";
-      paddingRight="48dp";
-      hintTextColor=theme.color.textColorSecondary;
-    };
-    {
-      ImageView;
-      layout_width="48dp";
-      layout_height="48dp";
-      padding="12dp";
-      layout_gravity="center|left";
-      layout_margin="4dp";
-      imageResource=R.drawable.ic_magnify;
-      colorFilter=theme.color.textColorPrimary;
-      id="searchButton";
-      alpha=Color.alpha(theme.color.textColorSecondary)/255;
-    };
-    {
-      ImageView;
-      layout_width="48dp";
-      layout_height="48dp";
-      padding="12dp";
-      imageResource=R.drawable.ic_close_circle_outline;
-      id="clearSearchBtn";
-      layout_gravity="center|right";
-      colorFilter=theme.color.textColorPrimary;
-      tooltip=getString(R.string.jesse205_clear);
-    };
+      theme=theme.number.id.actionBarTheme;
+      popupTheme=res.id.attr.actionBarPopupTheme;
+    }
   };
-}
+  MySearchLayout.Builder({
+    layout_weight=2;
+    {
+      {
+        AppCompatAutoCompleteTextView;
+        threshold=0;
+        dropDownHeight="224dp";
+      }
+    }
+  });
+};

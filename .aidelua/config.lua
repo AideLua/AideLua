@@ -27,3 +27,5 @@ icon = {
   day = "app/src/main/ic_launcher-playstore.png", -- 图标
   night = "app/src/main/ic_launcher_night-playstore.png", -- 暗色模式图标
 }
+
+

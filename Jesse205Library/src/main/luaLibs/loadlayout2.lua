@@ -16,6 +16,7 @@ local context = activity or service
 
 -- 各种类
 local ViewGroup = bindClass("android.view.ViewGroup")
+local ContextWrapper=bindClass("android.content.ContextWrapper")
 local String = bindClass("java.lang.String")
 local Gravity = bindClass("android.view.Gravity")
 local OnClickListener = bindClass("android.view.View$OnClickListener")
@@ -447,7 +448,7 @@ local function setattribute(root, view, params, k, v, ids)
     end
     if paramsAttr then
       params[paramsAttr] = checkValue(v)
-     elseif not (k:find("padding")) and k ~= "style" then -- 设置属性
+     elseif not (k:find("padding")) and k ~= "style" and k ~= "theme" then -- 设置属性
       k = string.gsub(k, "^(%w)", string.upper)
       if k == "Text" or k == "Title" or k == "Subtitle" or k == "Hint" then
         view["set" .. k](v)
@@ -487,12 +488,17 @@ local function loadlayout(t, root, group)
   root = root or _G
   local view
   local style = t.style
+  local theme=t.theme
   local viewClass=t[1]
   if not viewClass then
     error(string.format("loadlayout error: Fist value Must be a Class, checked import package.\n\tat %s", dump2(t)),
     0)
   end
-
+  local context=context
+  if theme then
+    context=ContextWrapper(context)
+    context.setTheme(theme)
+  end
   if style then
     view = viewClass(context, nil, style)
    else

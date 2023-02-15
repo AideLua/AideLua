@@ -12,6 +12,8 @@
 		android:height="2dp"
 		android:gravity="bottom">
 		<shape
+            android:height="2dp"
+            android:gravity="bottom"
 			android:shape="rectangle">
 			<solid
 				android:color="?colorAccent"/>

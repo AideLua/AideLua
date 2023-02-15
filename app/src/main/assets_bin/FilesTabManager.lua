@@ -106,6 +106,7 @@ local function applyTabMenu(view,config)
         if y>filesTabLay.getHeight() then
           dropMenuState=true
           --阻止事件传递
+          view.cancelLongPress()
           view.requestDisallowInterceptTouchEvent(true)
           if Build.VERSION.SDK_INT>=30 then
             view.performHapticFeedback(HapticFeedbackConstants.GESTURE_END)
@@ -122,6 +123,7 @@ local function applyTabMenu(view,config)
           .start()
          elseif not(pathTipState) and y<0 then
           pathTipState=true
+          view.cancelLongPress()
           view.requestDisallowInterceptTouchEvent(true)
           if Build.VERSION.SDK_INT>=24 then
             view.performLongClick(event.x,event.y)
@@ -146,8 +148,10 @@ local function applyTabMenu(view,config)
       maxY=0
     end
   end
-  view.onLongClick=function(view)
-    pathTipState=true
+  if Build.VERSION.SDK_INT>=26 then
+    view.onLongClick=function(view)
+      pathTipState=true
+    end
   end
   view.onGenericMotion=function(view,event)
     local buttonState = event.getButtonState()

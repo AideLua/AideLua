@@ -28,7 +28,7 @@
       radius=0;
       elevation="8dp";
       layoutTransition=newLayoutTransition();
-      backgroundColor=theme.color.windowBackground;
+      backgroundColor=res.color.attr.windowBackgroundColor
     };
   };
 };

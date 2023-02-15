@@ -5,7 +5,7 @@
   --layout_width="256dp";
   layout_height="fill";
   id="drawerChild";
-  backgroundColor=theme.color.windowBackground;
+  backgroundColor=res.color.attr.windowBackgroundColor;
   {
     LinearLayoutCompat;
     layout_height="fill";
@@ -15,7 +15,7 @@
     {
       CardView;
       layout_width="fill";
-      backgroundColor=theme.color.colorPrimary;
+      backgroundColor=res.color.attr.colorPrimary;
       radius=0;
       id="sideAppBarLayout";
       minimumHeight=1;

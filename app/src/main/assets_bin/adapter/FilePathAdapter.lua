@@ -1,7 +1,11 @@
 local pathSplitList=FilesBrowserManager.pathSplitList
+
+local mediumTypeface=Typeface.create("sans-serif-medium", Typeface.NORMAL)
 local function onClick(view)
   FilesBrowserManager.refresh(File(view.tag))
 end
+
+local actionBarRes=res(res.id.attr.actionBarTheme)
 
 local length=0
 return function(item)
@@ -26,19 +30,19 @@ return function(item)
       local iconView=ids.icon
       titleView.setBackground(ThemeUtil.getRippleDrawable(theme.color.ActionBar.rippleColorPrimary,true))
       titleView.onClick=onClick
-      titleView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL))
+      titleView.setTypeface(mediumTypeface)
 
       if viewType==1 then
         iconView.setVisibility(View.GONE)
         titleView.getPaint().setFakeBoldText(true)
         if oldDarkActionBar then
-          titleView.setTextColor(theme.color.ActionBar.colorControlNormal)
+          --theme.color.ActionBar.colorControlNormal
+          titleView.setTextColor(actionBarRes.color.attr.colorControlNormal)
          else
-          titleView.setTextColor(theme.color.colorAccent)
+          titleView.setTextColor(actionBarRes.color.attr.colorAccent)
         end
        else
-        titleView.setTextColor(theme.color.ActionBar.textColorSecondary)
-        --iconView.setAlpha(Color.alpha(theme.color.ActionBar.textColorSecondary)/255)
+        titleView.setTextColor(android.res(res.id.attr.actionBarTheme).color.attr.textColorSecondary)
       end
       return holder
     end,
@@ -47,11 +51,15 @@ return function(item)
       local data=pathSplitList[position+1]
       local view=holder.view
       local tag=view.getTag()
+      --[[
       local titleView=tag.title
       local iconView=tag.icon
       local text,path=data[1],data[2]
       titleView.setText(text)
-      titleView.setTag(path)
+      titleView.setTag(path)]]
+      local titleView=tag.title
+      titleView.setText(data[1])
+      titleView.setTag(data[2])
     end,
   }))
 

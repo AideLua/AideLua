@@ -2,7 +2,37 @@ import "java.io.File"
 import "java.io.FileInputStream"
 import "java.io.FileOutputStream"
 
+
 local FileUtil={}
+
+---@param sourceChannel FileChannel 来源FileChannel
+---@param destChannel FileChannel 目标FileChannel
+---@throws IllegalArgumentException | NonReadableChannelException | NonWritableChannelException | ClosedChannelException | AsynchronousCloseException | ClosedByInterruptException | IOException
+function FileUtil.channelCopy(sourceChannel, destChannel)
+  local size=sourceChannel.size()
+  local transferSize
+  local left=size
+  while left>0 do
+    transferSize = sourceChannel.transferTo((size - left), left, destChannel)
+    left=left-transferSize
+  end
+  --sourceChannel.close()
+  --destChannel.close()
+end
+
+--@param sourceStream FileInputStream 来源FileInputStream
+--@param destStream FileOutputStream 目标FileOutputStream
+function FileUtil.copyFileStream(sourceStream,destStream)
+  local sourceChannel=sourceStream.getChannel()
+  local destChannel=destStream.getChannel()
+  FileUtil.channelCopy(sourceChannel, destChannel)
+  sourceChannel.close()
+  destChannel.close()
+  --sourceStream.close()
+  --destStream.close()
+end
+
+
 local function copyFile(fromFile,toFile,rewrite)
   local exists=toFile.exists()
   if exists and not rewrite then
@@ -17,17 +47,18 @@ local function copyFile(fromFile,toFile,rewrite)
   end
   local fosfrom = FileInputStream(fromFile)
   local fosto = FileOutputStream(toFile)
+  FileUtil.copyFileStream(fosfrom,fosto)
+  --[[
   local bt = byte[1024]
   local c = fosfrom.read(bt)
   while c>=0 do
     fosto.write(bt, 0, c) --将内容写到新文件当中
     c = fosfrom.read(bt)
-  end
+  end]]
   fosfrom.close()
   fosto.close()
   luajava.clear(fosfrom)
   luajava.clear(fosto)
-  luajava.clear(bt)
 end
 FileUtil.copyFile=copyFile
 
