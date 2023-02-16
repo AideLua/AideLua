@@ -136,19 +136,52 @@ div[class*=language-] .highlight-lines {
 }
 
 //代码高亮
-.token.string {
+.token.string,
+.token.char,
+.token.regex,
+.token.variable {
     color: #c2185b;
 }
 
-.dark .token.string {
+.dark .token.string,
+.dark .token.char,
+.dark .token.regex,
+.dark .token.variable {
     color: #EC407A;
+}
+
+//XML语法高亮
+
+.token.attr-name{
+    color: #1976D2;
+}
+
+.token.attr-value {
+    color: #4CAF50;
+}
+
+//.token.tag>.token.attr-value>.token.punctuation,
+//.token.tag>.token.punctuation,
+.token.tag {
+    color: #3F51B5;
+}
+
+.token.tag>.token.tag {
+    font-weight: bold;
+}
+
+.token.attr-name>.token.namespace {
+    color: #9C27B0;
+    font-weight: bold;
 }
 
 .token.punctuation {
     color: #616161;
 }
 
+//数字、函数、类
 .token.number,
+.token.class-name,
 .token.function {
     color: #5C6BC0;
 }
@@ -167,9 +200,11 @@ div[class*=language-] .highlight-lines {
     color: #9E9E9E;
 }
 
+//注释
 .token.comment {
     font-style: italic;
 }
+
 
 .token.boolean,
 .token.selector,
@@ -189,4 +224,8 @@ html,
 body,
 div {
     transition: background-color var(--t-color) !important;
+}
+
+img {
+    border-radius: 3px;
 }

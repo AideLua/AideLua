@@ -17,22 +17,21 @@
 :::: code-group
 ::: code-group-item Lua
 
-```lua ts{4,6}
+```lua{8}
 local text = ""
 for index1 = 1, 9 do
     for index2 = 1, index1 do
-      text=text .. index1 .. "x" .. index2 .. "=" .. index1 * index2 .. (index2 ~= 9 and " " or "")
+        text=text .. index1 .. "x" .. index2 .. "=" .. index1 * index2 .. (index2 ~= 9 and "\t" or "")
     end
     text=text .. (index1 ~= 9 and "\n" or "")
 end
 print(text)
-
 ```
 
 :::
 ::: code-group-item Java
 
-``` java ts{1,3}
+``` java ts{3}
 class HelloJava{
     public static void main(String[] args){
         System.out.println("Hello Java!");
@@ -43,14 +42,64 @@ class HelloJava{
 :::
 ::: code-group-item Python
 
-``` python
+``` python{6}
 text = ""
 for index1 in range(1, 10):
     for index2 in range(1, index1 + 1):
-        text = text + str(index1) + "x" + str(index2) + "=" + str(index1 * index2) + (" " if index2 != index1 else "")
+        text = text + str(index1) + "x" + str(index2) + "=" + str(index1 * index2) + ("\t" if index2 != index1 else "")
     text = text + ("\n" if index1 != 9 else "")
 print(text)
 ```
+
+:::
+::: code-group-item JavaScript
+
+``` js{8}
+let text = "";
+for (let index1 = 1; index1<=9; index1++){
+    for (let index2 = 1; index2<=index1; index2++){
+        text=text + index1 + "x" + index2 + "=" + index1 * index2 + (index1 != index2? "\t": "");
+    }
+    text=text + (index1 != 9? "\n": "");
+}
+console.log(text);
+```
+
+:::
+::: code-group-item C++
+
+``` cpp
+#include <iostream>
+using namespace std;
+int main() {
+    for (int index1 = 1; index1<=9; index1++) {
+        for (int index2 = 1; index2<=index1; index2++) {
+            cout << index1 << 'x' << index2 << '=' << index2*index2 << (index1 != index2? "\t": "");
+        }
+        cout << (index1 != 9? "\n": "");
+    }
+    return 0;
+}```
+
+:::
+::: code-group-item XML
+
+``` xml
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="test.code">
+    <application
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:theme="@style/Theme.TestCode">
+        <activity
+            android:label="@string/app_name"
+            android:name="com.jesse205.superlua.LuaActivity"/>
+    <application/>
+</manifest>
+```
+
+:::
 
 ::::
 

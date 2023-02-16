@@ -1569,9 +1569,34 @@
     "@vuepress/core" "2.0.0-beta.60"
     prismjs "^1.29.0"
 
-"@vuepress/plugin-search@^2.0.0-beta.60":
+"@vuepress/plugin-pwa-popup@2.0.0-beta.60":
   version "2.0.0-beta.60"
-  resolved "https://registry.yarnpkg.com/@vuepress/plugin-search/-/plugin-search-2.0.0-beta.60.tgz#e253e00bb8070093baa5f7f400df75c1c484b7b4"
+  resolved "https://registry.npmmirror.com/@vuepress/plugin-pwa-popup/-/plugin-pwa-popup-2.0.0-beta.60.tgz#a2ddc6d2cc346f671b4eb0db2f83067ec5562e66"
+  integrity sha512-DHJG1BsqUndBxI6rc0QJY6ZPsurLvn0EkQfr8/w3QinY36lHGMq+hW1LfowilrmJdKueCDs0TUUf7pzWq6jGGQ==
+  dependencies:
+    "@vuepress/client" "2.0.0-beta.60"
+    "@vuepress/core" "2.0.0-beta.60"
+    "@vuepress/plugin-pwa" "2.0.0-beta.60"
+    "@vuepress/shared" "2.0.0-beta.60"
+    "@vuepress/utils" "2.0.0-beta.60"
+    vue "^3.2.45"
+
+"@vuepress/plugin-pwa@2.0.0-beta.60":
+  version "2.0.0-beta.60"
+  resolved "https://registry.npmmirror.com/@vuepress/plugin-pwa/-/plugin-pwa-2.0.0-beta.60.tgz#8fb85216f9f41d4da524cdc695894498f84b08ab"
+  integrity sha512-v+ohgXgZAEb/WCi8c74RNOPB0N91RaHalkuIy8aa3nhrKd41Rp06PAaDDxtrm4zmMlQKkqTCO78ia9eY75GW0Q==
+  dependencies:
+    "@vuepress/client" "2.0.0-beta.60"
+    "@vuepress/core" "2.0.0-beta.60"
+    "@vuepress/utils" "2.0.0-beta.60"
+    mitt "^3.0.0"
+    register-service-worker "^1.7.2"
+    vue "^3.2.45"
+    workbox-build "^6.5.4"
+
+"@vuepress/plugin-search@2.0.0-beta.60":
+  version "2.0.0-beta.60"
+  resolved "https://registry.npmmirror.com/@vuepress/plugin-search/-/plugin-search-2.0.0-beta.60.tgz#e253e00bb8070093baa5f7f400df75c1c484b7b4"
   integrity sha512-9ENqni4H35/L6vab5DpQfy92DcKPL+36xxoOj1EqZfjU/IlIOFKz4TK8JwhaX+reswokF8NriPFcWol4xIa5IA==
   dependencies:
     "@vuepress/client" "2.0.0-beta.60"
