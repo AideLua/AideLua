@@ -32,6 +32,12 @@
     license="Apache-2.0 license",
   },
   {
+    name="ZipAlign for Android",
+    message="Android port of zipalign tool.",
+    url="https://github.com/MuntashirAkon/zipalign-android",
+    license="Apache-2.0 license",
+  },
+  {
     name="zipalign-java",
     message="zipalign implemented as a java library",
     url="https://github.com/Iyxan23/zipalign-java",

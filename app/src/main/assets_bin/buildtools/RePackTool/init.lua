@@ -118,12 +118,10 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign,runMode)
     notLoadTheme=true
     import "jesse205"
     import "android.content.pm.PackageManager"
-    import "java.io.RandomAccessFile"
     import "net.lingala.zip4j.ZipFile"
-    import "com.iyxan23.zipalignjava.ZipAlign"
     import "apksigner.*"
     import "com.jesse205.util.FileUtil"
-
+    import "helper.ZipAlignToolHelper"
     import "buildtools.BuildHelper"
     RePackTool=require "buildtools.RePackTool"
 
@@ -257,7 +255,7 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign,runMode)
     newApkBaseName=appName.."_v"..appVer..os.date("_%Y%m%d%H%M%S")
     newApkName=newApkBaseName..".apk"
     newApkPath=binPath.."/"..newApkName
-   
+
     updateDoing(formatResStr(R.string.binproject_zip,{newApkName}))
     runBinEvent("beforePack",tempPath)
     LuaUtil.zip(tempPath,binPath,newApkName)
@@ -273,11 +271,13 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign,runMode)
      else
       isAlignZip=config.alignZip
     end
-    if isAlignZip then
+    if isAlignZip and ZipAlignToolHelper.getToolType() then
       updateDoing(formatResStr(R.string.binproject_zipalign))
+      updateInfo("ZipAligner: "..ZipAlignToolHelper.items[ZipAlignToolHelper.getToolType()+1])
       local notOptimizedApkPath=binPath.."/"..newApkBaseName.."_unopt.apk"
       os.rename(newApkPath, notOptimizedApkPath)
-      ZipAlign.alignZip(RandomAccessFile(notOptimizedApkPath,"r"), FileOutputStream(newApkPath))
+      ZipAlignToolHelper.alignZip(notOptimizedApkPath,newApkPath)
+      --ZipAlign.alignZip(RandomAccessFile(notOptimizedApkPath,"r"), FileOutputStream(newApkPath))
       File(notOptimizedApkPath).delete()
       updateSuccess(formatResStr(R.string.binproject_zipalign_done))
     end

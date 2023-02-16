@@ -46,6 +46,15 @@
     summary=R.string.zipalign_summary;
     key="alignZip";
   };
+  {--ZipAlign工具
+    SettingsLayUtil.ITEM;
+    icon=R.drawable.ic_zip_box_outline;
+    title=R.string.zipalign;
+    --summary=R.string.zipalign_summary;
+    key=ZipAlignToolHelper.key;
+    items=ZipAlignToolHelper.items,
+    action="singleChoose";
+  };
   {--项目
     SettingsLayUtil.TITLE;
     title=R.string.project;
@@ -120,11 +129,8 @@
     icon=R.drawable.ic_format_font;
     title=R.string.font;
     key="editor_font";
-    --summary=getSharedData("projectsDir");
     items={"Default","JetBrains Mono","Cascadia Code","System UI","Serif"},
     action="singleChoose";
-    hint=R.string.projects_path;
-    allowNull=false;
   };
 
   {

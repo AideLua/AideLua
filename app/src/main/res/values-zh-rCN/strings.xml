@@ -44,6 +44,7 @@
     <string name="buildAndPack">构建 &amp; 打包</string>
     <string name="compileLua">编译 Lua</string>
     <string name="zipalign">Zipalign 对齐</string>
+    <string name="zipalign_tool">Zipalign 工具</string>
     <string name="zipalign_summary">确保归档文件中的所有未压缩文件相对于文件开头对齐</string>
 
     <string name="open">打开</string>

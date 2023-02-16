@@ -8,6 +8,7 @@ normalkeys.config=true
 import "com.jesse205.layout.util.SettingsLayUtil"
 import "com.jesse205.layout.innocentlayout.RecyclerViewLayout"
 import "com.jesse205.app.dialog.EditDialogBuilder"
+import "helper.ZipAlignToolHelper"
 
 packageInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
 PluginsUtil.setActivityName("settings")

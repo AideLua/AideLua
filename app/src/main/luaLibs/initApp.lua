@@ -22,6 +22,10 @@ if getSharedData("alignZip")==nil then
   setSharedData("alignZip",true)
 end
 
+if getSharedData("alignZipTool")==nil then
+  setSharedData("alignZipTool",0)
+end
+
 if getSharedData("jesse205Lib_support")==nil then
   setSharedData("jesse205Lib_support",false)
 end
