@@ -133,6 +133,7 @@ function LuaEditorHelper.onEditorSelectionChangedListener(view,status,start,end_
     _clipboardActionMode=nil
   end
   if _clipboardActionMode then
+    --预览颜色
     local selectedText=view.getSelectedText()
     local previewString
     local color,colorName=getColorAndHex(selectedText)

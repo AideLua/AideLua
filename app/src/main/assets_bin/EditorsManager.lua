@@ -234,10 +234,6 @@ function EditorsManager.checkAndRefreshSharedDataListeners()
   end
 end
 
-
-
-
-
 --默认的管理器的活动事件
 local function generalActionEvent(editorConfig,name1,name2,...)
   local func=editorConfig.action[name1]
@@ -594,17 +590,15 @@ function EditorsManager.init()
   --EditorsManager.switchEditor("NoneView")
 end
 
-
-
 local symbolBar={}
 EditorsManager.symbolBar=symbolBar
 --在 v5.1.0(51099) 添加
 symbolBar.symbols={
-  --显示,显示2(为括号而准备),粘贴(默认显示),覆盖(默认粘贴),辅助提示,辅助英文提示
-  {"func()",false,"function()","function %s()\n\nend","函数(体)","Function (Body)"},
-  {"(",")",nil,nil,"小括号","Parentheses"},
-  {"[","]",nil,nil,"中括号","Brackets"},
-  {"{","}",nil,nil,"大括号","Curly Brackets"},
+  --显示,显示2(为括号而准备),粘贴(默认显示),覆盖(默认粘贴),辅助提示,辅助英文提示,覆盖时移动光标偏移量
+  {"func()",false,"function()","function %s()\n\nend","函数(体)","Function (Body)",-4},
+  {"(",")",nil,nil,"小括号","Parentheses",-1},
+  {"[","]",nil,nil,"中括号","Brackets",-1},
+  {"{","}",nil,nil,"大括号","Curly Brackets",-1},
   {"\"",true,nil,nil,"双引号","Double quotation"},
   {"=",nil,nil,nil,"等号","Equal"},
   {":",nil,nil,nil,"冒号","Colon"},
@@ -624,7 +618,7 @@ symbolBar.symbols={
   {"?",nil,nil,nil,"问好","Question"},
   {"&",nil,nil,nil,"与","And"},
   {"|",nil,nil,nil,"或","Or"},
-  {"<",">",nil,nil,"尖括号","Angle bracket"},
+  {"<",">",nil,nil,"尖括号","Angle bracket",-1},
   {"~",nil,nil,nil,"波浪号","Tilde"},
   {"'",true,nil,nil,"单引号","Single quotation"},
 }
@@ -651,8 +645,20 @@ end
 ---符号栏按钮点击时输入符号
 ---@param view View 按钮视图
 function symbolBar.onButtonClickListener(view)
-  if managerActions.paste(view.tag.reallyText) then
+  local config=view.tag
+  local selectedText=managerActions.getSelectedText()
+  
+  if managerActions.paste(config.reallyText) then
     view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
+    --移动光标到指定位置
+    if EditorsManager.checkEditorSupport("setSelection") and EditorsManager.checkEditorSupport("getSelectionEnd") then
+      if selectedText and selectedText~="" then--已选择文字
+        local move=config[7]
+        if move then
+          managerActions.setSelection(managerActions.getSelectionEnd()+move)
+        end
+      end
+    end
   end
 end
 
