@@ -32,6 +32,13 @@
     license="Apache-2.0 license",
   },
   {
+    name="zipalign-java",
+    message="zipalign implemented as a java library",
+    url="https://github.com/Iyxan23/zipalign-java",
+    licenseName="MIT license",
+    license="ZipalignJava license",
+  },
+  {
     name="android_packages_apps_DocumentsUI",
     url="https://github.com/LineageOS/android_packages_apps_DocumentsUI",
     license="Apache-2.0 license",

@@ -119,6 +119,7 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign,runMode)
     import "jesse205"
     import "android.content.pm.PackageManager"
     import "net.lingala.zip4j.ZipFile"
+    import "com.iyxan23.zipalignjava.ZipAlign"
     import "apksigner.*"
     import "com.jesse205.util.FileUtil"
 
@@ -145,9 +146,9 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign,runMode)
     local binDir=File(binPath)
     local tempPath
     if runMode then
-      tempPath=AppPath.Sdcard.."/Android/media/"..(config.packageName or activity.getPackageName()).."/cache/temp/aidelua_unzip"
+      tempPath=AppPath.Sdcard..("/Android/media/%s/cache/temp/debugApk"):format(config.packageName or activity.getPackageName())
      else
-      tempPath=binPath.."/.debugApk"
+      tempPath=binPath.."/.aidelua_unzip"
     end
     local tempDir=File(tempPath)
     local appName,appVer,appApkPAI,appApkInfo
@@ -180,6 +181,7 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign,runMode)
         end
       end
     end
+
     if appPath then
       updateInfo("File Name: "..appFile.getName())
      else
@@ -197,89 +199,109 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign,runMode)
       appVer=config.versionName or appApkPAI.versionName
       updateInfo("App Name: "..appName)
       updateInfo("Version Name: v"..appVer)
-
-      local binEventsPaths={RePackTool.getALPathByProjectPath(projectPath).."/bin.lua"}
-      for _type,path in rePackTool.getSubprojectPathIteratorByList(config,projectPath) do
-        if _type=="project" then
-          table.insert(binEventsPaths,RePackTool.getALPathByProjectPath(path).."/bin.lua")
-        end
-      end
-      for index=1,#binEventsPaths do
-        local path=binEventsPaths[index]
-        if File(path).isFile() then
-          local success,binEvents=pcall(getConfigFromFile,path)
-          if success then
-            setmetatable(binEvents,{__index=_G})
-            table.insert(binEventsList,binEvents)
-           else
-            updateError(binEvents)
-          end
-        end
-      end
-      binEventsPaths=nil
-      --解压安装包
-      updateDoing(formatResStr(R.string.binproject_unzip,{appFile.getName()}))
-      tempDir.getParentFile().mkdirs()
-      LuaUtil.rmDir(tempDir)
-      LuaUtil.unZip(appPath,tempPath)
-      updateSuccess(getString(R.string.binproject_unzip_done))
-
-      updateDoing(getString(R.string.binproject_copying))
-      rePackTool.buildLuaResources(config,projectPath,tempPath,updateInfo)
-      updateSuccess(getString(R.string.binproject_copy_done))
-
-      --编译Lua，默认true
-      if config.compileLua~=false then
-        updateDoing(getString(R.string.binproject_compiling))
-        RePackTool.autoCompileLua(tempDir,BuildHelper.onCompileListener)
-        updateSuccess(getString(R.string.binproject_compile_done))
-      end
-
-      if runMode then
-        --如果是运行模式，那么apkPath就是apk解包路径
-        return true,tempPath
-      end
-
-      --压缩
-      newApkBaseName=appName.."_v"..appVer..os.date("_%Y%m%d%H%M%S")
-      newApkName=newApkBaseName..".apk"
-      newApkPath=binPath.."/"..newApkName
-      updateDoing(formatResStr(R.string.binproject_zip,{newApkName}))
-      runBinEvent("beforePack",tempPath)
-      LuaUtil.zip(tempPath,binPath,newApkName)
-      updateSuccess(getString(R.string.binproject_zip_done))
-
-      updateDoing(getString(R.string.binproject_deleting))
-      LuaUtil.rmDir(tempDir)
-      updateSuccess(getString(R.string.binproject_delete_done))
-
-      --签名
-      if sign then
-        local signSucceed,signErr
-        local signedApkName=newApkBaseName.."_autosigned.apk"
-        local signedApkPath=binPath.."/"..signedApkName
-        if Signer then--有签名工具
-          updateDoing(formatResStr(R.string.binproject_signing,{signedApkName}))
-          updateInfo("Key Store: Debug")
-          signSucceed,signErr=pcall(Signer.sign,newApkPath,signedApkPath)
-          if signSucceed then
-            updateSuccess(getString(R.string.binproject_sign_done))
-           else
-            return false,signSucceed
-          end
-        end
-        if signSucceed then--签名成功
-          File(newApkPath).delete()
-          return true,signedApkPath
-         else
-          return formatResStr(R.string.binproject_error_signer,{newApkPath})
-        end
-       else
-        return true,newApkPath
-      end
      else
       --无法解析安装包
       return formatResStr(R.string.binproject_error_parse,{appFile.getName()})
+    end
+
+    local binEventsPaths={RePackTool.getALPathByProjectPath(projectPath).."/bin.lua"}
+    for _type,path in rePackTool.getSubprojectPathIteratorByList(config,projectPath) do
+      if _type=="project" then
+        table.insert(binEventsPaths,RePackTool.getALPathByProjectPath(path).."/bin.lua")
+      end
+    end
+    for index=1,#binEventsPaths do
+      local path=binEventsPaths[index]
+      if File(path).isFile() then
+        local success,binEvents=pcall(getConfigFromFile,path)
+        if success then
+          setmetatable(binEvents,{__index=_G})
+          table.insert(binEventsList,binEvents)
+         else
+          updateError(binEvents)
+        end
+      end
+    end
+    binEventsPaths=nil
+    --解压安装包
+    updateDoing(formatResStr(R.string.binproject_unzip,{appFile.getName()}))
+    tempDir.getParentFile().mkdirs()
+    LuaUtil.rmDir(tempDir)
+    LuaUtil.unZip(appPath,tempPath)
+    updateSuccess(getString(R.string.binproject_unzip_done))
+
+    updateDoing(getString(R.string.binproject_copying))
+    rePackTool.buildLuaResources(config,projectPath,tempPath,updateInfo)
+    updateSuccess(getString(R.string.binproject_copy_done))
+
+    --编译Lua
+    local isCompileLua
+    if type(config.compileLua)=="nil" then
+      isCompileLua=getSharedData("compileLua")
+     else
+      isCompileLua=config.compileLua
+    end
+    if isCompileLua then
+      updateDoing(getString(R.string.binproject_compiling))
+      RePackTool.autoCompileLua(tempDir,BuildHelper.onCompileListener)
+      updateSuccess(getString(R.string.binproject_compile_done))
+    end
+
+    if runMode then
+      --如果是运行模式，那么apkPath就是apk解包路径
+      return true,tempPath
+    end
+
+    --压缩
+    newApkBaseName=appName.."_v"..appVer..os.date("_%Y%m%d%H%M%S")
+    newApkName=newApkBaseName..".apk"
+    newApkPath=binPath.."/"..newApkName
+   
+    updateDoing(formatResStr(R.string.binproject_zip,{newApkName}))
+    runBinEvent("beforePack",tempPath)
+    LuaUtil.zip(tempPath,binPath,newApkName)
+    updateSuccess(getString(R.string.binproject_zip_done))
+
+    updateDoing(getString(R.string.binproject_deleting))
+    LuaUtil.rmDir(tempDir)
+    updateSuccess(getString(R.string.binproject_delete_done))
+
+    local isZipAlignAlignment
+    if type(config.useZipalign)=="nil" then
+      isZipAlignAlignment=getSharedData("zipalignAlignment")
+     else
+      isZipAlignAlignment=config.useZipalign
+    end
+    if isZipAlignAlignment then
+      updateDoing(formatResStr(R.string.binproject_zipalign))
+      local notOptimizedApkPath=binPath.."/"..newApkBaseName.."_unopt.apk"
+      os.rename(newApkPath, notOptimizedApkPath)
+      ZipAlign.alignZip(FileInputStream(notOptimizedApkPath), FileOutputStream(newApkPath))
+      File(notOptimizedApkPath).delete()
+      updateSuccess(formatResStr(R.string.binproject_zipalign_done))
+    end
+
+    --签名
+    if sign then
+      local signSucceed,signErr
+      local signedApkName=newApkBaseName.."_autosigned.apk"
+      local signedApkPath=binPath.."/"..signedApkName
+      if Signer then--有签名工具
+        updateDoing(formatResStr(R.string.binproject_signing,{signedApkName}))
+        updateInfo("Key Store: Debug")
+        signSucceed,signErr=pcall(Signer.sign,newApkPath,signedApkPath)
+      end
+      if signSucceed then
+        updateSuccess(getString(R.string.binproject_sign_done))
+        File(newApkPath).delete()
+        return true,signedApkPath
+       elseif signSucceed==false then
+        return signErr
+       else
+        return formatResStr(R.string.binproject_error_signer,{newApkPath})
+      end
+     else
+      return true,newApkPath
     end
   end)
 end

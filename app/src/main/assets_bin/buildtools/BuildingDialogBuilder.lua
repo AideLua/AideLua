@@ -57,7 +57,7 @@ function BuildingDialogBuilder:print(iconName,message,state)
    case "success" then--成功
     icon=R.drawable.ic_check
     iconColor=theme.color.Green
-    dialogIds.stateTextView.text=message
+    --dialogIds.stateTextView.text=message
    case "error" then--错误
     icon=R.drawable.ic_close
     iconColor=theme.color.Red

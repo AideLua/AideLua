@@ -42,6 +42,10 @@
     <string name="checkingUpdates">Checking for updates</string>
     <string name="font">Font</string>
     <string name="open_source_repository">Open source repository</string>
+    <string name="buildAndPack">Build &amp; Pack</string>
+    <string name="compileLua">Compile Lua</string>
+    <string name="zipalign">Zipalign alignment</string>
+    <string name="zipalign_summary">Helps ensure that all uncompressed files in the archive are aligned relative to the start of the file.</string>
     
     <string name="open">Open</string>
     <string name="open_failed">Open failed</string>
@@ -134,11 +138,13 @@
 	<string name="binproject_compiling">Compiling file</string>
     <string name="binproject_compile_done">Compiled completed</string>
     <string name="binproject_deleting">Deleting temporary folder</string>
+    <string name="binproject_delete_done">Delete complete</string>
     <string name="binproject_signing">Signing to %1$s</string>
 	<string name="binproject_sign_done">Signing completed</string>
-	<string name="binproject_delete_done">Delete complete</string>
     <string name="binproject_zip">Packing to %1$s</string>
 	<string name="binproject_zip_done">Package completed</string>
+	<string name="binproject_zipalign">Aligning with Zipalign</string>
+    <string name="binproject_zipalign_done">Alignment completed</string>
 	<string name="binproject_state_succeed">Packaged successfully</string>
     <string name="binproject_state_succeed_with_path">Packaged successfully\nPath: %1$s</string>
     <string name="binproject_state_succeed_with_path_needSign">Packaged successfully, please sign the Apk file. </string>

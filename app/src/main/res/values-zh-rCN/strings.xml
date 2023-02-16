@@ -41,18 +41,22 @@
     <string name="checkingUpdates">正在检查更新</string>
     <string name="font">字体</string>
     <string name="open_source_repository">开源仓库</string>
-    
+    <string name="buildAndPack">构建 &amp; 打包</string>
+    <string name="compileLua">编译 Lua</string>
+    <string name="zipalign">Zipalign 对齐</string>
+    <string name="zipalign_summary">确保归档文件中的所有未压缩文件相对于文件开头对齐</string>
+
     <string name="open">打开</string>
     <string name="open_failed">打开失败</string>
-    
+
     <string name="exit_toast">再按一次退出程序</string>
     <string name="res_reference">引用资源</string>
-    
+
     <string name="create">新建</string>
     <string name="create_success">创建成功</string>
     <string name="create_failed">创建失败</string>
     <string name="creating">正在创建...</string>
-    
+
     <string name="save_succeed">保存成功</string>
     <string name="save_failed">保存失败</string>
     <string name="save_failed_withMessage">保存失败，%1$s</string>
@@ -80,12 +84,12 @@
     <string name="file_viewName_content">文件名：%1$s</string>
     <string name="file_noOpen">未打开文件</string>
     <string name="file_createCopy">创建副本</string>
-    
+
     <string name="directory">文件夹</string>
     <string name="directory_go_popup">打开目录...</string>
     <string name="directory_create">新建文件夹</string>
     <string name="directory_name">文件夹名</string>
-    
+
     <string name="project">项目</string>
     <string name="project_root">项目根目录</string>
     <string name="project_popup">项目...</string>
@@ -119,7 +123,7 @@
 	<string name="projects_path_select">选择项目路径</string>
     <string name="projects_paths">项目路径</string>
 	<string name="projects_paths_summary">支持多个路径。路径之间使用“;”分割</string>
-	
+
     <string name="binproject_loading">正在打包...</string>
     <string name="binproject_loading_with_parent">正在打包...\n%1$s</string>
     <string name="binproject_creating_variables">正在创建变量</string>
@@ -136,6 +140,8 @@
     <string name="binproject_sign_done">签名完成</string>
     <string name="binproject_zip">正在打包到 %1$s</string>
 	<string name="binproject_zip_done">打包完成</string>
+	<string name="binproject_zipalign">正在 Zipalign 对齐</string>
+	<string name="binproject_zipalign_done">Zipalign 对齐完成</string>
 	<string name="binproject_state_succeed">打包成功</string>
     <string name="binproject_state_succeed_with_path">打包成功\n路径：%1$s</string>
     <string name="binproject_state_succeed_with_path_needSign">打包成功，请手动签名\n路径：%1$s</string>
@@ -144,16 +150,16 @@
     <string name="binproject_error_signer">签名失败，请手动签名\n路径：%1$s</string>
     <string name="binproject_error_parse">安装包 (%1$s) 解析失败</string>
     <string name="binproject_cannotFindTool">无法找到相应版本的 ReBuildTool，请检查 Aide Lua 是否有更新</string>
-    
+
 	<string name="newActivity">新建 Activity</string>
-    
+
     <string name="delete">删除</string>
     <string name="delete_withName">删除 %1$s</string>
     <string name="delete_warning">确定删除？删除后不可恢复。</string>
     <string name="delete_succeed">删除成功</string>
     <string name="delete_failed">删除失败</string>
     <string name="deleted_withName">已删除 %1$s</string>
-    
+
     <string name="javaApiViewer">Java API 浏览器</string>
     <string name="javaApiViewer_windmill">Java API 浏览器 (快乐程序)</string>
     <string name="javaApiViewer_viewApi">查看API</string>
@@ -167,10 +173,10 @@
     <string name="javaApiViewer_methods">方法</string>
 
     <string name="layoutHelper">布局助手</string>
-    
+
     <string name="checkCode">检查错误</string>
     <string name="checkCode_noGrammaticalErrors">没有语法错误。</string>
-    
+
     <string name="settings">设置</string>
     <string name="settings_ui_richAnim">丰富的动画</string>
     <string name="settings_support_Jesse205Library">Jesse205库 支持</string>
@@ -193,18 +199,18 @@
     <string name="settings_autoCheckUpdate">自动检查更新</string>
     <string name="settings_moreCompleteRun">比较完整的运行</string>
     <string name="settings_moreCompleteRun_summary">将 lua 资源整合后再运行，而不是直接运行</string>
-    
+
     <string name="window_openNew">新建窗口</string>
     <string name="window_openInNewWindow">在新窗口打开</string>
-    
+
     <string name="rename">重命名</string>
     <string name="rename_success">重命名成功</string>
     <string name="rename_fail">重命名失败</string>
-    
+
     <string name="runCode">运行代码</string>
     <string name="runCode_noApp">为了您更好地调试软件，请导出 LuaActivity，并打包项目并安装。</string>
     <string name="runCode_noPackageName">为了您更好地调试软件，请检查 config.lua 的 packageName 是否存在。</string>
-    
+
     <string name="plugins">插件</string>
     <string name="plugins_popup">插件...</string>
     <string name="plugins_manager">插件管理</string>
@@ -224,17 +230,17 @@
     <string name="plugins_error_update_app">您的 APP 版本不符合此插件最低要求，请检查软件更新</string>
     <string name="plugins_error_unsupported">此插件不适配本软件，请下载对应版本的插件</string>
     <string name="plugins_reboot">开关插件后需要重新启动本应用</string>
-    
+
     <string name="install">安装</string>
     <string name="install_success">安装成功</string>
     <string name="install_failed">安装失败</string>
-    
+
     <string name="uninstall">卸载</string>
     <string name="uninstall_withName">卸载 %1$s</string>
     <string name="uninstall_success">卸载成功</string>
     <string name="uninstall_failed">卸载失败</string>
-    
+
 	<string name="permission_repackApk">使用 Aide Lua 进行二次打包</string>
     <string name="permission_termux_runCode">在 Termux 环境中运行命令</string>
-    
+
 </resources>

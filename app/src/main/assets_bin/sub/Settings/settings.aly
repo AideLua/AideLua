@@ -22,10 +22,9 @@
     title=R.string.settings_ui_richAnim;
     key="richAnim";
   };
-
-  {--项目
+  {--构建&打包
     SettingsLayUtil.TITLE;
-    title=R.string.project;
+    title=R.string.buildAndPack;
   };
   {--比较完整的运行
     SettingsLayUtil.ITEM_SWITCH;
@@ -33,6 +32,23 @@
     title=R.string.settings_moreCompleteRun;
     key="moreCompleteRun";
     summary=R.string.settings_moreCompleteRun_summary;
+  };
+  {--编译Lua
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_file_code_outline;
+    title=R.string.compileLua;
+    key="compileLua";
+  };
+  {--ZipAlign对齐
+    SettingsLayUtil.ITEM_SWITCH;
+    icon=R.drawable.ic_zip_box_outline;
+    title=R.string.zipalign;
+    summary=R.string.zipalign_summary;
+    key="zipalignAlignment";
+  };
+  {--项目
+    SettingsLayUtil.TITLE;
+    title=R.string.project;
   };
   {--Jesse205库支持
     SettingsLayUtil.ITEM_SWITCH;
