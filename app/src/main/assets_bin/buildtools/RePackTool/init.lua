@@ -267,13 +267,13 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign,runMode)
     LuaUtil.rmDir(tempDir)
     updateSuccess(getString(R.string.binproject_delete_done))
 
-    local isZipAlignAlignment
-    if type(config.useZipalign)=="nil" then
-      isZipAlignAlignment=getSharedData("zipalignAlignment")
+    local isAlignZip
+    if type(config.alignZip)=="nil" then
+      isAlignZip=getSharedData("alignZip")
      else
-      isZipAlignAlignment=config.useZipalign
+      isAlignZip=config.alignZip
     end
-    if isZipAlignAlignment then
+    if isAlignZip then
       updateDoing(formatResStr(R.string.binproject_zipalign))
       local notOptimizedApkPath=binPath.."/"..newApkBaseName.."_unopt.apk"
       os.rename(newApkPath, notOptimizedApkPath)

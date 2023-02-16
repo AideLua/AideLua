@@ -44,7 +44,7 @@
     icon=R.drawable.ic_zip_box_outline;
     title=R.string.zipalign;
     summary=R.string.zipalign_summary;
-    key="zipalignAlignment";
+    key="alignZip";
   };
   {--项目
     SettingsLayUtil.TITLE;

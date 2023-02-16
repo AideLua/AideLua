@@ -18,8 +18,8 @@ if getSharedData("compileLua")==nil then
   setSharedData("compileLua",true)
 end
 
-if getSharedData("zipalignAlignment")==nil then
-  setSharedData("zipalignAlignment",true)
+if getSharedData("alignZip")==nil then
+  setSharedData("alignZip",true)
 end
 
 if getSharedData("jesse205Lib_support")==nil then
