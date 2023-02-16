@@ -432,43 +432,7 @@ import "jesse205"
           return true
         end,
         onPageStarted=function(super,view,url,favicon)
-          if url:find("%.md") or url:find("%.markdown") then
-            view.stopLoading()
-            --加载Showdown
-            local showdownFile=io.open(activity.getLuaDir().."/showdown/showdown.min.js","r")
-            local showdownJs=showdownFile:read("*a")
-            showdownFile:close()
-            local styleFile=io.open(activity.getLuaDir().."/showdown/index.css","r")
-            local styleCss=styleFile:read("*a")
-            styleFile:close()
-            styleCss=styleCss:gsub("{{(.-)}}",function(key)
-              return assert(loadstring("return "..key))()
-            end)
-            view.evaluateJavascript(showdownJs,nil)
-            view.evaluateJavascript([[
-var head = document.head || document.getElementsByTagName('head')[0];
-var style = document.createElement('style');
-style.innerHTML=']]..utf8ToUnicode(styleCss)..[['
-head.appendChild(style);
-]],nil)
-            --适配手机尺寸和utf8
-            view.evaluateJavascript([[
-var head = document.head || document.getElementsByTagName('head')[0];
-var viewportMeta = document.createElement('meta');
-viewportMeta.setAttribute('name', 'viewport')
-viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0')
-head.appendChild(viewportMeta);
-var charsetMeta = document.createElement('meta');
-charsetMeta.setAttribute('charset', 'utf-8')
-head.appendChild(charsetMeta);
-]],nil)
-            config.action.applyMarkdownFile(ids,config,Uri.parse(url).getPath())
-            --[[
-            local file=io.open(Uri.parse(url).getPath(),"r")
-            local content=file:read("*a")
-            file:close()
-            config.action.applyMarkdown(ids,config,content)]]
-          end
+          MarkdownHelper.webViewClient.onPageStarted(view,url,favicon)
         end,
         onPageFinished=function(super,view,url)
           --加载Eruda
@@ -481,33 +445,11 @@ head.appendChild(charsetMeta);
       getScrollY="default",
       evaluateJavascript="default",
       destroy="default",
-      applyMarkdown=function(ids,config,text)
-        ids.editor.evaluateJavascript([[
-var converter = new showdown.Converter();
-converter.setOption("tables",true);
-converter.setOption("emoji",true);
-converter.setOption("noHeaderId",true);
-converter.setOption("strikethrough",true);
-converter.setOption("tasklists",true);
-converter.setOption("requireSpaceBeforeHeadingText",true);
-converter.setOption("encodeEmails",true);
-console.log("refreshed");
-document.body.innerHTML = converter.makeHtml(']]..utf8ToUnicode(vuepressMd2NormalMd(text))..[[');
-]],nil)
-      end,
       applyMarkdownFile=function(ids,config,path)
-        local nowUrl=ids.editor.getUrl()
-        if not nowUrl or Uri.parse(nowUrl).getPath()~=path then
-          ids.editor.loadUrl("file://"..path)
-          return
-        end
-        local file=io.open(path,"r")
-        local content=file:read("*a")
-        file:close()
-        config.action.applyMarkdown(ids,config,content)
+        MarkdownHelper.loadFile(ids.editor,path)
       end
     },
     supportScroll=true;
   },
-  
+
 }

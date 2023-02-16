@@ -1,4 +1,4 @@
-import "GiteeUpdateUtil"
+import "helper.GiteeUpdateHelper"
 appInfo={
   {
     name=R.string.app_name,

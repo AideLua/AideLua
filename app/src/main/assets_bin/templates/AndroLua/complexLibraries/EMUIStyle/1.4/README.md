@@ -1,0 +1,23 @@
+# EMUI风格
+
+为软件添加 EMUI 主题样式，但仅在 EMUI 上有效果。
+
+## 使用方法
+
+1. 导入 `EMUIStyle`
+
+    ```
+    import "EMUIStyle"
+    ```
+
+2. `main.lua` 中设置主题
+
+    ```
+    if androidhwext then
+      pcall(function()
+        activity.setTheme(androidhwext.R.style.Theme_Emui)
+      end)
+    end
+    ```
+    
+    > 注意：必须pcall一下，因为使用hwext的系统不只有EMUI（比如MagicUI）。

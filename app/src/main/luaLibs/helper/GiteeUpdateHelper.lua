@@ -1,11 +1,11 @@
 
 import "cjson"
-local GiteeUpdateUtil={}
+local GiteeUpdateHelper={}
 local packageInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
 local baseUrl="https://gitee.com/api/v5/repos/%s/%s/releases/latest"
 
 --显示更新弹窗
-function GiteeUpdateUtil.showUpdateDialog(content)
+function GiteeUpdateHelper.showUpdateDialog(content)
   if not activity.isFinishing() then
     local dialog=AlertDialog.Builder(this)
     .setTitle(content.name)
@@ -36,12 +36,12 @@ function GiteeUpdateUtil.showUpdateDialog(content)
   end
 end
 
-function GiteeUpdateUtil.checkUpdate(owner,repo)
+function GiteeUpdateHelper.checkUpdate(owner,repo)
   local snackBar=MyToast(R.string.checkingUpdates)
   Http.get(baseUrl:format(owner,repo),nil,"UTF-8",nil,function(code,content,cookie,header)
     snackBar.dismiss()
     if code==200 then
-      pcall(GiteeUpdateUtil.showUpdateDialog,cjson.decode(content))
+      pcall(GiteeUpdateHelper.showUpdateDialog,cjson.decode(content))
      else
       MyToast.showNetErrorToast(code)
     end
@@ -50,4 +50,4 @@ end
 
 
 
-return GiteeUpdateUtil
+return GiteeUpdateHelper

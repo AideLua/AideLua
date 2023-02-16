@@ -118,6 +118,7 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign,runMode)
     notLoadTheme=true
     import "jesse205"
     import "android.content.pm.PackageManager"
+    import "java.io.RandomAccessFile"
     import "net.lingala.zip4j.ZipFile"
     import "com.iyxan23.zipalignjava.ZipAlign"
     import "apksigner.*"
@@ -276,7 +277,7 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign,runMode)
       updateDoing(formatResStr(R.string.binproject_zipalign))
       local notOptimizedApkPath=binPath.."/"..newApkBaseName.."_unopt.apk"
       os.rename(newApkPath, notOptimizedApkPath)
-      ZipAlign.alignZip(FileInputStream(notOptimizedApkPath), FileOutputStream(newApkPath))
+      ZipAlign.alignZip(RandomAccessFile(notOptimizedApkPath,"r"), FileOutputStream(newApkPath))
       File(notOptimizedApkPath).delete()
       updateSuccess(formatResStr(R.string.binproject_zipalign_done))
     end

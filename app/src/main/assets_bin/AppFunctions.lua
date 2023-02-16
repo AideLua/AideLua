@@ -384,56 +384,6 @@ function safeLoadLayout(path,parent)
 end
 
 --v5.1.1+
-function utf8ToUnicode(inStr)
-  local inStr=String(inStr)
-  local myBuffer=inStr.toCharArray()--数组
-  local sb =StringBuffer()
-  for i=0,inStr.length()-1 do
-    sb.append(string.format("\\u%04x",myBuffer[i]))
-  end
-  return sb.toString()
-end
-
---v5.1.1+
-function vuepressMd2NormalMd(content)
-  --去除语言标识，因为不支持
-  content=content:gsub("```[^\n]+","```")
-  local colons="::"
-  repeat
-    colons=colons..":"
-  until (not content:find(colons..".-"..colons))
-  for num=#colons,3,-1 do
-    local nowColons=string.rep(":",num)
-    content=content:gsub(nowColons..".-"..nowColons,function(content)
-      local blockType,title=content:match(nowColons.." -([^ \n]+) *([^ \n]*)")
-      local blockContent=content:match(nowColons..".-\n(.-)\n[> ]-"..nowColons)
-      if not title or title=="" then
-        if blockType=="tip" then
-          title="TIP"
-         elseif blockType=="warning" then
-          title="WARNING"
-         elseif blockType=="danger" then
-          title="DANGER"
-         elseif blockType=="code-group"
-          title="CODE GROUP"
-         elseif blockType=="code-group-item" then
-          title="ITEM"
-        end
-      end
-      local newContent=""
-      if title then
-        newContent=newContent.."> "..title.."<br>\n"
-      end
-      if blockContent then
-        newContent=newContent.."> "..blockContent:gsub("\n","\n> ").."\n"
-      end
-      return newContent
-    end)
-  end
-  return content
-end
-
---v5.1.1+
 function copyFilesFromDocumentFile(documentFile,targetPath)
   import "com.jesse205.util.FileInfoUtils"
   local uri=documentFile.getUri()
@@ -457,7 +407,11 @@ function copyFilesFromDocumentFile(documentFile,targetPath)
     if File(newPath).exists() then
       showSnackBar(name..": "..getString(R.string.file_exists))
      else
-      local inputStream=activity.getContentResolver().openInputStream(uri)
+      local isOpenSuccessful,inputStream=pcall(activity.getContentResolver().openInputStream,uri)
+      if not isOpenSuccessful then
+        showErrorDialog("Unable to open uri",inputStream)
+        return
+      end
       local outStream=FileOutputStream(newPath)
       --LuaUtil.copyFile(inputStream, outStream)
       local success,content=pcall(FileUtil.copyFileStream,inputStream, outStream)

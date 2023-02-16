@@ -96,7 +96,7 @@ CodeHelper=require "helper.CodeHelper"
 CreateFileUtil=require "CreateFileUtil"
 LuaEditorHelper=require "LuaEditorHelper"
 SubActivityUtil=require "SubActivityUtil"
-
+MarkdownHelper=require "helper.MarkdownHelper"
 CopyMenuUtil=require "CopyMenuUtil"
 BuildToolUtil=require "buildtools.BuildToolUtil"
 

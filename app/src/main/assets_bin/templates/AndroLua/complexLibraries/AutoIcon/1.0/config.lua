@@ -1,4 +1,4 @@
-name="自适应图标"
+name="自适应图标示例"
 keys={
   appIcon="@mipmap/ic_launcher"
 }
