@@ -78,7 +78,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 ## 使用教程
 [视频教程](https://space.bilibili.com/1229937144) |
-[使用文档](https://jesse205.github.io/AideLua/)
+[使用文档](https://aidelua.github.io/AideLua/)
 
 由于 AIDE 的特殊性，请下载 [__AIDE高级设置版__](https://aidepro.top/) 进行操作
 

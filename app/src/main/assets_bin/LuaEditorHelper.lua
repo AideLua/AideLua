@@ -374,6 +374,11 @@ function LuaEditorHelper.initKeys(editor,editorParent,pencilEdit,progressBar)
         utf8=String(getTableIndexList(utf8)),
         math=String(getTableIndexList(math)),
         theme=String(getTableIndexList(theme)),
+        android=String(getTableIndexList(android)),
+        res=String({
+          "color","colorStateList","drawable","id","string",
+          "dimension","int","float","boolean",
+          table.unpack(getTableIndexList(res))}),
         jesse205=String(getTableIndexList(jesse205)),
         AppPath=String(getTableIndexList(AppPath)),
         MyToast=String(getTableIndexList(MyToast)),

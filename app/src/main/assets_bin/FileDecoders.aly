@@ -77,6 +77,8 @@
     language=JavaLanguage(),
   },
   js={super="txt"},
+  ts={super="txt"},
+  kt={super="txt"},
   gradle={super="txt"},
   bat={super="txt"},
   properties={super="txt"},

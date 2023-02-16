@@ -2,7 +2,7 @@
 --[[
 --颜色
 res.color.attr.colorAccent
-res.color.attr.android.colorAccent
+androires.color.attr.colorAccent
 res.colorStateList.attr.colorAccent
 res.color.attr.colorPrimary
 --id

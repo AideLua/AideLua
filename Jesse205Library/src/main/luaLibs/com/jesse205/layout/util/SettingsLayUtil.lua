@@ -10,9 +10,9 @@ SettingsLayUtil.ITEM_SWITCH_NOSUMMARY=5
 SettingsLayUtil.ITEM_AVATAR=6
 SettingsLayUtil.ITEM_ONLYSUMMARY=7
 
-local colorAccent=theme.color.colorAccent
-local textColorPrimary=theme.color.textColorPrimary
-local textColorSecondary=theme.color.textColorSecondary
+local colorAccent=res.color.attr.colorAccent
+local textColorPrimary=android.res.color.attr.textColorPrimary
+local textColorSecondary=android.res.color.attr.textColorSecondary
 
 
 local leftIconLay={

@@ -17,6 +17,22 @@
         layout_height="fill";
         orientation="vertical";
         layoutTransition=newLayoutTransition();
+        MyTipLayout.Builder({
+          layout_margin="16dp";
+          layout_marginTop="8dp";
+          layout_marginBottom="8dp";
+          cardBackgroundColor=res.color.attr.rippleColorAccent;
+          {
+            {
+              imageResource=R.drawable.ic_alert_circle_outline;
+              colorFilter=res.color.attr.colorAccent;
+            },
+            {
+              text="请慎重选择支持库，全选可能会出BUG";
+              textColor=res.color.attr.colorAccent;
+            }
+          }
+        });
         {
           LinearLayout;
           layout_width="fill";
@@ -356,15 +372,15 @@
           layout_margin="16dp";
           layout_marginTop="8dp";
           layout_marginBottom="8dp";
-          cardBackgroundColor=theme.color.Ripple.Orange;
+          cardBackgroundColor=res.color.jesse205_orange_ripple;
           {
             {
               imageResource=R.drawable.ic_alert_circle_outline;
-              colorFilter=theme.color.Orange;
+              colorFilter=res.color.jesse205_orange;
             },
             {
               text="此模板暂时无法使用，敬请期待";
-              textColor=theme.color.Orange;
+              textColor=res.color.jesse205_orange;
             }
           }
         });

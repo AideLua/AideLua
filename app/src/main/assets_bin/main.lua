@@ -69,7 +69,7 @@ import "com.bumptech.glide.request.RequestListener"
 import "com.nwdxlgzs.view.photoview.PhotoView"
 import "com.caverock.androidsvg.SVG"
 import "com.termux.shared.termux.TermuxConstants"
-local RUN_COMMAND_SERVICE=TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE
+RUN_COMMAND_SERVICE=TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE
 import "com.drakeet.drawer.FullDraggableContainer"
 import "me.zhanghai.android.fastscroll.FastScrollerBuilder"
 import "org.apache.http.util.EncodingUtils"
@@ -297,26 +297,11 @@ function onOptionsItemSelected(item)
       return
     end
     if PermissionUtil.checkPermission("com.termux.permission.RUN_COMMAND") then
-      local intent=Intent()
-      intent.setClassName(TermuxConstants.TERMUX_PACKAGE_NAME, TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE_NAME);
-      intent.setAction(RUN_COMMAND_SERVICE.ACTION_RUN_COMMAND)
-      intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_COMMAND_PATH,"/data/data/com.termux/files/usr/bin/gradle")
-      intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_ARGUMENTS,String{"assembleRelease"})
-      intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_BACKGROUND, false)
-      intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_WORKDIR, ProjectManager.nowPath.."/"..ProjectManager.nowConfig.mainModuleName)
-      intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_COMMAND_LABEL, "Building "..ProjectManager.nowConfig.appName)
-      local resultIntent=activity.buildNewActivityIntent(0,"sub/TermuxResult/main.lua",nil,true,0)
-      resultIntent.putExtra("title",getString(R.string.project_build))
-      local pendingIntent = PendingIntent.getActivity(activity, 1, resultIntent, PendingIntent.FLAG_ONE_SHOT)
-      intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_PENDING_INTENT, pendingIntent)
-      if Build.VERSION.SDK_INT >= 26 then
-        activity.startForegroundService(intent)
-       else
-        activity.startService(intent)
-      end
-      local manager = activity.getPackageManager()
-      local intent = manager.getLaunchIntentForPackage(TermuxConstants.TERMUX_PACKAGE_NAME)
-      activity.startActivity(intent)
+      runInTermux("/data/data/com.termux/files/usr/bin/gradle",{"assembleRelease"},{
+        workDir=ProjectManager.nowPath.."/"..ProjectManager.nowConfig.mainModuleName,
+        showResult=true,
+        title=getString(R.string.project_build),
+      })
 
      else
       PermissionUtil.askForRequestPermissions({

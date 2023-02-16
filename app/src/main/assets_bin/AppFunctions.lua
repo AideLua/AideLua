@@ -491,11 +491,11 @@ function runInTermux(cmd,args,config)
       resultIntent.putExtra("title",config.title)
       local pendingIntent = PendingIntent.getActivity(activity, 1, resultIntent, PendingIntent.FLAG_ONE_SHOT)
       intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_PENDING_INTENT, pendingIntent)
-      if Build.VERSION.SDK_INT >= 26 then
-        activity.startForegroundService(intent)
-       else
-        activity.startService(intent)
-      end
+    end
+    if Build.VERSION.SDK_INT >= 26 then
+      activity.startForegroundService(intent)
+     else
+      activity.startService(intent)
     end
     local manager = activity.getPackageManager()
     local intent = manager.getLaunchIntentForPackage(TermuxConstants.TERMUX_PACKAGE_NAME)

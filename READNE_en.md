@@ -72,7 +72,7 @@ Watch this project.
 ## Documents
 
 [Video](https://space.bilibili.com/1229937144) |
-[Text](https://jesse205.github.io/AideLua/)
+[Text](https://aidelua.github.io/AideLua/)
 
 Due to the particularity of AIDE, please download [__AIDE Pro__](https://aidepro.top/) to operate.
 
