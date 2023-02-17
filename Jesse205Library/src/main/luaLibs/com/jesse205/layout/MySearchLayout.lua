@@ -10,6 +10,7 @@ MySearchLayout.layout={
   layout_margin="16dp";
   elevation="3dp";
   id="searchLayout";
+  cardBackgroundColor=res.color.attr.colorBackgroundFloating;
   {
     FrameLayout;
     layout_width="fill";

@@ -1,8 +1,8 @@
 :root{
-    --color-accent: {{color2CssRGB(res.color.attr.colorAccent)}};
-    --color-background: {{color2CssRGB(res.color.attr.windowBackgroundColor)}};
-    --color-text: {{color2CssRGB(android.res.color.attr.textColorPrimary)}};
-    --color-border: {{color2CssRGB(res.color.attr.strokeColor)}};
+    --color-accent: {{MarkdownHelper.color2CssRGB(res.color.attr.colorAccent)}};
+    --color-background: {{MarkdownHelper.color2CssRGB(res.color.attr.windowBackgroundColor)}};
+    --color-text: {{MarkdownHelper.color2CssRGB(android.res.color.attr.textColorPrimary)}};
+    --color-border: {{MarkdownHelper.color2CssRGB(res.color.attr.strokeColor)}};
 }
 
 html,

@@ -1,6 +1,12 @@
 --v5.1.1+
+import "android.graphics.Color"
 import "util.UnicodeUtil"
 local MarkdownHelper={}
+
+--供css使用，将颜色转换为css的rgb颜色
+function MarkdownHelper.color2CssRGB(color)
+  return "rgb("..Color.red(color)..","..Color.green(color)..","..Color.blue(color)..")"
+end
 
 local function vuepressMd2NormalMd(content)
   --去除语言标识，因为不支持
@@ -45,7 +51,7 @@ function MarkdownHelper.loadShowdown(webView)
   local showdownFile=io.open(AppPath.AppDataDir.."/showdown/showdown.min.js","r")
   local showdownJs=showdownFile:read("*a")
   showdownFile:close()
-  local styleFile=io.open(activity.getLuaDir().."/showdown/index.css","r")
+  local styleFile=io.open(AppPath.AppDataDir.."/showdown/index.css","r")
   local styleCss=styleFile:read("*a")
   styleFile:close()
   styleCss=styleCss:gsub("{{(.-)}}",function(key)

@@ -6,6 +6,7 @@
     <attr name="rippleColorPrimary" format="color"/>
     <attr name="floatingActionButtonBackgroundColor" format="color"/>
     <attr name="windowBackgroundColor" format="color"/>
+    <attr name="dialogBackgroundColor" format="color"/>
     <attr name="popupMenuCornerRadius" format="dimension" />
     <attr name="windowLightStatusBar" format="boolean" />
     <attr name="windowLightNavigationBar" format="boolean" />

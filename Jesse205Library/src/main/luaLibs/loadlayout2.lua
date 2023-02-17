@@ -16,7 +16,7 @@ local context = activity or service
 
 -- 各种类
 local ViewGroup = bindClass("android.view.ViewGroup")
-local ContextWrapper=bindClass("android.content.ContextWrapper")
+local ContextThemeWrapper=bindClass("androidx.appcompat.view.ContextThemeWrapper")
 local String = bindClass("java.lang.String")
 local Gravity = bindClass("android.view.Gravity")
 local OnClickListener = bindClass("android.view.View$OnClickListener")
@@ -494,11 +494,12 @@ local function loadlayout(t, root, group)
     error(string.format("loadlayout error: Fist value Must be a Class, checked import package.\n\tat %s", dump2(t)),
     0)
   end
+
   local context=context
   if theme then
-    context=ContextWrapper(context)
-    context.setTheme(theme)
+    context=ContextThemeWrapper(context,theme)
   end
+
   if style then
     view = viewClass(context, nil, style)
    else

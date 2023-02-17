@@ -191,6 +191,7 @@ PluginsUtil：
 :::
 
 ### v5.1.1(51199)
+
 ::: details 变更
 PluginsManagerUtil
 | 方法 | 说明 |
@@ -250,6 +251,10 @@ NewProjectManager：
 | ---- | ---- |
 | WebEditor | 其实就是个浏览器 |
 
+其他：
+
+* 插件支持 `README.md`
+
 :::
 
 ::: details 废除
@@ -264,4 +269,5 @@ EditorManager.symbolBar
 :::
 
 ## 相关链接
+
 * [应用更新日志](https://gitee.com/AideLua/AideLua/blob/master/README.md)

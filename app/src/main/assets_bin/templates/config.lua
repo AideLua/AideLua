@@ -1,4 +1,5 @@
 _G["import"] "com.jesse205.layout.MyTipLayout"
+_G["import"] "dialog.MarkdownReaderDialog"
 templateType="default"
 versions={
   app={

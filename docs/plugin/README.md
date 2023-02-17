@@ -107,6 +107,14 @@ Aide Lua 的插件通常以植入代码的方式实现。<br>
 
 ## 插件文件说明
 
+### README.md <Badge text="文件" vertical="middle" /> <Badge text="v5.1.1+" vertical="middle" />
+
+插件的说明文档
+
+::: danger
+说明文档的文件名只能是 `README.md` ，不能是 `readme.md` 、 `README.txt` 或其他。
+:::
+
 ### <Badge type="danger" text="*" vertical="middle" /> init.lua <Badge text="文件" vertical="middle" />
 
 插件入口，也用于存放模块信息的文件

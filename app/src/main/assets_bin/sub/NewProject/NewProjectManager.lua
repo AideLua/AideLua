@@ -265,12 +265,16 @@ end
 ---@param group ChipGroup Chip的父布局
 ---@param chipConfig table Chip信息
 ---@param _type string 页面标识，用于获取该Chip是否已选中
----@param chipList table Chip列表，用于查看是否支持AndroidX
+---@param chipList table Chip列表，用于查看是否支持AndroidX，v5.1.1+支持subtitle
 function NewProjectManager.addMultiChip(group,chipConfig,_type,chipsList)
   chipConfig.pageType=_type
+  local fullText=chipConfig.title
+  if chipConfig.subtitle then--v5.1.1+
+    fullText=("%s (%s)"):format(fullText,chipConfig.subtitle)
+  end
   local chip=Chip(activity)
   .setTag(chipConfig)
-  .setText(chipConfig.title)
+  .setText(fullText)
   .setCheckable(true)
   .setCheckedIconEnabled(false)--这里禁用勾选图标，防止勾选时Chip乱飞
   --.setCheckedIconResource(R.drawable.ic_check_accent)

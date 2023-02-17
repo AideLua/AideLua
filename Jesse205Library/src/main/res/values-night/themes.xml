@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Base.Theme.Jesse205" parent="Theme.MaterialComponents">
-        <item name="colorPrimary">@color/jesse205_black</item>
+        <item name="colorPrimary">@color/jesse205_black_blue</item>
         <item name="colorPrimaryDark">?colorPrimary</item>
         <item name="colorAccent">@color/jesse205_blue</item>
+        <item name="colorBackgroundFloating">@color/jesse205_black_blue_light</item>
         <item name="strokeColor">@color/jesse205_grey_dark</item>
         <item name="navigationViewColorAccent">?colorAccent</item>
-        <item name="windowBackgroundColor">@color/jesse205_black</item>
+        <item name="dialogBackgroundColor">@color/jesse205_grey_dark_blue</item>
+        <item name="windowBackgroundColor">@color/jesse205_black_blue</item>
         <item name="windowLightStatusBar">false</item>
         <item name="windowLightNavigationBar">false</item>
 		<item name="android:windowBackground">?windowBackgroundColor</item>
-        <item name="android:navigationBarColor">@color/jesse205_black</item>
+        <item name="android:navigationBarColor">@color/jesse205_black_blue</item>
         <item name="android:windowLightStatusBar">?windowLightStatusBar</item>
         <item name="android:windowLightNavigationBar">?windowLightNavigationBar</item>
         
@@ -21,7 +23,7 @@
 
         <item name="actionBarTheme">@style/ThemeOverlay.Jesse205.Dark.ActionBar</item>
         <item name="actionBarWidgetTheme">@null</item>
-        <item name="actionBarPopupTheme">@style/ThemeOverlay.MaterialComponents</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.Jesse205.Dark</item>
         <item name="actionModeBackground">@drawable/jesse205_cab_background_top_material</item>
         <item name="floatingActionButtonBackgroundColor">?colorBackgroundFloating</item>
         <item name="floatingActionButtonStyle">@style/Widget.Jesse205.FloatingActionButton.Dark</item>

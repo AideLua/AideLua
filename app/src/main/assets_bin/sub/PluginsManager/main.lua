@@ -3,12 +3,15 @@ import "jesse205"
 import "android.text.Spannable"
 import "android.text.SpannableString"
 import "android.text.style.ForegroundColorSpan"
+import "androidx.appcompat.widget.Toolbar"
+import "com.google.android.material.appbar.AppBarLayout"
 import "net.lingala.zip4j.ZipFile"
 import "com.jesse205.layout.util.SettingsLayUtil"
 import "com.jesse205.layout.innocentlayout.RecyclerViewLayout"
 import "settings"
 import "SettingsLayUtilPro"
 import "PluginsManagerUtil"
+import "dialog.MarkdownReaderDialog"
 
 PLUGINS_DIR=File(PluginsUtil.PLUGINS_PATH)
 
@@ -44,10 +47,6 @@ function onActivityResult(requestCode,resultCode,data)
     end
   end
 end
---[[
-function onNewIntent(intent)
-  print(intent)
-end]]
 
 function onResume()
   refresh()
@@ -76,6 +75,20 @@ function onItemClick(view,views,key,data)
     openUrl(PAGE_URL.."plugins.html")
   end
 end
+
+function onItemInfoBtnClick(view)
+  local data=view.tag
+  local readmePath=data.path.."/README.md"
+  if not File(readmePath).isFile() then
+    return
+  end
+  MarkdownReaderDialog.init()
+  MarkdownReaderDialog.load(readmePath)
+  MarkdownReaderDialog.setTitle(data.title)
+  MarkdownReaderDialog.show()
+end
+
+onItemInfoBtnClickListener=View.OnClickListener({onClick=onItemInfoBtnClick})
 
 function onItemLongClick(view,views,key,data)
   recyclerView.tag._data=data
@@ -216,6 +229,7 @@ function refresh()
           dirName=dirName,
           path=path,
           contextMenuEbaled=true,
+          hasReadme=File(path.."/README.md").isFile()
         })
       end
     end
@@ -246,7 +260,44 @@ if fileUri then
   installPlugin(fileUri)
 end
 
-adapter=SettingsLayUtil.newAdapter(settings2,onItemClick,onItemLongClick)
+adapter=LuaCustRecyclerAdapter(AdapterCreator({
+  getItemCount=function()
+    return SettingsLayUtil.adapterEvents.getItemCount(settings2)
+  end,
+  getItemViewType=function(position)
+    return SettingsLayUtil.adapterEvents.getItemViewType(settings2,position)
+  end,
+  onCreateViewHolder=function(parent,viewType)
+    local holder=SettingsLayUtil.adapterEvents.onCreateViewHolder(onItemClick,onItemLongClick,parent,viewType)
+    local ids=holder.view.tag
+    local infoBtnView=ids.infoBtnView
+    if infoBtnView then
+      local drawable=ThemeUtil.getRippleDrawable(res.color.attr.rippleColorPrimary,true)
+      if Build.VERSION.SDK_INT>=23 then
+        drawable.mutate().setRadius(math.dp2int(20))
+      end
+      infoBtnView.setBackground(drawable)
+      infoBtnView.setOnClickListener(onItemInfoBtnClickListener)
+    end
+    return holder
+  end,
+  onBindViewHolder=function(holder,position)
+    local data=settings2[position+1]
+    local layoutView=holder.view
+    local ids=layoutView.getTag()
+    local infoBtnView=ids.infoBtnView
+    if infoBtnView then
+      if data.hasReadme then
+        infoBtnView.setVisibility(View.VISIBLE)
+       else
+        infoBtnView.setVisibility(View.GONE)
+      end
+      infoBtnView.tag=data
+    end
+    SettingsLayUtil.adapterEvents.onBindViewHolder(settings2,holder,position)
+  end,
+}))
+
 recyclerView.setAdapter(adapter)
 layoutManager=LinearLayoutManager()
 recyclerView.setLayoutManager(layoutManager)
@@ -291,9 +342,6 @@ recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
 mainLay.onTouch=function(view,...)
   recyclerView.onTouchEvent(...)
 end
-
-
-
 
 mainLay.ViewTreeObserver
 .addOnGlobalLayoutListener(ScreenFixUtil.LayoutListenersBuilder.listViews(mainLay,{recyclerView}))

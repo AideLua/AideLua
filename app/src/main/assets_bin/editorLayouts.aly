@@ -383,7 +383,8 @@ import "jesse205"
         layout_height="fill";
         layout_width="fill";
         id="editor";
-        backgroundColor=theme.color.windowBackground;
+        --backgroundColor=theme.color.windowBackground;
+        backgroundColor=0;
       };
     },
     init=function(ids,config)

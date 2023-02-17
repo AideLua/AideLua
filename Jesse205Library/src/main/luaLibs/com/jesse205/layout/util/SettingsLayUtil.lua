@@ -244,6 +244,7 @@ local function onItemViewClick(view)
   viewConfig.allowedChange=true
   return true
 end
+local onItemViewClickListener=View.OnClickListener({onClick=onItemViewClick})
 
 local function onItemViewLongClick(view)
   local ids=view.tag
@@ -259,6 +260,8 @@ local function onItemViewLongClick(view)
   viewConfig.allowedChange=true
   return result
 end
+local onItemViewLongClickListener=View.OnLongClickListener({onLongClick=onItemViewLongClick})
+
 
 local function onSwitchCheckedChanged(view,checked)
   local viewConfig=view.tag
@@ -303,12 +306,12 @@ local adapterEvents={
       local switchView=ids.switchView
       view.setFocusable(true)
       view.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
-      view.onClick=onItemViewClick
-      view.onLongClick=onItemViewLongClick
+      view.setOnClickListener(onItemViewClickListener)
+      view.setOnLongClickListener(onItemViewLongClickListener)
       if switchView then
         switchView.tag=viewConfig
         switchView.setOnCheckedChangeListener({
-        onCheckedChanged=onSwitchCheckedChanged})
+          onCheckedChanged=onSwitchCheckedChanged})
       end
     end
     return holder
@@ -317,9 +320,9 @@ local adapterEvents={
   onBindViewHolder=function(data,holder,position)
     local data=data[position+1]
     local layoutView=holder.view
-    local tag=layoutView.getTag()
-    local viewConfig=tag._config
-    tag._data=data
+    local ids=layoutView.getTag()
+    local viewConfig=ids._config
+    ids._data=data
     local title=data.title
     local icon=data.icon
     local summary=data.summary
@@ -333,11 +336,11 @@ local adapterEvents={
     viewConfig.allowedChange=false
 
     --Views
-    local titleView=tag.title
-    local summaryView=tag.summary
-    local switchView=tag.switchView
-    local rightIconView=tag.rightIcon
-    local iconView=tag.icon
+    local titleView=ids.title
+    local summaryView=ids.summary
+    local switchView=ids.switchView
+    local rightIconView=ids.rightIcon
+    local iconView=ids.icon
 
     if title and titleView then
       titleView.text=title
@@ -389,7 +392,7 @@ local adapterEvents={
         switchView.setChecked(false)
       end
     end
-  
+
     if rightIconView then
       local newPage=data.newPage
       local visibility=rightIconView.getVisibility()

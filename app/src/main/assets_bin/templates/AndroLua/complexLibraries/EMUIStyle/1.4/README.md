@@ -6,13 +6,13 @@
 
 1. 导入 `EMUIStyle`
 
-    ```
+    ``` lua
     import "EMUIStyle"
     ```
 
 2. `main.lua` 中设置主题
 
-    ```
+    ``` lua
     if androidhwext then
       pcall(function()
         activity.setTheme(androidhwext.R.style.Theme_Emui)

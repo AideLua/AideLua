@@ -111,9 +111,13 @@
               chipConfig.viewIndex=viewIndex
               --content的名称代表版本
               --print(chipConfig.name,content.getName())
-              chipConfig.title=("%s (%s)"):format(chipConfig.name,content.getName())
+              chipConfig.title=chipConfig.name
+              chipConfig.subtitle="v"..content.getName()
+              --chipConfig.title=("%s (%s)"):format(chipConfig.name,content.getName())
               chipConfig.enabledList=enabledComplexLibs
-              NewProjectManager.addMultiChip(ids.complexLibrariesGroup,chipConfig,config._type,chipsList)
+              chipConfig.readme=path.."/README.md"
+              local chip=NewProjectManager.addMultiChip(ids.complexLibrariesGroup,chipConfig,config._type,chipsList)
+              chip.setOnLongClickListener(config.chipLongClickListener)
             end
           end
         end
@@ -140,8 +144,11 @@
               chipConfig.viewIndex=viewIndex
               chipConfig.support="all"
               chipConfig.enabledList=enabledJarLibs
-              chipConfig.title=("%s (%s)"):format(libraryFile.getName(),content.getName())
-              NewProjectManager.addMultiChip(ids.jarLibrariesGroup,chipConfig,config._type,chipsList)
+              chipConfig.title=libraryFile.getName()
+              chipConfig.subtitle="v"..content.getName()
+              chipConfig.readme=path.."/README.md"
+              local chip=NewProjectManager.addMultiChip(ids.jarLibrariesGroup,chipConfig,config._type,chipsList)
+              chip.setOnLongClickListener(config.chipLongClickListener)
             end
           end
         end
@@ -162,7 +169,9 @@
           chipConfig.support="all"
           chipConfig.title=content.getName()
           chipConfig.enabledList=enabledSimpleLibs
-          NewProjectManager.addMultiChip(ids.simpleLibrariesGroup,chipConfig,config._type,chipsList)
+          chipConfig.readme=path.."/README.md"
+          local chip=NewProjectManager.addMultiChip(ids.simpleLibrariesGroup,chipConfig,config._type,chipsList)
+          chip.setOnLongClickListener(config.chipLongClickListener)
         end
       end
 
@@ -346,8 +355,21 @@
         .setPositiveButton(android.R.string.ok,nil)
         .show()
       end
-    end
-
+    end,
+    chipLongClickListener=View.OnLongClickListener({
+      onLongClick=function(view)
+        local config=view.tag
+        local readmePath=config.readme
+        if readmePath and File(readmePath).isFile() then
+          MarkdownReaderDialog.init()
+          MarkdownReaderDialog.load(readmePath)
+          MarkdownReaderDialog.setTitle(config.title)
+          MarkdownReaderDialog.setSubtitle(config.subtitle)
+          MarkdownReaderDialog.show()
+          return true
+        end
+      end
+    })
   },
   {
     name="LuaJ++",

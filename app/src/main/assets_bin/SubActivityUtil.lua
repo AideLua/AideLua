@@ -64,7 +64,7 @@ function SubActivityUtil.showCreateActivityDialog(template,nowDir)
     if errorState then
       return true--防止对话框关闭
     end
-  end)
+  end,true,true)
   :setNegativeButton(android.R.string.cancel,nil)
   builder:show()
   local ids=builder.ids

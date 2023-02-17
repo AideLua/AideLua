@@ -5,8 +5,10 @@
         <item name="colorPrimary">@color/jesse205_white</item>
         <item name="colorPrimaryDark">?colorPrimary</item>
         <item name="colorAccent">@color/jesse205_blue</item>
+        <item name="colorBackgroundFloating">@color/jesse205_white</item>
         <item name="strokeColor">@color/jesse205_white_dark</item>
         <item name="navigationViewColorAccent">?colorAccent</item>
+        <item name="dialogBackgroundColor">@color/jesse205_white</item>
         <item name="windowBackgroundColor">@color/jesse205_white</item>
         <item name="windowLightStatusBar">true</item>
         <item name="windowLightNavigationBar">true</item>
@@ -93,7 +95,7 @@
         <item name="elevation">4dp</item>
 		<item name="cardBackgroundColor">@color/jesse205_white_ripple</item>
 		<item name="rippleColorPrimary">@color/jesse205_white_ripple</item>
-	</style>
+    </style>
 
 
     <style name="ThemeOverlay.Jesse205.ActionBar" parent="ThemeOverlay.MaterialComponents.ActionBar">
@@ -101,8 +103,11 @@
         <item name="elevation">4dp</item>
 		<item name="cardBackgroundColor">@color/jesse205_black_border</item>
 		<item name="rippleColorPrimary">@color/jesse205_black_ripple</item>
-	</style>
+    </style>
 
+    <style name="ThemeOverlay.Jesse205.Dark" parent="@style/ThemeOverlay.AppCompat.Dark">
+        <item name="colorBackgroundFloating">@color/jesse205_black_blue_light</item>
+    </style>
 
     <!--正式主题-->
     <style name="Theme.Jesse205" parent="Base.Theme.Jesse205"/>

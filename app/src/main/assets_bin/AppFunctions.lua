@@ -464,8 +464,3 @@ function path2DocumentUri(path)
     return Uri.parse("content://com.android.externalstorage.documents/document/primary:"..relativePath)
   end
 end
-
---供css使用，将颜色转换为css的rgb颜色
-function color2CssRGB(color)
-  return "rgb("..Color.red(color)..","..Color.green(color)..","..Color.blue(color)..")"
-end
