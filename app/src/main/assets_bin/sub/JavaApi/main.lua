@@ -12,7 +12,7 @@ import "com.google.android.material.appbar.AppBarLayout"
 
 import "com.jesse205.widget.AutoToolbarLayout"
 import "com.jesse205.adapter.MyLuaAdapter"
-import "com.jesse205.layout.MySearchLayout"
+import "com.jesse205.layout.MySearchBar"
 import "androidApis.editor.systemApis"
 import "showPackageMenu"
 
@@ -21,6 +21,11 @@ import "item"
 PluginsUtil.setActivityName("javaapi")
 
 searching=false
+nowDevice="phone"
+
+local actionBarState=true
+local actionBarAnimator
+local canPlayActionBarAnimation=true
 
 activity.setTitle(R.string.javaApiViewer)
 activity.setContentView(loadlayout2("layout"))
@@ -29,11 +34,14 @@ activity.setSupportActionBar(toolbar)
 actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true)
 
-
 function onCreate(savedInstanceState)
   PluginsUtil.callElevents("onCreate", savedInstanceState)
   onNewIntent(activity.getIntent())
   search("")
+end
+
+function onConfigurationChanged(config)
+  screenConfigDecoder:decodeConfiguration(config)
 end
 
 function onNewIntent(intent)
@@ -169,31 +177,36 @@ function checkTextError(text)
 end
 
 function onAnimUpdate(hideOffset)
-  local actionBarHeight=toolBarLayout.getHeight()
+  local actionBarHeight=appBarLayout.getHeight()
+  if actionBarHeight<=0 then
+    return
+  end
   local progress=1+hideOffset/actionBarHeight
   toolbar.setAlpha(progress*progress)
-  --toolBar.setTranslationY(hideOffset)
-  toolBarLayout.setTranslationY(hideOffset)
+  appBarLayout.setTranslationY(hideOffset)
+  --searchLayout.setTranslationY(hideOffset)
   progressBar.setTranslationY(hideOffset)
   if hideOffset==-actionBarHeight then
     toolbar.setVisibility(View.INVISIBLE)
    else
     toolbar.setVisibility(View.VISIBLE)
   end
-  --listView.setPadding(0,toolBarLayout.getHeight()+toolBarLayout.getTranslationY(),0,0)
   MyAnimationUtil.ListView.onScroll(listView,listView.getFirstVisiblePosition(),nil,nil,appBarLayout,nil,false,appBarLayout.getHeight()+hideOffset)
 end
 
-local actionBarState=true
-local actionBarAnimator
-local canPlayActionBarAnimation=true
 function showActionBar(force)
   if (not actionBarState or force) and canPlayActionBarAnimation then
-    actionBarState=true
     if actionBarAnimator then
       actionBarAnimator.cancel()
     end
-    actionBarAnimator = ObjectAnimator.ofFloat(toolBarLayout,"translationY",{0})
+    if nowDevice~="phone" then
+      appBarLayout.setTranslationY(0)
+      onAnimUpdate(0)
+      actionBarState=true
+      return
+    end
+    actionBarState=true
+    actionBarAnimator = ObjectAnimator.ofFloat(appBarLayout,"translationY",{0})
     .setDuration(200)
     .setAutoCancel(true)
     .addUpdateListener({
@@ -207,11 +220,17 @@ end
 
 function hideActionBar(force)
   if (actionBarState or force) and canPlayActionBarAnimation then
-    actionBarState=false
     if actionBarAnimator then
       actionBarAnimator.cancel()
     end
-    actionBarAnimator = ObjectAnimator.ofFloat(toolBarLayout,"translationY",{-appBarLayout.getHeight()})
+    if nowDevice~="phone" then
+      appBarLayout.setTranslationY(0)
+      onAnimUpdate(0)
+      actionBarState=true
+      return
+    end
+    actionBarState=false
+    actionBarAnimator = ObjectAnimator.ofFloat(appBarLayout,"translationY",{-appBarLayout.getHeight()})
     .setDuration(200)
     .setAutoCancel(true)
     .addUpdateListener({
@@ -223,23 +242,29 @@ function hideActionBar(force)
   end
 end
 
-
-local oldToolBarHeight=0
-searchLayout.getViewTreeObserver().addOnGlobalLayoutListener({
+local oldAppBarLayoutHeight=0
+local oldSearchLayoutHeight=0
+appBarLayout.getViewTreeObserver().addOnGlobalLayoutListener({
   onGlobalLayout=function()
     if activity.isFinishing() then
       return
     end
-
-    local toolBarHeight=toolBarLayout.getHeight()
-    if oldToolBarHeight~=toolBarHeight then
-      oldToolBarHeight=toolBarHeight
-      local params=progressBar.getLayoutParams()
-      --减去2dp，使滚动条在工具栏上方
-      params.setMargins(0,appBarLayout.getHeight(),0,0)
-      progressBar.setLayoutParams(params)
-      listView.setPadding(0,toolBarHeight,0,0)
+    local appBarLayoutHeight=appBarLayout.getHeight()
+    local searchLayoutHeight=searchLayout.getHeight()
+    local params=progressBar.getLayoutParams()
+    params.setMargins(0,appBarLayoutHeight,0,0)
+    progressBar.setLayoutParams(params)
+    if nowDevice=="phone" then
+      if appBarLayoutHeight+searchLayoutHeight~=oldAppBarLayoutHeight+oldSearchLayoutHeight then
+        listView.setPadding(0,appBarLayoutHeight+searchLayoutHeight,0,0)
+      end
+     else
+      if appBarLayoutHeight~=oldAppBarLayoutHeight then
+        listView.setPadding(0,appBarLayoutHeight,0,0)
+      end
     end
+    oldAppBarLayoutHeight=appBarLayoutHeight
+    oldSearchLayoutHeight=searchLayoutHeight
   end
 })
 
@@ -256,7 +281,7 @@ topLayoutOnTouchListener=View.OnTouchListener{
         actionBarAnimator.cancel()
       end
       searchEditDownY=y
-      searchEditDownOffset=toolBarLayout.getTranslationY()
+      searchEditDownOffset=appBarLayout.getTranslationY()
       canPlayActionBarAnimation=false
      elseif action==MotionEvent.ACTION_MOVE then
       local offset=y-searchEditDownY+searchEditDownOffset
@@ -301,6 +326,7 @@ searchButton.setBackground(drawable)
 searchAdapter=ArrayAdapter(activity,android.R.layout.simple_dropdown_item_1line,systemApis)
 searchEdit.setAdapter(searchAdapter)
 
+--添加触摸移动搜索框
 toolbar.setOnTouchListener(topLayoutOnTouchListener)
 searchEdit.setOnTouchListener(topLayoutOnTouchListener)
 searchLayout.setOnTouchListener(topLayoutOnTouchListener)
@@ -320,7 +346,7 @@ end
 local oldFirstVisibleItem=0
 local oldFirstViewTop=0
 listView.onScroll=function(view,firstVisibleItem,visibleItemCount,totalItemCount)
-  MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount,appBarLayout,nil,false,appBarLayout.getHeight()+toolBarLayout.getTranslationY())
+  MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount,appBarLayout,nil,false,appBarLayout.getHeight()+appBarLayout.getTranslationY())
   local firstView=view.getChildAt(0)
   local firstViewTop=firstView and firstView.getTop() or 0
   if firstVisibleItem>oldFirstVisibleItem then
@@ -350,3 +376,37 @@ end
 searchEdit.addTextChangedListener({onTextChanged=function(text)
     checkTextError(tostring(text))
 end})
+
+local params=searchLayout.getLayoutParams()
+params.setAnchorId(appBarLayout.getId())
+params.anchorGravity=Gravity.BOTTOM
+params.gravity=Gravity.BOTTOM
+searchLayout.setLayoutParams(params)
+
+screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
+  onDeviceByWidthChanged=function(device, oldDevice)
+    nowDevice=device
+    if device=="phone" then
+      toolBarLayout.removeView(searchLayout)
+      mainLay.addView(searchLayout)
+      local params=searchLayout.getLayoutParams()
+      params.setAnchorId(appBarLayout.getId())
+      params.anchorGravity=Gravity.BOTTOM
+      params.gravity=Gravity.BOTTOM
+      params.width=-1
+      searchLayout.setLayoutParams(params)
+      listView.setPadding(0,oldAppBarLayoutHeight+oldSearchLayoutHeight,0,0)
+     else
+      mainLay.removeView(searchLayout)
+      toolBarLayout.addView(searchLayout)
+      local params=searchLayout.getLayoutParams()
+      params.width=math.dp2int(320)
+      searchLayout.setLayoutParams(params)
+      listView.setPadding(0,oldAppBarLayoutHeight,0,0)
+      showActionBar(true)
+    end
+  end
+})
+
+onConfigurationChanged(activity.getResources().getConfiguration())
+

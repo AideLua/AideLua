@@ -22,9 +22,12 @@
                 "transActivities": [],
                 "Activities": [],
                 "UX": {
-                    "supportLock": "true",
+                    "supportRotationUxCompat": "false",
                     "isDraggable": "true",
-                    "supportDraggingToFullScreen": "ALL"
+                    "supportVideoFullscreen": "false",
+                    "supportDraggingToFullScreen": "ALL",
+                    "supportLock": "true",
+                    "draggingToFreeForm": "app"
                 }
             }
         }

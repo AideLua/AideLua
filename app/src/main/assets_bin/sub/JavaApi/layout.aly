@@ -12,7 +12,39 @@
     layout_height="fill";
     clipToPadding=false;
   };
-  "titleLayout";
+  {
+    AppBarLayout;
+    id="appBarLayout",
+    layout_width="fill";
+    {
+      LinearLayout;
+      layout_width="fill";
+      id="toolBarLayout";
+      {
+        Toolbar;
+        id="toolbar";
+        layout_width="fill";
+        layout_weight=1;
+        theme=theme.number.id.actionBarTheme;
+        popupTheme=res.id.attr.actionBarPopupTheme;
+      }
+    };
+  };
+  {
+    FrameLayout;
+    id="searchLayout";
+    layout_width="fill";
+    MySearchBar.Builder({
+      id="searchBar";
+      {
+        {
+          AppCompatAutoCompleteTextView;
+          threshold=0;
+          dropDownHeight="224dp";
+        }
+      }
+    });
+  };
   {
     ProgressBar;
     id="progressBar";

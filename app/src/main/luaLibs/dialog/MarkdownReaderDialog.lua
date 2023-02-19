@@ -71,10 +71,25 @@ function MarkdownReaderDialog.init()
        else
         url=request.getUrl()
       end
-      openUrl(tostring(url))
+      if url.getScheme()=="file" then
+        --view.loadUrl(tostring(url))
+        newSubActivity("WebView",{tostring(url),ids.toolbar.getTitle()})
+       else
+        openUrl(tostring(url))
+      end
       return true
     end,
     onPageStarted=function(super,view,url,favicon)
+      view.evaluateJavascript([[
+var head = document.head || document.getElementsByTagName('head')[0];
+var viewportMeta = document.createElement('meta');
+viewportMeta.setAttribute('name', 'viewport')
+viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0')
+head.appendChild(viewportMeta);
+var charsetMeta = document.createElement('meta');
+charsetMeta.setAttribute('charset', 'utf-8')
+head.appendChild(charsetMeta);
+]],nil)
       MarkdownHelper.webViewClient.onPageStarted(view,url,favicon)
     end
   }))

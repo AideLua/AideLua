@@ -209,7 +209,7 @@ import "jesse205"
 
       --自定义View
       "MyTextInputLayout","MyCardTitleEditLayout","MyTitleEditLayout",
-      "MyEditDialogLayout","MyTipLayout","MySearchLayout",
+      "MyEditDialogLayout","MyTipLayout","MySearchBar",
       "MyRecyclerView",
 
       --适配器

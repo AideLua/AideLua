@@ -2,7 +2,9 @@
     --color-accent: {{MarkdownHelper.color2CssRGB(res.color.attr.colorAccent)}};
     --color-background: {{MarkdownHelper.color2CssRGB(res.color.attr.windowBackgroundColor)}};
     --color-text: {{MarkdownHelper.color2CssRGB(android.res.color.attr.textColorPrimary)}};
+    --color-text-blockquote: {{(function()color=android.res.color.attr.textColorPrimary; return "rgba("..Color.red(color)..","..Color.green(color)..","..Color.blue(color)..", 0.6)" end)()}};
     --color-border: {{MarkdownHelper.color2CssRGB(res.color.attr.strokeColor)}};
+    --color-float: {{MarkdownHelper.color2CssRGB(res.color.attr.colorBackgroundFloating)}};
 }
 
 html,
@@ -56,9 +58,10 @@ code {
 }
 
 blockquote {
-    padding: 0 16px;
+    padding: 4px 16px;
     margin: 0;
     border-left: 8px solid var(--color-border);
+    color: var(--color-text-blockquote);
 }
 
 blockquote>:first-child {

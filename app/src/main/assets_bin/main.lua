@@ -281,7 +281,12 @@ function onOptionsItemSelected(item)
    case Rid.menu_redo then -- 重装
     editorActions.redo()
    case Rid.menu_run then -- 运行
-    ProjectManager.smartRunProject()
+    if ProjectManager.openState then
+      ProjectManager.smartRunProject()
+     else
+      local code=EditorsManager.actions.getText()
+      runLuaFile(nil,code)
+    end
    case Rid.menu_project_bin_run then -- 二次打包
     if ProjectManager.openState then
       FilesTabManager.saveAllFiles()
@@ -350,7 +355,7 @@ function onOptionsItemSelected(item)
     startWindmillActivity("Http 调试")
    case Rid.menu_tools_luaManual_windmill then -- Lua 手册
     startWindmillActivity("手册")
-   case Rid.menu_tools_manual then -- Lua 手册
+   case Rid.menu_tools_manual then -- 使用手册
     openUrl(DOCS_URL)
    case Rid.menu_more_settings then -- 设置
     newSubActivity("Settings")

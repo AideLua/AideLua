@@ -10,8 +10,8 @@ android {
     defaultConfig {
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 121101
-        versionName "12.1.1 (alpha) (Pro)"
+        versionCode 121199
+        versionName "12.1.1 (Pro)"
     }
     buildTypes {
         release {

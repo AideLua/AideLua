@@ -3,7 +3,7 @@
     android:inset="24dp">
     <shape android:shape="rectangle">
         <corners android:radius="?dialogCornerRadius" />
-        <solid android:color="?colorBackgroundFloating" />
+        <solid android:color="?dialogBackgroundColor" />
     </shape>
 </inset>
 

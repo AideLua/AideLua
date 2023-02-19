@@ -20,4 +20,4 @@
     end
     ```
     
-    > 注意：必须pcall一下，因为使用hwext的系统不只有EMUI（比如MagicUI）。
+    > 注意：必须pcall一下，因为拥有 hwext 的系统不只有 EMUI（比如 MagicUI 也拥有这个）。

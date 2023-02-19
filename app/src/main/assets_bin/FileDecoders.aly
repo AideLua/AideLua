@@ -42,7 +42,15 @@
           xpcall(function()
             view.addView(safeLoadLayout(filePath,view.getClass()))
             end,function(err)
-            view.addView(TextView(activity).setText(err).setTextColor(theme.color.textColorPrimary).setPadding(math.dp2int(8),math.dp2int(8),math.dp2int(8),math.dp2int(8)))
+            local textView=loadlayout2({
+              TextView;
+              padding="8dp";
+              paddingTop="44dp";
+              layout_width="fill";
+              layout_height="fill";
+              textColor=android.res.color.attr.textColorPrimary;
+            })
+            view.addView(textView.setText(err))
           end)
          else
           EditorsManager.switchPreview(false)
@@ -87,7 +95,7 @@
     preview={
       editor="WebEditor",
       apply=function(filePath,fileType,view,editorConfig)
-        
+
         --view.loadUrl("file://"..filePath)
         EditorsManager.actionsWithEditor.applyMarkdownFile(editorConfig,filePath)
         task(500,function()

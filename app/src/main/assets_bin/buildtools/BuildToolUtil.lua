@@ -31,7 +31,8 @@ local function repackApk_callback(buildingDialog,success,message,apkPath,project
     if runMode then
       buildingDialog.dialog.dismiss()
       --如果是运行模式，那么apkPath就是apk解包路径
-      ProjectManager.runProject(apkPath.."/assets/main.lua",config)
+      ProjectManager.runProject(checkSharedActivity("ProjectRunner"),config)
+      --ProjectManager.runProject(apkPath.."/assets/main.lua",config)
     end
    else
     showingText=message or getString(R.string.unknowError)

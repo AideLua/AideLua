@@ -60,17 +60,19 @@ ProjectManager.refreshProjectsPath=refreshProjectsPath
 
 ---运行项目
 ---@param path string 文件路径
-function ProjectManager.runProject(path,config)
+function ProjectManager.runProject(path,config,...)
   local code,projectMainFile
   config=config or nowConfig
+  local arg=String({...})
   if openState then
     FilesTabManager.saveAllFiles()
     if config.badPrj then--损坏的项目
      elseif config.packageName then
       local success,err=pcall(function()
         local intent=Intent(Intent.ACTION_VIEW,Uri.parse(path or config.projectMainPath.."/main.lua"))
-        local componentName=ComponentName(config.packageName,config.debugActivity or "com.androlua.LuaActivity")
+        local componentName=ComponentName(config.packageName,config.debugActivity)
         intent.setComponent(componentName)
+        intent.putExtra("arg",arg)
         intent.putExtra("key",config.key)
         activity.startActivity(intent)
       end)
@@ -83,9 +85,6 @@ function ProjectManager.runProject(path,config)
      else
       showSnackBar(R.string.runCode_noPackageName)
     end
-   else
-    local code=EditorsManager.actions.getText()
-    runLuaFile(nil,code)
   end
 end
 
@@ -122,35 +121,32 @@ function ProjectManager.openProject(path,filePath,openDirPath)
       FilesBrowserManager.clearAdapterData(true)
     end
     local loadedConfig,config=pcall(RePackTool.getConfigByProjectPath,path)
-    local projectMainPath,badPrj
-    local mainModuleName="app"
+
+    --local mainModuleName="app"
     if loadedConfig then
-      if not config.appName then
-        config.appName=getString(R.string.unknown)
-      end
+      config.appName=config.appName or getString(R.string.unknown)
       local loadedTool,rePackTool=pcall(RePackTool.getRePackToolByConfig,config)
       if loadedTool then
-        mainModuleName=rePackTool.getMainModuleName(config)
-        local mainProjectPath=RePackTool.getMainProjectDirByConfigAndRePackTool(path,config,rePackTool)
+        config.mainModuleName=rePackTool.getMainModuleName(config)
         if config.projectMainPath then
-          projectMainPath=rel2AbsPath(config.projectMainPath,path)
+          config.projectMainPath=rel2AbsPath(config.projectMainPath,path)
          else
-          projectMainPath=mainProjectPath.."/assets_bin"
+          local mainProjectPath=RePackTool.getMainProjectDirByConfigAndRePackTool(path,config,rePackTool)
+          config.projectMainPath=mainProjectPath.."/assets_bin"
         end
        else
-        projectMainPath=path.."/app/src/main/assets_bin"
-        badPrj=true
+        config.badPrj=true
       end
      else
       config={
         appName="Bad project",
+        badPrj=true
       }
-      projectMainPath=path.."/app/src/main/assets_bin"
-      badPrj=true
     end
-    config.projectMainPath=projectMainPath
-    config.badPrj=badPrj
-    config.mainModuleName=mainModuleName
+    config.mainModuleName=config.mainModuleName or "app"
+    config.projectMainPath=config.projectMainPath or path.."/"..config.mainModuleName.."/src/main/assets_bin"
+    config.badPrj=config.badPrj or false
+    config.debugActivity=config.debugActivity or "com.androlua.LuaActivity"
 
     openState=true
     nowFile=File(path)

@@ -5,7 +5,7 @@
         <item name="colorPrimaryDark">?colorPrimary</item>
         <item name="colorAccent">@color/jesse205_blue</item>
         <item name="colorBackgroundFloating">@color/jesse205_black_blue_light</item>
-        <item name="strokeColor">@color/jesse205_grey_dark</item>
+        <item name="strokeColor">@color/jesse205_grey_dark_blue</item>
         <item name="navigationViewColorAccent">?colorAccent</item>
         <item name="dialogBackgroundColor">@color/jesse205_grey_dark_blue</item>
         <item name="windowBackgroundColor">@color/jesse205_black_blue</item>

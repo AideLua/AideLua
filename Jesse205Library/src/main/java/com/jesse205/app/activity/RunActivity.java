@@ -22,6 +22,8 @@ public class RunActivity extends Activity {
 			String key=intent.getStringExtra("key");//获取key，待会儿比对MD5
 			if (key!=null && StringUtil.getMd5(key).equals(keyMd5)){//MD5相同，则允许运行文件
 				Intent newIntent = new Intent(this,LuaActivity.class);
+				newIntent.putExtra("arg",intent.getStringExtra("arg"));//参数
+				newIntent.putExtra("name",intent.getStringExtra("name"));//名称
 				newIntent.putExtra("luaPath",intent.getData().getPath());//运行对应文件
 				newIntent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 				startActivity(newIntent);

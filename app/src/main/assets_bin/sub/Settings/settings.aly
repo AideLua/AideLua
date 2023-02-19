@@ -49,7 +49,7 @@
   {--ZipAlign工具
     SettingsLayUtil.ITEM;
     icon=R.drawable.ic_zip_box_outline;
-    title=R.string.zipalign;
+    title=R.string.zipalign_tool;
     --summary=R.string.zipalign_summary;
     key=ZipAlignToolHelper.key;
     items=ZipAlignToolHelper.items,

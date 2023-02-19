@@ -123,6 +123,7 @@
         end
       end
 
+      local supportConfig=getConfigFromFile(subTemplatePath.."/jarLibraries/support.lua")
       --Jar库
       filesList=luajava.astable(File(subTemplatePath.."/jarLibraries").listFiles())
       table.sort(filesList,function(a,b)
@@ -130,23 +131,26 @@
       end)
       for viewIndex,libraryFile in ipairs(filesList) do
         if libraryFile.isDirectory() then
-          filesList=luajava.astable(libraryFile.listFiles())
+          local libraryName=libraryFile.getName()
+          local filesList=luajava.astable(libraryFile.listFiles())
           table.sort(filesList,function(a,b)
             return string.upper(a.getName())<string.upper(b.getName())
           end)
-          for index,content in ipairs(filesList) do
-            if content.isDirectory() then
-              local path=content.getPath()
+          for index,versionFile in ipairs(filesList) do
+            local versionName=versionFile.getName()
+            if versionFile.isDirectory() and versionName~="docs" then--排除docs文件夹，因为他不是一个版本
+              local path=versionFile.getPath()
               local chipConfig={}
               chipConfig.path=path
               chipConfig.key=path
-              chipConfig.file=content
+              chipConfig.file=versionFile
               chipConfig.viewIndex=viewIndex
               chipConfig.support="all"
               chipConfig.enabledList=enabledJarLibs
-              chipConfig.title=libraryFile.getName()
-              chipConfig.subtitle="v"..content.getName()
-              chipConfig.readme=path.."/README.md"
+              chipConfig.title=libraryName
+              chipConfig.subtitle="v"..versionName
+              chipConfig.support=supportConfig[libraryName] and supportConfig[libraryName][versionName]
+              chipConfig.readme=libraryFile.getPath().."/docs/README.md"
               local chip=NewProjectManager.addMultiChip(ids.jarLibrariesGroup,chipConfig,config._type,chipsList)
               chip.setOnLongClickListener(config.chipLongClickListener)
             end

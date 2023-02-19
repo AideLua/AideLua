@@ -1,0 +1,12 @@
+{
+  CoordinatorLayout;
+  layout_height="fill";
+  layout_width="fill";
+  id="mainLay";
+  {
+    LuaWebView;
+    id="webView";
+    layout_height="fill";
+    layout_width="fill";
+  };
+}

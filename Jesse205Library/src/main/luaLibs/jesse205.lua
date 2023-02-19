@@ -1,8 +1,8 @@
 --- @class Jesse205
 local jesse205 = {}
 _G.jesse205 = jesse205
-jesse205._VERSION = "12.1.1 (alpha) (Pro)" -- 库版本名
-jesse205._VERSIONCODE = 121101 -- 库版本号
+jesse205._VERSION = "12.1.1 (Pro)" -- 库版本名
+jesse205._VERSIONCODE = 121199 -- 库版本号
 jesse205._ENV = _ENV
 jesse205.themeType = "Jesse205" -- 主题类型
 

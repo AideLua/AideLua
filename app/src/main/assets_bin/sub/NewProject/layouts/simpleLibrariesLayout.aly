@@ -3,8 +3,8 @@
   layout_width="fill";
   orientation="vertical";
   layoutTransition=newLayoutTransition();
-  contentDescription="简单库";
-  {--简单库
+  contentDescription="Lua 和 so 库";
+  {--Lua & so 库
     LinearLayoutCompat;
     layout_width="fill";
     orientation="vertical";
@@ -15,7 +15,7 @@
     layout_marginRight="16dp";
     {
       AppCompatTextView;
-      text="简单库";
+      text="Lua & so 库";
       textSize="14sp";
       typeface=Typeface.defaultFromStyle(Typeface.BOLD);
       textColor=theme.color.colorAccent;
