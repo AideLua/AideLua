@@ -34,7 +34,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 ### Aide Lua Pro
 
-[![Gitee 发行版)](https://img.shields.io/github/v/tag/AideLua/AideLua?color=C71D23&label=Gitee+发行版&logo=gitee&style=flat-square)](https://gitee.com/AideLua/AideLua/releases/latest)
+[![Gitee 发行版)](https://img.shields.io/github/v/tag/AideLua/AideLua?color=C71D23&label=Gitee+发行版&logo=gitee)](https://gitee.com/AideLua/AideLua/releases/latest)
 
 #### 其他渠道 (可能更新不及时)
 
