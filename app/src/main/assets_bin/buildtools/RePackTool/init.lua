@@ -138,7 +138,7 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign,runMode)
       end
     end
     local mainModuleName=rePackTool.getMainModuleName(config)
-    updateInfo("Main Module Name: "..mainModuleName)
+    updateInfo("Main Module: "..mainModuleName)
     local mainAppPath=("%s/%s"):format(projectPath,mainModuleName)
     local buildPath=mainAppPath.."/build"
     local binPath=buildPath.."/bin"
