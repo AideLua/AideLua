@@ -359,10 +359,14 @@ function authorizeHWApplicationPermissions(uri)
 end
 
 ---v5.1.1+
+---安全加载 lua 布局，避免污染全局变量
+---@param path string 布局路径
+---@param parent ViewGroup 父布局类
+---@return View 生成的视图
 function safeLoadLayout(path,parent)
   local env={}
   setmetatable(env,{__index=function(self,key)
-      local globalVar=rawget(_G,key)
+      local globalVar=_G[key]
       if globalVar then
         rawset(self,key,globalVar)
         return globalVar
@@ -380,10 +384,26 @@ function safeLoadLayout(path,parent)
   local fileContent=file:read("*a")
   file:close()
   local layout=assert(loadstring("return "..fileContent,nil,"bt",env))()
+  --去除一些属性，不使用递归
+  local nowNodes={layout}
+  repeat
+    local nowNode=nowNodes[1]
+    nowNode.onClick=nil
+    nowNode.onLongClick=nil
+    for index,content in pairs(nowNode)
+      if type(index)=="number" and type(content)=="table" then
+        table.insert(nowNodes,content)
+      end
+    end
+    table.remove(nowNodes,1)
+  until (#nowNodes<=0)
   return loadlayout(layout,{},parent)
 end
 
---v5.1.1+
+---v5.1.1+
+---复制文件，从 DocumentFile 内。目前文件夹只能复制 DocumentUi 的 uri
+---@param documentFile DocumentFile 原文件
+---@param targetPath string 目标文件夹
 function copyFilesFromDocumentFile(documentFile,targetPath)
   import "com.jesse205.util.FileInfoUtils"
   local uri=documentFile.getUri()
@@ -425,7 +445,10 @@ function copyFilesFromDocumentFile(documentFile,targetPath)
 end
 
 ---v5.1.1+
----在Termux内运行代码
+---在 Termux 内运行代码
+---@param cmd string 运行的程序
+---@param args table(string[]) 参数
+---@param config table(map) 配置
 function runInTermux(cmd,args,config)
   if PermissionUtil.checkPermission("com.termux.permission.RUN_COMMAND") then
     if cmd:sub(1,1)~="/" then
@@ -457,7 +480,9 @@ function runInTermux(cmd,args,config)
   end
 end
 
---v5.1.1+
+---v5.1.1+
+---将路径转换为 DocumentUi的 uri
+---@param path string 路径
 function path2DocumentUri(path)
   if String(path).startsWith(AppPath.Sdcard) then
     local relativePath=string.sub(path,string.len(AppPath.Sdcard)+2):gsub("/","%%2f")

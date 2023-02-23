@@ -21,4 +21,8 @@ icon = {
   night = "app/src/main/ic_launcher_night-playstore.png", -- 暗色模式图标
 }
 
+command={
+  ["yarn install"]="sh yarn_install_termux.sh",
+  ["docs:dev"]="yarn docs:dev"
+}
 

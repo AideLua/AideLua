@@ -76,7 +76,14 @@
     init=function(ids,config)
       local editor,pencilEdit,progressBar,editorParent=ids.editor,ids.pencilEdit,ids.progressBar,ids.editorParent
       editor.onScrollChange=function(view,l,t,oldl,oldt)
-        MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,appBarLayout)
+        AnimationHelper.onScrollListenerForElevation({
+          top=appBarLayout,
+        },
+        {
+          top=t>0,
+        })
+
+        --MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,appBarLayout)
       end
       LuaEditorHelper.initKeys(editor,editorParent,pencilEdit,progressBar)
       LuaEditorHelper.applyStyleToolBar(editor)
@@ -411,7 +418,13 @@ import "jesse205"
       .setPluginsEnabled(true)--支持插件
       .setMixedContentMode(webViewSettings.MIXED_CONTENT_COMPATIBILITY_MODE)--允许https中加载http资源
       editor.onScrollChange=function(view,l,t,oldl,oldt)
-        MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,appBarLayout)
+        AnimationHelper.onScrollListenerForElevation({
+          top=appBarLayout,
+        },
+        {
+          top=t>0,
+        })
+        --MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,appBarLayout)
       end
 
       editor.setWebViewClient(luajava.override(WebViewClient,{

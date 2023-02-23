@@ -89,7 +89,7 @@ function BuildingDialogBuilder:show()
   local dialogIds=self.dialogIds
   table.clear(dialogIds)
   local adapter=LuaAdapter(activity,infoItem)
-  local dialog=AlertDialog.Builder(this)
+  local dialog=MaterialAlertDialogBuilder(this)
   .setTitle(R.string.binproject_loading)
   .setView(loadlayout(buildingLayout,dialogIds))
   .setPositiveButton(android.R.string.ok,nil)

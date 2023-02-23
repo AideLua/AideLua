@@ -442,6 +442,7 @@ packagesList={
 :::
 
 ### showSnackBar(text)
+
 智能根据侧滑栏打开状态显示 SnackBar
 
 | 参数 | 说明 |
@@ -449,6 +450,7 @@ packagesList={
 | text | __string__: 提示的内容|
 
 ### getTableIndexList(mTable)
+
 获取table的索引列表
 
 | 参数 | 说明 |
@@ -460,6 +462,47 @@ packagesList={
 | table (list) | mTable的索引列表 |
 
 ### authorizeHWApplicationPermissions(uri) <Badge text="v5.1.0+" vertical="middle" />
+
 目的是兼容华为文件管理的拖拽功能。
 
 授予 Action 为 `android.intent.action.SEND` 并且 Flag 为 `268435456`的所有应用、`com.huawei.desktop.systemui` 和 `com.huawei.desktop.explorer` `uri` 的权限（自动获取类型）。
+
+### safeLoadLayout(path,parent) <Badge text="v5.1.1+" vertical="middle" />
+
+安全加载 lua 布局，避免污染全局变量
+
+| 参数 | 说明 |
+| ---- | --- |
+| path | __string__: 随便的 table |
+| parent | __ViewGroup__: 父布局类 |
+
+| 返回类型 | 说明 |
+| ---- | --- |
+| View | 生成的视图 |
+
+### copyFilesFromDocumentFile(documentFile,targetPath) <Badge text="v5.1.1+" vertical="middle" />
+
+复制文件，从 DocumentFile 内。目前文件夹只能复制 DocumentUi 的 uri
+
+| 参数 | 说明 |
+| ---- | --- |
+| documentFile | __DocumentFile_: 原文件 |
+| targetPath | __string__: 目标文件夹 |
+
+### runInTermux(cmd,args,config) <Badge text="v5.1.1+" vertical="middle" />
+
+在 Termux 内运行代码
+
+| 参数 | 说明 |
+| ---- | --- |
+| cmd | __string__: 运行的程序 |
+| args | __table(string[])__: 参数 |
+| config | __table(map)__: 配置 |
+
+### path2DocumentUri(path) <Badge text="v5.1.1+" vertical="middle" />
+
+将路径转换为 DocumentUi的 uri
+
+| 参数 | 说明 |
+| ---- | --- |
+| path | __string__: 路径 |

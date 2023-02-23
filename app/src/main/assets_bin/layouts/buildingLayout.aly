@@ -21,6 +21,7 @@
     layout_width="fill";
     elevation="4dp";
     radius=0;
+    --cardBackgroundColor=res(res.id.attr.popupMenuStyle).color.attr.colorSurface;
     cardBackgroundColor=res.color.attr.dialogBackgroundColor;
     {
       LinearLayout;

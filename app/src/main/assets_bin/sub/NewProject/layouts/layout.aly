@@ -17,7 +17,7 @@
       {
         CardView;
         layout_width="fill";
-        backgroundColor=theme.color.colorPrimary;
+        backgroundColor=res(res.id.attr.actionBarStyle).color.attr.background;
         elevation=0;
         radius=0;
         id="topCard";

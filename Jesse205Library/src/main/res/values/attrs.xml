@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
-    <attr name="navigationViewColorAccent" format="color"/>
     <attr name="rippleColorAccent" format="color"/>
     <attr name="rippleColorPrimary" format="color"/>
     <attr name="floatingActionButtonBackgroundColor" format="color"/>

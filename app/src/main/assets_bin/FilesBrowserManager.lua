@@ -1098,12 +1098,22 @@ function FilesBrowserManager.init()
   recyclerView.setLayoutManager(layoutManager)
   recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
     onScrolled = function(view, dx, dy)
-      MyAnimationUtil.RecyclerView.onScroll(view, dx, dy, sideAppBarLayout, "LastSideActionBarElevation")
+      AnimationHelper.onScrollListenerForElevation({
+        top=sideAppBarLayout,
+      },
+      {
+        top=view.canScrollVertically(-1),
+      })
   end})
   recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
     onGlobalLayout = function()
       if activity.isFinishing() then return end
-      MyAnimationUtil.RecyclerView.onScroll(recyclerView, 0, 0, sideAppBarLayout, "LastSideActionBarElevation")
+      AnimationHelper.onScrollListenerForElevation({
+        top=sideAppBarLayout,
+      },
+      {
+        top=recyclerView.canScrollVertically(-1),
+      })
   end})
 
   --路径查看器

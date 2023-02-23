@@ -99,8 +99,54 @@ function onError(...)
   return true
 end
 
+function onCreate(savedInstanceState)
+  thread(function(initEnvFuncStr,BACKUP_TIME)
+    assert(load(initEnvFuncStr))(BACKUP_TIME)
+
+    local path=sdCardPath.."/Android/media/"..packageName.."/cache/temp/debugApk"
+    printInScreen(INFO_TAG,"Apk unzip path:",path)
+    local newMainDir=path.."/assets"
+    local newLuaDir=path.."/lua"
+
+    if not File(newMainDir.."/main.lua").isFile() then
+      return printInScreen(ERROR_TAG,"Lua file not found:",newMainDir.."/main.lua")
+    end
+    local backupDirFile=File(backupDir)
+    if backupDirFile.exists() then
+      printInScreen(INFO_TAG,"Deleting old backup:",backupDir)
+      LuaUtil.rmDir(backupDirFile)
+    end
+    backupDirFile.mkdirs()
+    --备份原文件
+    printInScreen(INFO_TAG,"Backing:",appMainDir)
+    LuaUtil.copyDir(appMainDir,backupMainDir)
+    printInScreen(INFO_TAG,"Backing:",appLuaDir)
+    LuaUtil.copyDir(appLuaDir,backupLuaDir)
+
+    --复制新文件到环境内
+    printInScreen(INFO_TAG,"Deleting:",appMainDir)
+    LuaUtil.rmDir(File(appMainDir))
+    printInScreen(INFO_TAG,"Applying:",newMainDir)
+    LuaUtil.copyDir(newMainDir,appMainDir)
+
+    printInScreen(INFO_TAG,"Deleting:",appLuaDir)
+    LuaUtil.rmDir(File(appLuaDir))
+    printInScreen(INFO_TAG,"Applying:",newLuaDir)
+    LuaUtil.copyDir(newLuaDir,appLuaDir)
+
+    call("onInited")
+    printInScreen(INFO_TAG,"Starting lua activity")
+    activity.newActivity(appMainDir.."/main.lua")
+  end,initEnvFuncStr,BACKUP_TIME)
+end
+
 function onOptionsItemSelected(item)
   local id=item.getItemId()
+  if id==android.R.id.home then
+    if not onKeyUp(KeyEvent.KEYCODE_BACK) then
+      activity.finish()
+    end
+  end
 end
 
 function onStart()
@@ -119,8 +165,12 @@ end
 
 function onKeyUp(keyCode, event)
   if keyCode==KeyEvent.KEYCODE_BACK then
+    if not inited then
+      print("Initializing, please do not exit.")
+      return true
+    end
     if not recovering then
-      print("Listening, please do not exit.")
+      restoreBackup()
       return true
     end
   end
@@ -130,11 +180,14 @@ function onDestroy()
   if inited and not recovering then
     print("Abnormal exit, restoring backup.")
     restoreBackup()
+   elseif not inited then
+    print("Abnormal exit, your software may be damaged.")
   end
 end
 
 function onInited()
   inited=true
+  actionBar.setDisplayHomeAsUpEnabled(true)
 end
 
 if themeutil.isJesse205Activity then--Jesse205主题没有分割线
@@ -142,43 +195,3 @@ if themeutil.isJesse205Activity then--Jesse205主题没有分割线
     MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,appBarLayout)
   end
 end
-
-
-thread(function(initEnvFuncStr,BACKUP_TIME)
-  assert(load(initEnvFuncStr))(BACKUP_TIME)
-
-  local path=sdCardPath.."/Android/media/"..packageName.."/cache/temp/debugApk"
-  printInScreen(INFO_TAG,"Apk unzip path:",path)
-  local newMainDir=path.."/assets"
-  local newLuaDir=path.."/lua"
-
-  if not File(newMainDir.."/main.lua").isFile() then
-    return printInScreen(ERROR_TAG,"Lua file not found:",newMainDir.."/main.lua")
-  end
-  local backupDirFile=File(backupDir)
-  if backupDirFile.exists() then
-    printInScreen(INFO_TAG,"Deleting old backup:",backupDir)
-    LuaUtil.rmDir(backupDirFile)
-  end
-  backupDirFile.mkdirs()
-  --备份原文件
-  printInScreen(INFO_TAG,"Backing:",appMainDir)
-  LuaUtil.copyDir(appMainDir,backupMainDir)
-  printInScreen(INFO_TAG,"Backing:",appLuaDir)
-  LuaUtil.copyDir(appLuaDir,backupLuaDir)
-
-  --复制新文件到环境内
-  printInScreen(INFO_TAG,"Deleting:",appMainDir)
-  LuaUtil.rmDir(File(appMainDir))
-  printInScreen(INFO_TAG,"Applying:",newMainDir)
-  LuaUtil.copyDir(newMainDir,appMainDir)
-
-  printInScreen(INFO_TAG,"Deleting:",appLuaDir)
-  LuaUtil.rmDir(File(appLuaDir))
-  printInScreen(INFO_TAG,"Applying:",newLuaDir)
-  LuaUtil.copyDir(newLuaDir,appLuaDir)
-
-  call("onInited")
-  printInScreen(INFO_TAG,"Starting lua activity")
-  activity.newActivity(newMainDir.."/main.lua")
-end,initEnvFuncStr,BACKUP_TIME)

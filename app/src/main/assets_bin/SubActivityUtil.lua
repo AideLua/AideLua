@@ -106,7 +106,7 @@ function SubActivityUtil.showSelectTypeDialog(nowDir)
   if type(choice)~="number" then--类型不为数字类型说明没有找到真正的选项，设置为0
     choice=0
   end
-  AlertDialog.Builder(activity)
+  MaterialAlertDialogBuilder(activity)
   .setTitle(R.string.newActivity)
   .setSingleChoiceItems(names,choice,{onClick=function(dialogInterface,index)
       choice=index

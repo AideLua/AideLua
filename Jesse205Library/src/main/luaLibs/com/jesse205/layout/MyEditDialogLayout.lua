@@ -4,8 +4,8 @@ local insertTable=require "com.jesse205.layout.insertTable"
 MyEditDialogLayout.layout=MyTextInputLayout.Builder{
   layout_margin="8dp";
   layout_width="fill";
-  layout_marginLeft="22dp";
-  layout_marginRight="22dp";
+  layout_marginLeft=res.dimension.attr.dialogPreferredPadding;
+  layout_marginRight=res.dimension.attr.dialogPreferredPadding;
   id="editLay";
   {
     inputType="text";
@@ -16,8 +16,6 @@ MyEditDialogLayout.layout=MyTextInputLayout.Builder{
     selectAllOnFocus=true;
   };
 }
-
---MyEditDialogLayout.insertTable=insertTable
 
 function MyEditDialogLayout.Builder(config)--返回布局表
   local layout=table.clone(MyEditDialogLayout.layout)

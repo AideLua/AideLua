@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="jesse205_theme_darkMode">深色模式</string>
+    <string name="jesse205_theme_default">深蓝</string>
+    <string name="jesse205_theme_red">深红</string>
+    <string name="jesse205_theme_teal">鸭绿</string>
+    <string name="jesse205_theme_orange">鲜橙</string>
+    <string name="jesse205_theme_pink">嫩粉</string>
+</resources>

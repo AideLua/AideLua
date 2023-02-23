@@ -1,8 +1,8 @@
 {
   LinearLayout;
   padding="4dp";
-  paddingLeft="24dp";
-  paddingRight="24dp";
+  paddingLeft=res.dimension.attr.dialogPreferredPadding;
+  paddingRight=res.dimension.attr.dialogPreferredPadding;
   gravity="center";
   layout_width="fill";
   {

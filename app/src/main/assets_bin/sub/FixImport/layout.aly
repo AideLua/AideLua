@@ -30,6 +30,9 @@
     layout_margin="16dp";
     imageResource=R.drawable.ic_content_copy;
     tooltip=getString(R.string.copy);
+    expanded=true;
+    expandedComponentIdHint=R.string.copy;
+    --shadowPaddingEnabled=true;
     --supportImageTintList={};
     --backgroundColor=theme.color.colorPrimary;
   };

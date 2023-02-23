@@ -1,8 +1,8 @@
 local MyStyleUtil={}
 
 function MyStyleUtil.applyToSwipeRefreshLayout(view)
-  view.setProgressBackgroundColorSchemeColor(theme.color.colorBackgroundFloating)
-  view.setColorSchemeColors(int{theme.color.colorAccent})
+  view.setProgressBackgroundColorSchemeColor(res.color.attr.colorBackgroundFloating)
+  view.setColorSchemeColors(int{res.color.attr.colorPrimary})
   return view
 end
 

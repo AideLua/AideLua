@@ -5,6 +5,7 @@ local normalkeys=jesse205.normalkeys
 normalkeys.configType=true
 normalkeys.config=true
 
+import "com.google.android.material.dialog.MaterialAlertDialogBuilder"
 import "com.jesse205.layout.util.SettingsLayUtil"
 import "com.jesse205.layout.innocentlayout.RecyclerViewLayout"
 import "com.jesse205.app.dialog.EditDialogBuilder"
@@ -65,7 +66,7 @@ function onItemClick(view,views,key,data)
     if action=="editString" then
       EditDialogBuilder.settingDialog(adapter,views,key,data)
      elseif action=="singleChoose" then
-      AlertDialog.Builder(activity)
+      MaterialAlertDialogBuilder(activity)
       .setTitle(data.title)
       .setSingleChoiceItems(data.items,getSharedData(key) or 0,function(dialog,which)
         setSharedData(key,which)

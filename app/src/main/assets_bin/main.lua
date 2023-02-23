@@ -60,6 +60,7 @@ import "androidx.documentfile.provider.DocumentFile"
 import "com.google.android.material.tabs.TabLayout"
 import "com.google.android.material.chip.Chip"
 import "com.google.android.material.chip.ChipGroup"
+import "com.google.android.material.dialog.MaterialAlertDialogBuilder"
 
 import "com.bumptech.glide.request.RequestOptions"
 import "com.bumptech.glide.load.engine.DiskCacheStrategy"
@@ -674,10 +675,9 @@ screenConfigDecoder = ScreenFixUtil.ScreenConfigDecoder({
   onDeviceByWidthChanged=onDeviceByWidthChanged
 })
 
-onConfigurationChanged(activity.getResources().getConfiguration())
+onConfigurationChanged(resources.getConfiguration())
 
 --在刷新后仍然为空，那就是关闭状态
 if screenConfigDecoder.deviceByWidth~="pc" and FilesBrowserManager.openState == nil then
   FilesBrowserManager.setOpenState(false)
 end
-

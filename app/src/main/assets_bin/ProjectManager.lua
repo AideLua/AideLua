@@ -19,7 +19,6 @@ ProjectManager.shortPath(path,max,basePath): 截取完整路径的后半，取�
   path: 绝对路径路径
   max: 最大字符数，如果max为true，代表无限大
   basePath: 当前路径
-
 ]]
 local ProjectManager={}
 ProjectManager._ENV=_ENV

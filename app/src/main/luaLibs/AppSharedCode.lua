@@ -48,7 +48,7 @@ function openUrl(url)
     import "androidx.browser.customtabs.CustomTabsIntent"
     CustomTabsIntent.Builder()
     .setShowTitle(true)
-    .setToolbarColor(theme.color.colorPrimary)
+    .setToolbarColor(res(res.id.attr.actionBarStyle).color.attr.background)
     .build()
     .launchUrl(activity, Uri.parse(url))
   end,

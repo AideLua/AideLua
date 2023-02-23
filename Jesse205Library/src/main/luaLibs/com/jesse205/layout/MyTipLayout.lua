@@ -4,7 +4,9 @@ local insertTable=require "com.jesse205.layout.insertTable"
 MyTipLayout.layout={
   CardView;
   layout_width="fill";
-  cardBackgroundColor=theme.color.rippleColorAccent;
+  cardBackgroundColor=res.color.attr.rippleColorAccent;
+  cardElevation=0;
+  radius="4dp";
   {
     LinearLayoutCompat;
     layout_width="fill";
@@ -17,12 +19,12 @@ MyTipLayout.layout={
       layout_height="24dp";
       layout_marginLeft="8dp";
       layout_marginRight="16dp";
-      colorFilter=theme.color.colorAccent;
+      colorFilter=res.color.attr.colorPrimary;
     };
     {
       AppCompatTextView;
       layout_marginRight="8dp";
-      textColor=theme.color.colorAccent;
+      textColor=res.color.attr.colorPrimary;
     };
   };
 }

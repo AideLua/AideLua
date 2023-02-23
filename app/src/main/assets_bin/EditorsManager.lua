@@ -84,7 +84,13 @@ MyCodeEditor=function(context)
   view=luajava.override(CodeEditor,{
     onKeyShortcut=onKeyShortcut,
     computeScroll=function(super)
-      MyAnimationUtil.ScrollView.onScrollChange(view,scroller.getCurrX(),scroller.getCurrY(),0,0,appBarLayout)
+      AnimationHelper.onScrollListenerForElevation({
+        top=appBarLayout,
+      },
+      {
+        top=scroller.getCurrY()>0,
+      })
+      --MyAnimationUtil.ScrollView.onScrollChange(view,scroller.getCurrX(),scroller.getCurrY(),0,0,appBarLayout)
       super()
     end
   })
@@ -549,11 +555,23 @@ function EditorsManager.refreshEditorScrollState()
   if editorConfig then
     local scrollState=editorConfig.supportScroll
     if scrollState==true then
-      MyAnimationUtil.ScrollView.onScrollChange(editor,managerActions.getScrollX(),managerActions.getScrollY(),0,0,appBarLayout,nil)
+      AnimationHelper.onScrollListenerForElevation({
+        top=appBarLayout,
+      },
+      {
+        top=managerActions.getScrollY()>0,
+      })
+      --MyAnimationUtil.ScrollView.onScrollChange(editor,managerActions.getScrollX(),managerActions.getScrollY(),0,0,appBarLayout,nil)
      elseif scrollState then
       scrollState(editorGroupViews,editorConfig)
      else
-      MyAnimationUtil.ScrollView.onScrollChange(editor,0,0,0,0,appBarLayout,nil)
+      AnimationHelper.onScrollListenerForElevation({
+        top=appBarLayout,
+      },
+      {
+        top=false,
+      })
+      --MyAnimationUtil.ScrollView.onScrollChange(editor,0,0,0,0,appBarLayout,nil)
     end
   end
 end
@@ -647,7 +665,7 @@ end
 function symbolBar.onButtonClickListener(view)
   local config=view.tag
   local selectedText=managerActions.getSelectedText()
-  
+
   if managerActions.paste(config.reallyText) then
     view.performHapticFeedback(HapticFeedbackConstants.KEYBOARD_TAP)
     --移动光标到指定位置

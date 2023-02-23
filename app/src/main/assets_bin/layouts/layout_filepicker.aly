@@ -15,7 +15,7 @@
     {
       CardView;
       layout_width="fill";
-      backgroundColor=res.color.attr.colorPrimary;
+      backgroundColor=res(res.id.attr.actionBarStyle).color.attr.background;
       radius=0;
       id="sideAppBarLayout";
       minimumHeight=1;
@@ -46,6 +46,7 @@
         layout_height="fill";
         id="recyclerViewCard";
         elevation="8dp";
+        cardBackgroundColor=res.color.attr.windowBackgroundColor;
         radius=0;
         {
           SwipeRefreshLayout;

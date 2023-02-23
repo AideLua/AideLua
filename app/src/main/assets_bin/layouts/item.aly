@@ -12,21 +12,14 @@
       layout_width="40dp";
       layout_height="40dp";
       radius="20dp";
+      cardBackgroundColor=0;--必须加这个，否则颜色不对，非常神奇
       {
-        CardView;
-        layout_width="fill";
-        layout_height="fill";
-        radius="18dp";
-        cardBackgroundColor=0;
-        elevation=0;
-        {
-          AppCompatImageView;
-          layout_width="24dp";
-          layout_height="24dp";
-          layout_gravity="center";
-          colorFilter=theme.color.colorAccent;
-          imageResource=R.drawable.ic_plus;
-        };
+        AppCompatImageView;
+        layout_width="24dp";
+        layout_height="24dp";
+        layout_gravity="center";
+        colorFilter=theme.color.colorPrimary;
+        imageResource=R.drawable.ic_plus;
       };
     };
     {

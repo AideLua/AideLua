@@ -282,8 +282,8 @@ return function(item)
             local isNowFile=FilesTabManager.openState and FilesTabManager.file==file
             view.setSelected(isNowFile)
             if isNowFile then
-              titleColor=theme.color.colorAccent
-              iconColor=theme.color.colorAccent
+              titleColor=theme.color.colorPrimary
+              iconColor=theme.color.colorPrimary
               cardBgColor=theme.color.rippleColorAccent
               --保存一下当前打开文件的位置，方便后期切换文件
               FilesBrowserManager.nowFilePosition=position
@@ -293,7 +293,7 @@ return function(item)
           end
           iconView.setColorFilter(iconColor)
           highLightCard.setCardBackgroundColor(cardBgColor)
-  
+
          else--未打开工程
           local pathView=tag.path
           local iconUrl,title,summary=loadPrjCfg(initData,data,file,filePath)

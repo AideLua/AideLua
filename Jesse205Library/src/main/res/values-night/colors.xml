@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="jesse205_white">#ffffffff</color>
+    <color name="jesse205_white_dark">#FFE0E0E0</color>
+    <color name="jesse205_white_ripple">#33ffffff</color>
+    <color name="jesse205_red">#FFE57373</color>
+    <color name="jesse205_red_ripple">#FFE57373</color>
+    <color name="jesse205_orange">#FFFFB64D</color>
+    <color name="jesse205_orange_ripple">#22FFB64D</color>
+    <color name="jesse205_blue">#8AB4F8</color>
+    <color name="jesse205_blue_ripple">#228AB4F8</color>
+    <color name="jesse205_green">#FF4CB6AC</color>
+    <color name="jesse205_green_ripple">#224CB6AC</color>
+    <color name="jesse205_pink">#FFF06292</color>
+    <color name="jesse205_pink_light">#FFFF80AB</color>
+    <color name="jesse205_pink_ripple">#22F06292</color>
+</resources>

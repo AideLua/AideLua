@@ -7,14 +7,8 @@ local AnimationHelper={}
 
 ---阴影状态字典的字典
 ---@type table<View, table>
-local elevationStateMapMap={}
-setmetatable(elevationStateMapMap,{
-  __index=function(self,key)
-    local newMap={}
-    rawset(elevationStateMapMap,key,newMap)
-    return newMap
-  end
-})
+local elevationStateMap={}
+
 
 AnimationHelper.elevationStateMap=elevationStateMapMap
 
@@ -28,20 +22,19 @@ function AnimationHelper.deleteElevationStateMap(view)
   elevationStateMapMap[view]=nil
 end
 
-AnimationHelper.scrollListenerForElevation=function(view,sideViewMap,sideStateMap)
-  local lastElevationStateMap=elevationStateMapMap[view]
+AnimationHelper.onScrollListenerForElevation=function(sideViewMap,sideStateMap)
   for side,sideView in pairs(sideViewMap) do
     --旧状态
-    local lastState=lastElevationStateMap[side]
+    local lastState=elevationStateMap[sideView]
     --新状态
     local newState=sideStateMap[side]
     if lastState~=newState then
       ObjectAnimator.ofFloat(sideView, "elevation", {newState and theme.number.actionBarElevation or 0})
       .setDuration(200)
-      .setInterpolator(DecelerateInterpolator())
+      --.setInterpolator(AccelerateInterpolator())
       .setAutoCancel(true)
       .start()
-      lastElevationStateMap[side]=newState
+      elevationStateMap[sideView]=newState
     end
   end
 end

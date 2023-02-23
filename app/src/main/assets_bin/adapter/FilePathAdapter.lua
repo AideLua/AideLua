@@ -37,9 +37,9 @@ return function(item)
         titleView.getPaint().setFakeBoldText(true)
         if oldDarkActionBar then
           --theme.color.ActionBar.colorControlNormal
-          titleView.setTextColor(actionBarRes.color.attr.colorControlNormal)
+          titleView.setTextColor(actionBarRes.color.attr.colorOnPrimary)
          else
-          titleView.setTextColor(actionBarRes.color.attr.colorAccent)
+          titleView.setTextColor(actionBarRes.color.attr.colorPrimary)
         end
        else
         titleView.setTextColor(android.res(res.id.attr.actionBarTheme).color.attr.textColorSecondary)

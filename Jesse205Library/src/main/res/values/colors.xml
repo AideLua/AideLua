@@ -10,14 +10,10 @@
     <color name="jesse205_orange_dark">#FFF57C00</color>
     <color name="jesse205_orange_ripple">#22FFA000</color>
     <color name="jesse205_orange_dark_ripple">#22F57C00</color>
-    <color name="jesse205_black">#ff000000</color>
-    <color name="jesse205_black_blue_light">#FF38393D</color>
-    <color name="jesse205_black_blue">#FF202125</color>
-    <color name="jesse205_black_border">#11000000</color>
-    <color name="jesse205_black_ripple">#22000000</color>
-    <color name="jesse205_blue">#FF3F51B5</color>
-    <color name="jesse205_blue_light">#FF5C6BC0</color>
-    <color name="jesse205_blue_ripple">#223F51B5</color>
+    <color name="jesse205_blue">#1A73E8</color>
+    <color name="jesse205_blue_dark">#1565C0</color>
+    <color name="jesse205_blue_light">#FF1E88E5</color>
+    <color name="jesse205_blue_ripple">#221A73E8</color>
     <color name="jesse205_green">#ff009688</color>
     <color name="jesse205_green_ripple">#22009688</color>
     <color name="jesse205_pink">#FFFF4081</color>
@@ -26,9 +22,15 @@
     <color name="jesse205_pink_dark_ripple">#22C2185B</color>
     <color name="jesse205_pink_ripple">#22FF4081</color>
     <color name="jesse205_grey">#FFBDBDBD</color>
+    <color name="jesse205_grey_light">#FFE0E0E0</color>
     <color name="jesse205_grey_dark">#FF424242</color>
     <color name="jesse205_grey_dark_blue">#FF414244</color>
     <color name="jesse205_grey_ripple">#22BDBDBD</color>
-    <color name="design_default_color_on_surface">#ff000000</color>
-    <color name="design_dark_default_color_on_surface">#ffffffff</color>
+    <color name="jesse205_black">#ff000000</color>
+    <color name="jesse205_black_blue_light">#FF38393D</color>
+    <color name="jesse205_black_blue">#202124</color>
+    <color name="jesse205_black_border">#11000000</color>
+    <color name="jesse205_black_ripple">#22000000</color>
+    <!--<color name="design_default_color_on_surface">#ff000000</color>
+    <color name="design_dark_default_color_on_surface">#ffffffff</color>-->
 </resources>

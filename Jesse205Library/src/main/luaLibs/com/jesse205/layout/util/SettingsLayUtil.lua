@@ -1,5 +1,7 @@
-local SettingsLayUtil={}
+import "com.google.android.material.switchmaterial.SwitchMaterial"
 import "com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions"
+
+local SettingsLayUtil={}
 local contextMenuEnabled
 
 SettingsLayUtil.TITLE=1
@@ -10,7 +12,7 @@ SettingsLayUtil.ITEM_SWITCH_NOSUMMARY=5
 SettingsLayUtil.ITEM_AVATAR=6
 SettingsLayUtil.ITEM_ONLYSUMMARY=7
 
-local colorAccent=res.color.attr.colorAccent
+local colorPrimary=res.color.attr.colorPrimary
 local textColorPrimary=android.res.color.attr.textColorPrimary
 local textColorSecondary=android.res.color.attr.textColorSecondary
 
@@ -21,7 +23,7 @@ local leftIconLay={
   layout_margin="16dp",
   layout_width="24dp",
   layout_height="24dp",
-  colorFilter=colorAccent,
+  colorFilter=colorPrimary,
 }
 
 local leftCoverLay={
@@ -98,10 +100,10 @@ local twoLineLay={
 }
 
 local rightSwitchLay={
-  SwitchCompat;
+  SwitchMaterial;
   id="switchView";
   layout_marginLeft=0;
-  layout_margin="16dp";
+  layout_marginRight="16dp";
 }
 
 local rightNewPageIconLay={
@@ -132,7 +134,7 @@ local itemsLay={
       AppCompatTextView;
       id="title";
       textSize="14sp";
-      textColor=colorAccent;
+      textColor=colorPrimary;
       layout_margin="16dp";
       layout_marginBottom=0;
       typeface=Typeface.defaultFromStyle(Typeface.BOLD);

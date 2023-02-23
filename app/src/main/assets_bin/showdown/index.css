@@ -1,5 +1,5 @@
 :root{
-    --color-accent: {{MarkdownHelper.color2CssRGB(res.color.attr.colorAccent)}};
+    --color-primary: {{MarkdownHelper.color2CssRGB(res.color.attr.colorPrimary)}};
     --color-background: {{MarkdownHelper.color2CssRGB(res.color.attr.windowBackgroundColor)}};
     --color-text: {{MarkdownHelper.color2CssRGB(android.res.color.attr.textColorPrimary)}};
     --color-text-blockquote: {{(function()color=android.res.color.attr.textColorPrimary; return "rgba("..Color.red(color)..","..Color.green(color)..","..Color.blue(color)..", 0.6)" end)()}};
@@ -37,7 +37,7 @@ img {
 }
 
 a {
-    color: var(--color-accent);
+    color: var(--color-primary);
     text-decoration: none;
 }
 

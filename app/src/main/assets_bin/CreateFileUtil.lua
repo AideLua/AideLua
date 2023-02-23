@@ -128,7 +128,7 @@ function CreateFileUtil.showSelectTypeDialog(nowDir)--模版选择对话框
     choice=0
   end
 
-  AlertDialog.Builder(activity)
+  MaterialAlertDialogBuilder(activity)
   .setTitle(R.string.file_create)
   .setSingleChoiceItems(names,choice,function(dialogInterface,index)
       choice=index

@@ -1,8 +1,8 @@
 --- @class Jesse205
 local jesse205 = {}
 _G.jesse205 = jesse205
-jesse205._VERSION = "12.1.1 (Pro)" -- 库版本名
-jesse205._VERSIONCODE = 121199 -- 库版本号
+jesse205._VERSION = "12.2.0 (alpha) (Pro)" -- 库版本名
+jesse205._VERSIONCODE = 122001 -- 库版本号
 jesse205._ENV = _ENV
 jesse205.themeType = "Jesse205" -- 主题类型
 
@@ -33,7 +33,8 @@ local fastImport = {
   MaterialButton_TextButton_Normal = "com.jesse205.widget.StyleWidget",
   MaterialButton_TextButton_Icon = "com.jesse205.widget.StyleWidget",
   -- 导入各种布局表
-  MyTextInputLayout = "com.jesse205.layout.MyTextInputLayout"
+  MyTextInputLayout = "com.jesse205.layout.MyTextInputLayout",
+  AnimationHelper = "com.jesse205.helper.AnimationHelper",
 }
 
 -- 根本就不是class的key

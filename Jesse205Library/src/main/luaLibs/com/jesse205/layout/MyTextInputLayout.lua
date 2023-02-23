@@ -1,18 +1,19 @@
-local MyTextInputLayout={}
 import "com.google.android.material.textfield.TextInputEditText"
 import "com.google.android.material.textfield.TextInputLayout"
 local insertTable=require "com.jesse205.layout.insertTable"
 
+local MyTextInputLayout={}
+
 MyTextInputLayout.layout={
   TextInputLayout;
+  theme=R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox_Dense;
   {
     TextInputEditText;
     layout_width="fill";
     layout_height="fill";
+    theme=R.style.Widget_MaterialComponents_TextInputLayout_OutlinedBox_Dense;
   };
 }
-
---MyTextInputLayout.insertTable=insertTable
 
 function MyTextInputLayout.Builder(config)
   local layout=table.clone(MyTextInputLayout.layout)

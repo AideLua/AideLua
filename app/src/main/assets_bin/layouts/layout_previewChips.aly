@@ -13,13 +13,18 @@
     layout_width="fill";
     layout_height="fill";
     singleSelection=true;
-    layout_margin="4dp";
+    layout_marginLeft="4dp";
+    layout_marginRight="4dp";
+    chipSpacing="2dp";
     {
       Chip;
       text=R.string.edit;
       id="editChip";
       checkable=true;
       checkedIconEnabled=false;
+      --chipBackgroundColor=R.color.mtrl_choice_chip_background_color;
+      --theme=R.style.Widget_MaterialComponents_Chip_Choice;
+      --style=R.style.Widget_MaterialComponents_Chip_Choice;
     };
     {
       Chip;

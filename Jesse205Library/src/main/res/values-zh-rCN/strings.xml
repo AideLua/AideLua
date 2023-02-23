@@ -41,12 +41,6 @@
     <string name="jesse205_step_previous">上一步</string>
     <string name="jesse205_step_next">下一步</string>
     <string name="jesse205_step_finish">完成</string>
-    <string name="jesse205_theme_darkMode">夜间模式</string>
-    <string name="jesse205_theme_default">靛蓝</string>
-    <string name="jesse205_theme_red">深红</string>
-    <string name="jesse205_theme_teal">鸭绿</string>
-    <string name="jesse205_theme_orange">鲜橙</string>
-    <string name="jesse205_theme_pink">嫩粉</string>
 	<string name="jesse205_ranking_random">排名不分先后顺序</string>
 	<string name="jesse205_clear">清空</string>
     <string name="jesse205_getHelp">获取帮助</string>

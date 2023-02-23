@@ -25,11 +25,11 @@
           {
             {
               imageResource=R.drawable.ic_alert_circle_outline;
-              colorFilter=res.color.attr.colorAccent;
+              colorFilter=res.color.attr.colorPrimary;
             },
             {
               text="请慎重选择支持库，全选可能会出BUG";
-              textColor=res.color.attr.colorAccent;
+              textColor=res.color.attr.colorPrimary;
             }
           }
         });
@@ -38,11 +38,14 @@
           layout_width="fill";
           id="androidXSwitchParent";
           background=ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true);
+          paddingLeft="16dp";
+          paddingRight="16dp";
+          --padding="8dp";
           {
-            SwitchCompat;
+            MaterialCheckBox;
             text="启用 AndroidX";
             layout_width="fill";
-            padding="16dp";
+            paddingLeft="8dp";
             id="androidXSwitch";--此ID需固定不变
             clickable=false;
             textSize="16sp";

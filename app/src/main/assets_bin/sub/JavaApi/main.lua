@@ -126,7 +126,6 @@ function searchTaskFunc(text,application)
       table.insert(findClasses,{text=content})
     end
   end
-
   return findClasses
 end
 

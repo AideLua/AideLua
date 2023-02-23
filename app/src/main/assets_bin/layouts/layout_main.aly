@@ -10,7 +10,7 @@
     CardView;
     layout_width="fill";
     id="appBarLayout";
-    backgroundColor=res.color.attr.colorPrimary;
+    backgroundColor=res(res.id.attr.actionBarStyle).color.attr.background;
     radius=0;
     minimumHeight=1;
     elevation=0;
@@ -31,6 +31,7 @@
         visibility=View.GONE;
         inlineLabel=true;
         tabIndicatorFullWidth=false;
+        --style=
       };
     };
   };

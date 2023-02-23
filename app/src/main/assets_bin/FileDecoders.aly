@@ -54,7 +54,7 @@
           end)
          else
           EditorsManager.switchPreview(false)
-          AlertDialog.Builder(this)
+          MaterialAlertDialogBuilder(this)
           .setTitle(getLocalLangObj("ALY 布局预览警告","ALY Layout Preview Warning"))
           .setMessage(getLocalLangObj("ALY布局预览仅可以预览特定的布局。您的布局无法预览属于正常现象。","ALY layout preview can only preview specific layouts. If your layout cannot be previewed, please do not panic."))
           .setPositiveButton(R.string.preview,function()

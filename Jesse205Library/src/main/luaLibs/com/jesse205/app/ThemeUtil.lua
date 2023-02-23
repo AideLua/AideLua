@@ -18,7 +18,7 @@ function ThemeUtil.getAppThemes()
       name="Default",
       show={
         name=R.string.jesse205_theme_default,
-        preview=0xff3F51B5,
+        preview=res.color.jesse205_blue,
       },
     },
 
@@ -212,6 +212,9 @@ ThemeUtil.getAppTheme=getAppTheme
 
 --刷新UI
 function ThemeUtil.refreshUI()
+  local useCustomAppToolbar=useCustomAppToolbar or false
+  local darkNavigationBar=darkNavigationBar or false
+  local darkStatusBar=darkStatusBar or false
   local themeKey
   themeKey=getAppTheme()--获取当前设置的主题
   if not(supportedThemeName[themeKey]) then--主图里面没有，可能是废除了这个主题
@@ -238,15 +241,15 @@ function ThemeUtil.refreshUI()
   if not(useCustomAppToolbar) then
     local actionBar=context.getSupportActionBar()
     _G.actionBar=actionBar
-    if actionBar then
-      actionBar.setElevation(0)--关闭ActionBar阴影
-    end
+    --if actionBar then
+    actionBar.setElevation(0)--关闭ActionBar阴影
+    --end
   end
 
   ThemeUtil.refreshThemeColor()--刷新一下颜色
 
   if isGrayNavigationBarSystem() then
-    ThemeUtil.setNavigationbarColor(theme.color.windowBackground)
+    ThemeUtil.setNavigationbarColor(res.theme.color.attr.windowBackgroundColor)
   end
 
   if theme.boolean.windowLightNavigationBar and SDK_INT>=26 and not(ThemeUtil.isNightMode()) and not(darkNavigationBar) then--主题默认亮色导航栏

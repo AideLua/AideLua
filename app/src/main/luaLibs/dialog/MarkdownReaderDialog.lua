@@ -12,12 +12,12 @@ local dialoglayout={
     layout_width="fill";
     elevation=0;
     radius=0;
-    cardBackgroundColor=res.color.attr.colorPrimary;
+    cardBackgroundColor=res(res.id.attr.actionBarStyle).color.attr.background;
     {
       Toolbar;
       id="toolbar";
       layout_width="fill";
-      theme=theme.number.id.actionBarTheme;
+      theme=res.id.attr.actionBarTheme;
       popupTheme=res.id.attr.actionBarPopupTheme;
       navigationIcon=R.drawable.ic_close;
       navigationContentDescription=R.string.close;

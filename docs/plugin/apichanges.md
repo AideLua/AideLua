@@ -116,6 +116,7 @@ Jesse205 库：
 | EditorsManager.refreshTypeface() | 刷新编辑器字体 |
 | EditorsManager.checkAndRefreshTypeface() | 检查并刷新编辑器字体 |
 | EditorsManager.checkAndRefreshSharedDataListeners() | 检查并刷新SharedData监听器 |
+| authorizeHWApplicationPermissions(uri) | 适配华为文件管理 |
 | ... | ... |
 
 PluginsUtil：
@@ -243,17 +244,20 @@ NewProjectManager：
 
 | 方法 | 说明 |
 | ---- | ---- |
-| authorizeHWApplicationPermissions(uri) | 适配华为文件管理 |
+| copyFilesFromDocumentFile(documentFile,targetPath) | 复制文件，从 DocumentFile 内 |
+| safeLoadLayout(path,parent) | 安全加载 lua 布局，避免污染全局变量 |
 
 编辑器：
 
 | 名称 | 说明 |
 | ---- | ---- |
+| FrameView | 想添加啥，就添加啥 |
 | WebEditor | 其实就是个浏览器 |
 
 其他：
 
 * 插件支持 `README.md`
+* 新增RES资源获取工具（`res.lua`），一切资源都使用这个工具
 
 :::
 
@@ -266,6 +270,18 @@ EditorManager.symbolBar
 | 老支持库 | 新支持库 |
 | ---- | ---- |
 | sharp | androidsvg |
+:::
+
+### v5.1.2(51299)
+
+::: details 新增
+
+工具
+
+| 文件名 | 介绍 |
+| ---- | ---- |
+| AnimationHelper.lua | 用于打开和关闭阴影 |
+
 :::
 
 ## 相关链接

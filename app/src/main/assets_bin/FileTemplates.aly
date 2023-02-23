@@ -90,7 +90,7 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
   
 })
 
-onConfigurationChanged(activity.getResources().getConfiguration())
+onConfigurationChanged(resources.getConfiguration())
 
 ]],
   },
@@ -116,7 +116,7 @@ onConfigurationChanged(activity.getResources().getConfiguration())
   },
 
   {
-    name="Lua 布局（AndroidX）",
+    name="Lua 布局 (Layout)（AndroidX）",
     enName="Lua Layout (AndroidX)",
     d="lualayout_androidx",
     fileExtension="aly",

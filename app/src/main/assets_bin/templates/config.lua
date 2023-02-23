@@ -1,5 +1,6 @@
 _G["import"] "com.jesse205.layout.MyTipLayout"
 _G["import"] "dialog.MarkdownReaderDialog"
+_G["import"] "com.google.android.material.checkbox.MaterialCheckBox"
 templateType="default"
 versions={
   app={

@@ -18,7 +18,7 @@
       text="Lua & so 库";
       textSize="14sp";
       typeface=Typeface.defaultFromStyle(Typeface.BOLD);
-      textColor=theme.color.colorAccent;
+      textColor=theme.color.colorPrimary;
       layout_marginBottom="8dp";
     };
   };

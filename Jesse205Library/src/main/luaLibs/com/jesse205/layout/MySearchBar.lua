@@ -39,7 +39,7 @@ MySearchBar.layout={
       layout_gravity="center|left";
       layout_margin="4dp";
       imageResource=R.drawable.ic_magnify;
-      colorFilter=theme.color.colorAccent;
+      colorFilter=res.color.attr.colorPrimary;
       id="searchButton";
     };
     {

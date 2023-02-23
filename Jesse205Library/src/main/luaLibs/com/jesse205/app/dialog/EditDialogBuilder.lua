@@ -1,3 +1,4 @@
+import "com.google.android.material.dialog.MaterialAlertDialogBuilder"
 import "com.jesse205.layout.MyEditDialogLayout"
 --好像有内存溢出的问题
 local EditDialogBuilder={}
@@ -11,7 +12,7 @@ function EditDialogBuilder.__call(class,context)
   self.context=context
   self.buttonConfigs={}
   self.checkNullButtons={}
-  self.dialogBuilder=AlertDialog.Builder(context)
+  self.dialogBuilder=MaterialAlertDialogBuilder(context)
   return self
 end
 
