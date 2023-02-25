@@ -103,3 +103,17 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 ## 开放源代码许可
 
 <https://gitee.com/AideLua/AideLua/blob/master/app/src/main/assets_bin/licences>
+
+## 广告
+
+### MyLuaApp（推荐）（友情推广）
+
+<!--有效期：2022.02.26-永久-->
+
+开源地址：https://github.com/dingyi222666/MyLuaApp
+
+MyLuaApp 是一款轻量，快速的安卓软件， 使用Lua和Java 来混合开发安卓软件。
+
+## 更多广告
+
+欢迎投放更多广告（仅限编程开发相关，5元1个月，超时后将不定时删除）！

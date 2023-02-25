@@ -34,7 +34,7 @@ t={
         text="转换",
         layout_width="fill";
         layout_weight=1;
-        minimumHeight="56dp";
+        minimumHeight="40dp";
       } ,
       {
         MaterialButton_TextButton_Normal;
@@ -43,7 +43,7 @@ t={
         layout_width="fill";
         layout_marginLeft="8dp";
         layout_weight=1;
-        minimumHeight="56dp";
+        minimumHeight="40dp";
       };
       {
         MaterialButton_TextButton_Normal;
@@ -52,7 +52,7 @@ t={
         layout_width="fill";
         layout_marginLeft="8dp";
         layout_weight=1;
-        minimumHeight="56dp";
+        minimumHeight="40dp";
       };
       {
         MaterialButton_TextButton_Normal;
@@ -61,7 +61,7 @@ t={
         layout_width="fill";
         layout_marginLeft="8dp";
         layout_weight=1;
-        minimumHeight="56dp";
+        minimumHeight="40dp";
       };
     };
   };

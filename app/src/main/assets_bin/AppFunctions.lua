@@ -22,10 +22,10 @@ setmetatable(MyFullDraggableContainer,MyFullDraggableContainer)
 
 --检查是不是路径相同的文件
 function isSamePathFileByPath(filePath1,filePath2)--通过文件路径
-  return string.lower(filePath1)==string.lower(filePath2)
+  return filePath1==filePath2
 end
 function isSamePathFile(file1,file2)--通过文件本身
-  return isSamePathFileByPath(file1.getPath(),file2.getPath())
+  return file1==file2
 end
 
 ---在 v5.1.1(51199) 返回结果改为 normalTable

@@ -284,6 +284,18 @@ EditorManager.symbolBar
 
 :::
 
+::: details 移除
+
+Jesse205Library
+
+* 大量的RES颜色
+* 废弃 `theme`
+* 大量的 `attr`
+
+:::
+
+我懒，详情请见github更改日志
+
 ## 相关链接
 
 * [应用更新日志](https://gitee.com/AideLua/AideLua/blob/master/README.md)

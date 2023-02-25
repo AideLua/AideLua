@@ -165,34 +165,33 @@ return function(item)
       return son1[position] or son1._else
     end,
     onCreateViewHolder=function(parent,viewType)
-      local _,result=xpcall(function()
+      local _,view=xpcall(function()
         local ids={}
         local view=loadlayout2(item[viewType],ids)
-        local holder=LuaCustRecyclerHolder(view)
         view.setTag(ids)
-        view.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
+        view.setBackground(ThemeUtil.getRippleDrawable(res.color.attr.rippleColorPrimary,true))
         view.setOnClickListener(onClickListener)
         view.setOnLongClickListener(onLongClickListener)
 
         if viewType==3 then--项目带有菜单按钮
           local moreView=ids.more
-          moreView.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
+          moreView.setBackground(ThemeUtil.getRippleDrawable(res.color.attr.rippleColorPrimary,true))
           moreView.onClick=fileMoreMenuClick
           local popupMenu=FilesBrowserManager.loadMoreMenu(moreView)
         end
-        return holder
+        return view
       end,
       function(err)
         showErrorDialog(err)
-        return LuaCustRecyclerHolder(View(activity))
+        return View(activity)
       end)
-      return result
+      return LuaCustRecyclerHolder(view)
     end,
 
     onBindViewHolder=function(holder,position)
       local view=holder.view
       --tag就是装有view的字典
-      local tag=view.getTag()
+      local ids=view.getTag()
       local data=adapterData[position]
       local initData=false
       if not data then--没有data 说明需要初始化
@@ -200,11 +199,12 @@ return function(item)
         adapterData[position]=data
         initData=true
       end
-      tag._data=data
+      ids._data=data
+
       --视图
-      local titleView=tag.title
-      local iconView=tag.icon
-      local messageView=tag.message
+      local titleView=ids.title
+      local iconView=ids.icon
+      local messageView=ids.message
 
       local file,filePath,fileName
 
@@ -241,35 +241,34 @@ return function(item)
 
         if projectOpenState then
           --视图
-          local highLightCard=tag.highLightCard
+          local highLightCard=ids.highLightCard
           --取data的变量。这些变量会多次使用，或者可能不想与data保持一致。
-          local isFile,fileType,title,iconColor
+          local isFile
           local cardBgColor=0
           local selected=false
           if initData then
+            local fileType
             isFile=file.isFile()
-            title=fileName
+            data.title=fileName
             data.iconAlpha=getIconAlphaByName(fileName)
+            data.isFile=isFile
             if isFile then
               fileType=getFileTypeByName(fileName)
               data.icon=fileIcons[fileType]
-              iconColor=fileColors[fileType and string.upper(fileType)]
+              data.iconColor=fileColors[fileType and string.upper(fileType)]
               data.action="openFile"
              else
               fileType=nil--文件夹根本就没有文件类型
               data.icon=folderIcons[fileName]
-              iconColor=fileColors.folder
+              data.iconColor=fileColors.folder
               data.action="openFolder"
             end
-            data.isFile=isFile
-            data.title=title
             data.fileType=fileType
-            data.iconColor=iconColor
            else
             isFile=data.isFile
-            title=data.title
-            iconColor=data.iconColor
           end
+
+          local iconColor=data.iconColor
           titleView.setText(data.title)
           iconView.setAlpha(data.iconAlpha)
           iconView.setImageResource(data.icon)
@@ -282,9 +281,9 @@ return function(item)
             local isNowFile=FilesTabManager.openState and FilesTabManager.file==file
             view.setSelected(isNowFile)
             if isNowFile then
-              titleColor=theme.color.colorPrimary
-              iconColor=theme.color.colorPrimary
-              cardBgColor=theme.color.rippleColorAccent
+              titleColor=res.color.attr.colorPrimary
+              iconColor=res.color.attr.colorPrimary
+              cardBgColor=res.color.attr.rippleColorAccent
               --保存一下当前打开文件的位置，方便后期切换文件
               FilesBrowserManager.nowFilePosition=position
             end
@@ -295,7 +294,7 @@ return function(item)
           highLightCard.setCardBackgroundColor(cardBgColor)
 
          else--未打开工程
-          local pathView=tag.path
+          local pathView=ids.path
           local iconUrl,title,summary=loadPrjCfg(initData,data,file,filePath)
           titleView.setText(title)
           messageView.setText(summary)
@@ -307,12 +306,12 @@ return function(item)
             pathView.setText(filePath)
             pathView.setVisibility(View.VISIBLE)
           end
-          loadPrjIcon(iconUrl,iconView,tag.iconCard)
-          titleColor=theme.color.textColorPrimary
+          loadPrjIcon(iconUrl,iconView,ids.iconCard)
+          titleColor=android.res.color.attr.textColorPrimary
         end
         --文件提示，仿MT管理器
         if highlightIndex and highlightIndex==position then
-          titleView.setTextColor(0xff4caf50)--下次刷新时这个view的颜色会被上面的逻辑覆盖，因此不需要担心
+          titleView.setTextColor(res.color.attr.colorPrimary)--下次刷新时这个view的颜色会被上面的逻辑覆盖，因此不需要担心
          else
           titleView.setTextColor(titleColor)
         end

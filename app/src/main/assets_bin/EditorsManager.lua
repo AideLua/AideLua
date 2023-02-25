@@ -47,6 +47,12 @@ local managerActionsWithEditor={}
 EditorsManager.actions=managerActions
 EditorsManager.actionsWithEditor=managerActionsWithEditor
 
+---v5.1.2+
+File(AppPath.LuaDBDir).mkdirs()
+---编辑器滚动数据库
+local filesScrollingDB=db.open(AppPath.LuaDBDir..'/filesScrolling.db')
+EditorsManager.filesScrollingDB=filesScrollingDB
+
 --编辑器活动(事件)，视图列表(table)，编辑器(View)，编辑器类型(String) 编辑器配置(table)
 local editorActions,editorGroupViews,editor,editorParent,editorType,editorConfig
 
@@ -57,6 +63,8 @@ import "io.github.rosemoe.editor.langs.html.HTMLLanguage"
 import "io.github.rosemoe.editor.langs.java.JavaLanguage"
 import "io.github.rosemoe.editor.langs.python.PythonLanguage"
 import "io.github.rosemoe.editor.langs.universal.UniversalLanguage"
+
+import "FileDecoders"
 
 local onKeyShortcut=function(super,keyCode,event)
   local filteredMetaState = event.getMetaState() & ~KeyEvent.META_CTRL_MASK;
@@ -357,11 +365,18 @@ function EditorsManager.openNewContent(filePath,fileType,decoder,keepHistory)
           assert(managerActions.setText(content),"The editor failed to set the text. Please pay attention to backup data.")
         end
         --编辑器滚动历史
-        local scrollConfig=filesScrollingDB:get(FilesTabManager.getScrollDbKeyByPath(filePath))
+        local addr=fileConfig.scrollDbAddrs[FilesTabManager.getScrollDbKeyByPath(filePath)]
+        --local addr=FilesTabManager.getScrollDbKeyByPath(filePath)
+
+        local scrollConfig=filesScrollingDB:get(addr)
         if scrollConfig then
           managerActions.setSelection(scrollConfig.selection or 0)
           managerActions.setTextSize(scrollConfig.size or math.dp2int(14))
           managerActions.scrollTo(scrollConfig.x or 0,scrollConfig.y or 0)
+         else
+          managerActions.setSelection(0)
+          managerActions.setTextSize(math.dp2int(14))
+          managerActions.scrollTo(0,0)
         end
 
         EditorsManager.refreshEditorScrollState()
@@ -828,6 +843,15 @@ end
 
 function magnifierManager.dismiss()
   magnifierManager.magnifier.dismiss()
+end
+
+--v5.1.2+
+function EditorsManager.onDestroy()
+  --[[
+  if magnifierUpdateTi and magnifierUpdateTi.isRun() then
+    magnifierUpdateTi.stop()
+  end]]
+  filesScrollingDB:close()
 end
 
 function EditorsManager.getEditor()

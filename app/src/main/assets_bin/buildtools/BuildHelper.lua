@@ -1,27 +1,32 @@
 local BuildHelper={}
-function updateInfo(message)
+function prinInfo(message)
   this.update("info")
   this.update(message)
 end
-function updateDoing(message)
+updateInfo=prinInfo
+
+function printDoing(message)
   this.update("doing")
   this.update(message)
 end
+updateDoing=printDoing
 
-function updateSuccess(message)
+function printSuccess(message)
   this.update("success")
   this.update(message)
 end
+updateSuccess=printSuccess
 
-function updateError(message)
+function printError(message)
   this.update("error")
   this.update(message)
 end
+updateError=printError
 
 --编译事件监听器
 BuildHelper.onCompileListener={
-  onError=updateError,
-  onDeleted=updateInfo
+  onError=printError,
+  onDeleted=prinInfo
 }
 
 function BuildHelper.loadEvents()

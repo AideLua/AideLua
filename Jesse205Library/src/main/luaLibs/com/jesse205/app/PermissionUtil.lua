@@ -1,31 +1,33 @@
-local PermissionUtil={}
-local grantedList={}
-PermissionUtil.grantedList=grantedList
+local PackageManager=luajava.bindClass("android.content.pm.PackageManager")
+local AlertDialog=luajava.bindClass("androidx.appcompat.app.AlertDialog")
+local ActivityCompat=luajava.bindClass("androidx.core.app.ActivityCompat")
+local String=luajava.bindClass("java.lang.String")
 local context=jesse205.context--当前context
 
---申请多个权限
-local function request(permissions,requestCode)
+local _M={}
+
+---申请多个权限
+function _M.request(permissions,requestCode)
   ActivityCompat.requestPermissions(context,String(permissions),requestCode or 0)
 end
-PermissionUtil.request=request
 
----检查单个权限是否*给予
-local function checkPermission(permission)
+---检查单个权限是否给予
+---@param permission string 权限
+function _M.checkPermission(permission)
   return ActivityCompat.checkSelfPermission(context,permission)==PackageManager.PERMISSION_GRANTED
 end
-PermissionUtil.checkPermission=checkPermission
 
 ---检查多个权限是否给予
-local function check(permissions)
+---@param permissions table 权限列表
+function _M.check(permissions)
   for index,permission in ipairs(permissions)
-    local granted=checkPermission(permission)
+    local granted=_M.checkPermission(permission)
     if not(granted) then--有一个没给予，直接返回false
       return false
     end
   end
   return true--所有的权限都没有没被给予，返回true
 end
-PermissionUtil.check=check
 
 --[[
 {
@@ -37,12 +39,15 @@ PermissionUtil.check=check
     permissions={"android.permission.WRITE_EXTERNAL_STORAGE","android.permission.READ_EXTERNAL_STORAGE"};
   }
 }]]
-local function askForRequestPermissions(permissionsItemsList,requestCode)
+---弹出权限申请对话框
+---@param permissionsItemsList table
+---@param requestCode number 回调代码
+function _M.askForRequestPermissions(permissionsItemsList,requestCode)
   for index=1,#permissionsItemsList do
     local permissionsItem=permissionsItemsList[index]
     local permissions=permissionsItem.permissions
-    if not(check(permissions)) then
-      local builder=AlertDialog.Builder(this)
+    if not(_M.check(permissions)) then
+      local builder=AlertDialog.Builder(activity)
       .setIcon(permissionsItem.icon)
       .setTitle(R.string.jesse205_permission_request)
       .setMessage(formatResStr(R.string.jesse205_permission_ask,{autoId2str(permissionsItem.tool),autoId2str(permissionsItem.name),autoId2str(permissionsItem.todo)}))
@@ -50,7 +55,7 @@ local function askForRequestPermissions(permissionsItemsList,requestCode)
         if permissionsItem.intent then
           activity.startActivity(permissionsItem.intent)
          else
-          request(permissions,requestCode)
+          _M.request(permissions,requestCode)
         end
       end)
       if permissionsItem.helpUrl then
@@ -67,6 +72,5 @@ local function askForRequestPermissions(permissionsItemsList,requestCode)
   end
 end
 
-PermissionUtil.askForRequestPermissions=askForRequestPermissions
 
-return PermissionUtil
+return _M

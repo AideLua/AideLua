@@ -192,6 +192,6 @@ end
 
 if themeutil.isJesse205Activity then--Jesse205主题没有分割线
   scrollView.onScrollChange=function(view,l,t,oldl,oldt)
-    MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,appBarLayout)
+    AnimationHelper.onScrollListenerForActionBarElevation(actionBar,t>0)
   end
 end

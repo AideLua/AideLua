@@ -22,14 +22,6 @@ function BuildingDialogBuilder:update(message,state)--state主要用来检验是
   local dialog=self.dialog
   if lastMessage then
     self:print(lastMessage,message)
-    local nowStatePanel=dialogIds.nowStatePanel
-    if state then
-      dialog.setTitle(R.string.binproject_state_succeed)
-      nowStatePanel.setVisibility(View.GONE)
-     elseif state==false then
-      dialog.setTitle(R.string.binproject_state_failed)
-      nowStatePanel.setVisibility(View.GONE)
-    end
     dialogIds.listView.setSelection(adapter.getCount()-1)
     self.lastMessage=nil
    else
@@ -48,19 +40,19 @@ function BuildingDialogBuilder:print(iconName,message,state)
   switch iconName do
    case "doing" then--正在
     icon=R.drawable.ic_reload
-    iconColor=theme.color.Blue
+    iconColor=res.color.jesse205_blue
    case "info" then--信息
     icon=R.drawable.ic_information_variant
    case "warning" then--警告
     icon=R.drawable.ic_alert_outline
-    iconColor=theme.color.Orange
+    iconColor=res.color.jesse205_orange
    case "success" then--成功
     icon=R.drawable.ic_check
-    iconColor=theme.color.Green
+    iconColor=res.color.jesse205_teal
     --dialogIds.stateTextView.text=message
    case "error" then--错误
     icon=R.drawable.ic_close
-    iconColor=theme.color.Red
+    iconColor=res.color.jesse205_red
    default
     error("Unknow icon",iconName)
   end

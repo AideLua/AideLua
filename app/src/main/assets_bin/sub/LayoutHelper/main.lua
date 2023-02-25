@@ -412,6 +412,7 @@ end
 
 --子视图列表对话框
 cd_dlg=AlertDialogBuilder(activity)
+cd_dlg.setCancelable(true)
 cd_list=cd_dlg.getListView()
 cd_list.onItemClick=function(l,v,p,i)
   getCurr(chids[p])
@@ -420,6 +421,7 @@ end
 
 --可选属性对话框
 check_dlg=AlertDialogBuilder(activity)
+check_dlg.setCancelable(true)
 check_list=check_dlg.getListView()
 check_list.onItemClick=function(l,v,p,i)
   local v=tostring(v.text)
@@ -499,7 +501,8 @@ func["子控件"]=function()
 end
 
 --添加视图对话框
-add_dlg=AppCompatDialog(activity)
+add_dlg=AlertDialog.Builder(activity)
+
 add_dlg.title="添加"
 wdt_list=ListView(activity)
 
@@ -534,7 +537,8 @@ end
 el=ExpandableListView(activity)
 el.setDividerHeight(0)
 el.setAdapter(mAdapter)
-add_dlg.setContentView(el)
+add_dlg.setView(el)
+add_dlg=add_dlg.create()
 
 el.onChildClick=function(l,v,g,c)
   local w={_G[wds[g+1][c+1]]}
@@ -588,6 +592,7 @@ end
 local ids={}
 sfd_dlg=AlertDialogBuilder(activity)
 --fld=EditText(activity)
+sfd_dlg.setCancelable(true)
 sfd_dlg.setView(MyEditDialogLayout.load({hint="内容"},ids))
 sfd_dlg.setPositiveButton("确定",ok)
 sfd_dlg.setNegativeButton("取消",nil)

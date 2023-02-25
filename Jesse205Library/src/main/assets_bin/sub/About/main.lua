@@ -14,6 +14,8 @@ import "android.text.SpannableString"
 import "android.text.style.ForegroundColorSpan"
 import "android.text.style.StyleSpan"
 
+import "com.google.android.material.dialog.MaterialAlertDialogBuilder"
+
 import "com.jesse205.layout.util.SettingsLayUtil"
 import "com.jesse205.app.dialog.ImageDialogBuilder"
 import "appAboutInfo"
@@ -30,7 +32,6 @@ portraitCardParent.addView(iconLayout)
 adapterEvents=SettingsLayUtil.adapterEvents
 packageInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
 landscapeState=false--是否是横屏。此Activity按竖屏做的，因此默认为false
-LastCard2Elevation=0
 topCardItems={}
 
 function onOptionsItemSelected(item)
@@ -100,7 +101,7 @@ function onItemClick(view,views,key,data)
       text.setSpan(StyleSpan(Typeface.BOLD),0,indexLength,Spannable.SPAN_EXCLUSIVE_INCLUSIVE)
       table.insert(items,text)
     end
-    AlertDialog.Builder(this)
+    MaterialAlertDialogBuilder(this)
     .setTitle(R.string.jesse205_thanksList)
     .setItems(items,nil)
     .setPositiveButton(android.R.string.ok,nil)
@@ -116,8 +117,7 @@ function onConfigurationChanged(config)
     local screenWidthDp=config.screenWidthDp
     if newLandscapeState then--横屏时
       --将工具栏阴影设置为0，启用虚拟阴影区域
-      LastActionBarElevation=0
-      actionBar.setElevation(0)
+      AnimationHelper.onScrollListenerForActionBarElevation(actionBar,false)
       appBarElevationCard.setVisibility(View.VISIBLE)
       local linearParams=iconLayout.getLayoutParams()
       if screenWidthDp>theme.number.width_dp_pc then--根据窗口宽度调整卡片宽度，保证在小屏手机显示效果良好
@@ -322,9 +322,9 @@ end
 recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
   onScrolled=function(view,dx,dy)
     if landscapeState then
-      MyAnimationUtil.RecyclerView.onScroll(view,dx,dy,appBarElevationCard,"LastCard2Elevation")
+      AnimationHelper.onScrollListenerForActionBarElevation(appBarElevationCard,view.canScrollVertically(-1))
      else
-      MyAnimationUtil.RecyclerView.onScroll(view,dx,dy)
+      AnimationHelper.onScrollListenerForActionBarElevation(actionBar,view.canScrollVertically(-1))
     end
   end
 })

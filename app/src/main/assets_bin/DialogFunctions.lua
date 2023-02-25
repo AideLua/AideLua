@@ -2,20 +2,23 @@ local cannotBeEmptyStr=getString(R.string.jesse205_edit_error_cannotBeEmpty)
 local existsStr=getString(R.string.file_exists)
 
 function deleteFileDialog(name,file)
-  local dialog=AlertDialog.Builder(this)
+  local dialog=MaterialAlertDialogBuilder(this)
   .setTitle(formatResStr(R.string.delete_withName,{name}))
   --.setIcon(R.drawable.ic_delete_outline_colored)
   .setMessage(activity.getString(R.string.delete_warning))
   .setPositiveButton(android.R.string.ok,function()
+    local filePath=file.getPath()
     local succeed=LuaUtil.rmDir(file)
     if succeed then
       FilesBrowserManager.refresh()
       showSnackBar(R.string.delete_succeed)
-      local config=FilesTabManager.openedFiles[string.lower(file.getPath())]
+      FilesTabManager.closeDeletedFile()
+      --[[
+      local config=FilesTabManager.openedFiles[filePath]
       if config then
         config.deleted=true
-        FilesTabManager.closeFile(string.lower(file.getPath()))
-      end
+        FilesTabManager.closeFile(filePath,true)
+      end]]
      else
       showSnackBar(R.string.delete_failed)
     end
@@ -23,8 +26,8 @@ function deleteFileDialog(name,file)
   .setNegativeButton(android.R.string.cancel,nil)
   .show()
   local okButton=dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-  okButton.setTextColor(theme.color.Red)
-  okButton.setRippleColor(ColorStateList({{}},{theme.color.Ripple.Red}))
+  okButton.setTextColor(res.color.jesse205_red)
+  okButton.setRippleColor(ColorStateList.valueOf(res.color.jesse205_red_ripple))
 end
 
 function createDirsDialog(nowDir)--创建文件夹对话框

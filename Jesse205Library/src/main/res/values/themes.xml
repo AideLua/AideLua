@@ -24,7 +24,6 @@
         <!--波纹颜色-->
         <item name="rippleColorAccent">@color/jesse205_blue_ripple</item>
         <item name="rippleColorPrimary">@color/ripple_material_light</item>
-        <item name="android:colorEdgeEffect">@color/jesse205_grey</item>
 
         <item name="actionBarTheme">@style/ThemeOverlay.Jesse205.ActionBar.Surface</item>
         <item name="actionBarStyle">@style/Widget.MaterialComponents.ActionBar.Surface</item>
@@ -43,7 +42,8 @@
         <item name="popupMenuStyle">@style/Widget.Jesse205.PopupMenu</item>
         <item name="android:contextPopupMenuStyle" tools:targetApi="n">@style/Widget.Jesse205.ContextPopupMenu</item>
         -->
-
+        <item name="actionSearchEditStyle">@style/Widget.Jesse205.ActionSearchEdit.Surface</item>
+        
         <item name="android:alertDialogTheme">@style/Base.Theme.Jesse205.Dialog.Alert</item>
         <item name="alertDialogTheme">@style/ThemeOverlay.Jesse205.Dialog.Alert</item>
 
@@ -131,6 +131,7 @@
         <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Primary</item>
         <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout.Colored</item>
         <item name="windowLightStatusBar">false</item>
+        <item name="actionSearchEditStyle">@style/Widget.Jesse205.ActionSearchEdit.Primary</item>
     </style>
 
     <style name="Theme.Jesse205.Default" parent="Theme.Jesse205"/>
@@ -141,19 +142,19 @@
         <item name="rippleColorAccent">@color/jesse205_red_ripple</item>
     </style>
     <style name="Theme.Jesse205.Red.DarkActionBar" parent="Theme.Jesse205.DarkActionBar">
-        <!--<item name="actionBarStyle">@style/Widget.Jesse205.Red.ActionBar</item>-->
         <item name="colorPrimary">@color/jesse205_red</item>
+        <item name="colorPrimaryDark">@color/jesse205_red_dark</item>
         <item name="rippleColorAccent">@color/jesse205_red_ripple</item>
     </style>
 
     <style name="Theme.Jesse205.Teal" parent="Theme.Jesse205">
-        <item name="colorAccent">@color/jesse205_green</item>
-        <item name="rippleColorAccent">@color/jesse205_green_ripple</item>
+        <item name="colorPrimary">@color/jesse205_teal</item>
+        <item name="rippleColorAccent">@color/jesse205_teal_ripple</item>
     </style>
     <style name="Theme.Jesse205.Teal.DarkActionBar" parent="Theme.Jesse205.DarkActionBar">
-        <item name="colorPrimary">@color/jesse205_green</item>
-        <item name="colorSecondary">@color/jesse205_pink_dark</item>
-        <item name="rippleColorAccent">@color/jesse205_pink_dark_ripple</item>
+        <item name="colorPrimary">@color/jesse205_teal</item>
+        <item name="colorPrimaryDark">@color/jesse205_teal_dark</item>
+        <item name="rippleColorAccent">@color/jesse205_teal_ripple</item>
     </style>
 
     <style name="Theme.Jesse205.Orange" parent="Theme.Jesse205">
@@ -162,7 +163,8 @@
     </style>
     <style name="Theme.Jesse205.Orange.DarkActionBar" parent="Theme.Jesse205.DarkActionBar">
         <item name="colorPrimary">@color/jesse205_orange</item>
-        <item name="rippleColorAccent">@color/jesse205_orange_dark_ripple</item>
+        <item name="colorPrimaryDark">@color/jesse205_orange_dark</item>
+        <item name="rippleColorAccent">@color/jesse205_orange_ripple</item>
     </style>
 
     <style name="Theme.Jesse205.Pink" parent="Theme.Jesse205">
@@ -170,66 +172,8 @@
         <item name="rippleColorAccent">@color/jesse205_pink_ripple</item>
     </style>
     <style name="Theme.Jesse205.Pink.DarkActionBar" parent="Theme.Jesse205.DarkActionBar">
-        <!--<item name="actionBarStyle">@style/Widget.Jesse205.Red.ActionBar</item>-->
         <item name="colorPrimary">@color/jesse205_pink</item>
+        <item name="colorPrimaryDark">@color/jesse205_pink_dark</item>
         <item name="rippleColorAccent">@color/jesse205_pink_ripple</item>
     </style>
-
-
-    <!--无工具栏主题-->
-    <style name="Theme.Jesse205.Default.NoActionBar" parent="Theme.Jesse205.Default">
-        <item name="windowActionModeOverlay">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="Theme.Jesse205.Default.DarkActionBar.NoActionBar" parent="Theme.Jesse205.Default.DarkActionBar">
-        <item name="windowActionModeOverlay">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.Jesse205.Red.NoActionBar" parent="Theme.Jesse205.Red">
-        <item name="windowActionModeOverlay">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="Theme.Jesse205.Red.DarkActionBar.NoActionBar" parent="Theme.Jesse205.Red.DarkActionBar">
-        <item name="windowActionModeOverlay">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.Jesse205.Teal.NoActionBar" parent="Theme.Jesse205.Teal">
-        <item name="windowActionModeOverlay">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="Theme.Jesse205.Teal.DarkActionBar.NoActionBar" parent="Theme.Jesse205.Teal.DarkActionBar">
-        <item name="windowActionModeOverlay">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.Jesse205.Orange.NoActionBar" parent="Theme.Jesse205.Orange">
-        <item name="windowActionModeOverlay">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="Theme.Jesse205.Orange.DarkActionBar.NoActionBar" parent="Theme.Jesse205.Orange.DarkActionBar">
-        <item name="windowActionModeOverlay">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.Jesse205.Pink.NoActionBar" parent="Theme.Jesse205.Pink">
-        <item name="windowActionModeOverlay">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-    <style name="Theme.Jesse205.Pink.DarkActionBar.NoActionBar" parent="Theme.Jesse205.Pink.DarkActionBar">
-        <item name="windowActionModeOverlay">true</item>
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
 </resources>

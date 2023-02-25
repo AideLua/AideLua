@@ -110,7 +110,7 @@ function ThemeUtil.refreshThemeColor()
   },
   {
     "rippleColorPrimary","rippleColorAccent",--波纹颜色
-    "floatingActionButtonBackgroundColor",--悬浮球背景颜色
+    --"floatingActionButtonBackgroundColor",--悬浮球背景颜色
     "colorBackgroundFloating","strokeColor",
   },"getColor",0)
 
@@ -184,7 +184,7 @@ function ThemeUtil.getRippleDrawable(color,square)
 
   if color then--要修改颜色
     if type(color)=="number" then--类型为数字
-      drawable.setColor(ColorStateList({{}},{color}))
+      drawable.setColor(ColorStateList.valueOf(color))
      else
       drawable.setColor(color)--类型不是数字，或是其他的，直接设置
     end

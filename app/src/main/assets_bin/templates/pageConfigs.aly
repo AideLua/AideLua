@@ -59,48 +59,48 @@
         "layouts.simpleLibrariesLayout";
       };
     },
-    onInit=function(ids,config)
+    onInit=function(ids,pageConfig)
       local filesList
       local configVersionsGroup=ids.configVersionsGroup
       local androluaVersionsGroup=ids.androluaVersionsGroup
-      local templatePath=config.templatePath--主模板路径
-      local subTemplatePath=config.subTemplatePath--子模板路径
+      local templatePath=pageConfig.templatePath--主模板路径
+      local subTemplatePath=pageConfig.subTemplatePath--子模板路径
 
       --用于针对性停用
       local chipsList={}
-      config.chipsList=chipsList
+      pageConfig.chipsList=chipsList
 
       --安卓X开关
       local androidXSwitch=ids.androidXSwitch
-      local androidXState=NewProjectManager.getSharedData(config._type,"androidxstate") or false
+      local androidXState=NewProjectManager.getSharedData(pageConfig._type,"androidxstate") or false
       androidXSwitch.setChecked(androidXState)
-      config.androidXState=androidXState
+      pageConfig.androidXState=androidXState
       ids.androidXSwitchParent.onClick=function()
         local nowState=androidXSwitch.isChecked()
         local newState=not(nowState)
         androidXSwitch.setChecked(newState)
-        NewProjectManager.setSharedData(config._type,"androidxstate",newState)
-        config.androidXState=newState
+        NewProjectManager.setSharedData(pageConfig._type,"androidxstate",newState)
+        pageConfig.androidXState=newState
         NewProjectManager.refreshState("androidx",newState,chipsList)
       end
 
-      local appCheckedText=NewProjectManager.getSharedData(config._type,"appVersion")
-      for index,content in ipairs(config.templateConfig.versions.app) do
+      local appCheckedText=NewProjectManager.getSharedData(pageConfig._type,"appVersion")
+      for index,content in ipairs(pageConfig.templateConfig.versions.app) do
         NewProjectManager.addSingleChip(configVersionsGroup,content,appCheckedText,chipsList)
       end
-      local aluaCheckedText=NewProjectManager.getSharedData(config._type,"androluaVersion")
-      for index,content in ipairs(config.subTemplateConfig.versions.androlua) do
+      local aluaCheckedText=NewProjectManager.getSharedData(pageConfig._type,"androluaVersion")
+      for index,content in ipairs(pageConfig.subTemplateConfig.versions.androlua) do
         NewProjectManager.addSingleChip(androluaVersionsGroup,content,aluaCheckedText,chipsList)
       end
-      NewProjectManager.applySingleCheckGroup(ids.configVersionsGroup,config,"appVersion")
-      NewProjectManager.applySingleCheckGroup(ids.androluaVersionsGroup,config,"androluaVersion")
+      NewProjectManager.applySingleCheckGroup(ids.configVersionsGroup,pageConfig,"appVersion")
+      NewProjectManager.applySingleCheckGroup(ids.androluaVersionsGroup,pageConfig,"androluaVersion")
 
       local enabledComplexLibs={}--复杂库
       local enabledJarLibs={}--Jar库
       local enabledSimpleLibs={}--简单库
-      config.enabledComplexLibs=enabledComplexLibs
-      config.enabledJarLibs=enabledJarLibs
-      config.enabledSimpleLibs=enabledSimpleLibs
+      pageConfig.enabledComplexLibs=enabledComplexLibs
+      pageConfig.enabledJarLibs=enabledJarLibs
+      pageConfig.enabledSimpleLibs=enabledSimpleLibs
 
       --复杂库
       for viewIndex,content in ipairs(luajava.astable(File(subTemplatePath.."/complexLibraries").listFiles())) do
@@ -119,8 +119,8 @@
               --chipConfig.title=("%s (%s)"):format(chipConfig.name,content.getName())
               chipConfig.enabledList=enabledComplexLibs
               chipConfig.readme=path.."/README.md"
-              local chip=NewProjectManager.addMultiChip(ids.complexLibrariesGroup,chipConfig,config._type,chipsList)
-              chip.setOnLongClickListener(config.chipLongClickListener)
+              local chip=NewProjectManager.addMultiChip(ids.complexLibrariesGroup,chipConfig,pageConfig._type,chipsList)
+              chip.setOnLongClickListener(pageConfig.chipLongClickListener)
             end
           end
         end
@@ -154,8 +154,8 @@
               chipConfig.subtitle="v"..versionName
               chipConfig.support=supportConfig[libraryName] and supportConfig[libraryName][versionName]
               chipConfig.readme=libraryFile.getPath().."/docs/README.md"
-              local chip=NewProjectManager.addMultiChip(ids.jarLibrariesGroup,chipConfig,config._type,chipsList)
-              chip.setOnLongClickListener(config.chipLongClickListener)
+              local chip=NewProjectManager.addMultiChip(ids.jarLibrariesGroup,chipConfig,pageConfig._type,chipsList)
+              chip.setOnLongClickListener(pageConfig.chipLongClickListener)
             end
           end
         end
@@ -177,20 +177,19 @@
           chipConfig.title=content.getName()
           chipConfig.enabledList=enabledSimpleLibs
           chipConfig.readme=path.."/README.md"
-          local chip=NewProjectManager.addMultiChip(ids.simpleLibrariesGroup,chipConfig,config._type,chipsList)
-          chip.setOnLongClickListener(config.chipLongClickListener)
+          local chip=NewProjectManager.addMultiChip(ids.simpleLibrariesGroup,chipConfig,pageConfig._type,chipsList)
+          chip.setOnLongClickListener(pageConfig.chipLongClickListener)
         end
       end
 
       --页面滚动时调整阴影
       ids.scrollView.onScrollChange=function(view,l,t,oldl,oldt)
-        MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,topCard)
-        config.showElevation=t>0
+        onScrollListenerForActionBarElevation(pageConfig,t>0)
       end
 
       NewProjectManager.refreshState("androidx",androidXState,chipsList)
     end,
-    onCreatePrj=function(ids,config,keys,formatList,unzipList,prjsPath)
+    onCreatePrj=function(ids,pageConfig,keys,formatList,unzipList,prjsPath)
       local keysJ_L={}
       local enabledComplexLibs={}--table列表，存放要用到的复杂库配置
       local enabledJarLibs={}--string列表，存放文件夹路径
@@ -198,25 +197,25 @@
       for index,content in pairs(keys)
         keysJ_L[index]=type(content)=="table" and String(content) or content
       end
-      for index,content in pairs(config.enabledComplexLibs) do
+      for index,content in pairs(pageConfig.enabledComplexLibs) do
         table.insert(enabledComplexLibs,HashMap({
           path=content.path,
           format=content.format and String(content.format),
           delete=content.delete and String(content.delete)}))
       end
-      for index,content in pairs(config.enabledJarLibs) do
+      for index,content in pairs(pageConfig.enabledJarLibs) do
         table.insert(enabledJarLibs,content.path)
       end
-      for index,content in pairs(config.enabledSimpleLibs) do
+      for index,content in pairs(pageConfig.enabledSimpleLibs) do
         table.insert(enabledSimpleLibs,content.path)
       end
-      AlertDialog.Builder(this)
+      MaterialAlertDialogBuilder(this)
       .setTitle(activity.getString(R.string.reminder))
       .setMessage(activity.getString(R.string.project_create_tip))
       .setPositiveButton(R.string.create,function()
         showLoadingDia(nil,R.string.creating)
-        activity.newTask(config.newProjectFunc,config.updateFunc,config.callbackFunc)
-        .execute({HashMap(keysJ_L),String(formatList),String(unzipList),ArrayList(enabledComplexLibs),String(enabledJarLibs),String(enabledSimpleLibs),config.subTemplatePath,prjsPath})
+        activity.newTask(pageConfig.newProjectFunc,pageConfig.updateFunc,pageConfig.callbackFunc)
+        .execute({HashMap(keysJ_L),String(formatList),String(unzipList),ArrayList(enabledComplexLibs),String(enabledJarLibs),String(enabledSimpleLibs),pageConfig.subTemplatePath,prjsPath})
       end)
       .setNegativeButton(android.R.string.cancel,nil)
       .show()
@@ -356,7 +355,7 @@
       if success then
         activity.result({"project_created_successfully",value})
        else
-        AlertDialog.Builder(activity)
+        MaterialAlertDialogBuilder(activity)
         .setTitle(activity.getString(R.string.project_create_failed))
         .setMessage(value)
         .setPositiveButton(android.R.string.ok,nil)

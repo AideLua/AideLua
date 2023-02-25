@@ -1,8 +1,11 @@
 import "android.webkit.WebViewClient"
+import "com.google.android.material.dialog.MaterialAlertDialogBuilder"
+
 import "helper.MarkdownHelper"
-local MarkdownReaderDialog={}
+
+local _M={}
 local ids={}
-MarkdownReaderDialog.ids=ids
+_M.ids=ids
 local dialoglayout={
   LinearLayout;
   orientation="vertical";
@@ -33,12 +36,12 @@ local dialog
 
 
 
-function MarkdownReaderDialog.init()
+function _M.init()
   if dialog then
     return
   end
   LastMarkdownDlgActionBarElevation=0
-  dialog=AlertDialog.Builder(activity)
+  dialog=MaterialAlertDialogBuilder(activity)
   .setView(loadlayout2(dialoglayout,ids))
   .create()
   local webViewSettings=ids.webView.getSettings()
@@ -99,27 +102,28 @@ head.appendChild(charsetMeta);
   end)
 
   ids.webView.onScrollChange=function(view,l,t,oldl,oldt)
-    MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,ids.appBarLayout,"LastMarkdownDlgActionBarElevation")
+    AnimationHelper.onScrollListenerForActionBarElevation(ids.appBarLayout,t>0)
+    --MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,ids.appBarLayout,"LastMarkdownDlgActionBarElevation")
   end
 end
 
-function MarkdownReaderDialog.show()
+function _M.show()
   dialog.show()
 end
 
-function MarkdownReaderDialog.setTitle(title)
+function _M.setTitle(title)
   ids.toolbar.setTitle(title)
 end
 
-function MarkdownReaderDialog.setSubtitle(title)
+function _M.setSubtitle(title)
   ids.toolbar.setSubtitle(title)
 end
 
-function MarkdownReaderDialog.load(path)
+function _M.load(path)
   ids.webView.loadUrl(path)
   task(500,function()
     ids.webView.clearHistory()
   end)
 end
 
-return MarkdownReaderDialog
+return _M

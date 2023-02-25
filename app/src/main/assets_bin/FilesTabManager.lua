@@ -34,6 +34,17 @@ local openedFiles = {}
 FilesTabManager.backupPath=AppPath.AppMediaDir..os.date("/backup/%Y%m%d")
 FilesTabManager.backupDir=File(FilesTabManager.backupPath)
 
+local scrollDbAddrsCreatorMetatable={
+  __index=function(self,key)
+    local filesScrollingDB=EditorsManager.filesScrollingDB
+    if not filesScrollingDB:has(key) then
+      filesScrollingDB:set(key,nil)
+    end
+    local addr=filesScrollingDB:addr(key)
+    rawset(self,key,addr)
+    return addr
+  end
+}
 ---在 v5.1.1(51199) 添加
 ---适配了菜单的TabLayout，平衡下拉与滚动的冲突
 function FilesTabManager.FilesTabLayoutBuilder(context)
@@ -201,8 +212,7 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory,saveFile,previ
     openState=true
     file=newFile
     fileType=newFileType
-    local lowerFilePath = string.lower(filePath) -- 小写路径
-    fileConfig = openedFiles[lowerFilePath]
+    fileConfig = openedFiles[filePath]
     local tab
     if fileConfig then
       tab=fileConfig.tab
@@ -219,13 +229,14 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory,saveFile,previ
         fileType=newFileType,
         fileName=fileName,
         path = filePath,
-        lowerPath = lowerFilePath,
         decoder = decoder,
         tab=tab,
         shortFilePath=ProjectManager.shortPath(filePath,true,ProjectManager.nowPath),
-        deleted=false;
+        deleted=false,
+        scrollDbAddrs={},
       }
-      openedFiles[lowerFilePath] = fileConfig
+      setmetatable(fileConfig.scrollDbAddrs,scrollDbAddrsCreatorMetatable)
+      openedFiles[filePath] = fileConfig
       tab.tag=fileConfig
       filesTabLay.addTab(tab)--在区域添加Tab
       filesTabLay.setVisibility(View.VISIBLE)--显示Tab区域
@@ -315,11 +326,11 @@ end
 
 --- 保存当前打开的文件，由于当前没有编辑器监听能力，保存文件需要直接从编辑器获取
 ---@param lowerFilePath string 小写文件路径
-function FilesTabManager.saveFile(lowerFilePath,showToast)
+function FilesTabManager.saveFile(filePath,showToast)
   --print("警告：保存文件",lowerFilePath)
   local config--这才是真正的文件信息
-  if lowerFilePath then
-    config=openedFiles[lowerFilePath]
+  if filePath then
+    config=openedFiles[filePath]
    else
     config=fileConfig
   end
@@ -335,12 +346,13 @@ function FilesTabManager.saveFile(lowerFilePath,showToast)
         y=managerActions.getScrollY(),
         selection=managerActions.getSelectionEnd()
       }
-      --滚动到已保存进度的位置
-      local key=FilesTabManager.getScrollDbKeyByPath(config.path)
+      --保存滚动到的位置
+      local addr=config.scrollDbAddrs[FilesTabManager.getScrollDbKeyByPath(config.path)]
+      --local addr=FilesTabManager.getScrollDbKeyByPath(config.path)
       if table.size(editorStateConfig)==0 then
-        filesScrollingDB:del(key)
+        EditorsManager.filesScrollingDB:del(addr)
        else
-        filesScrollingDB:set(key,editorStateConfig)
+        EditorsManager.filesScrollingDB:set(addr,editorStateConfig)
       end
       EditorsManager.save2Tab()--实际上不应该在这里调用
       if config.changed then
@@ -369,6 +381,17 @@ function FilesTabManager.saveFile(lowerFilePath,showToast)
   end
 end -- return:true，保存成功 nil，未保存 false，保存失败
 
+---v5.1.2+
+---关闭已删除的文件和标签
+function FilesTabManager.closeDeletedFile()
+  for path,config in pairs(openedFiles) do
+    if not File(path).isFile() then
+      config.deleted=true
+      FilesTabManager.closeFile(path,true)
+    end
+  end
+end
+
 -- 保存所有文件
 --[[
 function FilesTabManager.saveAllFiles(showToast)
@@ -384,18 +407,18 @@ function FilesTabManager.saveAllFiles(showToast)
 end
 
 -- 关闭文件，由于文件的打开都由Tab管理，所以不存在已有文件打开但是当前当前打开的文件为空的情况
-function FilesTabManager.closeFile(lowerFilePath,removeTab,changeEditor)
+function FilesTabManager.closeFile(filePath,removeTab,changeEditor)
   --print("警告：关闭文件")
   local config
-  if lowerFilePath then
-    config=openedFiles[lowerFilePath]
+  if filePath then
+    config=openedFiles[filePath]
    else
     config=fileConfig
   end
   if config then
-    local lowerPath=config.lowerPath
-    FilesTabManager.saveFile(lowerPath)
-    openedFiles[config.lowerPath]=nil
+    filePath=config.path
+    FilesTabManager.saveFile(filePath)
+    openedFiles[filePath]=nil
     if removeTab~=false then
       filesTabLay.removeTab(config.tab)
     end
@@ -478,13 +501,13 @@ function FilesTabManager.changeContent(content)
   end
 end
 
-function FilesTabManager.changePath(lowerPath,newPath)
-  local lowerNewPath=string.lower(newPath)
+function FilesTabManager.changePath(oldPath,newPath)
+  --local lowerNewPath=string.lower(newPath)
   local file=File(newPath)
   local fileName=file.getName()
   local fileType=getFileTypeByName(fileName)
   local decoder=FileDecoders[fileType]
-  local config=openedFiles[lowerPath]
+  local config=openedFiles[oldPath]
   if config then--有config，说明已经打开
     if decoder then--可以打开
       local tab=config.tab
@@ -492,14 +515,15 @@ function FilesTabManager.changePath(lowerPath,newPath)
         file = file,
         fileType=fileType,
         path = newPath,
-        lowerPath = lowerNewPath,
+        --lowerPath = lowerNewPath,
         decoder = decoder,
         tab=tab,
         shortFilePath=ProjectManager.shortPath(newPath,true),
-        deleted=false;
+        deleted=false,
+        needRefresh=true;
       }
-      openedFiles[lowerPath]=nil
-      openedFiles[lowerNewPath] = newConfig
+      openedFiles[oldPath]=nil
+      openedFiles[newPath] = newConfig
       tab.setText(fileName)--设置显示的文字
       if oldTabIcon then
         tab.setIcon(FilesBrowserManager.fileIcons[fileType])
@@ -507,11 +531,11 @@ function FilesTabManager.changePath(lowerPath,newPath)
       tab.tag=newConfig
       initFileTabView(tab,newConfig)
 
-      if lowerPath==fileConfig.lowerPath then--已打开的是此文件
+      if oldPath==fileConfig.path then--已打开的是此文件
         FilesTabManager.openFile(file,fileType)
       end
      else
-      FilesTabManager.closeFile(lowerPath)
+      FilesTabManager.closeFile(newPath)
     end
   end
 end

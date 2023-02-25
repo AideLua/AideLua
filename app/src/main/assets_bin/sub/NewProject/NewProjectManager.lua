@@ -1,6 +1,8 @@
 --NewProjectManager 是给主UI用的管理器，不能在线程里面使用
 --导入 NewProjectManager 前必须先导入 NewProjectUtil2
+import "db"
 local NewProjectManager = {}
+
 local TEMPLATES_DIR_PATH = NewProjectUtil2.TEMPLATES_DIR_PATH --模板路径
 local PRJS_PATH = NewProjectUtil2.PRJS_PATH --工程存放路径
 
@@ -16,6 +18,11 @@ local errorCode2String = {
   [2] = activity.getString(R.string.project_exists)
 }
 NewProjectManager.errorCode2String = errorCode2String
+
+--v5.1.2+
+File(AppPath.LuaDBDir).mkdirs()
+local selectedChipDB=db.open(AppPath.LuaDBDir..'/newProject_selectedChip.db')
+NewProjectManager.selectedChipDB=selectedChipDB
 
 --基础模板
 local baseTemplateConfig = {
@@ -184,14 +191,14 @@ end
 ---@param key string 键
 ---@param value Object 新值
 function NewProjectManager.setSharedData(_type, key, value)
-  return setSharedData("newproject_" .. _type .. "_" .. key, value)
+  return selectedChipDB:set(_type .. "_" .. key, value)
 end
 
 ---读取ShaedData
 ---@param _type string 模板类型，建议唯一
 ---@param key string 键
 function NewProjectManager.getSharedData(_type, key)
-  return getSharedData("newproject_" .. _type .. "_" .. key)
+  return selectedChipDB:get(_type .. "_" .. key)
 end
 
 --刷新启用状态，比如AndroidX
@@ -253,6 +260,7 @@ function NewProjectManager.addSingleChip(group,chipConfig,selectedText,chipsList
   .setText(title)
   .setCheckable(true)
   .setCheckedIconEnabled(false)
+  .setEnsureMinTouchTargetSize(false)
   group.addView(chip)
   table.insert(chipsList,chip)
   if selectedText==title or selectedText==nil and defaultChecked then
@@ -277,6 +285,7 @@ function NewProjectManager.addMultiChip(group,chipConfig,_type,chipsList)
   .setText(fullText)
   .setCheckable(true)
   .setCheckedIconEnabled(false)--这里禁用勾选图标，防止勾选时Chip乱飞
+  .setEnsureMinTouchTargetSize(false)
   --.setCheckedIconResource(R.drawable.ic_check_accent)
   group.addView(chip)
   chip.setOnCheckedChangeListener(onChipCheckChangedListenerJ)
@@ -416,5 +425,11 @@ function NewProjectManager.addTemplateZipsToUnzipList(unzipList,path,androidXSta
   --androidxState为true时取androidx.zip，否则取normal.zip
   table.insert(unzipList,path..(androidXState and "/androidx.zip" or "/normal.zip"))
 end
+
+--v5.1.2+
+function NewProjectManager.onDestroy()
+  selectedChipDB:close()
+end
+
 
 return NewProjectManager

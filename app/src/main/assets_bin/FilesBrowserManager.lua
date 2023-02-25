@@ -25,6 +25,9 @@ FilesBrowserManager.highlightIndex: 高亮显示的项目索引
 local FilesBrowserManager = {}
 local lastContextMenu--上一次的ContextMenu，用于拖放时关闭Menu
 local passDragFileTime=0--拖放排除次数，因为自己本身就有拖动事件
+
+local RES_PARH_MATCHER="^[^/]-/[^/]-/src/[^/]-/res/[^/]-/"--匹配RES路径，需要相对路径
+
 local providers={
   menuProviders={--参数：menuBuilder,config
   },
@@ -542,7 +545,7 @@ function FilesBrowserManager.startDragAndDrop(view,file,icon,iconColor)
   if icon then
     iconDrawable=resources.getDrawable(icon)
     if iconColor then
-      local iconColorStateList=ColorStateList({{}},{iconColor})
+      local iconColorStateList=ColorStateList.valueOf(iconColor)
       iconDrawable.setTintList(iconColorStateList)
     end
   end
@@ -590,11 +593,7 @@ function FilesBrowserManager.loadMoreMenu(moreView)
         openDirPath=nowProjectPath
        elseif id==Rid.menu_addLibraries then
         --TODO: 实现添加库
-        AlertDialog.Builder(this)
-        .setTitle(R.string.project_addLibraries)
-        .setMessage("您可以新建一个新工程后手动把对应的库文件复制过来，因为我懒得实现这个功能。\nYou can create a new project and copy the corresponding library file manually, because I am too lazy to implement this function.")
-        .setPositiveButton(android.R.string.ok,nil)
-        .show()
+        showSimpleDialog(R.string.project_addLibraries,"您可以新建一个新工程后手动把对应的库文件复制过来，因为我懒得实现这个功能。\nYou can create a new project and copy the corresponding library file manually, because I am too lazy to implement this function.")
       end
     end
     if openDirPath then
@@ -688,7 +687,6 @@ local function refreshTaskFunc(newDirectory,highlightPath,projectOpenState)
             table.insert(list,filesListJ[index])
           end
           luajava.clear(filesListJ)
-         else
         end
       end
     end
@@ -990,30 +988,28 @@ function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
         isFile=file.isFile()
         fileType=data.fileType
         fileRelativePath=ProjectManager.shortPath(filePath,true,ProjectManager.nowPath)
-        isResDir=parentName~="values" and not(parentName:find("values%-")) and ProjectManager.shortPath(filePath,true):find(".-/src/.-/res/.-/") or false
+        isResDir=toboolean(parentName~="values" and not(parentName:find("values%-")) and ProjectManager.shortPath(filePath,true):find(RES_PARH_MATCHER))
         javaRReference=isResDir and ("R.%s.%s"):format(parentName:match("(.-)%-") or parentName,fileName:match("(.+)%.") or fileName) or nil
        else
         isResDir=false
       end
-
-      if openState and ((fileType and relLibPathsMatch.types[fileType]) or not(isFile)) then--已经打开了项目并且文件类型受支持
-        if not(inLibDirPath) then
-          for index,content in ipairs(relLibPathsMatch.paths) do
-            inLibDirPath=fileRelativePath:match(content)
-            if inLibDirPath then
-              data.inLibDirPath=inLibDirPath
-              break
-            end
+      if not inLibDirPath and openState and ((fileType and relLibPathsMatch.types[fileType]) or not(isFile)) then--已经打开了项目并且文件类型受支持
+        for index,content in ipairs(relLibPathsMatch.paths) do
+          inLibDirPath=fileRelativePath:match(content)
+          if inLibDirPath then
+            data.inLibDirPath=inLibDirPath
+            break
           end
         end
       end
+
       local config={--主要是给提供者
         data=data,
         title=title,
         javaRReference=javaRReference,
         copyMenuVisible=ProjectManager.openState,
         openInNewWindowMenuVisible=isFile or data.action=="openProject",
-        referenceMenuVisible=toboolean(isResDir),
+        referenceMenuVisible=isResDir,
         renameMenuVisible=ProjectManager.openState,
 
         inLibDirPath=inLibDirPath,--从 relLibPathsMatchPaths 匹配出来的路径
@@ -1062,7 +1058,7 @@ function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
               showSnackBar(R.string.file_exists)
              else
               LuaUtil.copyDir(file,newFile)
-              FilesBrowserManager.refresh(parentFile,newName)
+              FilesBrowserManager.refresh(parentFile,newPath)
             end
            elseif id==Rid.menu_rename then--重命名
             renameDialog(file)
@@ -1073,8 +1069,7 @@ function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
               activity.newActivity("main",{filePath},true,int(System.currentTimeMillis()))
             end
            elseif id==Rid.menu_reference then--引用资源
-            local javaR=("R.%s.%s"):format(javaRReference)
-            EditorsManager.actions.paste(javaR)
+            EditorsManager.actions.paste(javaRReference)
           end
         end
       })
@@ -1084,83 +1079,75 @@ end
 
 --初始化
 function FilesBrowserManager.init()
-  --设置下拉刷新监听器
-  swipeRefresh.onRefresh = function()
-    FilesBrowserManager.refresh()
+--设置下拉刷新监听器
+swipeRefresh.onRefresh = function()
+  FilesBrowserManager.refresh()
+end
+
+--应用下拉刷新风格
+MyStyleUtil.applyToSwipeRefreshLayout(swipeRefresh)
+
+adapter=FileListAdapter(item)
+recyclerView.setAdapter(adapter)
+layoutManager = LinearLayoutManager()
+recyclerView.setLayoutManager(layoutManager)
+recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
+  onScrolled = function(view, dx, dy)
+    AnimationHelper.onScrollListenerForActionBarElevation(sideAppBarLayout,view.canScrollVertically(-1))
   end
-
-  --应用下拉刷新风格
-  MyStyleUtil.applyToSwipeRefreshLayout(swipeRefresh)
-
-  adapter=FileListAdapter(item)
-  recyclerView.setAdapter(adapter)
-  layoutManager = LinearLayoutManager()
-  recyclerView.setLayoutManager(layoutManager)
-  recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
-    onScrolled = function(view, dx, dy)
-      AnimationHelper.onScrollListenerForElevation({
-        top=sideAppBarLayout,
-      },
-      {
-        top=view.canScrollVertically(-1),
-      })
-  end})
-  recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
-    onGlobalLayout = function()
-      if activity.isFinishing() then return end
-      AnimationHelper.onScrollListenerForElevation({
-        top=sideAppBarLayout,
-      },
-      {
-        top=recyclerView.canScrollVertically(-1),
-      })
-  end})
-
-  --路径查看器
-  pathAdapter=FilePathAdapter(pathItem)
-  pathRecyclerView.setAdapter(pathAdapter)
-  pathLayoutManager = LinearLayoutManager()
-  pathLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL)
-  --pathLayoutManager.setStackFromEnd(true)
-  pathRecyclerView.setLayoutManager(pathLayoutManager)
-
-  --长按菜单
-  activity.registerForContextMenu(recyclerView)
-  recyclerView.onCreateContextMenu=function(menu,view,menuInfo)
-    FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
+})
+recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
+  onGlobalLayout = function()
+    if activity.isFinishing() then return end
+    AnimationHelper.onScrollListenerForActionBarElevation(sideAppBarLayout,recyclerView.canScrollVertically(-1))
   end
-  recyclerView.setTag({})
+})
 
-  --判断侧滑开启状态。
-  --如果侧滑为开启状态，那么文件浏览器一定是开启的。
-  --如果侧滑为关闭状态，那么可能处于平板模式下，没有侧滑，需要单独处理
-  openState = drawer.isDrawerOpen(Gravity.LEFT)
-  if openState == false then
-    openState = nil
-  end
-  drawer.addDrawerListener(DrawerLayout.DrawerListener({
-    onDrawerSlide = function(view, slideOffset)
-      if nowDevice ~= "pc" then
-        if slideOffset > 0.5 and not(openState) then
-          openState = true
-         elseif slideOffset <= 0.5 and openState then
-          openState = false
-        end
+--路径查看器
+pathAdapter=FilePathAdapter(pathItem)
+pathRecyclerView.setAdapter(pathAdapter)
+pathLayoutManager = LinearLayoutManager()
+pathLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL)
+--pathLayoutManager.setStackFromEnd(true)
+pathRecyclerView.setLayoutManager(pathLayoutManager)
+
+--长按菜单
+activity.registerForContextMenu(recyclerView)
+recyclerView.onCreateContextMenu=function(menu,view,menuInfo)
+  FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
+end
+recyclerView.setTag({})
+
+--判断侧滑开启状态。
+--如果侧滑为开启状态，那么文件浏览器一定是开启的。
+--如果侧滑为关闭状态，那么可能处于平板模式下，没有侧滑，需要单独处理
+openState = drawer.isDrawerOpen(Gravity.LEFT)
+if openState == false then
+  openState = nil
+end
+drawer.addDrawerListener(DrawerLayout.DrawerListener({
+  onDrawerSlide = function(view, slideOffset)
+    if nowDevice ~= "pc" then
+      if slideOffset > 0.5 and not(openState) then
+        openState = true
+       elseif slideOffset <= 0.5 and openState then
+        openState = false
       end
-    end,
-    onDrawerOpened = function(view)
-      --FilesTabManager.saveFile()--侧滑打开就保存文件
-    end,
-    onDrawerClosed = function(view)
-    end,
-    onDrawerStateChanged = function(newState)
     end
-  }))
+  end,
+  onDrawerOpened = function(view)
+    --FilesTabManager.saveFile()--侧滑打开就保存文件
+  end,
+  onDrawerClosed = function(view)
+  end,
+  onDrawerStateChanged = function(newState)
+  end
+}))
 
-  local dropFileFrameBackground
-  recyclerView.onDrag=function(view,event)
-    local action=event.getAction()
-    switch action do
+local dropFileFrameBackground
+recyclerView.onDrag=function(view,event)
+  local action=event.getAction()
+  switch action do
      case DragEvent.ACTION_DRAG_STARTED then
       local desc=event.getClipDescription()--必须有描述
       if not(desc and ProjectManager.openState) then

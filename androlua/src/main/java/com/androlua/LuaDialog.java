@@ -1,6 +1,7 @@
 package com.androlua;
 
 //import android.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
@@ -10,7 +11,7 @@ import android.widget.ArrayListAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import androidx.appcompat.app.AlertDialog;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -18,12 +19,7 @@ import java.util.Arrays;
  * Created by Administrator on 2017/02/04 0004.
  */
 
-public class LuaDialog extends AlertDialog implements  DialogInterface.OnClickListener {
-
-    @Override
-    public void cancel() {
-    }
-
+public class LuaDialog extends AlertDialog implements  DialogInterface.OnClickListener{
     private Context mContext;
 
     private ListView mListView;

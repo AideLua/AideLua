@@ -45,11 +45,7 @@ if path then
 end
 
 scrollView.onScrollChange=function(view,l,t,oldl,oldt)
-  AnimationHelper.onScrollListenerForElevation({
-    top=actionBar,
-  },
-  {
-    top=t>0,
-  })
+  AnimationHelper.onScrollListenerForActionBarElevation(actionBar,t>0)
+
   --MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt)
 end

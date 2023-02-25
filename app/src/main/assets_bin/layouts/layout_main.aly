@@ -26,6 +26,7 @@
         FilesTabManager.FilesTabLayoutBuilder;
         layout_width="fill";
         tabMode=TabLayout.MODE_SCROLLABLE;
+        tabGravity=TabLayout.GRAVITY_FILL;
         layout_height="32dp";
         id="filesTabLay";
         visibility=View.GONE;

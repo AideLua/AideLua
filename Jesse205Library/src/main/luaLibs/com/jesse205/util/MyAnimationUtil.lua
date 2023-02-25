@@ -2,6 +2,7 @@ local MyAnimationUtil={}
 import "android.animation.ObjectAnimator"
 import "android.view.animation.DecelerateInterpolator"
 import "android.view.animation.AccelerateInterpolator"
+import "android.util.Log"
 
 --保存一下ActionBar，快速响应
 MyAnimationUtil.actionBar=actionBar or activity.getSupportActionBar()
@@ -16,6 +17,7 @@ LastActionBarElevation=0
 ]]
 MyAnimationUtil.ListView={}
 function MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount,actionBar,contrast,mandatory,paddingTop)
+  Log.w("MyAnimationUtil","已废弃的API：MyAnimationUtil.ListView.onScroll")
   local contrast=contrast or "LastActionBarElevation"
   local childView=view.getChildAt(0)
   if childView then
@@ -41,6 +43,7 @@ end
 ]]
 MyAnimationUtil.RecyclerView={}
 function MyAnimationUtil.RecyclerView.onScroll(view,dx,dy,actionBar,contrast,mandatory)
+  Log.w("MyAnimationUtil","已废弃的API：MyAnimationUtil.RecyclerView.onScroll")
   local contrast=contrast or "LastActionBarElevation"
   local canScroll=view.canScrollVertically(-1)
   if not(canScroll) and (_G[contrast]~=0 or mandatory) then
@@ -60,6 +63,7 @@ end
 ]]
 MyAnimationUtil.ScrollView={}
 function MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,actionBar,contrast,mandatory)
+  Log.w("MyAnimationUtil","已废弃的API：MyAnimationUtil.ScrollView.onScrollChange")
   local contrast=contrast or "LastActionBarElevation"
   if t<=0 and (_G[contrast]~=0 or mandatory) then
     _G[contrast]=0
@@ -85,6 +89,7 @@ function MyAnimationUtil.ActionBar.cancelAnimator(actionBar)
 end
 
 function MyAnimationUtil.ActionBar.openElevation(actionBar)
+  Log.w("MyAnimationUtil","已废弃的API：MyAnimationUtil.ActionBar.openElevation")
   actionBar=actionBar or MyAnimationUtil.actionBar
   MyAnimationUtil.ActionBar.cancelAnimator(actionBar)
   local animator=ObjectAnimator.ofFloat(actionBar, "elevation", {theme.number.actionBarElevation})
@@ -97,6 +102,7 @@ function MyAnimationUtil.ActionBar.openElevation(actionBar)
 end
 
 function MyAnimationUtil.ActionBar.closeElevation(actionBar)
+  Log.w("MyAnimationUtil","已废弃的API：MyAnimationUtil.ActionBar.closeElevation")
   actionBar=actionBar or MyAnimationUtil.actionBar
   MyAnimationUtil.ActionBar.cancelAnimator(actionBar)
   local animator=ObjectAnimator.ofFloat(actionBar, "elevation", {0})

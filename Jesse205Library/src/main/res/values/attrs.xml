@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
     <attr name="rippleColorAccent" format="color"/>
     <attr name="rippleColorPrimary" format="color"/>
     <attr name="floatingActionButtonBackgroundColor" format="color"/>
@@ -9,4 +8,5 @@
     <attr name="popupMenuCornerRadius" format="dimension" />
     <attr name="windowLightStatusBar" format="boolean" />
     <attr name="windowLightNavigationBar" format="boolean" />
+    <attr name="actionSearchEditStyle" format="reference" />
 </resources>

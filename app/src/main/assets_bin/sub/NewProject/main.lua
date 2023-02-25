@@ -40,6 +40,19 @@ function onOptionsItemSelected(item)
   end
 end
 
+--v5.1.1+
+---滚动监听，用于打开和关闭标题栏阴影
+function onScrollListenerForActionBarElevation(pageConfig,state)
+  AnimationHelper.onScrollListenerForActionBarElevation(topCard,state)
+  pageConfig.showElevation=state
+end
+
+function onDestroy()
+  NewProjectManager.onDestroy()
+  PluginsUtil.callElevents("onDestroy")
+end
+
+
 noButton.onClick=function()--取消按钮
   activity.finish()
 end
@@ -54,7 +67,7 @@ createButton.onClick=function(view)--新建按钮
   prjsPaths[-1]=savedPrjsPath
   local choice=(table.find(prjsPaths,savedPrjsPath) or 0)-1--因为choice是java索引，所以要减去1
 
-  AlertDialog.Builder(activity)
+  MaterialAlertDialogBuilder(activity)
   .setTitle(R.string.projects_path_select)
   .setSingleChoiceItems(prjsPaths,choice,function(dialogInterface,index)
     choice=index
@@ -90,6 +103,7 @@ PluginsUtil.callElevents("onLoadTemplateConfig", templateMap,pageConfigsList)
 
 local pagePosition=getSharedData("newProject_pagePosition") or 0
 nowPageConfig=pageConfigsList[pagePosition+1]
+
 if not(nowPageConfig) then
   pagePosition=0
   setSharedData("newProject_pagePosition",pagePosition)
@@ -209,10 +223,10 @@ viewPager.setOnPageChangeListener({
      else
       if pageConfigsList[position+1].showElevation then
         topCard.setElevation(theme.number.actionBarElevation)
-        LastActionBarElevation=theme.number.actionBarElevation
+        --LastActionBarElevation=theme.number.actionBarElevation
        else
         topCard.setElevation(0)
-        LastActionBarElevation=0
+        --LastActionBarElevation=0
       end
     end
 

@@ -69,6 +69,17 @@
         <item name="strokeWidth">@dimen/mtrl_btn_stroke_size</item>
         <item name="strokeColor">@color/mtrl_btn_stroke_color_selector</item>
     </style>
+    
+    <style name="Widget.Jesse205.ActionSearchEdit.Surface" parent="android:style/Widget">
+        <item name="android:textColorPrimary">?colorOnSurface</item>
+        <item name="android:textColorHint">@color/material_on_surface_emphasis_medium</item>
+    </style>
+    <style name="Widget.Jesse205.ActionSearchEdit.Primary" parent="android:style/Widget">
+        <item name="colorPrimary">?colorOnPrimary</item>
+        <item name="android:textColorPrimary">?colorOnPrimary</item>
+        <item name="android:textColorHint">@color/material_on_primary_emphasis_medium</item>
+    </style>
+    
 
     <!--<style name="Widget.Jesse205.NavigationView" parent="Widget.MaterialComponents.NavigationView">
         <item name="itemIconTint">@color/jesse205_navigation_item_icon_tint</item>

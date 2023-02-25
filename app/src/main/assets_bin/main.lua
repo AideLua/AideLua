@@ -60,7 +60,6 @@ import "androidx.documentfile.provider.DocumentFile"
 import "com.google.android.material.tabs.TabLayout"
 import "com.google.android.material.chip.Chip"
 import "com.google.android.material.chip.ChipGroup"
-import "com.google.android.material.dialog.MaterialAlertDialogBuilder"
 
 import "com.bumptech.glide.request.RequestOptions"
 import "com.bumptech.glide.load.engine.DiskCacheStrategy"
@@ -71,6 +70,7 @@ import "com.nwdxlgzs.view.photoview.PhotoView"
 import "com.caverock.androidsvg.SVG"
 import "com.termux.shared.termux.TermuxConstants"
 RUN_COMMAND_SERVICE=TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE
+
 import "com.drakeet.drawer.FullDraggableContainer"
 import "me.zhanghai.android.fastscroll.FastScrollerBuilder"
 import "org.apache.http.util.EncodingUtils"
@@ -87,7 +87,8 @@ import "com.jesse205.util.ColorUtil"
 
 --https://github.com/limao996/LuaDB
 db=require "db"
-filesScrollingDB=db.open(AppPath.AppSdcardDataDir..'/filesScrolling.db')
+--v5.1.2移除
+--filesScrollingDB=db.open(AppPath.AppSdcardDataDir..'/filesScrolling.db')
 
 import "androidx"
 
@@ -154,10 +155,6 @@ local touchingKey = false
 
 nowDevice = "phone"
 screenWidthDp = 0
-
-import "FileDecoders"
-import "FileTemplates"
-import "ActivityTemplates"
 
 import "adapter.FileListAdapter"
 import "adapter.FilePathAdapter"
@@ -308,7 +305,6 @@ function onOptionsItemSelected(item)
         showResult=true,
         title=getString(R.string.project_build),
       })
-
      else
       PermissionUtil.askForRequestPermissions({
         {
@@ -573,13 +569,11 @@ function onStop()
 end
 
 function onDestroy()
-  if magnifierUpdateTi and magnifierUpdateTi.isRun() then
-    magnifierUpdateTi.stop()
-  end
-  filesScrollingDB:close()
-  AppPath.cleanTemp()
-
+  EditorsManager.onDestroy()
+  ProjectManager.onDestroy()
+  --v5.1.2先调用onDestroy后清理临时文件
   PluginsUtil.callElevents("onDestroy")
+  AppPath.cleanTemp()
 end
 
 function onKeyDown(keyCode, event)

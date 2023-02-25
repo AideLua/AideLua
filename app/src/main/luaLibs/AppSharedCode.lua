@@ -1,7 +1,9 @@
 --文档Url
 DOCS_URL="https://aidelua.github.io/AideLua/"
 REPOSITORY_URL="https://gitee.com/AideLua/AideLua"
-PAGE_URL="https://aidelua.github.io/"
+PAGE_URL="https://aidelua.netlify.app/"
+
+AppPath.LuaDBDir=AppPath.AppSdcardDataDir..'/luadb'
 
 if getSharedData("antiAddictionMode") then
   function checkTime()

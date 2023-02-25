@@ -373,3 +373,11 @@ jesse205库：
 ### v5.1.2
 1. 工程运行器支持按返回键还原软件
 2. 修复部分布局无法预览的问题（感谢 @IQge 的反馈）
+3. 更新 AndroidX 与 MaterialComponent，修改主题颜色
+4. 优化 db 存储性能（感谢 @狸猫）
+5. 去小写路径索引化
+6. 废弃大量API
+7. 更新 PluginUtil
+8. 修复无法引用java资源的bug
+9. 更新数据库存放目录，您将丢失所有编辑器滚动数据
+10. 更新新建工程getshareddata与setshareddata，您将丢失所有已选择的chip

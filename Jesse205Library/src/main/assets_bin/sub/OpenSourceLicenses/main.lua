@@ -93,13 +93,7 @@ recyclerView.setAdapter(adapter)
 recyclerView.setLayoutManager(layoutManager)
 recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
   onScrolled=function(view,dx,dy)
-    AnimationHelper.onScrollListenerForElevation({
-      top=actionBar,
-    },
-    {
-      top=view.canScrollVertically(-1),
-    })
-    MyAnimationUtil.RecyclerView.onScroll(view,dx,dy,sideAppBarLayout,"LastSideActionBarElevation")
+    AnimationHelper.onScrollListenerForActionBarElevation(actionBar,view.canScrollVertically(-1))
   end
 })
 recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
@@ -107,7 +101,7 @@ recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
     if activity.isFinishing() then
       return
     end
-    MyAnimationUtil.RecyclerView.onScroll(recyclerView,0,0,sideAppBarLayout,"LastSideActionBarElevation")
+    AnimationHelper.onScrollListenerForActionBarElevation(actionBar,recyclerView.canScrollVertically(-1))
   end
 })
 

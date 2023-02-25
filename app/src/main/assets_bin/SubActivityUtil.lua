@@ -1,3 +1,5 @@
+import "ActivityTemplates"
+
 local SubActivityUtil={}
 ---在 v5.1.1(51199) 添加
 

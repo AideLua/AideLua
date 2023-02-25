@@ -26,6 +26,7 @@
           layout_width="fill";
           id="tabLayout";
           tabIndicatorFullWidth=false;
+          tabGravity=TabLayout.GRAVITY_FILL;
           tabMode=TabLayout.MODE_SCROLLABLE;
           backgroundColor=0;
         };

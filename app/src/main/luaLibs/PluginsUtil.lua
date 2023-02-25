@@ -7,12 +7,12 @@ local setEnabled, getEnabled, getReallyEnabled, loadPlugins,
 getPluginPath, getPluginDataPath, getAvailable,
 getPluginsEventsAndName,getConfig,onPluginError
 
-
 local PLUGINS_PATH = AppPath.AppMediaDir .. "/plugins"
 local PLUGINS_DATA_PATH = AppPath.AppMediaDir .. "/data/plugins"
 PluginsUtil.PLUGINS_PATH = PLUGINS_PATH
 PluginsUtil.PLUGINS_DATA_PATH = PLUGINS_DATA_PATH
-PluginsUtil._VERSION="3.1.2"
+PluginsUtil._VERSION="4.0.0 (dev)"
+PluginsUtil._VERSIONCODE=40001
 
 local appPackageName = activity.getPackageName()
 local packInfo = activity.PackageManager.getPackageInfo(appPackageName, 0)

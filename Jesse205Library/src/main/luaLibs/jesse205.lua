@@ -104,7 +104,7 @@ end
 
 -- JavaAPI转LuaAPI
 local activity2luaApi = { "newActivity", "getSupportActionBar", "getSharedData", "setSharedData", "getString",
-"getPackageName" }
+  "getPackageName" }
 for _, content in ipairs(activity2luaApi) do
   _G[content] = function(...)
     return context[content](...) -- 直接赋值会出错
@@ -173,6 +173,7 @@ import "android.content.pm.PackageManager"
 -- 导入常用的Material类
 import "com.google.android.material.card.MaterialCardView" -- 卡片
 import "com.google.android.material.button.MaterialButton" -- 按钮
+import "com.google.android.material.dialog.MaterialAlertDialogBuilder"
 
 -- 导入IO
 import "java.io.File"
@@ -318,7 +319,7 @@ end
 ---@param title string 标题
 ---@param message string 信息
 function showSimpleDialog(title, message)
-  return AlertDialog.Builder(context)
+  return MaterialAlertDialogBuilder(context)
   .setTitle(title)
   .setMessage(message)
   .setPositiveButton(android.R.string.ok, nil)
@@ -336,21 +337,16 @@ end
 
 -- 以下为复写事件
 function onError(title, message)
-pcall(function()
-  -- 保存到文件。有报错说明软件有问题，必须解决掉。
-  local path = "/sdcard/Androlua/crash/" .. jesse205.packageName .. ".txt"
-  local content = tostring(title) .. os.date(" %Y-%m-%d %H:%M:%S") .. "\n" .. tostring(message) .. "\n\n"
-  io.open(path, "a"):write(content):close()
-end)
--- 报错重写
-pcall(function()
-  if activity.isFinishing() then
-    print(title,message)
-   else
+  pcall(function()
+    -- 保存到文件。有报错说明软件有问题，必须解决掉。
+    local path = "/sdcard/Androlua/crash/" .. jesse205.packageName .. ".txt"
+    local content = tostring(title) .. os.date(" %Y-%m-%d %H:%M:%S") .. "\n" .. tostring(message) .. "\n\n"
+    io.open(path, "a"):write(content):close()
+  end)
+  -- 报错重写
+  pcall(function()
     showErrorDialog(tostring(title), tostring(message)) -- 显示成对话框，解决安卓12的toast限制问题
-  end
-  return true
-end)
+  end)
 end
 
 if initApp then

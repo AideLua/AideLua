@@ -28,6 +28,11 @@ local projectsFile,projectsPath,nowFile,nowPath
 --v5.1.1+
 local projectsFiles,projectsPaths={},{}--多文件夹
 
+--v5.1.2+
+File(AppPath.LuaDBDir).mkdirs()
+local prjsOpenedFileDB=db.open(AppPath.LuaDBDir..'/prjsOpenedFile.db')
+ProjectManager.prjsOpenedFileDB=prjsOpenedFileDB
+
 --刷新项目存放路径
 local function refreshProjectsPath(autoFix)
   xpcall(function()--防呆设计
@@ -157,7 +162,7 @@ function ProjectManager.openProject(path,filePath,openDirPath)
     local nowBrowserDir=nowFile
     local nowOpenedFile
     if filePath~=false then
-      filePath=filePath or getSharedData("openedFilePath_"..path)
+      filePath=filePath or prjsOpenedFileDB:get(nowPath) --getSharedData("openedFilePath_"..path)
       local defaultFile=File(config.projectMainPath.."/main.lua")
       if filePath then
         nowOpenedFile=File(filePath)
@@ -207,7 +212,8 @@ function ProjectManager.closeProject(refreshFilesBrowser)
   FilesBrowserManager.clearAdapterData(true)
   FilesTabManager.closeAllFiles(false)
   if openState then
-    setSharedData("openedFilePath_"..nowPath,openedFilePath)
+    prjsOpenedFileDB:set(nowPath,openedFilePath)
+    --setSharedData("openedFilePath_"..nowPath,openedFilePath)
     luajava.clear(nowFile)
   end
   openState=false
@@ -315,6 +321,10 @@ function ProjectManager.getProjectIconPath(config,projectPath,mainProjectPath)
   return path
 end
 
+--v5.1.2+
+function ProjectManager.onDestroy()
+  prjsOpenedFileDB:close()
+end
 
 function ProjectManager.getNowConfig()
   return nowConfig

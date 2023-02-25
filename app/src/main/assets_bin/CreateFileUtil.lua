@@ -1,3 +1,4 @@
+import "FileTemplates"
 local CreateFileUtil={}
 
 ---不能为空的字符串

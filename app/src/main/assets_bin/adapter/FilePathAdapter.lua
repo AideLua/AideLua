@@ -42,7 +42,7 @@ return function(item)
           titleView.setTextColor(actionBarRes.color.attr.colorPrimary)
         end
        else
-        titleView.setTextColor(android.res(res.id.attr.actionBarTheme).color.attr.textColorSecondary)
+        titleView.setTextColor(android.res(res.id.attr.actionBarTheme).colorStateList.attr.textColorSecondary)
       end
       return holder
     end,

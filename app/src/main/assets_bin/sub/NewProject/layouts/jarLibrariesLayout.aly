@@ -15,7 +15,7 @@
     layout_marginRight="16dp";
     {
       AppCompatTextView;
-      text="Jar库";
+      text="Jar 库";
       textSize="14sp";
       typeface=Typeface.defaultFromStyle(Typeface.BOLD);
       textColor=theme.color.colorPrimary;
@@ -30,5 +30,6 @@
     layout_marginLeft="16dp";
     layout_marginRight="16dp";
     layout_marginBottom="8dp";
+    chipSpacing="4dp";
   };
 }

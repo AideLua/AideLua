@@ -184,7 +184,6 @@ function LuaEditorHelper.applyPencilInput(editor,pencilEdit)
             newText=newText:gsub(content[1],content[2])
           end
           editor.paste(newText)
-          --print(newText)
         end
         pencilEdit.text=" "
         pencilEdit.setSelection(1)
@@ -209,17 +208,11 @@ function LuaEditorHelper.applyTouchListener(editor)
       content(view,event)
     end
   end
-  --[[
-  editor.onLongClick=function(view)
-    if editor_magnify and magnifier then--这俩是全局变量，第一个确保放大镜已打开，第二个确保可以正常加载放大镜
-      print(1)
-    end
-  end]]
 end
 
---在 v5.1.0(51099) 废除
+--在 v5.1.0(51099) 废弃
 function LuaEditorHelper.applyMagnifier(editor)
-  print("警告","LuaEditorHelper.applyMagnifier","此API已废除")
+  print("警告","LuaEditorHelper.applyMagnifier","此API已废弃")
   local showingMagnifier=false
   local clickingLuaEitorEvent=nil
   editor.onTouch=function(view,event)

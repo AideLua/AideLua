@@ -31,5 +31,6 @@
     layout_marginRight="16dp";
     layout_marginBottom="8dp";
     singleSelection=true;
+    chipSpacing="4dp";
   };
 }

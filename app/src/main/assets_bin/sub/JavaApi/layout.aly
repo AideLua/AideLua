@@ -10,7 +10,7 @@
     fastScrollEnabled=true;
     layout_width="fill";
     layout_height="fill";
-    --clipToPadding=false;
+    clipToPadding=false;
   };
   {
     CardView;

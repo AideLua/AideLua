@@ -1,12 +1,15 @@
-local MyTitleEditLayout={}
+import "com.google.android.material.textfield.TextInputEditText"
+import "com.google.android.material.textfield.TextInputLayout"
 local insertTable=require "com.jesse205.layout.insertTable"
 
-MyTitleEditLayout.layout={
+local MyTitleSearchLayout={}
+
+MyTitleSearchLayout.layout={
   LinearLayout;
   layout_width="fill";
   layout_height="fill";
   {
-    AppCompatEditText;
+    TextInputEditText;
     layout_width="fill";
     layout_height="fill";
     layout_weight=1;
@@ -17,8 +20,9 @@ MyTitleEditLayout.layout={
     lines=1;
     inputType="text";
     textSize="18sp";
-    textColor=theme.color.ActionBar.colorControlNormal;
-    hintTextColor=theme.color.ActionBar.textColorSecondary;
+    theme=res.id.attr.actionSearchEditStyle;
+    --textColor=theme.color.ActionBar.colorControlNormal;
+    --hintTextColor=theme.color.ActionBar.textColorSecondary;
     gravity="center|left";
   };
   {
@@ -34,15 +38,15 @@ MyTitleEditLayout.layout={
   };
 }
 
-function MyTitleEditLayout.Builder(config)--返回布局表
-  local layout=table.clone(MyTitleEditLayout.layout)
+function MyTitleSearchLayout.Builder(config)--返回布局表
+  local layout=table.clone(MyTitleSearchLayout.layout)
   if config then
     insertTable(layout,config)
   end
   return layout
 end
 
-function MyTitleEditLayout.load(config,...)--返回视图
-  return loadlayout2(MyTitleEditLayout.Builder(config),...)
+function MyTitleSearchLayout.load(config,...)--返回视图
+  return loadlayout2(MyTitleSearchLayout.Builder(config),...)
 end
-return MyTitleEditLayout
+return MyTitleSearchLayout

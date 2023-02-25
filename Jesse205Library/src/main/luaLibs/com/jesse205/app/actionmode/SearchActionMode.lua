@@ -1,5 +1,5 @@
 import "android.view.inputmethod.InputMethodManager"
-import "com.jesse205.layout.MyTitleEditLayout"
+import "com.jesse205.layout.MyTitleSearchLayout"
 import "androidx.appcompat.view.ActionMode"
 
 return function(config)
@@ -16,10 +16,10 @@ return function(config)
   local searchMenu,searchEdit
   local actionMode=ActionMode.Callback({
     onCreateActionMode=function(mode,menu)
-      mode.setCustomView(MyTitleEditLayout.load({{
+      mode.setCustomView(MyTitleSearchLayout.load({{
           hint=config.hint or activity.getString(R.string.abc_search_hint);
-          text=config.text;
-          showSoftInputOnFocus=true;
+            text=config.text;
+            showSoftInputOnFocus=true;
       }},ids))
       searchEdit=ids.searchEdit
 
