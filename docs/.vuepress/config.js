@@ -43,7 +43,7 @@ export default defineUserConfig({
         navbar: [
             {
                 text: '首页',
-                link: '/home.md',
+                link: '/home.html',
             },
             {
                 text: '使用文档',
@@ -65,7 +65,7 @@ export default defineUserConfig({
             },
             {
                 text: '常见问题',
-                link: '/faq.md',
+                link: '/faq.html',
             },
             {
                 text: '用户交互',
@@ -83,15 +83,15 @@ export default defineUserConfig({
                 children: [
                     {
                         text: '新建工程',
-                        link: '/function/newproject.md',
+                        link: '/function/newproject.html',
                     },
                     {
                         text: '安全调试',
-                        link: '/function/safedebug.md',
+                        link: '/function/safedebug.html',
                     },
                     {
                         text: '构建项目',
-                        link: '/function/build.md',
+                        link: '/function/build.html',
                     },
                 ]
             },
@@ -105,7 +105,7 @@ export default defineUserConfig({
                     },
                     {
                         text: '使用 Git',
-                        link: '/project/usegit.md',
+                        link: '/project/usegit.html',
                     },
                     {
                         text: '.aidelua',
@@ -113,11 +113,11 @@ export default defineUserConfig({
                         children: [
                             {
                                 text: 'config.lua',
-                                link: '/project/aidelua/config.lua.md',
+                                link: '/project/aidelua/config.lua.html',
                             },
                             {
                                 text: 'bin.lua',
-                                link: '/project/aidelua/bin.lua.md',
+                                link: '/project/aidelua/bin.lua.html',
                             },
                         ]
                     },
@@ -143,127 +143,127 @@ export default defineUserConfig({
                     },
                     {
                         text: '软件基本操作',
-                        link: '/androluapro/base.md',
+                        link: '/androluapro/base.html',
                     },
                     {
                         text: '快速入门',
-                        link: '/androluapro/fast.md',
+                        link: '/androluapro/fast.html',
                     },
                     {
                         text: '与标准 Lua5.3 的不同',
-                        link: '/androluapro/differentwithlua5.3.md',
+                        link: '/androluapro/differentwithlua5.3.html',
                     },
                     {
                         text: '与标准 java 的不同',
-                        link: '/androluapro/differentwithjava.md',
+                        link: '/androluapro/differentwithjava.html',
                     },
                     {
                         text: '01. 参考链接',
-                        link: '/androluapro/01.md',
+                        link: '/androluapro/01.html',
                     },
                     {
                         text: '02. 导入模块',
-                        link: '/androluapro/02.md',
+                        link: '/androluapro/02.html',
                     },
                     {
                         text: '03. 导入包或类',
-                        link: '/androluapro/03.md',
+                        link: '/androluapro/03.html',
                     },
                     {
                         text: '04. 创建布局与组件',
-                        link: '/androluapro/04.md',
+                        link: '/androluapro/04.html',
                     },
                     {
                         text: '05. 使用方法',
-                        link: '/androluapro/05.md',
+                        link: '/androluapro/05.html',
                     },
                     {
                         text: '06. 使用事件',
-                        link: '/androluapro/06.md',
+                        link: '/androluapro/06.html',
                     },
                     {
                         text: '07. 回调方法',
-                        link: '/androluapro/07.md',
+                        link: '/androluapro/07.html',
                     },
                     {
                         text: '08. 按键与触控',
-                        link: '/androluapro/08.md',
+                        link: '/androluapro/08.html',
                     },
                     {
                         text: '09. 使用数组与 map',
-                        link: '/androluapro/09.md',
+                        link: '/androluapro/09.html',
                     },
                     {
                         text: '10. 使用线程',
-                        link: '/androluapro/10.md',
+                        link: '/androluapro/10.html',
                     },
                     {
                         text: '11. 使用布局表',
-                        link: '/androluapro/11.md',
+                        link: '/androluapro/11.html',
                     },
                     {
                         text: '12. 2D 绘图',
-                        link: '/androluapro/12.md',
+                        link: '/androluapro/12.html',
                     },
                     {
                         text: '13. Lua 类型与 Java 类型',
-                        link: '/androluapro/13.md',
+                        link: '/androluapro/13.html',
                     },
                     {
                         text: '14.1 canvas 模块',
-                        link: '/androluapro/14.1.md',
+                        link: '/androluapro/14.1.html',
                     },
                     {
                         text: '14.2 OpenGL 模块',
-                        link: '/androluapro/14.2.md',
+                        link: '/androluapro/14.2.html',
                     },
                     {
                         text: '14.3 http 同步网络模块',
-                        link: '/androluapro/14.3.md',
+                        link: '/androluapro/14.3.html',
                     },
                     {
                         text: '14.4 import 模块',
-                        link: '/androluapro/14.4.md',
+                        link: '/androluapro/14.4.html',
                     },
                     {
                         text: '14.5 Http 异步网络模块',
-                        link: '/androluapro/14.5.md',
+                        link: '/androluapro/14.5.html',
                     },
                     {
                         text: '14.6 bmob 网络数据库',
-                        link: '/androluapro/14.6.md',
+                        link: '/androluapro/14.6.html',
                     },
                     {
                         text: '15.1 LuaUtil 辅助库',
-                        link: '/androluapro/15.1.md',
+                        link: '/androluapro/15.1.html',
                     },
                     {
                         text: '15.2 LuaAdapter 适配器',
-                        link: '/androluapro/15.2.md',
+                        link: '/androluapro/15.2.html',
                     },
                     {
                         text: '15.3 LuaDialog 对话框',
-                        link: '/androluapro/15.3.md',
+                        link: '/androluapro/15.3.html',
                     },
                     {
                         text: '15.4 LuaDrawable 绘制',
-                        link: '/androluapro/15.4.md',
+                        link: '/androluapro/15.4.html',
                     },
                     {
                         text: '关于打包',
-                        link: '/androluapro/bin.md',
+                        link: '/androluapro/bin.html',
                     },
                     {
                         text: '部分函数参考',
-                        link: '/androluapro/api.md',
+                        link: '/androluapro/api.html',
                     },
                     {
                         text: 'activity 部分 API 参考',
-                        link: '/androluapro/activityapi.md',
+                        link: '/androluapro/activityapi.html',
                     },
                     {
                         text: '布局表字符串常量',
-                        link: '/androluapro/layout.md',
+                        link: '/androluapro/layout.html',
                     },
                 ]
             },
@@ -281,25 +281,25 @@ export default defineUserConfig({
                         children: [
                             {
                                 text: 'main.aly',
-                                link: '/plugin/pages/main.md',
+                                link: '/plugin/pages/main.html',
                             },
                             {
                                 text: 'newproject.aly',
-                                link: '/plugin/pages/newproject.md',
+                                link: '/plugin/pages/newproject.html',
                             },
                             {
                                 text: 'settings.aly',
-                                link: '/plugin/pages/settings.md',
+                                link: '/plugin/pages/settings.html',
                             },
                             {
                                 text: 'viewclass.aly',
-                                link: '/plugin/pages/viewclass.md',
+                                link: '/plugin/pages/viewclass.html',
                             },
                         ],
                     },
                     {
                         text: 'API变更说明',
-                        link: '/plugin/apichanges.md',
+                        link: '/plugin/apichanges.html',
                     },
                 ]
             },
