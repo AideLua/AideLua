@@ -274,7 +274,9 @@ function newSubActivity(name, ...)
 end
 
 ---@param id number 资源ID
+--v5.1.2-
 function getColorStateList(id)
+  print("此API已废弃","getColorStateList")
   return resources.getColorStateList(id)
 end
 
@@ -326,7 +328,19 @@ function showSimpleDialog(title, message)
   .show()
 end
 
-showErrorDialog = showSimpleDialog
+function showErrorDialog(title,message)
+  local dialog=MaterialAlertDialogBuilder(context)
+  .setTitle(title)
+  .setMessage(message)
+  .setPositiveButton(android.R.string.ok, nil)
+  .setNegativeButton(R.string.jesse205_copy, nil)
+  .show()
+  local textView = dialog.findViewById(android.R.id.message)
+  textView.setTextIsSelectable(true)
+  dialog.getButton(AlertDialog.BUTTON_NEGATIVE).onClick=function()
+    MyToast.copyText(message)
+  end
+end
 
 --- 自动初始化一个LayoutTransition
 function newLayoutTransition()

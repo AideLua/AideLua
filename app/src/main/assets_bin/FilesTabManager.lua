@@ -250,7 +250,7 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory,saveFile,previ
         --编辑器滚动相关在 EditorsManager.openNewContent 内
         local succes,err=EditorsManager.openNewContent(filePath,newFileType,nowDecoder,keepHistory)
         if succes then
-          setSharedData("openedFilePath_"..ProjectManager.nowPath,filePath)
+          ProjectManager.prjsOpenedFileDB:set(ProjectManager.nowPath,filePath)
           --更新文件浏览器显示内容
           local browserAdapter=FilesBrowserManager.adapter
           local oldFilePosition=FilesBrowserManager.nowFilePosition

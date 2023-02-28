@@ -34,10 +34,11 @@
     summary=R.string.settings_moreCompleteRun_summary;
   };
   {--编译Lua
-    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    SettingsLayUtil.ITEM_SWITCH;
     icon=R.drawable.ic_file_code_outline;
     title=R.string.compileLua;
     key="compileLua";
+    summary=R.string.compileLua_summary;
   };
   {--ZipAlign对齐
     SettingsLayUtil.ITEM_SWITCH;

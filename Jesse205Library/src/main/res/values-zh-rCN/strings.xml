@@ -44,4 +44,5 @@
 	<string name="jesse205_ranking_random">排名不分先后顺序</string>
 	<string name="jesse205_clear">清空</string>
     <string name="jesse205_getHelp">获取帮助</string>
+    <string name="jesse205_copy">复制</string>
 </resources>

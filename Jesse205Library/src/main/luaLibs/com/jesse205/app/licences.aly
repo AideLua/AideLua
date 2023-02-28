@@ -30,5 +30,11 @@
     message="The Android RTEditor is a rich text editor component for Android that can be used as a drop in for EditText",
     license="Apache-2.0 license",
     url="https://github.com/1gravity/Android-RTEditor"
+  },
+  {
+    name="AndroidFastScroll",
+    message="Fast scroll for Android RecyclerView and more",
+    license="Apache-2.0 license",
+    url="https://github.com/zhanghai/AndroidFastScroll"
   }
 }

@@ -5,16 +5,19 @@ package com.jesse205.manager;
  * @Author Jesse205
  * @Date 2023/02/21 01:11
  */
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
+import android.content.res.TypedArray;
 import android.preference.PreferenceManager;
+import android.view.View;
 import com.jesse205.R;
+import static android.os.Build.VERSION.SDK_INT;
 
 public class ThemeManager {
     public static final String THEME_TYPE="theme_type";
     public static final String THEME_DARK_ACTION_BAR="theme_dark_action_bar";
-    public static final String THEME_NO_ACTION_BAR="theme_no_action_bar";
+    //public static final String THEME_NO_ACTION_BAR="theme_no_action_bar";
 
     //一些可以定制的主题，用于替换默认蓝色的主题
     public static int defaultThemeNameId = R.string.jesse205_theme_default;
@@ -25,17 +28,14 @@ public class ThemeManager {
     private static ThemeType defaultAppTheme = ThemeType.DEFAULT;
 
     private ThemeType mThemeType;
-    private boolean mIsDarkActionBar;
-    private boolean mIsNoActionBar;
-    private Context mContext;
+    private boolean isDarkActionBar;
+    //private boolean mIsNoActionBar;
+    private Activity mContext;
 
-    public ThemeManager(Context context) {
+    public ThemeManager(Activity context) {
         mContext = context;
     }
 
-    public static boolean isSystemNightMode(Context context) {
-        return (context.getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
-	}
 
     public static void setDefaultTheme(Context context, ThemeType themeType) {
         SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(context);
@@ -59,10 +59,15 @@ public class ThemeManager {
         SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(context);
         String themeTypeName=sharedPreferences.getString(THEME_TYPE, null);
         //return ThemeType.valueOf(themeTypeName);
+
         if (themeTypeName == null) {
             return defaultAppTheme;
         } else {
-            return ThemeType.valueOf(themeTypeName);
+            try {
+                return ThemeType.valueOf(themeTypeName);
+            } catch (IllegalArgumentException e) {
+                return ThemeType.DEFAULT;
+            }
         }
     }
 
@@ -164,31 +169,47 @@ public class ThemeManager {
         return mThemeType;
     }
 
-    public boolean getDarkActionBarState() {
-        return mIsDarkActionBar;
+    public boolean getAppDarkActionBarState() {
+        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(mContext);
+        return sharedPreferences.getBoolean(THEME_DARK_ACTION_BAR, false);
     }
 
-    public boolean getNoActionBarState() {
-        return mIsNoActionBar;
+    public boolean getDarkActionBarState() {
+        return isDarkActionBar;
     }
 
     public void applyTheme() {
-        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(mContext);
-        boolean isDarkActionBar=sharedPreferences.getBoolean(THEME_DARK_ACTION_BAR, false);
-        boolean isNoActionBar=sharedPreferences.getBoolean(THEME_NO_ACTION_BAR, false);
-        applyTheme(isDarkActionBar, isNoActionBar);
+        applyTheme(getAppDarkActionBarState(), false);
     }
 
     public void applyTheme(boolean isDarkActionBar, boolean isNoActionBar) {
+        applyTheme(isDarkActionBar, isNoActionBar, false, false);
+    }
+
+    public void applyTheme(boolean isDarkActionBar, boolean isNoActionBar, boolean useDarkStatusBar, boolean useDarkNavigationBar) {
+        this.isDarkActionBar = isDarkActionBar;
         if (mThemeType == null)
             mThemeType = getAppTheme(mContext);
         int themeId = defaultThemeId;
-        if (mThemeType == null) {
+        themeId = getThemeId(mContext, mThemeType, isDarkActionBar, isNoActionBar);
+        mContext.setTheme(themeId);
 
-        } else {
-            themeId = getThemeId(mContext, mThemeType, isDarkActionBar, isNoActionBar);
-            mContext.setTheme(themeId);
-        }
+        TypedArray array = mContext.getTheme().obtainStyledAttributes(new int[]{
+                                                                          R.attr.windowLightStatusBar,
+                                                                          R.attr.windowLightNavigationBar,
+                                                                      });
+        boolean windowLightStatusBar = array.getBoolean(0, false);
+        boolean windowLightNavigationBar = array.getBoolean(1, false);
+        array.recycle();
+
+        int systemUiVisibility=0;
+        View decorView=mContext.getWindow().getDecorView();
+        if (windowLightStatusBar && SDK_INT >= 23)
+            systemUiVisibility |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        if (windowLightNavigationBar && SDK_INT >= 26)
+            systemUiVisibility |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+        decorView.setSystemUiVisibility(systemUiVisibility);
+
     }
 
     public enum ThemeType {

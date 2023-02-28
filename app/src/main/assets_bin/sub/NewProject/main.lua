@@ -212,21 +212,20 @@ viewPager.setOnPageChangeListener({
         nowPageConfig.onSelected(nowPageConfig.ids,nowPageConfig)
       end
     end
+    local actionBarElevation=res(res.id.attr.actionBarTheme).dimension.attr.elevation
     if positionOffset>0 then
       if toboolean(pageConfigsList[position+1].showElevation)~=toboolean(pageConfigsList[position+2].showElevation) then
         if pageConfigsList[position+1].showElevation then
-          topCard.setElevation(theme.number.actionBarElevation*(1-positionOffset))
+          topCard.setElevation(actionBarElevation*(1-positionOffset))
          else
-          topCard.setElevation(theme.number.actionBarElevation*positionOffset)
+          topCard.setElevation(actionBarElevation*positionOffset)
         end
       end
      else
       if pageConfigsList[position+1].showElevation then
-        topCard.setElevation(theme.number.actionBarElevation)
-        --LastActionBarElevation=theme.number.actionBarElevation
+        topCard.setElevation(actionBarElevation)
        else
         topCard.setElevation(0)
-        --LastActionBarElevation=0
       end
     end
 

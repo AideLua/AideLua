@@ -248,6 +248,7 @@ setmetatable(fileColors,{__index=function(self,key)
     return self.normal
 end})
 
+
 --隐藏文件映射
 local hiddenFiles={
   gradlew=true,
@@ -284,8 +285,9 @@ local recyclerViewAlphaAnimator
 local homingRunnable=Runnable({
   run = function()
     FilesBrowserManager.cancelBrowserAnimators()
-    if recyclerViewCard.getTranslationX()~=0 then
-      recyclerViewCardTranslationXAnimator=ObjectAnimator.ofFloat(recyclerViewCard,"translationX",{0})
+    --recyclerViewCard
+    if swipeRefresh.getTranslationX()~=0 then
+      recyclerViewCardTranslationXAnimator=ObjectAnimator.ofFloat(swipeRefresh,"translationX",{0})
       .setDuration(200)
       .setInterpolator(DecelerateInterpolator())
       .setAutoCancel(true)
@@ -444,11 +446,13 @@ function FilesBrowserManager.FilesRecyclerViewBuilder(context)
   return view
 end
 
---滑动返回偏移量
+---仅v5.1.1
+---滑动返回偏移量
 local BACK_OFFSET=math.dp2int(16)
 FilesBrowserManager.RecyclerViewCardView={
   _baseClass=CardView,
   __call=function(self,context)
+    print("已废弃的API","FilesBrowserManager.RecyclerViewCardView")
     local view
     local initialMotionX
     local lastOffset,lastBackState
@@ -512,6 +516,76 @@ FilesBrowserManager.RecyclerViewCardView={
   end,
 }
 setmetatable(FilesBrowserManager.RecyclerViewCardView,FilesBrowserManager.RecyclerViewCardView)
+
+---v5.1.2+
+---滑动返回偏移量
+local BACK_OFFSET=math.dp2int(16)
+FilesBrowserManager.SwipeRefreshLayout={
+  _baseClass=SwipeRefreshLayout,
+  __call=function(self,context)
+    local view
+    local initialMotionX
+    local lastOffset,lastBackState
+    view=luajava.override(SwipeRefreshLayout,{
+      onInterceptTouchEvent=function(super,event)
+        local action=event.getAction()
+        local x=event.getRawX()
+        if action==MotionEvent.ACTION_DOWN then
+          initialMotionX=x
+          lastBackState=false
+          lastOffset=0
+        end
+        local offset=x-initialMotionX
+        if offset<0 then
+          offset=0
+        end
+        --偏移32dp时响应
+        if ProjectManager.openState and offset>math.dp2int(32) then
+          initialMotionX=x-math.pow(view.getTranslationX(),10/8)
+          FilesBrowserManager.cancelBrowserAnimators()
+          showProgressHandler.removeCallbacks(homingRunnable)
+          --view.parent.requestDisallowInterceptTouchEvent(true)--不能请求自己，因为会导致不滚动
+          return true
+        end
+        return super(event)
+      end,
+      onTouchEvent=function(super,event)
+        local action=event.getAction()
+        local x=event.getRawX()
+        local offset=math.pow(x-initialMotionX,0.8)
+        if offset<0 or tostring(offset)=="nan" then
+          offset=0
+        end
+        if action==MotionEvent.ACTION_MOVE then
+          view.setTranslationX(offset)
+          --在允许返回之后逐渐透明
+          recyclerView.setAlpha(BACK_OFFSET/2/offset)
+          local nowBackState=offset>BACK_OFFSET
+          if lastBackState~=nowBackState then
+            view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS,HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING)
+            lastBackState=nowBackState
+          end
+          lastOffset=offset
+         elseif action==MotionEvent.ACTION_UP or action==MotionEvent.ACTION_CANCEL then
+          if offset>BACK_OFFSET and action==MotionEvent.ACTION_UP then
+            local directoryFile=FilesBrowserManager.directoryFile
+            if directoryFile then
+              FilesBrowserManager.refresh(directoryFile.getParentFile())
+            end
+          end
+        end
+        if action==MotionEvent.ACTION_UP and oldRichAnim then
+          showProgressHandler.postDelayed(homingRunnable, 100)
+         elseif action==MotionEvent.ACTION_CANCEL or action==MotionEvent.ACTION_UP then
+          homingRunnable.run()
+        end
+        return true
+      end
+    },context)
+    return view
+  end,
+}
+setmetatable(FilesBrowserManager.SwipeRefreshLayout,FilesBrowserManager.SwipeRefreshLayout)
 
 ---v5.1.1+
 ---开始拖放
@@ -886,7 +960,7 @@ function FilesBrowserManager.refresh(file,highlightPath,force,atOnce)
             if anim_propertyName then
               FilesBrowserManager.cancelBrowserAnimators()
               if anim_propertyName~="alpha" then--下面就是透明动画，所以无需执行card动画
-                recyclerViewCardTranslationXAnimator=ObjectAnimator.ofFloat(recyclerViewCard, anim_propertyName,anim_values)
+                recyclerViewCardTranslationXAnimator=ObjectAnimator.ofFloat(swipeRefresh, anim_propertyName,anim_values)
                 .setDuration(150)
                 .setInterpolator(DecelerateInterpolator())
                 .setAutoCancel(true)
@@ -916,7 +990,7 @@ function FilesBrowserManager.refresh(file,highlightPath,force,atOnce)
         --把文件浏览器位置摆正
         if oldRichAnim then--此修复无需在精简动画下生效
           FilesBrowserManager.cancelBrowserAnimators()
-          recyclerViewCard.setTranslationX(0)
+          swipeRefresh.setTranslationX(0)
           recyclerView.setAlpha(1)
         end
         table.clear(pathSplitList)--清空路径指示器
@@ -1079,75 +1153,75 @@ end
 
 --初始化
 function FilesBrowserManager.init()
---设置下拉刷新监听器
-swipeRefresh.onRefresh = function()
-  FilesBrowserManager.refresh()
-end
-
---应用下拉刷新风格
-MyStyleUtil.applyToSwipeRefreshLayout(swipeRefresh)
-
-adapter=FileListAdapter(item)
-recyclerView.setAdapter(adapter)
-layoutManager = LinearLayoutManager()
-recyclerView.setLayoutManager(layoutManager)
-recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
-  onScrolled = function(view, dx, dy)
-    AnimationHelper.onScrollListenerForActionBarElevation(sideAppBarLayout,view.canScrollVertically(-1))
+  --设置下拉刷新监听器
+  swipeRefresh.onRefresh = function()
+    FilesBrowserManager.refresh()
   end
-})
-recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
-  onGlobalLayout = function()
-    if activity.isFinishing() then return end
-    AnimationHelper.onScrollListenerForActionBarElevation(sideAppBarLayout,recyclerView.canScrollVertically(-1))
-  end
-})
 
---路径查看器
-pathAdapter=FilePathAdapter(pathItem)
-pathRecyclerView.setAdapter(pathAdapter)
-pathLayoutManager = LinearLayoutManager()
-pathLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL)
---pathLayoutManager.setStackFromEnd(true)
-pathRecyclerView.setLayoutManager(pathLayoutManager)
+  --应用下拉刷新风格
+  MyStyleUtil.applyToSwipeRefreshLayout(swipeRefresh)
 
---长按菜单
-activity.registerForContextMenu(recyclerView)
-recyclerView.onCreateContextMenu=function(menu,view,menuInfo)
-  FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
-end
-recyclerView.setTag({})
-
---判断侧滑开启状态。
---如果侧滑为开启状态，那么文件浏览器一定是开启的。
---如果侧滑为关闭状态，那么可能处于平板模式下，没有侧滑，需要单独处理
-openState = drawer.isDrawerOpen(Gravity.LEFT)
-if openState == false then
-  openState = nil
-end
-drawer.addDrawerListener(DrawerLayout.DrawerListener({
-  onDrawerSlide = function(view, slideOffset)
-    if nowDevice ~= "pc" then
-      if slideOffset > 0.5 and not(openState) then
-        openState = true
-       elseif slideOffset <= 0.5 and openState then
-        openState = false
-      end
+  adapter=FileListAdapter(item)
+  recyclerView.setAdapter(adapter)
+  layoutManager = LinearLayoutManager()
+  recyclerView.setLayoutManager(layoutManager)
+  recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
+    onScrolled = function(view, dx, dy)
+      AnimationHelper.onScrollListenerForActionBarElevation(sideAppBarLayout,view.canScrollVertically(-1))
     end
-  end,
-  onDrawerOpened = function(view)
-    --FilesTabManager.saveFile()--侧滑打开就保存文件
-  end,
-  onDrawerClosed = function(view)
-  end,
-  onDrawerStateChanged = function(newState)
-  end
-}))
+  })
+  recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
+    onGlobalLayout = function()
+      if activity.isFinishing() then return end
+      AnimationHelper.onScrollListenerForActionBarElevation(sideAppBarLayout,recyclerView.canScrollVertically(-1))
+    end
+  })
 
-local dropFileFrameBackground
-recyclerView.onDrag=function(view,event)
-  local action=event.getAction()
-  switch action do
+  --路径查看器
+  pathAdapter=FilePathAdapter(pathItem)
+  pathRecyclerView.setAdapter(pathAdapter)
+  pathLayoutManager = LinearLayoutManager()
+  pathLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL)
+  --pathLayoutManager.setStackFromEnd(true)
+  pathRecyclerView.setLayoutManager(pathLayoutManager)
+
+  --长按菜单
+  activity.registerForContextMenu(recyclerView)
+  recyclerView.onCreateContextMenu=function(menu,view,menuInfo)
+    FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
+  end
+  recyclerView.setTag({})
+
+  --判断侧滑开启状态。
+  --如果侧滑为开启状态，那么文件浏览器一定是开启的。
+  --如果侧滑为关闭状态，那么可能处于平板模式下，没有侧滑，需要单独处理
+  openState = drawer.isDrawerOpen(Gravity.LEFT)
+  if openState == false then
+    openState = nil
+  end
+  drawer.addDrawerListener(DrawerLayout.DrawerListener({
+    onDrawerSlide = function(view, slideOffset)
+      if nowDevice ~= "pc" then
+        if slideOffset > 0.5 and not(openState) then
+          openState = true
+         elseif slideOffset <= 0.5 and openState then
+          openState = false
+        end
+      end
+    end,
+    onDrawerOpened = function(view)
+      --FilesTabManager.saveFile()--侧滑打开就保存文件
+    end,
+    onDrawerClosed = function(view)
+    end,
+    onDrawerStateChanged = function(newState)
+    end
+  }))
+
+  local dropFileFrameBackground
+  recyclerView.onDrag=function(view,event)
+    local action=event.getAction()
+    switch action do
      case DragEvent.ACTION_DRAG_STARTED then
       local desc=event.getClipDescription()--必须有描述
       if not(desc and ProjectManager.openState) then

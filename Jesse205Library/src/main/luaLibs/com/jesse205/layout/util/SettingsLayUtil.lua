@@ -1,4 +1,5 @@
 import "com.google.android.material.switchmaterial.SwitchMaterial"
+import "com.google.android.material.imageview.ShapeableImageView"
 import "com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions"
 
 local SettingsLayUtil={}
@@ -33,18 +34,19 @@ local leftCoverLay={
   layout_margin="16dp";
   layout_marginRight=0;
   radius="20dp";
+  --[[
   {
     CardView;
     layout_height="fill";
     layout_width="fill";
-    radius="18dp";
+    radius="18dp";]]
     {
       AppCompatImageView;
       layout_height="fill";
       layout_width="fill";
       id="icon";
     };
-  };
+  --};
 }
 
 local leftCoverIconLay={
@@ -55,17 +57,11 @@ local leftCoverIconLay={
   layout_marginRight=0;
   radius="20dp";
   {
-    CardView;
-    layout_height="fill";
-    layout_width="fill";
-    radius="18dp";
-    {
-      AppCompatImageView;
-      layout_height="24dp";
-      layout_width="24dp";
-      layout_gravity="center";
-      id="icon";
-    };
+    AppCompatImageView;
+    layout_height="24dp";
+    layout_width="24dp";
+    layout_gravity="center";
+    id="icon";
   };
 }
 

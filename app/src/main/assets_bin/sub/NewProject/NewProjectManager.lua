@@ -175,10 +175,12 @@ function NewProjectManager.checkAppConfigError(appName, packageName, appNameLay,
 end
 
 ---仅刷新 创建按钮 的启用状态
+---v5.1.1去除检测packageNameError
+---v5.1.2新增检测createButtonDisabled
 ---@param config table 页面配置，用于获取错误信息
 function NewProjectManager.refreshCreateEnabled(config)
   --config.appNameError or config.packageNameError or
-  if config.helloWorld then
+  if config.helloWorld or config.createButtonDisabled then
     createButton.setEnabled(false)
    else
     createButton.setEnabled(true)

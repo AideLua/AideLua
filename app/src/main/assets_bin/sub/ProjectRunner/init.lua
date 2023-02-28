@@ -1,5 +1,5 @@
 appname="Project Runner"
---appver="1.1"
---appcode="1199"
+appver="1.2"
+appcode="1299"
 packagename="com.aidelua.prjrunner"
 developer="Jesse205"

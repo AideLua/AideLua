@@ -25,10 +25,12 @@
         <item name="rippleColorPrimary">@color/ripple_material_dark</item>
     
         <item name="actionBarTheme">@style/ThemeOverlay.Jesse205.ActionBar.Surface</item>
-        <item name="actionBarStyle">@style/Widget.MaterialComponents.ActionBar.Surface</item>
-        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Surface</item>
+        <item name="actionBarStyle">@style/Widget.Jesse205.ActionBar.Surface</item>
         <item name="actionBarPopupTheme">@style/ThemeOverlay.Jesse205.Dark</item>
+        <item name="actionBarTabBarStyle">@style/Widget.Jesse205.ActionBar.TabBar.Surface</item>
+        <item name="actionBarTabStyle">@style/Widget.Jesse205.ActionBar.TabView.Surface</item>
         <item name="actionModeBackground">?colorSurface</item>
+        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Surface</item>
         <!--<item name="actionBarTheme">@style/ThemeOverlay.Jesse205.Dark.ActionBar</item>-->
         <!--<item name="actionBarWidgetTheme">@null</item>-->
         <!--<item name="actionBarPopupTheme">@style/ThemeOverlay.Jesse205.Dark</item>-->

@@ -44,9 +44,10 @@
     <string name="open_source_repository">Open source repository</string>
     <string name="buildAndPack">Build &amp; Pack</string>
     <string name="compileLua">Compile Lua</string>
+    <string name="compileLua_summary">Compile lua before repackaging APK and before full operation. (This setting can be overridden by the compileLua property in the project config.lua file)</string>
     <string name="zipalign">Zipalign alignment</string>
     <string name="zipalign_tool">Zipalign tool</string>
-    <string name="zipalign_summary">Helps ensure that all uncompressed files in the archive are aligned relative to the start of the file.</string>
+    <string name="zipalign_summary">Helps ensure that all uncompressed files in the archive are aligned relative to the start of the file. (This setting can be overridden by the alignZip property in the project config.lua file)</string>
     
     <string name="open">Open</string>
     <string name="open_failed">Open failed</string>

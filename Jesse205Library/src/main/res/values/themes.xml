@@ -26,9 +26,11 @@
         <item name="rippleColorPrimary">@color/ripple_material_light</item>
 
         <item name="actionBarTheme">@style/ThemeOverlay.Jesse205.ActionBar.Surface</item>
-        <item name="actionBarStyle">@style/Widget.MaterialComponents.ActionBar.Surface</item>
-        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Surface</item>
+        <item name="actionBarStyle">@style/Widget.Jesse205.ActionBar.Surface</item>
+        <item name="actionBarTabBarStyle">@style/Widget.Jesse205.ActionBar.TabBar.Surface</item>
+        <item name="actionBarTabStyle">@style/Widget.Jesse205.ActionBar.TabView.Surface</item>
         <item name="actionModeBackground">?colorSurface</item>
+        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Surface</item>
         <!--<item name="actionBarWidgetTheme">@null</item>-->
         <!--<item name="actionBarPopupTheme">@style/ThemeOverlay.MaterialComponents.Light</item>-->
 		<!--<item name="actionModeBackground">@drawable/jesse205_cab_background_top_material</item>-->
@@ -102,7 +104,7 @@
 	</style>
 
 
-    <style name="ThemeOverlay.Jesse205.Dark.ActionBar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+    <style name="ThemeOverlay.Jesse205.ActionBar.Primary" parent="ThemeOverlay.MaterialComponents.ActionBar.Primary">
     	<item name="colorControlNormal">@color/jesse205_white</item>
         <item name="elevation">4dp</item>
 		<item name="cardBackgroundColor">@color/jesse205_white_ripple</item>
@@ -112,6 +114,7 @@
 
     <style name="ThemeOverlay.Jesse205.ActionBar.Surface" parent="ThemeOverlay.MaterialComponents.ActionBar.Surface">
         <item name="colorControlNormal">?colorOnSurface</item>
+        <item name="actionMenuTextColor">?colorOnSurface</item>
         <item name="elevation">4dp</item>
 	</style>
 
@@ -126,8 +129,10 @@
         <item name="colorPrimaryDark">@color/jesse205_blue_dark</item>
         <item name="actionModeBackground">?colorPrimary</item>
         <item name="android:colorEdgeEffect">?colorPrimary</item>
-        <item name="actionBarTheme">@style/ThemeOverlay.Jesse205.Dark.ActionBar</item>
+        <item name="actionBarTheme">@style/ThemeOverlay.Jesse205.ActionBar.Primary</item>
         <item name="actionBarStyle">@style/Widget.MaterialComponents.ActionBar.Solid</item>
+        <item name="actionBarTabBarStyle">@style/Widget.Jesse205.ActionBar.TabBar.Primary</item>
+        <item name="actionBarTabStyle">@style/Widget.Jesse205.ActionBar.TabView.Primary</item>
         <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Primary</item>
         <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout.Colored</item>
         <item name="windowLightStatusBar">false</item>

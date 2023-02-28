@@ -35,6 +35,7 @@
         clipToPadding=false;
       };
     };
+    --[[
     {
       LinearLayoutCompat;
       layout_width="fill";
@@ -47,20 +48,22 @@
         id="recyclerViewCard";
         elevation="8dp";
         cardBackgroundColor=res.color.attr.windowBackgroundColor;
-        radius=0;
-        {
-          SwipeRefreshLayout;
-          layout_width="fill";
-          layout_height="fill";
-          id="swipeRefresh";
-          {
-            FilesBrowserManager.FilesRecyclerViewBuilder;
-            layout_width="fill";
-            layout_height="fill";
-            id="recyclerView";
-          };
-        };
+        radius=0;]]
+    {
+      FilesBrowserManager.SwipeRefreshLayout;
+      layout_width="fill";
+      layout_height="fill";
+      --elevation="8dp";
+      id="swipeRefresh";
+      --backgroundColor=res.color.attr.windowBackgroundColor;
+      {
+        FilesBrowserManager.FilesRecyclerViewBuilder;
+        layout_width="fill";
+        layout_height="fill";
+        id="recyclerView";
       };
     };
+    --};
+    --};
   };
 }

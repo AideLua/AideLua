@@ -209,7 +209,14 @@ listView.setFastScrollEnabled(true)
 if themeutil.isJesse205Activity then--Jesse205主题没有分割线
   listView.setDivider(dividerVertical)
   listView.onScroll=function(view,firstVisibleItem,visibleItemCount,totalItemCount)
-    MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount)
+    pcall(function()
+      if jesse205._VERSIONCODE and jesse205._VERSIONCODE>=122000 then
+        local childView=view.getChildAt(0)
+        AnimationHelper.onScrollListenerForActionBarElevation(actionBar,childView and (childView.getTop()<0 or firstVisibleItem>0))
+       else
+        MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount)
+      end
+    end)
   end
 end
 

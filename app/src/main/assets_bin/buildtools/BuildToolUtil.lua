@@ -15,6 +15,13 @@ local function repackApk_callback(buildingDialog,success,message,apkPath,project
   local showingText=""
   dialog.setCancelable(true)
   if message==true then
+    if runMode then
+      buildingDialog.dialog.dismiss()
+      --如果是运行模式，那么apkPath就是apk解包路径
+      ProjectManager.runProject(checkSharedActivity("ProjectRunner"),config)
+      --ProjectManager.runProject(apkPath.."/assets/main.lua",config)
+      return
+    end
     local shortApkPath=rel2AbsPath(ProjectManager.shortPath(apkPath,true,projectPath),getString(R.string.project))--转换成相对路径
     if install then
       showingText=formatResStr(R.string.binproject_state_succeed_with_path,{shortApkPath})
@@ -28,12 +35,6 @@ local function repackApk_callback(buildingDialog,success,message,apkPath,project
       positiveButton.setVisibility(View.VISIBLE)
     end
     buildingDialog:print("success",showingText,true)
-    if runMode then
-      buildingDialog.dialog.dismiss()
-      --如果是运行模式，那么apkPath就是apk解包路径
-      ProjectManager.runProject(checkSharedActivity("ProjectRunner"),config)
-      --ProjectManager.runProject(apkPath.."/assets/main.lua",config)
-    end
    else
     showingText=message or getString(R.string.unknowError)
     buildingDialog:print("error",showingText,false)

@@ -201,12 +201,7 @@ end
 
 listView.onScroll=function(view,firstVisibleItem,visibleItemCount,totalItemCount)
   local childView=view.getChildAt(0)
-  AnimationHelper.onScrollListenerForElevation({
-    top=actionBar,
-  },
-  {
-    top=childView and (childView.getTop()<0 or firstVisibleItem>0),
-  })
+  AnimationHelper.onScrollListenerForActionBarElevation(actionBar,childView and (childView.getTop()<0 or firstVisibleItem>0))
   --MyAnimationUtil.ListView.onScroll(view,firstVisibleItem,visibleItemCount,totalItemCount)
 end
 

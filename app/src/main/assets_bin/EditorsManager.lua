@@ -623,10 +623,10 @@ function EditorsManager.init()
   --EditorsManager.switchEditor("NoneView")
 end
 
-local symbolBar={}
-EditorsManager.symbolBar=symbolBar
+local SymbolBarManager={}
+EditorsManager.symbolBar=SymbolBarManager
 --在 v5.1.0(51099) 添加
-symbolBar.symbols={
+SymbolBarManager.symbols={
   --显示,显示2(为括号而准备),粘贴(默认显示),覆盖(默认粘贴),辅助提示,辅助英文提示,覆盖时移动光标偏移量
   {"func()",false,"function()","function %s()\n\nend","函数(体)","Function (Body)",-4},
   {"(",")",nil,nil,"小括号","Parentheses",-1},
@@ -677,7 +677,7 @@ end
 ---在 v5.1.0(51099) 添加
 ---符号栏按钮点击时输入符号
 ---@param view View 按钮视图
-function symbolBar.onButtonClickListener(view)
+function SymbolBarManager.onButtonClickListener(view)
   local config=view.tag
   local selectedText=managerActions.getSelectedText()
 
@@ -696,21 +696,21 @@ function symbolBar.onButtonClickListener(view)
 end
 
 ---此API已在 v5.1.0(51099) 废除
-function symbolBar.psButtonClick()
+function SymbolBarManager.psButtonClick()
   print("警告","symbolBar.psButtonClick","此API已在 v5.1.0 废除")
 end
 
 ---在 v5.1.0(51099) 添加
 ---在 v5.1.1(51199) 废除
 ---符号栏按钮长按时提示
-function symbolBar.onButtonLongClickListener(view)
+function SymbolBarManager.onButtonLongClickListener(view)
   print("警告","symbolBar.onButtonLongClickListener","此API已在 v5.1.1 废除")
 end
 
 ---在 v5.1.1(51199) 添加
 ---符号栏按钮长按时提示
 --@type View.OnTouchListener
-symbolBar.onButtonTouchListener=View.OnTouchListener({
+SymbolBarManager.onButtonTouchListener=View.OnTouchListener({
   onTouch=function(view,event)
     local action=event.getAction()
     if action==MotionEvent.ACTION_DOWN then
@@ -724,10 +724,10 @@ symbolBar.onButtonTouchListener=View.OnTouchListener({
 ---初始化一个符号栏按钮
 ---@param text string 显示的文字
 ---@param config table 按钮配置 (在 v5.1.0(51099) 上添加)
-function symbolBar.newPsButton(text,config)
+function SymbolBarManager.newPsButton(text,config)
   local button=loadlayout2({
     AppCompatTextView;
-    onClick=symbolBar.onButtonClickListener;
+    onClick=SymbolBarManager.onButtonClickListener;
     text=text;
     tag=config;
     contentDescription=config[getLocalLangObj(5, 6)];
@@ -739,19 +739,19 @@ function symbolBar.newPsButton(text,config)
     minWidth="40dp";--设置最小宽度，减少误触
     allCaps=false;
     focusable=true;
-    textColor=theme.color.textColorPrimary;
-    background=ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary);
+    textColor=android.res.color.attr.textColorPrimary;
+    background=ThemeUtil.getRippleDrawable(res.color.attr.rippleColorPrimary);
   })
-  button.setOnTouchListener(symbolBar.onButtonTouchListener)
+  button.setOnTouchListener(SymbolBarManager.onButtonTouchListener)
   return button
 end
 
 ---刷新符号栏状态
 ---@param state boolean 新状态
-function symbolBar.refresh(state)
+function SymbolBarManager.refresh(state)
   if state then
     if not(loadedSymbolBar) then--没有加载过符号栏，就加载一次p
-      for index,group in ipairs(symbolBar.symbols) do
+      for index,group in ipairs(SymbolBarManager.symbols) do
         local group2
         local second=group[2]
         if second then--是成对符号
@@ -766,9 +766,9 @@ function symbolBar.refresh(state)
             end
           end
         end
-        ps_bar.addView(symbolBar.newPsButton(group[1],group))
+        ps_bar.addView(SymbolBarManager.newPsButton(group[1],group))
         if second and second~=true then
-          ps_bar.addView(symbolBar.newPsButton(group2[2],group2))
+          ps_bar.addView(SymbolBarManager.newPsButton(group2[2],group2))
         end
       end
       ps_paste=nil
@@ -783,29 +783,29 @@ end
 ---v5.1.0(51099)+
 ---放大镜管理器
 ---@type MagnifierManager
-local magnifierManager={}
+local MagnifierManager={}
 local magnifierUpdateRunnable
 local magnifierAutoUpdateEnabled=false
 local skipUpdateTime=0
-EditorsManager.magnifier=magnifierManager
-function magnifierManager.refresh()
-  magnifierManager.magnifyEnabled = getSharedData("editor_magnify")
-  if not(magnifierManager.magnifier) and magnifierManager.magnifyEnabled then
+EditorsManager.magnifier=MagnifierManager
+function MagnifierManager.refresh()
+  MagnifierManager.magnifyEnabled = getSharedData("editor_magnify")
+  if not(MagnifierManager.magnifier) and MagnifierManager.magnifyEnabled then
     local success=pcall(function()--放大镜，可能不存在，但不排除有部分ROM会自己实现
       import "android.widget.Magnifier"
-      magnifierManager.magnifier=Magnifier(editorGroup)
+      MagnifierManager.magnifier=Magnifier(editorGroup)
     end)
     if not success then
       import "com.jesse205.widget.MyMagnifier"
-      magnifierManager.magnifier=MyMagnifier(editorGroup)
+      MagnifierManager.magnifier=MyMagnifier(editorGroup)
     end
   end
 end
-function magnifierManager.isAvailable()
-  return magnifierManager.magnifyEnabled and magnifierManager.magnifier
+function MagnifierManager.isAvailable()
+  return MagnifierManager.magnifyEnabled and MagnifierManager.magnifier
 end
-function magnifierManager.show(x,y)
-  magnifierManager.magnifier.show(x,y)
+function MagnifierManager.show(x,y)
+  MagnifierManager.magnifier.show(x,y)
   skipUpdateTime=skipUpdateTime+1
 end
 magnifierUpdateRunnable=Runnable({
@@ -813,7 +813,7 @@ magnifierUpdateRunnable=Runnable({
     editorGroup.post(magnifierUpdateRunnable)
     if magnifierAutoUpdateEnabled then
       if skipUpdateTime==0 then
-        magnifierManager.magnifier.update()
+        MagnifierManager.magnifier.update()
        else
         skipUpdateTime=skipUpdateTime-1
       end
@@ -821,28 +821,28 @@ magnifierUpdateRunnable=Runnable({
   end
 })
 
-function magnifierManager.startAutoUpdate()
+function MagnifierManager.startAutoUpdate()
   if not magnifierAutoUpdateEnabled then
     editorGroup.post(magnifierUpdateRunnable)
     magnifierAutoUpdateEnabled=true
   end
 end
-function magnifierManager.stopAutoUpdate()
+function MagnifierManager.stopAutoUpdate()
   magnifierAutoUpdateEnabled=false
   editorGroup.removeCallbacks(magnifierUpdateRunnable)
 end
 
-function magnifierManager.start(x,y)
-  magnifierManager.show(x,y)
-  magnifierManager.startAutoUpdate()
+function MagnifierManager.start(x,y)
+  MagnifierManager.show(x,y)
+  MagnifierManager.startAutoUpdate()
 end
-function magnifierManager.stop()
-  magnifierManager.stopAutoUpdate()
-  magnifierManager.dismiss()
+function MagnifierManager.stop()
+  MagnifierManager.stopAutoUpdate()
+  MagnifierManager.dismiss()
 end
 
-function magnifierManager.dismiss()
-  magnifierManager.magnifier.dismiss()
+function MagnifierManager.dismiss()
+  MagnifierManager.magnifier.dismiss()
 end
 
 --v5.1.2+

@@ -74,10 +74,31 @@
         <item name="android:textColorPrimary">?colorOnSurface</item>
         <item name="android:textColorHint">@color/material_on_surface_emphasis_medium</item>
     </style>
+    
     <style name="Widget.Jesse205.ActionSearchEdit.Primary" parent="android:style/Widget">
         <item name="colorPrimary">?colorOnPrimary</item>
         <item name="android:textColorPrimary">?colorOnPrimary</item>
         <item name="android:textColorHint">@color/material_on_primary_emphasis_medium</item>
+    </style>
+
+    <style name="Widget.Jesse205.ActionBar.Surface" parent="Widget.MaterialComponents.ActionBar.Surface">
+        <item name="backgroundStacked">?colorSurface</item>
+    </style>
+    
+    <style name="Widget.Jesse205.ActionBar.TabBar.Surface" parent="Widget.AppCompat.ActionBar.TabBar">
+        <item name="colorPrimary">?colorSurface</item>
+        <item name="showDividers">none</item>
+    </style>
+    
+    <style name="Widget.Jesse205.ActionBar.TabBar.Primary" parent="Widget.AppCompat.ActionBar.TabBar">
+         <item name="showDividers">none</item>
+   </style>
+    
+    <style name="Widget.Jesse205.ActionBar.TabView.Surface" parent="Widget.AppCompat.ActionBar.TabView">
+    </style>
+  
+    <style name="Widget.Jesse205.ActionBar.TabView.Primary" parent="Widget.AppCompat.ActionBar.TabView">
+        <item name="colorControlActivated">?colorOnPrimary</item>
     </style>
     
 

@@ -37,7 +37,7 @@ function ThemeManager.applyTheme()
     ThemeUtil.setNavigationbarColor(res.theme.color.attr.windowBackgroundColor)
   end
 
-  if res.boolean.attr.windowLightNavigationBar and SDK_INT>=26 and not(ThemeUtil.isNightMode()) and not(darkNavigationBar) then--主题默认亮色导航栏
+  if res.boolean.attr.windowLightNavigationBar and SDK_INT>=26 and not(darkNavigationBar) then--主题默认亮色导航栏
     systemUiVisibility=systemUiVisibility|View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR--设置亮色导航栏
   end
 

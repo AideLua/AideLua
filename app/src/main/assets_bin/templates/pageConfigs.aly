@@ -390,6 +390,7 @@
       ScrollView;
       layout_height="fill";
       layout_width="fill";
+      id="scrollView";
       {
         LinearLayout;
         layout_width="fill";
@@ -416,47 +417,11 @@
         "layouts.appVersionsLayout";
       };
     },
-  },
-  --[[
-  {
-    name="FusionApp v1",
-    _type="fa",
-    subTemplateName="FusionApp",
-    useLoadlayout2=true,
-    checkAppConfig=true,
-    helloWorld=true,--不可用标识
-    androidXState=false,--永远用不到AndroidX那就直接设置false即可
-    layout={
-      ScrollView;
-      layout_height="fill";
-      layout_width="fill";
-      {
-        LinearLayout;
-        layout_width="fill";
-        layout_height="fill";
-        orientation="vertical";
-        layoutTransition=newLayoutTransition();
-        MyTipLayout.Builder({
-          layout_margin="16dp";
-          layout_marginTop="8dp";
-          layout_marginBottom="8dp";
-          cardBackgroundColor=theme.color.Ripple.Orange;
-          {
-            {
-              imageResource=R.drawable.ic_alert_circle_outline;
-              colorFilter=theme.color.Orange;
-            },
-            {
-              text="此模板暂时无法使用，敬请期待";
-              textColor=theme.color.Orange;
-            }
-          }
-        });
-        "layouts.appConfigLayout";
-      };
-    },
-    onSelected=function(ids,config)
-      --createButton.setEnabled(false)
+    onInit=function(ids,pageConfig)
+      --页面滚动时调整阴影
+      ids.scrollView.onScrollChange=function(view,l,t,oldl,oldt)
+        onScrollListenerForActionBarElevation(pageConfig,t>0)
+      end
     end
-  },]]
+  },
 }

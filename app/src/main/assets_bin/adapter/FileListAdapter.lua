@@ -99,6 +99,38 @@ local function loadPrjIcon(iconUrl,iconView,iconCard)
   end
 end
 
+--v5.1.2+
+local function createItemColorStateList(defaultColor)
+  local colorStateList=ColorStateList({
+    {android.R.attr.state_selected},
+    {}
+  },
+  {res.color.attr.colorPrimary,
+    defaultColor,
+  })
+  return colorStateList
+end
+
+--v5.1.2+
+local function createItemBackground()
+  local drawable = GradientDrawable()
+  drawable.setShape(GradientDrawable.RECTANGLE)
+  drawable.setColor(ColorStateList({
+    {android.R.attr.state_selected},
+  },
+  {res.color.attr.rippleColorAccent}))
+  drawable.setCornerRadius(math.dp2int(4))
+  local layerDrawable=LayerDrawable({drawable})
+  local dp_8=math.dp2int(8)
+  local dp_4=math.dp2int(4)
+  layerDrawable.setLayerInset(0,dp_8,dp_8,dp_8,dp_8)
+  local maskDrawable = ShapeDrawable()
+  local rippleDrawable=RippleDrawable(ColorStateList.valueOf(res.color.attr.rippleColorPrimary),layerDrawable,maskDrawable)
+  return rippleDrawable
+end
+
+--createItemBackground()
+
 function loadPrjCfg(initData,data,file,filePath)
   local isLoadedConfig,config,iconUrl,title,summary
   if initData then
@@ -149,6 +181,9 @@ local openState2ViewType={
     _else=2
   }
 }
+
+local defaultItemTitleColorStateList=createItemColorStateList(res.color.attr.colorOnSurface)
+
 return function(item)
   return LuaCustRecyclerAdapter(AdapterCreator({
     getItemCount=function()
@@ -169,10 +204,9 @@ return function(item)
         local ids={}
         local view=loadlayout2(item[viewType],ids)
         view.setTag(ids)
-        view.setBackground(ThemeUtil.getRippleDrawable(res.color.attr.rippleColorPrimary,true))
+        view.setBackground(createItemBackground())
         view.setOnClickListener(onClickListener)
         view.setOnLongClickListener(onLongClickListener)
-
         if viewType==3 then--项目带有菜单按钮
           local moreView=ids.more
           moreView.setBackground(ThemeUtil.getRippleDrawable(res.color.attr.rippleColorPrimary,true))
@@ -182,7 +216,7 @@ return function(item)
         return view
       end,
       function(err)
-        showErrorDialog(err)
+        onError("onCreateViewHolder",err)
         return View(activity)
       end)
       return LuaCustRecyclerHolder(view)
@@ -225,7 +259,7 @@ return function(item)
           end
         end
        else--不是第一项
-        local titleColor=theme.color.textColorPrimary
+        --local titleColor=theme.color.textColorPrimary
         if initData then
           file=directoryFilesList[position-1]
           filePath=file.getPath()
@@ -281,9 +315,9 @@ return function(item)
             local isNowFile=FilesTabManager.openState and FilesTabManager.file==file
             view.setSelected(isNowFile)
             if isNowFile then
-              titleColor=res.color.attr.colorPrimary
+              --titleColor=res.color.attr.colorPrimary
               iconColor=res.color.attr.colorPrimary
-              cardBgColor=res.color.attr.rippleColorAccent
+              --cardBgColor=res.color.attr.rippleColorAccent
               --保存一下当前打开文件的位置，方便后期切换文件
               FilesBrowserManager.nowFilePosition=position
             end
@@ -291,7 +325,7 @@ return function(item)
             view.setSelected(false)
           end
           iconView.setColorFilter(iconColor)
-          highLightCard.setCardBackgroundColor(cardBgColor)
+          --highLightCard.setCardBackgroundColor(cardBgColor)
 
          else--未打开工程
           local pathView=ids.path
@@ -307,13 +341,13 @@ return function(item)
             pathView.setVisibility(View.VISIBLE)
           end
           loadPrjIcon(iconUrl,iconView,ids.iconCard)
-          titleColor=android.res.color.attr.textColorPrimary
+          --titleColor=android.res.color.attr.textColorPrimary
         end
         --文件提示，仿MT管理器
         if highlightIndex and highlightIndex==position then
           titleView.setTextColor(res.color.attr.colorPrimary)--下次刷新时这个view的颜色会被上面的逻辑覆盖，因此不需要担心
          else
-          titleView.setTextColor(titleColor)
+          titleView.setTextColor(defaultItemTitleColorStateList)
         end
       end
     end,
