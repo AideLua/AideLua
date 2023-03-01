@@ -60,7 +60,7 @@ import "android.webkit.WebResourceResponse"
 import "androidx.drawerlayout.widget.DrawerLayout"
 import "androidx.core.graphics.ColorUtils"
 import "androidx.core.content.res.ResourcesCompat"
-import "androidx.slidingpanelayout.widget.SlidingPaneLayout"
+--import "androidx.slidingpanelayout.widget.SlidingPaneLayout"
 import "androidx.documentfile.provider.DocumentFile"
 
 import "com.google.android.material.tabs.TabLayout"
@@ -140,7 +140,8 @@ oldAndroidXSupport = getSharedData("androidX_support")
 oldTheme = ThemeUtil.getAppTheme()
 oldDarkActionBar = getSharedData("theme_darkactionbar")
 oldRichAnim = getSharedData("richAnim")
-oldTabIcon = getSharedData("tab_icon")
+--v5.1.2废除
+--oldTabIcon = getSharedData("tab_icon")
 oldEditorSymbolBar = getSharedData("editor_symbolBar")
 oldEditorFontId = getSharedData("editor_font") or 0
 oldEditorPreviewButton = getSharedData("editor_previewButton")
@@ -156,7 +157,8 @@ lastUpdateTime = packageInfo.lastUpdateTime
 
 activityStopped = false
 LoadedMenu = false
-local notFirstOnResume = false
+local isResumeAgain = false--v5.1.2+由notFirstOnResume改名
+--local notFirstOnResume = false
 local touchingKey = false
 
 nowDevice = "phone"
@@ -179,26 +181,26 @@ function onCreate(savedInstanceState)
   if PluginsUtil.callElevents("onCreate", savedInstanceState) then
     return
   end
-  local data,data2,data3=receivedData[1],receivedData[2],receivedData[3]
-  if data=="projectPicker" then
-    data=nil
+  local prjPath,filePath,dirPath=receivedData[1],receivedData[2],receivedData[3]
+  if prjPath=="projectPicker" then
+    prjPath=nil
    else
-    if not(data) then
-      data=getSharedData("openedProject")
+    if not(prjPath) then
+      prjPath=getSharedData("openedProject")
     end
   end
 
   if savedInstanceState then
-    local prjPath=savedInstanceState.getString("prjpath")
-    local filePath=savedInstanceState.getString("filepath")
-    local dirPath=savedInstanceState.getString("dirpath")
-    data=prjPath
-    data2=filePath or false
-    data3=dirPath or false
+    prjPath=savedInstanceState.getString("prjpath")
+    filePath=savedInstanceState.getString("filepath") or false
+    dirPath=savedInstanceState.getString("dirpath") or false
   end
-  if data then
+  if prjPath then
     pathPlaceholderView.setVisibility(View.VISIBLE)
-    ProjectManager.openProject(data,data2,data3)
+    ProjectManager.openProject(prjPath,filePath,dirPath)
+    if filePath==false then
+      EditorsManager.switchEditor("NoneView")
+    end
    else
     ProjectManager.closeProject(false)
     pathPlaceholderView.setVisibility(View.GONE)
@@ -318,7 +320,7 @@ function onOptionsItemSelected(item)
           tool=R.string.project_build,
           todo=getLocalLangObj("支持 Gradle 运行","Support gradle running"),
           permissions={"com.termux.permission.RUN_COMMAND"},
-          helpUrl="https://jesse205.github.io/AideLua/function/build.html",
+          helpUrl=DOCS_URL.."function/build.html",
         },
       })
     end
@@ -487,7 +489,7 @@ function onDeviceByWidthChanged(device, oldDevice)
 end
 
 function onResume()
-  if PluginsUtil.callElevents("onResume", notFirstOnResume)
+  if PluginsUtil.callElevents("onResume", isResumeAgain)
     return
   end
   local reload = false
@@ -504,9 +506,10 @@ function onResume()
     activity.recreate()
     return
   end
+  FilesTabManager.onResume(isResumeAgain)
   EditorsManager.magnifier.refresh()
 
-  if notFirstOnResume then
+  if isResumeAgain then
     ProjectManager.refreshProjectsPath()
     FilesTabManager.reopenFile()--包含了刷新预览按钮
     local newTabIcon = getSharedData("tab_icon") -- 刷新标签栏按钮状态
@@ -535,7 +538,7 @@ function onResume()
     EditorsManager.checkAndRefreshSharedDataListeners()
   end
   FilesBrowserManager.refresh()
-  notFirstOnResume = true
+  isResumeAgain = true
 end
 
 function onResult(name, action, content)
@@ -584,6 +587,8 @@ end
 
 function onKeyDown(keyCode, event)
   touchingKey = true
+  --v5.1.2
+  PluginsUtil.callElevents("onKeyDown",keyCode, event)
 end
 
 function onKeyUp(keyCode, event)
@@ -603,6 +608,8 @@ function onKeyUp(keyCode, event)
       return result
     end
   end
+  --v5.1.2+
+  PluginsUtil.callElevents("onKeyUp",keyCode, event)
 end
 
 function onBackPressed()
@@ -639,6 +646,8 @@ function onBackPressed()
       return true
     end
   end
+  --v5.1.2+
+  PluginsUtil.callElevents("onBackPressed")
 end
 
 function onRestoreInstanceState(savedInstanceState)
@@ -649,6 +658,8 @@ function onRestoreInstanceState(savedInstanceState)
     FilesBrowserManager.close()
   end
   toggle.syncState()
+  --v5.1.2+
+  PluginsUtil.callElevents("onRestoreInstanceState",savedInstanceState)
 end
 
 function onSaveInstanceState(savedInstanceState)
@@ -662,6 +673,8 @@ function onSaveInstanceState(savedInstanceState)
   if FilesTabManager.openState then
     savedInstanceState.putString("filepath",FilesTabManager.file.getPath())
   end
+  --v5.1.2+
+  PluginsUtil.callElevents("onSaveInstanceState",savedInstanceState)
 end
 
 toggle = ActionBarDrawerToggle(activity, drawer, R.string.drawer_open, R.string.drawer_close)

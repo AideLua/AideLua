@@ -1,22 +1,31 @@
 import "com.google.android.material.switchmaterial.SwitchMaterial"
-import "com.google.android.material.imageview.ShapeableImageView"
 import "com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions"
 
 local SettingsLayUtil={}
 local contextMenuEnabled
 
-SettingsLayUtil.TITLE=1
-SettingsLayUtil.ITEM=2
-SettingsLayUtil.ITEM_NOSUMMARY=3
-SettingsLayUtil.ITEM_SWITCH=4
-SettingsLayUtil.ITEM_SWITCH_NOSUMMARY=5
-SettingsLayUtil.ITEM_AVATAR=6
-SettingsLayUtil.ITEM_ONLYSUMMARY=7
+SettingsLayUtil.DIVIDER=1
+SettingsLayUtil.TITLE=2
+SettingsLayUtil.ITEM=3
+SettingsLayUtil.ITEM_NOSUMMARY=4
+SettingsLayUtil.ITEM_SWITCH=5
+SettingsLayUtil.ITEM_SWITCH_NOSUMMARY=6
+SettingsLayUtil.ITEM_AVATAR=7
+SettingsLayUtil.ITEM_ONLYSUMMARY=8
 
 local colorPrimary=res.color.attr.colorPrimary
 local textColorPrimary=android.res.color.attr.textColorPrimary
 local textColorSecondary=android.res.color.attr.textColorSecondary
 
+local dividerLay={
+  View;
+  layout_width="fill";
+  layout_height="1.5dp";--不知道为什么这里1.5dp等于res里面的1dp
+  id="divider";
+  --layout_marginTop="8dp";
+  --layout_marginBottom="8dp";
+  backgroundColor=res.color.attr.strokeColor;
+};
 
 local leftIconLay={
   AppCompatImageView,
@@ -24,7 +33,9 @@ local leftIconLay={
   layout_margin="16dp",
   layout_width="24dp",
   layout_height="24dp",
-  colorFilter=colorPrimary,
+  --colorFilter=res.colorStateList.attr.colorControlNormal.getColors()[1],
+  colorFilter=android.res.color.attr.textColorPrimary;
+  alpha=Color.alpha(android.res.color.attr.colorControlNormal)/255;
 }
 
 local leftCoverLay={
@@ -40,12 +51,12 @@ local leftCoverLay={
     layout_height="fill";
     layout_width="fill";
     radius="18dp";]]
-    {
-      AppCompatImageView;
-      layout_height="fill";
-      layout_width="fill";
-      id="icon";
-    };
+  {
+    AppCompatImageView;
+    layout_height="fill";
+    layout_width="fill";
+    id="icon";
+  };
   --};
 }
 
@@ -122,19 +133,31 @@ SettingsLayUtil.rightNewPageIconLay=rightNewPageIconLay
 
 
 local itemsLay={
+  {--分割线
+    LinearLayoutCompat;
+    layout_width="fill";
+    orientation="vertical";
+    focusable=true;
+    dividerLay;
+  };
+
   {--标题
     LinearLayoutCompat;
     layout_width="fill";
+    orientation="vertical";
     focusable=true;
+    dividerLay;
     {
       AppCompatTextView;
       id="title";
       textSize="14sp";
       textColor=colorPrimary;
-      layout_margin="16dp";
-      layout_marginBottom=0;
-      typeface=Typeface.defaultFromStyle(Typeface.BOLD);
-    };
+      padding="16dp";
+      paddingLeft="72dp";
+      paddingBottom="8dp";
+      --paddingTop="8dp";
+      --typeface=Typeface.defaultFromStyle(Typeface.BOLD);
+    }
   };
 
   {--设置项(图片,标题,简介)
@@ -334,11 +357,26 @@ local adapterEvents={
     viewConfig.allowedChange=false
 
     --Views
+    local dividerView=ids.divider
     local titleView=ids.title
     local summaryView=ids.summary
     local switchView=ids.switchView
     local rightIconView=ids.rightIcon
     local iconView=ids.icon
+
+    if dividerView then
+      if data.dividerVisible==true then
+        dividerView.setVisibility(View.VISIBLE)
+       elseif data.dividerVisible==false then
+        dividerView.setVisibility(View.GONE)
+       else
+        if position==0 then
+          dividerView.setVisibility(View.GONE)
+         else
+          dividerView.setVisibility(View.VISIBLE)
+        end
+      end
+    end
 
     if title and titleView then
       titleView.text=title

@@ -171,6 +171,7 @@ data={
   {--关于软件
     SettingsLayUtil.TITLE;
     title=R.string.jesse205_about_full;
+    dividerVisible=false;
   };
   {--软件版本
     SettingsLayUtil.ITEM;

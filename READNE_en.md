@@ -91,12 +91,18 @@ Due to the particularity of AIDE, please download [__AIDE Pro__](https://aidepro
 3. Click the `repack and install` button of AideLua (or `repack`, but manual signature is required) and install it. Test whether it can be packaged and run normally.
 4. Click the `Run` button of AideLua to test whether the installed application debugging passes normally.
 
-## Matters Needing Attention
+## Notes
 
 1. AIDE must use the `AIDE Pro`, otherwise it cannot be opened `Redefine the Apk path` .
 2. AIDE must open `Redefine apk path`, otherwise APK error will be caused.
 3. AIDE Better Close `adrt Debug File` .
 4. It is not necessary to compile with AIDE, but it can also be compiled with Android Studio
+
+## Stargazers over time
+
+* GitHub:
+
+[![Stargazers over time](https://starchart.cc/AideLua/AideLua.svg)](https://starchart.cc/AideLua/AideLua)
 
 ## Open Source License
 

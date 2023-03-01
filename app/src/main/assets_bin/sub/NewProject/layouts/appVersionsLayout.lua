@@ -17,7 +17,7 @@
       AppCompatTextView;
       text="* 配置版本";
       textSize="14sp";
-      typeface=Typeface.defaultFromStyle(Typeface.BOLD);
+      --typeface=Typeface.defaultFromStyle(Typeface.BOLD);
       textColor=theme.color.colorPrimary;
       layout_marginBottom="8dp";
     };

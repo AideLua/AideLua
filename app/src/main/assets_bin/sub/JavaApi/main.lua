@@ -241,37 +241,31 @@ function hideActionBar(force)
   end
 end
 
-local oldAppBarLayoutHeight=0
-local oldSearchLayoutHeight=0
-appBarLayout.getViewTreeObserver().addOnGlobalLayoutListener({
-  onGlobalLayout=function()
-    if activity.isFinishing() then
-      return
-    end
-    local appBarLayoutHeight=appBarLayout.getHeight()
-    local searchLayoutHeight=searchLayout.getHeight()
-    local params=progressBar.getLayoutParams()
-    params.setMargins(0,appBarLayoutHeight,0,0)
-    progressBar.setLayoutParams(params)
-    if nowDevice=="phone" then
-      if appBarLayoutHeight+searchLayoutHeight~=oldAppBarLayoutHeight+oldSearchLayoutHeight then
-        listView.setPadding(0,appBarLayoutHeight+searchLayoutHeight,0,0)
-      end
-     else
-      if appBarLayoutHeight~=oldAppBarLayoutHeight then
-        listView.setPadding(0,appBarLayoutHeight,0,0)
-      end
-    end
-    oldAppBarLayoutHeight=appBarLayoutHeight
-    oldSearchLayoutHeight=searchLayoutHeight
-  end
-})
+--设置ListView的padding
+local width=View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED)
+local height=View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED)
+searchLayout.measure(width,height)
+appBarLayout.measure(width,height)
+local searchLayoutHeight=searchLayout.getMeasuredHeight()
+local appBarLayoutHeight=appBarLayout.getMeasuredHeight()
+
+if nowDevice=="phone" then
+  listView.setPadding(0,appBarLayoutHeight+searchLayoutHeight,0,0)
+ else
+  listView.setPadding(0,appBarLayoutHeight,0,0)
+end
 
 local searchEditDownY=0
 local searchEditDownOffset=0
 --拽拖顶栏触摸事件
 topLayoutOnTouchListener=View.OnTouchListener{
   onTouch=function(view,event)
+    if nowDevice~="phone" then
+      appBarLayout.setTranslationY(0)
+      onAnimUpdate(0)
+      actionBarState=true
+      return
+    end
     local y=event.getRawY()
     local action=event.getAction()
     local actionBarHeight=appBarLayout.getHeight()
@@ -342,6 +336,7 @@ listView.onItemLongClick=function(id,v,zero,one)
   return true
 end
 
+
 local oldFirstVisibleItem=0
 local oldFirstViewTop=0
 listView.onScroll=function(view,firstVisibleItem,visibleItemCount,totalItemCount)
@@ -382,6 +377,7 @@ params.anchorGravity=Gravity.BOTTOM
 params.gravity=Gravity.BOTTOM
 searchLayout.setLayoutParams(params)
 
+
 screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
   onDeviceByWidthChanged=function(device, oldDevice)
     nowDevice=device
@@ -394,14 +390,23 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
       params.gravity=Gravity.BOTTOM
       params.width=-1
       searchLayout.setLayoutParams(params)
-      listView.setPadding(0,oldAppBarLayoutHeight+oldSearchLayoutHeight,0,0)
      else
       mainLay.removeView(searchLayout)
       toolBarLayout.addView(searchLayout)
       local params=searchLayout.getLayoutParams()
       params.width=math.dp2int(320)
       searchLayout.setLayoutParams(params)
-      listView.setPadding(0,oldAppBarLayoutHeight,0,0)
+    end
+    local width=View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED)
+    local height=View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED)
+    searchLayout.measure(width,height)
+    appBarLayout.measure(width,height)
+    local searchLayoutHeight=searchLayout.getMeasuredHeight()
+    local appBarLayoutHeight=appBarLayout.getMeasuredHeight()
+    if device=="phone" then
+      listView.setPadding(0,appBarLayoutHeight+searchLayoutHeight,0,0)
+     else
+      listView.setPadding(0,appBarLayoutHeight,0,0)
       showActionBar(true)
     end
   end

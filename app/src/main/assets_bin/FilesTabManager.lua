@@ -34,6 +34,8 @@ local openedFiles = {}
 FilesTabManager.backupPath=AppPath.AppMediaDir..os.date("/backup/%Y%m%d")
 FilesTabManager.backupDir=File(FilesTabManager.backupPath)
 
+FilesTabManager.tabIconState=getSharedData("tab_icon")
+
 local scrollDbAddrsCreatorMetatable={
   __index=function(self,key)
     local filesScrollingDB=EditorsManager.filesScrollingDB
@@ -191,6 +193,15 @@ local function initFileTabView(tab, fileConfig)
 end
 FilesTabManager.initFileTabView=initFileTabView
 
+---v5.1.2+
+---初始化所有TabView。因为Tab经常变回来，所以需要经常初始化
+function FilesTabManager.initAllTabViews()
+  for index, content in pairs(FilesTabManager.openedFiles) do
+    local tab = content.tab
+    FilesTabManager.initFileTabView(tab, content)
+  end
+end
+
 ---打开文件，兼职预览切换功能
 ---潜在bug表象：当编辑器错误地切换到其他编辑器，再次打开会丢源码
 ---@param newFile File 要打开的文件
@@ -219,7 +230,7 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory,saveFile,previ
      else
       tab=filesTabLay.newTab()--新建一个Tab
       tab.setText(fileName)--设置显示的文字
-      if oldTabIcon then
+      if FilesTabManager.tabIconState then
         tab.setIcon(FilesBrowserManager.fileIcons[fileType])
       end
     end
@@ -468,10 +479,13 @@ function FilesTabManager.init()
       if (openState and newFileConfig.path~=file.getPath()) then
         FilesTabManager.openFile(newFile,newFileConfig.fileType)
       end
+      FilesTabManager.initAllTabViews()
     end,
     onTabReselected = function(tab)
+      FilesTabManager.initAllTabViews()
     end,
     onTabUnselected = function(tab)
+      --FilesTabManager.initAllTabViews()
     end
   }))
   --metatable复用
@@ -525,7 +539,7 @@ function FilesTabManager.changePath(oldPath,newPath)
       openedFiles[oldPath]=nil
       openedFiles[newPath] = newConfig
       tab.setText(fileName)--设置显示的文字
-      if oldTabIcon then
+      if FilesTabManager.tabIconState then
         tab.setIcon(FilesBrowserManager.fileIcons[fileType])
       end
       tab.tag=newConfig
@@ -545,6 +559,27 @@ function FilesTabManager.getScrollDbKeyByPath(path)
   return path.."-"..EditorsManager.editorType
 end
 
+function FilesTabManager.onResume(isResumeAgain)
+  if isResumeAgain then
+    local newTabIcon = getSharedData("tab_icon") -- 刷新标签栏按钮状态
+    if FilesTabManager.tabIconState ~= newTabIcon then
+      FilesTabManager.tabIconState = newTabIcon
+      if newTabIcon then
+        for index, content in pairs(FilesTabManager.openedFiles) do
+          local tab = content.tab
+          tab.setIcon(FilesBrowserManager.fileIcons[content.fileType])
+          FilesTabManager.initFileTabView(tab, content) -- 再次初始化一下标签栏，下方同理
+        end
+       else
+        for index, content in pairs(FilesTabManager.openedFiles) do
+          local tab = content.tab
+          tab.setIcon(nil)
+          FilesTabManager.initFileTabView(tab, content)
+        end
+      end
+    end
+  end
+end
 
 function FilesTabManager.getFileConfig()
   return fileConfig

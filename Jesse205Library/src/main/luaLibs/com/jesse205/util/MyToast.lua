@@ -1,4 +1,6 @@
 import "com.google.android.material.snackbar.Snackbar"
+import "com.google.android.material.snackbar.BaseTransientBottomBar"
+import "com.google.android.material.motion.MotionUtils"
 
 local MyToast={}
 setmetatable(MyToast,MyToast)
@@ -13,9 +15,21 @@ function MyToast.showToast(text)
 end
 
 function MyToast.showSnackBar(text,view)
+  BaseTransientBottomBar.getDeclaredField("animationSlideDuration").setAccessible(true)
+  BaseTransientBottomBar.getDeclaredField("animationFadeInDuration").setAccessible(true)
+  BaseTransientBottomBar.getDeclaredField("animationFadeOutDuration").setAccessible(true)
+
   local snackBar=Snackbar.make(view or mainLay or context.getDecorView(),text,Snackbar.LENGTH_SHORT)
   --.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-  .show()
+  --snackbar的动画时间存在问题。一旦被修复，则移除这段代码
+  snackBar.animationSlideDuration=MotionUtils.resolveThemeDuration(context, R.attr.motionDurationShort4,250)
+  snackBar.animationFadeInDuration=MotionUtils.resolveThemeDuration(context, R.attr.motionDurationShort2,150)
+  snackBar.animationFadeOutDuration=MotionUtils.resolveThemeDuration(context, R.attr.motionDurationShort1, 75)
+  --[[
+  snackBar.animationSlideDuration=200
+  snackBar.animationFadeInDuration=150
+  snackBar.animationFadeOutDuration=150]]
+  snackBar.show()
   return snackBar
 end
 
@@ -50,7 +64,7 @@ function MyToast.copyText(text,view)
 end
 
 --显示“xxx成功/失败”
-function MyToast.pcallToToast(successStr,failedStr,succeed)
+function MyToast.assetsAndToast(successStr,failedStr,succeed)
   local text
   if succeed then
     text=successStr

@@ -111,5 +111,12 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 3. 提交代码
 4. 新建 Pull Request
 
+## 历史星标数
+
+* GitHub:
+
+![历史星标数](https://starchart.cc/AideLua/AideLua.svg)
+
 ## 开放源代码许可
+
 <https://gitee.com/AideLua/AideLua/blob/master/app/src/main/assets_bin/licences>

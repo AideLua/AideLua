@@ -12,18 +12,18 @@ MyTipLayout.layout={
     layout_width="fill";
     layout_height="fill";
     gravity="left|center";
-    layout_margin="8dp";
+    padding="12dp";
+    paddingTop="8dp";
+    paddingBottom="8dp";
     {
       AppCompatImageView;
       layout_width="24dp";
       layout_height="24dp";
-      layout_marginLeft="8dp";
-      layout_marginRight="16dp";
+      layout_marginRight="12dp";
       colorFilter=res.color.attr.colorPrimary;
     };
     {
       AppCompatTextView;
-      layout_marginRight="8dp";
       textColor=res.color.attr.colorPrimary;
     };
   };

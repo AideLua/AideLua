@@ -105,7 +105,8 @@
 
 
     <style name="ThemeOverlay.Jesse205.ActionBar.Primary" parent="ThemeOverlay.MaterialComponents.ActionBar.Primary">
-    	<item name="colorControlNormal">@color/jesse205_white</item>
+    	<item name="colorControlNormal">?colorOnPrimary</item>
+        <item name="actionMenuTextColor">?colorOnPrimary</item>
         <item name="elevation">4dp</item>
 		<item name="cardBackgroundColor">@color/jesse205_white_ripple</item>
 		<item name="rippleColorPrimary">@color/jesse205_white_ripple</item>

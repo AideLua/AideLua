@@ -194,24 +194,30 @@ PluginsUtil：
 ### v5.1.1(51199)
 
 ::: details 变更
-PluginsManagerUtil
+
+* main 页面
+  * PluginsManagerUtil
+
 | 方法 | 说明 |
 | ---- | ---- |
 | uninstall | 在成功之后自动执行 `PluginsManagerUtil.clearOpenedPluginPaths()` |
 | showInstallDialog | 在成功之后自动执行 `PluginsManagerUtil.clearOpenedPluginPaths()` |
 | installByUri | 见 `PluginsManagerUtil.showInstallDialog` |
 
-NewProjectManager
+  * NewProjectManager
+
 | 方法 | 说明 |
 | ---- | ---- |
 | applySingleCheckGroup | 修复未指定默认Chip时虽然有选择但是没有保存数据的bug，并弹出警告 |
 
-FilesBrowserManager
+  * FilesBrowserManager
+
 | 方法 | 说明 |
 | ---- | ---- |
 | refresh | 新增 `fileName` 参数，用于文件高亮显示 |
 
-其他
+  * 其他
+
 | 方法 | 说明 |
 | ---- | ---- |
 | createVirtualClass | 返回结果改为 `normalTable` |
@@ -221,40 +227,43 @@ FilesBrowserManager
 :::
 
 ::: details 新增
-文件：
+
+* main 页面
+
+  * 文件：
 
 | 文件名 | 说明 |
 | ---- | ---- |
 | SubActivityUtil.lua | 子页面相关 |
 | ClearContentHelper.lua | 清空按钮 |
 
-NewProjectManager：
+  * NewProjectManager：
 
 | 方法 | 说明 |
 | ---- | ---- |
 | getNowModuleDirName(fileRelativePath) | 获取当前模块目录名称，如果当前路径不在模块内，则返回主模块名称 |
 
-事件：
+  * 事件：
 
 | 事件 | 说明 |
 | ---- | ---- |
 | onPause | 生命周期：暂停 |
 
-其他方法：
+  * 其他方法：
 
 | 方法 | 说明 |
 | ---- | ---- |
 | copyFilesFromDocumentFile(documentFile,targetPath) | 复制文件，从 DocumentFile 内 |
 | safeLoadLayout(path,parent) | 安全加载 lua 布局，避免污染全局变量 |
 
-编辑器：
+  * 编辑器：
 
 | 名称 | 说明 |
 | ---- | ---- |
 | FrameView | 想添加啥，就添加啥 |
 | WebEditor | 其实就是个浏览器 |
 
-其他：
+  * 其他：
 
 * 插件支持 `README.md`
 * 新增RES资源获取工具（`res.lua`），一切资源都使用这个工具
@@ -262,7 +271,10 @@ NewProjectManager：
 :::
 
 ::: details 废除
-EditorManager.symbolBar
+* main 页面
+
+  * EditorManager.symbolBar
+
 | 老方法 | 新方法 |
 | ---- | ---- |
 | onButtonLongClickListener | symbolBar.onButtonTouchListener |
@@ -276,7 +288,9 @@ EditorManager.symbolBar
 
 ::: details 新增
 
-工具
+* main 页面
+
+  * 工具
 
 | 文件名 | 介绍 |
 | ---- | ---- |
@@ -285,6 +299,13 @@ EditorManager.symbolBar
 :::
 
 ::: details 移除
+
+* main 页面
+
+| 变量 | 说明 |
+| ---- | ---- |
+| oldTabIcon | 被 `FilesTabManager.tabIconState ` 代替 |
+
 
 Jesse205Library
 

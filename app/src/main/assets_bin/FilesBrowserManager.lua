@@ -1067,7 +1067,7 @@ function FilesBrowserManager.onCreateContextMenu(menu,view,menuInfo)
        else
         isResDir=false
       end
-      if not inLibDirPath and openState and ((fileType and relLibPathsMatch.types[fileType]) or not(isFile)) then--已经打开了项目并且文件类型受支持
+      if not inLibDirPath and openState and fileType and relLibPathsMatch.types[fileType] then--已经打开了项目并且文件类型受支持
         for index,content in ipairs(relLibPathsMatch.paths) do
           inLibDirPath=fileRelativePath:match(content)
           if inLibDirPath then

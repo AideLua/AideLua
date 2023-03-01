@@ -1,12 +1,15 @@
 未完待续
 # main.aly <Badge text="文件" vertical="middle" /> <Badge text="table" vertical="middle" /> <Badge text="Map" vertical="middle" />
+
 ::: details 本页内容
 [[toc]]
 :::
 `config/events/main.aly` : 主页面事件存放文件
 
 ## 事件说明
+
 ### onCreate(savedInstanceState) <Badge text="生命周期" vertical="middle" />
+
 [Activity 生命周期：onCreate()](https://developer.android.google.cn/guide/components/activities/activity-lifecycle?hl=zh_cn#oncreate)
 
 这是页面创建时候执行的事件 <br>
@@ -136,6 +139,7 @@ activity.result({<action>，<content>})
 刷新菜单状态
 
 ## 管理器、工具 API
+
 ### EditorsManager <Badge text="table" vertical="middle" /> <Badge text="Manager" vertical="middle" />
 
 | 键 | 类型 | 说明 |
@@ -171,6 +175,7 @@ activity.result({<action>，<content>})
 ::::
 
 #### EditorsManager.typefaceChangeListeners <Badge text="table" vertical="middle" /> <Badge text="List" vertical="middle" /> <Badge text="Listener" vertical="middle" /> <Badge text="v5.0.4+" vertical="middle" />
+
 编辑器字体监听器
 
 格式：
