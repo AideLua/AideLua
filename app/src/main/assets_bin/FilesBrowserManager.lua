@@ -279,6 +279,8 @@ local showProgressRunnable=Runnable({
 })
 
 --侧滑动画
+local filesViewTranslationDuration=MotionUtils.resolveThemeDuration(activity, R.attr.motionDurationShort2,150)
+local filesViewAlphaDuration=MotionUtils.resolveThemeDuration(activity, R.attr.motionDurationShort4,250)
 local recyclerViewCardTranslationXAnimator
 local recyclerViewAlphaAnimator
 --归位动画Runnable
@@ -288,15 +290,15 @@ local homingRunnable=Runnable({
     --recyclerViewCard
     if swipeRefresh.getTranslationX()~=0 then
       recyclerViewCardTranslationXAnimator=ObjectAnimator.ofFloat(swipeRefresh,"translationX",{0})
-      .setDuration(200)
-      .setInterpolator(DecelerateInterpolator())
+      .setDuration(filesViewTranslationDuration)
+      --.setInterpolator(DecelerateInterpolator())
       .setAutoCancel(true)
       .start()
     end
     if recyclerView.getAlpha()~=1 then
       recyclerViewAlphaAnimator=ObjectAnimator.ofFloat(recyclerView,"alpha",{1})
-      .setDuration(200)
-      .setInterpolator(DecelerateInterpolator())
+      .setDuration(filesViewAlphaDuration)
+      --.setInterpolator(DecelerateInterpolator())
       .setAutoCancel(true)
       .start()
     end
@@ -961,13 +963,14 @@ function FilesBrowserManager.refresh(file,highlightPath,force,atOnce)
               FilesBrowserManager.cancelBrowserAnimators()
               if anim_propertyName~="alpha" then--下面就是透明动画，所以无需执行card动画
                 recyclerViewCardTranslationXAnimator=ObjectAnimator.ofFloat(swipeRefresh, anim_propertyName,anim_values)
-                .setDuration(150)
+                .setDuration(filesViewTranslationDuration)
                 .setInterpolator(DecelerateInterpolator())
                 .setAutoCancel(true)
                 .start()
               end
+            
               recyclerViewAlphaAnimator=ObjectAnimator.ofFloat(recyclerView, "alpha",{0,1})
-              .setDuration(250)
+              .setDuration(filesViewTranslationDuration)
               .setInterpolator(DecelerateInterpolator())
               .setAutoCancel(true)
               .start()

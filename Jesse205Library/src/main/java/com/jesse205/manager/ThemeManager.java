@@ -13,32 +13,29 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import com.jesse205.R;
 import static android.os.Build.VERSION.SDK_INT;
+import java.lang.reflect.Field;
+import android.util.Log;
 
 public class ThemeManager {
+    private static final String TAG="ThemeManager";
     public static final String THEME_TYPE="theme_type";
+    public static final String THEME_MATERIAL3="theme_material3";
     public static final String THEME_DARK_ACTION_BAR="theme_dark_action_bar";
     //public static final String THEME_NO_ACTION_BAR="theme_no_action_bar";
 
-    //一些可以定制的主题，用于替换默认蓝色的主题
-    public static int defaultThemeNameId = R.string.jesse205_theme_default;
-    public static int defaultThemeId = R.style.Theme_Jesse205_Default;
-    public static int defaultNoActionBarThemeId = R.style.Theme_Jesse205_Default_NoActionBar;
-    public static int defaultDarkActionBarThemeId = R.style.Theme_Jesse205_Default_DarkActionBar;
-    public static int defaultDarkActionBarNoActionBarThemeId = R.style.Theme_Jesse205_Default_DarkActionBar_NoActionBar;
     private static ThemeType defaultAppTheme = ThemeType.DEFAULT;
 
     private ThemeType mThemeType;
     private boolean isDarkActionBar;
-    //private boolean mIsNoActionBar;
+    private boolean isMaterial3;
     private Activity mContext;
 
     public ThemeManager(Activity context) {
         mContext = context;
     }
 
-
     public static void setDefaultTheme(Context context, ThemeType themeType) {
-        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         if (sharedPreferences.getString(THEME_TYPE, null) == null) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(THEME_TYPE, themeType.name());
@@ -48,7 +45,7 @@ public class ThemeManager {
     }
 
     public static void setAppTheme(Context context, ThemeType themeType) {
-        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(THEME_TYPE, themeType.name());
         editor.commit();
@@ -56,7 +53,7 @@ public class ThemeManager {
     }
 
     public static ThemeType getAppTheme(Context context) {
-        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String themeTypeName=sharedPreferences.getString(THEME_TYPE, null);
         //return ThemeType.valueOf(themeTypeName);
 
@@ -66,102 +63,60 @@ public class ThemeManager {
             try {
                 return ThemeType.valueOf(themeTypeName);
             } catch (IllegalArgumentException e) {
-                return ThemeType.DEFAULT;
+                Log.e(TAG, "IllegalArgumentException: " + e.toString());
+                return defaultAppTheme;
             }
         }
     }
 
-    public static int getThemeId(Context context, ThemeType themeType, boolean isDarkActionBar, boolean isNoActionBar) {
-        int themeId;
-        if (isDarkActionBar) {
-            if (isNoActionBar) {
-                themeId = defaultDarkActionBarNoActionBarThemeId;
-                switch (themeType) {
-                    case TEAL:
-                        themeId = R.style.Theme_Jesse205_Teal_DarkActionBar_NoActionBar;
-                        break;
-                    case ORANGE:
-                        themeId = R.style.Theme_Jesse205_Orange_DarkActionBar_NoActionBar;
-                        break;
-                    case PINK:
-                        themeId = R.style.Theme_Jesse205_Pink_DarkActionBar_NoActionBar;
-                        break;
-                    case RED:
-                        themeId = R.style.Theme_Jesse205_Red_DarkActionBar_NoActionBar;
-                        break;
-                }
-            } else {
-                themeId = defaultDarkActionBarThemeId;
-                switch (themeType) {
-                    case TEAL:
-                        themeId = R.style.Theme_Jesse205_Teal_DarkActionBar;
-                        break;
-                    case ORANGE:
-                        themeId = R.style.Theme_Jesse205_Orange_DarkActionBar;
-                        break;
-                    case PINK:
-                        themeId = R.style.Theme_Jesse205_Pink_DarkActionBar;
-                        break;
-                    case RED:
-                        themeId = R.style.Theme_Jesse205_Red_DarkActionBar;
-                        break;
-                }
-            }
-        } else {
-            if (isNoActionBar) {
-                themeId = defaultNoActionBarThemeId;
-                switch (themeType) {
-                    case TEAL:
-                        themeId = R.style.Theme_Jesse205_Teal_NoActionBar;
-                        break;
-                    case ORANGE:
-                        themeId = R.style.Theme_Jesse205_Orange_NoActionBar;
-                        break;
-                    case PINK:
-                        themeId = R.style.Theme_Jesse205_Pink_NoActionBar;
-                        break;
-                    case RED:
-                        themeId = R.style.Theme_Jesse205_Red_NoActionBar;
-                        break;
-                }
-            } else {
-                themeId = defaultThemeId;
-                switch (themeType) {
-                    case TEAL:
-                        themeId = R.style.Theme_Jesse205_Teal;
-                        break;
-                    case ORANGE:
-                        themeId = R.style.Theme_Jesse205_Orange;
-                        break;
-                    case PINK:
-                        themeId = R.style.Theme_Jesse205_Pink;
-                        break;
-                    case RED:
-                        themeId = R.style.Theme_Jesse205_Red;
-                        break;
-                }
-            }
+    public static int getThemeId(Context context, ThemeType themeType, boolean isDarkActionBar, boolean isNoActionBar, boolean isMaterial3) {
+        if (isMaterial3)
+            return R.style.Theme_Jesse205_Material3;//MD3只有这一个主题
+        int themeId = R.style.Theme_Jesse205_Default;
+        String styleKey="Theme_Jesse205";
+        
+        switch (themeType) {
+            case DEFAULT:
+                styleKey += "_Default";
+                break;
+            case TEAL:
+                styleKey += "_Teal";
+                break;
+            case ORANGE:
+                styleKey += "_Orange";
+                break;
+            case PINK:
+                styleKey += "_Pink";
+                break;
+            case RED:
+                styleKey += "_Red";
+                break;
+        }
+        if (isDarkActionBar)
+            styleKey += "_DarkActionBar";
+        if (isNoActionBar)
+            styleKey += "_NoActionBar";
+        try {
+            Field field=R.style.class.getField(styleKey);
+            themeId = (int) field.get(R.style.class);
+        } catch (NoSuchFieldException e) {
+            Log.e(TAG, "NoSuchFieldException: " + e.toString());
+        } catch (IllegalAccessException e) {
+            Log.e(TAG, "IllegalAccessException: " + e.toString());
+        } catch (IllegalArgumentException e) {
+            Log.e(TAG, "IllegalArgumentException: " + e.toString());
         }
         return themeId;
     }
 
     public static String getThemeName(Context context, ThemeType themeType) {
-        int strId=defaultThemeNameId;
-        switch (themeType) {
-            case TEAL:
-                strId = R.string.jesse205_theme_teal;
-                break;
-            case ORANGE:
-                strId = R.string.jesse205_theme_orange;
-                break;
-            case PINK:
-                strId = R.string.jesse205_theme_pink;
-                break;
-            case RED:
-                strId = R.string.jesse205_theme_red;
-                break;
+        int index=themeType.ordinal();
+        if (index!=0){
+            String[] names=context.getResources().getStringArray(R.array.jesse205_themes);
+            return names[index];
         }
-        return context.getString(strId);
+        
+        return context.getString(R.string.jesse205_theme_default);
     }
 
 
@@ -169,29 +124,46 @@ public class ThemeManager {
         return mThemeType;
     }
 
-    public boolean getAppDarkActionBarState() {
-        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(mContext);
+    public static boolean getAppDarkActionBarState(Context context) {
+        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(context);
         return sharedPreferences.getBoolean(THEME_DARK_ACTION_BAR, false);
+    }
+
+    public static boolean getAppMaterial3State(Context context) {
+        SharedPreferences sharedPreferences= PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPreferences.getBoolean(THEME_MATERIAL3, false);
     }
 
     public boolean getDarkActionBarState() {
         return isDarkActionBar;
     }
 
-    public void applyTheme() {
-        applyTheme(getAppDarkActionBarState(), false);
+    public boolean getMaterial3State() {
+        return isMaterial3;
     }
 
+    public void applyTheme() {
+        applyTheme(false);
+    }
+    
+    public void applyTheme(boolean isNoActionBar) {
+        applyTheme(getAppDarkActionBarState(mContext), isNoActionBar);
+    }
+    
     public void applyTheme(boolean isDarkActionBar, boolean isNoActionBar) {
         applyTheme(isDarkActionBar, isNoActionBar, false, false);
     }
-
+    
     public void applyTheme(boolean isDarkActionBar, boolean isNoActionBar, boolean useDarkStatusBar, boolean useDarkNavigationBar) {
+        applyTheme(isDarkActionBar, isNoActionBar, useDarkStatusBar, useDarkNavigationBar, getAppMaterial3State(mContext));
+    }
+
+    public void applyTheme(boolean isDarkActionBar, boolean isNoActionBar, boolean useDarkStatusBar, boolean useDarkNavigationBar, boolean useMaterial3) {
         this.isDarkActionBar = isDarkActionBar;
+        this.isMaterial3 = useMaterial3;
         if (mThemeType == null)
             mThemeType = getAppTheme(mContext);
-        int themeId = defaultThemeId;
-        themeId = getThemeId(mContext, mThemeType, isDarkActionBar, isNoActionBar);
+        int themeId = getThemeId(mContext, mThemeType, isDarkActionBar, isNoActionBar, useMaterial3);
         mContext.setTheme(themeId);
 
         TypedArray array = mContext.getTheme().obtainStyledAttributes(new int[]{
@@ -204,12 +176,15 @@ public class ThemeManager {
 
         int systemUiVisibility=0;
         View decorView=mContext.getWindow().getDecorView();
-        if (windowLightStatusBar && SDK_INT >= 23)
+        if (SDK_INT >= 23 && windowLightStatusBar && !useDarkStatusBar)
             systemUiVisibility |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-        if (windowLightNavigationBar && SDK_INT >= 26)
+        if (SDK_INT >= 26 && windowLightNavigationBar && !useDarkNavigationBar)
             systemUiVisibility |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
         decorView.setSystemUiVisibility(systemUiVisibility);
-
+    }
+    
+    public boolean checkThemeChanged(){
+        return isMaterial3!=getAppMaterial3State(mContext) ||isDarkActionBar!=getAppDarkActionBarState(mContext);
     }
 
     public enum ThemeType {
@@ -217,6 +192,6 @@ public class ThemeManager {
         TEAL,
         ORANGE,
         PINK,
-        RED
+        RED;
         }
 }

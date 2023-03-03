@@ -92,13 +92,7 @@ MyCodeEditor=function(context)
   view=luajava.override(CodeEditor,{
     onKeyShortcut=onKeyShortcut,
     computeScroll=function(super)
-      AnimationHelper.onScrollListenerForElevation({
-        top=appBarLayout,
-      },
-      {
-        top=scroller.getCurrY()>0,
-      })
-      --MyAnimationUtil.ScrollView.onScrollChange(view,scroller.getCurrX(),scroller.getCurrY(),0,0,appBarLayout)
+      AnimationHelper.onScrollListenerForActionBarElevation(appBarLayout,scroller.getCurrY()>0)
       super()
     end
   })
@@ -570,23 +564,11 @@ function EditorsManager.refreshEditorScrollState()
   if editorConfig then
     local scrollState=editorConfig.supportScroll
     if scrollState==true then
-      AnimationHelper.onScrollListenerForElevation({
-        top=appBarLayout,
-      },
-      {
-        top=managerActions.getScrollY()>0,
-      })
-      --MyAnimationUtil.ScrollView.onScrollChange(editor,managerActions.getScrollX(),managerActions.getScrollY(),0,0,appBarLayout,nil)
+      AnimationHelper.onScrollListenerForActionBarElevation(appBarLayout,managerActions.getScrollY()>0)
      elseif scrollState then
       scrollState(editorGroupViews,editorConfig)
      else
-      AnimationHelper.onScrollListenerForElevation({
-        top=appBarLayout,
-      },
-      {
-        top=false,
-      })
-      --MyAnimationUtil.ScrollView.onScrollChange(editor,0,0,0,0,appBarLayout,nil)
+      AnimationHelper.onScrollListenerForActionBarElevation(appBarLayout,false)
     end
   end
 end

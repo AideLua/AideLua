@@ -127,6 +127,7 @@
 	<string name="projects_paths_summary">支持多个路径。路径之间使用“;”分割</string>
 
     <string name="binproject_loading">正在打包...</string>
+    <string name="binproject_loading_env">正在准备环境...</string>
     <string name="binproject_loading_with_parent">正在打包...\n%1$s</string>
     <string name="binproject_creating_variables">正在创建变量</string>
     <string name="binproject_arrangement">正在整理 APP</string>
@@ -148,7 +149,8 @@
     <string name="binproject_state_succeed_with_path">打包成功\n路径：%1$s</string>
     <string name="binproject_state_succeed_with_path_needSign">打包成功，请手动签名\n路径：%1$s</string>
     <string name="binproject_state_failed">打包失败</string>
-    <string name="binproject_error_notfind">未找到 app.apk ，请先使用 AIDE 打包。</string>
+    <string name="binproject_error_notfind">警告：此字符串即将废除\n未找到 app.apk ，请先使用 AIDE Pro 或 Gradle 工具构建项目。</string>
+    <string name="binproject_error_baseapk_notfind">未找到底包 ，请先使用 AIDE Pro 等 Gradle 工具构建项目。</string>
     <string name="binproject_error_signer">签名失败，请手动签名\n路径：%1$s</string>
     <string name="binproject_error_parse">安装包 (%1$s) 解析失败</string>
     <string name="binproject_cannotFindTool">无法找到相应版本的 ReBuildTool，请检查 Aide Lua 是否有更新</string>

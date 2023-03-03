@@ -55,7 +55,7 @@ function BuildToolUtil.repackApk(config,projectPath,install,sign)
   if repackApk_building then
     MyToast.showToast(R.string.binproject_loading)
    else
-    local buildingDialog=BuildingDialogBuilder()
+    local buildingDialog=BuildingDialogBuilder(activity)
     buildingDialog:show()
 
     activity.newTask(RePackTool.repackApk_taskFunc,function(...)
@@ -74,7 +74,8 @@ function BuildToolUtil.runProject(config,projectPath)
   if repackApk_building then
     MyToast.showToast(R.string.binproject_loading)
    else
-    local buildingDialog=BuildingDialogBuilder()
+    local buildingDialog=BuildingDialogBuilder(activity)
+    :setTitle(R.string.binproject_loading_env)
     buildingDialog:show()
 
     activity.newTask(RePackTool.repackApk_taskFunc,function(...)

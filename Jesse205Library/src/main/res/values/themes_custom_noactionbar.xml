@@ -57,4 +57,10 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="Theme.Jesse205.Material3.NoActionBar" parent="Theme.Jesse205.Material3">
+        <item name="windowActionModeOverlay">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    
 </resources>

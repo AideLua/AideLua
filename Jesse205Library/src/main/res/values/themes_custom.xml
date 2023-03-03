@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    
+    <style name="Theme.Jesse205.Default" parent="Theme.Jesse205"/>
+    <style name="Theme.Jesse205.Default.DarkActionBar" parent="Theme.Jesse205.DarkActionBar"/>
+
+    <style name="Theme.Jesse205.Red" parent="Theme.Jesse205">
+        <item name="colorPrimary">@color/jesse205_red</item>
+        <item name="rippleColorAccent">@color/jesse205_red_ripple</item>
+    </style>
+    <style name="Theme.Jesse205.Red.DarkActionBar" parent="Theme.Jesse205.DarkActionBar">
+        <item name="colorPrimary">@color/jesse205_red</item>
+        <item name="colorPrimaryDark">@color/jesse205_red_dark</item>
+        <item name="rippleColorAccent">@color/jesse205_red_ripple</item>
+    </style>
+
+    <style name="Theme.Jesse205.Teal" parent="Theme.Jesse205">
+        <item name="colorPrimary">@color/jesse205_teal</item>
+        <item name="rippleColorAccent">@color/jesse205_teal_ripple</item>
+    </style>
+    <style name="Theme.Jesse205.Teal.DarkActionBar" parent="Theme.Jesse205.DarkActionBar">
+        <item name="colorPrimary">@color/jesse205_teal</item>
+        <item name="colorPrimaryDark">@color/jesse205_teal_dark</item>
+        <item name="rippleColorAccent">@color/jesse205_teal_ripple</item>
+    </style>
+
+    <style name="Theme.Jesse205.Orange" parent="Theme.Jesse205">
+        <item name="colorPrimary">@color/jesse205_orange</item>
+        <item name="rippleColorAccent">@color/jesse205_orange_ripple</item>
+    </style>
+    <style name="Theme.Jesse205.Orange.DarkActionBar" parent="Theme.Jesse205.DarkActionBar">
+        <item name="colorPrimary">@color/jesse205_orange</item>
+        <item name="colorPrimaryDark">@color/jesse205_orange_dark</item>
+        <item name="rippleColorAccent">@color/jesse205_orange_ripple</item>
+    </style>
+
+    <style name="Theme.Jesse205.Pink" parent="Theme.Jesse205">
+        <item name="colorPrimary">@color/jesse205_pink</item>
+        <item name="rippleColorAccent">@color/jesse205_pink_ripple</item>
+    </style>
+    <style name="Theme.Jesse205.Pink.DarkActionBar" parent="Theme.Jesse205.DarkActionBar">
+        <item name="colorPrimary">@color/jesse205_pink</item>
+        <item name="colorPrimaryDark">@color/jesse205_pink_dark</item>
+        <item name="rippleColorAccent">@color/jesse205_pink_ripple</item>
+    </style>
+
+</resources>

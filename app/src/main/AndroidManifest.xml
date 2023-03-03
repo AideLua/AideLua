@@ -84,11 +84,8 @@
                 android:resource="@xml/shortcuts"/>
 
             <intent-filter>
-
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
-
             </intent-filter>
 
         </activity>
@@ -122,53 +119,35 @@
             android:enabled="true"
             android:name="com.androlua.LuaService"/>
 
-        <activity
+        <activity 
             android:label="@string/plugins_manager"
-            android:name="com.jesse205.aidelua2.InstallPluginActivity"
+            android:name=".PluginsManagerActivity"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:configChanges="keyboardHidden|orientation|screenSize|smallestScreenSize"
+            android:theme="@style/Theme.Jesse205.Welcome"
             android:exported="true">
-
             <intent-filter android:label="@string/plugins_install">
-
                 <action android:name="android.intent.action.VIEW"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
-
                 <category android:name="android.intent.category.BROWSABLE"/>
-
                 <data android:scheme="file"/>
-
                 <data android:scheme="content"/>
-
                 <data android:mimeType="application/alp"/>
-
                 <data android:host="*"/>
-
                 <data android:pathPattern=".*\.alp"/>
-
             </intent-filter>
-
             <intent-filter android:label="@string/plugins_install">
-
                 <action android:name="android.intent.action.VIEW"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
-
                 <category android:name="android.intent.category.BROWSABLE"/>
-
                 <data android:scheme="file"/>
-
                 <data android:scheme="content"/>
-
                 <data android:host="*"/>
-
                 <data android:mimeType="application/octet-stream"/>
-
                 <data android:mimeType="application/zip"/>
-
                 <data android:mimeType="application/alp"/>
-
             </intent-filter>
-
         </activity>
 
     </application>

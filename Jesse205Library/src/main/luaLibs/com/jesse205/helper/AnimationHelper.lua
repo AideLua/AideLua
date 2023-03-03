@@ -7,39 +7,72 @@ local _M={}
 
 ---阴影状态字典的字典
 ---@type table<View, table>
-local elevationStateMap={}
+local elevationMap={}
+--local elevationStateMap={}
+local backgroundColorMap={}
 
+_M.elevationMap=elevationMap
 
-_M.elevationStateMap=elevationStateMap
-
----获取阴影状态字典
+---获取阴影状态
 ---@param view View
-function _M.getElevationStateMap(view)
-  return elevationStateMap[view]
+function _M.getElevation(view)
+  return elevationMap[view]
 end
 
-function _M.deleteElevationStateMap(view)
-  elevationStateMap[view]=nil
+---删除阴影状态
+---@param view View
+function _M.deleteElevation(view)
+  elevationMap[view]=nil
 end
 
-function _M.onScrollListenerForElevation(sideViewMap,sideStateMap)
+---@param sideViewMap table
+---@param sideElevationMap table
+function _M.onScrollListenerForElevation(sideViewMap,sideElevationMap)
   for side,sideView in pairs(sideViewMap) do
     --旧状态
-    local lastState=elevationStateMap[sideView]
+    local lastElevation=elevationMap[sideView]
     --新状态
-    local newState=sideStateMap[side]
-    if lastState~=newState then
-      ObjectAnimator.ofFloat(sideView, "elevation", {newState and theme.number.actionBarElevation or 0})
-      .setDuration(200)
+    local newElevation=sideElevationMap[side]
+    if lastElevation~=newElevation then
+      ObjectAnimator.ofFloat(sideView, "elevation", {newElevation})
+      .setDuration(150)
       .setAutoCancel(true)
       .start()
-      elevationStateMap[sideView]=newState
+      elevationMap[sideView]=newElevation
     end
   end
 end
 
+---@param sideViewMap table
+---@param sideElevationMap table
+function _M.onScrollListenerForBackgroundColor(sideViewMap,sideElevationMap)
+  for side,sideView in pairs(sideViewMap) do
+    --旧状态
+    local lastElevation=elevationMap[sideView]
+    --新状态
+    local newElevation=sideElevationMap[side]
+    if lastElevation~=newElevation then
+      ObjectAnimator.ofFloat(sideView, "elevation", {newElevation})
+      .setDuration(150)
+      .setAutoCancel(true)
+      .start()
+      elevationMap[sideView]=newElevation
+    end
+  end
+end
+
+
 function _M.onScrollListenerForActionBarElevation(actionBar,state)
-  _M.onScrollListenerForElevation({top=actionBar},{top=state})
+  local elevation=0
+  if state then
+    elevation=res(res.id.attr.actionBarTheme).dimen.attr.elevation
+  end
+  _M.onScrollListenerForElevation({top=actionBar},{top=elevation})
+end
+
+function _M.onScrollListenerForToolBar(toolBar,backgroundViews,state)
+  _M.onScrollListenerForActionBarElevation(actionBar,state)
+
 end
 
 return _M

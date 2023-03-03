@@ -1,3 +1,11 @@
+SelfJavaActivity=activity.getPackageName()..".PluginsManagerActivity"
+if activity.getClass()~=luajava.bindClass(activity.getPackageName()..".PluginsManagerActivity") then
+  local Intent=luajava.bindClass("android.content.Intent")
+  local intent=Intent(activity,luajava.bindClass(SelfJavaActivity))
+  activity.startActivity(intent)
+  activity.finish()
+  return
+end
 require "import"
 import "jesse205"
 import "android.text.Spannable"
@@ -12,6 +20,9 @@ import "settings"
 import "SettingsLayUtilPro"
 import "PluginsManagerUtil"
 import "dialog.MarkdownReaderDialog"
+
+--v5.1.2+
+PluginsUtil.setActivityName("pluginsmanager")
 
 PLUGINS_DIR=File(PluginsUtil.PLUGINS_PATH)
 
@@ -45,6 +56,13 @@ function onActivityResult(requestCode,resultCode,data)
     if requestCode==REQUEST_INSTALLPLUGIN then
       installPlugin(data.getData())
     end
+  end
+end
+
+function onNewIntent(newIntent)
+  local fileUri=newIntent.getData()
+  if fileUri then
+    installPlugin(fileUri)
   end
 end
 
@@ -255,11 +273,6 @@ function installPlugin(uri)
   end)
 end
 
-local fileUri=activity.getIntent().getExtras().get("fileUri")
-if fileUri then
-  installPlugin(fileUri)
-end
-
 adapter=LuaCustRecyclerAdapter(AdapterCreator({
   getItemCount=function()
     return SettingsLayUtil.adapterEvents.getItemCount(settings2)
@@ -345,3 +358,5 @@ end
 
 mainLay.ViewTreeObserver
 .addOnGlobalLayoutListener(ScreenFixUtil.LayoutListenersBuilder.listViews(mainLay,{recyclerView}))
+
+onNewIntent(activity.getIntent())

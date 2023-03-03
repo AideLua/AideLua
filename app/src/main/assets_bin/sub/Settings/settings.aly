@@ -10,11 +10,19 @@
     key="theme_picker";
     newPage=true;
   };
+  {--Material 3
+    SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
+    icon=R.drawable.ic_tshirt_crew_outline;
+    title="Material 3";
+    key=ThemeManager.THEME_MATERIAL3;
+    sharedPreferences=PreferenceManager.getDefaultSharedPreferences(activity);
+  };
   {--暗色工具栏
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;
     icon=R.drawable.ic_theme_light_dark;
     title=R.string.jesse205_darkActionBar;
-    key="theme_darkactionbar";
+    key=ThemeManager.THEME_DARK_ACTION_BAR;
+    sharedPreferences=PreferenceManager.getDefaultSharedPreferences(activity);
   };
   {--更多动画
     SettingsLayUtil.ITEM_SWITCH_NOSUMMARY;

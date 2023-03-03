@@ -34,8 +34,20 @@ android {
 
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
-    api project(':androlua')
+    
+    //AndroidX
     api 'androidx.appcompat:appcompat:1.7.0-alpha01'
+    api 'androidx.viewpager2:viewpager2:1.0.0'
+    api "androidx.recyclerview:recyclerview:1.3.0-rc01"
+    api "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
+    
+    //Material
     api 'com.google.android.material:material:1.9.0-alpha02'
+    
+    //滚动条
     api 'me.zhanghai.android.fastscroll:library:1.2.0'
+    
+    //lua
+    api project(':androlua')
+   
 }

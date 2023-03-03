@@ -46,6 +46,4 @@ end
 
 scrollView.onScrollChange=function(view,l,t,oldl,oldt)
   AnimationHelper.onScrollListenerForActionBarElevation(actionBar,t>0)
-
-  --MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt)
 end

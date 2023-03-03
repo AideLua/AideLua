@@ -66,6 +66,7 @@ import "androidx.documentfile.provider.DocumentFile"
 import "com.google.android.material.tabs.TabLayout"
 import "com.google.android.material.chip.Chip"
 import "com.google.android.material.chip.ChipGroup"
+import "com.google.android.material.motion.MotionUtils"
 
 import "com.bumptech.glide.request.RequestOptions"
 import "com.bumptech.glide.load.engine.DiskCacheStrategy"
@@ -137,8 +138,8 @@ PermissionUtil.askForRequestPermissions({
 --个性化设置
 oldJesse205Support = getSharedData("jesse205Lib_support")
 oldAndroidXSupport = getSharedData("androidX_support")
-oldTheme = ThemeUtil.getAppTheme()
-oldDarkActionBar = getSharedData("theme_darkactionbar")
+oldTheme = ThemeManager.getAppTheme()
+oldDarkActionBar = ThemeManager.getAppDarkActionBarState()
 oldRichAnim = getSharedData("richAnim")
 --v5.1.2废除
 --oldTabIcon = getSharedData("tab_icon")
@@ -498,13 +499,16 @@ function onResume()
     reload = true
     application.set("luaeditor_initialized", false)
   end
-  if reload
-    or (oldTheme ~= ThemeUtil.getAppTheme())
-    or (oldDarkActionBar ~= getSharedData("theme_darkactionbar"))
-    or (oldRichAnim ~= getSharedData("richAnim"))
-    then
-    activity.recreate()
-    return
+  --print(oldTheme ~= ThemeManager.getAppTheme())
+  if isResumeAgain then
+    if reload
+      or (oldTheme ~= ThemeManager.getAppTheme())
+      or (oldDarkActionBar ~= ThemeManager.getAppDarkActionBarState())
+      or (oldRichAnim ~= getSharedData("richAnim"))
+      then
+      activity.recreate()
+      return
+    end
   end
   FilesTabManager.onResume(isResumeAgain)
   EditorsManager.magnifier.refresh()

@@ -94,15 +94,17 @@ local twoLineLay={
   {
     AppCompatTextView;
     id="title";
-    textSize="16sp";
+    --textSize="16sp";
     layout_width="fill";
-    textColor=textColorPrimary;
+    --textColor=textColorPrimary;
+    textAppearance=android.res.id.attr.textAppearanceListItem;
   };
   {
     AppCompatTextView;
     textSize="14sp";
     id="summary";
     layout_width="fill";
+    --textAppearance=android.res.id.attr.textAppearanceListItemSecondary;
   };
 }
 
@@ -255,7 +257,14 @@ local function onItemViewClick(view)
     if data.checked~=nil then
       data.checked=checked
      elseif data.key then
-      setSharedData(data.key,checked)
+      local key=data.key
+      if data.sharedPreferences then
+        local editor = data.sharedPreferences.edit()
+        editor.putBoolean(key, checked)
+        editor.commit()
+       else
+        setSharedData(key,checked)
+      end
     end
   end
 
@@ -294,7 +303,14 @@ local function onSwitchCheckedChanged(view,checked)
     if data.checked~=nil then
       data.checked=checked
      elseif data.key then
-      setSharedData(data.key,checked)
+      local key=data.key
+      if data.sharedPreferences then
+        local editor = data.sharedPreferences.edit()
+        editor.putBoolean(key, checked)
+        editor.commit()
+       else
+        setSharedData(key,checked)
+      end
     end
     if onItemClick then
       onItemClick(viewConfig.itemView,viewConfig.ids,key,data)
@@ -422,8 +438,14 @@ local adapterEvents={
     if switchView then
       if data.checked~=nil then
         switchView.setChecked(data.checked)
-       elseif data.key then
-        switchView.setChecked(getSharedData(key) or false)
+       elseif key then
+        local checked
+        if data.sharedPreferences then
+          checked=data.sharedPreferences.getBoolean(key,false)
+         else
+          checked=getSharedData(key)
+        end
+        switchView.setChecked(toboolean(checked))
        else
         switchView.setChecked(false)
       end

@@ -23,7 +23,7 @@ appInfo={
   },
 }
 function onUpdate()
-  GiteeUpdateUtil.checkUpdate("Jesse205","AideLua")
+  GiteeUpdateHelper.checkUpdate("Jesse205","AideLua")
 end
 
 --开发者们

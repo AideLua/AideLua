@@ -8,10 +8,17 @@ local BuildingDialogBuilder={}
 setmetatable(BuildingDialogBuilder,BuildingDialogBuilder)
 local buildingDialogBuilderMetatable={__index=BuildingDialogBuilder}
 
-function BuildingDialogBuilder.__call(class)
+--@param context Context v5.1.2+
+function BuildingDialogBuilder.__call(class,context)
   local self={}
+  self.context=context--v5.1.2+
   self.dialogIds={}
   setmetatable(self,buildingDialogBuilderMetatable)
+  return self
+end
+
+function BuildingDialogBuilder:setTitle(text)
+  self.title=text
   return self
 end
 
@@ -81,8 +88,8 @@ function BuildingDialogBuilder:show()
   local dialogIds=self.dialogIds
   table.clear(dialogIds)
   local adapter=LuaAdapter(activity,infoItem)
-  local dialog=MaterialAlertDialogBuilder(this)
-  .setTitle(R.string.binproject_loading)
+  local dialog=MaterialAlertDialogBuilder(self.context)
+  .setTitle(self.title or R.string.binproject_loading)
   .setView(loadlayout(buildingLayout,dialogIds))
   .setPositiveButton(android.R.string.ok,nil)
   .setNegativeButton(android.R.string.cancel,nil)

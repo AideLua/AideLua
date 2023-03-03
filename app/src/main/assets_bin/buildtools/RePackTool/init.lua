@@ -182,9 +182,9 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign,runMode)
     end
 
     if appPath then
-      updateInfo("File Name: "..appFile.getName())
+      prinInfo("File Name: "..appFile.getName())
      else
-      return getString(R.string.binproject_error_notfind)
+      return getString(R.string.binproject_error_baseapk_notfind)
     end
 
     --找到appPath，就告诉用户版本
@@ -196,8 +196,8 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign,runMode)
       appName=config.appName or getString(android.R.string.unknownName)
       --appName=tostring(packageManager.getApplicationLabel(appApkInfo))
       appVer=config.versionName or appApkPAI.versionName
-      updateInfo("App Name: "..appName)
-      updateInfo("Version Name: v"..appVer)
+      prinInfo("App Name: "..appName)
+      prinInfo("Version Name: v"..appVer)
      else
       --无法解析安装包
       return formatResStr(R.string.binproject_error_parse,{appFile.getName()})
@@ -289,7 +289,7 @@ function RePackTool.repackApk_taskFunc(configJ,projectPath,install,sign,runMode)
       local signedApkPath=binPath.."/"..signedApkName
       if Signer then--有签名工具
         updateDoing(formatResStr(R.string.binproject_signing,{signedApkName}))
-        updateInfo("Key Store: Debug")
+        prinInfo("Key Store: Debug")
         signSucceed,signErr=pcall(Signer.sign,newApkPath,signedApkPath)
       end
       if signSucceed then

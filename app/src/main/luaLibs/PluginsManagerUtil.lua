@@ -46,7 +46,7 @@ URI: %s",
     if waringId then
       message=message.."\n\n"..getString(waringId)
     end
-    AlertDialog.Builder(this)
+    local dialog=MaterialAlertDialogBuilder(this)
     .setTitle(R.string.plugins_install)
     .setMessage(message)
     .setPositiveButton(R.string.install,function()
@@ -67,6 +67,7 @@ URI: %s",
     end)
     .setNegativeButton(android.R.string.cancel,nil)
     .show()
+    DialogHelper.enableTextIsSelectable(dialog)
    else
     callback("failed")
   end

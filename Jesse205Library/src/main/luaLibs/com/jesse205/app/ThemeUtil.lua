@@ -215,6 +215,9 @@ function ThemeUtil.refreshUI()
   local useCustomAppToolbar=useCustomAppToolbar or false
   local darkNavigationBar=darkNavigationBar or false
   local darkStatusBar=darkStatusBar or false
+  
+  ThemeManager.applyTheme(useCustomAppToolbar)
+  --[[
   local themeKey
   themeKey=getAppTheme()--获取当前设置的主题
   if not(supportedThemeName[themeKey]) then--主图里面没有，可能是废除了这个主题
@@ -232,7 +235,7 @@ function ThemeUtil.refreshUI()
   end
 
   activity.setTheme(R.style[themeString])--设置主题
-  themeString=nil
+  themeString=nil]]
 
   local systemUiVisibility=0
   decorView=activity.getDecorView()--定要在设置主题之后调用
@@ -262,6 +265,8 @@ function ThemeUtil.refreshUI()
 
   decorView.setSystemUiVisibility(systemUiVisibility)
   ThemeUtil.SystemUiVisibility=systemUiVisibility
+  
+  ThemeManager.applyTheme(useCustomAppToolbar)
 end
 
 return ThemeUtil

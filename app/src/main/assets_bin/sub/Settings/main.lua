@@ -5,10 +5,12 @@ local normalkeys=jesse205.normalkeys
 normalkeys.configType=true
 normalkeys.config=true
 
+import "android.preference.PreferenceManager"
 import "com.google.android.material.dialog.MaterialAlertDialogBuilder"
 import "com.jesse205.layout.util.SettingsLayUtil"
 import "com.jesse205.layout.innocentlayout.RecyclerViewLayout"
 import "com.jesse205.app.dialog.EditDialogBuilder"
+import "com.jesse205.app.dialog.ThemeSelectDialogBuilder"
 import "helper.ZipAlignToolHelper"
 
 packageInfo=activity.getPackageManager().getPackageInfo(getPackageName(),0)
@@ -55,10 +57,13 @@ end
 function onItemClick(view,views,key,data)
   local action=data.action
   if key=="theme_picker" then
-    newSubActivity("ThemePicker")
+    --newSubActivity("ThemePicker")
+    ThemeSelectDialogBuilder(activity)
+    .setCallback(lambda changed,newTheme: changed and reloadActivity({view}))
+    .show()
    elseif key=="about" then
     newSubActivity("About")
-   elseif key=="theme_darkactionbar" then
+   elseif key=="theme_dark_action_bar" then
     reloadActivity({view,views.switchView})
    elseif key=="plugins_manager" then
     newSubActivity("PluginsManager")

@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="jesse205_theme_darkMode">Dark mode</string>
-    <string name="jesse205_theme_default">Blue</string>
-    <string name="jesse205_theme_red">Red</string>
-    <string name="jesse205_theme_teal">Teal</string>
-    <string name="jesse205_theme_orange">Orange</string>
-    <string name="jesse205_theme_pink">Pink</string>
+    <string name="jesse205_theme_default">Default</string>
+    <string-array name="jesse205_themes">
+        <item>Blue</item>
+        <item>Red</item>
+        <item>Teal</item>
+        <item>Orange</item>
+        <item>Pink</item>
+    </string-array>
 </resources>

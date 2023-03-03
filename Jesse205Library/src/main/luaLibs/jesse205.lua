@@ -5,7 +5,8 @@ jesse205._VERSION = "12.2.0 (alpha) (Pro)" -- 库版本名
 jesse205._VERSIONCODE = 122001 -- 库版本号
 jesse205._ENV = _ENV
 jesse205.themeType = "Jesse205" -- 主题类型
-
+jesse205.LIBRARY_PACKAGE_NAME="com.jesse205"
+local LIBRARY_PACKAGE_NAME=jesse205.LIBRARY_PACKAGE_NAME
 require("import") -- 导入import
 import("loadlayout2")
 local import_ = _G["import"] -- 防止编辑器报错
@@ -17,24 +18,26 @@ local fastImport = {
   Bitmap = "android.graphics.Bitmap",
   LayoutTransition = "android.animation.LayoutTransition",
   StatService = "com.baidu.mobstat.StatService",
-  AppPath = "com.jesse205.app.AppPath",
-  PermissionUtil = "com.jesse205.app.PermissionUtil",
-  MyStyleUtil = "com.jesse205.util.MyStyleUtil",
-  MyToast = "com.jesse205.util.MyToast",
-  getNetErrorStr = "com.jesse205.util.getNetErrorStr",
-  MyAnimationUtil = "com.jesse205.util.MyAnimationUtil",
-  ScreenFixUtil = "com.jesse205.util.ScreenFixUtil",
-  FileUtil = "com.jesse205.util.FileUtil",
-  ClearContentHelper = "com.jesse205.helper.ClearContentHelper",
+  AppPath = LIBRARY_PACKAGE_NAME..".app.AppPath",
+  PermissionUtil = LIBRARY_PACKAGE_NAME..".app.PermissionUtil",
+  MyStyleUtil = LIBRARY_PACKAGE_NAME..".util.MyStyleUtil",
+  MyToast = LIBRARY_PACKAGE_NAME..".util.MyToast",
+  getNetErrorStr = LIBRARY_PACKAGE_NAME..".util.getNetErrorStr",
+  MyAnimationUtil = LIBRARY_PACKAGE_NAME..".util.MyAnimationUtil",
+  ScreenFixUtil = LIBRARY_PACKAGE_NAME..".util.ScreenFixUtil",
+  FileUtil = LIBRARY_PACKAGE_NAME..".util.FileUtil",
+  ClearContentHelper = LIBRARY_PACKAGE_NAME..".helper.ClearContentHelper",
   -- 导入各种风格的控件
-  StyleWidget = "com.jesse205.widget.StyleWidget",
-  MaterialButton_TextButton = "com.jesse205.widget.StyleWidget",
-  MaterialButton_OutlinedButton = "com.jesse205.widget.StyleWidget",
-  MaterialButton_TextButton_Normal = "com.jesse205.widget.StyleWidget",
-  MaterialButton_TextButton_Icon = "com.jesse205.widget.StyleWidget",
+  StyleWidget = LIBRARY_PACKAGE_NAME..".widget.StyleWidget",
+  MaterialButton_TextButton = LIBRARY_PACKAGE_NAME..".widget.StyleWidget",
+  MaterialButton_OutlinedButton = LIBRARY_PACKAGE_NAME..".widget.StyleWidget",
+  MaterialButton_TextButton_Normal = LIBRARY_PACKAGE_NAME..".widget.StyleWidget",
+  MaterialButton_TextButton_Icon = LIBRARY_PACKAGE_NAME..".widget.StyleWidget",
   -- 导入各种布局表
-  MyTextInputLayout = "com.jesse205.layout.MyTextInputLayout",
-  AnimationHelper = "com.jesse205.helper.AnimationHelper",
+  MyTextInputLayout = LIBRARY_PACKAGE_NAME..".layout.MyTextInputLayout",
+  AnimationHelper = LIBRARY_PACKAGE_NAME..".helper.AnimationHelper",
+  DialogHelper = LIBRARY_PACKAGE_NAME..".helper.DialogHelper",
+  ThemeManager = LIBRARY_PACKAGE_NAME..".manager.ThemeManager"
 }
 
 -- 根本就不是class的key
@@ -335,8 +338,7 @@ function showErrorDialog(title,message)
   .setPositiveButton(android.R.string.ok, nil)
   .setNegativeButton(R.string.jesse205_copy, nil)
   .show()
-  local textView = dialog.findViewById(android.R.id.message)
-  textView.setTextIsSelectable(true)
+  DialogHelper.enableTextIsSelectable(dialog)
   dialog.getButton(AlertDialog.BUTTON_NEGATIVE).onClick=function()
     MyToast.copyText(message)
   end

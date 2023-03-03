@@ -315,6 +315,8 @@ Jesse205Library
 
 :::
 
+1. `SettingsLayUtil` 支持自定义`sharedPreferences`
+
 我懒，详情请见github更改日志
 
 ## 相关链接

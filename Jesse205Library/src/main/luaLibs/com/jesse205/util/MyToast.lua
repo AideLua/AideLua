@@ -21,10 +21,12 @@ function MyToast.showSnackBar(text,view)
 
   local snackBar=Snackbar.make(view or mainLay or context.getDecorView(),text,Snackbar.LENGTH_SHORT)
   --.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-  --snackbar的动画时间存在问题。一旦被修复，则移除这段代码
-  snackBar.animationSlideDuration=MotionUtils.resolveThemeDuration(context, R.attr.motionDurationShort4,250)
-  snackBar.animationFadeInDuration=MotionUtils.resolveThemeDuration(context, R.attr.motionDurationShort2,150)
-  snackBar.animationFadeOutDuration=MotionUtils.resolveThemeDuration(context, R.attr.motionDurationShort1, 75)
+  --snackbar的MD2动画时间存在问题。一旦被修复，则移除这段代码
+  if not res.boolean.attr.isMaterial3Theme then
+    snackBar.animationSlideDuration=MotionUtils.resolveThemeDuration(context, R.attr.motionDurationShort4,250)
+    snackBar.animationFadeInDuration=MotionUtils.resolveThemeDuration(context, R.attr.motionDurationShort2,150)
+    snackBar.animationFadeOutDuration=MotionUtils.resolveThemeDuration(context, R.attr.motionDurationShort1,75)
+  end
   --[[
   snackBar.animationSlideDuration=200
   snackBar.animationFadeInDuration=150
