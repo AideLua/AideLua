@@ -1,3 +1,5 @@
+PluginsManager=require "PluginsManager"
+
 local PluginsUtil = {}
 local plugins
 local enabledPluginPaths
@@ -17,7 +19,6 @@ PluginsUtil._VERSIONCODE=40001
 local appPackageName = activity.getPackageName()
 local packInfo = activity.PackageManager.getPackageInfo(appPackageName, 0)
 local versionCode = packInfo.versionCode
-
 
 function PluginsUtil.callElevents(name, ...)
   --if activityName then

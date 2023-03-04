@@ -93,9 +93,9 @@ end
 ScreenFixUtil.getDeviceTypeFromWidth=getDeviceTypeFromWidth
 
 local function getDeviceTypeFromWidthDp(widthDp)
-  if widthDp<res.int.jesse205_width_pad then--判断设备类型
+  if widthDp<res.int.jesse205_width_dp_pad then--判断设备类型
     return "phone"
-   elseif widthDp<res.int.jesse205_width_pc then
+   elseif widthDp<res.int.jesse205_width_dp_pc then
     return "pad"
    else
     return "pc"
