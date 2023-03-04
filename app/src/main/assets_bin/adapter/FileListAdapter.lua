@@ -182,7 +182,7 @@ local openState2ViewType={
   }
 }
 
-local defaultItemTitleColorStateList=createItemColorStateList(res.color.attr.colorOnSurface)
+local defaultItemTitleColorStateList=createItemColorStateList(res.color.attr.colorOnBackground)
 
 return function(item)
   return LuaCustRecyclerAdapter(AdapterCreator({
@@ -259,7 +259,6 @@ return function(item)
           end
         end
        else--不是第一项
-        --local titleColor=theme.color.textColorPrimary
         if initData then
           file=directoryFilesList[position-1]
           filePath=file.getPath()
@@ -315,9 +314,7 @@ return function(item)
             local isNowFile=FilesTabManager.openState and FilesTabManager.file==file
             view.setSelected(isNowFile)
             if isNowFile then
-              --titleColor=res.color.attr.colorPrimary
               iconColor=res.color.attr.colorPrimary
-              --cardBgColor=res.color.attr.rippleColorAccent
               --保存一下当前打开文件的位置，方便后期切换文件
               FilesBrowserManager.nowFilePosition=position
             end
@@ -325,7 +322,6 @@ return function(item)
             view.setSelected(false)
           end
           iconView.setColorFilter(iconColor)
-          --highLightCard.setCardBackgroundColor(cardBgColor)
 
          else--未打开工程
           local pathView=ids.path
@@ -341,7 +337,6 @@ return function(item)
             pathView.setVisibility(View.VISIBLE)
           end
           loadPrjIcon(iconUrl,iconView,ids.iconCard)
-          --titleColor=android.res.color.attr.textColorPrimary
         end
         --文件提示，仿MT管理器
         if highlightIndex and highlightIndex==position then

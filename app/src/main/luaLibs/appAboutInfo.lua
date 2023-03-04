@@ -2,21 +2,21 @@ import "helper.GiteeUpdateHelper"
 appInfo={
   {
     name=R.string.app_name,
-    message="为更快的移动开发",
+    message=R.string.app_summary,
     iconResource=R.mipmap.ic_launcher_round,
     browserUrl="https://aidelua.github.io/",
     clickable=true,
   },
   {
-    name="AIDE Pro",
-    message="魔改过的全新版本",
+    name=R.string.aidepro,
+    message=R.string.aidepro_summary,
     iconResource=R.mipmap.ic_launcher_aide_round,
     browserUrl="https://www.aidepro.top/",
     clickable=true,
   },
   {
-    name="Windmill",
-    message="重认手机上的工具",
+    name=R.string.windmill,
+    message=R.string.windmill_summary,
     iconResource=R.mipmap.ic_launcher_windmill_round,
     browserUrl="https://www.coolapk.com/apk/com.agyer.windmill",
     clickable=true,
@@ -28,21 +28,21 @@ end
 
 --开发者们
 developers={
-  {
-    name="Eddie",
+  {--Eddie
+    name=res.string.developer_eddie,
     qq=2140125724,
-    message="AideLua 开发者",
+    message=R.string.developer_eddie_description,
     url="https://b23.tv/Xp0Cc4P",
   },
-  {
-    name="xiaoyi",
-    qq=2821981550,
-    message="快乐程序 运营者",
-  },
-  {
-    name="0047ol",
+  {--0047ol
+    name=res.string.developer_0047ol,
     qq=2088343717,
-    message="AideLua 官网开发者",
+    message=R.string.developer_0047ol_description,
+  },
+  {--xiaoyi
+    name=res.string.developer_xiaoyi,
+    qq=2821981550,
+    message=R.string.developer_xiaoyi_description,
   },
 }
 
@@ -64,8 +64,8 @@ openSourceLicenses=true
     end,
   },
   --以此类推
-}
-]]
+}]]
+
 moreItem={
   {--仓库
     SettingsLayUtil.ITEM_NOSUMMARY;
@@ -142,14 +142,16 @@ moreItem={
 thanks={
   难忘的旋律={"PhotoView"},
   噬心={"HtmlEditor (老版本)"},
-  dingyi={"MyLuaApp","LuaEditor","Gradle工程修复","放大镜","Preference设置页面"},
+  dingyi={"MyLuaApp","LuaEditor","Gradle 工程修复","放大镜","Preference 设置页面","布局编译","AndroLua 调试"},
   狸猫={"提供优化后的 AndroidX 模板"},
-  frrrrrits={"AnimeonGo（为Edde系列应用优化提供了重要参考）"},
+  frrrrrits={"AnimeonGo（为 Edde 系列应用优化提供了重要参考）"},
   smile={"编译 ZipAlign 并测试"},
+  undraw={"插画"},
+  
 }
 
 --版权信息
-copyright="Copyright (c) 2020-2022, Jesse205"
+copyright="Copyright (c) 2020-2023, Jesse205"
 
 PluginsUtil.setActivityName("about")
 

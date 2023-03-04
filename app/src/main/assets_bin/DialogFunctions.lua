@@ -116,7 +116,7 @@ function renameDialog(oldFile)--重命名对话框
       FilesTabManager.changePath(lowerOldFilePath,newFilePath)
 
       showSnackBar(R.string.rename_success)
-      FilesBrowserManager.refresh(newParentFile,newFile.getName())
+      FilesBrowserManager.refresh(newParentFile,newFilePath)
     end,
     function(err)
       showErrorDialog(R.string.rename_fail,err)

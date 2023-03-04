@@ -18,7 +18,7 @@
     id="stateTextView";
     layout_width="fill";
     layout_marginLeft="16dp";
-    textColor=theme.color.textColorPrimary;
+    textColor=res.color.attr.colorOnBackground;
     textSize="16sp";
   };
 }

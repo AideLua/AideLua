@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="termux">Termux</string>
+    <string name="termux_summary">Android terminal application and Linux environment</string>
+    <string name="termux_start_failed">Unable to start Termux, please download the app first.</string>
+    
+    <string name="aidepro">AIDE Pro</string>
+    <string name="aidepro_summary">A brand new version of Magic Change</string>
+    <string name="aidepro_start_failed">Unable to start AIDE Pro, please download the app first.</string>
+
+    <string name="windmill">Windmill</string>
+    <string name="windmill_summary">Re-recognize tools on mobile phone</string>
+    <string name="windmill_start_failed">Unable to start Windmill, please download the app first.</string>
+    
+</resources>

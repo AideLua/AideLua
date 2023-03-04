@@ -36,14 +36,14 @@
         
         <item name="actionSearchEditStyle">@style/Widget.Jesse205.ActionSearchEdit.Surface</item>
         
-        <item name="android:alertDialogTheme">@style/Base.Theme.Jesse205.Dialog.Alert</item>
+        <!--<item name="android:alertDialogTheme">@style/Base.Theme.Jesse205.Dialog.Alert</item>
         <item name="alertDialogTheme">@style/ThemeOverlay.Jesse205.Dialog.Alert</item>
 
         <item name="materialCardViewStyle">@style/Widget.Jesse205.Material.CardView</item>
         <item name="cardViewStyle">@style/Widget.Jesse205.CardView</item>
         <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense</item>
         <item name="chipStyle">@style/Widget.Jesse205.Chip</item>
-        
+ -->       
         <!--字体-->
         <item name="textAppearancePopupMenuHeader">@style/TextAppearance.Jesse205.Widget.PopupMenu.Header</item>
 

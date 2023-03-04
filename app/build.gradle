@@ -12,8 +12,8 @@ android {
         minSdkVersion 21
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 29
-        versionCode 51299
-        versionName "5.1.2"
+        versionCode 52099
+        versionName "5.2.0"
     }
 
     buildTypes {

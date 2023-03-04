@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="developer_eddie">Eddie</string>
+    <string name="developer_eddie_description">Software development, operation, project manager, UI design, architecture design.</string>
+    
+    <string name="developer_0047ol">0047ol</string>
+    <string name="developer_0047ol_description">Official website development and UI design.</string>
+    
+    <string name="developer_xiaoyi">xiaoyi</string>
+    <string name="developer_xiaoyi_description">Windmill operation</string>
+    
+</resources>

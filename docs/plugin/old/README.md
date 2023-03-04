@@ -6,12 +6,7 @@ next:
 
 # 插件文档
 
-Util 版本：v4.0
-
-::: tip
-您正在浏览 Util v4.0.0版本文档，新版本 Aide Lua 结构发生了巨大变化，删除了旧版本的所有 API。如需浏览旧版本文档，请转到[这里](old/README.md)。
-:::
-
+Util 版本：v3.1
 ::: details 本页内容
 [[toc]]
 :::
@@ -22,14 +17,14 @@ Util 版本：v4.0
 1. 本文档部分说明格式为 “__变量名__ (数据类型): 说明” 或 “__数据类型__: 说明”
 2. 标有 <Badge type="danger" text="X" vertical="middle" /> 的表示已废除，相关 API 已被移除
 3. 标有 <Badge type="danger" text="*" vertical="middle" /> 的表示必须文件、方法 或 变量
-3. 部分 AndroLua+ 插件也可以使用，但是效果不好
+4. 软件写的比较随意，因此您可以随意调用API，就像是修改软件本身一样，此文档只是起帮助理解的作用。
 
 ::: warning
-已废除的 API 无法继续使用，因此您需要进行特殊的判断，请谨慎提高 `targetcode` ，以免造成用户体验下降，甚至用户数据丢失
+已废除的 API 无法继续使用，因此您需要进行特殊的判断，请谨慎提高 `targetcode` ，以免造成用户数据损失
 :::
 
 ::: danger 建议最低的最低适配软件版本
-我们强烈建议从 __v5.2.0(52099)或以上__ 开始适配，因为在 v5.2.0 发生了巨大变化，软件架构及运行逻辑发生了巨大变化。
+我们强烈建议从 __v5.1.0(51099)或以上__ 开始适配，因为在 v5.1.0 发生了巨大变化，大到开发者自己都不知道改了啥。本文档有非常多地方待修正或者补充，如果您发现了某处有问题，希望您可以联系我们以修复。
 :::
 
 ## 手动导入
@@ -46,22 +41,16 @@ Util 版本：v4.0
 1. 目标版本和最低版本请按实际情况填写，最低为 `50099`
 2. 扩展名应为 `alp` (Androlua+ 扩展) 或 `zip`
 3. 为了防止污染全局变量，插件内直接赋值为插件的局部变量。如要修改全局变量，请使用 `_G.xxx=xxx`
-4. 请充分利用 `thirdplugins` 变量，因为某些插件可能需要正确的执行顺序才能运行
-
-## 内置插件
-
-### Jesse205 Library Support
-
-Jesse205框架的支持插件
 
 ## 通用 API
 
 ::: warning
-请尽量避免使用 Jesse205 框架。因为 Jesse205 框架每次改动都比较大，很容易引起插件报错。
+尽量避免使用 Jesse205 库。因为 Jesse205 库每次改动都比较大，很容易引起插件报错。
 :::
 
 ::: tip
-
+Aide Lua 的插件通常以植入代码的方式实现。<br>
+您可以在 Github 或者 Gitee 上查看此程序的源码，以便编写良好的插件。
 :::
 
 ### PluginsUtil <Badge text="table" vertical="middle" /> <Badge text="Util" vertical="middle" />
@@ -102,11 +91,11 @@ Jesse205框架的支持插件
 | ---- | ----- |
 | main | 主页面 |
 | settings | 软件设置页面 |
-| newproject | 新建工程页面 |
-| viewclass | 查看类页面 |
-| about | 关于页面 |
-| layouthelper | 布局助手页面 |
-| javaapi | JavaAPI查看器页面 |
+| newproject | 新建工程页面 <Badge text="v5.0.4+" vertical="middle" /> |
+| viewclass | 查看类页面 <Badge text="v5.0.4+" vertical="middle" /> |
+| about | 关于页面 <Badge text="v5.0.4+" vertical="middle" /> |
+| layouthelper | 布局助手页面 <Badge text="v5.0.4+" vertical="middle" /> |
+| javaapi | JavaAPI查看器页面 <Badge text="v5.0.4+" vertical="middle" /> |
 
 ### getPluginDataPath(packageName)
 

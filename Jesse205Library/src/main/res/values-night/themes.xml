@@ -3,6 +3,7 @@
     <style name="Base.Theme.Jesse205" parent="Base.Theme.Jasse205.Bridge">
         <item name="colorOnPrimary">@color/design_default_color_on_primary</item>
         
+        <item name="colorSurface">@color/jesse205_black_blue_light</item>
         <item name="colorBackgroundFloating">@color/jesse205_black_blue_light</item>
         <item name="strokeColor">@color/jesse205_grey_dark</item>
         <item name="dialogBackgroundColor">@color/jesse205_grey_dark_blue</item>

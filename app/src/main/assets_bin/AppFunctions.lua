@@ -166,6 +166,7 @@ function startWindmillActivity(toolName)
   end)
   if not(success) then
     openUrl("https://www.coolapk.com/apk/com.agyer.windmill")
+    MyToast.showToast(R.string.windmill)
   end
 end
 
@@ -178,6 +179,7 @@ function updateSharedActivity(name,sdActivityDir)
   LuaUtil.copyDir(File(activity.getLuaDir("sub/"..name)),sdActivityDir)
 end
 
+---检查共享活动的更新
 function checkSharedActivity(name)
   local packageName
   packageName=ProjectManager.openState and ProjectManager.nowConfig.packageName or activity.getPackageName()
@@ -224,11 +226,14 @@ end
 
 --啊这，扩展名写成类型了，就这样凑合用吧
 function getFileTypeByName(name)
-  local extensions=name:match(".+%.(.+)")
-  if extensions then
-    return string.lower(extensions)
+  local extensionName=name:match(".+%.(.+)")
+  if extensionName then
+    return string.lower(extensionName)
   end
 end
+
+--v5.1.2
+getExtensionNameByName=getFileTypeByName
 
 --修复因LayoutTransition导致的布局延迟
 --修复逻辑：先去除LayoutTransition，再设置回来

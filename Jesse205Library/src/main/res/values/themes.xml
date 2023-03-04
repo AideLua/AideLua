@@ -6,16 +6,18 @@
         <item name="colorPrimaryDark">?windowBackgroundColor</item>
         <item name="colorSecondary">?colorPrimary</item>
         <item name="colorSecondaryVariant">?colorSecondary</item>
-        <item name="colorOnSecondary">?colorOnPrimary</item>
-        <item name="colorSurface">?windowBackgroundColor</item>
+        <!--<item name="colorOnSecondary">?colorOnPrimary</item>
+        <item name="colorSurface">?windowBackgroundColor</item>-->
 
+        <item name="strokeColor">@color/material_on_surface_stroke</item>
+        
         <item name="android:windowBackground">?windowBackgroundColor</item>
         <item name="android:navigationBarColor">?windowBackgroundColor</item>
         <item name="android:windowLightStatusBar">?windowLightStatusBar</item>
         <item name="android:windowLightNavigationBar">?windowLightNavigationBar</item>
 
         <!--组件-->
-        <item name="materialCardViewStyle">@style/Widget.Jesse205.Material.CardView</item>
+        <item name="materialCardViewStyle">@style/Widget.Jesse205.MaterialCardView</item>
         <item name="cardViewStyle">@style/Widget.Jesse205.CardView</item>
         <item name="textInputStyle">?textInputOutlinedDenseStyle</item>
         <item name="chipStyle">@style/Widget.Jesse205.Chip</item>
@@ -28,7 +30,7 @@
         <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Surface</item>
         <item name="android:listViewStyle">@style/Widget.Jesse205.ListView</item>
         <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout</item>
-        <!--<item name="autoCompleteTextViewStyle">@style/Widget.Jesse205.AutoCompleteTextView</item>-->
+        <item name="autoCompleteTextViewStyle">@style/Widget.Jesse205.AutoCompleteTextView</item>
         <item name="actionSearchEditStyle">@style/Widget.Jesse205.ActionSearchEdit.Surface</item>
 
         <item name="alertDialogTheme">@style/ThemeOverlay.Jesse205.Dialog.Alert</item>
@@ -50,9 +52,10 @@
     </style>
     <style name="Base.Theme.Jesse205" parent="Base.Theme.Jasse205.Bridge">
 
+        <item name="colorSurface">@color/jesse205_white</item>
         <item name="colorBackgroundFloating">@color/jesse205_white</item>
         <!--按钮边框的颜色默认是按压下去的，所以要写死边框颜色才行-->
-        <item name="strokeColor">@color/jesse205_grey_light</item>
+        <!--<item name="strokeColor">@color/jesse205_grey_light</item>-->
         <item name="dialogBackgroundColor">@color/jesse205_white</item>
         <item name="windowBackgroundColor">@color/jesse205_white</item>
         <item name="windowLightStatusBar">true</item>
@@ -65,7 +68,8 @@
         <item name="android:alertDialogTheme">@style/Theme.Jesse205.Framework.Dialog.Alert</item>
 
     </style>
-
+    
+    <!--原生对话框-->
     <style name="Theme.Jesse205.Framework.Dialog.Alert" parent="android:Theme.Material.Light.Dialog.Alert">
         <item name="android:colorAccent">?colorAccent</item>
         <item name="android:windowBackground">@drawable/mtrl_dialog_background</item>
@@ -101,13 +105,15 @@
 
 
     <style name="ThemeOverlay.Jesse205.ActionBar.Surface" parent="ThemeOverlay.MaterialComponents.ActionBar.Surface">
+        <!--设置图标颜色和文字颜色，文字颜色拥有不同的状态-->
         <item name="colorControlNormal">@color/jesse205_color_on_surface</item>
         <item name="actionMenuTextColor">@color/jesse205_color_on_surface</item>
         <item name="elevation">4dp</item>
 	</style>
 
     <style name="ThemeOverlay.Jesse205.Dark" parent="@style/ThemeOverlay.AppCompat.Dark">
-        <item name="colorBackgroundFloating">@color/jesse205_black_blue_light</item>
+        <!--修复暗色模式下溢出菜单背景颜色异常，这个只是暂时的-->
+        <item name="colorBackgroundFloating">?colorOnSurface</item>
     </style>
 
     <!--正式主题-->

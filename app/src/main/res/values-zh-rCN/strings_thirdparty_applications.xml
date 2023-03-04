@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="termux">Termux</string>
+    <string name="termux_summary">Android 终端应用程序和 Linux 环境</string>
+    <string name="termux_start_failed">无法启动 Termux，请先下载该 APP。</string>
+    
+    <string name="aidepro_summary">魔改过的全新版本</string>
+    <string name="aidepro_start_failed">无法启动 AIDE Pro，请先下载该 APP。</string>
+
+    <string name="windmill_summary">重认手机上的工具</string>
+    <string name="windmill_start_failed">无法启动 Windmill，请先下载该 APP。</string>
+    
+</resources>

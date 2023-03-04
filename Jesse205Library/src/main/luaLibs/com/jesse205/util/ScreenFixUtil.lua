@@ -27,7 +27,7 @@ end]]
 function ScreenFixUtil.getDensityDpi()
   import "android.util.DisplayMetrics"
   local dm=DisplayMetrics()
-  activity.WindowManager.getDefaultDisplay().getMetrics(dm)
+  activity.getWindowManager().getDefaultDisplay().getMetrics(dm)
   return dm.densityDpi
 end
 
@@ -82,9 +82,9 @@ end
 ScreenFixUtil.setGridViewsNumColumns=setGridViewsNumColumns
 
 local function getDeviceTypeFromWidth(width)
-  if width<theme.number.Dimension.width_pad then--判断设备类型
+  if width<res.dimen.jesse205_width_pad then--判断设备类型
     return "phone"
-   elseif width<theme.number.Dimension.width_pc then
+   elseif width<res.dimen.jesse205_width_pc then
     return "pad"
    else
     return "pc"
@@ -93,9 +93,9 @@ end
 ScreenFixUtil.getDeviceTypeFromWidth=getDeviceTypeFromWidth
 
 local function getDeviceTypeFromWidthDp(widthDp)
-  if widthDp<theme.number.width_dp_pc then--判断设备类型
+  if widthDp<res.int.jesse205_width_pad then--判断设备类型
     return "phone"
-   elseif widthDp<theme.number.width_dp_pad then
+   elseif widthDp<res.int.jesse205_width_pc then
     return "pad"
    else
     return "pc"

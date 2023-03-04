@@ -1,12 +1,13 @@
 --- @class Jesse205
 local jesse205 = {}
 _G.jesse205 = jesse205
-jesse205._VERSION = "12.2.0 (alpha) (Pro)" -- 库版本名
-jesse205._VERSIONCODE = 122001 -- 库版本号
+jesse205._VERSION = "13.0.0 (alpha) (Pro)" -- 库版本名
+jesse205._VERSIONCODE = 130001 -- 库版本号
 jesse205._ENV = _ENV
 jesse205.themeType = "Jesse205" -- 主题类型
 jesse205.LIBRARY_PACKAGE_NAME="com.jesse205"
 local LIBRARY_PACKAGE_NAME=jesse205.LIBRARY_PACKAGE_NAME
+
 require("import") -- 导入import
 import("loadlayout2")
 local import_ = _G["import"] -- 防止编辑器报错
@@ -40,7 +41,7 @@ local fastImport = {
   ThemeManager = LIBRARY_PACKAGE_NAME..".manager.ThemeManager"
 }
 
--- 根本就不是class的key
+-- 根本就不是class的key，因此直接取全局变量即可
 local normalkeys = {
   this = true,
   activity = true,
@@ -81,7 +82,8 @@ setmetatable(_G, newMetatable)
 
 application = activity.getApplication()
 
-local context = activity or service -- 当前context
+-- 当前context
+local context = activity or service
 jesse205.context = context
 
 -- 软件名
@@ -90,13 +92,13 @@ if appName == nil then
   appName = context.getApplicationInfo().loadLabel(context.getPackageManager())
   application.set("appName", appName)
 end
+local packageName=activity.getPackageName()
 jesse205.appName = appName
-jesse205.packageName = activity.getPackageName()
-BuildConfig=luajava.bindClass(jesse205.packageName..".BuildConfig")
-
+jesse205.packageName = packageName
 
 resources = context.getResources() -- 当前resources
-R = luajava.bindClass(context.getPackageName() .. ".R")
+R = luajava.bindClass(packageName .. ".R")
+BuildConfig=luajava.bindClass(packageName..".BuildConfig")
 
 if activity then
   window = activity.getWindow()
@@ -237,7 +239,7 @@ openUrl = openInBrowser -- 通常情况下，应用不自带内置浏览器
 ---@param path string 要转换的相对路径
 ---@param localPath string 相对的目录
 function rel2AbsPath(path, localPath)
-  if path:find("^/") then
+  if path:sub(1,1)=="/" then
     return path
    else
     return localPath .. "/" .. path
@@ -247,11 +249,7 @@ end
 --- 将value转换为boolean类型
 ---@param value any 任何东西
 function toboolean(value)
-  if value then
-    return true
-   else
-    return false
-  end
+  return not not value
 end
 
 --- 进入Lua子页面
@@ -355,7 +353,7 @@ end
 function onError(title, message)
   pcall(function()
     -- 保存到文件。有报错说明软件有问题，必须解决掉。
-    local path = "/sdcard/Androlua/crash/" .. jesse205.packageName .. ".txt"
+    local path = "/sdcard/Androlua/crash/" .. packageName .. ".txt"
     local content = tostring(title) .. os.date(" %Y-%m-%d %H:%M:%S") .. "\n" .. tostring(message) .. "\n\n"
     io.open(path, "a"):write(content):close()
   end)
@@ -397,6 +395,7 @@ if not notLoadTheme then
 
   setmetatable(color, { -- 普通颜色
     __index = function(self, key)
+      print("警告:调用了theme.color",key)
       local value = resources.getColor(R.color["jesse205_" .. string.lower(key)])
       rawset(self, key, value)
       return value
@@ -404,6 +403,7 @@ if not notLoadTheme then
   })
   setmetatable(ripple, { -- 波纹颜色
     __index = function(self, key)
+      print("警告:调用了theme.ripple",key)
       local value = resources.getColor(R.color["jesse205_" .. string.lower(key) .. "_ripple"])
       rawset(self, key, value)
       return value
@@ -411,6 +411,7 @@ if not notLoadTheme then
   })
   setmetatable(light, { -- 偏亮颜色
     __index = function(self, key)
+      print("警告:调用了theme.color",key)
       local value = resources.getColor(R.color["jesse205_" .. string.lower(key) .. "_light"])
       rawset(self, key, value)
       return value
@@ -418,6 +419,7 @@ if not notLoadTheme then
   })
   setmetatable(dark, { -- 偏暗颜色
     __index = function(self, key)
+      print("警告:调用了theme.color",key)
       local value = resources.getColor(R.color["jesse205_" .. string.lower(key) .. "_dark"])
       rawset(self, key, value)
       return value
@@ -425,6 +427,7 @@ if not notLoadTheme then
   })
   setmetatable(number, { -- 数字
     __index = function(self, key)
+      print("警告:调用了theme.number",key)
       local value = resources.getInteger(R.integer["jesse205_" .. string.lower(key)])
       rawset(self, key, value)
       return value
@@ -432,6 +435,7 @@ if not notLoadTheme then
   })
   setmetatable(dimension, { -- 数字
     __index = function(self, key)
+      print("警告:调用了theme.number",key)
       local value = resources.getDimension(R.dimen["jesse205_" .. string.lower(key)])
       rawset(self, key, value)
       return value

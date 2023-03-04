@@ -10,6 +10,6 @@
     padding="16dp";
     textSize="16sp";
     --typeface=Typeface.DEFAULT_BOLD;
-    textColor=theme.color.textColorPrimary;
+    textColor=res.color.attr.colorOnBackground;
   },
 }

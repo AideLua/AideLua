@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="developer_eddie">初识埃迪</string>
+    <string name="developer_eddie_description">软件开发、运营、项目经理、UI设计、架构设计</string>
+    
+    <string name="developer_0047ol">0047ol</string>
+    <string name="developer_0047ol_description">官网开发、官网UI设计</string>
+    
+    <string name="developer_xiaoyi">xiaoyi</string>
+    <string name="developer_xiaoyi_description">Windmill 运营</string>
+    
+</resources>

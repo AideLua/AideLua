@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_documnet">使用文档</string>
+    <string name="app_summary">为更快的移动开发</string>
+    
     <string name="undo">撤销</string>
     <string name="redo">重做</string>
     <string name="run">运行</string>
@@ -35,6 +37,7 @@
     <string name="commentedCode">注释代码</string>
     <string name="uncommentedCode">取消注释代码</string>
     <string name="logCat">日志猫</string>
+    <string name="logcat">日志查看器</string>
     <string name="viewError">查看错误</string>
     <string name="openInAndroidDeveloper">在“Android 开发者”上打开</string>
     <string name="download">下载</string>
@@ -247,4 +250,6 @@
 	<string name="permission_repackApk">使用 Aide Lua 进行二次打包</string>
     <string name="permission_termux_runCode">在 Termux 环境中运行命令</string>
 
+    
+    
 </resources>

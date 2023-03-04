@@ -136,31 +136,5 @@
         end)
       end
     },
-    --[[
-    preview={
-      editor="PhotoView",
-      apply=function(filePath,fileType,view)
-        -- Read an SVG from the assets folder
-        local svg = SVG.getFromInputStream(FileInputStream(filePath))
-        -- Create a canvas to draw onto
-        if svg.getDocumentWidth()~=-1 then
-          local newBM = Bitmap.createBitmap(Math.ceil(svg.getDocumentWidth()),
-          Math.ceil(svg.getDocumentHeight()), Bitmap.Config.ARGB_8888)
-          local bmcanvas=Canvas(newBM)
-          -- Clear background to white
-          bmcanvas.drawRGB(255, 255, 255)
-          -- Render our document onto our canvas
-          svg.renderToCanvas(bmcanvas)
-
-          local options=RequestOptions()
-          options.skipMemoryCache(true)--跳过内存缓存
-          options.diskCacheStrategy(DiskCacheStrategy.NONE)--不缓冲disk硬盘中
-          Glide.with(activity).load(newBM).apply(options).into(view)
-         else
-          error("File read failed")
-        end
-        -- Sharp.loadFile(File(filePath)).into(view)
-      end,
-    },]]
   },
 }

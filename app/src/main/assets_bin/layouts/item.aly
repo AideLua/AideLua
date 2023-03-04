@@ -18,7 +18,7 @@
         layout_width="24dp";
         layout_height="24dp";
         layout_gravity="center";
-        colorFilter=theme.color.colorPrimary;
+        colorFilter=res.color.attr.colorPrimary;
         imageResource=R.drawable.ic_plus;
       };
     };
@@ -28,8 +28,8 @@
       layout_margin="16dp";
       layout_marginLeft=0;
       layout_weight=1;
-      text=activity.getString(R.string.project_create);
-      textColor=theme.color.textColorPrimary;
+      text=R.string.project_create;
+      textColor=res.color.attr.colorOnBackground;
     };
   },
 
@@ -68,7 +68,7 @@
         AppCompatTextView;
         id="title";
         textSize="16sp";
-        textColor=theme.color.textColorPrimary;
+        textColor=res.color.attr.colorOnBackground;
       };
       {
         AppCompatTextView;
@@ -115,14 +115,11 @@
         layout_marginRight=0;
         layout_weight=1;
         text="..";
-        textColor=android.res.color.attr.textColorPrimary;
+        textColor=res.color.attr.colorOnBackground;
       };
-      {
+      {--分割线
         View;
         layout_width="1dp";
-        --layout_margin="8dp";
-        --layout_marginTop="16dp";
-        --layout_marginBottom="16dp";
         layout_height="32dp";
         backgroundColor=android.res.color.attr.textColorSecondary;
       };
@@ -134,7 +131,6 @@
         contentDescription=getString(R.string.menu);
         id="more";
         gravity="center";
-        --layout_marginRight="8dp";
         {
           AppCompatImageView;
           layout_width="24dp";
@@ -152,23 +148,6 @@
     layout_width="fill";
     longClickable=true;
     padding="8dp";
-    --paddingTop="4dp";
-    --paddingBottom="4dp";
-    --[[
-    {
-      CardView;
-      layout_width="fill";
-      radius="4dp";
-      elevation=0;
-      layout_margin="8dp";
-      layout_marginTop="4dp";
-      layout_marginBottom="4dp";
-      id="highLightCard";
-      cardBackgroundColor=0;
-      {
-        LinearLayout;
-        layout_width="fill";
-        gravity="center|left";]]
     {
       AppCompatImageView;
       id="icon";
@@ -186,7 +165,5 @@
       layout_margin="16dp";
       layout_weight=1;
     };
-    --};
-    --};
   },
 }
