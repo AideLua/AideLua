@@ -66,5 +66,5 @@ end
 
 apptype="aidelua"
 
-import "PluginsUtil"
+PluginsUtil=require "PluginsUtil"
 

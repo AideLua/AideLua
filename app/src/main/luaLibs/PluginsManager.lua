@@ -123,7 +123,7 @@ local baseVirtualEnv={
 local virtualEnvMetatable={__index=baseVirtualEnv}
 
 for index=1,#virtualEnvCloneList do
-  local value=baseVirtualEnv[index]
+  local value=virtualEnvCloneList[index]
   baseVirtualEnv[value]=_ENV[value]
 end
 
