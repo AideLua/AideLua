@@ -117,6 +117,29 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 ![历史星标数](https://starchart.cc/AideLua/AideLua.svg)
 
+## 捐赠
+
+Aide Lua 不开放捐赠服务。如果您觉得 Aide Lua 好用，可以购买广告位支持一下😁，非常感谢。
+
+``` txt
+群文件广告位：
+1元/月
+注：群文件“广告”文件夹为广告位，未经允许的广告将不定期移动至其他文件夹
+
+群公告广告位：
+0.1元/月
+注：群公告“广告”公告为广告位
+
+开发者文档广告位：
+5元/月
+
+统一体验价：1元/天，但不限制内容，只要不违反法律就行
+
+广告内容：与编程开发相关
+
+超时广告将在下一次更改并提交后移除
+```
+
 ## 开放源代码许可
 
 <https://gitee.com/AideLua/AideLua/blob/master/app/src/main/assets_bin/licences>

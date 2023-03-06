@@ -743,7 +743,7 @@ end
 
 --刷新文件浏览器的线程
 local function refreshTaskFunc(newDirectory,highlightPath,projectOpenState)
-  return pcall(function()
+  return xpcall(function()
     require "import"
     import "java.io.File"
     import "java.util.Collections"
@@ -817,6 +817,9 @@ local function refreshTaskFunc(newDirectory,highlightPath,projectOpenState)
     newList=nil
     filesList=nil
     return newListJ,newDirectory,itemIndex
+  end,
+  function(e)
+    return tostring(e).."\n"..debug.traceback()
   end)
 end
 
@@ -968,7 +971,7 @@ function FilesBrowserManager.refresh(file,highlightPath,force,atOnce)
                 .setAutoCancel(true)
                 .start()
               end
-            
+
               recyclerViewAlphaAnimator=ObjectAnimator.ofFloat(recyclerView, "alpha",{0,1})
               .setDuration(filesViewTranslationDuration)
               .setInterpolator(DecelerateInterpolator())

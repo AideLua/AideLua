@@ -2,7 +2,7 @@
 local jesse205 = {}
 _G.jesse205 = jesse205
 jesse205._VERSION = "13.0.0 (alpha) (Pro)" -- 库版本名
-jesse205._VERSIONCODE = 130001 -- 库版本号
+jesse205._VERSION_CODE = 130001 -- 库版本号
 jesse205._ENV = _ENV
 jesse205.themeType = "Jesse205" -- 主题类型
 jesse205.LIBRARY_PACKAGE_NAME="com.jesse205"

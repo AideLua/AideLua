@@ -256,7 +256,7 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory,saveFile,previ
 
     local success,failed,toast=false,false,false
     if File(filePath).isFile() then
-      success,failed=pcall(function()
+      success,failed=xpcall(function()
         EditorsManager.switchEditorByDecoder(nowDecoder)
         --编辑器滚动相关在 EditorsManager.openNewContent 内
         local succes,err=EditorsManager.openNewContent(filePath,newFileType,nowDecoder,keepHistory)
@@ -290,6 +290,9 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory,saveFile,previ
         end
         EditorsManager.switchPreviewState(preview)
         EditorsManager.refreshPreviewButtonVisibility()
+      end,
+      function(e)
+        return tostring(e).."\n"..debug.traceback()
       end)
       refreshMenusState()
      else

@@ -183,7 +183,7 @@ data={
   {--Jesse205Library版本
     SettingsLayUtil.ITEM;
     title=R.string.jesse205_nowVersion_jesse205Library;
-    summary=("%s (%s)"):format(jesse205._VERSION,jesse205._VERSIONCODE);
+    summary=("%s (%s)"):format(jesse205._VERSION,jesse205._VERSION_CODE);
     icon=R.drawable.ic_information_outline;
   };
 }

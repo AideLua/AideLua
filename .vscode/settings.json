@@ -5,5 +5,25 @@
     "cSpell.words": [
         "Giscus"
     ],
+    "Lua.completion.keywordSnippet": "Both",
+    "Lua.diagnostics.globals": [
+        "luajava"
+    ],
+    "Lua.hint.enable": true,
+    "Lua.type.weakNilCheck": true,
+    "Lua.workspace.useGitIgnore": false,
+    "Lua.completion.callSnippet": "Both",
+    "Lua.hint.setType": true,
+    "Lua.codeLens.enable": true,
+    "Lua.runtime.path": [
+        "?.lua",
+        "?/init.lua",
+        "app/src/main/luaLibs/?.lua",
+        "app/src/main/luaLibs/?/init.lua",
+        "androlua/src/main/luaLibs/?.lua",
+        "androlua/src/main/luaLibs/?/init.lua",
+        "Jesse205Library/src/main/luaLibs/?.lua",
+        "Jesse205Library/src/main/luaLibs/?/init.lua",
+    ],
     
 }
