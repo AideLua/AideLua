@@ -1,4 +1,4 @@
-{
+return {
   LinearLayout;
   layout_width="fill";
   orientation="vertical";

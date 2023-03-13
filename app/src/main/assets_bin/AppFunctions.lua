@@ -1,6 +1,6 @@
 --此文件内为此页面的部分函数
 
-
+---适配了软件的全屏滑动容器
 MyFullDraggableContainer={
   _baseClass=FullDraggableContainer,
   __call=function(self,context)
@@ -20,15 +20,22 @@ setmetatable(MyFullDraggableContainer,MyFullDraggableContainer)
 
 
 
---检查是不是路径相同的文件
+---检查是不是路径相同的文件
+---@deprecated 请直接使用 filePath1==filePath2 判断路径是否相同
+---@return boolean 文件路径是否相同
 function isSamePathFileByPath(filePath1,filePath2)--通过文件路径
   return filePath1==filePath2
 end
+
+---检查是不是路径相同的文件
+---@deprecated 请直接使用 file1==file2 判断路径是否相同
+---@return boolean 文件路径是否相同
 function isSamePathFile(file1,file2)--通过文件本身
   return file1==file2
 end
 
 ---在 v5.1.1(51199) 返回结果改为 normalTable
+---创建支持getter的虚拟类
 function createVirtualClass(normalTable)
   local metatable={
     __index=function(self,key)
@@ -46,6 +53,9 @@ function createVirtualClass(normalTable)
   return normalTable
 end
 
+---运行lua文件或lua代码
+---@param file File 文件名
+---@param code string 或lua代码
 function runLuaFile(file,code)
   if file and file.isFile() then
     newActivity(file.getPath())
@@ -54,7 +64,9 @@ function runLuaFile(file,code)
   end
 end
 
---自动识别显示toast的方式进行显示
+---自动识别显示toast的方式进行显示
+---@param text string|number
+---@return SnackBar|Toast
 function showSnackBar(text)
   if FilesBrowserManager.openState and nowDevice ~= "pc" then
     return MyToast(text,mainLay)
@@ -63,6 +75,9 @@ function showSnackBar(text)
   end
 end
 
+---判断是不是二进制文件
+---@param filePath string 文件路径
+---@return boolean 是否是二进制文件
 function isBinaryFile(filePath)
   local ioFile = io.open(filePath, "r")
   if ioFile then
@@ -80,6 +95,9 @@ function isBinaryFile(filePath)
   end
 end
 
+---复制表，但跳过已存在的数据
+---@param oldTable table 源表
+---@param newTable table 目标表
 function safeCloneTable(oldTable,newTable)
   for index,content in pairs(oldTable) do
     if newTable[index]==nil then
@@ -88,7 +106,7 @@ function safeCloneTable(oldTable,newTable)
   end
 end
 
---刷新Menu状态
+---刷新Menu状态
 function refreshMenusState()
   if LoadedMenu then
     local fileOpenState,projectOpenState=FilesTabManager.openState,ProjectManager.openState
@@ -110,11 +128,12 @@ function refreshMenusState()
 end
 
 ---在 v5.1.0(51099) 已废除
+---刷新放大镜状态
 function refreshMagnifier()
   print("警告","refreshMagnifier","在 v5.1.0(51099) 已废除")
 end
 
-
+---@enum string
 local MyMimeMap={
   lua="text/plain",
 }
@@ -122,12 +141,16 @@ setmetatable(MyMimeMap,{__index=function(self,key)
     return MimeTypeMap.getSingleton().getMimeTypeFromExtension(key) or "*/"
 end})
 
---在 v5.1.0(51099) 添加
+---在 v5.1.0(51099) 添加
+---获取 MimeType
+---@param extensionName string
+---@return string MimeType
 function getMimeType(extensionName)
   return MyMimeMap[extensionName]
 end
 
---用外部应用打开文件
+---用外部应用打开文件
+---@param path string
 function openFileITPS(path)
   import "android.webkit.MimeTypeMap"
   local file=File(path)
@@ -151,6 +174,7 @@ function openFileITPS(path)
   end
 end
 
+---@enum WindmillTools
 WindmillTools={
   手册=2,
   ["Java API"]=3,
@@ -170,20 +194,26 @@ function startWindmillActivity(toolName)
   end
 end
 
---公共Activity
+---公共ActivityFormatter
 local sharedActivityPathTemplate=AppPath.Sdcard.."/Android/media/%s/cache/temp/aidelua/activities/%s"
 
---更新共享Activity到目录
+---更新共享Activity到目录
+---@param name string 页面名称
+---@param sdActivityDir File 内部存储目录
 function updateSharedActivity(name,sdActivityDir)
   LuaUtil.rmDir(sdActivityDir)
   LuaUtil.copyDir(File(activity.getLuaDir("sub/"..name)),sdActivityDir)
 end
 
 ---检查共享活动的更新
+---@param name string 页面名称
+---@return string mainLuaPath 主文件路径
 function checkSharedActivity(name)
+  ---@type string
   local packageName
+  ---@type string
   packageName=ProjectManager.openState and ProjectManager.nowConfig.packageName or activity.getPackageName()
-  local sdActivityPath=sharedActivityPathTemplate:format(packageName,name)--AppPath.AppShareCacheDir.."/activities/"..name
+  local sdActivityPath=sharedActivityPathTemplate:format(packageName,name)
   local sdActivityDir=File(sdActivityPath)
 
   local sdActivityInitPath=sdActivityPath.."/init.lua"
@@ -201,6 +231,8 @@ function checkSharedActivity(name)
   return sdActivityPath.."/main.lua"
 end
 
+---刷新子标题
+---@param newScreenWidthDp number
 function refreshSubTitle(newScreenWidthDp)
   if ProjectManager.openState then
     local appName=ProjectManager.nowConfig.appName
@@ -224,23 +256,28 @@ function refreshSubTitle(newScreenWidthDp)
   end
 end
 
---啊这，扩展名写成类型了，就这样凑合用吧
+---通过文件名获取扩展名
+---扩展名写成类型了，就这样凑合用吧
+---@param name string 文件名
+---@return string|nil extensionName 扩展名
 function getFileTypeByName(name)
   local extensionName=name:match(".+%.(.+)")
   if extensionName then
     return string.lower(extensionName)
   end
+  return nil
 end
 
 --v5.1.2
 getExtensionNameByName=getFileTypeByName
 
---修复因LayoutTransition导致的布局延迟
---修复逻辑：先去除LayoutTransition，再设置回来
---[[使用方法：
-local applyLT=fixLT({view1,view2})
-applyLT()
-]]
+---修复因LayoutTransition导致的布局延迟<br>
+---逻辑：先去除LayoutTransition，再设置回来<br>
+---使用方法：<br>
+---local applyLT=fixLT({view1,view2})<br>
+---applyLT()
+---@param list table<ViewGroup>
+---@return function applyLT 恢复 LayoutTransition
 function fixLT(list)
   local lTList={}
   for index=1,#list do
@@ -257,21 +294,32 @@ function fixLT(list)
   end
 end
 
+---将字符串添加到列表内
+---@param text string 字符串
+---@param list string[]
+---@param checkList table<string,boolean>
 function addStrToTable(text,list,checkList)
-  if not(checkList[text]) then
+  if not checkList[text] then
     table.insert(list,text)
     checkList[text]=true
   end
 end
 
-function getFilePathCopyMenus(inLibDirPath,filePath,fileRelativePath,fileName,isFile,isResDir,fileType)
+---@param inLibDirPath string 在lib文件夹的路径
+---@param filePath string 文件绝对路径
+---@param fileRelativePath string 文件相对于工程的路径
+---@param fileName string 文件名
+---@param isFile boolean 是文件？
+---@param isResDir boolean 是在res文件夹？
+---@param fileExtensionName string 文件扩展名
+function getFilePathCopyMenus(inLibDirPath,filePath,fileRelativePath,fileName,isFile,isResDir,fileExtensionName)
   local textList={}
   local textCheckList={}
   if inLibDirPath then
     local callLibPath=inLibDirPath:gsub("/",".")
     addStrToTable(fileName:match("(.+)%.") or fileName,textList,textCheckList)
     addStrToTable(callLibPath,textList,textCheckList)
-    if fileType=="aly" or fileType=="lua" or fileType=="java" or fileType=="kt" or File(filePath.."/init.lua").isFile() then
+    if fileExtensionName=="aly" or fileExtensionName=="lua" or fileExtensionName=="java" or fileExtensionName=="kt" or File(filePath.."/init.lua").isFile() then
       addStrToTable(CodeHelper.getImportCode(callLibPath),textList,textCheckList)
     end
    else
@@ -283,7 +331,7 @@ function getFilePathCopyMenus(inLibDirPath,filePath,fileRelativePath,fileName,is
   return textList
 end
 
---这是去除./和../的
+---这是去除./和../的
 function fixPath(path)
   path=(path.."/")
   :gsub("//+","/")
@@ -295,7 +343,7 @@ function fixPath(path)
   return path:match("(.+)/") or "/"
 end
 
---获取table的index列表
+---获取table的index列表
 function getTableIndexList(mTable)
   local list={}
   for index,content in pairs(mTable) do
@@ -304,6 +352,7 @@ function getTableIndexList(mTable)
   return list
 end
 
+---@enum
 local name2ColorMap={
   white=0xffffffff,
   black=0xff000000,
@@ -331,7 +380,7 @@ function formatColor2Hex(color)
   end
 end
 
---获取文字内颜色的数值和16进制
+---获取文字内颜色的数值和16进制
 function getColorAndHex(text)
   if text and text~="" then
     local success,color
@@ -361,6 +410,7 @@ function authorizeHWApplicationPermissions(uri)
   end
   activity.grantUriPermission("com.huawei.desktop.explorer", uri, flag)
   activity.grantUriPermission("com.huawei.desktop.systemui", uri, flag)
+  activity.grantUriPermission("com.huawei.distributedpasteboard", uri, flag)
 end
 
 ---v5.1.1+
@@ -395,7 +445,7 @@ function safeLoadLayout(path,parent)
     local nowNode=nowNodes[1]
     nowNode.onClick=nil
     nowNode.onLongClick=nil
-    for index,content in pairs(nowNode)
+    for index,content in pairs(nowNode) do
       if type(index)=="number" and type(content)=="table" then
         table.insert(nowNodes,content)
       end
@@ -434,14 +484,13 @@ function copyFilesFromDocumentFile(documentFile,targetPath)
      else
       local isOpenSuccessful,inputStream=pcall(activity.getContentResolver().openInputStream,uri)
       if not isOpenSuccessful then
-        showErrorDialog("Unable to open uri",inputStream)
+        showErrorDialog("Unable to open uri","uri: "..tostring(uri).."\n\n"..inputStream)
         return
       end
       local outStream=FileOutputStream(newPath)
-      --LuaUtil.copyFile(inputStream, outStream)
       local success,content=pcall(FileUtil.copyFileStream,inputStream, outStream)
       if not success then
-        showErrorDialog(name,content)
+        showErrorDialog("Copy error","uri: "..tostring(uri).."\nname: "..name.."\n\n"..content)
       end
       inputStream.close()
       outStream.close()
@@ -494,3 +543,23 @@ function path2DocumentUri(path)
     return Uri.parse("content://com.android.externalstorage.documents/document/primary:"..relativePath)
   end
 end
+
+--[[
+function createFolderIconWitchBadge(badgeId,badgeWidth,badgeColor)
+  local iconDrawable=activity.getDrawable(R.drawable.ic_folder_outline)
+  local badgeDrawable=activity.getDrawable(badgeId)
+  if badgeColor then
+    badgeDrawable.setTintList(ColorStateList.valueOf(badgeColor))
+  end
+  local background = LayerDrawable({iconDrawable,badgeDrawable})
+  background.setLayerGravity(0, Gravity.CENTER)
+  background.setLayerGravity(1, Gravity.CENTER)
+  local iconWidth=math.dp2int(24)
+  local badgeWidth=badgeWidth or math.dp2int(14)
+
+  background.setLayerSize(0, iconWidth, iconWidth)
+  background.setLayerSize(1, badgeWidth, badgeWidth)
+  background.setLayerInset(1,math.dp2int(2),math.dp2int(4),math.dp2int(2),math.dp2int(2))
+  return background
+end
+]]

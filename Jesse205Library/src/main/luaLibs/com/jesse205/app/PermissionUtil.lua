@@ -20,7 +20,7 @@ end
 ---检查多个权限是否给予
 ---@param permissions table 权限列表
 function _M.check(permissions)
-  for index,permission in ipairs(permissions)
+  for index,permission in ipairs(permissions) do
     local granted=_M.checkPermission(permission)
     if not(granted) then--有一个没给予，直接返回false
       return false

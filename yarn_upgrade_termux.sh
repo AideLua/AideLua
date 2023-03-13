@@ -1,0 +1,1 @@
+yarn upgrade --latest --modules-folder /data/data/com.termux/files/home/node_modules

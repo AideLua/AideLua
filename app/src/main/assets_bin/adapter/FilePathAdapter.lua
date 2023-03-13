@@ -28,7 +28,7 @@ return function(item)
       view.setTag(ids)
       local titleView=ids.title
       local iconView=ids.icon
-      titleView.setBackground(ThemeUtil.getRippleDrawable(theme.color.ActionBar.rippleColorPrimary,true))
+      titleView.setBackground(res.drawable.attr.listChoiceBackgroundIndicator)
       titleView.onClick=onClick
       titleView.setTypeface(mediumTypeface)
 

@@ -1,10 +1,17 @@
 --local directoryFilesList=FilesBrowserManager.directoryFilesList
 local filesPositions=FilesBrowserManager.filesPositions
 local adapterData=FilesBrowserManager.adapterData
-local fileColors=FilesBrowserManager.fileColors
-local fileIcons=FilesBrowserManager.fileIcons
-local folderIcons=FilesBrowserManager.folderIcons
+--local fileColors=FilesBrowserManager.fileColors
+--local fileIcons=FilesBrowserManager.fileIcons
+--local folderIcons=FilesBrowserManager.folderIcons
+
 local relLibPathsMatch=FilesBrowserManager.relLibPathsMatch
+
+--新的图标
+local specialIconDrawables=FilesBrowserManager.specialIconDrawables
+local folderIconDrawables=FilesBrowserManager.folderIconDrawables
+local fileIconDrawables=FilesBrowserManager.fileIconDrawables
+local specialColors=FilesBrowserManager.specialColors
 
 local unknowString=getString(R.string.unknown)
 
@@ -19,15 +26,14 @@ local function onClick(view)
   local file=data.file
   local path=data.filePath
   local action=data.action
-  switch action do
-   case "createProject" then
+  if action=="createProject" then
     newSubActivity("NewProject")
-   case "openProject" then
-    ProjectManager.openProject(path)
-   case "openFolder" then
+  elseif action=="openProject" then
+     ProjectManager.openProject(path)
+  elseif action=="openFolder" then
     refresh(file,data.upFile)
-   case "openFile" then
-    local success,inThirdPartySoftware=FilesTabManager.openFile(file,data.fileType,false)
+  elseif action=="openFile" then
+     local success,inThirdPartySoftware=FilesTabManager.openFile(file,data.fileType,false)
     if success and not(inThirdPartySoftware) then
       if screenConfigDecoder.deviceByWidth ~= "pc" then
         FilesBrowserManager.close()
@@ -99,35 +105,58 @@ local function loadPrjIcon(iconUrl,iconView,iconCard)
   end
 end
 
+
+
 --v5.1.2+
-local function createItemColorStateList(defaultColor)
-  local colorStateList=ColorStateList({
-    {android.R.attr.state_selected},
-    {}
-  },
-  {res.color.attr.colorPrimary,
-    defaultColor,
-  })
-  return colorStateList
-end
+local itemBackgroundColorStateList=ColorStateList({
+  {android.R.attr.state_selected},
+},
+{res.color.attr.rippleColorAccent})
 
 --v5.1.2+
 local function createItemBackground()
   local drawable = GradientDrawable()
   drawable.setShape(GradientDrawable.RECTANGLE)
-  drawable.setColor(ColorStateList({
-    {android.R.attr.state_selected},
-  },
-  {res.color.attr.rippleColorAccent}))
-  drawable.setCornerRadius(math.dp2int(4))
+  drawable.setColor(itemBackgroundColorStateList)
+  drawable.setCornerRadius(math.dp2int(4))--圆角4dp
+
   local layerDrawable=LayerDrawable({drawable})
   local dp_8=math.dp2int(8)
   local dp_4=math.dp2int(4)
-  layerDrawable.setLayerInset(0,dp_8,dp_8,dp_8,dp_8)
+  layerDrawable.setLayerInset(0,dp_8,dp_8,dp_8,dp_8)--编边距为8dp
   local maskDrawable = ShapeDrawable()
-  local rippleDrawable=RippleDrawable(ColorStateList.valueOf(res.color.attr.rippleColorPrimary),layerDrawable,maskDrawable)
+
+  local rippleDrawable=RippleDrawable(ColorStateList.valueOf(res.color.attr.rippleColorPrimary),layerDrawable,maskDrawable)--添加波纹
   return rippleDrawable
 end
+--[[
+--测试1
+import "android.graphics.drawable.shapes.OvalShape"
+import "android.graphics.drawable.ClipDrawable"
+local function createIconWitchBadge(iconId,badgeId)
+  local iconDrawable=activity.getDrawable(iconId)
+  local CroppedIconDrawable=ClipDrawable(iconDrawable,Gravity.TOP,ClipDrawable.VERTICAL)
+  CroppedIconDrawable.setLevel(12/24*10000)
+  local CroppedIconDrawable2=ClipDrawable(iconDrawable,Gravity.LEFT,ClipDrawable.HORIZONTAL)
+  CroppedIconDrawable2.setLevel(12/24*10000)
+
+  local badgeDrawable=activity.getDrawable(badgeId)
+  local background = LayerDrawable({CroppedIconDrawable,badgeDrawable})
+  background.setLayerGravity(0, Gravity.TOP | Gravity.LEFT)
+  background.setLayerGravity(1, Gravity.TOP | Gravity.LEFT)
+  background.setLayerGravity(2, Gravity.CENTER)
+  local iconWidth=math.dp2int(24)
+  --local badgeBgWidth=math.dp2int(14)
+  local badgeWidth=math.dp2int(10)
+
+  background.setLayerSize(0, iconWidth, iconWidth)
+  background.setLayerSize(1, iconWidth, iconWidth)
+  background.setLayerSize(2, badgeWidth, badgeWidth)
+  background.setLayerSize(3, badgeWidth, badgeWidth)
+  background.setLayerInset(2,math.dp2int(0.9),math.dp2int(0.9),math.dp2int(1),math.dp2int(1))
+  background.setLayerInset(3,math.dp2int(1),math.dp2int(1),math.dp2int(0.9),math.dp2int(0.9))
+  return background
+end]]
 
 --createItemBackground()
 
@@ -182,7 +211,21 @@ local openState2ViewType={
   }
 }
 
-local defaultItemTitleColorStateList=createItemColorStateList(res.color.attr.colorOnBackground)
+local createIconColorStateList=FilesBrowserManager.createIconColorStateList
+
+local defaultItemTitleColorStateList=ColorStateList({
+  {android.R.attr.state_selected},
+  {}
+},
+{specialColors.active,
+  res.color.attr.colorOnBackground,
+})
+local defaultItemIconColorStateList=ColorStateList({
+  {android.R.attr.state_selected},
+},
+{specialColors.active,
+})
+local defaultItemTitleColorStateList=createIconColorStateList(res.color.attr.colorOnBackground)
 
 return function(item)
   return LuaCustRecyclerAdapter(AdapterCreator({
@@ -242,6 +285,7 @@ return function(item)
 
       local file,filePath,fileName
 
+
       local projectOpenState=ProjectManager.openState
       if position==0 then--是第一项，就是新建项目或者返回上一目录
         if initData then
@@ -252,13 +296,15 @@ return function(item)
             data.fileName=file.getName()
             data.upFile=true
             data.icon=R.drawable.ic_folder_outline
-            data.iconColor=fileColors.folder
+            data.iconDrawable=specialIconDrawables.folder
+            --data.iconColor=fileColors.folder
             data.action="openFolder"
            else--项目没打开，就是创建项目选项
             data.action="createProject"
           end
         end
        else--不是第一项
+        local isModuleDir=false
         if initData then
           file=directoryFilesList[position-1]
           filePath=file.getPath()
@@ -274,7 +320,7 @@ return function(item)
 
         if projectOpenState then
           --视图
-          local highLightCard=ids.highLightCard
+          --local highLightCard=ids.highLightCard
           --取data的变量。这些变量会多次使用，或者可能不想与data保持一致。
           local isFile
           local cardBgColor=0
@@ -282,36 +328,54 @@ return function(item)
           if initData then
             local fileType
             isFile=file.isFile()
+            isModuleDir=File(filePath.."/build.gradle").isFile()
             data.title=fileName
             data.iconAlpha=getIconAlphaByName(fileName)
             data.isFile=isFile
+
             if isFile then
-              fileType=getFileTypeByName(fileName)
-              data.icon=fileIcons[fileType]
-              data.iconColor=fileColors[fileType and string.upper(fileType)]
               data.action="openFile"
+              fileType=getFileTypeByName(fileName)
+              data.iconDrawable=fileIconDrawables[fileType or ""]
+
+              --data.icon=fileIcons[fileType]
+              --data.iconColor=fileColors[fileType and string.upper(fileType)]
              else
-              fileType=nil--文件夹根本就没有文件类型
-              data.icon=folderIcons[fileName]
-              data.iconColor=fileColors.folder
               data.action="openFolder"
+              fileType=nil--文件夹根本就没有文件类型
+              if isModuleDir then
+                data.iconDrawable=specialIconDrawables.moduleFolder
+                -- data.icon=createFolderIconWitchBadge(R.drawable.ic_android)
+               else
+                data.iconDrawable=folderIconDrawables[fileName]
+                --data.icon=folderIcons[fileName]
+              end
+              --data.iconColor=fileColors.folder
             end
             data.fileType=fileType
+            data.isModuleDir=isModuleDir
            else
             isFile=data.isFile
+            isModuleDir=data.isModuleDir
           end
 
           local iconColor=data.iconColor
           titleView.setText(data.title)
           iconView.setAlpha(data.iconAlpha)
-          iconView.setImageResource(data.icon)
+          --[[
+          if type(data.icon)=="number" then
+            iconView.setImageResource(data.icon)
+           else
+            iconView.setImageDrawable(data.icon)
+          end]]
 
+          local isNowFile
           if isFile then--当前是文件
             if initData then
               filesPositions[filePath]=position
             end
             --是不是正在浏览的文件
-            local isNowFile=FilesTabManager.openState and FilesTabManager.file==file
+            isNowFile=FilesTabManager.openState and FilesTabManager.file==file
             view.setSelected(isNowFile)
             if isNowFile then
               iconColor=res.color.attr.colorPrimary
@@ -321,7 +385,18 @@ return function(item)
            else--当前是文件夹
             view.setSelected(false)
           end
-          iconView.setColorFilter(iconColor)
+          --设置图标
+          --data.iconDrawable.setTintList(defaultItemIconColorStateList)
+          iconView.setImageDrawable(data.iconDrawable.getConstantState().newDrawable())
+          iconView.setColorFilter(isNowFile and specialColors.active or nil)
+          --[[
+if isNowFile then
+            data.iconDrawable.setColorFilter(specialColors.active,PorterDuff.Mode.SRC_IN)
+           else
+            data.iconDrawable.setColorFilter(nil)
+            --iconView.setImageDrawable(data.iconDrawable)
+            --iconView.setColorFilter(nil)
+          end]]
 
          else--未打开工程
           local pathView=ids.path
@@ -344,6 +419,13 @@ return function(item)
          else
           titleView.setTextColor(defaultItemTitleColorStateList)
         end
+      --是模块目录就
+        if isModuleDir then
+          titleView.getPaint().setTypeface(Typeface.DEFAULT_BOLD)
+         else
+          titleView.getPaint().setTypeface(Typeface.DEFAULT)
+        end
+        --titleView.getPaint().setFakeBoldText(isModuleDir)
       end
     end,
   }))

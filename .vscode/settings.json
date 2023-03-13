@@ -3,18 +3,26 @@
         "luajava"
     ],
     "cSpell.words": [
+        "androidx",
         "Giscus"
     ],
     "Lua.completion.keywordSnippet": "Both",
     "Lua.diagnostics.globals": [
-        "luajava"
+        "luajava",
+        "activity",
+        "appname",
+        "packagename",
+        "appcode",
+        "appver",
+        "mode",
+        "utilversion",
+        "smallicon",
+        "supported2",
+        "thirdplugins",
+        "events",
+        "activity"
     ],
-    "Lua.hint.enable": true,
-    "Lua.type.weakNilCheck": true,
-    "Lua.workspace.useGitIgnore": false,
     "Lua.completion.callSnippet": "Both",
-    "Lua.hint.setType": true,
-    "Lua.codeLens.enable": true,
     "Lua.runtime.path": [
         "?.lua",
         "?/init.lua",
@@ -25,5 +33,15 @@
         "Jesse205Library/src/main/luaLibs/?.lua",
         "Jesse205Library/src/main/luaLibs/?/init.lua",
     ],
+    "Lua.diagnostics.disable": [
+        "lowercase-global",
+        "undefined-global"
+    ],
+    "Lua.completion.autoRequire": false,
+    "Lua.runtime.special": {
+        "import": "require"
+    },
+    "Lua.runtime.unicodeName": true,
+    "Lua.semantic.keyword": true,
     
 }

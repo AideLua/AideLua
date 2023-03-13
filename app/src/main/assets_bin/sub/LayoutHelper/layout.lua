@@ -1,4 +1,4 @@
-{
+return {
   main={
     LinearLayout,
     orientation="vertical";

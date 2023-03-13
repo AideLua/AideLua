@@ -3,10 +3,10 @@
     android:tint="?attr/colorControlNormal"
     android:width="24dp"
     android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
-
+    android:viewportHeight="24"
+    android:viewportWidth="24">
     <path
         android:fillColor="#ff808080"
-        android:pathData="M21,3h-6H3v11v7h18l-9-9L21,3z M5,5h4.86L5,9.45V5z M12.82,5h3.35l-5.59,5.59L9.17,12L5,16.17v-4L12.82,5z M16.17,19H5 l5.59-5.59L16.17,19z" />
+        android:pathData="M20,18H4V8H20M20,6H12L10,4H4A2,2 0,0 0,2 6V18A2,2 0,0 0,4 20H20A2,2 0,0 0,22 18V8A2,2 0,0 0,20 6M15,16H6V14H15V16M18,12H6V10H18V12Z"/>
+
 </vector>

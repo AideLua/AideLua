@@ -16,12 +16,14 @@ local LuaReservedCharacters = {"switch", "if", "then", "and", "break", "do", "el
 
 ---根据文件名和扩展名获取用户真正想创建的文件路径
 ---@param name string 用户输入的名称
----@param extensionName 扩展名
+---@param extensionName string 扩展名
+---@return string path 返回文件路径
 local function buildReallyFilePath(name,extensionName)
-  if extensionName and not(name:find("%.[^/]*$")) then
-    return name.."."..extensionName
+  local path=name
+  if extensionName and not(path:find("%.[^/]*$")) then
+    return path.."."..extensionName
   end
-  return name
+  return path
 end
 
 ---创建文件

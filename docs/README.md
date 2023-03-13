@@ -82,7 +82,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 4. 点击 AideLua 的 `运行` 按钮，测试是否正常通过已安装的应用调试
 
 ::: tip
-您也可以使用[此工具](https://www.123pan.com/s/G7a9-c1ek)将现有 AndroLua+ 工程转换为 Aide Lua 项目
+您也可以使用[此工具](tool/alua2aidelua.md)将现有 AndroLua+ 工程转换为 Aide Lua 项目
 :::
 
 ## 工作原理

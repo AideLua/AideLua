@@ -1,13 +1,20 @@
 --v5.1.1+
 import "android.graphics.Color"
 import "util.UnicodeUtil"
+
+---Maekdown助手
 local MarkdownHelper={}
 
---供css使用，将颜色转换为css的rgb颜色
-function MarkdownHelper.color2CssRGB(color)
-  return "rgb("..Color.red(color)..","..Color.green(color)..","..Color.blue(color)..")"
+---供css使用，将颜色转换为css的rgb颜色
+---@param color number
+---@return string cssCode css代码
+function MarkdownHelper.color2CssRGB(color,alpha)
+  return "rgba("..Color.red(color)..","..Color.green(color)..","..Color.blue(color)..", "..(alpha or 1)..")"
 end
 
+---将 vuepress 的 markdown 语法转换为普通 markdown 语法
+---@param content string 内容
+---@return string newContent 新内容
 local function vuepressMd2NormalMd(content)
   --去除语言标识，因为不支持
   content=content:gsub("```[^\n]+","```")
@@ -27,7 +34,7 @@ local function vuepressMd2NormalMd(content)
           title="WARNING"
          elseif blockType=="danger" then
           title="DANGER"
-         elseif blockType=="code-group"
+         elseif blockType=="code-group" then
           title="CODE GROUP"
          elseif blockType=="code-group-item" then
           title="ITEM"
@@ -46,7 +53,8 @@ local function vuepressMd2NormalMd(content)
   return content
 end
 
---加载Shdowdown，在加载内容前调用
+---加载Shdowdown，在加载内容前调用
+---@param webView WebView
 function MarkdownHelper.loadShowdown(webView)
   local showdownFile=io.open(AppPath.AppDataDir.."/showdown/showdown.min.js","r")
   local showdownJs=showdownFile:read("*a")
@@ -58,6 +66,7 @@ function MarkdownHelper.loadShowdown(webView)
     return assert(loadstring("return "..key))()
   end)
   webView.evaluateJavascript(showdownJs,nil)
+  ---@language js
   webView.evaluateJavascript([[
 var head = document.head || document.getElementsByTagName('head')[0];
 var style = document.createElement('style');

@@ -37,6 +37,8 @@
     <string name="manual">User manual</string>
     <string name="commentedCode">Commented code</string>
     <string name="uncommentedCode">Uncomment code</string>
+    <string name="commentCode">Comment code</string>
+    <string name="uncommentCode">Uncomment code</string>
     <string name="logCat">Log Cat</string>
     <string name="logcat">Logcat</string>
     <string name="viewError">View Error</string>

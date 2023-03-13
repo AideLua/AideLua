@@ -41,6 +41,7 @@ EditorsManager.symbolBar.refreshSymbolBar(state): 刷新符号栏状态
 
 local EditorsManager={}
 local managerActions={}
+
 ---v5.1.1+
 local managerActionsWithEditor={}
 
@@ -76,6 +77,7 @@ local onKeyShortcut=function(super,keyCode,event)
   return onKeyShortcut(keyCode,event)
 end
 
+---@return View
 local function toCustomEditorView(CodeEditor)
   return function(context)
     return luajava.override(CodeEditor,{
@@ -138,12 +140,12 @@ setmetatable(EditorsManager.PSBarHorizontalScrollView,EditorsManager.PSBarHorizo
 import "editorLayouts"
 
 
+--在 v5.1.0(51099) 添加
 ---字体改变监听器
----在 v5.1.0(51099) 添加
 local typefaceChangeListeners={}
 
+--在 v5.1.0(51099) 添加
 ---配置更改监听器
----在 v5.1.0(51099) 添加
 local sharedDataChangeListeners={}
 local sharedDataCache={}
 setmetatable(sharedDataChangeListeners,{__index=function(self,key)
@@ -160,11 +162,16 @@ EditorsManager.typefaceChangeListeners=typefaceChangeListeners
 EditorsManager.sharedDataChangeListeners=sharedDataChangeListeners
 
 --获取字体Typeface
+---@return Typeface typeface 默认字体
+---@return Typeface boldTypeface 粗体
+---@return Typeface italicTypeface 意大利体
 local function getEditorTypefaces()
   --常规，粗体，斜体
+  ---@type Typeface,Typeface,Typeface
   local typeface,boldTypeface,italicTypeface
   local id=oldEditorFontId
   if id==0 then--默认，自动读取androlua字体
+    ---@type string
     local fontDir=LuaApplication.getInstance().getLuaExtDir("fonts")
 
     --常规
@@ -176,6 +183,7 @@ local function getEditorTypefaces()
     end
 
     --粗体
+    
     local boldFile=File(fontDir, "bold.ttf")
     if boldFile.exists() then
       boldTypeface=Typeface.createFromFile(boldFile)

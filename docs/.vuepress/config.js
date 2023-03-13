@@ -1,13 +1,13 @@
 import { defineUserConfig, defaultTheme } from 'vuepress'
-//import { pwaPlugin } from '@vuepress/plugin-pwa'
-//import { pwaPopupPlugin } from '@vuepress/plugin-pwa-popup'
+// import { pwaPlugin } from '@vuepress/plugin-pwa'
+// import { pwaPopupPlugin } from '@vuepress/plugin-pwa-popup'
 import { searchPlugin } from '@vuepress/plugin-search'
 // https://plugin-pwa2.vuejs.press/zh/
-//import { pwaPlugin } from "vuepress-plugin-pwa2"
+// import { pwaPlugin } from "vuepress-plugin-pwa2"
 // https://plugin-copy-code2.vuejs.press/zh/
-import { copyCodePlugin } from "vuepress-plugin-copy-code2";
+// import { copyCodePlugin } from "vuepress-plugin-copy-code2";
 // https://plugin-comment2.vuejs.press/zh/
-import { commentPlugin } from "vuepress-plugin-comment2";
+// import { commentPlugin } from "vuepress-plugin-comment2";
 
 
 export default defineUserConfig({
@@ -329,7 +329,7 @@ export default defineUserConfig({
                 },
             },
         }),*/
-        copyCodePlugin({
+        /* copyCodePlugin({
             showInMobile: true,
             pure: true,
             delay: 100,
@@ -340,6 +340,6 @@ export default defineUserConfig({
             repoId: "R_kgDOHfPX_g",
             category: "DocumentGiscus",
             categoryId: "DIC_kwDOHfPX_s4CUCDx",
-        }),
+        }), */
     ],
 })

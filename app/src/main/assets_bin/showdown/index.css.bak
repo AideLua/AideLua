@@ -2,8 +2,8 @@
     --color-primary: {{MarkdownHelper.color2CssRGB(res.color.attr.colorPrimary)}};
     --color-background: {{MarkdownHelper.color2CssRGB(res.color.attr.windowBackgroundColor)}};
     --color-text: {{MarkdownHelper.color2CssRGB(res.color.attr.colorOnBackground)}};
-    --color-text-blockquote: {{MarkdownHelper.color2CssRGB(android.res.color.attr.textColorPrimary,0.6)}};
-    --color-border: {{MarkdownHelper.color2CssRGB(res.color.attr.colorOnBackground,0.1)}};
+    --color-text-blockquote: {{MarkdownHelper.color2CssRGB(android.res.color.attr.textColorPrimary,0.3)}};
+    --color-border: {{MarkdownHelper.color2CssRGB(res.color.attr.colorOnBackground,0.3)}};
     --color-float: {{MarkdownHelper.color2CssRGB(res.color.attr.colorBackgroundFloating)}};
 }
 

@@ -36,6 +36,7 @@ FilesTabManager.backupDir=File(FilesTabManager.backupPath)
 
 FilesTabManager.tabIconState=getSharedData("tab_icon")
 
+
 local scrollDbAddrsCreatorMetatable={
   __index=function(self,key)
     local filesScrollingDB=EditorsManager.filesScrollingDB
@@ -231,7 +232,7 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory,saveFile,previ
       tab=filesTabLay.newTab()--新建一个Tab
       tab.setText(fileName)--设置显示的文字
       if FilesTabManager.tabIconState then
-        tab.setIcon(FilesBrowserManager.fileIcons[fileType])
+        tab.setIcon(FilesBrowserManager.fileIconDrawables[fileType or ""].getConstantState().newDrawable())
       end
     end
     if not(fileConfig) or fileConfig.needRefresh==true then
@@ -564,6 +565,7 @@ end
 
 function FilesTabManager.onResume(isResumeAgain)
   if isResumeAgain then
+    FilesTabManager.reopenFile()--包含了刷新预览按钮
     local newTabIcon = getSharedData("tab_icon") -- 刷新标签栏按钮状态
     if FilesTabManager.tabIconState ~= newTabIcon then
       FilesTabManager.tabIconState = newTabIcon

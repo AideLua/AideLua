@@ -1,9 +1,5 @@
-SelfJavaActivity=activity.getPackageName()..".PluginsManagerActivity"
-if activity.getClass()~=luajava.bindClass(activity.getPackageName()..".PluginsManagerActivity") then
-  local Intent=luajava.bindClass("android.content.Intent")
-  local intent=Intent(activity,luajava.bindClass(SelfJavaActivity))
-  activity.startActivity(intent)
-  activity.finish()
+RedirectHelper=require "RedirectHelper"
+if RedirectHelper.toAndroidActivity(activity.getPackageName()..".PluginsManagerActivity") then
   return
 end
 require "import"

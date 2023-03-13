@@ -1,7 +1,7 @@
 # API变更说明
 
 ::: tip
-您正在浏览 Util v4.0.0版本文档，新版本 Aide Lua 结构发生了巨大变化，删除了旧版本的所有 API。如需浏览旧版本文档，请转到[这里](old/apichanges)。
+您正在浏览 Util v4.0.0版本文档，新版本 Aide Lua 结构发生了巨大变化，删除了旧版本的所有 API。如需浏览旧版本文档，请转到[这里](old/apichanges.md)。
 :::
 
 更新日期：2022.11.1
@@ -13,7 +13,11 @@
 
 ### v5.2.0
 
-初始版本
+1. `EditorsManager.actions.commented` -> `EditorsManager.actions.comment`
+
+::: tip
+更多日志请见 `v5.1.2(51299)` 的变更日志
+:::
 
 ## 相关链接
 

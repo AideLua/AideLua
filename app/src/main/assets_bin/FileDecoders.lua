@@ -1,7 +1,14 @@
+---@class FileDecoder
+---@field editor string 编辑器名称
+
+
+
 ---@type table<string, FileDecoder> 文件解析器
-{
+return {
   txt={
     editor="CodeEditor",
+    ---@param path string 文件路径
+    ---@return string 文件的内容
     read=function(path)
       local content=isBinaryFile(path)
       if content==true then

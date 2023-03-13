@@ -1,7 +1,12 @@
 import "com.google.android.material.switchmaterial.SwitchMaterial"
 import "com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions"
 
+
 local SettingsLayUtil={}
+
+SettingsLayUtil._VERSION="3.0"
+SettingsLayUtil._VERSION_CODE=3099
+
 local contextMenuEnabled
 
 SettingsLayUtil.DIVIDER=1
@@ -14,9 +19,14 @@ SettingsLayUtil.ITEM_AVATAR=7
 SettingsLayUtil.ITEM_ONLYSUMMARY=8
 
 local colorPrimary=res.color.attr.colorPrimary
+local colorOnSurface=res.color.attr.colorOnSurface
+local colorStateListOnSurface=res.colorStateList.jesse205_color_on_surface
 local textColorPrimary=android.res.color.attr.textColorPrimary
 local textColorSecondary=android.res.color.attr.textColorSecondary
 
+local iconAlpha=Color.alpha(android.res.color.attr.colorControlNormal)/255
+
+--v3.0+
 local dividerLay={
   View;
   layout_width="fill";
@@ -34,8 +44,8 @@ local leftIconLay={
   layout_width="24dp",
   layout_height="24dp",
   --colorFilter=res.colorStateList.attr.colorControlNormal.getColors()[1],
-  colorFilter=android.res.color.attr.textColorPrimary;
-  alpha=Color.alpha(android.res.color.attr.colorControlNormal)/255;
+  colorFilter=colorOnSurface;
+  alpha=iconAlpha;
 }
 
 local leftCoverLay={
@@ -45,19 +55,12 @@ local leftCoverLay={
   layout_margin="16dp";
   layout_marginRight=0;
   radius="20dp";
-  --[[
-  {
-    CardView;
-    layout_height="fill";
-    layout_width="fill";
-    radius="18dp";]]
   {
     AppCompatImageView;
     layout_height="fill";
     layout_width="fill";
     id="icon";
   };
-  --};
 }
 
 local leftCoverIconLay={
@@ -79,10 +82,11 @@ local leftCoverIconLay={
 local oneLineLay={
   AppCompatTextView;
   id="title";
-  textSize="16sp";
-  textColor=textColorPrimary;
+  --textSize="16sp";
+  --textColor=colorOnSurface;
   layout_weight=1;
   layout_margin="16dp";
+  textAppearance=android.res.id.attr.textAppearanceListItem
 }
 
 local twoLineLay={
@@ -95,8 +99,8 @@ local twoLineLay={
     AppCompatTextView;
     id="title";
     --textSize="16sp";
-    layout_width="fill";
     --textColor=textColorPrimary;
+    layout_width="fill";
     textAppearance=android.res.id.attr.textAppearanceListItem;
   };
   {
@@ -139,8 +143,9 @@ local itemsLay={
     LinearLayoutCompat;
     layout_width="fill";
     orientation="vertical";
-    focusable=true;
+    focusable=false;
     dividerLay;
+    clickable=false;
   };
 
   {--标题
@@ -148,6 +153,7 @@ local itemsLay={
     layout_width="fill";
     orientation="vertical";
     focusable=true;
+    clickable=false;
     dividerLay;
     {
       AppCompatTextView;
@@ -258,6 +264,7 @@ local function onItemViewClick(view)
       data.checked=checked
      elseif data.key then
       local key=data.key
+      --自动保存新值
       if data.sharedPreferences then
         local editor = data.sharedPreferences.edit()
         editor.putBoolean(key, checked)
@@ -328,21 +335,25 @@ local adapterEvents={
     return itemData[1]
   end,
   onCreateViewHolder=function(onItemClick,onItemLongClick,parent,viewType)
+    local layoutTable=itemsLay[viewType]
     local ids={}
-    local view=loadlayout2(itemsLay[viewType],ids)
+
+    local view=loadlayout2(layoutTable,ids)
     local holder=LuaCustRecyclerHolder(view)
     view.setTag(ids)
     local viewConfig={enabled=true,
-      switchEnabled=true,
+      rightIconViewVisible=true,
       onItemClick=onItemClick,
       onItemLongClick=onItemLongClick,
       itemView=view,
+      alphaStateViews={ids.title,ids.summary,ids.rightIcon},
       ids=ids}
     ids._config=viewConfig
-    if viewType~=1 then
+    if layoutTable.clickable~=false then
       local switchView=ids.switchView
       view.setFocusable(true)
-      view.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
+      view.setBackground(res.drawable.attr.listChoiceBackgroundIndicator)
+      --view.setBackground(ThemeUtil.getRippleDrawable(res.color.attr.rippleColor,true))
       view.setOnClickListener(onItemViewClickListener)
       view.setOnLongClickListener(onItemViewLongClickListener)
       if switchView then
@@ -373,19 +384,20 @@ local adapterEvents={
     viewConfig.allowedChange=false
 
     --Views
-    local dividerView=ids.divider
-    local titleView=ids.title
-    local summaryView=ids.summary
-    local switchView=ids.switchView
-    local rightIconView=ids.rightIcon
+    local dividerView=ids.divider--分割线
+    local titleView=ids.title--标题
+    local summaryView=ids.summary--简介
+    local switchView=ids.switchView--开关
+    local rightIconView=ids.rightIcon--右侧提示图标
     local iconView=ids.icon
 
+    --分割线
     if dividerView then
       if data.dividerVisible==true then
         dividerView.setVisibility(View.VISIBLE)
        elseif data.dividerVisible==false then
         dividerView.setVisibility(View.GONE)
-       else
+       else--默认状态，自动设置
         if position==0 then
           dividerView.setVisibility(View.GONE)
          else
@@ -394,9 +406,12 @@ local adapterEvents={
       end
     end
 
-    if title and titleView then
+    --标题
+    if titleView and title then
       titleView.text=title
     end
+
+    --简介
     if summaryView then
       if summary then
         summaryView.text=summary
@@ -404,34 +419,38 @@ local adapterEvents={
         summaryView.text=chooseItems[(getSharedData(key) or 0)+1]
       end
     end
-    if icon and iconView then
-      if type(icon)=="number" then
-        iconView.setImageResource(icon)
+
+    --左侧图标
+    if iconView then
+      if icon then
+        local iconType=type(icon)
+        if iconType=="number" then
+          iconView.setImageResource(icon)
+         else
+          Glide.with(activity)
+          .load(icon)
+          .transition(DrawableTransitionOptions.withCrossFade())
+          .into(iconView)
+        end
        else
-        Glide.with(activity)
-        .load(icon)
-        .transition(DrawableTransitionOptions.withCrossFade())
-        .into(iconView)
+        iconView.setImageDrawable(nil)
       end
     end
-
     --设置启用状态透明
     local enabledNotFalse=not(enabled==false)
     local switchEnabledNotFalse=not(switchEnabled==false)
     if viewConfig.enabled~=enabledNotFalse then
       viewConfig.enabled=enabledNotFalse
       layoutView.setEnabled(enabledNotFalse)
-      local viewsList={titleView,summaryView,iconView,rightIconView}
       if enabledNotFalse then
-        setAlpha(viewsList,1)
+        setAlpha(viewConfig.alphaStateViews,1)
+        iconView.setAlpha(iconAlpha)
        else
-        setAlpha(viewsList,0.5)
+        setAlpha(viewConfig.alphaStateViews,0.5)
+        iconView.setAlpha(iconAlpha*0.5)
       end
-    end
-    if viewConfig.switchEnabled~=switchEnabledNotFalse then
-      viewConfig.switchEnabled=switchEnabledNotFalse
       if switchView then
-        switchView.setEnabled(switchEnabledNotFalse)
+        switchView.setEnabled(enabledNotFalse)
       end
     end
 
@@ -450,22 +469,24 @@ local adapterEvents={
         switchView.setChecked(false)
       end
     end
-
+    --右侧提示图标
     if rightIconView then
       local newPage=data.newPage
-      local visibility=rightIconView.getVisibility()
+      local visible=viewConfig.rightIconViewVisible
       if newPage then
         if newPage=="newApp" then
           rightIconView.setImageResource(R.drawable.ic_launch)
          else
           rightIconView.setImageResource(R.drawable.ic_chevron_right)
         end
-        if visibility~=View.VISIBLE then
+        if visible~=true then
           rightIconView.setVisibility(View.VISIBLE)
+          viewConfig.rightIconViewVisible=true
         end
        else
-        if visibility~=View.GONE then
+        if visible~=false then
           rightIconView.setVisibility(View.GONE)
+          viewConfig.rightIconViewVisible=false
         end
       end
     end
@@ -474,7 +495,51 @@ local adapterEvents={
 }
 SettingsLayUtil.adapterEvents=adapterEvents
 
+
+--v3.0+
+---生成摄制组字典<br>
+---{<br>
+--- key = [TitleSetting]<br>
+---}<br>
+---@param settingsData table[] 设置项数据
+---@param settingsMap table<string,table> 要添加到的表
+---@return table<string,table> settingsMap 已添加到的列表。如果存在 settingsMap，则返回 settingsMap
+function SettingsLayUtil.generateSettingsGroupMap(settingsData,settingsMap)
+  settingsMap=settingsMap or {}
+  for index,content in ipairs(settingsData) do
+    if type(content)=="table" then
+      if content[1]==SettingsLayUtil.TITLE then
+        if content.key then
+          settingsMap[content.key]=content
+        end
+      end
+    end
+  end
+  return settingsMap
+end
+
+--v3.0+
+---加载设置项
+---@param settingsData table[] 设置项数据
+---@param newData table[] 要添加到的列表
+---@return table[] newData 已添加到的列表
+function SettingsLayUtil.loadSettingItems(settingsData,newData)
+  newData=newData or {}
+  for index,content in ipairs(settingsData) do
+    if type(content)=="table" then
+      table.insert(newData,content)
+      SettingsLayUtil.loadSettingItems(content,newData)
+    end
+  end
+  return newData
+end
+
+--新建一个简单的适配器
+---@param data table<SettingItem>
+---@param onItemClick function(view,ids,key,data)
 function SettingsLayUtil.newAdapter(data,onItemClick,onItemLongClick)
+  assert(data,"The first parameter must be table, now is "..type(data)..".")
+
   return LuaCustRecyclerAdapter(AdapterCreator({
     getItemCount=function()
       return adapterEvents.getItemCount(data)

@@ -9,8 +9,8 @@ local setEnabled, getEnabled, getReallyEnabled, loadPlugins,
 getPluginPath, getPluginDataPath, getAvailable,
 getPluginsEventsAndName,getConfig,onPluginError
 
-local PLUGINS_PATH = AppPath.AppMediaDir .. "/plugins"
-local PLUGINS_DATA_PATH = AppPath.AppMediaDir .. "/data/plugins"
+local PLUGINS_PATH = PluginsManager.PLUGINS_PATH_USER
+local PLUGINS_DATA_PATH = PluginsManager.PLUGINS_DATA_PATH
 PluginsUtil.PLUGINS_PATH = PLUGINS_PATH
 PluginsUtil.PLUGINS_DATA_PATH = PLUGINS_DATA_PATH
 PluginsUtil._VERSION="4.0.0 (dev)"

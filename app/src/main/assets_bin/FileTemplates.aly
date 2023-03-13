@@ -158,6 +158,7 @@ local metatable={__index={{ShoredModuleName}}}
 function {{ShoredModuleName}}.__call(self)
   local self={}
   setmetatable(self,metatable)
+  return self
 end
 return {{ShoredModuleName}}
 ]],

@@ -281,7 +281,7 @@ topLayoutOnTouchListener=View.OnTouchListener{
       local offset=y-searchEditDownY+searchEditDownOffset
       if offset>0 then
         offset=0
-       elseif offset<-actionBarHeight
+       elseif offset<-actionBarHeight then
         offset=-actionBarHeight
       end
       onAnimUpdate(offset)

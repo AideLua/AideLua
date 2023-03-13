@@ -44,24 +44,19 @@ function BuildingDialogBuilder:print(iconName,message,state)
   local dialog=self.dialog
 
   local icon,iconColor=0,0--设置图标及颜色
-  switch iconName do
-   case "doing" then--正在
+  if iconName=="doing" then
     icon=R.drawable.ic_reload
     iconColor=res.color.jesse205_blue
-   case "info" then--信息
+  elseif iconName=="info" then
     icon=R.drawable.ic_information_variant
-   case "warning" then--警告
-    icon=R.drawable.ic_alert_outline
-    iconColor=res.color.jesse205_orange
-   case "success" then--成功
+  elseif iconName=="success" then
     icon=R.drawable.ic_check
     iconColor=res.color.jesse205_teal
-    --dialogIds.stateTextView.text=message
-   case "error" then--错误
+  elseif iconName=="error" then
     icon=R.drawable.ic_close
     iconColor=res.color.jesse205_red
-   default
-    error("Unknow icon",iconName)
+  else
+    error("Unknow icon:"..iconName)
   end
 
   adapter.add({stateTextView=message or "",icon={src=icon ,colorFilter=iconColor}})

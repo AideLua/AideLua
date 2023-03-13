@@ -6,6 +6,7 @@
     <string name="jesse205_toast_neterror">Network error: %1$s (%2$s)</string>
     <string name="jesse205_ui">User Interface</string>
     <string name="jesse205_themePicker">Theme settings</string>
+    <string name="jesse205_themeColor">Theme color</string>
     <string name="jesse205_darkActionBar">Dark ActionBar theme</string>
     <string name="jesse205_app">App</string>
     <string name="jesse205_about">About</string>
@@ -27,7 +28,7 @@
     <string name="jesse205_copyright">Copyright</string>
     <string name="jesse205_supportProject">Support this project</string>
     <string name="jesse205_htmlFileViewer">HTML Viewer</string>
-    <string name="jesse205_openSourceLicense">Open source license</string>
+    <string name="jesse205_openSourceLicenses">Open source licenses</string>
     <string name="jesse205_welcome">Welcome</string>
     <!--<string name="jesse205_allReady">All ready</string>
     <string name="jesse205_allReady_tips">Click the "Finish" button to start the experience! </string>-->

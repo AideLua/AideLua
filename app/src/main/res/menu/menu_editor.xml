@@ -27,12 +27,25 @@
         android:title="@string/code_popup">
         <menu>
             <item
-                android:id="@+id/menu_code_commented"
-                android:title="@string/commentedCode"/>
+                android:id="@+id/menu_code_comment"
+                android:title="@string/commentCode"/>
             <item
                 android:id="@+id/menu_code_viewApi"
                 android:title="@string/javaApiViewer_viewApi"/>
 
+            <item
+                android:id="@+id/menu_code_format"
+                android:title="@string/format"/>
+            <item
+                android:id="@+id/menu_code_search"
+                android:title="@string/abc_searchview_description_search"/>
+            <item
+                android:id="@+id/menu_code_checkImport"
+                android:title="@string/check_import"/>
+            <item
+                android:id="@+id/menu_code_checkCode"
+                android:title="@string/checkCode"/>
+            
         </menu>
     </item>
 </menu>

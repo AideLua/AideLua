@@ -12,6 +12,8 @@ local M2PName={
   },
 }
 
+---LuaEditor帮助类
+---@class LuaEditorHelper
 local LuaEditorHelper={}
 local _clipboardActionMode=nil
 local removePackages,screenToViewX,screenToViewY,isNearChar,isNearChar2
@@ -53,8 +55,47 @@ local providers={
 }--提供者们
 LuaEditorHelper.providers=providers
 
+--@type ActionMode.Callback
+local actionModeCallback=ActionMode.Callback({
+  onCreateActionMode=function(mode,menu)
+    _clipboardActionMode=mode
+    mode.setTitle(android.R.string.selectTextMode)
+    local inflater=mode.getMenuInflater()
+    inflater.inflate(R.menu.menu_editor,menu)
+    return true
+  end,
+  onActionItemClicked=function(mode,item)
+    local editor=mode.tag.editor
+    local id=item.getItemId()
+    if id==R.id.menu_selectAll then
+      editor.selectAll()
+     elseif id==R.id.menu_cut then
+      editor.cut()
+     elseif id==R.id.menu_copy then
+      editor.copy()
+     elseif id==R.id.menu_paste then
+      editor.paste()
+     elseif id==R.id.menu_code_comment then
+      --TODO: 指定编辑器
+      EditorsManager.actions.comment()
+     elseif id==R.id.menu_code_viewApi then
+      local selectedText=editor.getSelectedText()
+      newSubActivity("JavaApi",{selectedText},true)
+    end
+    return false;
+  end,
+  onDestroyActionMode=function(mode)
+    mode.tag.editor.selectText(false)
+    _clipboardActionMode=nil
+  end,
+})
+local actionModeTag={
+  ---@class LuaEditor
+  editor=nil
+}
+
 function removePackages(editor,packages)
-  for index,package in pairs(packages) do
+  for index,package in ipairs(packages) do
     editor.removePackage(package)
   end
 end
@@ -70,7 +111,8 @@ end
 LuaEditorHelper.screenToViewX=screenToViewX
 LuaEditorHelper.screenToViewY=screenToViewY
 
-
+--v5.2.0-
+--[[
 function isNearChar(bounds,x,y)
   local TOUCH_SLOP=12
   return (y >= (bounds.top - TOUCH_SLOP)
@@ -78,12 +120,15 @@ function isNearChar(bounds,x,y)
   and x >= (bounds.left - TOUCH_SLOP)
   and x < (bounds.right + TOUCH_SLOP))
 end
-LuaEditorHelper.isNearChar=isNearChar
+LuaEditorHelper.isNearChar=isNearChar]]
 
-
+---@param editor LuaEditor
+---@param relativeCaretX number
+---@param relativeCaretY number
+---@param x number
+---@param y number
 function isNearChar2(editor,relativeCaretX,relativeCaretY,x,y)
   local TOUCH_SLOP=editor.getTextSize()+10
-  --print(TOUCH_SLOP)
   return (y >= (relativeCaretY - TOUCH_SLOP)
   and y < (relativeCaretY + TOUCH_SLOP+100)
   and x >= (relativeCaretX - TOUCH_SLOP-40)
@@ -91,43 +136,16 @@ function isNearChar2(editor,relativeCaretX,relativeCaretY,x,y)
 end
 LuaEditorHelper.isNearChar2=isNearChar2
 
-
+---编辑器选择状态改变
+---@param view LuaEditor
+---@param status boolean 选择状态
+---@param start number 开始索引
+---@param end number 结束索引
 function LuaEditorHelper.onEditorSelectionChangedListener(view,status,start,end_)
-
   if not(_clipboardActionMode) and status then
-    local actionMode=luajava.new(ActionMode.Callback,
-    {
-      onCreateActionMode=function(mode,menu)
-        _clipboardActionMode=mode
-        mode.setTitle(android.R.string.selectTextMode)
-        local inflater=mode.getMenuInflater()
-        inflater.inflate(R.menu.menu_editor,menu)
-        return true
-      end,
-      onActionItemClicked=function(mode,item)
-        local id=item.getItemId()
-        if id==R.id.menu_selectAll then
-          view.selectAll()
-         elseif id==R.id.menu_cut then
-          view.cut()
-         elseif id==R.id.menu_copy then
-          view.copy()
-         elseif id==R.id.menu_paste then
-          view.paste()
-         elseif id==R.id.menu_code_commented then
-          EditorsManager.actions.commented()
-         elseif id==R.id.menu_code_viewApi then
-          local selectedText=view.getSelectedText()
-          newSubActivity("JavaApi",{selectedText},true)
-        end
-        return false;
-      end,
-      onDestroyActionMode=function(mode)
-        view.selectText(false)
-        _clipboardActionMode=nil
-      end,
-    })
-    activity.startSupportActionMode(actionMode)
+    _clipboardActionMode=activity.startSupportActionMode(actionModeCallback)
+    actionModeTag.editor=view
+    _clipboardActionMode.setTag(actionModeTag)
    elseif _clipboardActionMode and not(status) then
     _clipboardActionMode.finish()
     _clipboardActionMode=nil
@@ -150,9 +168,9 @@ function LuaEditorHelper.onEditorSelectionChangedListener(view,status,start,end_
   end
 end
 
+---应用工具栏
 function LuaEditorHelper.applyStyleToolBar(editor)
-  --混淆这里有一点反混淆
-
+  --这里有一点反混淆
   editor.setOnSelectionChangedListener({
     [M2PName["com.myopicmobile.textwarrior.android.OnSelectionChangedListener"].onSelectionChanged]=function(active,selStart,selEnd)
       LuaEditorHelper.onEditorSelectionChangedListener(editor,active,selStart,selEnd)
@@ -160,19 +178,22 @@ function LuaEditorHelper.applyStyleToolBar(editor)
   })
 end
 
+local cnString2EnString={
+  {"，",","},
+  {"（","("},
+  {"）",")"},
+  {"［","["},
+  {"］","]"},
+  {"＇","'"},
+  {"＂","\""},
+  {"“","\""},
+  {"”","\""},
+  {"〃","\""},
+}
+
+---应用手写笔输入
+---@param editor LuaEditor
 function LuaEditorHelper.applyPencilInput(editor,pencilEdit)
-  local cnString2EnString={
-    {"，",","},
-    {"（","("},
-    {"）",")"},
-    {"［","["},
-    {"］","]"},
-    {"＇","'"},
-    {"＂","\""},
-    {"“","\""},
-    {"”","\""},
-    {"〃","\""},
-  }
   pencilEdit.addTextChangedListener({
     onTextChanged=function(text,start,before,count)
       text=tostring(text)
@@ -180,7 +201,7 @@ function LuaEditorHelper.applyPencilInput(editor,pencilEdit)
         if text=="" then
          else
           local newText=text:match(" (.+)")
-          for index,content in ipairs(cnString2EnString)
+          for index,content in ipairs(cnString2EnString) do
             newText=newText:gsub(content[1],content[2])
           end
           editor.paste(newText)
@@ -210,7 +231,9 @@ function LuaEditorHelper.applyTouchListener(editor)
   end
 end
 
---在 v5.1.0(51099) 废弃
+---在 v5.1.0(51099) 废弃
+---v5.2.0-
+--[[
 function LuaEditorHelper.applyMagnifier(editor)
   print("警告","LuaEditorHelper.applyMagnifier","此API已废弃")
   local showingMagnifier=false
@@ -258,7 +281,10 @@ function LuaEditorHelper.applyMagnifier(editor)
     end
   end
 end
+]]
 
+---初始化关键词任务
+---@param keysListJ
 function LuaEditorHelper.initKeysTaskFunc(keysListJ,packagesListJ)
   require "import"
   import "androidApis.editor.androluaApis"

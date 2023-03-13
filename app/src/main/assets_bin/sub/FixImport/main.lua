@@ -146,7 +146,7 @@ function fiximport(code,packageName,application)
     local buf={}
     local last=nil
 
-    for advance,text,column in CodeHelper.LuaLexerIteratorBuilder(code)
+    for advance,text,column in CodeHelper.LuaLexerIteratorBuilder(code) do
       if last~=LuaTokenTypes.DOT and advance==LuaTokenTypes.NAME then
         if not(buf[text]) then
           buf[text]=true

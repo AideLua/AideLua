@@ -44,9 +44,13 @@ import "android.graphics.Bitmap"
 import "android.graphics.Canvas"
 import "android.graphics.drawable.GradientDrawable"
 import "android.graphics.drawable.ShapeDrawable"
-import "android.graphics.drawable.shapes.RoundRectShape"
+--import "android.graphics.drawable.shapes.RoundRectShape"
 import "android.graphics.drawable.RippleDrawable"
 import "android.graphics.drawable.LayerDrawable"
+import "android.graphics.drawable.DrawableWrapper"
+
+import "android.graphics.drawable.shapes.OvalShape"
+import "android.graphics.PorterDuff"
 
 import "android.content.ClipData"
 import "android.content.ClipDescription"
@@ -280,31 +284,30 @@ function onOptionsItemSelected(item)
   local aRid = android.R.id
   local editorActions = EditorsManager.actions
   --小心switch的bug
-  switch id do
-   case aRid.home then -- 菜单键
+  if id==aRid.home then -- 菜单键
     FilesBrowserManager.switchState()
-   case Rid.menu_undo then -- 撤销
+  elseif id==Rid.menu_undo then -- 撤销
     editorActions.undo()
-   case Rid.menu_redo then -- 重装
+  elseif id== Rid.menu_redo then -- 重装
     editorActions.redo()
-   case Rid.menu_run then -- 运行
+  elseif id== Rid.menu_run then -- 运行
     if ProjectManager.openState then
       ProjectManager.smartRunProject()
      else
       local code=EditorsManager.actions.getText()
       runLuaFile(nil,code)
     end
-   case Rid.menu_project_bin_run then -- 二次打包
+  elseif id== Rid.menu_project_bin_run then -- 二次打包
     if ProjectManager.openState then
       FilesTabManager.saveAllFiles()
       BuildToolUtil.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,true,true)
     end
-   case Rid.menu_project_bin then -- 二次打包
+  elseif id== Rid.menu_project_bin then -- 二次打包
     if ProjectManager.openState then
       FilesTabManager.saveAllFiles()
       BuildToolUtil.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,false,false)
     end
-   case Rid.menu_project_build then
+  elseif id== Rid.menu_project_build then
     if not ProjectManager.openState then
       return
     end
@@ -325,21 +328,21 @@ function onOptionsItemSelected(item)
         },
       })
     end
-   case Rid.menu_project_reopen then -- 重新打开项目
+  elseif id== Rid.menu_project_reopen then -- 重新打开项目
     ProjectManager.reopenProject()--函数内已判断打开状态
-   case Rid.menu_project_close then -- 关闭项目
+  elseif id== Rid.menu_project_close then -- 关闭项目
     ProjectManager.closeProject()
-   case Rid.menu_file_save then -- 保存
+  elseif id== Rid.menu_file_save then -- 保存
     FilesTabManager.saveAllFiles(true)
-   case Rid.menu_file_reopen then -- 重新打开文件
+  elseif id== Rid.menu_file_reopen then -- 重新打开文件
     FilesTabManager.reopenFile()--函数内已判断打开状态
-   case Rid.menu_file_close then -- 关闭文件
+  elseif id== Rid.menu_file_close then -- 关闭文件
     FilesTabManager.closeFile()
-   case Rid.menu_code_format then -- 格式化
+  elseif id== Rid.menu_code_format then -- 格式化
     editorActions.format()
-   case Rid.menu_code_search then -- 代码搜索
+  elseif id== Rid.menu_code_search then -- 代码搜索
     EditorsManager.startSearch()
-   case Rid.menu_code_checkImport then -- 检查导入
+  elseif id== Rid.menu_code_checkImport then -- 检查导入
     if EditorsManager.isEditor() then
       local packageName=activity.getPackageName()
       if ProjectManager.openState then--打开了工程
@@ -347,29 +350,29 @@ function onOptionsItemSelected(item)
       end
       newSubActivity("FixImport",{EditorsManager.actions.getText(),packageName})
     end
-   case Rid.menu_tools_javaApiViewer then -- JavaAPI浏览器
+  elseif id== Rid.menu_tools_javaApiViewer then -- JavaAPI浏览器
     newSubActivity("JavaApi",true)
-   case Rid.menu_tools_javaApiViewer_windmill then -- JavaAPI浏览器
+  elseif id== Rid.menu_tools_javaApiViewer_windmill then -- JavaAPI浏览器
     startWindmillActivity("Java API")
-   case Rid.menu_tools_logCat then -- 日志猫
+  elseif id== Rid.menu_tools_logCat then -- 日志猫
     if ProjectManager.openState then
       ProjectManager.runProject(checkSharedActivity("LogCat"))
      else
       newSubActivity("LogCat",true)
     end
-   case Rid.menu_tools_httpDebugging_windmill then -- Http 调试
+  elseif id== Rid.menu_tools_httpDebugging_windmill then -- Http 调试
     startWindmillActivity("Http 调试")
-   case Rid.menu_tools_luaManual_windmill then -- Lua 手册
+  elseif id== Rid.menu_tools_luaManual_windmill then -- Lua 手册
     startWindmillActivity("手册")
-   case Rid.menu_tools_manual then -- 使用手册
+  elseif id== Rid.menu_tools_manual then -- 使用手册
     openUrl(DOCS_URL)
-   case Rid.menu_more_settings then -- 设置
+  elseif id== Rid.menu_more_settings then -- 设置
     newSubActivity("Settings")
-   case Rid.menu_more_about then -- 关于
+  elseif id== Rid.menu_more_about then -- 关于
     newSubActivity("About")
-   case Rid.menu_code_checkCode then -- 代码查错
+  elseif id== Rid.menu_code_checkCode then -- 代码查错
     editorActions.check(true)
-   case Rid.menu_tools_layoutHelper then -- 布局助手
+  elseif id== Rid.menu_tools_layoutHelper then -- 布局助手
     FilesTabManager.saveFile()
     local prjPath,filePath
     if ProjectManager.openState then
@@ -379,9 +382,10 @@ function onOptionsItemSelected(item)
       filePath=FilesTabManager.file.getPath()
     end
     newSubActivity("LayoutHelper",{prjPath,filePath})
-   case Rid.menu_more_openNewWindow then -- 打开新窗口
+  elseif id== Rid.menu_more_openNewWindow then -- 打开新窗口
     activity.newActivity("main",{"projectPicker"},true,int(System.currentTimeMillis()))
   end
+
   PluginsUtil.callElevents("onOptionsItemSelected", item)
 end
 
@@ -490,7 +494,7 @@ function onDeviceByWidthChanged(device, oldDevice)
 end
 
 function onResume()
-  if PluginsUtil.callElevents("onResume", isResumeAgain)
+  if PluginsUtil.callElevents("onResume", isResumeAgain) then
     return
   end
   local reload = false
@@ -515,24 +519,6 @@ function onResume()
 
   if isResumeAgain then
     ProjectManager.refreshProjectsPath()
-    FilesTabManager.reopenFile()--包含了刷新预览按钮
-    local newTabIcon = getSharedData("tab_icon") -- 刷新标签栏按钮状态
-    if oldTabIcon ~= newTabIcon then
-      oldTabIcon = newTabIcon
-      if newTabIcon then
-        for index, content in pairs(FilesTabManager.openedFiles) do
-          local tab = content.tab
-          tab.setIcon(FilesBrowserManager.fileIcons[content.fileType])
-          FilesTabManager.initFileTabView(tab, content) -- 再次初始化一下标签栏，下方同理
-        end
-       else
-        for index, content in pairs(FilesTabManager.openedFiles) do
-          local tab = content.tab
-          tab.setIcon(nil)
-          FilesTabManager.initFileTabView(tab, content)
-        end
-      end
-    end
     local newEditorSymbolBar = getSharedData("editor_symbolBar")
     if oldEditorSymbolBar ~= newEditorSymbolBar then
       oldEditorSymbolBar = newEditorSymbolBar
@@ -655,19 +641,13 @@ function onBackPressed()
 end
 
 function onRestoreInstanceState(savedInstanceState)
-  local fileBrowserOpenState=savedInstanceState.getBoolean("filebrowser_openstate")
-  if fileBrowserOpenState then
-    FilesBrowserManager.open()
-   else
-    FilesBrowserManager.close()
-  end
-  toggle.syncState()
+  FilesBrowserManager.onRestoreInstanceState(savedInstanceState)
   --v5.1.2+
   PluginsUtil.callElevents("onRestoreInstanceState",savedInstanceState)
 end
 
 function onSaveInstanceState(savedInstanceState)
-  savedInstanceState.putBoolean("filebrowser_openstate",FilesBrowserManager.openState)
+  FilesBrowserManager.onSaveInstanceState(savedInstanceState)
   --只有当d打开了工程才保存工程路径
   if ProjectManager.openState and FilesBrowserManager.directoryFile then
     savedInstanceState.putString("prjpath",ProjectManager.nowPath)

@@ -140,13 +140,17 @@ moreItem={
 
 --感谢名单
 thanks={
-  难忘的旋律={"PhotoView"},
-  噬心={"HtmlEditor (老版本)"},
-  dingyi={"MyLuaApp","LuaEditor","Gradle 工程修复","放大镜","Preference 设置页面","布局编译","AndroLua 调试"},
-  狸猫={"提供优化后的 AndroidX 模板"},
-  frrrrrits={"AnimeonGo（为 Edde 系列应用优化提供了重要参考）"},
-  smile={"编译 ZipAlign 并测试"},
+  ["@难忘的旋律"]={"PhotoView"},
+  ["@噬心"]={"HtmlEditor (老版本)"},
+  ["@dingyi"]={"MyLuaApp","LuaEditor","Gradle 工程修复","放大镜","Preference 设置页面","布局编译","AndroLua 调试"},
+  ["@狸猫"]={"提供优化后的 AndroidX 模板"},
+  ["@frrrrrits"]={"AnimeonGo（为 Edde 系列应用优化提供了重要参考）"},
+  ["@smile"]={"编译 ZipAlign 并测试"},
+  ["@🍊漪涟里梦 .ƎHTƎ⅃"]={"部分开发相关图标"},
   undraw={"插画"},
+  IconPark={"Android 等部分图标"},
+  ["Material Design Icon"]={"几乎所有图标"},
+  
   
 }
 

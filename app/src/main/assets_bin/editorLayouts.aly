@@ -128,18 +128,18 @@
         end
         return toboolean(state),message
       end,
-      commented=function(ids,config)
+      comment=function(ids,config)
         local editor=ids.editor
         local selectedText=editor.getSelectedText()
         if #selectedText~=0 then
-          if selectedText:find("\n") then
+          if selectedText:find("\n") then--有换行，多行注释
             local equals=""
             local selectedTextJ=String(selectedText)
             while (selectedTextJ.indexOf("]"..equals.."]")~=-1 or selectedTextJ.indexOf("["..equals.."[")~=-1) do
               equals=equals.."="
             end
             editor.paste("--["..equals.."["..selectedText.."]"..equals.."]")
-           else
+           else--进行单行注释
             editor.paste("--"..selectedText.."")
           end
         end

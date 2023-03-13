@@ -1,47 +1,52 @@
---- @class Jesse205
+---Jesse205 框架
+---@class Jesse205
 local jesse205 = {}
 _G.jesse205 = jesse205
-jesse205._VERSION = "13.0.0 (alpha) (Pro)" -- 库版本名
-jesse205._VERSION_CODE = 130001 -- 库版本号
-jesse205._ENV = _ENV
-jesse205.themeType = "Jesse205" -- 主题类型
-jesse205.LIBRARY_PACKAGE_NAME="com.jesse205"
-local LIBRARY_PACKAGE_NAME=jesse205.LIBRARY_PACKAGE_NAME
+jesse205._VERSION = "13.0.0 (alpha) (Pro)"   -- 库版本名
+jesse205._VERSION_CODE = 130001              -- 库版本号
+jesse205._ENV = _ENV                         -- Jesse205局部变量
+jesse205.themeType = "Jesse205"              -- 主题类型
+jesse205.LIBRARY_PACKAGE_NAME = "com.jesse205" -- 库包名
+local LIBRARY_PACKAGE_NAME = jesse205.LIBRARY_PACKAGE_NAME
 
-require("import") -- 导入import
+require("import")            -- 导入import
 import("loadlayout2")
 local import_ = _G["import"] -- 防止编辑器报错
 local appName, loadingDia
 local phoneLanguage
+
+---Java类提示
+-- require "JavaClassHint"
 
 -- 惰性导入？
 local fastImport = {
   Bitmap = "android.graphics.Bitmap",
   LayoutTransition = "android.animation.LayoutTransition",
   StatService = "com.baidu.mobstat.StatService",
-  AppPath = LIBRARY_PACKAGE_NAME..".app.AppPath",
-  PermissionUtil = LIBRARY_PACKAGE_NAME..".app.PermissionUtil",
-  MyStyleUtil = LIBRARY_PACKAGE_NAME..".util.MyStyleUtil",
-  MyToast = LIBRARY_PACKAGE_NAME..".util.MyToast",
-  getNetErrorStr = LIBRARY_PACKAGE_NAME..".util.getNetErrorStr",
-  MyAnimationUtil = LIBRARY_PACKAGE_NAME..".util.MyAnimationUtil",
-  ScreenFixUtil = LIBRARY_PACKAGE_NAME..".util.ScreenFixUtil",
-  FileUtil = LIBRARY_PACKAGE_NAME..".util.FileUtil",
-  ClearContentHelper = LIBRARY_PACKAGE_NAME..".helper.ClearContentHelper",
+  AppPath = LIBRARY_PACKAGE_NAME .. ".app.AppPath",
+  PermissionUtil = LIBRARY_PACKAGE_NAME .. ".app.PermissionUtil",
+  MyStyleUtil = LIBRARY_PACKAGE_NAME .. ".util.MyStyleUtil",
+  MyToast = LIBRARY_PACKAGE_NAME .. ".util.MyToast",
+  getNetErrorStr = LIBRARY_PACKAGE_NAME .. ".util.getNetErrorStr",
+  MyAnimationUtil = LIBRARY_PACKAGE_NAME .. ".util.MyAnimationUtil",
+  ScreenFixUtil = LIBRARY_PACKAGE_NAME .. ".util.ScreenFixUtil",
+  FileUtil = LIBRARY_PACKAGE_NAME .. ".util.FileUtil",
+  ClearContentHelper = LIBRARY_PACKAGE_NAME .. ".helper.ClearContentHelper",
   -- 导入各种风格的控件
-  StyleWidget = LIBRARY_PACKAGE_NAME..".widget.StyleWidget",
-  MaterialButton_TextButton = LIBRARY_PACKAGE_NAME..".widget.StyleWidget",
-  MaterialButton_OutlinedButton = LIBRARY_PACKAGE_NAME..".widget.StyleWidget",
-  MaterialButton_TextButton_Normal = LIBRARY_PACKAGE_NAME..".widget.StyleWidget",
-  MaterialButton_TextButton_Icon = LIBRARY_PACKAGE_NAME..".widget.StyleWidget",
+  StyleWidget = LIBRARY_PACKAGE_NAME .. ".widget.StyleWidget",
+  MaterialButton_TextButton = LIBRARY_PACKAGE_NAME .. ".widget.StyleWidget",
+  MaterialButton_OutlinedButton = LIBRARY_PACKAGE_NAME .. ".widget.StyleWidget",
+  MaterialButton_TextButton_Normal = LIBRARY_PACKAGE_NAME .. ".widget.StyleWidget",
+  MaterialButton_TextButton_Icon = LIBRARY_PACKAGE_NAME .. ".widget.StyleWidget",
   -- 导入各种布局表
-  MyTextInputLayout = LIBRARY_PACKAGE_NAME..".layout.MyTextInputLayout",
-  AnimationHelper = LIBRARY_PACKAGE_NAME..".helper.AnimationHelper",
-  DialogHelper = LIBRARY_PACKAGE_NAME..".helper.DialogHelper",
-  ThemeManager = LIBRARY_PACKAGE_NAME..".manager.ThemeManager"
+  MyTextInputLayout = LIBRARY_PACKAGE_NAME .. ".layout.MyTextInputLayout",
+  AnimationHelper = LIBRARY_PACKAGE_NAME .. ".helper.AnimationHelper",
+  DialogHelper = LIBRARY_PACKAGE_NAME .. ".helper.DialogHelper",
+  ThemeManager = LIBRARY_PACKAGE_NAME .. ".manager.ThemeManager"
 }
 
 -- 根本就不是class的key，因此直接取全局变量即可
+---@enum
 local normalkeys = {
   this = true,
   activity = true,
@@ -67,12 +72,12 @@ local newMetatable = {
   __index = function(self, key)
     if normalkeys[key] then
       return rawget(_G, key)
-     else
+    else
       local value = fastImport[key]
       if value then
         import_(value)
         return rawget(_G, key)
-       else
+      else
         return oldMetatable.__index(self, key)
       end
     end
@@ -92,17 +97,17 @@ if appName == nil then
   appName = context.getApplicationInfo().loadLabel(context.getPackageManager())
   application.set("appName", appName)
 end
-local packageName=activity.getPackageName()
+local packageName = activity.getPackageName()
 jesse205.appName = appName
 jesse205.packageName = packageName
 
 resources = context.getResources() -- 当前resources
 R = luajava.bindClass(packageName .. ".R")
-BuildConfig=luajava.bindClass(packageName..".BuildConfig")
+BuildConfig = luajava.bindClass(packageName .. ".BuildConfig")
 
 if activity then
   window = activity.getWindow()
- else
+else
   -- 没有activity不加载主题
   notLoadTheme = true
 end
@@ -120,7 +125,7 @@ activity2luaApi = nil
 import "android.os.Environment"
 import "android.content.res.Configuration"
 
-require "com.jesse205.lua.math" -- 导入更强大的math
+require "com.jesse205.lua.math"   -- 导入更强大的math
 require "com.jesse205.lua.string" -- 导入更强大的string
 
 -- 导入常用的包
@@ -183,7 +188,7 @@ import "com.google.android.material.dialog.MaterialAlertDialogBuilder"
 -- 导入IO
 import "java.io.File"
 
-import "com.bumptech.glide.Glide" -- 导入Glide
+import "com.bumptech.glide.Glide"                                           -- 导入Glide
 
 inputMethodService = context.getSystemService(Context.INPUT_METHOD_SERVICE) -- 获取输入法服务
 
@@ -198,7 +203,7 @@ function getLocalLangObj(zh, en)
   end
   if phoneLanguage == "zh" then
     return zh or en
-   else
+  else
     return en or zh
   end
 end
@@ -206,10 +211,10 @@ end
 ---自动识别资源id和字符串，并自动获取字符串
 ---@param text string|number
 function autoId2str(text)
-  local _type=type(text)
-  if _type=="number" then
+  local _type = type(text)
+  if _type == "number" then
     return getString(text)
-   else
+  else
     return text
   end
 end
@@ -239,9 +244,9 @@ openUrl = openInBrowser -- 通常情况下，应用不自带内置浏览器
 ---@param path string 要转换的相对路径
 ---@param localPath string 相对的目录
 function rel2AbsPath(path, localPath)
-  if path:sub(1,1)=="/" then
+  if path:sub(1, 1) == "/" then
     return path
-   else
+  else
     return localPath .. "/" .. path
   end
 end
@@ -259,15 +264,15 @@ function newSubActivity(name, ...)
   local parentDirFile = nowDirFile.getParentFile()
   local basePath
   if nowDirFile.getName() == "sub" then
-    basePath="."
-   elseif parentDirFile.getName() == "sub" then
-    basePath=parentDirFile.getPath()
-   else
-    basePath="sub"
+    basePath = "."
+  elseif parentDirFile.getName() == "sub" then
+    basePath = parentDirFile.getPath()
+  else
+    basePath = "sub"
   end
   if name:find("/") then
     newActivity(basePath .. "/" .. name, ...)
-   else
+  else
     newActivity(basePath .. "/" .. name .. "/main.lua", ...)
   end
   luajava.clear(nowDirFile)
@@ -277,7 +282,7 @@ end
 ---@param id number 资源ID
 --v5.1.2-
 function getColorStateList(id)
-  print("此API已废弃","getColorStateList")
+  print("此API已废弃", "getColorStateList")
   return resources.getColorStateList(id)
 end
 
@@ -291,11 +296,11 @@ function showLoadingDia(message, title, cancelable)
   if not (loadingDia) then
     import "android.app.ProgressDialog"
     loadingDia = ProgressDialog(context)
-    loadingDia.setProgressStyle(ProgressDialog.STYLE_SPINNER) -- 进度条类型
+    loadingDia.setProgressStyle(ProgressDialog.STYLE_SPINNER)                  -- 进度条类型
     loadingDia.setTitle(title or context.getString(R.string.jesse205_loading)) -- 标题
-    loadingDia.setCancelable(cancelable or false) -- 是否可以取消
-    loadingDia.setCanceledOnTouchOutside(cancelable or false) -- 是否可以点击外面取消
-    loadingDia.setOnCancelListener ({
+    loadingDia.setCancelable(cancelable or false)                              -- 是否可以取消
+    loadingDia.setCanceledOnTouchOutside(cancelable or false)                  -- 是否可以点击外面取消
+    loadingDia.setOnCancelListener({
       onCancel = function()
         loadingDia = nil -- 如果取消了，就把 loadingDia 赋值为空，视为没有正在展示的加载中对话框
       end
@@ -323,21 +328,21 @@ end
 ---@param message string 信息
 function showSimpleDialog(title, message)
   return MaterialAlertDialogBuilder(context)
-  .setTitle(title)
-  .setMessage(message)
-  .setPositiveButton(android.R.string.ok, nil)
-  .show()
+      .setTitle(title)
+      .setMessage(message)
+      .setPositiveButton(android.R.string.ok, nil)
+      .show()
 end
 
-function showErrorDialog(title,message)
-  local dialog=MaterialAlertDialogBuilder(context)
-  .setTitle(title)
-  .setMessage(message)
-  .setPositiveButton(android.R.string.ok, nil)
-  .setNegativeButton(R.string.jesse205_copy, nil)
-  .show()
+function showErrorDialog(title, message)
+  local dialog = MaterialAlertDialogBuilder(context)
+      .setTitle(title)
+      .setMessage(message)
+      .setPositiveButton(android.R.string.ok, nil)
+      .setNegativeButton(R.string.jesse205_copy, nil)
+      .show()
   DialogHelper.enableTextIsSelectable(dialog)
-  dialog.getButton(AlertDialog.BUTTON_NEGATIVE).onClick=function()
+  dialog.getButton(AlertDialog.BUTTON_NEGATIVE).onClick = function()
     MyToast.copyText(message)
   end
 end
@@ -345,8 +350,8 @@ end
 --- 自动初始化一个LayoutTransition
 function newLayoutTransition()
   return LayoutTransition()
-  .enableTransitionType(LayoutTransition.CHANGING)
-  .setDuration(200)
+      .enableTransitionType(LayoutTransition.CHANGING)
+      .setDuration(200)
 end
 
 -- 以下为复写事件
@@ -393,49 +398,55 @@ if not notLoadTheme then
   local number = theme.number
   local dimension = number.Dimension
 
-  setmetatable(color, { -- 普通颜色
+  setmetatable(color, {
+                        -- 普通颜色
     __index = function(self, key)
-      print("警告:调用了theme.color",key)
+      print("警告:调用了theme.color", key)
       local value = resources.getColor(R.color["jesse205_" .. string.lower(key)])
       rawset(self, key, value)
       return value
     end
   })
-  setmetatable(ripple, { -- 波纹颜色
+  setmetatable(ripple, {
+                         -- 波纹颜色
     __index = function(self, key)
-      print("警告:调用了theme.ripple",key)
+      print("警告:调用了theme.ripple", key)
       local value = resources.getColor(R.color["jesse205_" .. string.lower(key) .. "_ripple"])
       rawset(self, key, value)
       return value
     end
   })
-  setmetatable(light, { -- 偏亮颜色
+  setmetatable(light, {
+                        -- 偏亮颜色
     __index = function(self, key)
-      print("警告:调用了theme.color",key)
+      print("警告:调用了theme.color", key)
       local value = resources.getColor(R.color["jesse205_" .. string.lower(key) .. "_light"])
       rawset(self, key, value)
       return value
     end
   })
-  setmetatable(dark, { -- 偏暗颜色
+  setmetatable(dark, {
+                       -- 偏暗颜色
     __index = function(self, key)
-      print("警告:调用了theme.color",key)
+      print("警告:调用了theme.color", key)
       local value = resources.getColor(R.color["jesse205_" .. string.lower(key) .. "_dark"])
       rawset(self, key, value)
       return value
     end
   })
-  setmetatable(number, { -- 数字
+  setmetatable(number, {
+                         -- 数字
     __index = function(self, key)
-      print("警告:调用了theme.number",key)
+      print("警告:调用了theme.number", key)
       local value = resources.getInteger(R.integer["jesse205_" .. string.lower(key)])
       rawset(self, key, value)
       return value
     end
   })
-  setmetatable(dimension, { -- 数字
+  setmetatable(dimension, {
+                            -- 数字
     __index = function(self, key)
-      print("警告:调用了theme.number",key)
+      print("警告:调用了theme.number", key)
       local value = resources.getDimension(R.dimen["jesse205_" .. string.lower(key)])
       rawset(self, key, value)
       return value

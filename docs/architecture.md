@@ -20,9 +20,8 @@ AideLuaPro: 项目根目录
 
 ```
 
-## lua目录文件结构
+## lua 目录文件结构
 
-assets:
-
-
-luaLibs:
+* assets：lua 资源目录
+    * sub：子页面目录
+* luaLibs：lua 库目录
