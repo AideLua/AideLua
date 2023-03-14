@@ -1283,7 +1283,7 @@ function FilesBrowserManager.onCreateContextMenu(menu, view, menuInfo)
 end
 
 --初始化
-function FilesBrowserManager.init()
+function FilesBrowserManager.initViews()
   --设置下拉刷新监听器
   swipeRefresh.onRefresh = function()
     FilesBrowserManager.refresh()

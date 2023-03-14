@@ -379,7 +379,7 @@ function LuaEditorHelper.initKeys(editor,editorParent,pencilEdit,progressBar)
    else
     editorParent.removeView(pencilEdit)--先移除view，避免手写输入以及编辑器渲染导致的bug
     editorParent.removeView(editor)
-    local editorConfig=editorLayouts.LuaEditor
+    local editorConfig=editorConfigsMap.LuaEditor
     local editorText=editor.text--保存一下编辑器内文字，
     editor.text=""--防止渲染文字造成的卡顿
 

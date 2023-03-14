@@ -214,7 +214,7 @@ function FilesTabManager.openFile(newFile,newFileType,keepHistory,saveFile,previ
     FilesTabManager.saveFile(nil,false)
   end
   local filePath = newFile.getPath()
-  local decoder=FileDecoders[newFileType]
+  local decoder=fileDecoders[newFileType]
   local nowDecoder=decoder
   if preview then
     nowDecoder=decoder.preview
@@ -475,7 +475,7 @@ function FilesTabManager.closeAllFiles(changeEditor)
 end
 
 -- 初始化 FilesTabManager
-function FilesTabManager.init()
+function FilesTabManager.initViews()
   filesTabLay.addOnTabSelectedListener(TabLayout.OnTabSelectedListener({
     onTabSelected = function(tab)
       local newFileConfig = tab.tag
@@ -495,11 +495,11 @@ function FilesTabManager.init()
   --metatable复用
   local metatables={}
   setmetatable(metatables,{__index=function(self,key)
-      local mMetatable={__index=FileDecoders[key]}
+      local mMetatable={__index=fileDecoders[key]}
       rawset(self,key,mMetatable)
       return mMetatable
   end})
-  for index,content in pairs(FileDecoders) do
+  for index,content in pairs(fileDecoders) do
     local superType=content.super
     if superType then
       setmetatable(content,metatables[superType])

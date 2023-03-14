@@ -1,6 +1,6 @@
 {
     "name": "aide-lua-pro",
-    "version": "5.1.1",
+    "version": "5.2.0",
     "description": "依赖 Aide ，使用 Lua 快速、高效开发的工具",
     "main": "index.js",
     "repository": "https://gitee.com/AideLua/AideLua",

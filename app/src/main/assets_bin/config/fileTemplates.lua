@@ -1,4 +1,4 @@
-{
+return {
   {
     name="Lua 活动 (Activity)",--有enName时就是中文名，没enName时就是英文名
     enName="Lua Activity",--英文名

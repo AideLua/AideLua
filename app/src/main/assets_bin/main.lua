@@ -114,10 +114,10 @@ CopyMenuUtil=require "CopyMenuUtil"
 BuildToolUtil=require "buildtools.BuildToolUtil"
 
 --各种管理器
-FilesBrowserManager=require "FilesBrowserManager"
-EditorsManager=require "EditorsManager"
-FilesTabManager=require "FilesTabManager"
-ProjectManager=require "ProjectManager"
+FilesBrowserManager=require "manager.FilesBrowserManager"
+EditorsManager=require "manager.EditorsManager"
+FilesTabManager=require "manager.FilesTabManager"
+ProjectManager=require "manager.ProjectManager"
 
 --各种布局
 item=require "layouts.item"
@@ -145,8 +145,10 @@ oldAndroidXSupport = getSharedData("androidX_support")
 oldTheme = ThemeManager.getAppTheme()
 oldDarkActionBar = ThemeManager.getAppDarkActionBarState()
 oldRichAnim = getSharedData("richAnim")
+
 --v5.1.2废除
 --oldTabIcon = getSharedData("tab_icon")
+
 oldEditorSymbolBar = getSharedData("editor_symbolBar")
 oldEditorFontId = getSharedData("editor_font") or 0
 oldEditorPreviewButton = getSharedData("editor_previewButton")
@@ -493,6 +495,7 @@ function onDeviceByWidthChanged(device, oldDevice)
   applyLT()
 end
 
+
 function onResume()
   if PluginsUtil.callElevents("onResume", isResumeAgain) then
     return
@@ -506,8 +509,9 @@ function onResume()
   --print(oldTheme ~= ThemeManager.getAppTheme())
   if isResumeAgain then
     if reload
-      or (oldTheme ~= ThemeManager.getAppTheme())
-      or (oldDarkActionBar ~= ThemeManager.getAppDarkActionBarState())
+      or ThemeManager.checkThemeChanged()
+      --or (oldTheme ~= ThemeManager.getAppTheme())
+      --or (oldDarkActionBar ~= ThemeManager.getAppDarkActionBarState())
       or (oldRichAnim ~= getSharedData("richAnim"))
       then
       activity.recreate()
@@ -664,9 +668,9 @@ end
 toggle = ActionBarDrawerToggle(activity, drawer, R.string.drawer_open, R.string.drawer_close)
 drawer.addDrawerListener(toggle)
 
-FilesTabManager.init()
-EditorsManager.init()
-FilesBrowserManager.init()
+FilesTabManager.initViews()
+EditorsManager.initViews()
+FilesBrowserManager.initViews()
 
 screenConfigDecoder = ScreenFixUtil.ScreenConfigDecoder({
   onDeviceByWidthChanged=onDeviceByWidthChanged

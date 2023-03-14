@@ -1,4 +1,4 @@
-import "ActivityTemplates"
+import "config.activityTemplates"
 
 local SubActivityUtil={}
 ---在 v5.1.1(51199) 添加
@@ -95,7 +95,7 @@ function SubActivityUtil.showSelectTypeDialog(nowDir)
   local nowDir=nowDir or FilesBrowserManager.directoryFile
   local names={}
   local templates={}
-  for index,content in ipairs(ActivityTemplates) do
+  for index,content in ipairs(activityTemplates) do
     local enabledVar=content.enabledVar
     if not(enabledVar) or _G[enabledVar] then
       table.insert(names,getLocalLangObj(content.name,content.enName))

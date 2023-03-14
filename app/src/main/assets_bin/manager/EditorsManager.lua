@@ -39,6 +39,15 @@ EditorsManager.symbolBar.refreshSymbolBar(state): 刷新符号栏状态
   state: boolean: 开关状态
 ]]
 
+
+import "io.github.rosemoe.editor.widget.CodeEditor"
+import "io.github.rosemoe.editor.langs.EmptyLanguage"
+import "io.github.rosemoe.editor.langs.desc.JavaScriptDescription"
+import "io.github.rosemoe.editor.langs.html.HTMLLanguage"
+import "io.github.rosemoe.editor.langs.java.JavaLanguage"
+import "io.github.rosemoe.editor.langs.python.PythonLanguage"
+import "io.github.rosemoe.editor.langs.universal.UniversalLanguage"
+
 local EditorsManager={}
 local managerActions={}
 
@@ -57,15 +66,7 @@ EditorsManager.filesScrollingDB=filesScrollingDB
 --编辑器活动(事件)，视图列表(table)，编辑器(View)，编辑器类型(String) 编辑器配置(table)
 local editorActions,editorGroupViews,editor,editorParent,editorType,editorConfig
 
-import "io.github.rosemoe.editor.widget.CodeEditor"
-import "io.github.rosemoe.editor.langs.EmptyLanguage"
-import "io.github.rosemoe.editor.langs.desc.JavaScriptDescription"
-import "io.github.rosemoe.editor.langs.html.HTMLLanguage"
-import "io.github.rosemoe.editor.langs.java.JavaLanguage"
-import "io.github.rosemoe.editor.langs.python.PythonLanguage"
-import "io.github.rosemoe.editor.langs.universal.UniversalLanguage"
-
-import "FileDecoders"
+import "config.fileDecoders"
 
 local onKeyShortcut=function(super,keyCode,event)
   local filteredMetaState = event.getMetaState() & ~KeyEvent.META_CTRL_MASK;
@@ -137,7 +138,7 @@ EditorsManager.PSBarHorizontalScrollView={
 setmetatable(EditorsManager.PSBarHorizontalScrollView,EditorsManager.PSBarHorizontalScrollView)
 
 
-import "editorLayouts"
+import "config.editorConfigsMap"
 
 
 --在 v5.1.0(51099) 添加
@@ -493,7 +494,7 @@ function EditorsManager.switchEditor(newEditorType)
   if editor and EditorsManager.isEditor() then
     managerActions.setText("")
   end
-  editorConfig=editorLayouts[newEditorType]
+  editorConfig=editorConfigsMap[newEditorType]
   editorConfig.name=newEditorType
 
   --检查是不是真的存在这个编辑器
@@ -581,7 +582,7 @@ function EditorsManager.refreshEditorScrollState()
   end
 end
 
-function EditorsManager.init()
+function EditorsManager.initViews()
   --阻止Chip取消选中
   local previewChipGroupSelectedId
   previewChipGroup.setOnCheckedChangeListener{
@@ -794,10 +795,12 @@ end
 function MagnifierManager.isAvailable()
   return MagnifierManager.magnifyEnabled and MagnifierManager.magnifier
 end
+
 function MagnifierManager.show(x,y)
   MagnifierManager.magnifier.show(x,y)
   skipUpdateTime=skipUpdateTime+1
 end
+
 magnifierUpdateRunnable=Runnable({
   run=function()
     editorGroup.post(magnifierUpdateRunnable)
@@ -837,10 +840,6 @@ end
 
 --v5.1.2+
 function EditorsManager.onDestroy()
-  --[[
-  if magnifierUpdateTi and magnifierUpdateTi.isRun() then
-    magnifierUpdateTi.stop()
-  end]]
   filesScrollingDB:close()
 end
 
@@ -850,10 +849,12 @@ end
 function EditorsManager.getEditorConfig()
   return editorConfig
 end
+
 --[[
 function EditorsManager.setEditorConfig(config)
   editorConfig=config
 end]]
+
 function EditorsManager.getEditorType()
   return editorType
 end

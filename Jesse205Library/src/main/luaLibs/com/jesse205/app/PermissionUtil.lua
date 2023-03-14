@@ -40,7 +40,7 @@ end
   }
 }]]
 ---弹出权限申请对话框
----@param permissionsItemsList table
+---@param permissionsItemsList table[]
 ---@param requestCode number 回调代码
 function _M.askForRequestPermissions(permissionsItemsList,requestCode)
   for index=1,#permissionsItemsList do

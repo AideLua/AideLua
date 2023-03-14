@@ -1,4 +1,4 @@
-{
+return {
   --格式：https://aidelua.github.io/AideLua/plugin/pages/main.html#editorlayouts
 
   NoneView={

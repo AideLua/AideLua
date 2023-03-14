@@ -1,4 +1,4 @@
-import "FileTemplates"
+import "config.fileTemplates"
 local CreateFileUtil={}
 
 ---不能为空的字符串
@@ -117,7 +117,7 @@ function CreateFileUtil.showSelectTypeDialog(nowDir)--模版选择对话框
   local nowDir=nowDir or FilesBrowserManager.directoryFile
   local names={}
   local templates={}
-  for index,content in ipairs(FileTemplates) do
+  for index,content in ipairs(fileTemplates) do
     local enabledVar=content.enabledVar
     if not(enabledVar) or _G[enabledVar] then
       table.insert(names,getLocalLangObj(content.name,content.enName))
