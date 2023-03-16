@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="jesse205_theme_darkMode">深色模式</string>
-    <string name="jesse205_theme_default">默认</string>
+    <string name="jesse205_theme_default">谷蓝</string>
     <string-array name="jesse205_themes">
-        <item>谷歌蓝</item>
+        <item>谷蓝</item>
         <item>深红</item>
         <item>鸭绿</item>
         <item>鲜橙</item>

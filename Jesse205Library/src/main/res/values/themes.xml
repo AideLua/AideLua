@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Platform.V21.Theme.Jasse205" parent="Theme.MaterialComponents.DayNight">
-        <item name="colorPrimaryDark">@color/status_bar_background_compat_daynight</item>
+    <style name="Platform.V21.Theme.Jasse205.Material2" parent="Theme.MaterialComponents.DayNight">
+        <item name="colorPrimaryDark">@color/jesse205_system_window_scrim_compat</item>
         <item name="windowLightStatusBar">?isLightTheme</item>
         <item name="windowLightNavigationBar">?isLightTheme</item>
     </style>
-    <style name="Platform.Theme.Jasse205" parent="Platform.V21.Theme.Jasse205" />
+    <style name="Platform.Theme.Jasse205.Material2" parent="Platform.V21.Theme.Jasse205.Material2" />
     
     <!--基础主题-->
-    <style name="Base.Theme.Jasse205.Bridge" parent="Theme.MaterialComponents.DayNight">
+    <style name="Base.Theme.Jasse205.Bridge" parent="Platform.Theme.Jasse205.Material2">
         <item name="colorPrimary">@color/jesse205_blue</item>
-        <item name="colorPrimaryDark">?windowBackgroundColor</item>
+        <item name="colorPrimaryVariant">?colorPrimary</item>
+        <!-- <item name="colorPrimaryDark">?windowBackgroundColor</item> -->
         <item name="colorSecondary">?colorPrimary</item>
         <item name="colorSecondaryVariant">?colorSecondary</item>
         <!--<item name="colorOnSecondary">?colorOnPrimary</item>
         <item name="colorSurface">?windowBackgroundColor</item>-->
 
-        <item name="strokeColor">@color/material_on_surface_stroke</item>
-        
         <item name="android:windowBackground">?windowBackgroundColor</item>
-        <item name="android:navigationBarColor">?windowBackgroundColor</item>
-        <item name="android:windowLightStatusBar">?windowLightStatusBar</item>
-        <item name="android:windowLightNavigationBar">?windowLightNavigationBar</item>
+        <item name="actionModeBackground">?colorSurface</item>
 
         <!--组件-->
         <item name="materialCardViewStyle">@style/Widget.Jesse205.MaterialCardView</item>
@@ -33,7 +30,7 @@
         <item name="actionBarStyle">@style/Widget.Jesse205.ActionBar.Surface</item>
         <item name="actionBarTabBarStyle">@style/Widget.Jesse205.ActionBar.TabBar.Surface</item>
         <item name="actionBarTabStyle">@style/Widget.Jesse205.ActionBar.TabView.Surface</item>
-        <item name="actionModeBackground">?colorSurface</item>
+
         <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Surface</item>
         <item name="android:listViewStyle">@style/Widget.Jesse205.ListView</item>
         <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout</item>
@@ -57,29 +54,27 @@
         <item name="android:actionModePasteDrawable">@drawable/ic_content_paste</item>
 
     </style>
+
     <style name="Base.Theme.Jesse205" parent="Base.Theme.Jasse205.Bridge">
 
         <item name="colorSurface">@color/jesse205_white</item>
         <item name="colorBackgroundFloating">@color/jesse205_white</item>
         <!--按钮边框的颜色默认是按压下去的，所以要写死边框颜色才行-->
-        <!--<item name="strokeColor">@color/jesse205_grey_light</item>-->
+        <item name="strokeColor">@color/material_on_surface_stroke</item>
         <item name="dialogBackgroundColor">@color/jesse205_white</item>
         <item name="windowBackgroundColor">@color/jesse205_white</item>
-        <item name="windowLightStatusBar">true</item>
-        <item name="windowLightNavigationBar">true</item>
 
         <!--波纹颜色-->
         <item name="rippleColorAccent">@color/jesse205_blue_ripple</item>
         <item name="rippleColorPrimary">@color/ripple_material_light</item>
 
         <item name="android:alertDialogTheme">@style/Theme.Jesse205.Framework.Dialog.Alert</item>
-
     </style>
     
     <!--原生对话框-->
     <style name="Theme.Jesse205.Framework.Dialog.Alert" parent="android:Theme.Material.Light.Dialog.Alert">
         <item name="android:colorAccent">?colorAccent</item>
-        <item name="android:windowBackground">@drawable/mtrl_dialog_background</item>
+        <item name="android:windowBackground" tools:ignore="PrivateResource">@drawable/mtrl_dialog_background</item>
 	    <item name="android:backgroundDimAmount">0.32</item>
 	    <item name="colorBackgroundFloating">?dialogBackgroundColor</item>
 		<item name="colorSurface">?dialogBackgroundColor</item>
@@ -87,7 +82,7 @@
 
     <style name="Theme.Jesse205.Framework.Dark.Dialog.Alert" parent="android:Theme.Material.Dialog.Alert">
         <item name="android:colorAccent">?colorAccent</item>
-        <item name="android:windowBackground">@drawable/mtrl_dialog_background</item>
+        <item name="android:windowBackground" tools:ignore="PrivateResource">@drawable/mtrl_dialog_background</item>
   		<item name="android:backgroundDimAmount">0.32</item>
 	    <item name="colorBackgroundFloating">?dialogBackgroundColor</item>
 	    <item name="colorSurface">?dialogBackgroundColor</item>
@@ -95,7 +90,7 @@
 
 
     <style name="ThemeOverlay.Jesse205.Dialog.Alert" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="android:windowBackground">@drawable/mtrl_dialog_background</item>
+        <item name="android:windowBackground" tools:ignore="PrivateResource">@drawable/mtrl_dialog_background</item>
         <item name="android:backgroundDimAmount">0.32</item>
 	    <item name="colorBackgroundFloating">?dialogBackgroundColor</item>
 	    <item name="colorSurface">?dialogBackgroundColor</item>
@@ -124,12 +119,15 @@
     </style>
 
     <!--正式主题-->
-    <style name="Theme.Jesse205" parent="Base.Theme.Jesse205"/>
+    <style name="Theme.Jesse205" parent="Base.Theme.Jesse205">
+
+    </style>
+
     <style name="Theme.Jesse205.DarkActionBar" parent="Theme.Jesse205">
         <item name="colorPrimary">@color/jesse205_blue</item>
         <item name="colorPrimaryDark">@color/jesse205_blue_dark</item>
         <item name="actionModeBackground">?colorPrimary</item>
-        <item name="android:colorEdgeEffect">?colorPrimary</item>
+        <!-- <item name="android:colorEdgeEffect">?colorPrimary</item> -->
         <item name="actionBarTheme">@style/ThemeOverlay.Jesse205.ActionBar.Primary</item>
         <item name="actionBarStyle">@style/Widget.MaterialComponents.ActionBar.Solid</item>
         <item name="actionBarTabBarStyle">@style/Widget.Jesse205.ActionBar.TabBar.Primary</item>

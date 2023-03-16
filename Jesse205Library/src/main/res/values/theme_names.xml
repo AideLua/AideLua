@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="jesse205_theme_darkMode">Dark mode</string>
-    <string name="jesse205_theme_default">Default</string>
+    <string name="jesse205_theme_default">Blue</string>
     <string-array name="jesse205_themes">
         <item>Blue</item>
         <item>Red</item>

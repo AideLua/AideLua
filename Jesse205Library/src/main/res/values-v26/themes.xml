@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="Platform.V27.Theme.Jasse205" parent="Platform.V23.Theme.Jasse205">
-        <item name="android:navigationBarColor">@color/system_window_scrim_daynight</item>
-        <item name="android:windowLightNavigationBar">?windowLightNavigationBar</item>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Platform.V26.Theme.Jasse205.Material2" parent="Platform.V23.Theme.Jasse205.Material2">
+        <item name="android:navigationBarColor">@color/jesse205_system_window_scrim</item>
+        <!-- v26支持动态设置亮色导航栏 -->
+        <item name="android:windowLightNavigationBar" tools:ignore="NewApi">?windowLightNavigationBar</item>
     </style>
-    <style name="Platform.Theme.Jasse205" parent="Platform.V27.Theme.Jasse205" />
+    <style name="Platform.Theme.Jasse205.Material2" parent="Platform.V26.Theme.Jasse205.Material2" />
     
-    <style name="Theme.Jesse205" parent="Base.Theme.Jesse205"/>
+    <!-- <style name="Theme.Jesse205" parent="Base.Theme.Jesse205"/> -->
 </resources>

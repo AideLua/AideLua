@@ -21,6 +21,9 @@
     
     <color name="jesse205_status_bar_background_compat_daynight">@color/jesse205_status_bar_background_compat_dark</color>
     
-    <color name="jesse205_system_window_scrim_daynight">@color/jesse205_system_window_scrim_dark</color>
-    
+    <!-- <color name="jesse205_system_window_scrim_daynight">@color/jesse205_system_window_scrim_dark</color> -->
+
+    <color name="jesse205_system_window_scrim">@color/jesse205_system_window_scrim_dark</color>
+
+    <color name="jesse205_system_window_scrim_compat">@color/jesse205_system_window_scrim_dark</color>
 </resources>

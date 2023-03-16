@@ -3,7 +3,8 @@
     <!--控件-->
 
     <style name="Widget.Jesse205.Chip" parent="Widget.MaterialComponents.Chip.Action">
-        <item name="chipStrokeWidth">@dimen/mtrl_btn_stroke_size</item>
+        <item name="chipStrokeWidth" tools:ignore="PrivateResource">@dimen/mtrl_btn_stroke_size
+        </item>
         <item name="chipStrokeColor">@color/jesse205_chip_stroke_color</item>
         <item name="chipCornerRadius">4dp</item>
         <item name="chipBackgroundColor">@color/jesse205_chip_background_color</item>
@@ -18,27 +19,31 @@
 
     <style name="Widget.Jesse205.AutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:popupElevation">8dp</item>
-        <item name="android:popupBackground">@drawable/mtrl_popupmenu_background</item>
+        <item name="android:popupBackground" tools:ignore="PrivateResource">
+            @drawable/mtrl_popupmenu_background
+        </item>
         <item name="android:dropDownVerticalOffset">1dp</item>
     </style>
 
     <style name="Widget.Jesse205.CardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardCornerRadius">?cardCornerRadius</item>
     </style>
-    
+
     <style name="Widget.Jesse205.MaterialCardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardBackgroundColor">?windowBackgroundColor</item>
         <item name="cardCornerRadius">?cardCornerRadius</item>
         <item name="cardElevation">0dp</item>
-        <item name="strokeWidth">@dimen/mtrl_btn_stroke_size</item>
-        <item name="strokeColor">@color/mtrl_btn_stroke_color_selector</item>
+        <item name="strokeWidth" tools:ignore="PrivateResource">@dimen/mtrl_btn_stroke_size</item>
+        <item name="strokeColor" tools:ignore="PrivateResource">
+            @color/mtrl_btn_stroke_color_selector
+        </item>
     </style>
-    
+
     <style name="Widget.Jesse205.ActionSearchEdit.Surface" parent="android:style/Widget">
         <item name="android:textColorPrimary">@color/jesse205_color_on_surface</item>
         <item name="android:textColorHint">@color/material_on_surface_emphasis_medium</item>
     </style>
-    
+
     <style name="Widget.Jesse205.ActionSearchEdit.Primary" parent="android:style/Widget">
         <item name="colorPrimary">?colorOnPrimary</item>
         <item name="android:textColorPrimary">?colorOnPrimary</item>
@@ -48,24 +53,23 @@
     <style name="Widget.Jesse205.ActionBar.Surface" parent="Widget.MaterialComponents.ActionBar.Surface">
         <item name="backgroundStacked">?colorSurface</item>
     </style>
-    
-    <style name="Widget.Jesse205.Material3.Light.ActionBar.Solid" parent="Widget.Material3.Light.ActionBar.Solid">
-    </style>
-    
+
+    <style name="Widget.Jesse205.Material3.Light.ActionBar.Solid" parent="Widget.Material3.Light.ActionBar.Solid" />
+
     <style name="Widget.Jesse205.ActionBar.TabBar.Surface" parent="Widget.AppCompat.ActionBar.TabBar">
         <item name="colorPrimary">?colorSurface</item>
         <item name="showDividers">none</item>
     </style>
-    
+
     <style name="Widget.Jesse205.ActionBar.TabBar.Primary" parent="Widget.AppCompat.ActionBar.TabBar">
-         <item name="showDividers">none</item>
-   </style>
-    
-    <style name="Widget.Jesse205.ActionBar.TabView.Surface" parent="Widget.AppCompat.ActionBar.TabView">
+        <item name="showDividers">none</item>
+        <item name="colorControlActivated">?colorOnPrimary</item>
     </style>
-  
+
+    <style name="Widget.Jesse205.ActionBar.TabView.Surface" parent="Widget.AppCompat.ActionBar.TabView" />
+
     <style name="Widget.Jesse205.ActionBar.TabView.Primary" parent="Widget.AppCompat.ActionBar.TabView">
         <item name="colorControlActivated">?colorOnPrimary</item>
     </style>
-    
+
 </resources>

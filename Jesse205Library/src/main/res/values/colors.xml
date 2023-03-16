@@ -18,7 +18,7 @@
     <color name="jesse205_pink">#E91E63</color>
     <color name="jesse205_pink_dark">#C2185B</color>
     <color name="jesse205_pink_ripple">#22E91E63</color>
-    
+
     <color name="jesse205_grey">#BDBDBD</color>
     <color name="jesse205_grey_light">#E0E0E0</color>
     <color name="jesse205_grey_dark">#424242</color>
@@ -27,13 +27,29 @@
     <color name="jesse205_black_blue_light">#38393D</color>
     <color name="jesse205_black_blue">#202124</color>
     <color name="jesse205_black_ripple">#22000000</color>
-    
+
     <color name="jesse205_status_bar_background_compat_light">#BBBBBB</color>
-    <color name="jesse205_status_bar_background_compat_dark">@color/design_dark_default_color_surface</color>
-    <color name="jesse205_status_bar_background_compat_daynight">@color/jesse205_status_bar_background_compat_light</color>
+    <color name="jesse205_status_bar_background_compat_dark">
+        @color/design_dark_default_color_surface
+    </color>
+    <color name="jesse205_status_bar_background_compat_daynight">
+        @color/jesse205_status_bar_background_compat_light
+    </color>
+
+    <!-- <color name="jesse205_system_window_scrim_light">#99FFFFFF</color> -->
+    <!-- <color name="jesse205_system_window_scrim_dark">#66202124</color> -->
+    <!-- <color name="jesse205_system_window_scrim_daynight">@color/jesse205_system_window_scrim_light</color> -->
+
 
     <color name="jesse205_system_window_scrim_light">#99FFFFFF</color>
-    <color name="jesse205_system_window_scrim_dark">#52000000</color>
-    <color name="jesse205_system_window_scrim_daynight">@color/jesse205_system_window_scrim_light</color>
-    
+    <color name="jesse205_system_window_scrim_dark">#66202124</color>
+    <color name="jesse205_system_window_scrim_dark_black">#66000000</color>
+    <color name="jesse205_system_window_scrim">@color/jesse205_system_window_scrim_light</color>
+
+    <color name="jesse205_system_window_scrim_light_compat">#44000000</color>
+    <color name="jesse205_system_window_scrim_compat">
+        @color/jesse205_system_window_scrim_light_compat
+    </color>
+
+
 </resources>
