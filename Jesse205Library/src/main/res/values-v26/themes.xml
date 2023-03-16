@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="Platform.V27.Theme.Jasse205" parent="Platform.V23.Theme.Jasse205">
+        <item name="android:navigationBarColor">@color/system_window_scrim_daynight</item>
+        <item name="android:windowLightNavigationBar">?windowLightNavigationBar</item>
+    </style>
+    <style name="Platform.Theme.Jasse205" parent="Platform.V27.Theme.Jasse205" />
+    
     <style name="Theme.Jesse205" parent="Base.Theme.Jesse205"/>
 </resources>

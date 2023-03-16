@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Platform.V21.Theme.Jasse205" parent="Theme.MaterialComponents.DayNight">
+        <item name="colorPrimaryDark">@color/status_bar_background_compat_daynight</item>
+        <item name="windowLightStatusBar">?isLightTheme</item>
+        <item name="windowLightNavigationBar">?isLightTheme</item>
+    </style>
+    <style name="Platform.Theme.Jasse205" parent="Platform.V21.Theme.Jasse205" />
+    
     <!--基础主题-->
     <style name="Base.Theme.Jasse205.Bridge" parent="Theme.MaterialComponents.DayNight">
         <item name="colorPrimary">@color/jesse205_blue</item>

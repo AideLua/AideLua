@@ -3,12 +3,14 @@ import "jesse205"
 import "android.text.method.LinkMovementMethod"
 import "android.text.util.Linkify"
 
+
 import "licences"
 import "item"
 
-activity.setTitle(R.string.jesse205_openSourceLicense)
-activity.setContentView(loadlayout2("com.jesse205.layout.innocentlayout.RecyclerViewLayout",_ENV))
+activity.setTitle(R.string.jesse205_openSourceLicenses)
+activity.setContentView(loadlayout2("com.jesse205.layout.innocentlayout.RecyclerViewLayout"))
 actionBar.setDisplayHomeAsUpEnabled(true)
+
 fileBasePath=activity.getLuaPath("../../licences/%s.txt")
 
 function onOptionsItemSelected(item)
@@ -36,19 +38,22 @@ adapter=LuaCustRecyclerAdapter(AdapterCreator({
     view.setTag(ids)
     local cardViewChild=ids.cardViewChild
     local licenseView=ids.license
-    cardViewChild.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary))
+    cardViewChild.setBackground(ThemeUtil.getRippleDrawable(res.color.attr.rippleColorPrimary))
     cardViewChild.onClick=function()
       local url=ids._data.url
       if url then
         openUrl(url)
       end
     end
-    licenseView.setBackground(ThemeUtil.getRippleDrawable(theme.color.rippleColorPrimary,true))
+    licenseView.setBackground(ThemeUtil.getRippleDrawable(res.color.attr.rippleColorPrimary,true))
     licenseView.onClick=function(view)
       local data=ids._data
       local path=data.path
       if path then
-        newSubActivity("HtmlFileViewer",{{title=data.license or data.licenseName,path=path,text=true}})
+        newSubActivity("HtmlFileViewer",{{
+            title=data.license or data.licenseName,
+            path=path,
+            text=true}})
       end
     end
     return holder
@@ -89,6 +94,7 @@ adapter=LuaCustRecyclerAdapter(AdapterCreator({
 
 layoutManager=StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL)
 recyclerView.setPadding(math.dp2int(8),0,math.dp2int(8),0)
+recyclerView.setClipToPadding(false)
 recyclerView.setAdapter(adapter)
 recyclerView.setLayoutManager(layoutManager)
 recyclerView.addOnScrollListener(RecyclerView.OnScrollListener{
@@ -104,6 +110,7 @@ recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
     AnimationHelper.onScrollListenerForActionBarElevation(actionBar,recyclerView.canScrollVertically(-1))
   end
 })
+
 
 screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
   layoutManagers={layoutManager},

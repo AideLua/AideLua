@@ -1,4 +1,8 @@
 import "helper.GiteeUpdateHelper"
+import "db"
+
+local packageInfo = activity.getPackageManager().getPackageInfo(getPackageName(), 0)
+
 appInfo={
   {
     name=R.string.app_name,
@@ -22,6 +26,7 @@ appInfo={
     clickable=true,
   },
 }
+
 function onUpdate()
   GiteeUpdateHelper.checkUpdate("Jesse205","AideLua")
 end
@@ -52,9 +57,9 @@ openSourceLicenses=true
 --[[格式：
 {
   {
-    name="群名称"; -- 群名称
-    qqGroup=708199076; -- 群号
-    contextMenuEnabled=true; -- 启用ContextMenu
+    name="群名称", -- 群名称
+    qqGroup=708199076, -- 群号
+    contextMenuEnabled=true, -- 启用ContextMenu
   },
   {
     name="百度", -- 显示的名称
@@ -66,22 +71,60 @@ openSourceLicenses=true
   --以此类推
 }]]
 
-moreItem={
+versionItems={
+  {
+    --软件版本
+    SettingsLayUtil.ITEM,
+    title = R.string.jesse205_nowVersion_app,
+    summary = ("%s (%s)"):format(BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
+    icon = R.drawable.ic_information_outline,
+    key = "appVersion",
+  },
+  {
+    --Jesse205Library版本
+    SettingsLayUtil.ITEM,
+    title = R.string.jesse205_nowVersion_jesse205Library,
+    summary = ("%s (%s)"):format(jesse205._VERSION, jesse205._VERSION_CODE),
+    icon = R.drawable.ic_information_outline,
+  },
+  {--PluginsUtil 版本
+    SettingsLayUtil.ITEM,
+    title=getLocalLangObj("PluginsUtil 版本","PluginsUtil version"),
+    summary=PluginsUtil._VERSION,
+    icon=R.drawable.ic_puzzle_outline,
+  },
+  {--LuaDB 版本
+    SettingsLayUtil.ITEM,
+    title=getLocalLangObj("LuaDB 版本","LuaDB version"),
+    summary=tostring(db.ver),
+    icon=R.drawable.ic_database_outline,
+    key="luaDbVersion",
+  },
+  {--更新日志
+    SettingsLayUtil.ITEM_NOSUMMARY,
+    title=getLocalLangObj("更新日志","Change Log"),
+    url=REPOSITORY_URL.."/blob/master/CHANGELOG.md",
+    icon=R.drawable.ic_history,
+    newPage="newApp",
+  }
+}
+
+moreItems={
   {--仓库
-    SettingsLayUtil.ITEM_NOSUMMARY;
-    title=R.string.open_source_repository;
-    icon=R.drawable.ic_github;
-    newPage="newApp";
-    browserUrl=REPOSITORY_URL;
+    SettingsLayUtil.ITEM_NOSUMMARY,
+    title=R.string.open_source_repository,
+    icon=R.drawable.ic_github,
+    newPage="newApp",
+    browserUrl=REPOSITORY_URL,
   },
   {--交流群
-    SettingsLayUtil.ITEM;
-    title=R.string.jesse205_qqGroup;
+    SettingsLayUtil.ITEM,
+    title=R.string.jesse205_qqGroup,
     summary="628045718",
-    icon=R.drawable.ic_account_group_outline;
-    newPage="newApp";
-    qqGroup=628045718;
-    contextMenuEnabled=true;
+    icon=R.drawable.ic_account_group_outline,
+    newPage="newApp",
+    qqGroup=628045718,
+    contextMenuEnabled=true,
     menus={
       {
         title="Aide Lua Bug测试群",
@@ -95,28 +138,28 @@ moreItem={
         title="Edde 综合群",
         qqGroup=708199076,
       },
-    };
+    },
   },
   {--频道
-    SettingsLayUtil.ITEM;
-    title=R.string.jesse205_qqChannel;
+    SettingsLayUtil.ITEM,
+    title=R.string.jesse205_qqChannel,
     summary="t37c1u1nmw",
-    icon=R.drawable.ic_qq_channel;
-    newPage="newApp";
-    url="https://pd.qq.com/s/n51c4k";
+    icon=R.drawable.ic_qq_channel,
+    newPage="newApp",
+    url="https://pd.qq.com/s/n51c4k",
   },
   {--使用文档
-    SettingsLayUtil.ITEM_NOSUMMARY;
-    title=R.string.app_documnet;
-    icon=R.drawable.ic_file_document_outline;
-    newPage="newApp";
-    url=DOCS_URL;
+    SettingsLayUtil.ITEM_NOSUMMARY,
+    title=R.string.app_documnet,
+    icon=R.drawable.ic_file_document_outline,
+    newPage="newApp",
+    url=DOCS_URL,
   },
   {--支持
-    SettingsLayUtil.ITEM_NOSUMMARY;
-    title=R.string.jesse205_supportProject;
-    icon=R.drawable.ic_wallet_giftcard;
-    contextMenuEnabled=true;
+    SettingsLayUtil.ITEM_NOSUMMARY,
+    title=R.string.jesse205_supportProject,
+    icon=R.drawable.ic_wallet_giftcard,
+    contextMenuEnabled=true,
     menus={
       {
         title="更多软件",
@@ -134,12 +177,12 @@ moreItem={
         title="参与开发",
         url=REPOSITORY_URL,
       },
-    };
+    },
   },
 }
 
 --感谢名单
-thanks={
+thanksMap={
   ["@难忘的旋律"]={"PhotoView"},
   ["@噬心"]={"HtmlEditor (老版本)"},
   ["@dingyi"]={"MyLuaApp","LuaEditor","Gradle 工程修复","放大镜","Preference 设置页面","布局编译","AndroLua 调试"},
@@ -150,37 +193,9 @@ thanks={
   undraw={"插画"},
   IconPark={"Android 等部分图标"},
   ["Material Design Icon"]={"几乎所有图标"},
-  
-  
 }
 
 --版权信息
-copyright="Copyright (c) 2020-2023, Jesse205"
+copyrightText="Copyright (c) 2020-2023, Jesse205"
 
 PluginsUtil.setActivityName("about")
-
-function main()
-  import "db"
-  local index=4
-  table.insert(data,index,{--PluginsUtil 版本
-    SettingsLayUtil.ITEM;
-    title=getLocalLangObj("PluginsUtil 版本","PluginsUtil version");
-    summary=PluginsUtil._VERSION;
-    icon=R.drawable.ic_puzzle_outline;
-  })
-  index=index+1
-  table.insert(data,index,{--LuaDB 版本
-    SettingsLayUtil.ITEM;
-    title=getLocalLangObj("LuaDB 版本","LuaDB version");
-    summary=tostring(db.ver);
-    icon=R.drawable.ic_database_outline;
-  })
-  index=index+2
-  table.insert(data,index,{--更新日志
-    SettingsLayUtil.ITEM_NOSUMMARY;
-    title=getLocalLangObj("更新日志","Change Log");
-    url=REPOSITORY_URL.."/blob/master/CHANGELOG.md",
-    icon=R.drawable.ic_history;
-    newPage="newApp";
-  })
-end

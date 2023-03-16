@@ -26,6 +26,18 @@
   },
 
   {
+    name="Termux API",
+    message="Termux add-on app which exposes device functionality as API to command line programs.",
+    url="https://github.com/termux/termux-api",
+  },
+  {
+    name="AndroidSVG",
+    message="SVG rendering library for Android",
+    url="https://github.com/BigBadaboom/androidsvg",
+    license="Apache-2.0 license",
+  },
+
+  {
     name="Sharp",
     message="Scalable vector graphics for Android",
     url="https://github.com/Pixplicity/sharp",

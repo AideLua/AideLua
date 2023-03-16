@@ -1,17 +1,3 @@
---RES资源获取工具
---[[
---颜色
-res.color.attr.colorAccent
-android.res.color.attr.colorAccent
-res.colorStateList.attr.colorAccent
-res.color.attr.colorPrimary
---id
-android.res.id.attr.actionBarTheme
-res.id.attr.actionBarTheme
-
-res(android.res.id.attr.actionBarTheme).color.attr.colorControlNormal
-
-]]
 local _M={}
 _M._VERSION="1.0 (alpha3) (dev)"
 _M._VERSIONCODE=1003
@@ -19,16 +5,19 @@ _M._NAME="Android Res Getter"
 
 --android.res
 local androidRes=table.clone(_M)
-androidRes._isAndroidRes=true
 android.res=androidRes
+androidRes._isAndroidRes=true
 
 ---默认值
+---@type table<string,all>
 local defaultAttrValues={
   color=0xFFFF0000,
   id=0,
   resourceId=0,
   boolean=false,
   dimension=0,
+  dimensionPixelSize=0,
+  dimensionPixelOffset=0,
   dimen=0,
   float=0,
   int=0,
@@ -36,6 +25,7 @@ local defaultAttrValues={
   themeAttributeId=0,
 }
 
+---@type table<string,boolean>
 local noDefaultAttrValues={
   colorStateList=true,
   complexColor=true,
@@ -47,13 +37,15 @@ local noDefaultAttrValues={
   type=true,
 }
 
---将键转换为java的方法名称
+---将键转换为java的方法名称
+---@type table<string,string>
 local key2GetterMap={
   id="getResourceId",
   dimen="getDimension",
   bool="getBoolean",
 }
 
+---@type table<string,string>
 local key2ResGetterMap={
   int="getInteger",
 }
@@ -63,6 +55,8 @@ local key2RIndexMap={
   colorStateList="color",
   resourceId="id",
   dimension="dimen",
+  dimensionPixelSize="dimen",
+  dimensionPixelOffset="dimen",
   int="integer",
   boolean="bool",
   text="string",
@@ -76,21 +70,36 @@ androidMetatable,typeMetatable,
 androidAttrMetatable,attrMetatable
 
 --应用了样式的res索引
+---@type table<number,table>
 local styledResMap={}
+---@type table<number,table>
 local styledAndroidResMap={}
 
+---将key转换为用于获取TypedArray的方法名
+---@param key string 资源类型名称，也就是res.(xxxx)的这段
+---@return string methodName 方法名
 local function key2Getter(key)
   return key2GetterMap[key] or "get"..string.gsub(key, "^(%w)", string.upper)
 end
 
+---将key转换为用于获取Resource的方法名
+---@param key string 资源类型名称，也就是res.(xxxx)的这段
+---@return string methodName 方法名
 local function key2ResGetter(key)
   return key2ResGetterMap[key] or key2Getter(key)
 end
 
+---将key转换为R的子类名称
+---@param key string 资源类型名称，也就是res.(xxxx)的这段
+---@return string rClassName R的子类名
 local function key2RIndex(key)
   return key2RIndexMap[key] or key
 end
 
+---获取主题中的值
+---@param _type string 资源类型名称，也就是res.(xxxx)的这段
+---@param key string attr名称，也就是res.xxxx.attr.(xxxx)的这段
+---@param style number 主题ID
 local function getAttrValue(_type,key,style)
   local array
   if style then

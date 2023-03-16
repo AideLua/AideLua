@@ -23,7 +23,7 @@ public class ThemeManager {
     public static final String THEME_DARK_ACTION_BAR="theme_dark_action_bar";
     //public static final String THEME_NO_ACTION_BAR="theme_no_action_bar";
 
-    private static ThemeType defaultAppTheme = ThemeType.DEFAULT;
+    private static ThemeType defaultAppTheme = ThemeType.BLUE;
 
     private ThemeType mThemeType;
     private boolean isDarkActionBar;
@@ -72,12 +72,12 @@ public class ThemeManager {
     public static int getThemeId(Context context, ThemeType themeType, boolean isDarkActionBar, boolean isNoActionBar, boolean isMaterial3) {
         if (isMaterial3)
             return R.style.Theme_Jesse205_Material3;//MD3只有这一个主题
-        int themeId = R.style.Theme_Jesse205_Default;
+        int themeId = R.style.Theme_Jesse205_Blue;
         String styleKey="Theme_Jesse205";
         
         switch (themeType) {
-            case DEFAULT:
-                styleKey += "_Default";
+            case BLUE:
+                styleKey += "_Blue";
                 break;
             case TEAL:
                 styleKey += "_Teal";
@@ -188,7 +188,7 @@ public class ThemeManager {
     }
 
     public enum ThemeType {
-        DEFAULT,
+        BLUE,
         TEAL,
         ORANGE,
         PINK,

@@ -23,12 +23,12 @@
           textSize="16sp";
           id="name";
           layout_marginBottom="8dp";
-          textColor=theme.color.colorPrimary;
-          Typeface=Typeface.defaultFromStyle(Typeface.BOLD);
+          textColor=res.color.attr.colorPrimary;
+          --typeface=Typeface.defaultFromStyle(Typeface.BOLD);
         };
         {
           AppCompatTextView;
-          textColor=theme.color.textColorPrimary;
+          textColor=res.color.attr.colorOnBackground;
           id="message";
           textSize="14sp";
         };

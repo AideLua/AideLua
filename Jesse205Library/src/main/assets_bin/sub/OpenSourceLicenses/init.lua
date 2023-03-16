@@ -1,1 +1,1 @@
-appname="开源许可"
+appname="Open source licenses"
