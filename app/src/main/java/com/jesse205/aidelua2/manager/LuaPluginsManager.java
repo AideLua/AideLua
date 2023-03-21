@@ -9,16 +9,16 @@ public class LuaPluginsManager {
 
     private static final String TAG = "LuaPluginsManager";
 
-    private static String[] enabledPluginPaths;
+    private static String[] mEnabledPluginPaths;
 
-    private static String appTag; // 相当于apptype
+    private static String mAppTag; // 相当于apptype
 
     public static void setEnabledPluginPaths(String[] enabledPluginPaths) {
-        LuaPluginsManager.enabledPluginPaths = enabledPluginPaths;
+        mEnabledPluginPaths = enabledPluginPaths;
     }
 
     public static String[] getEnabledPluginPaths() {
-        return enabledPluginPaths;
+        return mEnabledPluginPaths;
     }
 
 }

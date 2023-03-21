@@ -1,5 +1,6 @@
+---@deprecated
 local ThemeUtil={}
-local ThemeUtilJava=luajava.bindClass("com.jesse205.app.ThemeUtil")
+local ThemeUtilJava=luajava.bindClass("com.jesse205.util.ThemeUtil")
 local context=jesse205.context
 local theme=_G.theme
 local SDK_INT=Build.VERSION.SDK_INT
@@ -55,7 +56,7 @@ end
 
 --判断是否是系统夜间模式
 local function isSysNightMode()
-  return ThemeUtilJava.isSysNightMode(context)
+  return ThemeUtilJava.isSystemNightMode(context)
 end
 ThemeUtil.isSysNightMode=isSysNightMode--这个一般用不到
 ThemeUtil.isNightMode=isSysNightMode

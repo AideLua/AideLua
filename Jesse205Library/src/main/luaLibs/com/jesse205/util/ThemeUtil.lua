@@ -1,9 +1,13 @@
+local ThemeUtilJava=luajava.bindClass(jesse205.LIBRARY_PACKAGE_NAME..".util.ThemeUtil")
+local context=jesse205.context
 local ThemeUtil={}
-setmetatable(ThemeUtil,ThemeUtil)
-local metatable={__index=ThemeUtil}
 
-function ThemeUtil.__call(self)
-  local self={}
-  setmetatable(self,metatable)
+---判断是否是系统夜间模式
+---@return boolean 是否开启了夜间模式
+function ThemeUtil.isSysNightMode()
+  return ThemeUtilJava.isSystemNightMode(context)
 end
+ThemeUtil.isNightMode=ThemeUtil.isSysNightMode
+
+
 return ThemeUtil

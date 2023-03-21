@@ -19,7 +19,7 @@ public class StringUtil {
 	 * @param str 需要获取MD5值的字符串
 	 * @return 获取到的MD5字符串
 	 * @author Jesse205
-	 * @Time 2022-10-7 2:25
+	 * @time 2022-10-7 2:25
 	 */
     public static String getMd5(String str) {
         byte[] digest = null;

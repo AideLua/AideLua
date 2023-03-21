@@ -28,8 +28,8 @@ public class ThemeManager {
     private static ThemeType defaultAppTheme = ThemeType.BLUE;
 
     private ThemeType mThemeType;
-    private boolean isDarkActionBar;
-    private boolean isMaterial3;
+    private boolean mIsDarkActionBar;
+    private boolean mIsMaterial3;
     private Activity mContext;
 
     public ThemeManager(Activity context) {
@@ -137,11 +137,11 @@ public class ThemeManager {
     }
 
     public boolean getDarkActionBarState() {
-        return isDarkActionBar;
+        return mIsDarkActionBar;
     }
 
     public boolean getMaterial3State() {
-        return isMaterial3;
+        return mIsMaterial3;
     }
 
     public void applyTheme() {
@@ -161,8 +161,8 @@ public class ThemeManager {
     }
 
     public void applyTheme(boolean isDarkActionBar, boolean isNoActionBar, boolean useDarkStatusBar, boolean useDarkNavigationBar, boolean useMaterial3) {
-        this.isDarkActionBar = isDarkActionBar;
-        this.isMaterial3 = useMaterial3;
+        mIsDarkActionBar = isDarkActionBar;
+        mIsMaterial3 = useMaterial3;
         if (mThemeType == null)
             mThemeType = getAppTheme(mContext);
         int themeId = getThemeId(mContext, mThemeType, isDarkActionBar, isNoActionBar, useMaterial3);
@@ -191,7 +191,7 @@ public class ThemeManager {
     }
 
     public boolean checkThemeChanged() {
-        return isMaterial3 != getAppMaterial3State(mContext) || isDarkActionBar != getAppDarkActionBarState(mContext);
+        return mIsMaterial3 != getAppMaterial3State(mContext) || mIsDarkActionBar != getAppDarkActionBarState(mContext);
     }
 
     public enum ThemeType {
