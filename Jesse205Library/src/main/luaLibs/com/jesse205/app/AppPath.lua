@@ -2,7 +2,7 @@ local Environment=luajava.bindClass("android.os.Environment")
 local LuaUtil=luajava.bindClass("com.androlua.LuaUtil")
 local File=luajava.bindClass("java.io.File")
 local context=jesse205.context
-local packageName=context.getPackageName()
+local packageName=jesse205.packageName
 
 local sdcardPath=Environment.getExternalStorageDirectory().getPath()--SD卡的目录
 
@@ -11,7 +11,9 @@ local sdcardDataDirPath="Android/data/"..packageName
 context.setLuaExtDir(sdcardDataDirPath.."/files")
 local dataDirPath="/data/data/"..packageName
 sdcardDataDirPath=sdcardPath.."/"..sdcardDataDirPath
-local mediaDirPath=sdcardPath.."/Android/media/"..packageName--共享文件夹
+
+local mediaDirPaths=context.getExternalMediaDirs()
+local mediaDirPath=mediaDirPaths and #mediaDirPaths>0 and mediaDirPaths[0].toString() or nil
 
 local _M={}
 
@@ -29,17 +31,25 @@ _M.Pictures=getAppPublicPath("Pictures")
 _M.Music=getAppPublicPath("Music")
 
 _M.LuaDir=context.getLuaDir()
+
+
 _M.AppMediaDir=mediaDirPath.."/files"
-_M.AppDataDir=dataDirPath.."/files"
+local filesDir=context.getFilesDir()
+_M.AppDataDir=filesDir and filesDir.toString() or nil
 _M.AppSdcardDataDir=sdcardDataDirPath.."/files"
 
+--缓存
 _M.AppMediaCacheDir=mediaDirPath.."/cache"
-_M.AppDataCacheDir=dataDirPath.."/cache"
-_M.AppSdcardDataCacheDir=sdcardDataDirPath.."/cache"
+local cacheDir=context.getCacheDir()
+_M.AppDataCacheDir=cacheDir and cacheDir.toString() or nil
+local externalCacheDir=context.getExternalCacheDir()
+_M.AppSdcardDataCacheDir=externalCacheDir and externalCacheDir.toString() or nil
 
-_M.AppMediaTempDir=mediaDirPath.."/cache/temp"
-_M.AppDataTempDir=dataDirPath.."/cache/temp"
-_M.AppSdcardDataTempDir=sdcardDataDirPath.."/cache/temp"
+
+--临时文件
+_M.AppMediaTempDir=_M.AppMediaCacheDir.."/temp"
+_M.AppDataTempDir=_M.AppDataCacheDir.."/temp"
+_M.AppSdcardDataTempDir=_M.AppSdcardDataCacheDir.."/temp"
 
 function _M.cleanTemp()
   LuaUtil.rmDir(File(_M.AppMediaTempDir))

@@ -195,11 +195,11 @@ return {
     {--工程路径，多路径
       SettingsLayUtil.ITEM;
       icon=R.drawable.ic_folder_cog_outline;
-      title=R.string.projects_paths;
-      key="projectsDirs";
-      summary=getSharedData("projectsDirs");
+      title="Git 程序路径 Git binary path";
+      key="git_path";
+      summary=getSharedData("git_path");
       action="editString";
-      hint=R.string.projects_paths;
+      --hint="";
       helperText=R.string.projects_paths_summary;
       allowNull=false;
     };

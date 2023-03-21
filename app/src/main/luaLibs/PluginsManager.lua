@@ -1,3 +1,4 @@
+import "com.jesse205.aidelua2.manager.LuaPluginsManager"
 local PluginsManager = {}
 PluginsManager._VERSION = "4.0.0 (dev)"
 PluginsManager._VERSION_CODE = 40001
@@ -29,11 +30,11 @@ local appVersionCode = appPackageInfo.versionCode
 local apptype=apptype
 local activityName
 
-function PluginsManager.clearOpenedPluginPaths()
+function PluginsManager.clearEnabledPluginPaths()
   application.set("plugin_enabledPaths", nil)
 end
 
-function PluginsManager.getOpenedPluginPaths()
+function PluginsManager.getEnabledPluginPaths()
   local paths = application.get("plugin_enabledPaths")
   if paths then
     return paths
@@ -41,7 +42,10 @@ function PluginsManager.getOpenedPluginPaths()
   paths={}
   for pluginsDirPathKey=1,#PLUGINS_PATHS do
     local pluginsDirPath=PLUGINS_PATHS[pluginsDirPathKey]
+    
   end
+  application.set("plugin_enabledpaths",String(paths))
+  return paths
 end
 
 ---设置活动标识
@@ -102,6 +106,7 @@ function PluginsManager.getAvailable(packageName)
   return PluginsManager.getEnabled(packageName)
 end
 
+--要克隆的变量
 local virtualEnvCloneList={"android","short","tostring","string",
   "activity","func","xpcall","collectgarbage","load",
   "import","tointeger","_VERSION","loadstring","loadmenu",
@@ -117,7 +122,7 @@ local virtualEnvCloneList={"android","short","tostring","string",
   "int","error"}
 
 local baseVirtualEnv={
-  _APP_G=_G,
+  _APP_G=_G,--页面全局变量
 }
 
 local virtualEnvMetatable={__index=baseVirtualEnv}
@@ -129,7 +134,6 @@ end
 
 ---新建插件环境表
 function PluginsManager.newPluginEnv()
-
   local virtualEnv={}
   virtualEnv._G=virtualEnv
   virtualEnv._ENV=virtualEnv
@@ -139,10 +143,8 @@ function PluginsManager.newPluginEnv()
 end
 
 function PluginsManager.loadPluginConfig(pluginPath)
-
   local configPath=pluginPath.."/init.lua"
   local virtualEnv=PluginsManager.newPluginEnv()
-
 end
 
 function PluginsManager.loadPlugin(pluginPath)

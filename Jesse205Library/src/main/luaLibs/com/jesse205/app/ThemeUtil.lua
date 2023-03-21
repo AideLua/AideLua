@@ -164,6 +164,7 @@ function ThemeUtil.setNavigationbarColor(color)
   return color
 end
 
+--[[
 --透明系统栏
 function ThemeUtil.applyAplhaSystemBar()
   decorView.setSystemUiVisibility(
@@ -173,7 +174,7 @@ function ThemeUtil.applyAplhaSystemBar()
   |View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
   window.setStatusBarColor(0)
   window.setNavigationBarColor(0)
-end
+end]]
 
 --获取波纹Drawable
 function ThemeUtil.getRippleDrawable(color,square)
@@ -250,10 +251,10 @@ function ThemeUtil.refreshUI()
   end
 
   ThemeUtil.refreshThemeColor()--刷新一下颜色
-
+--[[
   if isGrayNavigationBarSystem() then
     ThemeUtil.setNavigationbarColor(res.theme.color.attr.windowBackgroundColor)
-  end
+  end]]
 
   if theme.boolean.windowLightNavigationBar and SDK_INT>=26 and not(darkNavigationBar) then--主题默认亮色导航栏
     systemUiVisibility=systemUiVisibility|View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR--设置亮色导航栏

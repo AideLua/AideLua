@@ -108,6 +108,19 @@ function onItemLongClick(view,views,key,data)
   recyclerView.tag._data=data
 end
 
+function getIcon(pluginPath)
+  local icon=pluginPath.."/icon.png"
+  local icon_night=pluginPath.."/icon-night.png"
+  --图标
+  if ThemeUtil.isNightMode() and File(icon_night).isFile() then
+    return icon_night
+  end
+  if not(File(icon).isFile()) then
+    return R.drawable.ic_puzzle_icon
+  end
+  return icon
+end
+
 function addSummaryTextLine(summarySpanIndex,color,oldSummary,summary)
   local newSummary=oldSummary.."\n"..summary
   table.insert(summarySpanIndex,{theme.color[color] or color,utf8.len(oldSummary)+1,utf8.len(newSummary)})
@@ -133,8 +146,6 @@ function refresh()
         local path=file.getPath()
         local dirName=file.getName()
         local initPath=path.."/init.lua"
-        local icon=path.."/icon.png"
-        local icon_night=path.."/icon-night.png"
         loadedConfig,config=pcall(getConfigFromFile,initPath)--init.lua内容
         if loadedConfig then--存在init.lua，是合法插件
           if config.appname then
@@ -150,17 +161,13 @@ function refresh()
           --版本号
           local pluginVersionName=config.appver
           local pluginVersionCode=config.appcode
-          if pluginVersionName then
-            if versionCode then
-              summary=summary..formatResStr(R.string.plugins_info_version,{("%s (%s)"):format(pluginVersionName,pluginVersionCode)})
-             else
-              summary=summary..formatResStr(R.string.plugins_info_version,{pluginVersionName})
-            end
-           elseif pluginVersionCode then
-            summary=summary..formatResStr(R.string.plugins_info_version,{pluginVersionCode})
+          local versionText
+          if pluginVersionName or pluginVersionCode then
+            versionText=("%s (%s)"):format(pluginVersionName or android.res.string.unknownName,pluginVersionCode or android.res.string.unknownName)
            else
-            summary=summary..formatResStr(R.string.plugins_info_version,{getString(R.string.android.R.string.unknownName)})
+            versionText=android.res.string.unknownName
           end
+          summary=summary..formatResStr(R.string.plugins_info_version,{versionText})
 
           --包名
           local packageName=config.packagename
@@ -218,12 +225,7 @@ function refresh()
             spannableSummary.setSpan(ForegroundColorSpan(content[1]),content[2],content[3],Spannable.SPAN_INCLUSIVE_INCLUSIVE)
           end
         end
-        if ThemeUtil.isNightMode() and File(icon_night).isFile() then
-          icon=icon_night
-        end
-        if not(File(icon).isFile()) then
-          icon=R.drawable.ic_puzzle_icon
-        end
+
         table.insert(settings2,{
           (function()
             if config.smallicon then
@@ -232,7 +234,7 @@ function refresh()
               return SettingsLayUtil.ITEM_AVATAR_SWITCH
             end
           end)();
-          icon=icon,
+          icon=getIcon(path),
           title=title,
           summary=summary or spannableSummary,
           key="plugin_item",

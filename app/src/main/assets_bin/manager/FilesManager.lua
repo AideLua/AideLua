@@ -1,11 +1,10 @@
 --v5.2.0+
---@class FilesManager
-local _M={}
+local FilesManager={}
 
 
 
-function _M.initViews()
+function FilesManager.initViews()
   
 end
 
-return createVirtualClass(_M)
+return createVirtualClass(FilesManager)

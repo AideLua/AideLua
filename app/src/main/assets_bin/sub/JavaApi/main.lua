@@ -34,6 +34,12 @@ activity.setContentView(loadlayout2("layout"))
 activity.setSupportActionBar(toolbar)
 actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true)
+--[[
+decorView.setSystemUiVisibility(
+decorView.getSystemUiVisibility()|
+View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+|View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+|View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)]]
 
 function onCreate(savedInstanceState)
   PluginsUtil.callElevents("onCreate", savedInstanceState)
@@ -177,7 +183,8 @@ function checkTextError(text)
 end
 
 function onAnimUpdate(hideOffset)
-  local actionBarHeight=appBarLayout.getHeight()
+  --print(hideOffset)
+  local actionBarHeight=toolBarLayout.getHeight()
   if actionBarHeight<=0 then
     return
   end
@@ -230,7 +237,7 @@ function hideActionBar(force)
       return
     end
     actionBarState=false
-    actionBarAnimator = ObjectAnimator.ofFloat(appBarLayout,"translationY",{-appBarLayout.getHeight()})
+    actionBarAnimator = ObjectAnimator.ofFloat(appBarLayout,"translationY",{-toolBarLayout.getHeight()})
     .setDuration(200)
     .setAutoCancel(true)
     .addUpdateListener({
@@ -242,18 +249,25 @@ function hideActionBar(force)
   end
 end
 
+--[[
 --设置ListView的padding
 local width=View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED)
 local height=View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED)
 searchLayout.measure(width,height)
 appBarLayout.measure(width,height)
 local searchLayoutHeight=searchLayout.getMeasuredHeight()
-local appBarLayoutHeight=appBarLayout.getMeasuredHeight()
-
+local appBarLayoutHeight=appBarLayout.getMeasuredHeight()]]
+--[[
 if nowDevice=="phone" then
   listView.setPadding(0,appBarLayoutHeight+searchLayoutHeight,0,0)
  else
   listView.setPadding(0,appBarLayoutHeight,0,0)
+end]]
+
+listView.onApplyWindowInsets=function(view,insets)
+  view.setPadding(insets.getSystemWindowInsetLeft(),insets.getSystemWindowInsetTop(),insets.getSystemWindowInsetRight(),insets.getSystemWindowInsetBottom())
+  view.resolvePadding()
+  return insets
 end
 
 local searchEditDownY=0
@@ -261,6 +275,7 @@ local searchEditDownOffset=0
 --拽拖顶栏触摸事件
 topLayoutOnTouchListener=View.OnTouchListener{
   onTouch=function(view,event)
+    --print(nowDevice)
     if nowDevice~="phone" then
       appBarLayout.setTranslationY(0)
       onAnimUpdate(0)
@@ -269,7 +284,7 @@ topLayoutOnTouchListener=View.OnTouchListener{
     end
     local y=event.getRawY()
     local action=event.getAction()
-    local actionBarHeight=appBarLayout.getHeight()
+    local actionBarHeight=toolBarLayout.getHeight()
     if action==MotionEvent.ACTION_DOWN then
       if actionBarAnimator then
         actionBarAnimator.cancel()

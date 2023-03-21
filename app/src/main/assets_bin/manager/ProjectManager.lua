@@ -62,6 +62,12 @@ end
 refreshProjectsPath()
 ProjectManager.refreshProjectsPath=refreshProjectsPath
 
+---使用已安装的本项目的软件运行lua文件
+---@param path string 文件路径
+function ProjectManager.runFile(path)
+
+end
+
 ---运行项目
 ---@param path string 文件路径
 function ProjectManager.runProject(path,config,...)

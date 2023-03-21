@@ -1,0 +1,4 @@
+local WelcomeManager={}
+
+
+return WelcomeManager

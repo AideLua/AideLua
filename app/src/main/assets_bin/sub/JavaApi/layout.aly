@@ -5,18 +5,13 @@
   id="mainLay";
   fitsSystemWindows=true;
   {
-    ListView;
-    id="listView";
-    fastScrollEnabled=true;
-    layout_width="fill";
-    layout_height="fill";
-    clipToPadding=false;
-  };
-  {
     AppBarLayout;
     id="appBarLayout",
     layout_width="fill";
     elevation=0;
+    fitsSystemWindows=true;
+    --liftable=false;
+    --liftOnScroll=false;
     --theme=R.style.Widget_MaterialComponents_AppBarLayout_Surface;
     --theme=theme.number.id.actionBarTheme;
     --radius=0;
@@ -34,6 +29,15 @@
         popupTheme=res.id.attr.actionBarPopupTheme;
       }
     };
+  };
+  {
+    ListView;
+    id="listView";
+    fastScrollEnabled=true;
+    layout_width="fill";
+    layout_height="fill";
+    clipToPadding=false;
+    fitsSystemWindows=true;
   };
   {
     FrameLayout;

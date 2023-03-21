@@ -2,6 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Platform.V21.Theme.Jasse205.Material2" parent="Theme.MaterialComponents.DayNight">
         <item name="colorPrimaryDark">@color/jesse205_system_window_scrim_compat</item>
+        <item name="android:navigationBarColor">@color/jesse205_system_window_scrim_compat</item>
         <item name="windowLightStatusBar">?isLightTheme</item>
         <item name="windowLightNavigationBar">?isLightTheme</item>
     </style>

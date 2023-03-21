@@ -47,7 +47,7 @@ import "android.graphics.drawable.ShapeDrawable"
 --import "android.graphics.drawable.shapes.RoundRectShape"
 import "android.graphics.drawable.RippleDrawable"
 import "android.graphics.drawable.LayerDrawable"
-import "android.graphics.drawable.DrawableWrapper"
+--import "android.graphics.drawable.DrawableWrapper"
 
 import "android.graphics.drawable.shapes.OvalShape"
 import "android.graphics.PorterDuff"
@@ -142,8 +142,7 @@ PermissionUtil.askForRequestPermissions({
 --个性化设置
 oldJesse205Support = getSharedData("jesse205Lib_support")
 oldAndroidXSupport = getSharedData("androidX_support")
-oldTheme = ThemeManager.getAppTheme()
-oldDarkActionBar = ThemeManager.getAppDarkActionBarState()
+
 oldRichAnim = getSharedData("richAnim")
 
 --v5.1.2废除
@@ -219,24 +218,25 @@ end
 function onCreateOptionsMenu(menu)
   local inflater = activity.getMenuInflater()
   inflater.inflate(R.menu.menu_main_aidelua, menu)
+  local Rid=R.id
   -- 获取一下Menu
-  reopenFileMenu = menu.findItem(R.id.menu_file_reopen)
-  closeFileMenu = menu.findItem(R.id.menu_file_close)
-  saveFileMenu = menu.findItem(R.id.menu_file_save)
-  runMenu = menu.findItem(R.id.menu_run)
-  binMenu = menu.findItem(R.id.menu_project_bin)
-  binRunMenu = menu.findItem(R.id.menu_project_bin_run)
-  reopenProjectMenu = menu.findItem(R.id.menu_project_reopen)
-  closeProjectMenu = menu.findItem(R.id.menu_project_close)
-  projectPropertiesMenu = menu.findItem(R.id.menu_project_properties)
-  buildMenu = menu.findItem(R.id.menu_project_build)
+  reopenFileMenu = menu.findItem(Rid.menu_file_reopen)
+  closeFileMenu = menu.findItem(Rid.menu_file_close)
+  saveFileMenu = menu.findItem(Rid.menu_file_save)
+  runMenu = menu.findItem(Rid.menu_run)
+  binMenu = menu.findItem(Rid.menu_project_bin)
+  binRunMenu = menu.findItem(Rid.menu_project_bin_run)
+  reopenProjectMenu = menu.findItem(Rid.menu_project_reopen)
+  closeProjectMenu = menu.findItem(Rid.menu_project_close)
+  projectPropertiesMenu = menu.findItem(Rid.menu_project_properties)
+  buildMenu = menu.findItem(Rid.menu_project_build)
 
-  codeMenu = menu.findItem(R.id.subMenu_code)
-  toolsMenu = menu.findItem(R.id.subMenu_tools)
-  fileMenu = menu.findItem(R.id.subMenu_file)
-  projectMenu = menu.findItem(R.id.subMenu_project)
-  moreMenu = menu.findItem(R.id.subMenu_more)
-  pluginsMenu = menu.findItem(R.id.subMenu_plugins)
+  codeMenu = menu.findItem(Rid.subMenu_code)
+  toolsMenu = menu.findItem(Rid.subMenu_tools)
+  fileMenu = menu.findItem(Rid.subMenu_file)
+  projectMenu = menu.findItem(Rid.subMenu_project)
+  moreMenu = menu.findItem(Rid.subMenu_more)
+  pluginsMenu = menu.findItem(Rid.subMenu_plugins)
 
   -- 菜单组
   StateByFileAndEditorMenus = {saveFileMenu}
@@ -288,28 +288,28 @@ function onOptionsItemSelected(item)
   --小心switch的bug
   if id==aRid.home then -- 菜单键
     FilesBrowserManager.switchState()
-  elseif id==Rid.menu_undo then -- 撤销
+   elseif id==Rid.menu_undo then -- 撤销
     editorActions.undo()
-  elseif id== Rid.menu_redo then -- 重装
+   elseif id== Rid.menu_redo then -- 重装
     editorActions.redo()
-  elseif id== Rid.menu_run then -- 运行
+   elseif id== Rid.menu_run then -- 运行
     if ProjectManager.openState then
       ProjectManager.smartRunProject()
      else
       local code=EditorsManager.actions.getText()
       runLuaFile(nil,code)
     end
-  elseif id== Rid.menu_project_bin_run then -- 二次打包
+   elseif id== Rid.menu_project_bin_run then -- 二次打包
     if ProjectManager.openState then
       FilesTabManager.saveAllFiles()
       BuildToolUtil.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,true,true)
     end
-  elseif id== Rid.menu_project_bin then -- 二次打包
+   elseif id== Rid.menu_project_bin then -- 二次打包
     if ProjectManager.openState then
       FilesTabManager.saveAllFiles()
       BuildToolUtil.repackApk(ProjectManager.nowConfig,ProjectManager.nowPath,false,false)
     end
-  elseif id== Rid.menu_project_build then
+   elseif id== Rid.menu_project_build then
     if not ProjectManager.openState then
       return
     end
@@ -330,21 +330,21 @@ function onOptionsItemSelected(item)
         },
       })
     end
-  elseif id== Rid.menu_project_reopen then -- 重新打开项目
+   elseif id== Rid.menu_project_reopen then -- 重新打开项目
     ProjectManager.reopenProject()--函数内已判断打开状态
-  elseif id== Rid.menu_project_close then -- 关闭项目
+   elseif id== Rid.menu_project_close then -- 关闭项目
     ProjectManager.closeProject()
-  elseif id== Rid.menu_file_save then -- 保存
+   elseif id== Rid.menu_file_save then -- 保存
     FilesTabManager.saveAllFiles(true)
-  elseif id== Rid.menu_file_reopen then -- 重新打开文件
+   elseif id== Rid.menu_file_reopen then -- 重新打开文件
     FilesTabManager.reopenFile()--函数内已判断打开状态
-  elseif id== Rid.menu_file_close then -- 关闭文件
+   elseif id== Rid.menu_file_close then -- 关闭文件
     FilesTabManager.closeFile()
-  elseif id== Rid.menu_code_format then -- 格式化
+   elseif id== Rid.menu_code_format then -- 格式化
     editorActions.format()
-  elseif id== Rid.menu_code_search then -- 代码搜索
+   elseif id== Rid.menu_code_search then -- 代码搜索
     EditorsManager.startSearch()
-  elseif id== Rid.menu_code_checkImport then -- 检查导入
+   elseif id== Rid.menu_code_checkImport then -- 检查导入
     if EditorsManager.isEditor() then
       local packageName=activity.getPackageName()
       if ProjectManager.openState then--打开了工程
@@ -352,29 +352,29 @@ function onOptionsItemSelected(item)
       end
       newSubActivity("FixImport",{EditorsManager.actions.getText(),packageName})
     end
-  elseif id== Rid.menu_tools_javaApiViewer then -- JavaAPI浏览器
+   elseif id== Rid.menu_tools_javaApiViewer then -- JavaAPI浏览器
     newSubActivity("JavaApi",true)
-  elseif id== Rid.menu_tools_javaApiViewer_windmill then -- JavaAPI浏览器
+   elseif id== Rid.menu_tools_javaApiViewer_windmill then -- JavaAPI浏览器
     startWindmillActivity("Java API")
-  elseif id== Rid.menu_tools_logCat then -- 日志猫
+   elseif id== Rid.menu_tools_logCat then -- 日志猫
     if ProjectManager.openState then
       ProjectManager.runProject(checkSharedActivity("LogCat"))
      else
       newSubActivity("LogCat",true)
     end
-  elseif id== Rid.menu_tools_httpDebugging_windmill then -- Http 调试
+   elseif id== Rid.menu_tools_httpDebugging_windmill then -- Http 调试
     startWindmillActivity("Http 调试")
-  elseif id== Rid.menu_tools_luaManual_windmill then -- Lua 手册
+   elseif id== Rid.menu_tools_luaManual_windmill then -- Lua 手册
     startWindmillActivity("手册")
-  elseif id== Rid.menu_tools_manual then -- 使用手册
+   elseif id== Rid.menu_tools_manual then -- 使用手册
     openUrl(DOCS_URL)
-  elseif id== Rid.menu_more_settings then -- 设置
+   elseif id== Rid.menu_more_settings then -- 设置
     newSubActivity("Settings")
-  elseif id== Rid.menu_more_about then -- 关于
+   elseif id== Rid.menu_more_about then -- 关于
     newSubActivity("About")
-  elseif id== Rid.menu_code_checkCode then -- 代码查错
+   elseif id== Rid.menu_code_checkCode then -- 代码查错
     editorActions.check(true)
-  elseif id== Rid.menu_tools_layoutHelper then -- 布局助手
+   elseif id== Rid.menu_tools_layoutHelper then -- 布局助手
     FilesTabManager.saveFile()
     local prjPath,filePath
     if ProjectManager.openState then
@@ -384,7 +384,7 @@ function onOptionsItemSelected(item)
       filePath=FilesTabManager.file.getPath()
     end
     newSubActivity("LayoutHelper",{prjPath,filePath})
-  elseif id== Rid.menu_more_openNewWindow then -- 打开新窗口
+   elseif id== Rid.menu_more_openNewWindow then -- 打开新窗口
     activity.newActivity("main",{"projectPicker"},true,int(System.currentTimeMillis()))
   end
 
@@ -510,8 +510,6 @@ function onResume()
   if isResumeAgain then
     if reload
       or ThemeManager.checkThemeChanged()
-      --or (oldTheme ~= ThemeManager.getAppTheme())
-      --or (oldDarkActionBar ~= ThemeManager.getAppDarkActionBarState())
       or (oldRichAnim ~= getSharedData("richAnim"))
       then
       activity.recreate()

@@ -163,6 +163,7 @@ local itemsLay={
       padding="16dp";
       paddingLeft="72dp";
       paddingBottom="8dp";
+      allCaps=true;
       --paddingTop="8dp";
       --typeface=Typeface.defaultFromStyle(Typeface.BOLD);
     }

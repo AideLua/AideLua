@@ -43,7 +43,7 @@
 
     <color name="jesse205_system_window_scrim_light">#99FFFFFF</color>
     <color name="jesse205_system_window_scrim_dark">#66202124</color>
-    <color name="jesse205_system_window_scrim_dark_black">#66000000</color>
+    <color name="jesse205_system_window_scrim_dark_black">#22000000</color>
     <color name="jesse205_system_window_scrim">@color/jesse205_system_window_scrim_light</color>
 
     <color name="jesse205_system_window_scrim_light_compat">#44000000</color>

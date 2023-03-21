@@ -15,6 +15,8 @@ import com.jesse205.R;
 import static android.os.Build.VERSION.SDK_INT;
 import java.lang.reflect.Field;
 import android.util.Log;
+import com.jesse205.util.ThemeUtil;
+import android.view.Window;
 
 public class ThemeManager {
     private static final String TAG="ThemeManager";
@@ -74,7 +76,7 @@ public class ThemeManager {
             return R.style.Theme_Jesse205_Material3;//MD3只有这一个主题
         int themeId = R.style.Theme_Jesse205_Blue;
         String styleKey="Theme_Jesse205";
-        
+
         switch (themeType) {
             case BLUE:
                 styleKey += "_Blue";
@@ -111,11 +113,11 @@ public class ThemeManager {
 
     public static String getThemeName(Context context, ThemeType themeType) {
         int index=themeType.ordinal();
-        if (index!=0){
+        if (index != 0) {
             String[] names=context.getResources().getStringArray(R.array.jesse205_themes);
             return names[index];
         }
-        
+
         return context.getString(R.string.jesse205_theme_default);
     }
 
@@ -145,15 +147,15 @@ public class ThemeManager {
     public void applyTheme() {
         applyTheme(false);
     }
-    
+
     public void applyTheme(boolean isNoActionBar) {
         applyTheme(getAppDarkActionBarState(mContext), isNoActionBar);
     }
-    
+
     public void applyTheme(boolean isDarkActionBar, boolean isNoActionBar) {
         applyTheme(isDarkActionBar, isNoActionBar, false, false);
     }
-    
+
     public void applyTheme(boolean isDarkActionBar, boolean isNoActionBar, boolean useDarkStatusBar, boolean useDarkNavigationBar) {
         applyTheme(isDarkActionBar, isNoActionBar, useDarkStatusBar, useDarkNavigationBar, getAppMaterial3State(mContext));
     }
@@ -175,16 +177,21 @@ public class ThemeManager {
         array.recycle();
 
         int systemUiVisibility=0;
-        View decorView=mContext.getWindow().getDecorView();
-        if (SDK_INT >= 23 && windowLightStatusBar && !useDarkStatusBar)
+        Window window=mContext.getWindow();
+        View decorView=window.getDecorView();
+        if (!useDarkStatusBar && SDK_INT >= 23 && windowLightStatusBar)
             systemUiVisibility |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-        if (SDK_INT >= 26 && windowLightNavigationBar && !useDarkNavigationBar)
-            systemUiVisibility |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+
+        if (!useDarkNavigationBar && (SDK_INT >= 26 || ThemeUtil.isGrayNavigationBarSystem()) && windowLightNavigationBar) {
+            if (SDK_INT >= 26)
+                systemUiVisibility |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            window.setNavigationBarColor(mContext.getResources().getColor(R.color.jesse205_system_window_scrim));
+        }
         decorView.setSystemUiVisibility(systemUiVisibility);
     }
-    
-    public boolean checkThemeChanged(){
-        return isMaterial3!=getAppMaterial3State(mContext) ||isDarkActionBar!=getAppDarkActionBarState(mContext);
+
+    public boolean checkThemeChanged() {
+        return isMaterial3 != getAppMaterial3State(mContext) || isDarkActionBar != getAppDarkActionBarState(mContext);
     }
 
     public enum ThemeType {
@@ -193,5 +200,5 @@ public class ThemeManager {
         ORANGE,
         PINK,
         RED;
-        }
+    }
 }

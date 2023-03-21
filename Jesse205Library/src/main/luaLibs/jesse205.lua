@@ -2,15 +2,16 @@
 ---@class Jesse205
 local jesse205 = {}
 _G.jesse205 = jesse205
-jesse205._VERSION = "13.0.0 (alpha) (Pro)"   -- 库版本名
-jesse205._VERSION_CODE = 130001              -- 库版本号
-jesse205._ENV = _ENV                         -- Jesse205局部变量
-jesse205.themeType = "Jesse205"              -- 主题类型
+jesse205._VERSION = "13.0.0 (alpha) (Pro)" -- 库版本名
+jesse205._VERSION_CODE = 130001 -- 库版本号
+jesse205._ENV = _ENV -- Jesse205局部变量
+--jesse205.themeType = "Jesse205"              -- 主题类型
 jesse205.LIBRARY_PACKAGE_NAME = "com.jesse205" -- 库包名
 local LIBRARY_PACKAGE_NAME = jesse205.LIBRARY_PACKAGE_NAME
 
-require("import")            -- 导入import
-import("loadlayout2")
+require "import" -- 导入import
+import "loadlayout2"
+import "lazyimport"
 local import_ = _G["import"] -- 防止编辑器报错
 local appName, loadingDia
 local phoneLanguage
@@ -19,6 +20,7 @@ local phoneLanguage
 -- require "JavaClassHint"
 
 -- 惰性导入？
+
 local fastImport = {
   Bitmap = "android.graphics.Bitmap",
   LayoutTransition = "android.animation.LayoutTransition",
@@ -44,6 +46,10 @@ local fastImport = {
   DialogHelper = LIBRARY_PACKAGE_NAME .. ".helper.DialogHelper",
   ThemeManager = LIBRARY_PACKAGE_NAME .. ".manager.ThemeManager"
 }
+
+for index,content in pairs(fastImport) do
+  lazyimport(content,nil,index)
+end
 
 -- 根本就不是class的key，因此直接取全局变量即可
 ---@enum
@@ -72,14 +78,8 @@ local newMetatable = {
   __index = function(self, key)
     if normalkeys[key] then
       return rawget(_G, key)
-    else
-      local value = fastImport[key]
-      if value then
-        import_(value)
-        return rawget(_G, key)
-      else
-        return oldMetatable.__index(self, key)
-      end
+     else
+      return oldMetatable.__index(self, key)
     end
   end
 }
@@ -107,14 +107,14 @@ BuildConfig = luajava.bindClass(packageName .. ".BuildConfig")
 
 if activity then
   window = activity.getWindow()
-else
+ else
   -- 没有activity不加载主题
   notLoadTheme = true
 end
 
 -- JavaAPI转LuaAPI
 local activity2luaApi = { "newActivity", "getSupportActionBar", "getSharedData", "setSharedData", "getString",
-  "getPackageName" }
+"getPackageName" }
 for _, content in ipairs(activity2luaApi) do
   _G[content] = function(...)
     return context[content](...) -- 直接赋值会出错
@@ -122,10 +122,10 @@ for _, content in ipairs(activity2luaApi) do
 end
 activity2luaApi = nil
 
-import "android.os.Environment"
-import "android.content.res.Configuration"
+lazyimport "android.os.Environment"
+lazyimport "android.content.res.Configuration"
 
-require "com.jesse205.lua.math"   -- 导入更强大的math
+require "com.jesse205.lua.math" -- 导入更强大的math
 require "com.jesse205.lua.string" -- 导入更强大的string
 
 -- 导入常用的包
@@ -134,61 +134,61 @@ import "androidx.appcompat.app.*"
 
 import "android.widget.*"
 import "android.app.*"
-import "android.os.Build"
+lazyimport "android.os.Build"
 import "android.os.*"
-import "android.view.View" -- 加载主题要用
+lazyimport "android.view.View" -- 加载主题要用
 import "android.view.*"
-import "android.view.inputmethod.InputMethodManager"
+lazyimport "android.view.inputmethod.InputMethodManager"
 
-import "androidx.appcompat.app.AlertDialog"
+lazyimport "androidx.appcompat.app.AlertDialog"
 
-import "android.widget.TextView"
-import "android.widget.LinearLayout"
-import "android.widget.FrameLayout"
-import "android.widget.ScrollView"
-import "androidx.appcompat.widget.AppCompatTextView"
-import "androidx.appcompat.widget.AppCompatImageView"
-import "androidx.appcompat.widget.LinearLayoutCompat"
-import "androidx.coordinatorlayout.widget.CoordinatorLayout"
+lazyimport "android.widget.TextView"
+lazyimport "android.widget.LinearLayout"
+lazyimport "android.widget.FrameLayout"
+lazyimport "android.widget.ScrollView"
+lazyimport "androidx.appcompat.widget.AppCompatTextView"
+lazyimport "androidx.appcompat.widget.AppCompatImageView"
+lazyimport "androidx.appcompat.widget.LinearLayoutCompat"
+lazyimport "androidx.coordinatorlayout.widget.CoordinatorLayout"
 
 -- 导入常用类
-import "android.graphics.Bitmap"
-import "android.graphics.Color"
-import "android.graphics.Typeface"
-import "android.graphics.drawable.GradientDrawable"
+lazyimport "android.graphics.Bitmap"
+lazyimport "android.graphics.Color"
+lazyimport "android.graphics.Typeface"
+lazyimport "android.graphics.drawable.GradientDrawable"
 
-import "androidx.core.app.ActivityCompat"
-import "androidx.core.content.ContextCompat"
-import "androidx.core.view.MenuItemCompat"
+lazyimport "androidx.core.app.ActivityCompat"
+lazyimport "androidx.core.content.ContextCompat"
+lazyimport "androidx.core.view.MenuItemCompat"
 
-import "androidx.coordinatorlayout.widget.CoordinatorLayout"
-import "androidx.swiperefreshlayout.widget.SwipeRefreshLayout"
-import "androidx.cardview.widget.CardView"
+lazyimport "androidx.coordinatorlayout.widget.CoordinatorLayout"
+lazyimport "androidx.swiperefreshlayout.widget.SwipeRefreshLayout"
+lazyimport "androidx.cardview.widget.CardView"
 
-import "com.jesse205.widget.MyRecyclerView"
-import "androidx.recyclerview.widget.RecyclerView"
-import "androidx.recyclerview.widget.StaggeredGridLayoutManager"
-import "androidx.recyclerview.widget.LinearLayoutManager"
+lazyimport "com.jesse205.widget.MyRecyclerView"
+lazyimport "androidx.recyclerview.widget.RecyclerView"
+lazyimport "androidx.recyclerview.widget.StaggeredGridLayoutManager"
+lazyimport "androidx.recyclerview.widget.LinearLayoutManager"
 
-import "com.lua.custrecycleradapter.AdapterCreator" -- 导入LuaCustRecyclerAdapter及相关类
-import "com.lua.custrecycleradapter.LuaCustRecyclerAdapter"
-import "com.lua.custrecycleradapter.LuaCustRecyclerHolder"
+lazyimport "com.lua.custrecycleradapter.AdapterCreator" -- 导入LuaCustRecyclerAdapter及相关类
+lazyimport "com.lua.custrecycleradapter.LuaCustRecyclerAdapter"
+lazyimport "com.lua.custrecycleradapter.LuaCustRecyclerHolder"
 
-import "android.net.Uri"
-import "android.content.Intent"
-import "android.content.Context"
-import "android.content.res.ColorStateList"
-import "android.content.pm.PackageManager"
+lazyimport "android.net.Uri"
+lazyimport "android.content.Intent"
+lazyimport "android.content.Context"
+lazyimport "android.content.res.ColorStateList"
+lazyimport "android.content.pm.PackageManager"
 
 -- 导入常用的Material类
-import "com.google.android.material.card.MaterialCardView" -- 卡片
-import "com.google.android.material.button.MaterialButton" -- 按钮
-import "com.google.android.material.dialog.MaterialAlertDialogBuilder"
+lazyimport "com.google.android.material.card.MaterialCardView" -- 卡片
+lazyimport "com.google.android.material.button.MaterialButton" -- 按钮
+lazyimport "com.google.android.material.dialog.MaterialAlertDialogBuilder"
 
 -- 导入IO
-import "java.io.File"
+lazyimport "java.io.File"
 
-import "com.bumptech.glide.Glide"                                           -- 导入Glide
+lazyimport "com.bumptech.glide.Glide" -- 导入Glide
 
 inputMethodService = context.getSystemService(Context.INPUT_METHOD_SERVICE) -- 获取输入法服务
 
@@ -203,7 +203,7 @@ function getLocalLangObj(zh, en)
   end
   if phoneLanguage == "zh" then
     return zh or en
-  else
+   else
     return en or zh
   end
 end
@@ -214,7 +214,7 @@ function autoId2str(text)
   local _type = type(text)
   if _type == "number" then
     return getString(text)
-  else
+   else
     return text
   end
 end
@@ -246,7 +246,7 @@ openUrl = openInBrowser -- 通常情况下，应用不自带内置浏览器
 function rel2AbsPath(path, localPath)
   if path:sub(1, 1) == "/" then
     return path
-  else
+   else
     return localPath .. "/" .. path
   end
 end
@@ -265,25 +265,18 @@ function newSubActivity(name, ...)
   local basePath
   if nowDirFile.getName() == "sub" then
     basePath = "."
-  elseif parentDirFile.getName() == "sub" then
+   elseif parentDirFile.getName() == "sub" then
     basePath = parentDirFile.getPath()
-  else
+   else
     basePath = "sub"
   end
   if name:find("/") then
     newActivity(basePath .. "/" .. name, ...)
-  else
+   else
     newActivity(basePath .. "/" .. name .. "/main.lua", ...)
   end
   luajava.clear(nowDirFile)
   luajava.clear(parentDirFile)
-end
-
----@param id number 资源ID
---v5.1.2-
-function getColorStateList(id)
-  print("此API已废弃", "getColorStateList")
-  return resources.getColorStateList(id)
 end
 
 -- 好用的加载中对话框
@@ -296,10 +289,10 @@ function showLoadingDia(message, title, cancelable)
   if not (loadingDia) then
     import "android.app.ProgressDialog"
     loadingDia = ProgressDialog(context)
-    loadingDia.setProgressStyle(ProgressDialog.STYLE_SPINNER)                  -- 进度条类型
+    loadingDia.setProgressStyle(ProgressDialog.STYLE_SPINNER) -- 进度条类型
     loadingDia.setTitle(title or context.getString(R.string.jesse205_loading)) -- 标题
-    loadingDia.setCancelable(cancelable or false)                              -- 是否可以取消
-    loadingDia.setCanceledOnTouchOutside(cancelable or false)                  -- 是否可以点击外面取消
+    loadingDia.setCancelable(cancelable or false) -- 是否可以取消
+    loadingDia.setCanceledOnTouchOutside(cancelable or false) -- 是否可以点击外面取消
     loadingDia.setOnCancelListener({
       onCancel = function()
         loadingDia = nil -- 如果取消了，就把 loadingDia 赋值为空，视为没有正在展示的加载中对话框
@@ -328,19 +321,19 @@ end
 ---@param message string 信息
 function showSimpleDialog(title, message)
   return MaterialAlertDialogBuilder(context)
-      .setTitle(title)
-      .setMessage(message)
-      .setPositiveButton(android.R.string.ok, nil)
-      .show()
+  .setTitle(title)
+  .setMessage(message)
+  .setPositiveButton(android.R.string.ok, nil)
+  .show()
 end
 
 function showErrorDialog(title, message)
   local dialog = MaterialAlertDialogBuilder(context)
-      .setTitle(title)
-      .setMessage(message)
-      .setPositiveButton(android.R.string.ok, nil)
-      .setNegativeButton(R.string.jesse205_copy, nil)
-      .show()
+  .setTitle(title)
+  .setMessage(message)
+  .setPositiveButton(android.R.string.ok, nil)
+  .setNegativeButton(R.string.jesse205_copy, nil)
+  .show()
   DialogHelper.enableTextIsSelectable(dialog)
   dialog.getButton(AlertDialog.BUTTON_NEGATIVE).onClick = function()
     MyToast.copyText(message)
@@ -350,8 +343,8 @@ end
 --- 自动初始化一个LayoutTransition
 function newLayoutTransition()
   return LayoutTransition()
-      .enableTransitionType(LayoutTransition.CHANGING)
-      .setDuration(200)
+  .enableTransitionType(LayoutTransition.CHANGING)
+  .setDuration(200)
 end
 
 -- 以下为复写事件
@@ -376,7 +369,7 @@ end
 -- 加载主题
 -- 在get某东西（ActionBar等）前必须把主题搞定
 if not notLoadTheme then
-  import "com.jesse205.app.res"
+  import "res"
   theme = {
     color = {
       Ripple = {},
@@ -399,7 +392,7 @@ if not notLoadTheme then
   local dimension = number.Dimension
 
   setmetatable(color, {
-                        -- 普通颜色
+    -- 普通颜色
     __index = function(self, key)
       print("警告:调用了theme.color", key)
       local value = resources.getColor(R.color["jesse205_" .. string.lower(key)])
@@ -408,7 +401,7 @@ if not notLoadTheme then
     end
   })
   setmetatable(ripple, {
-                         -- 波纹颜色
+    -- 波纹颜色
     __index = function(self, key)
       print("警告:调用了theme.ripple", key)
       local value = resources.getColor(R.color["jesse205_" .. string.lower(key) .. "_ripple"])
@@ -417,7 +410,7 @@ if not notLoadTheme then
     end
   })
   setmetatable(light, {
-                        -- 偏亮颜色
+    -- 偏亮颜色
     __index = function(self, key)
       print("警告:调用了theme.color", key)
       local value = resources.getColor(R.color["jesse205_" .. string.lower(key) .. "_light"])
@@ -426,7 +419,7 @@ if not notLoadTheme then
     end
   })
   setmetatable(dark, {
-                       -- 偏暗颜色
+    -- 偏暗颜色
     __index = function(self, key)
       print("警告:调用了theme.color", key)
       local value = resources.getColor(R.color["jesse205_" .. string.lower(key) .. "_dark"])
@@ -435,7 +428,7 @@ if not notLoadTheme then
     end
   })
   setmetatable(number, {
-                         -- 数字
+    -- 数字
     __index = function(self, key)
       print("警告:调用了theme.number", key)
       local value = resources.getInteger(R.integer["jesse205_" .. string.lower(key)])
@@ -444,7 +437,7 @@ if not notLoadTheme then
     end
   })
   setmetatable(dimension, {
-                            -- 数字
+    -- 数字
     __index = function(self, key)
       print("警告:调用了theme.number", key)
       local value = resources.getDimension(R.dimen["jesse205_" .. string.lower(key)])
