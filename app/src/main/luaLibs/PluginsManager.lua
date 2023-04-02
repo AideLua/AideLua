@@ -27,25 +27,30 @@ PluginsManager.loadedPluginConfigsMap = loadedPluginConfigsMap
 local appPackageName = activity.getPackageName()
 local appPackageInfo = activity.PackageManager.getPackageInfo(appPackageName, 0)
 local appVersionCode = appPackageInfo.versionCode
-local apptype=apptype
+local appTag=appTag
 local activityName
 
+--LuaPluginsManager.setAppTag(appTag)
+
+---清空已加载插件的路径列表
 function PluginsManager.clearEnabledPluginPaths()
-  application.set("plugin_enabledPaths", nil)
+  LuaPluginsManager.setEnabledPluginPaths(nil)
 end
 
 function PluginsManager.getEnabledPluginPaths()
-  local paths = application.get("plugin_enabledPaths")
-  if paths then
-    return paths
+  local pathsJ = LuaPluginsManager.getEnabledPluginPaths()
+  if pathsJ then
+    return pathsJ
   end
-  paths={}
+  --没有已加载插件路径，开始遍历插件
+  local paths={}
   for pluginsDirPathKey=1,#PLUGINS_PATHS do
     local pluginsDirPath=PLUGINS_PATHS[pluginsDirPathKey]
-    
+
   end
-  application.set("plugin_enabledpaths",String(paths))
-  return paths
+  pathsJ=String(paths)
+  LuaPluginsManager.setEnabledPluginPaths(pathsJ)
+  return pathsJ
 end
 
 ---设置活动标识
@@ -133,6 +138,7 @@ for index=1,#virtualEnvCloneList do
 end
 
 ---新建插件环境表
+---@return table virtualEnv 虚拟环境表
 function PluginsManager.newPluginEnv()
   local virtualEnv={}
   virtualEnv._G=virtualEnv
@@ -142,9 +148,13 @@ function PluginsManager.newPluginEnv()
   return virtualEnv
 end
 
+---加载插件配置，自动重复利用已加载的插件
+---@param pluginPath string 插件路径
+---@return table pluginConfig
 function PluginsManager.loadPluginConfig(pluginPath)
   local configPath=pluginPath.."/init.lua"
   local virtualEnv=PluginsManager.newPluginEnv()
+  
 end
 
 function PluginsManager.loadPlugin(pluginPath)

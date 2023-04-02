@@ -29,7 +29,7 @@
         android:title="@string/file_create"/>
     <item
         android:id="@+id/menu_createDir"
-        android:title="@string/directory_create"/>
+        android:title="@string/folder_create"/>
     <item
         android:id="@+id/menu_newActivity"
         android:title="@string/newActivity"/>

@@ -4,6 +4,8 @@ LuaEditorHelper.removePackages(editor,packages): 移除包
   editor:com.androlua.LuaEditor
   package: table(list)
 ]]
+local toEnSymbolsMap=require "config.toEnSymbolsMap"
+
 --混淆的配置，方便后期维护
 local M2PName={
   ["com.myopicmobile.textwarrior.android.OnSelectionChangedListener"]={
@@ -178,6 +180,7 @@ function LuaEditorHelper.applyStyleToolBar(editor)
   })
 end
 
+--TODO: 讲这些使用toEnSymbolsMap代替
 local cnString2EnString={
   {"，",","},
   {"（","("},

@@ -1,3 +1,4 @@
+lazyimport "android.util.Log"
 --文档Url
 DOCS_URL="https://aidelua.github.io/AideLua/"
 REPOSITORY_URL="https://gitee.com/AideLua/AideLua"
@@ -38,13 +39,16 @@ function getConfigFromFile(path,env)
 end
 
 local richAnim=getSharedData("richAnim")
-local newLayoutTransitionSuper=newLayoutTransition
+local superNewLayoutTransition=newLayoutTransition
+
+---@override
 function newLayoutTransition()
   if richAnim then
-    return newLayoutTransitionSuper()
+    return superNewLayoutTransition()
   end
 end
 
+---@override
 function openUrl(url)
   xpcall(function()
     import "androidx.browser.customtabs.CustomTabsIntent"
@@ -54,17 +58,22 @@ function openUrl(url)
     .build()
     .launchUrl(activity, Uri.parse(url))
   end,
-  function()
+  function(e)
+    Log.e("openUrl",e)
     openInBrowser(url)
   end)
 end
 
 --加载全局插件
+---@deprecated
 function onCreate(savedInstanceState)
   PluginsUtil.callElevents("onCreate", savedInstanceState)
 end
 
+---@deprecated
 apptype="aidelua"
+
+appTag="aidelua"
 
 PluginsUtil=require "PluginsUtil"
 

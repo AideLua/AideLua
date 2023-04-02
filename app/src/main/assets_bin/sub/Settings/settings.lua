@@ -1,4 +1,16 @@
 return {
+  {--用户权益
+    SettingsLayUtil.TITLE;
+    title="用户权益 User benefits";
+    key="user_benefits";
+    {--Aide Lua Pro Plus
+      SettingsLayUtil.ITEM_NOSUMMARY;
+      icon=R.drawable.ic_tshirt_crew_outline;
+      title="Aide Lua Pro Plus";
+      key="user_vip";
+      newPage=true;
+    };
+  },
   {--界面
     SettingsLayUtil.TITLE;
     title=R.string.jesse205_ui;
@@ -71,10 +83,23 @@ return {
       title="构建工具 Building tool";
       --summary=R.string.zipalign_summary;
       key="buildingTools";
-      items={"Termux-Gradle (Recommend)","Termux","AIDE","AndroidIDE"},
+      items={"Terminal-Gradle (Recommend)","AIDE","AndroidIDE"},
       action="singleChoose";
       enabled=false;
     };
+    {--Gradle 程序路径
+      SettingsLayUtil.ITEM;
+      icon=R.drawable.ic_folder_cog_outline;
+      title="Gradle程序路径 Gradle binary path";
+      key="gradle_path";
+      summary=getSharedData("gradle_path");
+      action="editString";
+      --hint="";
+      helperText=R.string.projects_paths_summary;
+      allowNull=false;
+      enabled=false;
+    };
+
   };
   {--项目
     SettingsLayUtil.TITLE;
@@ -105,19 +130,20 @@ return {
       helperText=R.string.projects_paths_summary;
       allowNull=false;
     };
+    {--SDK 管理
+      SettingsLayUtil.ITEM_NOSUMMARY;
+      icon=R.drawable.ic_puzzle_outline;
+      title="SDK 管理 SDK manager";
+      key="sdk_manager";
+      newPage=true;
+    };
   };
 
   {--插件
     SettingsLayUtil.TITLE;
     title=R.string.plugins;
     key="plugins";
-    {--插件管理
-      SettingsLayUtil.ITEM_NOSUMMARY;
-      icon=R.drawable.ic_puzzle_outline;
-      title=R.string.plugins_manager;
-      key="plugins_manager";
-      newPage=true;
-    };
+
   };
 
   {--编辑器
@@ -151,14 +177,6 @@ return {
       title=R.string.settings_editor_symbolNar;
       key="editor_symbolBar";
     };
-    {--自动备份
-      SettingsLayUtil.ITEM_SWITCH;
-      icon=R.drawable.ic_file_clock_outline;
-      title=R.string.settings_editor_automaticallyBackupOriginalFiles;
-      summary=R.string.settings_editor_automaticallyBackupOriginalFiles_summary;
-      key="editor_autoBackupOriginalFiles";
-      enabled=false;
-    };
     {--字体
       SettingsLayUtil.ITEM;
       icon=R.drawable.ic_format_font;
@@ -187,12 +205,27 @@ return {
       key="tab_icon";
     };
   };
+  {--终端
+    SettingsLayUtil.TITLE;
+    title="终端 Terminal ";
+    key="terminal";
+
+    {--终端管理
+      SettingsLayUtil.ITEM;
+      icon=R.drawable.ic_folder_cog_outline;
+      title="终端管理 Terminal manager";
+      key="terminal_manager";
+      summary=getSharedData("terminal_manager");
+      enabled=false;
+    };
+
+  };
 
   {--版本控制
     SettingsLayUtil.TITLE;
-    title="版本控制 Version control ";
+    title="版本控制 Version control";
     key="versionControl";
-    {--工程路径，多路径
+    {--Git 程序路径
       SettingsLayUtil.ITEM;
       icon=R.drawable.ic_folder_cog_outline;
       title="Git 程序路径 Git binary path";
@@ -202,7 +235,17 @@ return {
       --hint="";
       helperText=R.string.projects_paths_summary;
       allowNull=false;
+      enabled=false;
     };
+    {--自动备份
+      SettingsLayUtil.ITEM_SWITCH;
+      icon=R.drawable.ic_file_clock_outline;
+      title=R.string.settings_editor_automaticallyBackupOriginalFiles;
+      summary=R.string.settings_editor_automaticallyBackupOriginalFiles_summary;
+      key="editor_autoBackupOriginalFiles";
+      enabled=false;
+    };
+
   };
   {--高级
     SettingsLayUtil.TITLE;

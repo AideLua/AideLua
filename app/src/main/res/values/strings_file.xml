@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="file">File</string>
+    <string name="file_up">Return to the previous directory</string>
+    <string name="file_popup">File...</string>
+    <string name="file_cannot_open_compiled_file">"Can't open the compiled file."</string>   
+    <string name="file_not_find">File not found</string>
+    <string name="file_not_supported">File type not supported</string>
+    <string name="file_create">Create a file</string>
+    <string name="file_create_withName">Create %1$s</string>
+    <string name="file_exists">File already exist</string>
+    <string name="file_name">File name</string>
+    <string name="file_name_copy">Copy file name</string>
+    <string name="file_close">Close file</string>
+    <string name="file_close_all">Close all files</string>
+    <string name="file_close_other">Close other files</string>
+    <string name="file_current_path">Current file path</string>
+    <string name="file_reopen">Reopen file</string>
+    <string name="file_noChange">This file has not been changed</string>
+    <string name="file_viewName_content">Name: %1$s</string>
+    <string name="file_noOpen">No file opened</string>
+    <string name="file_createCopy">Create a copy</string>
+    
+    <string name="folder">Folder</string>
+    <string name="folder_go_popup">Open Folder...</string>
+    <string name="folder_create">Create folder</string>
+    <string name="folder_name">Folder name</string>
+    
+
+    <string name="directory">Directory</string>
+    <string name="directory_go_popup">Open directory...</string>
+    <string name="directory_create">Create directory</string>
+    <string name="directory_name">directory name</string>
+    
+</resources>

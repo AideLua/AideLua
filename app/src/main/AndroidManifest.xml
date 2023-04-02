@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.jesse205.aidelua2">
     <uses-sdk
-        tools:overrideLibrary="androidx.draganddrop"/>
+        tools:overrideLibrary="androidx.draganddrop|dev.rikka.shizuku:api|rikka.shizuku.provider|rikka.shizuku.api|rikka.shizuku.shared|rikka.shizuku.aidl"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
 
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>

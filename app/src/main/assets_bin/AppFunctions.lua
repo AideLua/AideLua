@@ -397,7 +397,7 @@ end
 
 ---在 v5.1.1(51199) 添加
 ---适配SEND应用权限，适配华为文件管理
----@param uri Uri
+---@param uri Uri:
 function authorizeHWApplicationPermissions(uri)
   local flag=Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION
   local intent = Intent()
@@ -460,12 +460,12 @@ end
 ---@param documentFile DocumentFile 原文件
 ---@param targetPath string 目标文件夹
 function copyFilesFromDocumentFile(documentFile,targetPath)
-  import "com.jesse205.util.FileInfoUtils"
+  import "com.jesse205.util.FileUriUtil"
   local uri=documentFile.getUri()
   local name=documentFile.getName()
   local newPath=targetPath.."/"..name
   if documentFile.isDirectory() then
-    local isGetPathSucceeded,reallyPath=pcall(FileInfoUtils.getPath,activity,uri)
+    local isGetPathSucceeded,reallyPath=pcall(FileUriUtil.getPath,activity,uri)
     if isGetPathSucceeded then
       local isCpSucceeded,content=pcall(FileUtil.copyDir, File(reallyPath), File(newPath))
       if not isCpSucceeded then

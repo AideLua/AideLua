@@ -101,7 +101,7 @@
     <style name="ThemeOverlay.Jesse205.ActionBar.Primary" parent="ThemeOverlay.MaterialComponents.ActionBar.Primary">
     	<item name="colorControlNormal">@color/jesse205_color_on_primary</item>
         <item name="actionMenuTextColor">@color/jesse205_color_on_primary</item>
-        <item name="elevation">4dp</item>
+        <!--<item name="elevation">4dp</item>-->
 		<item name="cardBackgroundColor">@color/jesse205_white_ripple</item>
 		<item name="rippleColor">@color/jesse205_white_ripple</item>
 	</style>
@@ -111,7 +111,7 @@
         <!--设置图标颜色和文字颜色，文字颜色拥有不同的状态-->
         <item name="colorControlNormal">@color/jesse205_color_on_surface</item>
         <item name="actionMenuTextColor">@color/jesse205_color_on_surface</item>
-        <item name="elevation">4dp</item>
+        <!--<item name="elevation">4dp</item>-->
 	</style>
 
     <style name="ThemeOverlay.Jesse205.Dark" parent="@style/ThemeOverlay.AppCompat.Dark">

@@ -2,7 +2,6 @@
 local FilesManager={}
 
 
-
 function FilesManager.initViews()
   
 end

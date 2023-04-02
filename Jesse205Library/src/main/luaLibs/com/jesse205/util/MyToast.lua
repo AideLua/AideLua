@@ -1,6 +1,6 @@
-import "com.google.android.material.snackbar.Snackbar"
-import "com.google.android.material.snackbar.BaseTransientBottomBar"
-import "com.google.android.material.motion.MotionUtils"
+lazyimport "com.google.android.material.snackbar.Snackbar"
+lazyimport "com.google.android.material.snackbar.BaseTransientBottomBar"
+lazyimport "com.google.android.material.motion.MotionUtils"
 
 local MyToast={}
 setmetatable(MyToast,MyToast)

@@ -11,7 +11,7 @@ import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 
-public class FileInfoUtils {  
+public class FileUriUtil {  
     /**
      * Android 4.4往后版本 ，其中区别在 8.0download目录报错修改，华为手机uri获取不到路径处理。
      */

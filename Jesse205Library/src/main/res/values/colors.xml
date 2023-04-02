@@ -51,5 +51,6 @@
         @color/jesse205_system_window_scrim_light_compat
     </color>
 
+    <color name="jesse205_shortcut_icon_background">#F5F5F5</color>
 
 </resources>

@@ -78,6 +78,20 @@ export default defineUserConfig({
                 ]
             },
             {
+                text: 'Lua 模块',
+                collapsible: true,
+                children: [
+                    {
+                        text: 'LuaDB',
+                        link: '/library/db.html',
+                    },
+                    {
+                        text: '资源获取工具',
+                        link: '/library/res.html',
+                    },
+                ]
+            },
+            {
                 text: '功能介绍',
                 collapsible: true,
                 children: [

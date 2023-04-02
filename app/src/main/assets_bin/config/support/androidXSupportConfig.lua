@@ -1,0 +1,10 @@
+return {
+  editor={
+    LuaEditor={
+      keywordsList={
+        
+      },
+    }
+  }
+
+}

@@ -1,15 +1,26 @@
 --v5.2.0+
+local isHiddenFilesMap=require "config.isHiddenFilesMap"
+local fileIconColors=require "config.fileIconColors"
+local fileSpecialColors=require "config.fileSpecialColors"
+
 ---文件图标管理器
 local FileIconsManager={}
+--判断是否隐藏文件的字典
+FileIconsManager.isHiddenFilesMap=isHiddenFilesMap
+--
+FileIconsManager.fileIconColors=fileIconColors
+--一些特殊文件图标的颜色
+FileIconsManager.fileSpecialColors=fileSpecialColors
 
-local rDrawable=R.drawable
 
+--[[
 --图标相关
 local extensionName2DrawableMap,selectableColorStateListsMap
 local specialColorsMap, typeColorsMap, fileColorsMap, folderIconIds, folderIconColorState,
 fileIconDrawables, specialIconDrawables
-
----一些特殊的颜色
+]]
+--[[
+---一些特殊的颜色，被fileSpecialColors取代
 ---@type table<string, number>
 specialColorsMap = {
   normal = 0xff757575, -- 普通文件颜色
@@ -17,7 +28,9 @@ specialColorsMap = {
   folder = 0xFFF9A825, -- 文件夹颜色
 }
 FileIconsManager.specialColorsMap = specialColorsMap
+]]
 
+--[[
 ---一类型的图标颜色
 ---@type table<string, number>
 typeColorsMap = {
@@ -31,7 +44,8 @@ typeColorsMap = {
 }
 
 FileIconsManager.typeColorsMap = typeColorsMap
-
+]]
+--[[
 --图标颜色
 ---@enum
 fileColorsMap = {
@@ -85,13 +99,15 @@ fileColorsMap = {
   sh = res.color.attr.colorOnBackground,
 }
 FileIconsManager.fileColorsMap = fileColorsMap
-
+]]
+--[[
 setmetatable(fileColorsMap, {
   __index = function(self, key)
     return specialColorsMap.normal
   end
-})
+})]]
 
+--TODO: 这些迁移到单独的ColorStateMap
 ---@type table<number,ColorStateList>
 selectableColorStateListsMap={}
 FileIconsManager.selectableColorStateListsMap=selectableColorStateListsMap
@@ -109,6 +125,7 @@ setmetatable(selectableColorStateListsMap,{
     return colorStateList
   end
 })
+
 
 function FileIconsManager.createFolderIconWitchBadge(badgeId, badgeWidth, badgeColor)
   local iconDrawable = specialIconDrawables.folder
@@ -154,6 +171,7 @@ folderIconColorState = ColorStateList({
   specialColors.folder,
 })]]
 
+--[[
 ---@enum resId
 ---@type table<string,number>
 folderIconIds = {
@@ -181,9 +199,9 @@ for iconId, content in pairs(folderIconsIdsToBeAdded) do
   end
 end
 folderIconsIdsToBeAdded=nil
-
+]]
 --v5.2.0+
-FilesBrowserManager.folderIconIds = folderIconIds
+--FilesBrowserManager.folderIconIds = folderIconIds
 
 --一些需要单独拿出来的图标
 ---@enum
@@ -319,20 +337,10 @@ setmetatable(extensionName2DrawableMap, {
   end
 })
 
---隐藏文件字典
-local isHiddenFilesMap = {
-  gradlew = true,
-  ["gradlew.bat"] = true,
-  ["luajava-license.txt"] = true,
-  ["lua-license.txt"] = true,
-  [".gitignore"] = true,
-  gradle = true,
-  build = true,
-  ["init.lua"] = true,
-  libs = true,
-  cache = true,
-  caches = true,
-  wrapper = true
-}
+
+function FileIconsManager.init()
+  --TODO: 初始化一些配置信息
+
+end
 
 return createVirtualClass(FileIconsManager)

@@ -1,5 +1,5 @@
-import "android.view.inputmethod.InputMethodManager"
-import "com.jesse205.layout.MyTitleSearchLayout"
+lazyimport "android.view.inputmethod.InputMethodManager"
+lazyimport "com.jesse205.layout.MyTitleSearchLayout"
 import "androidx.appcompat.view.ActionMode"
 
 return function(config)

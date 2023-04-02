@@ -563,6 +563,14 @@ function FilesTabManager.getScrollDbKeyByPath(path)
   return path.."-"..EditorsManager.editorType
 end
 
+---v5.2.0+
+function FilesTabManager.onPause()
+  if FilesTabManager.openState then
+    FilesTabManager.saveFile()
+  end
+end
+
+--v5.1.2+
 function FilesTabManager.onResume(isResumeAgain)
   if isResumeAgain then
     FilesTabManager.reopenFile()--包含了刷新预览按钮

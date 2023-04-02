@@ -36,13 +36,15 @@
 
 ### 打包应用总是无法找到 `app.apk`
 
-请先使用 AIDE 刷新构建或使用 Gradle 构建
+请先使用 AIDE 刷新构建或使用 Gradle 构建。
 
 ### 构建项目时总是提示需要 Termux 运行权限
 
 Aide Lua 本身不支持构建应用，所以您需要手动安装 Termux 并配置一系列开发环境后才能使用 Aide Lua 的「构建项目」
 
-或者使用 [AIDE Pro](https://www.aidepro.top/) 或 [AndroidIDE](https://androidide.com/) 构建项目。其中 AIDE Pro 会自动下载 Gradle，AndroidIDE 更高级一些。
+或者使用 [AIDE Pro](https://www.aidepro.top/) 或 [AndroidIDE](https://androidide.com/) 构建项目。
+
+AIDE Pro 会自动下载 Gradle，更方便一些，但是 AndroidIDE 更高级一些。
 
 ## 插件
 

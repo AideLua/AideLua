@@ -3,19 +3,19 @@
   layout_width="fill";
   layout_height="fill";
   id="mainLay";
-  fitsSystemWindows=true;
+  --fitsSystemWindows=true;
   {
     AppBarLayout;
     id="appBarLayout",
     layout_width="fill";
-    elevation=0;
+    --elevation=0;
     fitsSystemWindows=true;
+    --lifted=true;
     --liftable=false;
-    --liftOnScroll=false;
+    --liftOnScroll=true;
     --theme=R.style.Widget_MaterialComponents_AppBarLayout_Surface;
     --theme=theme.number.id.actionBarTheme;
     --radius=0;
-    --cardBackgroundColor=res(res.id.attr.actionBarStyle).color.attr.background;
     {
       LinearLayout;
       layout_width="fill";
@@ -30,15 +30,22 @@
       }
     };
   };
+  --[[
+  {
+    NestedScrollView;
+    layout_width="fill";
+    layout_height="fill";
+    fitsSystemWindows=true;]]
   {
     ListView;
     id="listView";
     fastScrollEnabled=true;
     layout_width="fill";
-    layout_height="fill";
+    --layout_height="fill";
     clipToPadding=false;
-    fitsSystemWindows=true;
+    --fitsSystemWindows=true;
   };
+  --};
   {
     FrameLayout;
     id="searchLayout";

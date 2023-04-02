@@ -74,9 +74,13 @@ dependencies {
     //annotationProcessor 'com.github.bumptech.glide:compiler:4.15.0'
     
     //编辑器
-    //api 'io.github.Rosemoe.sora-editor:editor:0.16.4'
-    //api "io.github.Rosemoe.sora-editor:bom:‎0.20.1"
+    //implementation "io.github.Rosemoe.sora-editor:editor:0.16.4"
+    //implementation "io.github.Rosemoe.sora-editor:bom:‎0.20.1"
     //api "io.github.Rosemoe.sora-editor:editor"
+    
+    implementation "dev.rikka.shizuku:api:12.2.0"
+    implementation "dev.rikka.shizuku:provider:12.2.0"
+
     api project(':soraeditor')
    
     //框架

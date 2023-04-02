@@ -1,4 +1,4 @@
-import "com.google.android.material.dialog.MaterialAlertDialogBuilder"
+lazyimport "com.google.android.material.dialog.MaterialAlertDialogBuilder"
 
 local ThemeSelectDialogBuilder={}
 setmetatable(ThemeSelectDialogBuilder,ThemeSelectDialogBuilder)

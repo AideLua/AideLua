@@ -30,55 +30,56 @@ end
 
 StatService.start(activity)
 
-import "android.animation.AnimatorSet"
-import "android.graphics.drawable.ColorDrawable"
-import "android.text.TextUtils$TruncateAt"
-import "android.content.ComponentName"
-import "android.provider.DocumentsContract"
+lazyimport "android.animation.AnimatorSet"
+lazyimport "android.graphics.drawable.ColorDrawable"
+lazyimport "android.text.TextUtils$TruncateAt"
+lazyimport "android.content.ComponentName"
+lazyimport "android.provider.DocumentsContract"
 
-import "android.text.SpannableString"
-import "android.text.style.ForegroundColorSpan"
-import "android.text.style.BackgroundColorSpan"
-import "android.text.Spannable"
-import "android.graphics.Bitmap"
-import "android.graphics.Canvas"
-import "android.graphics.drawable.GradientDrawable"
-import "android.graphics.drawable.ShapeDrawable"
+lazyimport "android.text.SpannableString"
+lazyimport "android.text.style.ForegroundColorSpan"
+lazyimport "android.text.style.BackgroundColorSpan"
+lazyimport "android.text.Spannable"
+lazyimport "android.graphics.Bitmap"
+lazyimport "android.graphics.Canvas"
+lazyimport "android.graphics.drawable.GradientDrawable"
+lazyimport "android.graphics.drawable.ShapeDrawable"
 --import "android.graphics.drawable.shapes.RoundRectShape"
-import "android.graphics.drawable.RippleDrawable"
-import "android.graphics.drawable.LayerDrawable"
+lazyimport "android.graphics.drawable.RippleDrawable"
+lazyimport "android.graphics.drawable.LayerDrawable"
 --import "android.graphics.drawable.DrawableWrapper"
 
-import "android.graphics.drawable.shapes.OvalShape"
-import "android.graphics.PorterDuff"
+lazyimport "android.graphics.drawable.shapes.OvalShape"
+lazyimport "android.graphics.PorterDuff"
 
-import "android.content.ClipData"
-import "android.content.ClipDescription"
-import "android.view.View$DragShadowBuilder"
-import "android.content.FileProvider"
-import "android.webkit.MimeTypeMap"
-import "android.webkit.WebView"
-import "android.webkit.WebViewClient"
-import "android.webkit.WebResourceResponse"
+lazyimport "android.content.ClipData"
+lazyimport "android.content.ClipDescription"
+lazyimport "android.view.View$DragShadowBuilder"
+lazyimport "android.content.FileProvider"
+lazyimport "android.webkit.MimeTypeMap"
+lazyimport "android.webkit.WebView"
+lazyimport "android.webkit.WebViewClient"
+lazyimport "android.webkit.WebResourceResponse"
 
 import "androidx.drawerlayout.widget.DrawerLayout"
-import "androidx.core.graphics.ColorUtils"
-import "androidx.core.content.res.ResourcesCompat"
+lazyimport "androidx.core.graphics.ColorUtils"
+lazyimport "androidx.core.content.res.ResourcesCompat"
 --import "androidx.slidingpanelayout.widget.SlidingPaneLayout"
-import "androidx.documentfile.provider.DocumentFile"
+lazyimport "androidx.documentfile.provider.DocumentFile"
+import "androidx.appcompat.app.ActionBarDrawerToggle"
 
 import "com.google.android.material.tabs.TabLayout"
 import "com.google.android.material.chip.Chip"
 import "com.google.android.material.chip.ChipGroup"
-import "com.google.android.material.motion.MotionUtils"
+lazyimport "com.google.android.material.motion.MotionUtils"
 
-import "com.bumptech.glide.request.RequestOptions"
-import "com.bumptech.glide.load.engine.DiskCacheStrategy"
-import "com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions"
-import "com.bumptech.glide.request.RequestListener"
+lazyimport "com.bumptech.glide.request.RequestOptions"
+lazyimport "com.bumptech.glide.load.engine.DiskCacheStrategy"
+lazyimport "com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions"
+lazyimport "com.bumptech.glide.request.RequestListener"
 
 import "com.nwdxlgzs.view.photoview.PhotoView"
-import "com.caverock.androidsvg.SVG"
+lazyimport "com.caverock.androidsvg.SVG"
 import "com.termux.shared.termux.TermuxConstants"
 RUN_COMMAND_SERVICE=TermuxConstants.TERMUX_APP.RUN_COMMAND_SERVICE
 
@@ -93,11 +94,12 @@ import "com.jesse205.app.dialog.EditDialogBuilder"
 import "com.jesse205.util.FileUtil"
 import "com.jesse205.util.ScreenFixUtil"
 
-import "com.jesse205.util.FileInfoUtils"
+import "com.jesse205.util.FileUriUtil"
 import "com.jesse205.util.ColorUtil"
+import "loader.loadluaconfig"
 
 --https://github.com/limao996/LuaDB
-db=require "db"
+import "db"
 --v5.1.2移除
 --filesScrollingDB=db.open(AppPath.AppSdcardDataDir..'/filesScrolling.db')
 
@@ -114,10 +116,13 @@ CopyMenuUtil=require "CopyMenuUtil"
 BuildToolUtil=require "buildtools.BuildToolUtil"
 
 --各种管理器
+DecodeCenter=require "manager.DecodeCenter"
 FilesBrowserManager=require "manager.FilesBrowserManager"
 EditorsManager=require "manager.EditorsManager"
 FilesTabManager=require "manager.FilesTabManager"
 ProjectManager=require "manager.ProjectManager"
+SavedDataManager=require "manager.SavedDataManager"
+
 
 --各种布局
 item=require "layouts.item"
@@ -506,7 +511,7 @@ function onResume()
     reload = true
     application.set("luaeditor_initialized", false)
   end
-  --print(oldTheme ~= ThemeManager.getAppTheme())
+
   if isResumeAgain then
     if reload
       or ThemeManager.checkThemeChanged()
@@ -553,9 +558,7 @@ end
 
 
 function onPause()
-  if FilesTabManager.openState then
-    FilesTabManager.saveFile()
-  end
+  FilesTabManager.onPause()
   PluginsUtil.callElevents("onPause")
 end
 
@@ -574,6 +577,7 @@ function onDestroy()
   ProjectManager.onDestroy()
   --v5.1.2先调用onDestroy后清理临时文件
   PluginsUtil.callElevents("onDestroy")
+  SavedDataManager.onDestroy()
   AppPath.cleanTemp()
 end
 
@@ -663,12 +667,14 @@ function onSaveInstanceState(savedInstanceState)
   PluginsUtil.callElevents("onSaveInstanceState",savedInstanceState)
 end
 
+
 toggle = ActionBarDrawerToggle(activity, drawer, R.string.drawer_open, R.string.drawer_close)
 drawer.addDrawerListener(toggle)
 
 FilesTabManager.initViews()
 EditorsManager.initViews()
 FilesBrowserManager.initViews()
+SavedDataManager.init()
 
 screenConfigDecoder = ScreenFixUtil.ScreenConfigDecoder({
   onDeviceByWidthChanged=onDeviceByWidthChanged

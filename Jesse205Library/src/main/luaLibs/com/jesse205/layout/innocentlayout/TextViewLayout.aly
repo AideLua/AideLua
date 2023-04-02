@@ -10,13 +10,13 @@
     id="scrollView";
     fillViewport=true;
     {
-      AppCompatTextView;
+      MaterialTextView;
       padding="16dp";
       id="textView";
       layout_height="fill";
       layout_width="fill";
       textIsSelectable=true;
-      textColor=theme.color.textColorPrimary;
+      textColor=res.color.attr.colorOnBackground;
     };
   };
 };

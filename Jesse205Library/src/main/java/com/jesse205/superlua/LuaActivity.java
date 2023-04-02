@@ -44,6 +44,7 @@ public class LuaActivity extends com.androlua.LuaActivity {
 
         super.onCreate(savedInstanceState);
 
+        //更新检查未通过
         if (checkUpdate && (oldLastTime != lastTime)) {
             Intent intent = new Intent(this, Welcome.class);
             intent.putExtra("newIntent", getIntent());
@@ -116,7 +117,6 @@ public class LuaActivity extends com.androlua.LuaActivity {
 
     @Override
     public void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-        // TODO: Implement this method
         try {
             super.onRestoreInstanceState(savedInstanceState);
         } catch (Exception e) {
@@ -124,8 +124,16 @@ public class LuaActivity extends com.androlua.LuaActivity {
         }
         runFunc("onRestoreInstanceState", savedInstanceState);
     }
+
+    /**
+     * 获取 LuaActivity 的类，用于构建新 LuaActivity 的 Intent
+     */
+    public Class<?> getLuaActivityClass() {
+        return LuaActivity.class;
+    }
+
     public Intent buildNewActivityIntent(int req, String path, Object[] arg, boolean newDocument, int documentId) {
-        Intent intent = new Intent(this, LuaActivity.class);
+        Intent intent = new Intent(this, getLuaActivityClass());
         intent.putExtra("name", path);
         if (path.charAt(0) != '/')//如果不是/开头，说明是相对路径
             path = this.getLuaDir() + "/" + path;
@@ -160,9 +168,9 @@ public class LuaActivity extends com.androlua.LuaActivity {
 
     public void newActivity(int req, String path, Object[] arg, boolean newDocument, int documentId) {
         Intent intent = buildNewActivityIntent(req,  path, arg,  newDocument,  documentId);
-        if (newDocument) {
+        if (newDocument) 
             startActivity(intent);
-        } else
+        else
             startActivityForResult(intent, req);
     }
 
@@ -180,7 +188,7 @@ public class LuaActivity extends com.androlua.LuaActivity {
     @Override
     public void setTaskDescription(ActivityManager.TaskDescription taskDescription) {
         TypedArray array = this.getTheme().obtainStyledAttributes(new int[]{android.R.attr.colorPrimary});
-        taskDescription = new ActivityManager.TaskDescription(taskDescription.getLabel(), taskDescription.getIcon(), array.getColor(0, 0xFF0000));
+        taskDescription = new ActivityManager.TaskDescription(taskDescription.getLabel(), taskDescription.getIcon(), array.getColor(0, 0xFF000000));
         array.recycle();
         super.setTaskDescription(taskDescription);
     }

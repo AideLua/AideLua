@@ -1,6 +1,6 @@
 local _M={}
-_M._VERSION="1.0 (alpha3) (dev)"
-_M._VERSIONCODE=1003
+_M._VERSION="1.0 (alpha4) (dev)"
+_M._VERSIONCODE=1004
 _M._NAME="Android Res Getter"
 
 --android.res
@@ -100,6 +100,7 @@ end
 ---@param _type string 资源类型名称，也就是res.(xxxx)的这段
 ---@param key string attr名称，也就是res.xxxx.attr.(xxxx)的这段
 ---@param style number 主题ID
+---@return all value 获取到的值
 local function getAttrValue(_type,key,style)
   local array
   if style then
@@ -125,14 +126,20 @@ typeMetatable={
     local isAndroidRes=rawget(self,"_isAndroidRes")
     local value
     if key=="attr" then--res.xxx.attr
+      ---@type ResGetterAttrHolder
       value={_type=_type,_isAndroidRes=isAndroidRes,_style=style}
       setmetatable(value,attrMetatable)
      else--res.xxx.xxx
+      ---@type R
       local Rid=isAndroidRes and android.R or R
+      ---@type all
       value = resources[key2ResGetter(_type)](Rid[key2RIndex(_type)][key])
     end
     rawset(self,key,value)
     return value
+  end,
+  __type=function(self)
+    return "ResGetterTypeHolder"
   end
 }
 
@@ -146,6 +153,9 @@ attrMetatable={
     value=getAttrValue(_type,Rid.attr[key],style)
     rawset(self,key,value)
     return value
+  end,
+  __type=function(self)
+    return "ResGetterAttrHolder"
   end
 }
 
@@ -153,6 +163,7 @@ resMetatable={
   __index=function(self,key)
     local isAndroidRes=rawget(self,"_isAndroidRes")
     local style=rawget(self,"_style")
+    ---@type ResGetterTypeHolder
     local typeT={_type=key,_isAndroidRes=isAndroidRes,_style=style}
     setmetatable(typeT,typeMetatable)
     return typeT
@@ -162,12 +173,16 @@ resMetatable={
     local map=isAndroidRes and styledAndroidResMap or styledResMap
     local styled=map[key]
     if not styled then
+      ---@type ResGetterHolder
       styled={_isAndroidRes=isAndroidRes,_style=key}
       setmetatable(styled,resMetatable)
       map[key]=styled
     end
     return styled
   end,
+  __type=function(self)
+    return "ResGetterHolder"
+  end
 }
 
 setmetatable(_M,resMetatable)

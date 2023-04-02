@@ -2,8 +2,15 @@ import "java.io.File"
 import "java.io.FileInputStream"
 import "java.io.FileOutputStream"
 
-
 local FileUtil={}
+
+
+---获取文件父路径
+---@param filePath string 文件路径
+---@return string parentFilePath 父目录路径
+function FileUtil.getParentPath(filePath)
+  return filePath:match("(.+)/.")
+end
 
 ---@param sourceChannel FileChannel 来源FileChannel
 ---@param destChannel FileChannel 目标FileChannel

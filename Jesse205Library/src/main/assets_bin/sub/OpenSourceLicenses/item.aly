@@ -19,7 +19,7 @@
         layout_margin="16dp";
         orientation="vertical";
         {
-          AppCompatTextView;
+          MaterialTextView;
           textSize="16sp";
           id="name";
           layout_marginBottom="8dp";
@@ -27,13 +27,13 @@
           --typeface=Typeface.defaultFromStyle(Typeface.BOLD);
         };
         {
-          AppCompatTextView;
+          MaterialTextView;
           textColor=res.color.attr.colorOnBackground;
           id="message";
           textSize="14sp";
         };
         {
-          AppCompatTextView;
+          MaterialTextView;
           id="license";
           textSize="14sp";
         };

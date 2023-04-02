@@ -48,7 +48,12 @@ import "io.github.rosemoe.editor.langs.java.JavaLanguage"
 import "io.github.rosemoe.editor.langs.python.PythonLanguage"
 import "io.github.rosemoe.editor.langs.universal.UniversalLanguage"
 
+
 local EditorsManager={}
+
+local TAG_DATABASE_SCROLLING="filesScrolling"
+local PATH_DATABASE_SCROLLING=AppPath.LuaDBDir.."/filesScrolling.db"
+
 local managerActions={}
 
 ---v5.1.1+
@@ -59,8 +64,9 @@ EditorsManager.actionsWithEditor=managerActionsWithEditor
 
 ---v5.1.2+
 File(AppPath.LuaDBDir).mkdirs()
+
 ---编辑器滚动数据库
-local filesScrollingDB=db.open(AppPath.LuaDBDir..'/filesScrolling.db')
+local filesScrollingDB=SavedDataManager.openLuaDatabase(PATH_DATABASE_SCROLLING,TAG_DATABASE_SCROLLING)
 EditorsManager.filesScrollingDB=filesScrollingDB
 
 --编辑器活动(事件)，视图列表(table)，编辑器(View)，编辑器类型(String) 编辑器配置(table)
@@ -184,7 +190,7 @@ local function getEditorTypefaces()
     end
 
     --粗体
-    
+
     local boldFile=File(fontDir, "bold.ttf")
     if boldFile.exists() then
       boldTypeface=Typeface.createFromFile(boldFile)

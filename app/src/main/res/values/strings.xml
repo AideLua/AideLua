@@ -70,33 +70,8 @@
 
     <string name="drawer_open">Close drawer</string>
     <string name="drawer_close">Open drawer</string>
-
-    <string name="file">File</string>
-    <string name="file_up">Return to the previous directory</string>
-    <string name="file_popup">File...</string>
-    <string name="file_cannot_open_compiled_file">"Can't open the compiled file."</string>   
-    <string name="file_not_find">File not found</string>
-    <string name="file_not_supported">File type not supported</string>
-    <string name="file_create">Create a file</string>
-    <string name="file_create_withName">Create %1$s</string>
-    <string name="file_exists">File already exist</string>
-    <string name="file_name">File name</string>
-    <string name="file_name_copy">Copy file name</string>
-    <string name="file_close">Close file</string>
-	<string name="file_close_all">Close all files</string>
-    <string name="file_close_other">Close other files</string>
-	<string name="file_current_path">Current file path</string>
-    <string name="file_reopen">Reopen file</string>
-    <string name="file_noChange">This file has not been changed</string>
-    <string name="file_viewName_content">Name: %1$s</string>
-    <string name="file_noOpen">No file opened</string>
-    <string name="file_createCopy">Create a copy</string>
     
-    <string name="directory">Folder</string>
-    <string name="directory_go_popup">Open Directory...</string>
-    <string name="directory_create">Create folder</string>
-    <string name="directory_name">Folder name</string>
-    
+ 
     <string name="project">Project</string>
     <string name="project_root">Project root</string>
     <string name="project_popup">Project...</string>
@@ -206,7 +181,7 @@
     <string name="settings_addComplexLibrary_summary">You can use your own complex library in functions such as "new project"</string>
     <string name="settings_editor_previewButton">Preview button</string>
     <string name="settings_editor_automaticallyBackupOriginalFiles">Automatically backup the original files</string>
-    <string name="settings_editor_automaticallyBackupOriginalFiles_summary">Automatically backup the original file when saving\nTo switch states, please use setSharedData("editor_autobackuporiginalfiles", boolean)</string>
+    <string name="settings_editor_automaticallyBackupOriginalFiles_summary">Automatically backup the original file when saving\nTo switch states, please use setSharedData(\"editor_autobackuporiginalfiles\", boolean)</string>
     <string name="settings_autoCheckUpdate">Automatic check for updates</string>
     <string name="settings_moreCompleteRun">More complete run</string>
     <string name="settings_moreCompleteRun_summary">Integrate lua resources before running them, rather than running them directly.</string>

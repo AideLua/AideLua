@@ -1,5 +1,5 @@
-import "com.google.android.material.dialog.MaterialAlertDialogBuilder"
-import "com.jesse205.layout.MyEditDialogLayout"
+lazyimport "com.google.android.material.dialog.MaterialAlertDialogBuilder"
+lazyimport "com.jesse205.layout.MyEditDialogLayout"
 --好像有内存溢出的问题
 local EditDialogBuilder={}
 setmetatable(EditDialogBuilder,EditDialogBuilder)

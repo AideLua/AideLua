@@ -7,6 +7,7 @@ jesse205._VERSION_CODE = 130001 -- 库版本号
 jesse205._ENV = _ENV -- Jesse205局部变量
 --jesse205.themeType = "Jesse205"              -- 主题类型
 jesse205.LIBRARY_PACKAGE_NAME = "com.jesse205" -- 库包名
+
 local LIBRARY_PACKAGE_NAME = jesse205.LIBRARY_PACKAGE_NAME
 
 require "import" -- 导入import
@@ -114,7 +115,7 @@ end
 
 -- JavaAPI转LuaAPI
 local activity2luaApi = { "newActivity", "getSupportActionBar", "getSharedData", "setSharedData", "getString",
-"getPackageName" }
+  "getPackageName" }
 for _, content in ipairs(activity2luaApi) do
   _G[content] = function(...)
     return context[content](...) -- 直接赋值会出错
@@ -183,7 +184,8 @@ lazyimport "android.content.pm.PackageManager"
 -- 导入常用的Material类
 lazyimport "com.google.android.material.card.MaterialCardView" -- 卡片
 lazyimport "com.google.android.material.button.MaterialButton" -- 按钮
-lazyimport "com.google.android.material.dialog.MaterialAlertDialogBuilder"
+lazyimport "com.google.android.material.dialog.MaterialAlertDialogBuilder" -- 对话框
+lazyimport "com.google.android.material.textview.MaterialTextView" -- 文字
 
 -- 导入IO
 lazyimport "java.io.File"
@@ -260,6 +262,7 @@ end
 --- 进入Lua子页面
 ---@param name string 子活动名称
 function newSubActivity(name, ...)
+  assert(name:sub(1,1)~="/","name must not start with \"/\"")
   local nowDirFile = File(context.getLuaDir())
   local parentDirFile = nowDirFile.getParentFile()
   local basePath

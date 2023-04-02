@@ -6,6 +6,7 @@ import "android.widget.ListView"
 import "androidx.core.view.ViewCompat"
 import "androidx.core.view.WindowInsetsCompat"
 import "androidx.core.graphics.ColorUtils"
+import "androidx.core.widget.NestedScrollView"
 import "android.graphics.drawable.ColorDrawable"
 import "android.animation.ObjectAnimator"
 import "com.google.android.material.appbar.AppBarLayout"
@@ -34,12 +35,21 @@ activity.setContentView(loadlayout2("layout"))
 activity.setSupportActionBar(toolbar)
 actionBar=activity.getSupportActionBar()
 actionBar.setDisplayHomeAsUpEnabled(true)
---[[
-decorView.setSystemUiVisibility(
-decorView.getSystemUiVisibility()|
-View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-|View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-|View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)]]
+
+if Build.VERSION.SDK_INT >= 23 then
+  decorView.setSystemUiVisibility(
+  decorView.getSystemUiVisibility()|
+  View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+  |View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+  |View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION)
+end
+
+appBarLayout.setLiftOnScrollTargetView(listView)
+local params=searchLayout.getLayoutParams()
+params.setAnchorId(appBarLayout.getId())
+params.anchorGravity=Gravity.BOTTOM
+params.gravity=Gravity.BOTTOM
+searchLayout.setLayoutParams(params)
 
 function onCreate(savedInstanceState)
   PluginsUtil.callElevents("onCreate", savedInstanceState)
@@ -48,7 +58,7 @@ function onCreate(savedInstanceState)
 end
 
 function onConfigurationChanged(config)
-  screenConfigDecoder:decodeConfiguration(config)
+  --screenConfigDecoder:decodeConfiguration(config)
 end
 
 function onNewIntent(intent)
@@ -182,6 +192,7 @@ function checkTextError(text)
   return not success
 end
 
+--[[
 function onAnimUpdate(hideOffset)
   --print(hideOffset)
   local actionBarHeight=toolBarLayout.getHeight()
@@ -248,7 +259,7 @@ function hideActionBar(force)
     .start()
   end
 end
-
+]]
 --[[
 --设置ListView的padding
 local width=View.MeasureSpec.makeMeasureSpec(0,View.MeasureSpec.UNSPECIFIED)
@@ -264,12 +275,15 @@ if nowDevice=="phone" then
   listView.setPadding(0,appBarLayoutHeight,0,0)
 end]]
 
+--[[
 listView.onApplyWindowInsets=function(view,insets)
   view.setPadding(insets.getSystemWindowInsetLeft(),insets.getSystemWindowInsetTop(),insets.getSystemWindowInsetRight(),insets.getSystemWindowInsetBottom())
   view.resolvePadding()
   return insets
-end
+end]]
 
+
+--[[
 local searchEditDownY=0
 local searchEditDownOffset=0
 --拽拖顶栏触摸事件
@@ -321,7 +335,7 @@ topLayoutOnTouchListener=View.OnTouchListener{
       end
     end
   end
-}
+}]]
 
 ClearContentHelper.setupEditor(searchEdit,clearSearchBtn,res.color.attr.rippleColorPrimary)
 
@@ -334,12 +348,12 @@ searchButton.setBackground(drawable)
 
 searchAdapter=ArrayAdapter(activity,android.R.layout.simple_dropdown_item_1line,systemApis)
 searchEdit.setAdapter(searchAdapter)
-
+--[[
 --添加触摸移动搜索框
 toolbar.setOnTouchListener(topLayoutOnTouchListener)
 searchEdit.setOnTouchListener(topLayoutOnTouchListener)
 searchLayout.setOnTouchListener(topLayoutOnTouchListener)
-
+]]
 datas={}
 adp=MyLuaAdapter(activity,datas,item)
 listView.setAdapter(adp)
@@ -352,6 +366,7 @@ listView.onItemLongClick=function(id,v,zero,one)
   return true
 end
 
+--[[
 
 local oldFirstVisibleItem=0
 local oldFirstViewTop=0
@@ -371,7 +386,7 @@ listView.onScroll=function(view,firstVisibleItem,visibleItemCount,totalItemCount
   oldFirstVisibleItem=firstVisibleItem
   oldFirstViewTop=firstViewTop
 end
-
+]]
 searchButton.onClick=function()
   search(searchEdit.text)
 end
@@ -387,13 +402,8 @@ searchEdit.addTextChangedListener({onTextChanged=function(text)
     checkTextError(tostring(text))
 end})
 
-local params=searchLayout.getLayoutParams()
-params.setAnchorId(appBarLayout.getId())
-params.anchorGravity=Gravity.BOTTOM
-params.gravity=Gravity.BOTTOM
-searchLayout.setLayoutParams(params)
 
-
+--[[
 screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
   onDeviceByWidthChanged=function(device, oldDevice)
     nowDevice=device
@@ -429,4 +439,4 @@ screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
 })
 
 onConfigurationChanged(activity.getResources().getConfiguration())
-
+]]

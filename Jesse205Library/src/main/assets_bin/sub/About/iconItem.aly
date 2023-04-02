@@ -7,7 +7,7 @@
   {
     LinearLayoutCompat;
     orientation="vertical";
-    gravity="center";
+    gravity="center|top";
     layout_width="fill";
     layout_height="fill";
     {

@@ -1,13 +1,15 @@
-# AndroLua+ Res Getter
+# AndroLua+ 资源获取工具
 
-版本: v1.0 (alpha2) (dev)
+[![license](https://img.shields.io/github/license/AideLua/AndroLuaResGetter)](LICENSE)
+[![Gitee 发行版](https://img.shields.io/github/v/tag/AideLua/AndroLuaResGetter?color=C71D23&label=发行版&logo=gitee&style=flat-square)](https://gitee.com/AideLua/AndroLuaResGetter/releases/latest)
+[![作者: Jesse205](https://img.shields.io/badge/作者-Jesse205-1A73E8?style=flat-square)](https://gitee.com/Jesse205)
+
+[![Gitee 仓库](https://img.shields.io/badge/Gitee-仓库-C71D23?logo=gitee&style=flat-square)](https://gitee.com/AideLua/AndroLuaResGetter)
+[![Github 仓库](https://img.shields.io/badge/Github-仓库-0969DA?logo=github&style=flat-square)](https://github.com/AideLua/AndroLuaResGetter)
 
 ## 介绍
 
 在 AndroLua+ 中很方便地获取资源数据
-
-* __Gitee__: <https://gitee.com/AideLua/AndroLuaResGetter>
-* __GitHub__: <https://github.com/AideLua/AndroLuaResGetter>
 
 ## 软件架构
 
@@ -15,9 +17,9 @@
 
 ## 安装教程
 
-1.  复制 `res.lua` 到 `你的工程/lua` 内
-2.  在 `main.lua` 内导入 `import` 模块: `require "import"`
-3.  导入 `res` 模块: `import "res"`
+1. 复制 `res.lua` 到 `luaLibs` 内
+2. 在 `main.lua` 内导入 `import` 模块: `require "import"`
+3. 导入 `res` 模块: `import "res"`
 
 ## 使用说明
 

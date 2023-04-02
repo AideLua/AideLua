@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="file">文件</string>
+    <string name="file_up">返回上一级目录</string>
+    <string name="file_popup">文件...</string>
+    <string name="file_cannot_open_compiled_file">不能打开已编译文件。</string>   
+    <string name="file_not_find">未找到文件</string>
+    <string name="file_not_supported">文件类型不支持</string>
+    <string name="file_create">新建文件</string>
+    <string name="file_create_withName">新建 %1$s</string>
+    <string name="file_exists">文件已存在</string>
+    <string name="file_name">文件名</string>
+    <string name="file_name_copy">复制文件名</string>
+    <string name="file_close">关闭文件</string>
+    <string name="file_close_all">关闭所有文件</string>
+    <string name="file_close_other">关闭其他文件</string>
+    <string name="file_current_path">当前文件路径</string>
+    <string name="file_reopen">重新打开</string>
+    <string name="file_noChange">此文件未改动</string>
+    <string name="file_viewName_content">文件名：%1$s</string>
+    <string name="file_noOpen">未打开文件</string>
+    <string name="file_createCopy">创建副本</string>
+
+    <string name="folder">文件夹</string>
+    <string name="folder_go_popup">打开文件夹...</string>
+    <string name="folder_create">新建文件夹</string>
+    <string name="folder_name">文件夹名</string>
+
+    <string name="directory">目录</string>
+    <string name="directory_go_popup">打开目录...</string>
+    <string name="directory_create">新建目录</string>
+    <string name="directory_name">目录名</string>
+</resources>

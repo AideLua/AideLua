@@ -1,7 +1,6 @@
 import "com.google.android.material.switchmaterial.SwitchMaterial"
 import "com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions"
 
-
 local SettingsLayUtil={}
 
 SettingsLayUtil._VERSION="3.0"
@@ -96,7 +95,7 @@ local twoLineLay={
   layout_weight=1;
   layout_margin="16dp";
   {
-    AppCompatTextView;
+    MaterialTextView;
     id="title";
     --textSize="16sp";
     --textColor=textColorPrimary;
@@ -104,7 +103,7 @@ local twoLineLay={
     textAppearance=android.res.id.attr.textAppearanceListItem;
   };
   {
-    AppCompatTextView;
+    MaterialTextView;
     textSize="14sp";
     id="summary";
     layout_width="fill";
@@ -164,8 +163,6 @@ local itemsLay={
       paddingLeft="72dp";
       paddingBottom="8dp";
       allCaps=true;
-      --paddingTop="8dp";
-      --typeface=Typeface.defaultFromStyle(Typeface.BOLD);
     }
   };
 
@@ -258,7 +255,7 @@ local function onItemViewClick(view)
   viewConfig.allowedChange=false
 
   local switchView=ids.switchView
-  if switchView and viewConfig.switchEnabled then
+  if switchView and viewConfig.enabled then
     local checked=not(switchView.checked)
     switchView.setChecked(checked)
     if data.checked~=nil then
@@ -360,7 +357,7 @@ local adapterEvents={
       if switchView then
         switchView.tag=viewConfig
         switchView.setOnCheckedChangeListener({
-          onCheckedChanged=onSwitchCheckedChanged})
+        onCheckedChanged=onSwitchCheckedChanged})
       end
     end
     return holder
@@ -372,13 +369,19 @@ local adapterEvents={
     local ids=layoutView.getTag()
     local viewConfig=ids._config
     ids._data=data
+    ---@type string|number|nil
     local title=data.title
+    ---@type string|number|nil
     local icon=data.icon
+    ---@type string|number|nil
     local summary=data.summary
-    local enabled=data.enabled
-    local switchEnabled=data.switchEnabled
+    ---@type boolean
+    local enabled=not(data.enabled==false)
+    ---@type string|nil
     local key=data.key
+    ---@type string|nil
     local action=data.action
+    ---@type table|nil
     local chooseItems=data.items
     viewConfig.key=key
     viewConfig.data=data
@@ -394,30 +397,35 @@ local adapterEvents={
 
     --分割线
     if dividerView then
+      local visibility
       if data.dividerVisible==true then
-        dividerView.setVisibility(View.VISIBLE)
+        visibility=View.VISIBLE
        elseif data.dividerVisible==false then
-        dividerView.setVisibility(View.GONE)
+        visibility=View.GONE
        else--默认状态，自动设置
         if position==0 then
-          dividerView.setVisibility(View.GONE)
+          visibility=View.GONE
          else
-          dividerView.setVisibility(View.VISIBLE)
+          visibility=View.VISIBLE
         end
       end
+      dividerView.setVisibility(visibility)
     end
 
     --标题
-    if titleView and title then
-      titleView.text=title
+    if titleView then
+      titleView.setText(title or "")
     end
 
     --简介
     if summaryView then
       if summary then
-        summaryView.text=summary
+        summaryView.setText(summary)
        elseif action=="singleChoose" then
-        summaryView.text=chooseItems[(getSharedData(key) or 0)+1]
+        local choice=getSharedData(key) or 0
+        summaryView.setText(chooseItems[choice+1])
+       else
+        summaryView.setText("")
       end
     end
 
@@ -438,12 +446,10 @@ local adapterEvents={
       end
     end
     --设置启用状态透明
-    local enabledNotFalse=not(enabled==false)
-    local switchEnabledNotFalse=not(switchEnabled==false)
-    if viewConfig.enabled~=enabledNotFalse then
-      viewConfig.enabled=enabledNotFalse
-      layoutView.setEnabled(enabledNotFalse)
-      if enabledNotFalse then
+    if viewConfig.enabled~=enabled then
+      viewConfig.enabled=enabled
+      layoutView.setEnabled(enabled)
+      if enabled then
         setAlpha(viewConfig.alphaStateViews,1)
         iconView.setAlpha(iconAlpha)
        else
@@ -451,7 +457,7 @@ local adapterEvents={
         iconView.setAlpha(iconAlpha*0.5)
       end
       if switchView then
-        switchView.setEnabled(enabledNotFalse)
+        switchView.setEnabled(enabled)
       end
     end
 
