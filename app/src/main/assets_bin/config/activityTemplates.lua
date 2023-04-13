@@ -1,12 +1,12 @@
-return {--在 v5.1.0(51099) 添加
-  {
-    name="普通 Activity",--有enName时就是中文名，没enName时就是英文名
-    enName="Normal Activity",--英文名
-    id="activity",--标识
-    files={
-      {
-        name="main.lua",
-        content=[[require "import"
+return {                      --在 v5.1.0(51099) 添加
+    {
+        name = "普通 Activity", --有enName时就是中文名，没enName时就是英文名
+        enName = "Normal Activity", --英文名
+        id = "activity",      --标识
+        files = {
+            {
+                name = "main.lua",
+                content = [[require "import"
 import "android.app.*"
 import "android.os.*"
 import "android.widget.*"
@@ -16,7 +16,7 @@ import "android.view.*"
 activity.setTheme(R.style.AppTheme)
 activity.setContentView(loadlayout("layout"))
 actionBar=activity.getActionBar()
-actionBar.setDisplayHomeAsUpEnabled(true) 
+actionBar.setDisplayHomeAsUpEnabled(true)
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()
@@ -26,15 +26,15 @@ function onOptionsItemSelected(item)
 end
 
 ]],
-      },
-      {
-        name="init.lua",
-        content=[[appname="{{ModuleName}}"
+            },
+            {
+                name = "init.lua",
+                content = [[appname="{{ModuleName}}"
 ]],
-      },
-      {
-        name="layout.aly",
-        content=[[{
+            },
+            {
+                name = "layout.aly",
+                content = [[{
   LinearLayout;
   layout_height="fill";
   layout_width="fill";
@@ -47,18 +47,18 @@ end
     layout_width="fill";
   };
 }]],
-      },
+            },
+        },
     },
-  },
-  {
-    name="普通 Activity (AndroidX)",
-    enName="Normal Activity (AndroidX)",
-    id="activity_androidx",
-    enabledVar="oldAndroidXSupport",
-    files={
-      {
-        name="main.lua",
-        content=[[require "import"
+    {
+        name = "普通 Activity (AndroidX)",
+        enName = "Normal Activity (AndroidX)",
+        id = "activity_androidx",
+        enabledVar = "oldAndroidXSupport",
+        files = {
+            {
+                name = "main.lua",
+                content = [[require "import"
 import "android.app.*"
 import "android.os.*"
 import "android.widget.*"
@@ -68,7 +68,7 @@ import "android.view.*"
 activity.setTheme(R.style.AppTheme)
 activity.setContentView(loadlayout("layout"))
 actionBar=activity.getActionBar()
-actionBar.setDisplayHomeAsUpEnabled(true) 
+actionBar.setDisplayHomeAsUpEnabled(true)
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()
@@ -78,15 +78,15 @@ function onOptionsItemSelected(item)
 end
 
 ]],
-      },
-      {
-        name="init.lua",
-        content=[[appname="{{ModuleName}}"
+            },
+            {
+                name = "init.lua",
+                content = [[appname="{{ModuleName}}"
 ]],
-      },
-      {
-        name="layout.aly",
-        content=[[{
+            },
+            {
+                name = "layout.aly",
+                content = [[{
   CoordinatorLayout;
   layout_height="fill";
   layout_width="fill";
@@ -99,23 +99,23 @@ end
     layout_width="fill";
   };
 }]],
-      },
+            },
+        },
     },
-  },
-  {
-    name="普通 Activity (Jesse205)",
-    enName="Normal Activity (Jesse205)",
-    id="activity_jesse205",
-    enabledVar="oldJesse205Support",
-    files={
-      {
-        name="main.lua",
-        content=[[require "import"
+    {
+        name = "普通 Activity (Jesse205)",
+        enName = "Normal Activity (Jesse205)",
+        id = "activity_jesse205",
+        enabledVar = "oldJesse205Support",
+        files = {
+            {
+                name = "main.lua",
+                content = [[require "import"
 import "jesse205"
 
 activity.setTitle(R.string.app_name)
 activity.setContentView(loadlayout2("layout"))
-actionBar.setDisplayHomeAsUpEnabled(true) 
+actionBar.setDisplayHomeAsUpEnabled(true)
 
 function onOptionsItemSelected(item)
   local id=item.getItemId()
@@ -130,21 +130,21 @@ end
 
 
 screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
-  
+
 })
 
 onConfigurationChanged(activity.getResources().getConfiguration())
 
 ]],
-      },
-      {
-        name="init.lua",
-        content=[[appname="{{ModuleName}}"
+            },
+            {
+                name = "init.lua",
+                content = [[appname="{{ModuleName}}"
 ]],
-      },
-      {
-        name="layout.aly",
-        content=[[{
+            },
+            {
+                name = "layout.aly",
+                content = [[{
   CoordinatorLayout;
   layout_height="fill";
   layout_width="fill";
@@ -157,17 +157,17 @@ onConfigurationChanged(activity.getResources().getConfiguration())
     layout_width="fill";
   };
 }]],
-      },
+            },
+        },
     },
-  },
-  {
-    name="设置 Activity",
-    enName="Settings Activity",
-    id="settings",
-    files={
-      {
-        name="main.lua",
-        content=[[require "import"
+    {
+        name = "设置 Activity",
+        enName = "Settings Activity",
+        id = "settings",
+        files = {
+            {
+                name = "main.lua",
+                content = [[require "import"
 import "android.app.*"
 import "android.os.*"
 import "android.widget.*"
@@ -178,7 +178,7 @@ import "settings"
 --activity.setTitle("{{ModuleName}}")
 activity.setTheme(R.style.AppTheme)
 actionBar=activity.getActionBar()
-actionBar.setDisplayHomeAsUpEnabled(true) 
+actionBar.setDisplayHomeAsUpEnabled(true)
 
 fragment=LuaPreferenceFragment(settings)
 activity.setFragment(fragment)
@@ -201,15 +201,15 @@ fragment.onPreferenceChange=function(preference)
 end
 
 ]],
-      },
-      {
-        name="init.lua",
-        content=[[appname="{{ModuleName}}"
+            },
+            {
+                name = "init.lua",
+                content = [[appname="{{ModuleName}}"
 ]],
-      },
-      {
-        name="settings.aly",
-        content=[[{
+            },
+            {
+                name = "settings.aly",
+                content = [[{
   {
     PreferenceCategory;
     title="Title1";
@@ -238,18 +238,18 @@ end
     key="item3";
   };
 }]],
-      },
+            },
+        },
     },
-  },
-  {
-    name="设置 Activity (Jesse205)",
-    enName="Settings Activity (Jesse205)",
-    id="settings_jesse205",
-    enabledVar="oldJesse205Support",
-    files={
-      {
-        name="main.lua",
-        content=[[ require "import"
+    {
+        name = "设置 Activity (Jesse205)",
+        enName = "Settings Activity (Jesse205)",
+        id = "settings_jesse205",
+        enabledVar = "oldJesse205Support",
+        files = {
+            {
+                name = "main.lua",
+                content = [[ require "import"
 initApp=true
 import "jesse205"
 local normalkeys=jesse205.normalkeys
@@ -318,15 +318,15 @@ end
 mainLay.ViewTreeObserver
 .addOnGlobalLayoutListener(ScreenFixUtil.LayoutListenersBuilder.listViews(mainLay,{recyclerView}))
 ]],
-      },
-      {
-        name="init.lua",
-        content=[[appname="{{ModuleName}}"
+            },
+            {
+                name = "init.lua",
+                content = [[appname="{{ModuleName}}"
 ]],
-      },
-      {
-        name="settings.aly",
-        content=[[{
+            },
+            {
+                name = "settings.aly",
+                content = [[{
   {--软件
     SettingsLayUtil.TITLE;
     title=R.string.jesse205_app;
@@ -339,7 +339,7 @@ mainLay.ViewTreeObserver
     newPage=true;
   };
 }]],
-      },
+            },
+        },
     },
-  },
 }

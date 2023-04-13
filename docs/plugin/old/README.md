@@ -4,7 +4,7 @@ next:
   link: pages/main.md
 ---
 
-# 插件文档
+# 插件文档 <Badge type="warning" text="v3.1.N" />
 
 Util 版本：v3.1
 ::: details 本页内容

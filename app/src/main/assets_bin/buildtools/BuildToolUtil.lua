@@ -36,7 +36,7 @@ local function repackApk_callback(buildingDialog,success,message,apkPath,project
     end
     buildingDialog:print("success",showingText,true)
    else
-    showingText=message or getString(R.string.unknowError)
+    showingText=message or getString(R.string.unknownError)
     buildingDialog:print("error",showingText,false)
     positiveButton.setVisibility(View.VISIBLE)
   end

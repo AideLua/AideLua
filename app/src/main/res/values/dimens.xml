@@ -23,4 +23,7 @@
     <dimen name="drag_shadow_radius">4dp</dimen>
     <dimen name="drag_shadow_padding">8dp</dimen>
 
+    <dimen name="item_background_padding_x">8dp</dimen>
+    <dimen name="item_background_padding_y">8dp</dimen>
+    <dimen name="item_background_radius">4dp</dimen>
 </resources>

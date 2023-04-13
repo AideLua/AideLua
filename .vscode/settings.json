@@ -1,6 +1,18 @@
 {
     "emmylua.spell.dict": [
-        "luajava"
+        "luajava",
+        "appname",
+        "lazyimport",
+        "androidx",
+        "appcompat",
+        "recyclerview",
+        "custrecycleradapter",
+        "Compat",
+        "coordinatorlayout",
+        "cardview",
+        "swiperefreshlayout",
+        "textview",
+        "bumptech"
     ],
     "cSpell.words": [
         "androidx",
@@ -43,5 +55,6 @@
     },
     "Lua.runtime.unicodeName": true,
     "Lua.semantic.keyword": true,
+    "color-highlight.enable": false,
     
 }

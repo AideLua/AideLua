@@ -8,7 +8,7 @@
         <item name="windowNoTitle">true</item>
     </style>
     <style name="Theme.Jesse205.Blue.DarkActionBar.NoActionBar" parent="Theme.Jesse205.Blue.DarkActionBar">
-        <item name="colorPrimaryDark">@color/jesse205_system_window_scrim_dark_black</item>
+        <item name="colorPrimaryDark">@color/jesse205_system_window_scrim_light_black</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -20,7 +20,7 @@
         <item name="windowNoTitle">true</item>
     </style>
     <style name="Theme.Jesse205.Red.DarkActionBar.NoActionBar" parent="Theme.Jesse205.Red.DarkActionBar">
-        <item name="colorPrimaryDark">@color/jesse205_system_window_scrim_dark_black</item>
+        <item name="colorPrimaryDark">@color/jesse205_system_window_scrim_light_black</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -32,7 +32,7 @@
         <item name="windowNoTitle">true</item>
     </style>
     <style name="Theme.Jesse205.Teal.DarkActionBar.NoActionBar" parent="Theme.Jesse205.Teal.DarkActionBar">
-        <item name="colorPrimaryDark">@color/jesse205_system_window_scrim_dark_black</item>
+        <item name="colorPrimaryDark">@color/jesse205_system_window_scrim_light_black</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -44,7 +44,7 @@
         <item name="windowNoTitle">true</item>
     </style>
     <style name="Theme.Jesse205.Orange.DarkActionBar.NoActionBar" parent="Theme.Jesse205.Orange.DarkActionBar">
-        <item name="colorPrimaryDark">@color/jesse205_system_window_scrim_dark_black</item>
+        <item name="colorPrimaryDark">@color/jesse205_system_window_scrim_light_black</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -56,7 +56,7 @@
         <item name="windowNoTitle">true</item>
     </style>
     <style name="Theme.Jesse205.Pink.DarkActionBar.NoActionBar" parent="Theme.Jesse205.Pink.DarkActionBar">
-        <item name="colorPrimaryDark">@color/jesse205_system_window_scrim_dark_black</item>
+        <item name="colorPrimaryDark">@color/jesse205_system_window_scrim_light_black</item>
         <item name="windowActionModeOverlay">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

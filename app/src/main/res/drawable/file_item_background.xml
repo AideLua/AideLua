@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android"
+    android:color="?rippleColor">
+    <item android:id="@android:id/mask">
+        <layer-list>
+            <item
+                android:bottom="@dimen/item_background_padding_y"
+                android:left="@dimen/item_background_padding_x"
+                android:right="@dimen/item_background_padding_x"
+                android:top="@dimen/item_background_padding_y">
+                <shape android:shape="rectangle">
+                    <corners android:radius="@dimen/item_background_radius" />
+                    <solid android:color="?rippleColorAccent" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</ripple>

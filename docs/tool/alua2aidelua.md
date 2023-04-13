@@ -1,4 +1,4 @@
-# ALua转AideLua
+# ALua 转 AideLua 工程
 
 将 AndroLua+ 的工程一键转换为 Aide Lua 项目
 
@@ -9,7 +9,7 @@
 
 ## 工具下载
 
-二进制文件：
+发行版文件：
 
 * [123 云盘](https://www.123pan.com/s/G7a9-c1ek)
 
@@ -34,7 +34,7 @@
 ### v1.2
 
 1. 修复ALP文件解压失败时没有删除临时文件的bug
-2. 修复icon.png未转换的问题（welcome.png已弃用，因为此方法呈现出来的效果不好）
+2. 修复icon.png未转换的问题（welcome.png 已弃用，因为此方法呈现出来的效果不好）
 3. 修复权限错误问题
 4. 修复严重的错误
 5. 修复版本号错误

@@ -1,41 +1,42 @@
 package com.jesse205.aidelua2.manager;
-
-/**
- * @Author Jesse205
- * @Date 2023/03/20 03:00
- * @Describe Lua 插件管理器
- */
 import android.content.Context;
 
+/**
+ * Author Jesse205
+ * Date 2023/03/20 03:00
+ * Describe Lua 插件管理器
+ */
 public class LuaPluginsManager {
 
     private static final String TAG = "LuaPluginsManager";
 
-    private static String[] mEnabledPluginPaths;
+    private static String[] enabledPluginPaths;
 
-    private static String mAppTag;//相当于apptype
+    private static String appTag;//相当于apptype
     private Context mContext;
 
     public LuaPluginsManager(Context context){
         mContext=context;
     }
-    
-    public static void setAppTag(String appTag) {
-        mAppTag = appTag;
-    }
+
 
     public static String getAppTag() {
-        return mAppTag;
+        return appTag;
     }
 
-    public static void setEnabledPluginPaths(String[] enabledPluginPaths) {
-        mEnabledPluginPaths = enabledPluginPaths;
+    public static void setAppTag(String appTag) {
+        LuaPluginsManager.appTag = appTag;
     }
 
     public static String[] getEnabledPluginPaths() {
-        return mEnabledPluginPaths;
+        return enabledPluginPaths;
     }
-    
-    
 
+    public static void setEnabledPluginPaths(String[] enabledPluginPaths) {
+        LuaPluginsManager.enabledPluginPaths = enabledPluginPaths;
+    }
+
+    public Context getContext() {
+        return mContext;
+    }
 }

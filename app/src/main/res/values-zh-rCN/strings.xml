@@ -18,7 +18,7 @@
     <string name="tools_popup">工具...</string>
     <string name="reminder">温馨提示</string>
     <string name="unknown">(未知)</string>
-    <string name="unknowError">未知错误</string>
+    <string name="unknownError">未知错误</string>
     <string name="copy">复制</string>
     <string name="copy_popup">复制...</string>
 	<string name="copy_name_popup">复制名称...</string>

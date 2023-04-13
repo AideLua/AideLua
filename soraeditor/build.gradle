@@ -8,8 +8,6 @@ android {
         //applicationId "io.github.rosemoe.sora"
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 1199
-        versionName "5.0.18(1.1)(armeabi-v7a,arm64-v8a)"
     }
     buildTypes {
         release {
@@ -29,7 +27,8 @@ android {
             //jniLibs.srcDirs = ['libs']
         }
     }
-    lintOptions {
+    namespace 'io.github.rosemoe.sora'
+    lint {
         abortOnError false
         checkReleaseBuilds false
     }

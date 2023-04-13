@@ -1,13 +1,14 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 32
+    compileSdkVersion 33
     buildToolsVersion "32.0.0"
+    namespace 'com.androlua'
 
     defaultConfig {
         //applicationId "com.androlua"
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 33
         versionCode 1199
         versionName "5.0.18(1.1)(armeabi-v7a,arm64-v8a)"
     }
@@ -16,12 +17,14 @@ android {
             minifyEnabled false
             shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            ndk {abiFilters 'armeabi-v7a', 'x86', 'arm64-v8a'}
+            //noinspection ChromeOsAbiSupport
+            ndk {abiFilters 'armeabi-v7a', 'arm64-v8a'}
         }
         debug {
             minifyEnabled false
             shrinkResources false
-            ndk {abiFilters 'armeabi-v7a', 'x86', 'arm64-v8a'}
+            //noinspection ChromeOsAbiSupport
+            ndk {abiFilters 'armeabi-v7a', 'arm64-v8a'}
         }
     }
     sourceSets {
@@ -29,7 +32,7 @@ android {
             //jniLibs.srcDirs = ['libs']
         }
     }
-    lintOptions {
+    lint {
         abortOnError false
         checkReleaseBuilds false
     }

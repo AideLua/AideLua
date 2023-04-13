@@ -1,1 +1,2 @@
-appname="Aide Lua Pro"
+appname = "Aide Lua Pro"
+

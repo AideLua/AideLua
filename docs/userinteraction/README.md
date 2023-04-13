@@ -11,15 +11,15 @@ Aide Lua 为用户提供更好的用户交互体验
 
 ## 全局特性
 
-### 标题栏阴影动态展示
+### 标题栏阴影与背景色动态展示
 
 当用户在页面上当前位置不是第一的话，应用将显示工具栏阴影，以凸现层级，告知用户当前未滑动到顶部。
 
 当阴影发生变化时，软件将使用过渡动画切换阴影状态。
-![](/images/ui/autoshadow/toolbar_hide.jpg)
+![列表已到顶部](/images/ui/autoshadow/toolbar_hide.jpg)
 <p class="pictureName">[图片] 列表已到顶部</p>
 
-![](/images/ui/autoshadow/toolbar_show.jpg)
+![列表未到顶部](/images/ui/autoshadow/toolbar_show.jpg)
 <p class="pictureName">[图片] 列表未到顶部</p>
 
 ### 合适的宽度
@@ -30,17 +30,18 @@ Aide Lua 为用户提供更好的用户交互体验
 
 在列表中，调整整个列表的宽度。
 
-![](/images/ui/autowidth/list_normal.jpg)
+![小宽度](/images/ui/autowidth/list_normal.jpg)
 <p class="pictureName">[图片] 小宽度</p>
 
-![](/images/ui/autowidth/list_wide.jpg)
+![大宽度](/images/ui/autowidth/list_wide.jpg)
 <p class="pictureName">[图片] 大宽度</p>
 
 ::: tip
-在大宽度模式下，滑动列表的两侧依旧可以滚动列表。<br>
+在大宽度模式下，滑动列表的两侧依旧可以滚动列表。
+
 如果您发现此操作无法被响应，那么这是一个 Bug，欢迎向我们[提供反馈](https://gitee.com/AideLua/AideLua/issues)。
 
-![](/images/ui/autowidth/list_wide_scroll.gif)
+![滑动外部可滚动列表](/images/ui/autowidth/list_wide_scroll.gif)
 <p class="pictureName">[动图] 滑动外部可滚动列表</p>
 :::
 
@@ -48,8 +49,8 @@ Aide Lua 为用户提供更好的用户交互体验
 
 在网格中，则调整单个格子的宽度。
 
-![](/images/ui/autowidth/grid_normal.jpg)
+![小宽度](/images/ui/autowidth/grid_normal.jpg)
 <p class="pictureName">[图片] 小宽度</p>
 
-![](/images/ui/autowidth/grid_wide.jpg)
+![大宽度](/images/ui/autowidth/grid_wide.jpg)
 <p class="pictureName">[图片] 大宽度</p>

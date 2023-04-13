@@ -5,9 +5,5 @@
         <item name="android:windowLightStatusBar">?windowLightStatusBar</item>
     </style>
     <style name="Platform.Theme.Jasse205.Material2" parent="Platform.V23.Theme.Jasse205.Material2" />
-    
-    <!-- <style name="Theme.Jesse205" parent="Base.Theme.Jesse205">
-        <item name="android:navigationBarColor">@color/jesse205_grey</item>
-        <item name="windowLightNavigationBar">false</item>
-    </style> -->
+
 </resources>

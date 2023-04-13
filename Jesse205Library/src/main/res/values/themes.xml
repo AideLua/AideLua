@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <style name="Platform.V21.Theme.Jasse205.Material2" parent="Theme.MaterialComponents.DayNight">
         <item name="colorPrimaryDark">@color/jesse205_system_window_scrim_compat</item>
         <item name="android:navigationBarColor">@color/jesse205_system_window_scrim_compat</item>
         <item name="windowLightStatusBar">?isLightTheme</item>
         <item name="windowLightNavigationBar">?isLightTheme</item>
     </style>
+
     <style name="Platform.Theme.Jasse205.Material2" parent="Platform.V21.Theme.Jasse205.Material2" />
-    
+
     <!--基础主题-->
     <style name="Base.Theme.Jasse205.Bridge" parent="Platform.Theme.Jasse205.Material2">
         <item name="colorPrimary">@color/jesse205_blue</item>
@@ -33,15 +35,22 @@
         <item name="actionBarTabStyle">@style/Widget.Jesse205.ActionBar.TabView.Surface</item>
 
         <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Surface</item>
-        <item name="android:listViewStyle">@style/Widget.Jesse205.ListView</item>
         <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout</item>
-        <item name="autoCompleteTextViewStyle">@style/Widget.Jesse205.AutoCompleteTextView</item>
         <item name="actionSearchEditStyle">@style/Widget.Jesse205.ActionSearchEdit.Surface</item>
+
+        <item name="android:listViewStyle">@style/Widget.Jesse205.ListView</item>
+        <item name="autoCompleteTextViewStyle">@style/Widget.Jesse205.AutoCompleteTextView</item>
 
         <item name="alertDialogTheme">@style/ThemeOverlay.Jesse205.Dialog.Alert</item>
 
         <!--字体-->
-        <item name="textAppearancePopupMenuHeader">@style/TextAppearance.Jesse205.Widget.PopupMenu.Header</item>
+        <item name="textAppearancePopupMenuHeader">
+            @style/TextAppearance.Jesse205.Widget.PopupMenu.Header
+        </item>
+
+        <!--波纹颜色-->
+        <item name="rippleColorAccent">@color/jesse205_primary_ripple</item>
+        <item name="rippleColorPrimary">@color/jesse205_on_background_ripple</item>
 
         <!--圆角-->
         <!--<item name="dialogCornerRadius">4dp</item>-->
@@ -58,66 +67,17 @@
 
     <style name="Base.Theme.Jesse205" parent="Base.Theme.Jasse205.Bridge">
 
-        <item name="colorSurface">@color/jesse205_white</item>
+        <item name="colorSurface">?windowBackgroundColor</item>
         <item name="colorBackgroundFloating">@color/jesse205_white</item>
+
         <!--按钮边框的颜色默认是按压下去的，所以要写死边框颜色才行-->
         <item name="strokeColor">@color/material_on_surface_stroke</item>
         <item name="dialogBackgroundColor">@color/jesse205_white</item>
         <item name="windowBackgroundColor">@color/jesse205_white</item>
 
-        <!--波纹颜色-->
-        <item name="rippleColorAccent">@color/jesse205_blue_ripple</item>
-        <item name="rippleColorPrimary">@color/ripple_material_light</item>
-
         <item name="android:alertDialogTheme">@style/Theme.Jesse205.Framework.Dialog.Alert</item>
     </style>
-    
-    <!--原生对话框-->
-    <style name="Theme.Jesse205.Framework.Dialog.Alert" parent="android:Theme.Material.Light.Dialog.Alert">
-        <item name="android:colorAccent">?colorAccent</item>
-        <item name="android:windowBackground" tools:ignore="PrivateResource">@drawable/mtrl_dialog_background</item>
-	    <item name="android:backgroundDimAmount">0.32</item>
-	    <item name="colorBackgroundFloating">?dialogBackgroundColor</item>
-		<item name="colorSurface">?dialogBackgroundColor</item>
-	</style>
 
-    <style name="Theme.Jesse205.Framework.Dark.Dialog.Alert" parent="android:Theme.Material.Dialog.Alert">
-        <item name="android:colorAccent">?colorAccent</item>
-        <item name="android:windowBackground" tools:ignore="PrivateResource">@drawable/mtrl_dialog_background</item>
-  		<item name="android:backgroundDimAmount">0.32</item>
-	    <item name="colorBackgroundFloating">?dialogBackgroundColor</item>
-	    <item name="colorSurface">?dialogBackgroundColor</item>
-	</style>
-
-
-    <style name="ThemeOverlay.Jesse205.Dialog.Alert" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="android:windowBackground" tools:ignore="PrivateResource">@drawable/mtrl_dialog_background</item>
-        <item name="android:backgroundDimAmount">0.32</item>
-	    <item name="colorBackgroundFloating">?dialogBackgroundColor</item>
-	    <item name="colorSurface">?dialogBackgroundColor</item>
-	</style>
-
-    <!--ActionBar Themes-->
-    <style name="ThemeOverlay.Jesse205.ActionBar.Primary" parent="ThemeOverlay.MaterialComponents.ActionBar.Primary">
-    	<item name="colorControlNormal">@color/jesse205_color_on_primary</item>
-        <item name="actionMenuTextColor">@color/jesse205_color_on_primary</item>
-        <!--<item name="elevation">4dp</item>-->
-		<item name="cardBackgroundColor">@color/jesse205_white_ripple</item>
-		<item name="rippleColor">@color/jesse205_white_ripple</item>
-	</style>
-
-
-    <style name="ThemeOverlay.Jesse205.ActionBar.Surface" parent="ThemeOverlay.MaterialComponents.ActionBar.Surface">
-        <!--设置图标颜色和文字颜色，文字颜色拥有不同的状态-->
-        <item name="colorControlNormal">@color/jesse205_color_on_surface</item>
-        <item name="actionMenuTextColor">@color/jesse205_color_on_surface</item>
-        <!--<item name="elevation">4dp</item>-->
-	</style>
-
-    <style name="ThemeOverlay.Jesse205.Dark" parent="@style/ThemeOverlay.AppCompat.Dark">
-        <!--修复暗色模式下溢出菜单背景颜色异常，这个只是暂时的-->
-        <item name="colorBackgroundFloating">?colorOnSurface</item>
-    </style>
 
     <!--正式主题-->
     <style name="Theme.Jesse205" parent="Base.Theme.Jesse205">

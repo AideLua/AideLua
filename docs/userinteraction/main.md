@@ -38,24 +38,27 @@ local function initFileTabView(tab, fileConfig)
   applyTabMenu(view,fileConfig)
 end
 ```
+
+> 这段代码等待更新
+
 ::: tip
 在低于 Android 8.0 时，Tooltip可能会设置不成功，因为在接下的代码中重新设置了 `onLongClick`
 :::
 
 在桌面端，当指针悬停在标签上时显示 Tooltip。
 
+![鼠标指针悬停在标签上]()
 <p class="pictureName">[图片] 鼠标指针悬停在标签上</p>
 
 在移动端，当用户长按文件标签时显示 Tooltip
 
-![](/images/ui/main/tab_hover_finger.jpg)
+![标签被长按](/images/ui/main/tab_hover_finger.jpg)
 <p class="pictureName">[图片] 标签被长按</p>
 
 当然，也可以通过上拉来快速显示 Tooltip。在用户上拉后，文件标签将播放向上旋转动画，使用户意识到触发了上滑操作。
 
-![](/images/ui/main/tab_slideup.gif)
+![上滑标签](/images/ui/main/tab_slideup.gif)
 <p class="pictureName">[动图] 上滑标签</p>
-
 
 ### 下拉菜单
 
@@ -63,12 +66,15 @@ end
 
 用户可以通过下拉文件标签来调出下拉菜单，同时文件标签将播放向下旋转动画，使用户意识到触发了下拉操作
 
+![下拉标签]()
 <p class="pictureName">[动图] 下拉标签</p>
 
 为考虑部分用户的习惯，当用户触发下拉菜单后不会立即进入滑动选择，而是当持续时间超过 600ms 或下拉中途返回后进入滑动选择模式
 
+![下拉标签后停顿]()
 <p class="pictureName">[动图] 下拉标签后停顿</p>
 
+![下拉标签后返回]()
 <p class="pictureName">[动图] 下拉标签后返回</p>
 
 ::: tip

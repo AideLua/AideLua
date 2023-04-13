@@ -19,7 +19,7 @@
     <string name="tools_popup">Tools...</string>
     <string name="reminder">Tips</string>
     <string name="unknown">(Unknow)</string>
-    <string name="unknowError">Unknown error</string>
+    <string name="unknownError">Unknown error</string>
     <string name="copy">Copy</string>
 	<string name="copy_popup">Copy...</string>
 	<string name="copy_name_popup">Copy name...</string>

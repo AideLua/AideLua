@@ -1,6 +1,7 @@
 ---默认设置管理器<br>
 ---使用前需要初始化<br>
 ---DefaultSettingsManager()
+---@class DefaultSettingsManager
 local DefaultSettingsManager={}
 setmetatable(DefaultSettingsManager,DefaultSettingsManager)
 local metatable={__index=DefaultSettingsManager}
@@ -21,8 +22,9 @@ local dataGetterMetatable={
 }
 
 ---@return DefaultSettingsManager
-function DefaultSettingsManager.__call(self)
+function DefaultSettingsManager.__call(class)
   local self={}
+  ---原始数据表
   local originDataMap={}
   --原始数据字典
   self._originDataMap=originDataMap

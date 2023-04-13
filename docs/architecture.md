@@ -26,5 +26,5 @@ AideLuaPro: 项目根目录
 ## lua 目录文件结构
 
 * assets：lua 资源目录
-    * sub：子页面目录
+  * sub：子页面目录
 * luaLibs：lua 库目录

@@ -1,6 +1,6 @@
 # AndroLua+ 资源获取工具
 
-[![license](https://img.shields.io/github/license/AideLua/AndroLuaResGetter)](LICENSE)
+[![license](https://img.shields.io/github/license/AideLua/AndroLuaResGetter?style=flat-square)](https://gitee.com/AideLua/AndroLuaResGetter/blob/master/LICENSE)
 [![Gitee 发行版](https://img.shields.io/github/v/tag/AideLua/AndroLuaResGetter?color=C71D23&label=发行版&logo=gitee&style=flat-square)](https://gitee.com/AideLua/AndroLuaResGetter/releases/latest)
 [![作者: Jesse205](https://img.shields.io/badge/作者-Jesse205-1A73E8?style=flat-square)](https://gitee.com/Jesse205)
 
@@ -17,7 +17,7 @@
 
 ## 安装教程
 
-1. 复制 `res.lua` 到 `luaLibs` 内
+1. 复制 `res.lua` 到 `<项目>/app/src/main/luaLibs` 内
 2. 在 `main.lua` 内导入 `import` 模块: `require "import"`
 3. 导入 `res` 模块: `import "res"`
 

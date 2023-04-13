@@ -47,7 +47,7 @@ export default defineUserConfig({
             },
             {
                 text: '使用文档',
-                link: '/',
+                link: '',
             },
             {
                 text: 'Gitee 仓库',
@@ -62,6 +62,32 @@ export default defineUserConfig({
             {
                 text: '使用文档',
                 link: '/',
+            },
+            {
+                text: '快速使用',
+                collapsible: true,
+                children: [
+                    {
+                        text: '概览',
+                        link: '/quickly/',
+                    },
+                    {
+                        text: '一、首次使用软件',
+                        link: '/quickly/1.html',
+                    },
+                    {
+                        text: '二、编写代码、打包发布',
+                        link: '/quickly/2.html',
+                    },
+                    {
+                        text: '三、资源文件',
+                        link: '/quickly/3.html',
+                    },
+                    {
+                        text: '四、build.gradle 和 config.lua',
+                        link: '/quickly/4.html',
+                    },
+                ]
             },
             {
                 text: '常见问题',
@@ -347,8 +373,8 @@ export default defineUserConfig({
             showInMobile: true,
             pure: true,
             delay: 100,
-        }),
-        commentPlugin({
+        }), */
+        /* commentPlugin({
             provider: "Giscus",
             repo: "AideLua/AideLua",
             repoId: "R_kgDOHfPX_g",

@@ -1,15 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="PrivateResource">
     <!--基础主题-->
     <style name="Base.Theme.Jesse205.Material3" parent="Theme.Material3.DynamicColors.Light">
-        <!--<item name="colorPrimary">@color/jesse205_blue</item>
-        <item name="colorPrimaryDark">?windowBackgroundColor</item>
-        <item name="colorSecondary">?colorPrimary</item>
-        <item name="colorSurface">?windowBackgroundColor</item>
-        <item name="colorOnSecondary">?colorOnPrimary</item>
-        <item name="colorSecondaryVariant">?colorSecondary</item>-->
-
-        <!--<item name="colorBackgroundFloating">@color/jesse205_white</item>-->
         <!--按钮边框的颜色默认是按压下去的，所以要写死边框颜色才行-->
         <item name="strokeColor">@color/jesse205_grey_light</item>
         <item name="dialogBackgroundColor">@color/jesse205_white</item>
@@ -25,37 +18,15 @@
         <item name="rippleColorAccent">@color/jesse205_blue_ripple</item>
         <item name="rippleColorPrimary">@color/ripple_material_light</item>
 
-        <!--<item name="actionBarTheme">@style/ThemeOverlay.Jesse205.ActionBar.Surface</item>
-        <item name="actionBarStyle">@style/Widget.Jesse205.ActionBar.Surface</item>
-        <item name="actionBarTabBarStyle">@style/Widget.Jesse205.ActionBar.TabBar.Surface</item>
-        <item name="actionBarTabStyle">@style/Widget.Jesse205.ActionBar.TabView.Surface</item>
-        <item name="actionModeBackground">?colorSurface</item>
-        <item name="appBarLayoutStyle">@style/Widget.MaterialComponents.AppBarLayout.Surface</item>
-        <item name="android:listViewStyle">@style/Widget.Jesse205.ListView</item>
-        <item name="tabStyle">@style/Widget.MaterialComponents.TabLayout</item>-->
-        
         <item name="actionSearchEditStyle">@style/Widget.Jesse205.ActionSearchEdit.Surface</item>
-        
-        <!--<item name="android:alertDialogTheme">@style/Base.Theme.Jesse205.Dialog.Alert</item>
-        <item name="alertDialogTheme">@style/ThemeOverlay.Jesse205.Dialog.Alert</item>
 
-        <item name="materialCardViewStyle">@style/Widget.Jesse205.Material.CardView</item>
-        <item name="cardViewStyle">@style/Widget.Jesse205.CardView</item>
-        <item name="textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense</item>
-        <item name="chipStyle">@style/Widget.Jesse205.Chip</item>
- -->       
         <!--字体-->
         <item name="textAppearancePopupMenuHeader">@style/TextAppearance.Jesse205.Widget.PopupMenu.Header</item>
 
         <!--圆角-->
         <item name="dialogCornerRadius">4dp</item>
         <item name="cardCornerRadius">?cornerRadius</item>
-        <!--<item name="popupMenuCornerRadius">4dp</item>-->
         <item name="cornerRadius">8dp</item>
-        <!--<item name="boxCornerRadiusTopStart">4dp</item>
-        <item name="boxCornerRadiusTopEnd">4dp</item>
-        <item name="boxCornerRadiusBottomStart">4dp</item>
-        <item name="boxCornerRadiusBottomEnd">4dp</item>-->
 
         <!--图标-->
         <item name="android:actionModeSelectAllDrawable">@drawable/ic_select_all</item>

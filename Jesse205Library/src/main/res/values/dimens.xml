@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="jesse205_width_pad">600dip</dimen>
-    <dimen name="jesse205_width_pc">800dip</dimen>
+    <dimen name="jesse205_width_pad">600dp</dimen>
+    <dimen name="jesse205_width_pc">800dp</dimen>
 </resources>

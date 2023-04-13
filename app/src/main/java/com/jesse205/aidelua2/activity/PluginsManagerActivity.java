@@ -1,4 +1,4 @@
-package com.jesse205.aidelua2;
+package com.jesse205.aidelua2.activity;
 
 import android.app.Activity;
 import android.os.Bundle;

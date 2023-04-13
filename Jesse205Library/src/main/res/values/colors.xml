@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="jesse205_white">#ffffffff</color>
     <color name="jesse205_white_dark">#FFE0E0E0</color>
     <color name="jesse205_white_ripple">#33ffffff</color>
@@ -28,29 +28,7 @@
     <color name="jesse205_black_blue">#202124</color>
     <color name="jesse205_black_ripple">#22000000</color>
 
-    <color name="jesse205_status_bar_background_compat_light">#BBBBBB</color>
-    <color name="jesse205_status_bar_background_compat_dark">
-        @color/design_dark_default_color_surface
-    </color>
-    <color name="jesse205_status_bar_background_compat_daynight">
-        @color/jesse205_status_bar_background_compat_light
-    </color>
-
-    <!-- <color name="jesse205_system_window_scrim_light">#99FFFFFF</color> -->
-    <!-- <color name="jesse205_system_window_scrim_dark">#66202124</color> -->
-    <!-- <color name="jesse205_system_window_scrim_daynight">@color/jesse205_system_window_scrim_light</color> -->
-
-
-    <color name="jesse205_system_window_scrim_light">#99FFFFFF</color>
-    <color name="jesse205_system_window_scrim_dark">#66202124</color>
-    <color name="jesse205_system_window_scrim_dark_black">#22000000</color>
-    <color name="jesse205_system_window_scrim">@color/jesse205_system_window_scrim_light</color>
-
-    <color name="jesse205_system_window_scrim_light_compat">#44000000</color>
-    <color name="jesse205_system_window_scrim_compat">
-        @color/jesse205_system_window_scrim_light_compat
-    </color>
-
-    <color name="jesse205_shortcut_icon_background">#F5F5F5</color>
-
+    <color name="jesse205_system_window_scrim_light_black">#44000000</color>
+    <color name="jesse205_system_window_scrim">@color/jesse205_background_emphasis_medium</color>
+    <color name="jesse205_system_window_scrim_compat">@color/jesse205_system_window_scrim_light_black</color>
 </resources>

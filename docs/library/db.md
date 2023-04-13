@@ -1,5 +1,6 @@
 # LuaDB
 
+[![license](https://img.shields.io/github/license/limao996/LuaDB?style=flat-square)](https://github.com/limao996/LuaDB/blob/main/LICENSE)
 [![作者: 狸猫呐](https://img.shields.io/badge/作者-狸猫呐-1A73E8?style=flat-square)](https://github.com/limao996)
 
 [![Github 仓库](https://img.shields.io/badge/Github-仓库-0969DA?logo=github&style=flat-square)](https://github.com/limao996/LuaDB/)
@@ -10,7 +11,7 @@
 
 ## 安装教程
 
-1. 复制 `db.lua` 到 `luaLibs` 内
+1. 复制 `db.lua` 、`db-pack.lua`（可选）、`db-pack.lua`（可选）和 `db-stream.lua`（可选） 到 `<项目>/app/src/main/luaLibs` 内
 2. 导入 `db` 模块: `local db = require "db"`
 
 ## 使用说明

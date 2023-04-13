@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="PrivateResource">
+
+    <style name="TextAppearance.Jesse205.Widget.PopupMenu.Header" parent="TextAppearance.AppCompat.Widget.PopupMenu.Header">
+        <item name="android:textColor">?colorPrimary</item>
+    </style>
+
     <!--控件-->
 
+    <!-- Chip修改为Outlined样式 -->
     <style name="Widget.Jesse205.Chip" parent="Widget.MaterialComponents.Chip.Action">
-        <item name="chipStrokeWidth" tools:ignore="PrivateResource">@dimen/mtrl_btn_stroke_size
-        </item>
+        <item name="chipStrokeWidth">@dimen/mtrl_btn_stroke_size</item>
         <item name="chipStrokeColor">@color/jesse205_chip_stroke_color</item>
         <item name="chipCornerRadius">4dp</item>
         <item name="chipBackgroundColor">@color/jesse205_chip_background_color</item>
@@ -13,13 +18,15 @@
         <item name="android:elevation">-4dp</item>
     </style>
 
+    <!-- 列表去除分割线 -->
     <style name="Widget.Jesse205.ListView" parent="Widget.AppCompat.ListView">
         <item name="android:divider">@null</item>
     </style>
 
+    <!-- 将AutoCompleteTextView的弹窗MD2化 -->
     <style name="Widget.Jesse205.AutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:popupElevation">8dp</item>
-        <item name="android:popupBackground" tools:ignore="PrivateResource">
+        <item name="android:popupBackground">
             @drawable/mtrl_popupmenu_background
         </item>
         <item name="android:dropDownVerticalOffset">1dp</item>
@@ -33,14 +40,12 @@
         <item name="cardBackgroundColor">?windowBackgroundColor</item>
         <item name="cardCornerRadius">?cardCornerRadius</item>
         <item name="cardElevation">0dp</item>
-        <item name="strokeWidth" tools:ignore="PrivateResource">@dimen/mtrl_btn_stroke_size</item>
-        <item name="strokeColor" tools:ignore="PrivateResource">
-            @color/mtrl_btn_stroke_color_selector
-        </item>
+        <item name="strokeWidth">@dimen/mtrl_btn_stroke_size</item>
+        <item name="strokeColor">@color/mtrl_btn_stroke_color_selector</item>
     </style>
 
     <style name="Widget.Jesse205.ActionSearchEdit.Surface" parent="android:style/Widget">
-        <item name="android:textColorPrimary">@color/jesse205_color_on_surface</item>
+        <item name="android:textColorPrimary">@color/jesse205_on_surface</item>
         <item name="android:textColorHint">@color/material_on_surface_emphasis_medium</item>
     </style>
 
@@ -52,6 +57,7 @@
 
     <style name="Widget.Jesse205.ActionBar.Surface" parent="Widget.MaterialComponents.ActionBar.Surface">
         <item name="backgroundStacked">?colorSurface</item>
+        <item name="backgroundSplit">?colorSurface</item>
     </style>
 
     <style name="Widget.Jesse205.Material3.Light.ActionBar.Solid" parent="Widget.Material3.Light.ActionBar.Solid" />
@@ -70,6 +76,60 @@
 
     <style name="Widget.Jesse205.ActionBar.TabView.Primary" parent="Widget.AppCompat.ActionBar.TabView">
         <item name="colorControlActivated">?colorOnPrimary</item>
+    </style>
+
+
+    <!--原生对话框-->
+    <style name="Theme.Jesse205.Framework.Dialog.Alert" parent="android:Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorAccent">?colorAccent</item>
+        <item name="android:windowBackground" tools:ignore="PrivateResource">
+            @drawable/mtrl_dialog_background
+        </item>
+        <item name="android:backgroundDimAmount">0.32</item>
+        <item name="colorBackgroundFloating">?dialogBackgroundColor</item>
+        <item name="colorSurface">?dialogBackgroundColor</item>
+    </style>
+
+    <style name="Theme.Jesse205.Framework.Dark.Dialog.Alert" parent="android:Theme.Material.Dialog.Alert">
+        <item name="android:colorAccent">?colorAccent</item>
+        <item name="android:windowBackground" tools:ignore="PrivateResource">
+            @drawable/mtrl_dialog_background
+        </item>
+        <item name="android:backgroundDimAmount">0.32</item>
+        <item name="colorBackgroundFloating">?dialogBackgroundColor</item>
+        <item name="colorSurface">?dialogBackgroundColor</item>
+    </style>
+
+
+    <style name="ThemeOverlay.Jesse205.Dialog.Alert" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="android:windowBackground" tools:ignore="PrivateResource">
+            @drawable/mtrl_dialog_background
+        </item>
+        <item name="android:backgroundDimAmount">0.32</item>
+        <item name="colorBackgroundFloating">?dialogBackgroundColor</item>
+        <item name="colorSurface">?dialogBackgroundColor</item>
+    </style>
+
+    <!--ActionBar Themes-->
+    <style name="ThemeOverlay.Jesse205.ActionBar.Primary" parent="ThemeOverlay.MaterialComponents.ActionBar.Primary">
+        <item name="colorControlNormal">@color/jesse205_on_primary</item>
+        <item name="actionMenuTextColor">@color/jesse205_on_primary</item>
+        <!--<item name="elevation">4dp</item>-->
+        <item name="cardBackgroundColor">@color/jesse205_white_ripple</item>
+        <item name="rippleColor">@color/jesse205_white_ripple</item>
+    </style>
+
+
+    <style name="ThemeOverlay.Jesse205.ActionBar.Surface" parent="ThemeOverlay.MaterialComponents.ActionBar.Surface">
+        <!--设置图标颜色和文字颜色，文字颜色拥有不同的状态-->
+        <item name="colorControlNormal">@color/jesse205_on_surface</item>
+        <item name="actionMenuTextColor">@color/jesse205_on_surface</item>
+        <!--<item name="elevation">4dp</item>-->
+    </style>
+
+    <style name="ThemeOverlay.Jesse205.Dark" parent="@style/ThemeOverlay.AppCompat.Dark">
+        <!--修复暗色模式下溢出菜单背景颜色异常，这个只是暂时的-->
+        <item name="colorBackgroundFloating">?colorOnSurface</item>
     </style>
 
 </resources>
