@@ -1,9 +1,0 @@
-appname="命令栏"--插件名
-packagename="com.aidelua.commandBar"--插件包名
-appver="3.1"
-appcode=3199
-mode="plugin"--模式：插件
-supported2={
-  aidelua={mincode=50399,targetcode=59999}
-}
-thirdplugins={}
