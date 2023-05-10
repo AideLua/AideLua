@@ -66,5 +66,5 @@ gridView.onItemClick=function(id,v,zero,one)
 end
 
 mainLay.ViewTreeObserver
-.addOnGlobalLayoutListener(ScreenFixUtil.LayoutListenersBuilder.gridViews(mainLay,{gridView}))
+.addOnGlobalLayoutListener(ScreenUtil.LayoutListenersBuilder.gridViews(mainLay,{gridView}))
 

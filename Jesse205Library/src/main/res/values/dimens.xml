@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 屏幕 -->
     <dimen name="jesse205_width_pad">600dp</dimen>
     <dimen name="jesse205_width_pc">800dp</dimen>
+
+    <!-- chip -->
+    <dimen name="jesse205_chip_corner_size">4dp</dimen>
+    <dimen name="jesse205_chip_elevated_elevation">-4dp</dimen>
 </resources>

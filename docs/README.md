@@ -12,9 +12,9 @@ title: false
 [![QQ 群: 628045718](https://img.shields.io/badge/QQ_群-628045718-0099FF?logo=TencentQQ&style=flat-square)](https://jq.qq.com/?_wv=1027&k=41q8mp8y)
 [![QQ 频道: t37c1u1nmw](https://img.shields.io/badge/QQ_频道-t37c1u1nmw-0099FF?logo=TencentQQ&style=flat-square)](https://pd.qq.com/s/ncghvc)
 
-Aide Lua 是一款依赖 Aide 的 Lua 编辑器   
-Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件开发   
-Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
+Aide Lua 是一款依赖 Aide 的 Lua 编辑器<br>
+Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件开发<br>
+Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio<br>
 
 [![AideLua/Aide Lua](https://gitee.com/AideLua/AideLua/widgets/widget_card.svg?colors=4183c4,ffffff,ffffff,e3e9ed,666666,9b9b9b)](https://gitee.com/AideLua/AideLua)
 
@@ -114,6 +114,15 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 MyLuaApp 是一款轻量，快速的安卓软件， 使用Lua和Java 来混合开发安卓软件。
 
+::: tip
+Aide Lua 这种工作方式终究不是一个好的解决方案。MyLuaApp 将会取代 Aide Lua
+:::
+
 ### 更多广告
 
 欢迎投放更多广告（仅限编程开发相关，5元1个月，超时后将不定时删除）！
+
+## 更多资源
+
+[软件素材](./material.md) |
+[国际化](./internationalization.md)

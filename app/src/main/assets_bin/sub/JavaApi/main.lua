@@ -404,7 +404,7 @@ end})
 
 
 --[[
-screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
+screenConfigDecoder=ScreenUtil.ScreenConfigDecoder({
   onDeviceByWidthChanged=function(device, oldDevice)
     nowDevice=device
     if device=="phone" then

@@ -9,6 +9,12 @@
 [[toc]]
 :::
 
+## PluginsManager 变更日志
+
+### PluginsManager v4.0
+
+1. 将 `PluginsUtil` 更名为 `PluginsManager`
+
 ## API变更日志
 
 ### v5.2.0

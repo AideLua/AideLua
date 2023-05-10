@@ -6,6 +6,7 @@ return {                      --在 v5.1.0(51099) 添加
         files = {
             {
                 name = "main.lua",
+                
                 content = [[require "import"
 import "android.app.*"
 import "android.os.*"
@@ -129,7 +130,7 @@ function onConfigurationChanged(config)
 end
 
 
-screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
+screenConfigDecoder=ScreenUtil.ScreenConfigDecoder({
 
 })
 
@@ -316,7 +317,7 @@ mainLay.onTouch=function(view,...)
 end
 
 mainLay.ViewTreeObserver
-.addOnGlobalLayoutListener(ScreenFixUtil.LayoutListenersBuilder.listViews(mainLay,{recyclerView}))
+.addOnGlobalLayoutListener(ScreenUtil.LayoutListenersBuilder.listViews(mainLay,{recyclerView}))
 ]],
             },
             {

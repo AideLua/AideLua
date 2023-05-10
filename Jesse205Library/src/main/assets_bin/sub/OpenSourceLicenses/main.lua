@@ -112,7 +112,7 @@ recyclerView.getViewTreeObserver().addOnGlobalLayoutListener({
 })
 
 
-screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
+screenConfigDecoder=ScreenUtil.ScreenConfigDecoder({
   layoutManagers={layoutManager},
 })
 

@@ -178,7 +178,7 @@ end
 
 ---@enum WindmillTools
 WindmillTools = {
-    手册 = 2,
+    ["手册"] = 2,
     ["Java API"] = 3,
     ["Http 调试"] = 4,
 }

@@ -203,7 +203,7 @@ nextButton.onClick=function()
   end
 end
 
-screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder(ScreenFixContent)
+screenConfigDecoder=ScreenUtil.ScreenConfigDecoder(ScreenFixContent)
 
 onConfigurationChanged(activity.getResources().getConfiguration())
 

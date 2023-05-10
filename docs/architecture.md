@@ -5,7 +5,7 @@
 
 ## 文件结构
 
-```txt
+``` text
 AideLuaPro: 项目根目录
 |- .aidelua: Aide Lua 配置目录
 |- docs: 文档说明文件夹
@@ -27,4 +27,9 @@ AideLuaPro: 项目根目录
 
 * assets：lua 资源目录
   * sub：子页面目录
+  * manager: 主页面管理器目录
+    * file: 和文件相关的管理器目录
+  * config: 存放一些基础的配置等目录，比如文件颜色
+  * licences: 许可证存放目录
+    * 文件命名: `产品名小写英文_license.txt` 或 `开源许可证名.txt`
 * luaLibs：lua 库目录

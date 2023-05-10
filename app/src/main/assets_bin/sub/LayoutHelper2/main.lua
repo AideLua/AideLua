@@ -52,7 +52,7 @@ print(layoutContent,editFileMode)
 
 
 
-screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
+screenConfigDecoder=ScreenUtil.ScreenConfigDecoder({
 
 })
 

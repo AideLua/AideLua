@@ -12,20 +12,21 @@
 
 ![cover](images/ic_cover-aidelua.png)
 
-###### Language:
+## Language
 
-[中文](README.md) | English
+* [中文](README.md)
+* English
 
 ## Alert
 
 If you need to use the source code, please go to the [releases (Github)](https://github.com/Jesse205/AideLua/releases/latest) page to download.
 
-Please not to change the repository directly in Github, because Github's repository is mirrored by Gitee。
+Please not to change the repository directly in Github, because Github's repository is mirrored by Gitee.
 
 ## Introduction
 
-Aide Lua is a Lua editor relying on Aide   
-Aide Lua allows you to enjoy advanced and rapid software development on mobile devices   
+Aide Lua is a Lua editor relying on Aide<br>
+Aide Lua allows you to enjoy advanced and rapid software development on mobile devices<br>
 Aide Lua can help you transfer from Androlua+to AIDE and then to Android Studio
 
 ## Download

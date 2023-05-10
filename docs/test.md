@@ -233,7 +233,7 @@ print("hello world")
 print("hello world")
 ```
 
-```ts:no-line-numbers
+``` ts:no-line-numbers
 // 行号被禁用
 const line2 = 'This is line 2'
 const line3 = 'This is line 3'

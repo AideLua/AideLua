@@ -355,6 +355,6 @@ mainLay.onTouch=function(view,...)
 end
 
 mainLay.ViewTreeObserver
-.addOnGlobalLayoutListener(ScreenFixUtil.LayoutListenersBuilder.listViews(mainLay,{recyclerView}))
+.addOnGlobalLayoutListener(ScreenUtil.LayoutListenersBuilder.listViews(mainLay,{recyclerView}))
 
 onNewIntent(activity.getIntent())

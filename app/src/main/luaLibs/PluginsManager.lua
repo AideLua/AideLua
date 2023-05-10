@@ -56,7 +56,7 @@ for index = 1, #virtualEnvCloneList do
     baseVirtualEnv[value] = _ENV[value]
 end
 
--- LuaPluginsManager.setAppTag(appTag)
+LuaPluginsManager.setAppTag(appTag)
 
 ---清空已加载插件的路径列表
 function PluginsManager.clearEnabledPluginPaths()
@@ -88,6 +88,7 @@ function PluginsManager.setActivityName(name)
     baseVirtualEnv.activityName = name--虚拟环境中的值需要单独设置
 end
 
+---设置已启用插件的版本
 ---@param pluginPackageName string 插件包名
 ---@param versionCode number|boolean 软件版本号，true:默认启用，受targetcode控制 或false:停用插件
 function PluginsManager.setEnabledVersion(pluginPackageName, versionCode)
@@ -95,6 +96,9 @@ function PluginsManager.setEnabledVersion(pluginPackageName, versionCode)
     return PluginsManager
 end
 
+---获取已启用插件的版本
+---@param pluginPackageName string 插件包名
+---@return number|boolean enabledVersion 软件版本号，true:默认启用，受targetcode控制 或false:停用插件
 function PluginsManager.getEnabledVersion(pluginPackageName)
     local enabledVersion = getSharedData("plugin_" .. pluginPackageName .. "_enabled")
     if enabledVersion == nil then
@@ -105,12 +109,12 @@ end
 
 ---设置插件启用状态
 ---储存值：number|boolean 软件版本号，true:默认启用，受targetcode控制 或false:停用插件
----@param pluginPackageName string 插件包名
+---@param pluginConfig table 插件配置
 ---@param enabled boolean 状态，自动判断
 function PluginsManager.setEnabled(pluginConfig, enabled)
     local pluginPackageName = pluginConfig.packagename
     local enabledVersionCode =
-        PluginsManager.setEnabledVersion(pluginPackageName, versionCode)
+        PluginsManager.setEnabledVersion(pluginPackageName, appVersionCode)
     return PluginsManager
 end
 
@@ -118,12 +122,12 @@ function PluginsManager.getEnabled(pluginConfig)
     local pluginPackageName = pluginConfig.packagename
     local enabledVersion = PluginsManager.getEnabledVersion(pluginPackageName)
     local supports = pluginConfig.supported2
-    if enabledVersion and apptype and supports then --只有当enabledVersion为true时才需要判断兼容版本
-        local versionConfig = supports[apptype]
+    if enabledVersion and appTag and supports then --只有当enabledVersion为true时才需要判断兼容版本
+        local versionConfig = supports[appTag]
         if versionConfig then
             local minVerCode = versionConfig.mincode
             local targetVerCode = versionConfig.targetcode
-            --进行版本校验
+            --进行版本校验，最低版本大于软件版本，或者目标版本小于软件版本并且没有强制启用
             if (minVerCode and minVerCode > appVersionCode)
                 or (targetVerCode and targetVerCode < appVersionCode and enabledVersion ~= appVersionCode) then
                 return false
@@ -133,20 +137,21 @@ function PluginsManager.getEnabled(pluginConfig)
     return toboolean(enabledVersion)
 end
 
----获取插件可用状态
----@return boolean available 是否启用
+--[[ ---获取插件可用状态
+---@param packageName string 插件包名
+---@return boolean available 是否可用
 function PluginsManager.getAvailable(packageName)
     local path = getPluginPath(packageName)
     if not (File(path).isDirectory()) then
         return false
     end
     return PluginsManager.getEnabled(packageName)
-end
+end ]]
 
 ---新建插件环境表
 ---@return table virtualEnv 虚拟环境表
-function PluginsManager.newPluginEnv()
-    local virtualEnv = {}
+function PluginsManager.newPluginEnv(virtualEnv)
+    virtualEnv = virtualEnv or {}
     virtualEnv._G = virtualEnv
     virtualEnv._ENV = virtualEnv
 
@@ -159,7 +164,8 @@ end
 ---@return table pluginConfig
 function PluginsManager.loadPluginConfig(pluginPath)
     local configPath = pluginPath .. "/init.lua"
-    local virtualEnv = PluginsManager.newPluginEnv()
+    local virtualEnv
+    PluginsManager.newPluginEnv(virtualEnv)
 end
 
 function PluginsManager.loadPlugin(pluginPath)

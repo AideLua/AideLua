@@ -200,7 +200,6 @@ folderIconsIdsToBeAdded=nil
 --FilesBrowserManager.folderIconIds = folderIconIds
 
 --一些需要单独拿出来的图标
----@enum
 ---@type table<string,Drawable>
 specialIconDrawables = {
     folder = activity.getDrawable(rDrawable.ic_folder_outline).setTint(specialColorsMap.folder),

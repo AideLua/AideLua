@@ -32,7 +32,7 @@ local fastImport = {
     MyToast = LIBRARY_PACKAGE_NAME .. ".util.MyToast",
     getNetErrorStr = LIBRARY_PACKAGE_NAME .. ".util.getNetErrorStr",
     MyAnimationUtil = LIBRARY_PACKAGE_NAME .. ".util.MyAnimationUtil",
-    ScreenFixUtil = LIBRARY_PACKAGE_NAME .. ".util.ScreenFixUtil",
+    ScreenUtil = LIBRARY_PACKAGE_NAME .. ".util.ScreenUtil",
     FileUtil = LIBRARY_PACKAGE_NAME .. ".util.FileUtil",
     ClearContentHelper = LIBRARY_PACKAGE_NAME .. ".helper.ClearContentHelper",
     -- 导入各种风格的控件
@@ -292,10 +292,10 @@ function showLoadingDia(message, title, cancelable)
     if not (loadingDia) then
         import "android.app.ProgressDialog"
         loadingDia = ProgressDialog(context)
-        loadingDia.setProgressStyle(ProgressDialog.STYLE_SPINNER)              -- 进度条类型
+        loadingDia.setProgressStyle(ProgressDialog.STYLE_SPINNER)                  -- 进度条类型
         loadingDia.setTitle(title or context.getString(R.string.jesse205_loading)) -- 标题
-        loadingDia.setCancelable(cancelable or false)                          -- 是否可以取消
-        loadingDia.setCanceledOnTouchOutside(cancelable or false)              -- 是否可以点击外面取消
+        loadingDia.setCancelable(cancelable or false)                              -- 是否可以取消
+        loadingDia.setCanceledOnTouchOutside(cancelable or false)                  -- 是否可以点击外面取消
         loadingDia.setOnCancelListener({
             onCancel = function()
                 loadingDia = nil -- 如果取消了，就把 loadingDia 赋值为空，视为没有正在展示的加载中对话框

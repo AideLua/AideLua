@@ -28,7 +28,7 @@ return {
                     "AppPath", "ThemeUtil", "EditDialogBuilder", "ImageDialogBuilder",
                     "MyToast", "AutoToolbarLayout", "PermissionUtil", "MyStyleUtil",
                     "AutoCollapsingToolbarLayout", "SettingsLayUtil", "jesse205",
-                    "StyleWidget", "ScreenFixUtil", "FileUriUtil", "ClearContentHelper",
+                    "StyleWidget", "ScreenUtil", "FileUriUtil", "ClearContentHelper",
                     "MyAnimationUtil", "FileUtil", "AnimationHelper",
 
                     --自定义View
@@ -71,7 +71,7 @@ function onConfigurationChanged(config)
 end
 
 
-screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
+screenConfigDecoder=ScreenUtil.ScreenConfigDecoder({
 
 })
 

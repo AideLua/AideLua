@@ -40,11 +40,11 @@ end
   }
 }]]
 ---弹出权限申请对话框
----@param permissionsItemsList table[]
+---@param permissionsItemList table[]
 ---@param requestCode number 回调代码
-function _M.askForRequestPermissions(permissionsItemsList,requestCode)
-  for index=1,#permissionsItemsList do
-    local permissionsItem=permissionsItemsList[index]
+function _M.askForRequestPermissions(permissionsItemList,requestCode)
+  for index=1,#permissionsItemList do
+    local permissionsItem=permissionsItemList[index]
     local permissions=permissionsItem.permissions
     if not(_M.check(permissions)) then
       local builder=AlertDialog.Builder(activity)

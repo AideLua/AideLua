@@ -207,7 +207,7 @@ import "jesse205"
       "AppPath","ThemeUtil","EditDialogBuilder","ImageDialogBuilder",
       "MyToast","AutoToolbarLayout","PermissionUtil","MyStyleUtil",
       "AutoCollapsingToolbarLayout","SettingsLayUtil","jesse205",
-      "StyleWidget","ScreenFixUtil","FileUriUtil","ClearContentHelper",
+      "StyleWidget","ScreenUtil","FileUriUtil","ClearContentHelper",
       "MyAnimationUtil","FileUtil","AnimationHelper",
 
       --自定义View

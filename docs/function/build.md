@@ -1,9 +1,10 @@
 未完待续
+
 # 构建项目
 
 要二次打包，就先要构建项目
 
-您可以选择使用 Termux 原生方法、[AIDE Pro](https://www.aidepro.top/) 或者 Android IDE 来构建项目
+您可以选择使用 [Termux](https://github.com/termux/termux-app) 原生方法、[AIDE Pro](https://www.aidepro.top/) 或者 Android IDE 来构建项目
 
 Aide Lua 的构建项目是通过调用 Termux 来实现的。因此，您需要手动配置环境。
 
@@ -25,7 +26,7 @@ Termux 有三个官方下载渠道
 
 ### 一、安装 Gradle 与 Java
 
-[使用Termux构建Android Studio项目](https://www.coolapk.com/feed/19454309?shareKey=ODEwZWY2ZDg0YjQ3NjNjZjRlNTc~&shareUid=1432137&shareFrom=com.coolapk.market_13.0.1)
+* [使用Termux构建Android Studio项目](https://www.coolapk.com/feed/19454309?shareKey=ODEwZWY2ZDg0YjQ3NjNjZjRlNTc~&shareUid=1432137&shareFrom=com.coolapk.market_13.0.1)
 
 ### 二、允许第三方应用执行命令
 

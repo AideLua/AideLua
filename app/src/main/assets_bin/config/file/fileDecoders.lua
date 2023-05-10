@@ -3,6 +3,7 @@
 
 
 ---@type table<string, FileDecoder> 文件解析器
+---@deprecated
 return {
     txt = {
         editor = "CodeEditor",

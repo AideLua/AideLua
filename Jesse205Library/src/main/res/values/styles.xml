@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="PrivateResource">
 
+    <!-- 字体 -->
     <style name="TextAppearance.Jesse205.Widget.PopupMenu.Header" parent="TextAppearance.AppCompat.Widget.PopupMenu.Header">
         <item name="android:textColor">?colorPrimary</item>
     </style>
 
     <!--控件-->
 
-    <!-- Chip修改为Outlined样式 -->
+    <!-- Chip 修改为 Outlined样式 -->
     <style name="Widget.Jesse205.Chip" parent="Widget.MaterialComponents.Chip.Action">
         <item name="chipStrokeWidth">@dimen/mtrl_btn_stroke_size</item>
         <item name="chipStrokeColor">@color/jesse205_chip_stroke_color</item>
-        <item name="chipCornerRadius">4dp</item>
+        <item name="chipCornerRadius">@dimen/jesse205_chip_corner_size</item>
         <item name="chipBackgroundColor">@color/jesse205_chip_background_color</item>
         <item name="rippleColor">@color/jesse205_chip_ripple_color</item>
         <item name="android:textColor">@color/jesse205_chip_text_color</item>
-        <item name="android:elevation">-4dp</item>
+        <item name="android:elevation">@dimen/jesse205_chip_elevated_elevation</item>
     </style>
 
     <!-- 列表去除分割线 -->
@@ -82,9 +83,7 @@
     <!--原生对话框-->
     <style name="Theme.Jesse205.Framework.Dialog.Alert" parent="android:Theme.Material.Light.Dialog.Alert">
         <item name="android:colorAccent">?colorAccent</item>
-        <item name="android:windowBackground" tools:ignore="PrivateResource">
-            @drawable/mtrl_dialog_background
-        </item>
+        <item name="android:windowBackground">@drawable/mtrl_dialog_background</item>
         <item name="android:backgroundDimAmount">0.32</item>
         <item name="colorBackgroundFloating">?dialogBackgroundColor</item>
         <item name="colorSurface">?dialogBackgroundColor</item>
@@ -92,9 +91,7 @@
 
     <style name="Theme.Jesse205.Framework.Dark.Dialog.Alert" parent="android:Theme.Material.Dialog.Alert">
         <item name="android:colorAccent">?colorAccent</item>
-        <item name="android:windowBackground" tools:ignore="PrivateResource">
-            @drawable/mtrl_dialog_background
-        </item>
+        <item name="android:windowBackground">@drawable/mtrl_dialog_background</item>
         <item name="android:backgroundDimAmount">0.32</item>
         <item name="colorBackgroundFloating">?dialogBackgroundColor</item>
         <item name="colorSurface">?dialogBackgroundColor</item>
@@ -102,9 +99,7 @@
 
 
     <style name="ThemeOverlay.Jesse205.Dialog.Alert" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="android:windowBackground" tools:ignore="PrivateResource">
-            @drawable/mtrl_dialog_background
-        </item>
+        <item name="android:windowBackground">@drawable/mtrl_dialog_background</item>
         <item name="android:backgroundDimAmount">0.32</item>
         <item name="colorBackgroundFloating">?dialogBackgroundColor</item>
         <item name="colorSurface">?dialogBackgroundColor</item>
@@ -114,7 +109,7 @@
     <style name="ThemeOverlay.Jesse205.ActionBar.Primary" parent="ThemeOverlay.MaterialComponents.ActionBar.Primary">
         <item name="colorControlNormal">@color/jesse205_on_primary</item>
         <item name="actionMenuTextColor">@color/jesse205_on_primary</item>
-        <!--<item name="elevation">4dp</item>-->
+        <item name="elevation">4dp</item>
         <item name="cardBackgroundColor">@color/jesse205_white_ripple</item>
         <item name="rippleColor">@color/jesse205_white_ripple</item>
     </style>
@@ -124,7 +119,7 @@
         <!--设置图标颜色和文字颜色，文字颜色拥有不同的状态-->
         <item name="colorControlNormal">@color/jesse205_on_surface</item>
         <item name="actionMenuTextColor">@color/jesse205_on_surface</item>
-        <!--<item name="elevation">4dp</item>-->
+        <item name="elevation">4dp</item>
     </style>
 
     <style name="ThemeOverlay.Jesse205.Dark" parent="@style/ThemeOverlay.AppCompat.Dark">

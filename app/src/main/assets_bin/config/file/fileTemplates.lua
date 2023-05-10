@@ -2,7 +2,7 @@ return {
     {
         name = "Lua 活动 (Activity)", --有enName时就是中文名，没enName时就是英文名
         enName = "Lua Activity",    --英文名
-        id = "luaactivity",         --标识
+        id = "luaactivity",         --标识，用来排序
         fileExtension = "lua",      --扩展名
         --在 v5.1.0(51099) 改名为 content
         content = [[require "import"
@@ -26,8 +26,6 @@ end
 
 ]],
     },
-    
-
     {
         name = "Lua 布局 (Layout)",
         enName = "Lua Layout",

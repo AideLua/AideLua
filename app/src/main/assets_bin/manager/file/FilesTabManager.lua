@@ -1,33 +1,4 @@
 ---@class FilesTabManager
---[[
-FilesTabManager: metatable(class): 文件标签管理器，兼职管理文件的读写与保存
-FilesTabManager.openState; FilesTabManager.getOpenState(): boolean: 文件打开状态
-FilesTabManager.file; FilesTabManager.getFile(): java.io.File: 现在打开的文件
-FilesTabManager.fileConfig; FilesTabManager.getFileConfig(): table(map): 现在打开的文件的配置
-FilesTabManager.fileType; FilesTabManager.getFileType(): string: 现在打开的文件扩展名
-FilesTabManager.openedFiles; FilesTabManager.getOpenedFiles(): table(map): 已打开的文件列表，以lowerPath作为键
-  数据格式:{
-   ["/绝对路径.lua"]={
-     file=File(),
-     path="/path1.lua",
-     oldContent="content1",
-     newContent="content2",
-     lowerPath="/path1.lua",
-     edited=true,
-     }
-   ...
-   }
-FilesTabManager.openFile(file,fileType): 打开文件
-  file: java.io.File: 要打开的文件
-  fileType: string: 文件扩展名
-FilesTabManager.saveFile(): 保存当前编辑的文件
-FilesTabManager.saveAllFiles(): 保存所有文件
-FilesTabManager.closeFile(lowerFilePath,removeTab,changeEditor): 关闭文件
-  lowerFilePath: string: 小写的文件路径
-  removeTab: boolean: 是否移除Tab，默认为true
-  changeEditor: boolean: 是否未打开文件时自动改变编辑器，默认为true
-FilesTabManager.init(): 初始化管理器
-]]
 local FilesTabManager = {}
 local openState, file, fileConfig, fileType = false, nil, nil, nil
 local openedFiles = {}

@@ -40,6 +40,6 @@
       end
     })
     mainLay.ViewTreeObserver
-    .addOnGlobalLayoutListener(ScreenFixUtil.LayoutListenersBuilder.layoutManagers(mainLay,{layoutManager}))
+    .addOnGlobalLayoutListener(ScreenUtil.LayoutListenersBuilder.layoutManagers(mainLay,{layoutManager}))
   end,
 }

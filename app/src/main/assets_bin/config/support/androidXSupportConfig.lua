@@ -1,9 +1,7 @@
 return {
     editor = {
         LuaEditor = {
-            keywordsList = {
-
-            },
+            keywordsList = {}
         }
     },
     fileTemplates = {
@@ -38,7 +36,7 @@ activity.finish()
 end
 end
 
-]],
-        },
+]]
+        }
     }
 }

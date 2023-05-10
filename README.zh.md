@@ -12,22 +12,23 @@
 
 ![cover](images/ic_cover-aidelua.png)
 
-###### 语言 | Language:
+## 语言 | Language
 
-中文 | [English](READNE_en.md)
+* 中文
+* [English](READNE_en.md)
 
 ## 注意 | Alert
 
-如需使用源代码，请进入 [发行版 (Gitee)](https://gitee.com/AideLua/AideLua/releases/latest) 页面下载。   
+如需使用源代码，请进入 [发行版 (Gitee)](https://gitee.com/AideLua/AideLua/releases/latest) 页面下载。<br>
 If you need to use the source code, please go to the [releases (Github)](https://github.com/AideLua/AideLua/releases/latest) page to download.
 
-请不要在 Github 内直接更改此仓库，因为 Github 的仓库是由 Gitee 镜像过去的。   
+请不要在 Github 内直接更改此仓库，因为 Github 的仓库是由 Gitee 镜像过去的。<br>
 Please not to change the repository directly in Github, because Github's repository is mirrored by Gitee。
 
 ## 简介
 
-Aide Lua 是一款依赖 Aide 的 Lua 编辑器   
-Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件开发   
+Aide Lua 是一款依赖 Aide 的 Lua 编辑器<br>
+Aide Lua 可以让您在移动设备上也能享受高级的、快速的软件开发<br>
 Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 
 ## 下载
@@ -77,6 +78,7 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 ![步骤2](images/releases/step2.jpg)
 
 ## 使用教程
+
 [视频教程](https://space.bilibili.com/1229937144) |
 [使用文档](https://aidelua.github.io/AideLua/)
 
@@ -110,6 +112,10 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio
 2. 新建 Feat_xxx 分支
 3. 提交代码
 4. 新建 Pull Request
+
+### 翻译
+
+Aide Lua 使用了两套国际化系统。一套是 Android 原生国际化方案，另一套是 [i18n.lua](https://github.com/kikito/i18n.lua)。
 
 ## 历史星标数
 

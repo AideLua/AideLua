@@ -12,7 +12,16 @@
         "cardview",
         "swiperefreshlayout",
         "textview",
-        "bumptech"
+        "bumptech",
+        "nirenr",
+        "luaj",
+        "gitee",
+        "Draggable",
+        "Termux",
+        "fullscreen",
+        "toboolean",
+        "aidepro",
+        "mipmap"
     ],
     "cSpell.words": [
         "androidx",
@@ -55,6 +64,21 @@
     },
     "Lua.runtime.unicodeName": true,
     "Lua.semantic.keyword": true,
-    "color-highlight.enable": false,
-    
+    "markdownlint.config": {
+        "default": true,
+        "MD033": {
+            "allowed_elements": [
+                "Badge",
+                "br"
+            ]
+        }
+    },
+    "gitConfigUser.profiles": [
+        {
+            "label": "Jesse205",
+            "email": "2055675594@qq.com",
+            "userName": "Jesse205",
+            "selected": true
+        }
+    ]
 }

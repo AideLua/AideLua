@@ -1,3 +1,3 @@
 return {
-  theme_darkactionbar=false,
+    theme_darkactionbar = false,
 }

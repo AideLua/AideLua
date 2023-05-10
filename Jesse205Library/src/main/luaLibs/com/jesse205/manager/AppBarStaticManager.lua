@@ -1,0 +1,3 @@
+local AppBarStaticManager = {}
+
+return AppBarStaticManager

@@ -17,7 +17,7 @@ function onConfigurationChanged(config)
 end
 
 
-screenConfigDecoder=ScreenFixUtil.ScreenConfigDecoder({
+screenConfigDecoder=ScreenUtil.ScreenConfigDecoder({
 
 })
 

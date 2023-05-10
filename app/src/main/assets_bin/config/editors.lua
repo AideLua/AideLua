@@ -9,7 +9,7 @@ return {
                 name = "空",
                 description = "未打开文件"
             }
-        },
+        }
     },
     {
         name = "Lua Editor",
@@ -42,6 +42,7 @@ return {
             editor.setBoldTypeface(boldTypeface)
             editor.setItalicTypeface(italicTypeface)
         end,
+        supportedFiles = {"lua", "aly"}
     },
     {
         name = "Sora Code Editor",
@@ -50,9 +51,31 @@ return {
         locale = {
             zh = {
                 name = "Sora 代码编辑器",
-                description = "Sora 代码编辑器"
+                description = "查看与编写代码"
             }
         },
+        supportedFiles = {
+            -- Lua
+            "lua",
+            "aly",
+            -- Java
+            "java",
+            "kt",
+            -- 网页
+            "js",
+            "ts",
+            "css",
+            "scss",
+            "less",
+            -- 文档
+            "md",
+            "markdown",
+            "txt",
+            -- 数据存储
+            "json",
+            "xml",
+            "ini"
+        }
     },
     {
         name = "Layout Viewer",
@@ -61,9 +84,9 @@ return {
         locale = {
             zh = {
                 name = "布局查看器",
-                description = "布局查看器"
+                description = "查看 Lua 布局"
             }
-        },
+        }
     },
     {
         name = "Image Viewer",
@@ -72,19 +95,30 @@ return {
         locale = {
             zh = {
                 name = "图片查看器",
-                description = "图片查看器"
+                description = "查看 PNG、JPG 等类型的图片"
             }
-        },
+        }
     },
     {
-        name = "HTML Viewer",
-        type = "html_viewer",
+        name = "Web Viewer",
+        type = "web_viewer",
         description = "HTML Viewer",
         locale = {
             zh = {
-                name = "HTML 查看器",
-                description = "HTML 查看器"
+                name = "网页浏览器",
+                description = "查看 HTML、SVG，预览视频和音频"
             }
-        },
+        }
+    },
+    {
+        name = "Markdown Viewer",
+        type = "markdown_viewer",
+        description = "View Markdown file",
+        locale = {
+            zh = {
+                name = "Markdown 查看器",
+                description = "查看 Markdown 文件"
+            }
+        }
     }
 }
