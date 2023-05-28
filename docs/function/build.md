@@ -32,27 +32,32 @@ Termux 有三个官方下载渠道
 
 1. 下载 [质感文件](https://www.coolapk.com/apk/me.zhanghai.android.files) 与 [App Manager](https://f-droid.org/packages/io.github.muntashirakon.AppManager/)
 2. 打开 AOSP 的“文件”应用程序
-    ``` sh:no-line-numbers
-    # 对于部分隐藏了“文件”应用程序的定制系统，您可以在 Termux 执行以下命令启动“文件”应用程序
-    am start com.android.documentsui/.LauncherActivity
-    ```
-3. 在“浏览其他应用中的文件”板块中选择“Termux”
-4. 进入 `.termux` 目录，使用“意图拦截器”打开 `termux.properties` 文件
-5. 将「MIME 类型」修改为 `text/plain` 
-6. 选择「发送编辑过的意图」，然后选择质感文件的「文本编辑器」
-7. 将 12 行左右的 `# allow-external-apps = true` 取消注释并保存文件
-    ``` sh:no-line-numbers{4}
-    ### Allow external applications to execute arbitrary commands within Termux.
-    ### This potentially could be a security issue, so option is disabled by
-    ### default. Uncomment to enable.
-    allow-external-apps = true
 
-    ### Default working directory that will be used when launching the app.
-    # default-working-directory = /data/data/com.termux/files/home
-    ```
+``` sh:no-line-numbers
+# 对于部分隐藏了“文件”应用程序的定制系统，您可以在 Termux 执行以下命令启动“文件”应用程序
+am start com.android.documentsui/.LauncherActivity
+```
+
+1. 在“浏览其他应用中的文件”板块中选择“Termux”
+2. 进入 `.termux` 目录，使用“意图拦截器”打开 `termux.properties` 文件
+3. 将「MIME 类型」修改为 `text/plain`
+4. 选择「发送编辑过的意图」，然后选择质感文件的「文本编辑器」
+5. 将 12 行左右的 `# allow-external-apps = true` 取消注释并保存文件
+
+``` sh:no-line-numbers{4}
+### Allow external applications to execute arbitrary commands within Termux.
+### This potentially could be a security issue, so option is disabled by
+### default. Uncomment to enable.
+allow-external-apps = true
+
+### Default working directory that will be used when launching the app.
+# default-working-directory = /data/data/com.termux/files/home
+```
+
 ::: tip
-如果您的文件管理器可以直接打开 `termux.properties` 文件，您就可以忽略 (5) 和 (6) 步，直接使用您的文件管理器打开此文件。
+如果您的文件管理器可以直接打开 `termux.properties` 文件，您就可以忽略 (2) 到 (4) 步，直接使用您的文件管理器打开此文件。
 :::
+
 ::: warning
 请不要使用「MT管理器」 `v2.13.0` 之前的版本打开此文件。因为某些原因可能无法保存。
 :::
@@ -82,3 +87,4 @@ AIDE Pro 可以使用两种构建工具：
 
 ### Gradle
 
+敬请期待

@@ -257,7 +257,7 @@ function onCreateOptionsMenu(menu)
     --buildMenu.setEnabled(false)
 
     screenConfigDecoder.events.menus = {
-                                       -- 自动刷新菜单显示
+        -- 自动刷新菜单显示
         [600] = { codeMenu, toolsMenu },
         [800] = { fileMenu, projectMenu, moreMenu, pluginsMenu }
     }
@@ -295,13 +295,13 @@ function onOptionsItemSelected(item)
     local aRid = android.R.id
     local editorActions = EditorsManager.actions
     --小心switch的bug
-    if id == aRid.home then       -- 菜单键
+    if id == aRid.home then         -- 菜单键
         FilesBrowserManager.switchState()
     elseif id == Rid.menu_undo then -- 撤销
         editorActions.undo()
     elseif id == Rid.menu_redo then -- 重装
         editorActions.redo()
-    elseif id == Rid.menu_run then -- 运行
+    elseif id == Rid.menu_run then  -- 运行
         if ProjectManager.openState then
             ProjectManager.smartRunProject()
         else
@@ -339,19 +339,19 @@ function onOptionsItemSelected(item)
                 },
             })
         end
-    elseif id == Rid.menu_project_reopen then -- 重新打开项目
-        ProjectManager.reopenProject()        --函数内已判断打开状态
-    elseif id == Rid.menu_project_close then  -- 关闭项目
+    elseif id == Rid.menu_project_reopen then   -- 重新打开项目
+        ProjectManager.reopenProject()          --函数内已判断打开状态
+    elseif id == Rid.menu_project_close then    -- 关闭项目
         ProjectManager.closeProject()
-    elseif id == Rid.menu_file_save then      -- 保存
+    elseif id == Rid.menu_file_save then        -- 保存
         FilesTabManager.saveAllFiles(true)
-    elseif id == Rid.menu_file_reopen then    -- 重新打开文件
-        FilesTabManager.reopenFile()          --函数内已判断打开状态
-    elseif id == Rid.menu_file_close then     -- 关闭文件
+    elseif id == Rid.menu_file_reopen then      -- 重新打开文件
+        FilesTabManager.reopenFile()            --函数内已判断打开状态
+    elseif id == Rid.menu_file_close then       -- 关闭文件
         FilesTabManager.closeFile()
-    elseif id == Rid.menu_code_format then    -- 格式化
+    elseif id == Rid.menu_code_format then      -- 格式化
         editorActions.format()
-    elseif id == Rid.menu_code_search then    -- 代码搜索
+    elseif id == Rid.menu_code_search then      -- 代码搜索
         EditorsManager.startSearch()
     elseif id == Rid.menu_code_checkImport then -- 检查导入
         if EditorsManager.isEditor() then
@@ -361,11 +361,11 @@ function onOptionsItemSelected(item)
             end
             newSubActivity("FixImport", { EditorsManager.actions.getText(), packageName })
         end
-    elseif id == Rid.menu_tools_javaApiViewer then        -- JavaAPI浏览器
+    elseif id == Rid.menu_tools_javaApiViewer then          -- JavaAPI浏览器
         newSubActivity("JavaApi", true)
     elseif id == Rid.menu_tools_javaApiViewer_windmill then -- JavaAPI浏览器
         startWindmillActivity("Java API")
-    elseif id == Rid.menu_tools_logCat then               -- 日志猫
+    elseif id == Rid.menu_tools_logCat then                 -- 日志猫
         if ProjectManager.openState then
             ProjectManager.runProject(checkSharedActivity("LogCat"))
         else
@@ -373,17 +373,17 @@ function onOptionsItemSelected(item)
         end
     elseif id == Rid.menu_tools_httpDebugging_windmill then -- Http 调试
         startWindmillActivity("Http 调试")
-    elseif id == Rid.menu_tools_luaManual_windmill then   -- Lua 手册
+    elseif id == Rid.menu_tools_luaManual_windmill then     -- Lua 手册
         startWindmillActivity("手册")
-    elseif id == Rid.menu_tools_manual then               -- 使用手册
+    elseif id == Rid.menu_tools_manual then                 -- 使用手册
         openUrl(DOCS_URL)
-    elseif id == Rid.menu_more_settings then              -- 设置
+    elseif id == Rid.menu_more_settings then                -- 设置
         newSubActivity("Settings")
-    elseif id == Rid.menu_more_about then                 -- 关于
+    elseif id == Rid.menu_more_about then                   -- 关于
         newSubActivity("About")
-    elseif id == Rid.menu_code_checkCode then             -- 代码查错
+    elseif id == Rid.menu_code_checkCode then               -- 代码查错
         editorActions.check(true)
-    elseif id == Rid.menu_tools_layoutHelper then         -- 布局助手
+    elseif id == Rid.menu_tools_layoutHelper then           -- 布局助手
         FilesTabManager.saveFile()
         local prjPath, filePath
         if ProjectManager.openState then
@@ -673,6 +673,7 @@ end
 toggle = ActionBarDrawerToggle(activity, drawer, R.string.drawer_open, R.string.drawer_close)
 drawer.addDrawerListener(toggle)
 
+DecodeCenter.init()
 FilesTabManager.initViews()
 EditorsManager.initViews()
 FilesBrowserManager.initViews()

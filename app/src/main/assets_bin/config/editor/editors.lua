@@ -1,10 +1,11 @@
 return {
     {
-        name = "None",
-        type = "none",
-        description = "No files opened",
-        layout = "layout.editor.none",
-        locale = {
+        name = "None",                   --名称
+        type = "none",                   --类型，不可重复
+        description = "No files opened", --简介
+        layout = "layout.editor.none",   --布局文件
+        locale =                         --本地化信息
+        {
             zh = {
                 name = "空",
                 description = "未打开文件"
@@ -26,15 +27,17 @@ return {
             --TODO: 初始化 Lua 编辑器
         end,
         onOpenFile = function(self, viewsMap, fileCfg)
-            --TODO: 使用安全的方法读取文件
+            --TODO: 使用安全的公共方法读取文件
             print("file: " .. dump(fileCfg))
             local editor = viewsMap.editor
         end,
+        ---文件保存时
         onSaveFile = function(self, viewsMap, fileCfg)
-            --TODO: 使用安全的方法保存文件
+            --TODO: 使用安全的方法公共方法保存文件
             local editor = viewsMap.editor
             FilesManager.saveTextFile(fileCfg)
         end,
+        ---字体改变时
         onTypefaceChange = function(self, viewsMap, typeface, boldTypeface, italicTypeface)
             ---@type LuaEditor
             local editor = viewsMap.editor
@@ -42,7 +45,11 @@ return {
             editor.setBoldTypeface(boldTypeface)
             editor.setItalicTypeface(italicTypeface)
         end,
-        supportedFiles = {"lua", "aly"}
+        ---模板解析时
+        onDecodeSupport = function(self, viewsMap)
+
+        end,
+        supportedFiles = { "lua", "aly" }
     },
     {
         name = "Sora Code Editor",

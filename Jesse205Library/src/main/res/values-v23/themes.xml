@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Platform.V23.Theme.Jasse205.Material2" parent="Platform.V21.Theme.Jasse205.Material2">
+    <style name="Platform.V23.Theme.Jesse205.Material2" parent="Platform.V21.Theme.Jesse205.Material2">
         <item name="colorPrimaryDark">@color/jesse205_system_window_scrim</item>
         <item name="android:windowLightStatusBar">?windowLightStatusBar</item>
     </style>
-    <style name="Platform.Theme.Jasse205.Material2" parent="Platform.V23.Theme.Jasse205.Material2" />
+    <style name="Platform.Theme.Jesse205.Material2" parent="Platform.V23.Theme.Jesse205.Material2" />
 
 </resources>

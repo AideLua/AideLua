@@ -2,7 +2,7 @@ return {
     {
         name = "Lua 活动 (Activity)", --有enName时就是中文名，没enName时就是英文名
         enName = "Lua Activity",    --英文名
-        id = "luaactivity",         --标识，用来排序
+        id = "lua_activity",         --标识，用来排序
         fileExtension = "lua",      --扩展名
         --在 v5.1.0(51099) 改名为 content
         content = [[require "import"
@@ -29,7 +29,7 @@ end
     {
         name = "Lua 布局 (Layout)",
         enName = "Lua Layout",
-        id = "lualayout",
+        id = "lua_layout",
         fileExtension = "aly",
         content = [[{
   LinearLayout;
@@ -49,7 +49,7 @@ end
     {
         name = "Lua 布局 (Layout)（AndroidX）",
         enName = "Lua Layout (AndroidX)",
-        d = "lualayout_androidx",
+        d = "lua_layout_androidx",
         fileExtension = "aly",
         enabledVar = "oldAndroidXSupport",
         content = [[{
@@ -70,7 +70,7 @@ end
     {
         name = "Lua 表 (Table)",
         enName = "Lua Table",
-        id = "luatable",
+        id = "lua_table",
         fileExtension = "aly",
         content = [[{
 
@@ -80,7 +80,7 @@ end
     {
         name = "Lua 模块 (Module)",
         enName = "Lua Module",
-        id = "luamodule",
+        id = "lua_module",
         fileExtension = "lua",
         content = [[local {{ShoredModuleName}}={}
 setmetatable({{ShoredModuleName}},{{ShoredModuleName}})
@@ -98,7 +98,7 @@ return {{ShoredModuleName}}
     {
         name = "空 Lua 文件",
         enName = "Empty Lua File",
-        id = "emptyfile_lua",
+        id = "lua_empty",
         fileExtension = "lua",
         content = "",
     },

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Platform.V29.Theme.Jasse205.Material2" parent="Platform.V28.Theme.Jasse205.Material2">
+    <style name="Platform.V29.Theme.Jesse205.Material2" parent="Platform.V28.Theme.Jesse205.Material2">
         <item name="android:forceDarkAllowed">false</item>
     </style>
 
-    <style name="Platform.Theme.Jasse205.Material2" parent="Platform.V29.Theme.Jasse205.Material2" />
+    <style name="Platform.Theme.Jesse205.Material2" parent="Platform.V29.Theme.Jesse205.Material2" />
 </resources>

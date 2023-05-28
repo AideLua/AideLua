@@ -1,8 +1,11 @@
 # 项目模板介绍
+
 ## 文件说明
+
 Aide Lua 的模板支持字模板。因此您编写的时候可以套娃。
 
 ::: details 这是我们的模板结构
+
 ``` 文件树:no-line-numbers
 templates   <-- 模板根文件夹
 │  config.lua   <-- * 模板配置文件
@@ -38,11 +41,13 @@ templates   <-- 模板根文件夹
 ```
 
 :::
+
 ### config.lua
 
 ### pageConfigs.aly
 
 ### baseTemplate/
+
 存放基本模板的地方
 
 | 文件 | 说明 |

@@ -1,20 +1,18 @@
 import "java.io.FileOutputStream"
----@deprecated
-local PluginsManagerUtil = {}
-local getAlpInfo, showInstallDialog
-local PackInfo = activity.PackageManager.getPackageInfo(activity.getPackageName(), 64)
-local versionCode = PackInfo.versionCode
 
-function getAlpInfo(path)
+---插件助手，用于安装和卸载插件
+---@class PluginsManagerHelper
+local PluginsManagerHelper = {}
+local function getAlpInfo(path)
     local config = {}
     loadstring(tostring(String(LuaUtil.readZip(path, "init.lua"))), "bt", "bt", config)()
     return config
 end
 
-PluginsManagerUtil.getAlpInfo = getAlpInfo
+PluginsManagerHelper.getAlpInfo = getAlpInfo
 
 
-function showInstallDialog(path, uri, config, callback, deleteFile)
+local function showInstallDialog(path, uri, config, callback, deleteFile)
     local mode = config.mode
     if mode == "plugin" or mode == nil then
         local packageName = config.packagename
@@ -32,7 +30,7 @@ URI: %s",
             uri)
         local supported = config.supported2
         local waringId
-        if supported then  --插件指定了受支持的应用
+        if supported then        --插件指定了受支持的应用
             local limitVersion = supported[apptype]
             if limitVersion then --支持此应用
                 if limitVersion.targetcode < versionCode then
@@ -74,9 +72,9 @@ URI: %s",
     end
 end
 
-PluginsManagerUtil.showInstallDialog = showInstallDialog
+PluginsManagerHelper.showInstallDialog = showInstallDialog
 
-function PluginsManagerUtil.installByUri(uri, callback)
+function PluginsManagerHelper.installByUri(uri, callback)
     local scheme = uri.getScheme()
     local path, deleteFile
     if scheme == "content" then
@@ -97,7 +95,7 @@ function PluginsManagerUtil.installByUri(uri, callback)
         local supported = config.supported2
         if supported then
             local limitVersion = supported[apptype]
-            if limitVersion then                 --支持此APP
+            if limitVersion then                           --支持此APP
                 if limitVersion.mincode > versionCode then --在最低版本之上
                     showErrorDialog(R.string.plugins_error_update_app)
                 else
@@ -114,22 +112,17 @@ function PluginsManagerUtil.installByUri(uri, callback)
     end
 end
 
---[[PluginsManagerUtil.uninstall(path, {appname="AppName"},function(state)
-  if state=="success" then
-    elseif state=="failed" then
-  end
-end)]]
-function PluginsManagerUtil.uninstall(path, config, callback)
+function PluginsManagerHelper.uninstall(path, config, callback)
     local dir = File(path)
     local dirName = dir.getName()
     AlertDialog.Builder(this)
         .setTitle(formatResStr(R.string.uninstall_withName, { config.appname or dirName }))
         .setMessage(R.string.plugins_uninstall_warning)
         .setPositiveButton(R.string.uninstall, function()
-            if dir.exists() then                                  --判断一下插件是否存在
-                LuaUtil.rmDir(dir)                                --移除插件
+            if dir.exists() then                                            --判断一下插件是否存在
+                LuaUtil.rmDir(dir)                                          --移除插件
                 LuaUtil.rmDir(File(PluginsUtil.getPluginDataPath(dirName))) --移除数据
-                PluginsUtil.setEnabled(dirName, nil)              --移除启用状态
+                PluginsUtil.setEnabled(dirName, nil)                        --移除启用状态
                 PluginsUtil.clearOpenedPluginPaths()
                 callback("success")
             else
@@ -140,4 +133,4 @@ function PluginsManagerUtil.uninstall(path, config, callback)
         .show()
 end
 
-return PluginsManagerUtil
+return PluginsManagerHelper

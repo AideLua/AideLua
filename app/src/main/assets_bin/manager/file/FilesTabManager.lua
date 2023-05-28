@@ -1,4 +1,5 @@
 ---@class FilesTabManager
+---@deprecated
 local FilesTabManager = {}
 local openState, file, fileConfig, fileType = false, nil, nil, nil
 local openedFiles = {}

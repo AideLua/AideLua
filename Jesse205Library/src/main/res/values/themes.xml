@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="Platform.V21.Theme.Jasse205.Material2" parent="Theme.MaterialComponents.DayNight">
+    <style name="Platform.V21.Theme.Jesse205.Material2" parent="Theme.MaterialComponents.DayNight">
         <item name="colorPrimaryDark">@color/jesse205_system_window_scrim_compat</item>
         <item name="android:navigationBarColor">@color/jesse205_system_window_scrim_compat</item>
         <item name="windowLightStatusBar">?isLightTheme</item>
         <item name="windowLightNavigationBar">?isLightTheme</item>
     </style>
 
-    <style name="Platform.Theme.Jasse205.Material2" parent="Platform.V21.Theme.Jasse205.Material2" />
+    <style name="Platform.Theme.Jesse205.Material2" parent="Platform.V21.Theme.Jesse205.Material2" />
 
     <!--基础主题-->
-    <style name="Base.Theme.Jasse205.Bridge" parent="Platform.Theme.Jasse205.Material2">
+    <style name="Base.Theme.Jesse205.Bridge" parent="Platform.Theme.Jesse205.Material2">
         <item name="colorPrimary">@color/jesse205_blue</item>
         <item name="colorPrimaryVariant">?colorPrimary</item>
         <!-- <item name="colorPrimaryDark">?windowBackgroundColor</item> -->
@@ -65,7 +65,7 @@
 
     </style>
 
-    <style name="Base.Theme.Jesse205" parent="Base.Theme.Jasse205.Bridge">
+    <style name="Base.Theme.Jesse205" parent="Base.Theme.Jesse205.Bridge">
 
         <item name="colorSurface">?windowBackgroundColor</item>
         <item name="colorBackgroundFloating">@color/jesse205_white</item>

@@ -1,6 +1,6 @@
 local require = require
 local luajava = luajava
-local type=type
+local type = type
 local table = require "table"
 local loaded = {}
 local imported = {}
@@ -181,8 +181,8 @@ local function env_import(env)
         end
     }
 
-    if type(_env)=="string" then
-        return globalMT.__index({},_env)
+    if type(_env) == "string" then
+        return globalMT.__index({}, _env)
     end
 
     setmetatable(_env, globalMT)
@@ -213,7 +213,6 @@ end
 function _M.compile(name)
     append(dexes, luacontext.loadDex(name))
 end
-
 
 function _M.enum(e)
     return function()
@@ -264,7 +263,7 @@ function _M.dump(o)
                         end
                         table.insert(t, string.format('\r\n%s%s\t= ', string.rep(space, deep - 1), k))
                         if v == NIL then
-                            table.insert(t, string.format('%s ;',"nil"))
+                            table.insert(t, string.format('%s ;', "nil"))
                         elseif type(v) == ('table') then
                             if _t[tostring(v)] == nil then
                                 _t[tostring(v)] = v
@@ -293,7 +292,6 @@ function _M.dump(o)
     t = _ToString(o, '')
     return table.concat(t)
 end
-
 
 function _M.printstack()
     local stacks = {}
@@ -362,9 +360,7 @@ function _M.printstack()
     -- print("_ENV="..dump(ups._ENV or lps._ENV))
 end
 
-
 if activity then
-
     function _M.print(...)
         local buf = {}
         for n = 1, select("#", ...) do
@@ -487,8 +483,8 @@ env_import(_G)
 local luajava_mt = {}
 luajava_mt.__index = function(t, k)
     local b, ret = xpcall(function()
-        return luajava.bindClass((rawget(t, "__name") or "") .. k)
-    end,
+            return luajava.bindClass((rawget(t, "__name") or "") .. k)
+        end,
         function()
             local p = {}
             p.__name = (rawget(t, "__name") or "") .. k .. "."
@@ -501,5 +497,3 @@ end
 setmetatable(luajava, luajava_mt)
 
 return env_import
-
-

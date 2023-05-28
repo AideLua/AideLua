@@ -11,4 +11,8 @@ function EventManager.push(func)
     table.insert(eventList, func)
 end
 
+function EventManager.handleEvents(func)
+    
+end
+
 return EventManager

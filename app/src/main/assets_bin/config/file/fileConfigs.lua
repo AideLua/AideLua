@@ -4,14 +4,17 @@ return {
         noneEditor = "none",
         runCode = {
             defaultEditor = "lua_editor",
-            defaultContent=[[
-                
+            defaultContent = [[
+
             ]]
         }
     },
     fileConfigs = {
         lua = {
             defaultEditor = "lua_editor"
-        }
+        },
+        aly = {
+            super = "lua"
+        },
     }
 }

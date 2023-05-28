@@ -21,7 +21,12 @@
         "fullscreen",
         "toboolean",
         "aidepro",
-        "mipmap"
+        "mipmap",
+        "gradle",
+        "gradlew",
+        "libs",
+        "superlua",
+        "Andro"
     ],
     "cSpell.words": [
         "androidx",

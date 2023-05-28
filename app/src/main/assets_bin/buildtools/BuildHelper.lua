@@ -1,32 +1,36 @@
-local BuildHelper={}
+local BuildHelper = {}
 function prinInfo(message)
-  this.update("info")
-  this.update(message)
+    this.update("info")
+    this.update(message)
 end
-updateInfo=prinInfo
+
+updateInfo = prinInfo
 
 function printDoing(message)
-  this.update("doing")
-  this.update(message)
+    this.update("doing")
+    this.update(message)
 end
-updateDoing=printDoing
+
+updateDoing = printDoing
 
 function printSuccess(message)
-  this.update("success")
-  this.update(message)
+    this.update("success")
+    this.update(message)
 end
-updateSuccess=printSuccess
+
+updateSuccess = printSuccess
 
 function printError(message)
-  this.update("error")
-  this.update(message)
+    this.update("error")
+    this.update(message)
 end
-updateError=printError
+
+updateError = printError
 
 --编译事件监听器
-BuildHelper.onCompileListener={
-  onError=printError,
-  onDeleted=prinInfo
+BuildHelper.onCompileListener = {
+    onError = printError,
+    onDeleted = prinInfo
 }
 
 function BuildHelper.loadEvents()

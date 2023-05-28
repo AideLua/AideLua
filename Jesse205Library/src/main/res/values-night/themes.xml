@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Base.Theme.Jesse205" parent="Base.Theme.Jasse205.Bridge">
+    <style name="Base.Theme.Jesse205" parent="Base.Theme.Jesse205.Bridge">
         <item name="colorSurface">@color/jesse205_black_blue_light</item>
         <item name="colorBackgroundFloating">@color/jesse205_black_blue_light</item>
         <item name="strokeColor">@color/jesse205_grey_dark</item>

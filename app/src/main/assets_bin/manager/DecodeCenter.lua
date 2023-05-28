@@ -3,16 +3,15 @@ local DecodeCenter = {}
 
 ---支持解析器
 ---@type table<string, function[]>
-DecodeCenter.supportDecodersMap = {}
+local supportDecodersMap = {}
 
 ---加载支持配置
 ---@param supportConfig table
 function DecodeCenter.loadSupport(supportConfig)
-    local supportDecodersMap = DecodeCenter.supportDecodersMap
-    
-    for decoderType, decodersList in pairs(supportConfig) do
-        local content = supportConfig[decoderType]
-        if content then--只有配置文件中有此项时候调用解析器
+    local supportDecodersMap = supportDecodersMap
+    for decoderType, content in pairs(supportConfig) do
+        local decodersList = supportDecodersMap[decoderType]
+        if decodersList then --只有配置文件中有此项时候调用解析器
             for index = 1, #decodersList do
                 decodersList[index](content)
             end
@@ -21,10 +20,15 @@ function DecodeCenter.loadSupport(supportConfig)
 end
 
 ---添加解析器
----@param supportDecoder function function(supportDecoder: table)
----@param decoderType string 解析器类型
+---@param supportDecoder function function(content: table)
+---@param decoderType string 解析器类型，如editor
 function DecodeCenter.addSupportDecoder(supportDecoder, decoderType)
-    table.insert(DecodeCenter.supportDecoders, supportDecoder)
+    local decodersList = supportDecodersMap[decoderType]
+    if not decodersList then
+        decodersList = {}
+        supportDecodersMap[decoderType] = decodersList
+    end
+    table.insert(decodersList, supportDecoder)
 end
 
 function DecodeCenter.init()

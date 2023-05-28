@@ -19,8 +19,6 @@
 
 ### v5.2.0
 
-1. `EditorsManager.actions.commented` -> `EditorsManager.actions.comment`
-
 ::: tip
 更多日志请见 `v5.1.2(51299)` 的变更日志
 :::

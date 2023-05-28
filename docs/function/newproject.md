@@ -1,4 +1,5 @@
 未完待续
+
 # 新建项目
 
 Aide Lua 提供了两种项目。您可以选择不同的项目模板新建项目
@@ -51,6 +52,7 @@ Aide Lua 提供了两种项目。您可以选择不同的项目模板新建项�
 暂时不支持LuaJ++项目。作者无法成功运行 LuaJ++ 的 Demo。
 
 ::: details 错误信息
+
 ``` txt:no-line-numbers
 Process: com.aidelua.luajpptest
 PID: 27581
@@ -61,35 +63,36 @@ Lifetime: 0s
 Build: HONOR/BLN-AL10/HWBLN-H:8.0.0/HONORBLN-AL10/541(C00):user/release-keys
 
 java.lang.NoClassDefFoundError: Failed resolution of: Lres/Hex;
-	at org.luaj.lib.Utf8Lib.$d2j$hex$e2972372$decode_I(:16)
-	at org.luaj.lib.Utf8Lib.<clinit>(Unknown Source:10)
-	at org.luaj.lib.jse.JsePlatform.standardGlobals(Unknown Source:93)
-	at com.androlua.LuaActivity.onCreate(Unknown Source:163)
-	at com.androlua.Welcome.onCreate(Unknown Source:0)
-	at android.app.Activity.performCreate(Activity.java:7383)
-	at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1218)
-	at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:3256)
-	at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:3411)
-	at android.app.ActivityThread.-wrap12(Unknown Source:0)
-	at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1994)
-	at android.os.Handler.dispatchMessage(Handler.java:108)
-	at android.os.Looper.loop(Looper.java:166)
-	at android.app.ActivityThread.main(ActivityThread.java:7529)
-	at java.lang.reflect.Method.invoke(Native Method)
-	at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:245)
-	at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:921)
+    at org.luaj.lib.Utf8Lib.$d2j$hex$e2972372$decode_I(:16)
+    at org.luaj.lib.Utf8Lib.<clinit>(Unknown Source:10)
+    at org.luaj.lib.jse.JsePlatform.standardGlobals(Unknown Source:93)
+    at com.androlua.LuaActivity.onCreate(Unknown Source:163)
+    at com.androlua.Welcome.onCreate(Unknown Source:0)
+    at android.app.Activity.performCreate(Activity.java:7383)
+    at android.app.Instrumentation.callActivityOnCreate(Instrumentation.java:1218)
+    at android.app.ActivityThread.performLaunchActivity(ActivityThread.java:3256)
+    at android.app.ActivityThread.handleLaunchActivity(ActivityThread.java:3411)
+    at android.app.ActivityThread.-wrap12(Unknown Source:0)
+    at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1994)
+    at android.os.Handler.dispatchMessage(Handler.java:108)
+    at android.os.Looper.loop(Looper.java:166)
+    at android.app.ActivityThread.main(ActivityThread.java:7529)
+    at java.lang.reflect.Method.invoke(Native Method)
+    at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:245)
+    at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:921)
 Caused by: java.lang.ClassNotFoundException: Didn't find class "res.Hex" on path: DexPathList[[zip file "/data/app/com.aidelua.luajpptest-_S2BlgbGmVYUMpmUUGRaDw==/base.apk"],nativeLibraryDirectories=[/data/app/com.aidelua.luajpptest-_S2BlgbGmVYUMpmUUGRaDw==/lib/arm64, /system/lib64, /vendor/lib64, /product/lib64]]
-	at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:93)
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:379)
-	at java.lang.ClassLoader.loadClass(ClassLoader.java:312)
-	... 17 more
+    at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:93)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:379)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:312)
+    ... 17 more
 -mainthread -loghandler
 ```
+
 :::
 
-如果您成功解决此问题并运行 Demo，欢迎提交pl！
+如果您成功解决此问题并运行 Demo，欢迎提交pr！
 
-## 参考链接
+## 相关链接
 
-[工程介绍](/project/README.md) <br>
-[项目模板介绍](/project/template/README.md)
+* [工程介绍](/project/README.md)
+* [项目模板介绍](/project/template/README.md)

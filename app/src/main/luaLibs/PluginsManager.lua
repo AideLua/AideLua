@@ -1,4 +1,7 @@
 import "com.jesse205.aidelua2.manager.LuaPluginsManager"
+
+---插件管理器
+---@class PluginsManager
 local PluginsManager = {}
 PluginsManager._VERSION = "4.0.0 (dev)"
 PluginsManager._VERSION_CODE = 40001
@@ -19,7 +22,8 @@ PluginsManager.PLUGINS_DATA_PATH = PLUGINS_DATA_PATH
 local loadedPluginsMap = {}
 PluginsManager.loadedPluginsMap = loadedPluginsMap
 
---path:pluginConfig
+---已加载的插件配置字典
+---@type table<string,table>
 local loadedPluginConfigsMap = {}
 PluginsManager.loadedPluginConfigsMap = loadedPluginConfigsMap
 
@@ -45,6 +49,7 @@ local virtualEnvCloneList = { "android", "short", "tostring", "string",
     "call", "dofile", "pairs", "each", "package", "utf8", "table",
     "int", "error" }
 
+--公共全局变量
 local baseVirtualEnv = {
     _APP_G = _G, --页面全局变量
 }
@@ -58,7 +63,7 @@ end
 
 LuaPluginsManager.setAppTag(appTag)
 
----清空已加载插件的路径列表
+---清空已启用插件的路径列表
 function PluginsManager.clearEnabledPluginPaths()
     LuaPluginsManager.setEnabledPluginPaths(nil)
 end
@@ -66,8 +71,10 @@ end
 ---获取已启用插件路径列表，第一次调用时检查所有插件
 ---@return String[] pathsJ 已启用插件路径列表
 function PluginsManager.getEnabledPluginPaths()
+    ---@type String[]
     local pathsJ = LuaPluginsManager.getEnabledPluginPaths()
     if pathsJ then
+        --如果已存在列表，就不需要读取了
         return pathsJ
     end
     --没有已加载插件路径，开始遍历插件
@@ -75,6 +82,7 @@ function PluginsManager.getEnabledPluginPaths()
     for pluginsDirPathKey = 1, #PLUGINS_PATHS do
         local pluginsDirPath = PLUGINS_PATHS[pluginsDirPathKey]
         --TODO: 检查插件状态并添加至列表
+        table.insert(paths, pluginsDirPath)
     end
     pathsJ = String(paths)
     LuaPluginsManager.setEnabledPluginPaths(pathsJ)
@@ -85,20 +93,20 @@ end
 ---@param name string 设置活动名称
 function PluginsManager.setActivityName(name)
     activityName = name
-    baseVirtualEnv.activityName = name--虚拟环境中的值需要单独设置
+    baseVirtualEnv.activityName = name --虚拟环境中的值需要单独设置
 end
 
 ---设置已启用插件的版本
 ---@param pluginPackageName string 插件包名
----@param versionCode number|boolean 软件版本号，true:默认启用，受targetcode控制 或false:停用插件
+---@param versionCode number|false 软件版本号，true:默认启用，受targetcode控制 或false:停用插件
 function PluginsManager.setEnabledVersion(pluginPackageName, versionCode)
     setSharedData("plugin_" .. pluginPackageName .. "_enabled", versionCode)
     return PluginsManager
 end
 
----获取已启用插件的版本
+---获取已启用插件的宿主版本
 ---@param pluginPackageName string 插件包名
----@return number|boolean enabledVersion 软件版本号，true:默认启用，受targetcode控制 或false:停用插件
+---@return number|false enabledVersion 软件版本号，true:默认启用，受targetcode控制 或false:停用插件
 function PluginsManager.getEnabledVersion(pluginPackageName)
     local enabledVersion = getSharedData("plugin_" .. pluginPackageName .. "_enabled")
     if enabledVersion == nil then
@@ -113,8 +121,7 @@ end
 ---@param enabled boolean 状态，自动判断
 function PluginsManager.setEnabled(pluginConfig, enabled)
     local pluginPackageName = pluginConfig.packagename
-    local enabledVersionCode =
-        PluginsManager.setEnabledVersion(pluginPackageName, appVersionCode)
+    PluginsManager.setEnabledVersion(pluginPackageName, appVersionCode)
     return PluginsManager
 end
 
@@ -136,17 +143,6 @@ function PluginsManager.getEnabled(pluginConfig)
     end
     return toboolean(enabledVersion)
 end
-
---[[ ---获取插件可用状态
----@param packageName string 插件包名
----@return boolean available 是否可用
-function PluginsManager.getAvailable(packageName)
-    local path = getPluginPath(packageName)
-    if not (File(path).isDirectory()) then
-        return false
-    end
-    return PluginsManager.getEnabled(packageName)
-end ]]
 
 ---新建插件环境表
 ---@return table virtualEnv 虚拟环境表

@@ -76,7 +76,6 @@ Aide Lua 未使用标准的菜单更新方式，因此您使用 `activity.invali
 | -------- | ---------------------------------------------------------- |
 | boolean  | 如果返回 `true` 则停止执行接下来的操作（响应自带快捷键）。 |
 
-
 代码执行顺序：
 > 调用插件事件 - 判断返回值，响应自带快捷键事件
 
@@ -121,6 +120,7 @@ Activity 停止时执行，常见于切到后台
 Activity 销毁时执行，常见于关闭页面
 
 ### onResult(name, action, content)
+
 有返回参数时执行，这里一般都是Lua页面返回的。
 
 | 参数    | 说明                                                 |
@@ -226,6 +226,7 @@ activity.result({<action>，<content>})
 | string   | 颜色值 |
 
 #### getColorAndHex(text)
+
 获取文字内颜色的数值和16进制
 
 | 参数 | 说明                     |
@@ -313,6 +314,7 @@ packagesList={
 | text | __string__: 显示的文字 |
 
 ### openFileITPS(path)
+
 用外部应用打开文件
 
 | 参数 | 说明                 |
@@ -320,6 +322,7 @@ packagesList={
 | path | __string__: 文件路径 |
 
 ### runLuaFile(file,code)
+
 在单独的页面运行Lua代码
 
 | 参数 | 说明               |

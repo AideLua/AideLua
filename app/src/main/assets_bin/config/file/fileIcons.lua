@@ -21,7 +21,7 @@ local folderIconIdsMapByName = {
 }
 
 --待添加到folderIconIds的表，之后要应该被回收
----@type table<number,string[]>?
+---@type table<number,string[]>
 local _folderIconIdsMapByNameToBeAdded = {
     [rDrawable.ic_folder_cog_outline] = {
         ".git", ".github", ".gradle", ".idea", ".vscode", ".obsidian", ".androidide",

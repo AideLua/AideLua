@@ -1,13 +1,13 @@
 return {
-  editor={
-    LuaEditor={
-      keywordsList={
-        superluaKeywords={
-          --一些事件
-          "onSaveInstanceState","onBackPressed",
-        },
-      },
+    editor = {
+        LuaEditor = {
+            keywordsList = {
+                superluaKeywords = {
+                    --一些事件
+                    "onSaveInstanceState", "onBackPressed",
+                },
+            },
+        }
     }
-  }
 
 }
