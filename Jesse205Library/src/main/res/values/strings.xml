@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="jesse205_edit_error_cannotBeEmpty">Cannot be empty here</string>
-    <string name="jesse205_loading">Loading...</string>
+    <string name="jesse205_loading">Loading…</string>
     <string name="jesse205_toast_copied">Copied to clipboard</string>
     <string name="jesse205_toast_neterror">Network error: %1$s (%2$s)</string>
     <string name="jesse205_ui">User Interface</string>
@@ -30,8 +30,6 @@
     <string name="jesse205_htmlFileViewer">HTML Viewer</string>
     <string name="jesse205_openSourceLicenses">Open source licenses</string>
     <string name="jesse205_welcome">Welcome</string>
-    <!--<string name="jesse205_allReady">All ready</string>
-    <string name="jesse205_allReady_tips">Click the "Finish" button to start the experience! </string>-->
     <string name="jesse205_permission">Permission</string>
     <string name="jesse205_permission_request">Permission request</string>
     <string name="jesse205_permission_tips">Failure to grant certain permissions may cause software errors. </string>

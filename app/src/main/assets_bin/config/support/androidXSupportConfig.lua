@@ -9,8 +9,8 @@ return {
             name = "Lua 活动 (Activity)（AndroidX）",
             enName = "Lua Activity (AndroidX)",
             id = "luaactivity_android",
-            fileExtension = "lua",
-            enabledVar = "oldAndroidXSupport",
+            extensionName = "lua",
+            enabledKey = "oldAndroidXSupport",
             content = [[require "import"
 --import "androidx"
 import "androidx.appcompat.app.*"
@@ -37,6 +37,27 @@ end
 end
 
 ]]
-        }
+        },
+        {
+            name = "Lua 布局 (Layout)（AndroidX）",
+            enName = "Lua Layout (AndroidX)",
+            id = "lua_layout_androidx",
+            extensionName = "aly",
+            enabledKey = "oldAndroidXSupport",
+            content = [[{
+      CoordinatorLayout;
+      layout_height="fill";
+      layout_width="fill";
+      id="mainLay";
+      {
+        TextView;
+        gravity="center";
+        text="Hello World";
+        layout_height="fill";
+        layout_width="fill";
+      };
+    }]],
+        },
+
     }
 }

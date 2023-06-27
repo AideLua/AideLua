@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="jesse205_theme_material1" translatable="false">Material 1</string>
+    <string name="jesse205_theme_material2" translatable="false">Material 2</string>
+    <string name="jesse205_theme_material3" translatable="false">Material 3</string>
     <string name="jesse205_theme_darkMode">Dark mode</string>
     <string name="jesse205_theme_default">Blue</string>
     <string-array name="jesse205_themes">

@@ -6,7 +6,8 @@ import "helper.MarkdownHelper"
 local _M = {}
 local ids = {}
 _M.ids = ids
-local dialoglayout = {
+
+local dialogLayout = {
     LinearLayout,
     orientation = "vertical",
     {
@@ -42,28 +43,27 @@ function _M.init()
     end
     LastMarkdownDlgActionBarElevation = 0
     dialog = MaterialAlertDialogBuilder(activity)
-        .setView(loadlayout2(dialoglayout, ids))
+        .setView(loadlayout2(dialogLayout, ids))
         .create()
     local webViewSettings = ids.webView.getSettings()
     webViewSettings
-        .setDisplayZoomControls(false)                                   --隐藏自带的右下角缩放控件
-        .setSupportZoom(true)                                            --支持网页缩放
-        .setDomStorageEnabled(true)                                      --dom储存数据
-        .setDatabaseEnabled(true)                                        --数据库
-        .setAppCacheEnabled(true)                                        --启用缓存
-        .setUseWideViewPort(true)
-        .setAllowFileAccess(true)                                        --允许访问文件
-        .setBuiltInZoomControls(false)                                   --缩放
+        .setDisplayZoomControls(false)                                         --隐藏自带的右下角缩放控件
+        .setSupportZoom(true)                                                  --支持网页缩放
+        .setDomStorageEnabled(true)                                            --dom储存数据
+        .setDatabaseEnabled(true)                                              --数据库
+        .setAppCacheEnabled(true)                                              --启用缓存
+        .setAllowFileAccess(true)                                              --允许访问文件
+        .setBuiltInZoomControls(false)                                         --缩放
         .setLoadWithOverviewMode(true)
-        .setLoadsImagesAutomatically(true)                               --图片自动加载
-        .setSaveFormData(true)                                           --保存表单数据，就是输入框的内容，但并不是全部输入框都会储存
-        .setAllowContentAccess(true)                                     --允许访问内容
-        .setJavaScriptEnabled(true)                                      --支持js脚本
-        .setUseWideViewPort(true)                                        --图片自适应
-        .setAcceptThirdPartyCookies(true)                                --接受第三方cookie
-        .setCacheMode(webViewSettings.LOAD_DEFAULT)                      --设置缓存加载方式
-        .setLayoutAlgorithm(webViewSettings.LayoutAlgorithm.SINGLE_COLUMN) --支持重新布局
-        .setPluginsEnabled(true)                                         --支持插件
+        .setLoadsImagesAutomatically(true)                                     --图片自动加载
+        .setSaveFormData(true)                                                 --保存表单数据，就是输入框的内容，但并不是全部输入框都会储存
+        .setAllowContentAccess(true)                                           --允许访问内容
+        .setJavaScriptEnabled(true)                                            --支持js脚本
+        .setUseWideViewPort(true)                                              --图片自适应
+        .setAcceptThirdPartyCookies(true)                                      --接受第三方cookie
+        .setCacheMode(webViewSettings.LOAD_DEFAULT)                            --设置缓存加载方式
+        .setLayoutAlgorithm(webViewSettings.LayoutAlgorithm.SINGLE_COLUMN)     --支持重新布局
+        .setPluginsEnabled(true)                                               --支持插件
         .setMixedContentMode(webViewSettings.MIXED_CONTENT_COMPATIBILITY_MODE) --允许https中加载http资源
     ids.webView.setWebViewClient(luajava.override(WebViewClient, {
         shouldOverrideUrlLoading = function(super, view, request)
@@ -82,18 +82,20 @@ function _M.init()
             end
             return true
         end,
-        onPageStarted = function(super, view, url, favicon)
+        onPageStarted = function(super, view, url, favIcon)
             view.evaluateJavascript([[
-var head = document.head || document.getElementsByTagName('head')[0];
-var viewportMeta = document.createElement('meta');
-viewportMeta.setAttribute('name', 'viewport')
-viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0')
-head.appendChild(viewportMeta);
-var charsetMeta = document.createElement('meta');
-charsetMeta.setAttribute('charset', 'utf-8')
-head.appendChild(charsetMeta);
-]], nil)
-            MarkdownHelper.webViewClient.onPageStarted(view, url, favicon)
+                    //js
+                    var head = document.head || document.getElementsByTagName('head')[0];
+                    var viewportMeta = document.createElement('meta');
+                    viewportMeta.setAttribute('name', 'viewport')
+                    viewportMeta.setAttribute('content', 'width=device-width, initial-scale=1.0')
+                    head.appendChild(viewportMeta);
+                    var charsetMeta = document.createElement('meta');
+                    charsetMeta.setAttribute('charset', 'utf-8')
+                    head.appendChild(charsetMeta);
+                    //!js
+                ]], nil)
+            MarkdownHelper.webViewClient.onPageStarted(view, url, favIcon)
         end
     }))
 
@@ -103,7 +105,6 @@ head.appendChild(charsetMeta);
 
     ids.webView.onScrollChange = function(view, l, t, oldl, oldt)
         AnimationHelper.onScrollListenerForActionBarElevation(ids.appBarLayout, t > 0)
-        --MyAnimationUtil.ScrollView.onScrollChange(view,l,t,oldl,oldt,ids.appBarLayout,"LastMarkdownDlgActionBarElevation")
     end
 end
 

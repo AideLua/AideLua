@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="PrivateResource">
+
+    <style name="Platform.V21.Theme.Jesse205.Material3" parent="Theme.Material3.DynamicColors.DayNight">
+        <item name="statusBarScrimColor">@color/jesse205_system_window_scrim_compat</item>
+        <item name="navigationBarScrimColor">@color/jesse205_system_window_scrim_compat</item>
+        <item name="windowLightStatusBar">?isLightTheme</item>
+        <item name="windowLightNavigationBar">?isLightTheme</item>
+    </style>
+
+    <style name="Platform.Theme.Jesse205.Material3" parent="Platform.V21.Theme.Jesse205.Material3" />
+
     <!--基础主题-->
-    <style name="Base.Theme.Jesse205.Material3" parent="Theme.Material3.DynamicColors.Light">
+    <style name="Base.Theme.Jesse205.Material3" parent="Theme.Material3.DynamicColors.DayNight">
         <!--按钮边框的颜色默认是按压下去的，所以要写死边框颜色才行-->
         <item name="strokeColor">@color/jesse205_grey_light</item>
         <item name="dialogBackgroundColor">@color/jesse205_white</item>
-        <item name="windowBackgroundColor">@color/jesse205_white</item>
         <item name="windowLightStatusBar">true</item>
         <item name="windowLightNavigationBar">true</item>
-        <item name="android:windowBackground">?windowBackgroundColor</item>
-        <item name="android:navigationBarColor">?windowBackgroundColor</item>
+        <item name="android:navigationBarColor">?android:colorBackground</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">?windowLightStatusBar</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">?windowLightNavigationBar</item>
-
-        <!--波纹颜色-->
-        <item name="rippleColorAccent">@color/jesse205_blue_ripple</item>
-        <item name="rippleColorPrimary">@color/ripple_material_light</item>
 
         <item name="actionSearchEditStyle">@style/Widget.Jesse205.ActionSearchEdit.Surface</item>
 
@@ -33,40 +37,6 @@
         <item name="android:actionModeCutDrawable">@drawable/ic_content_cut</item>
         <item name="android:actionModeCopyDrawable">@drawable/ic_content_copy</item>
         <item name="android:actionModePasteDrawable">@drawable/ic_content_paste</item>
-    </style>
-
-    <style name="Base.Theme.Jesse205.Material3.Dialog.Alert" parent="android:Theme.Material.Light.Dialog.Alert">
-        <item name="android:colorAccent">?colorAccent</item>
-        <item name="android:windowBackground">@drawable/mtrl_dialog_background</item>
-	    <item name="android:backgroundDimAmount">0.32</item>
-	    <item name="colorBackgroundFloating">?dialogBackgroundColor</item>
-		<item name="colorSurface">?dialogBackgroundColor</item>
-	</style>
-
-    <style name="Base.Theme.Jesse205.Material3.Dark.Dialog.Alert" parent="android:Theme.Material.Dialog.Alert">
-        <item name="android:colorAccent">?colorAccent</item>
-        <item name="android:windowBackground">@drawable/mtrl_dialog_background</item>
-  		<item name="android:backgroundDimAmount">0.32</item>
-	    <item name="colorBackgroundFloating">?dialogBackgroundColor</item>
-	    <item name="colorSurface">?dialogBackgroundColor</item>
-	</style>
-
-
-    <style name="ThemeOverlay.Jesse205.Material3.Dialog.Alert" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
-        <item name="android:windowBackground">@drawable/mtrl_dialog_background</item>
-        <item name="android:backgroundDimAmount">0.32</item>
-	    <item name="colorBackgroundFloating">?dialogBackgroundColor</item>
-	    <item name="colorSurface">?dialogBackgroundColor</item>
-	</style>
-
-    <style name="ThemeOverlay.Jesse205.Material3.ActionBar.Surface" parent="ThemeOverlay.MaterialComponents.ActionBar.Surface">
-        <item name="colorControlNormal">?colorOnSurface</item>
-        <item name="actionMenuTextColor">?colorOnSurface</item>
-        <item name="elevation">4dp</item>
-	</style>
-
-    <style name="ThemeOverlay.Jesse205.Material3.Dark" parent="@style/ThemeOverlay.AppCompat.Dark">
-        <item name="colorBackgroundFloating">@color/jesse205_black_blue_light</item>
     </style>
 
     <!--正式主题-->

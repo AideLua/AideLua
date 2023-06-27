@@ -1,7 +1,6 @@
 --R.drawable简写
 local rDrawable = R.drawable
 
----一些文件和文件夹图标
 local fileIcons = {}
 
 
@@ -20,6 +19,7 @@ local folderIconIdsMapByName = {
     res = rDrawable.ic_folder_table_outline,
 }
 
+--region 批量添加图标到folderIconIdsMapByName
 --待添加到folderIconIds的表，之后要应该被回收
 ---@type table<number,string[]>
 local _folderIconIdsMapByNameToBeAdded = {
@@ -42,7 +42,7 @@ for iconId, content in pairs(_folderIconIdsMapByNameToBeAdded) do
     end
 end
 _folderIconIdsMapByNameToBeAdded = nil
-
+--endregion
 
 
 fileIcons.folderIconDrawableMapByName = folderIconDrawableMapByName
@@ -133,5 +133,6 @@ local fileIconIdsMapByExtensionName = {
 
 fileIcons.fileIconDrawableMapByName = fileIconDrawableMapByName
 fileIcons.fileIconIdsMapByName = fileIconIdsMapByName
+fileIcons.fileIconIdsMapByExtensionName = fileIconIdsMapByExtensionName
 
 return fileIcons

@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 系统栏颜色 -->
+    <attr name="statusBarScrimColor" format="color" />
+    <attr name="navigationBarScrimColor" format="color" />
     <attr name="windowLightStatusBar" format="boolean" />
     <attr name="windowLightNavigationBar" format="boolean" />
 
-    <attr name="rippleColorAccent" format="color" />
-    <attr name="rippleColorPrimary" format="color" />
+    <!-- <attr name="rippleColorAccent" format="color" /> -->
+    <!-- <attr name="rippleColorPrimary" format="color" /> -->
 
-    <attr name="floatingActionButtonBackgroundColor" format="color" />
-    <attr name="windowBackgroundColor" format="color" />
+    <!-- <attr name="floatingActionButtonBackgroundColor" format="color" /> -->
+    <!-- <attr name="windowBackgroundColor" format="color" /> -->
     <attr name="dialogBackgroundColor" format="color" />
     <attr name="popupMenuCornerRadius" format="dimension" />
 
+    <!-- 搜索输入框主题 -->
     <attr name="actionSearchEditStyle" format="reference" />
 </resources>

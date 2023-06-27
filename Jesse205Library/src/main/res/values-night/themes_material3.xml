@@ -1,27 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Base.Theme.Jesse205.Material3" parent="Theme.Material3.DynamicColors.Dark">
+    <style name="Base.Theme.Jesse205.Material3" parent="Theme.Material3.DynamicColors.DayNight">
 
         <item name="colorBackgroundFloating">@color/jesse205_black_blue_light</item>
         <item name="strokeColor">@color/jesse205_grey_dark</item>
         <item name="dialogBackgroundColor">@color/jesse205_grey_dark_blue</item>
-        <item name="windowBackgroundColor">@color/jesse205_black_blue</item>
         <item name="windowLightStatusBar">false</item>
         <item name="windowLightNavigationBar">false</item>
-		<item name="android:windowBackground">?windowBackgroundColor</item>
-        <item name="android:navigationBarColor">?windowBackgroundColor</item>
+		<item name="android:windowBackground">?android:colorBackground</item>
+        <item name="android:navigationBarColor">?navigationBarScrimColor</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">?windowLightStatusBar</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">?windowLightNavigationBar</item>
-        
-        <!--波纹颜色-->
-        <item name="rippleColorAccent">@color/jesse205_blue_ripple</item>
-        <item name="rippleColorPrimary">@color/ripple_material_dark</item>
 
 		<!--字体-->
 		<item name="textAppearancePopupMenuHeader">@style/TextAppearance.Jesse205.Widget.PopupMenu.Header</item>
 		
         <!--圆角-->
-        <item name="dialogCornerRadius">4dp</item>
         <item name="cardCornerRadius">?cornerRadius</item>
         <item name="cornerRadius">8dp</item>
 

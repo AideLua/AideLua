@@ -1,8 +1,9 @@
 lazyimport "android.util.Log"
---文档Url
-DOCS_URL = "https://aidelua.github.io/AideLua/"
-REPOSITORY_URL = "https://gitee.com/AideLua/AideLua"
-PAGE_URL = "https://aidelua.netlify.app/"
+
+
+DOCS_URL = "https://aidelua.github.io/AideLua/"      --文档链接
+REPOSITORY_URL = "https://gitee.com/AideLua/AideLua" --仓库链接
+PAGE_URL = "https://aidelua.netlify.app/"            --官网链接
 
 AppPath.LuaDBDir = AppPath.AppSdcardDataDir .. '/luadb'
 

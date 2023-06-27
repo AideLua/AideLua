@@ -14,7 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.androlua.LuaApplication;
 import com.androlua.LuaUtil;
 import com.jesse205.R;
-import com.jesse205.superlua.Welcome;
+
 import java.io.File;
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.exception.ZipException;
@@ -45,7 +45,7 @@ public class Welcome extends AppCompatActivity {
                 versionName = packageInfo.versionName;//版本名
                 luaMdDir = app.getMdDir();
                 localDir = app.getLocalDir();
-                this.setContentView(R.layout.layout_jesse205_welcome);
+                this.setContentView(R.layout.jesse205_welcome);
                 new UpdateTask().execute();
             } else {
                 startActivity(false);

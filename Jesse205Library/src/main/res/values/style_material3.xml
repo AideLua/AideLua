@@ -1,2 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <style name="Widget.Jesse205.Material3.Light.ActionBar.Solid" parent="Widget.Material3.Light.ActionBar.Solid" />
+
+
+    <style name="ThemeOverlay.Jesse205.Material3.Dialog.Alert" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="android:windowBackground">@drawable/mtrl_dialog_background</item>
+        <item name="android:backgroundDimAmount">0.32</item>
+        <item name="colorBackgroundFloating">?dialogBackgroundColor</item>
+        <item name="colorSurface">?dialogBackgroundColor</item>
+    </style>
+
+    <style name="ThemeOverlay.Jesse205.Material3.ActionBar.Surface" parent="ThemeOverlay.MaterialComponents.ActionBar.Surface">
+        <item name="colorControlNormal">?colorOnSurface</item>
+        <item name="actionMenuTextColor">?colorOnSurface</item>
+    </style>
+
+    <style name="ThemeOverlay.Jesse205.Material3.Dark" parent="@style/ThemeOverlay.AppCompat.Dark">
+        <item name="colorBackgroundFloating">@color/jesse205_black_blue_light</item>
+    </style>
+
+</resources>

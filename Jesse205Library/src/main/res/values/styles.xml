@@ -27,9 +27,7 @@
     <!-- 将AutoCompleteTextView的弹窗MD2化 -->
     <style name="Widget.Jesse205.AutoCompleteTextView" parent="Widget.AppCompat.AutoCompleteTextView">
         <item name="android:popupElevation">8dp</item>
-        <item name="android:popupBackground">
-            @drawable/mtrl_popupmenu_background
-        </item>
+        <item name="android:popupBackground">@drawable/mtrl_popupmenu_background</item>
         <item name="android:dropDownVerticalOffset">1dp</item>
     </style>
 
@@ -45,8 +43,10 @@
         <item name="strokeColor">@color/mtrl_btn_stroke_color_selector</item>
     </style>
 
+    <!-- 搜索框 -->
     <style name="Widget.Jesse205.ActionSearchEdit.Surface" parent="android:style/Widget">
         <item name="android:textColorPrimary">@color/jesse205_on_surface</item>
+        <item name="android:textColorSecondary">@color/material_on_surface_emphasis_medium</item>
         <item name="android:textColorHint">@color/material_on_surface_emphasis_medium</item>
     </style>
 
@@ -56,12 +56,13 @@
         <item name="android:textColorHint">@color/material_on_primary_emphasis_medium</item>
     </style>
 
+    <!-- 功能栏 -->
     <style name="Widget.Jesse205.ActionBar.Surface" parent="Widget.MaterialComponents.ActionBar.Surface">
         <item name="backgroundStacked">?colorSurface</item>
         <item name="backgroundSplit">?colorSurface</item>
+        <item name="background">?attr/colorSurface</item>
     </style>
 
-    <style name="Widget.Jesse205.Material3.Light.ActionBar.Solid" parent="Widget.Material3.Light.ActionBar.Solid" />
 
     <style name="Widget.Jesse205.ActionBar.TabBar.Surface" parent="Widget.AppCompat.ActionBar.TabBar">
         <item name="colorPrimary">?colorSurface</item>
@@ -81,7 +82,7 @@
 
 
     <!--原生对话框-->
-    <style name="Theme.Jesse205.Framework.Dialog.Alert" parent="android:Theme.Material.Light.Dialog.Alert">
+    <style name="Theme.Jesse205.Framework.Light.Dialog.Alert" parent="android:Theme.Material.Light.Dialog.Alert">
         <item name="android:colorAccent">?colorAccent</item>
         <item name="android:windowBackground">@drawable/mtrl_dialog_background</item>
         <item name="android:backgroundDimAmount">0.32</item>
@@ -109,17 +110,14 @@
     <style name="ThemeOverlay.Jesse205.ActionBar.Primary" parent="ThemeOverlay.MaterialComponents.ActionBar.Primary">
         <item name="colorControlNormal">@color/jesse205_on_primary</item>
         <item name="actionMenuTextColor">@color/jesse205_on_primary</item>
-        <item name="elevation">4dp</item>
-        <item name="cardBackgroundColor">@color/jesse205_white_ripple</item>
-        <item name="rippleColor">@color/jesse205_white_ripple</item>
+        <item name="rippleColor">@color/jesse205_on_primary_ripple</item>
     </style>
-
 
     <style name="ThemeOverlay.Jesse205.ActionBar.Surface" parent="ThemeOverlay.MaterialComponents.ActionBar.Surface">
         <!--设置图标颜色和文字颜色，文字颜色拥有不同的状态-->
         <item name="colorControlNormal">@color/jesse205_on_surface</item>
         <item name="actionMenuTextColor">@color/jesse205_on_surface</item>
-        <item name="elevation">4dp</item>
+        <item name="rippleColor">@color/jesse205_on_surface_ripple</item>
     </style>
 
     <style name="ThemeOverlay.Jesse205.Dark" parent="@style/ThemeOverlay.AppCompat.Dark">

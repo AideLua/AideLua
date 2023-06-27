@@ -26,7 +26,13 @@
         "gradlew",
         "libs",
         "superlua",
-        "Andro"
+        "Andro",
+        "html",
+        "kotlin",
+        "androlua",
+        "loadlayout",
+        "sdcard",
+        "Dirs"
     ],
     "cSpell.words": [
         "androidx",
@@ -76,7 +82,8 @@
                 "Badge",
                 "br"
             ]
-        }
+        },
+        "MD025": false,
     },
     "gitConfigUser.profiles": [
         {

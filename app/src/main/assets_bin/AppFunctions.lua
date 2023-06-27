@@ -20,31 +20,39 @@ setmetatable(MyFullDraggableContainer, MyFullDraggableContainer)
 
 
 
----检查是不是路径相同的文件
----@deprecated 请直接使用 filePath1==filePath2 判断路径是否相同
+---检查是不是路径相同的文件<br>
+---请直接使用 filePath1==filePath2 判断路径是否相同
+---@deprecated
 ---@return boolean 文件路径是否相同
 function isSamePathFileByPath(filePath1, filePath2) --通过文件路径
     return filePath1 == filePath2
 end
 
----检查是不是路径相同的文件
----@deprecated 请直接使用 file1==file2 判断路径是否相同
+---检查是不是路径相同的文件<br>
+--- 请直接使用 file1==file2 判断路径是否相同
+---@deprecated
 ---@return boolean 文件路径是否相同
 function isSamePathFile(file1, file2) --通过文件本身
     return file1 == file2
 end
 
 ---在 v5.1.1(51199) 返回结果改为 normalTable
----创建支持getter的虚拟类
+---创建支持 getter 的虚拟类，实现 getter
+---@generic T : table
+---@param normalTable T
+---@return T 虚拟类实现的功能
 function createVirtualClass(normalTable)
     local metatable = {
         __index = function(self, key)
-            if rawget(self, key) then
-                return rawget(self, key)
+            local rawValue = rawget(self, key)
+            if rawValue then
+                return rawValue
             else
-                local getter = "get" .. key:gsub("^%l", string.upper)
-                if rawget(self, getter) then
-                    return rawget(self, getter)()
+                local getterName = "get" .. key:gsub("^%l", string.upper)
+                ---@type fun()
+                local getterFunc = rawget(self, getterName)
+                if getterFunc then
+                    return getterFunc()
                 end
             end
         end
@@ -252,11 +260,11 @@ function refreshSubTitle(newScreenWidthDp)
             actionBar.setSubtitle(appName)
         end
         activity.setTaskDescription(ActivityManager.TaskDescription(appName .. "-" .. getString(R.string.app_name), nil,
-        theme.color.colorPrimary))
+            theme.color.colorPrimary))
     else
         actionBar.setSubtitle(R.string.project_no_open)
         activity.setTaskDescription(ActivityManager.TaskDescription(getString(R.string.app_name), nil,
-        theme.color.colorPrimary))
+            theme.color.colorPrimary))
     end
 end
 
@@ -522,7 +530,7 @@ function runInTermux(cmd, args, config)
         intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_ARGUMENTS, String(args))
         intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_BACKGROUND, false)
         intent.putExtra(RUN_COMMAND_SERVICE.EXTRA_WORKDIR,
-        config.workDir or ProjectManager.nowPath .. "/" .. ProjectManager.nowConfig.mainModuleName)
+            config.workDir or ProjectManager.nowPath .. "/" .. ProjectManager.nowConfig.mainModuleName)
         --显示结果
         if config.showResult then
             local resultIntent = activity.buildNewActivityIntent(0, "sub/TermuxResult/main.lua", nil, true, 0)

@@ -2,5 +2,5 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:alpha="@dimen/material_emphasis_disabled"
-        android:color="?colorPrimary"/>
+        android:color="?colorOnPrimary"/>
 </selector>

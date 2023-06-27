@@ -1,6 +1,7 @@
 --v5.2.0+
 ---判断是否隐藏文件的字典
----@type table<string,boolean>
+---@alias FileName string
+---@type table<FileName,boolean>
 local hiddenFilesMap = {
     gradlew = true,
     ["gradlew.bat"] = true,

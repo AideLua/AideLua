@@ -3,7 +3,7 @@
 ---TODO: 实现 SQLite
 local SavedDataManager = {}
 
---lua数据库列表
+---lua数据库列表
 ---@type table<string,LuaDB>
 local luaDatabases = {}
 

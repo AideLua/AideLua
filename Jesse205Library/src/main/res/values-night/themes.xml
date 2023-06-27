@@ -2,14 +2,10 @@
 <resources>
     <style name="Base.Theme.Jesse205" parent="Base.Theme.Jesse205.Bridge">
         <item name="colorSurface">@color/jesse205_black_blue_light</item>
-        <item name="colorBackgroundFloating">@color/jesse205_black_blue_light</item>
+        <item name="android:colorBackground">@color/jesse205_black_blue</item>
+        <item name="colorBackgroundFloating">?colorSurface</item>
         <item name="strokeColor">@color/jesse205_grey_dark</item>
         <item name="dialogBackgroundColor">@color/jesse205_grey_dark_blue</item>
-        <item name="windowBackgroundColor">@color/jesse205_black_blue</item>
-
-        <!--波纹颜色-->
-        <item name="rippleColorAccent">@color/jesse205_blue_ripple</item>
-        <item name="rippleColorPrimary">@color/ripple_material_dark</item>
 
 		<item name="android:alertDialogTheme">@style/Theme.Jesse205.Framework.Dark.Dialog.Alert</item>
 	 </style>
