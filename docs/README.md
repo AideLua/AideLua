@@ -31,6 +31,10 @@ Aide Lua 可以帮您从 Androlua+ 转移到 AIDE，再转移到 Android Studio<
 3. 此软件必须搭配编译器，不管你用的是真 Gradle 还是假 Gradle __(AIDE 属于假 Gradle)__
 4. 要实现直接运行项目，必须导出 `LuaActivity`（默认是导出的），__并成功安装项目软件（先用 AIDE 打包，然后用 Aide Lua 打包，最后安装）__
 
+::: warning
+由于 Aide Lua Pro 正在重构，本文档暂停完善，里面的内容非常不完善，凑合看吧了。
+:::
+
 ## 下载
 
 ### Aide Lua Pro

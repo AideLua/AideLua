@@ -6,8 +6,8 @@
         android:color="?colorAccent" />
 	<item
         android:state_enabled="true"
-        android:color="?android:colorForeground"/>
+        android:color="?colorOnBackground"/>
 	<item
-        android:color="?android:colorForeground"
+        android:color="?colorOnBackground"
         android:alpha="0.3"/>
 </selector>
