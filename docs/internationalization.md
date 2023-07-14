@@ -4,6 +4,12 @@ Aide Lua 使用了两套国际化系统。一套是 [Android 原生国际化方�
 
 ## Android 原生国际化方案
 
-Aide Lua 的国际化文件在 [res 文件夹](https://gitee.com/AideLua/AideLua/tree/master/app/src/main/res) 内
+Aide Lua 的国际化文件在 [res 文件夹](https://gitee.com/AideLua/AideLua/tree/master/app/src/main/res) 内。
+
+所有自带
 
 ## i18n.lua
+
+对于插件与共享Activity，Aide Lua 将会使用 i18n.lua 方案国际化。
+
+更多内容敬请期待

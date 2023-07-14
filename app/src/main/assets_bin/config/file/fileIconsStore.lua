@@ -1,10 +1,48 @@
 --R.drawable简写
 local rDrawable = R.drawable
 
-local fileIcons = {}
+---@class FileIconCofig
+---@field public resId number|nil 资源名称
+---@field public iconPath string|nil 图标路径
+---@field public drawable Drawable|nil 图标Drawable
+---@field public color number|nil 图标填色
+
+---读取数据优先级：name > extension > mimeType > type
+---@class FileIconsStore
+---@field public folderName table<string,FileIconCofig> 文件夹图标列表，使用名称作为索引
+---@field public name table<string,FileIconCofig> 文件图标列表，使用名称作为索引
+---@field public extension table<string,FileIconCofig> 文件夹图标，使用扩展名 `xxx.(xxx)` 作为索引
+---@field public mimeType table<string,FileIconCofig> 文件夹图标，使用MimeType `xxx/xxx.xxx` 作为索引
+---@field public type table<string,FileIconCofig> 文件夹图标，使用自定义的类型 `xxx` 作为索引
+local fileIcons = {
+    folderName = {
+
+    },
+    name = {},
+    extension = {},
+    mimeType = {},
+    type = {}
+}
 
 
+local byFolderNameList = fileIcons.folderName
+local byNameList = fileIcons.name
+local byExtensionList = fileIcons.extension
+local byMimeTypeList = fileIcons.mimeType
+local byTypeList = fileIcons.type
 
+
+--TODO:重新设计数据结构
+--[[
+{
+    name = {},
+    extension = {},
+    mimeType = {},
+    type = {}
+}
+]]
+
+--[[
 ---通过文件夹名获取图标<br>
 ---getter回退 通过文件夹名获取资源后动态添加drawable<br>
 ---getter回退 默认文件夹图标
@@ -134,5 +172,5 @@ local fileIconIdsMapByExtensionName = {
 fileIcons.fileIconDrawableMapByName = fileIconDrawableMapByName
 fileIcons.fileIconIdsMapByName = fileIconIdsMapByName
 fileIcons.fileIconIdsMapByExtensionName = fileIconIdsMapByExtensionName
-
+]]
 return fileIcons

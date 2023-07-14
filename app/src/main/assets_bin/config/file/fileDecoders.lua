@@ -20,7 +20,7 @@ return {
             if getSharedData("editor_autoBackupOriginalFiles") then
                 FilesTabManager.backupDir.mkdirs()
                 local backupFilePath = FilesTabManager.backupPath ..
-                "/" .. System.currentTimeMillis() .. "_" .. File(path).getName()
+                    "/" .. System.currentTimeMillis() .. "_" .. File(path).getName()
                 os.rename(path, backupFilePath)
             end
             local file = io.open(path, "w")
@@ -65,7 +65,7 @@ return {
                     MaterialAlertDialogBuilder(this)
                         .setTitle(getLocalLangObj("ALY 布局预览警告", "ALY Layout Preview Warning"))
                         .setMessage(getLocalLangObj("ALY布局预览仅可以预览特定的布局。您的布局无法预览属于正常现象。（该提示将在下次启动APP时重新显示）",
-                        "ALY layout preview can only preview specific layouts. If your layout cannot be previewed, please do not panic. (This dialog will be displayed again the next time you start the APP.)"))
+                            "ALY layout preview can only preview specific layouts. If your layout cannot be previewed, please do not panic. (This dialog will be displayed again the next time you start the APP.)"))
                         .setPositiveButton(R.string.preview, function()
                             _warnedAlyPreview = true
                             EditorsManager.switchPreview(true)
@@ -117,7 +117,7 @@ return {
         editor = "PhotoView",
         apply = function(filePath, fileType, view)
             local options = RequestOptions()
-            options.skipMemoryCache(true)               --跳过内存缓存
+            options.skipMemoryCache(true)                     --跳过内存缓存
             options.diskCacheStrategy(DiskCacheStrategy.NONE) --不缓冲disk硬盘中
             Glide.with(activity).load(filePath).apply(options).into(view)
         end,

@@ -6,25 +6,30 @@ next:
 
 # 插件文档 <Badge type="tip" text="v4.0 (alpha)" />
 
-* __PluginsManager 版本__：v4.0
+- **PluginsManager 版本**：v4.0
 
 ::: tip
 您正在浏览 PluginsManager v4.0.0 版本文档，新版本 Aide Lua 结构发生了巨大变化，删除了旧版本的所有 API。如需浏览旧版本文档，请转到[这里](old/README.md)。
+
+**当前文档正在编写，敬请期待。**
 :::
 
 ::: danger
-PluginsManager v4.0还正在制作。目前最新版本仍然用的是[3.1版本](old/README.md)。
+PluginsManager v4.0 还正在制作。目前最新版本仍然用的是[3.1版本](old/README.md)。
 :::
 
 ::: details 本页内容
 [[toc]]
 :::
 
+- 插件完整模板
+- 插件模板 Lite
+
 <!-- [插件模板](#) -->
 
 ## 提示
 
-1. 本文档部分说明格式为 “__变量名__ (数据类型): 说明” 或 “__数据类型__: 说明”
+1. 本文档部分说明格式为 “**变量名** (数据类型): 说明” 或 “**数据类型**: 说明”
 2. 标有 <Badge type="danger" text="已废除" vertical="middle" /> 的表示已废除，相关 API 或方法已被移除
 3. 标有 <Badge type="danger" text="*" vertical="middle" / 的表示必须文件、方法 或 变量
 4. 部分 AndroLua+ 插件也可以使用，但是效果不好
@@ -34,7 +39,7 @@ PluginsManager v4.0还正在制作。目前最新版本仍然用的是[3.1版本
 :::
 
 ::: danger 建议最低的最低适配软件版本
-我们强烈建议从 __v5.2.0(52099) 或以上__ 开始适配，因为在 v5.2.0 发生了翻天覆地的变化，软件架构及运行逻辑发生了巨大变化。
+我们强烈建议从 **v5.2.0(52099) 或以上** 开始适配，因为在 v5.2.0 发生了翻天覆地的变化，软件架构及运行逻辑发生了巨大变化。
 :::
 
 ## 手动导入
@@ -58,6 +63,16 @@ PluginsManager v4.0还正在制作。目前最新版本仍然用的是[3.1版本
 4. 为了防止污染全局变量，插件内直接赋值为插件的局部变量。如要访问或修改全局变量，请使用 `_APP_G.xxx` 和 `_APP_G.xxx=xxx`
 5. 插件管理器不会自动添加插件路径为环境变量。因此您不可以直接使用 `import` 或者 `require`
 6. 请充分利用 `thirdplugins` 变量，因为某些插件可能需要正确的执行顺序才能运行
+
+## 插件结构
+
+AideLua 插件在原版 AndroLua+ 的基础上再次改进。您的 AndroLua+ 插件可能可以在 Aide Lua 中运行。因为工程结构与编辑器不同，有相当一部分 AndroLua+ 不兼容 Aide Lua。
+
+- 插件完整模板.zip
+  - pages
+  - init.lua
+  - main.lua
+  - 敬请期待
 
 ## 内置插件
 
@@ -85,9 +100,9 @@ Jesse205 框架的支持插件
 
 | 常量              | 说明                         |
 | ----------------- | ---------------------------- |
-| _VERSION          | __string__: Util 版本        |
-| PLUGINS_PATH      | __string__: 插件存放路径     |
-| PLUGINS_DATA_PATH | __string__: 插件数据存放路径 |
+| _VERSION          | **string**: 管理器版本       |
+| PLUGINS_PATH      | **string**: 插件存放路径     |
+| PLUGINS_DATA_PATH | **string**: 插件数据存放路径 |
 
 #### PluginsManager.getPluginDataPath(packageName:string)
 
@@ -95,7 +110,7 @@ Jesse205 框架的支持插件
 
 | 参数        | 说明                   |
 | ----------- | ---------------------- |
-| packageName | __string__: 插件包名。 |
+| packageName | **string**: 插件包名。 |
 
 | 返回值类型 | 说明             |
 | ---------- | ---------------- |
@@ -107,7 +122,7 @@ Jesse205 框架的支持插件
 
 | 参数        | 说明                 |
 | ----------- | -------------------- |
-| packageName | __string__: 插件包名 |
+| packageName | **string**: 插件包名 |
 
 | 返回值类型 | 说明         |
 | ---------- | ------------ |
@@ -163,18 +178,18 @@ Jesse205 框架的支持插件
 
 变量说明：
 
-* __<Badge type="danger" text="*" vertical="middle" /> appname__: `string` 插件
-* __<Badge type="danger" text="*" vertical="middle" /> packagename__: `string` 插件包名
-* __<Badge type="danger" text="*" vertical="middle" /> appver__: `string` 插件版本名
-* __<Badge type="danger" text="*" vertical="middle" /> appcode__: `string` 插件版本号
-* __mode__: `string` 工程模式，始终为 `"plugin"`
-* __managerversion__: `string` PluginsManager 版本，此变量不起任何作用，当前为 `"4.0"`
-* __thirdplugins__: `string[]` 需要安装的第三方库
-  * 内容: 插件的包名
-* __supported2__: `table` 支持的宿主字典。PluginsManager会通过此字段判断插件是否支持宿主。
-  * 索引: 软件代号 (`appTag`)
-  * 内容: `table` 支持的版本，`mincode` 为最低版本，`targetcode` 为最高版本
-  * 注意: 无此字段的插件一律视为 AndroLua+ 的插件
+- **<Badge type="danger" text="*" vertical="middle" /> appname**: `string` 插件
+- **<Badge type="danger" text="*" vertical="middle" /> packagename**: `string` 插件包名
+- **<Badge type="danger" text="*" vertical="middle" /> appver**: `string` 插件版本名
+- **<Badge type="danger" text="*" vertical="middle" /> appcode**: `string` 插件版本号
+- **mode**: `string` 工程模式，始终为 `"plugin"`
+- **managerversion**: `string` PluginsManager 版本，此变量不起任何作用，当前为 `"4.0"`
+- **thirdplugins**: `string[]` 需要安装的第三方库
+  - 内容: 插件的包名
+- **supported2**: `table` 支持的宿主字典。PluginsManager会通过此字段判断插件是否支持宿主。
+  - 索引: 软件代号 (`appTag`)
+  - 内容: `table` 支持的版本，`mincode` 为最低版本，`targetcode` 为最高版本
+  - 注意: 无此字段的插件一律视为 AndroLua+ 的插件
 
 ``` lua:no-line-numbers
 -- 实例
@@ -183,7 +198,7 @@ supported2 = {
 }
 ```
 
-* __events__: 全局事件
+- **events**: 全局事件
 
 ::: tip
 全局事件与独立事件基本一致。
@@ -191,8 +206,8 @@ supported2 = {
 
 ::: warning
 
-* `init.lua` 中执行中不会有各种内置变量，只有在执行后会将环境表设置为 `metatable`，自动继承 _APP_G 中部分变量
-* 在插件中，插件环境表即init.lua 所用环境表，`_G` 与 `_ENV` 都将返回 init.lua 所用环境表
+- `init.lua` 中执行中不会有各种内置变量，只有在执行后会将环境表设置为 `metatable`，自动继承 _APP_G 中部分变量
+- 在插件中，插件环境表即init.lua 所用环境表，`_G` 与 `_ENV` 都将返回 init.lua 所用环境表
 
 :::
 
@@ -232,7 +247,7 @@ supported2 = {
 
 存放各个页面的独立配置的文件夹
 
-* 文件扩展名: `lua`
-* 文件名称: `<页面标识>.lua`
-* 文件示例: `main.lua` 、`settings.lua` ......
-* 更多请见 [`pages` 目录](pages/main/README.md)
+- 文件扩展名: `lua`
+- 文件名称: `<页面标识>.lua`
+- 文件示例: `main.lua` 、`settings.lua` ......
+- 更多请见 [`pages` 目录](pages/main/README.md)

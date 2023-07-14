@@ -1,30 +1,33 @@
 package com.jesse205.manager;
 
-/**
- * 主题管理器
- *
- * @Author Jesse205
- * @Date 2023/02/21 01:11
- */
-
 import static android.os.Build.VERSION.SDK_INT;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.View;
 import android.view.Window;
 
 import androidx.annotation.NonNull;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.jesse205.R;
 import com.jesse205.util.ThemeUtil;
 
 import java.lang.reflect.Field;
 
+/**
+ * 主题管理器
+ *
+ * @author Jesse205
+ * @since 2023/02/21 01:11
+ */
 public class ThemeManager {
     public static final String THEME_TYPE = "theme_type";
     public static final String THEME_STYLE = "theme_style";
@@ -33,15 +36,21 @@ public class ThemeManager {
     private static ThemeType defaultAppTheme = ThemeType.BLUE;
     @NonNull
     private static ThemeStyle defaultThemeStyle = ThemeStyle.Material2;
+    private static ThemeType appThemeType;
+    private static ThemeStyle appThemeStyle;
 
     private final ThemeType themeType;
     private final ThemeStyle themeStyle;
-    private final Activity context;
+    private final ContextThemeWrapper context;
 
-    public ThemeManager(Activity context) {
+    public ThemeManager(ContextThemeWrapper context) {
         this.context = context;
-        themeType = getAppTheme(context);
-        themeStyle = getAppThemeStyle(context);
+        if (appThemeType == null)
+            appThemeType = getAppTheme(context);
+        if (appThemeStyle == null)
+            appThemeStyle = getAppThemeStyle(context);
+        themeType = appThemeType;
+        themeStyle = appThemeStyle;
     }
 
     /**
@@ -83,11 +92,11 @@ public class ThemeManager {
      * @param themeType 主题配色
      */
     public static void setAppTheme(Context context, ThemeType themeType) {
+        appThemeType = themeType;
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(THEME_TYPE, themeType.name());
         editor.apply();
-        //nowAppTheme = themeType;
     }
 
     /**
@@ -112,6 +121,20 @@ public class ThemeManager {
     }
 
     /**
+     * 设置软件全局主题风格
+     *
+     * @param context    上下文
+     * @param themeStyle 主题配色
+     */
+    public static void setAppThemeStyle(Context context, ThemeStyle themeStyle) {
+        appThemeStyle = themeStyle;
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(THEME_STYLE, themeStyle.name());
+        editor.apply();
+    }
+
+    /**
      * 获取软件全局主题风格
      *
      * @param context 上下文
@@ -120,7 +143,6 @@ public class ThemeManager {
     public static ThemeStyle getAppThemeStyle(Context context) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         String themeStyleName = sharedPreferences.getString(THEME_STYLE, null);
-        //return ThemeType.valueOf(themeTypeName);
 
         if (themeStyleName == null) {
             return defaultThemeStyle;
@@ -144,8 +166,10 @@ public class ThemeManager {
      * @return 主题资源ID
      */
     public static int getThemeId(Context context, ThemeType themeType, ThemeStyle themeStyle, boolean isNoActionBar) {
-        //TODO: 实现Material1，并用switch判断
-        if (themeStyle == ThemeStyle.Material3) return R.style.Theme_Jesse205_Material3;//MD3只有这一个主题
+        // TODO: 实现Material1，并用switch判断
+        if (themeStyle == ThemeStyle.Material3)
+            return R.style.Theme_Jesse205_Material3;// MD3只有这一个主题
+
         int themeId = R.style.Theme_Jesse205_Blue;
         String styleKey = "Theme_Jesse205";
 
@@ -220,28 +244,34 @@ public class ThemeManager {
         int themeId = getThemeId(context, themeType, themeStyle, isNoActionBar);
         context.setTheme(themeId);
 
-        TypedArray array = context.getTheme().obtainStyledAttributes(new int[]{R.attr.windowLightStatusBar, R.attr.windowLightNavigationBar,});
-        boolean windowLightStatusBar = array.getBoolean(0, false);
-        boolean windowLightNavigationBar = array.getBoolean(1, false);
-        array.recycle();
+        if (context instanceof Activity) {
+            TypedArray array = context.getTheme().obtainStyledAttributes(new int[]{
+                    R.attr.windowLightStatusBar,
+                    R.attr.windowLightNavigationBar
+            });
 
-        int systemUiVisibility = 0;
-        Window window = context.getWindow();
-        View decorView = window.getDecorView();
-        if (!useDarkStatusBar && SDK_INT >= 23 && windowLightStatusBar)
-            systemUiVisibility |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            boolean windowLightStatusBar = array.getBoolean(0, false);
+            boolean windowLightNavigationBar = array.getBoolean(1, false);
+            array.recycle();
 
-        if (!useDarkNavigationBar && (SDK_INT >= 26 || ThemeUtil.isGrayNavigationBarSystem()) && windowLightNavigationBar) {
-            if (SDK_INT >= 26) systemUiVisibility |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
-            window.setNavigationBarColor(context.getResources().getColor(R.color.jesse205_system_window_scrim));
+            Window window = ((Activity) context).getWindow();
+            WindowInsetsControllerCompat windowInsetsController =
+                    WindowCompat.getInsetsController(window, window.getDecorView());
+            if (!useDarkStatusBar && SDK_INT >= Build.VERSION_CODES.O && windowLightStatusBar) {
+                windowInsetsController.setAppearanceLightStatusBars(true);
+            }
+
+            if (!useDarkNavigationBar && (SDK_INT >= Build.VERSION_CODES.M || ThemeUtil.isGrayNavigationBarSystem()) && windowLightNavigationBar) {
+                windowInsetsController.setAppearanceLightNavigationBars(true);
+                //  沉浸导航栏
+                window.setNavigationBarColor(context.getResources().getColor(R.color.jesse205_system_window_scrim, context.getTheme()));
+            }
         }
-        decorView.setSystemUiVisibility(systemUiVisibility);
     }
 
     public boolean checkThemeChanged() {
-        return themeType != getAppTheme(context) || themeStyle != getAppThemeStyle(context);
+        return appThemeType != themeType || appThemeStyle != themeStyle;
     }
-
 
     public enum ThemeType {
         BLUE, TEAL, ORANGE, PINK, RED

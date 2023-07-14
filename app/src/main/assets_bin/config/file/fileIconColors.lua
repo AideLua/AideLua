@@ -13,10 +13,12 @@ fileIconColors={
     --通过扩展名获取图标颜色（主要）
   }
 }]]
+
+---@deprecated
 local fileIconColors = {
-    normal = 0xff757575, -- 普通文件颜色，灰色
+    normal = 0xff757575,   -- 普通文件颜色，灰色
     active = colorPrimary, -- 已打开文件颜色
-    folder = 0xFFF9A825, -- 文件夹颜色，橙色
+    folder = 0xFFF9A825,   -- 文件夹颜色，橙色
 }
 
 ---一类型的图标颜色

@@ -1,5 +1,7 @@
 package com.jesse205.util;
 
+import androidx.annotation.NonNull;
+
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -9,7 +11,6 @@ import java.security.NoSuchAlgorithmException;
 /**
  * 有关字符串的一些工具
  * @author Jesse205
- * @Time 2022-10-7 2:25
  *
  */
 public class StringUtil {
@@ -19,9 +20,8 @@ public class StringUtil {
 	 * @param str 需要获取MD5值的字符串
 	 * @return 获取到的MD5字符串
 	 * @author Jesse205
-	 * @time 2022-10-7 2:25
 	 */
-    public static String getMd5(String str) {
+    public static String getMd5(@NonNull String str) {
         byte[] digest = null;
         try {
             MessageDigest md5 = MessageDigest.getInstance("md5");

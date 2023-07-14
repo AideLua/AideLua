@@ -2,6 +2,11 @@ import "com.jesse205.aidelua2.manager.LuaPluginsManager"
 
 ---插件管理器
 ---@class PluginsManager
+---@field public _VERSION string 版本名
+---@field public _VERSION_CODE string 版本号
+---@field public PLUGINS_PATH_USER string 用户插件路径
+---@field public PLUGINS_PATH_SYSTEM string 内置插件路径
+---@field public PLUGINS_PATHS string[] 插件所有路径列表
 local PluginsManager = {}
 PluginsManager._VERSION = "4.0.0 (dev)"
 PluginsManager._VERSION_CODE = 40001
@@ -18,12 +23,13 @@ PluginsManager.PLUGINS_PATH_SYSTEM = PLUGINS_PATH_SYSTEM
 PluginsManager.PLUGINS_PATHS = PLUGINS_PATHS
 PluginsManager.PLUGINS_DATA_PATH = PLUGINS_DATA_PATH
 
---已加载插件列表 pluginPackageName:pluginConfig
-local loadedPluginsMap = {}
-PluginsManager.loadedPluginsMap = loadedPluginsMap
+-- ---已加载插件列表 pluginPackageName:pluginConfig
+-- ---@type PluginConfig[]
+-- local loadedPluginsMap = {}
+-- PluginsManager.loadedPluginsMap = loadedPluginsMap
 
 ---已加载的插件配置字典
----@type table<string,table>
+---@type table<string,PluginConfig>
 local loadedPluginConfigsMap = {}
 PluginsManager.loadedPluginConfigsMap = loadedPluginConfigsMap
 
@@ -34,7 +40,8 @@ local appVersionCode = appPackageInfo.versionCode
 local appTag = appTag
 local activityName
 
---要克隆的变量
+---要克隆的变量
+---@type string[]
 local virtualEnvCloneList = { "android", "short", "tostring", "string",
     "activity", "func", "xpcall", "collectgarbage", "load",
     "import", "tointeger", "_VERSION", "loadstring", "loadmenu",
@@ -49,11 +56,14 @@ local virtualEnvCloneList = { "android", "short", "tostring", "string",
     "call", "dofile", "pairs", "each", "package", "utf8", "table",
     "int", "error" }
 
---公共全局变量
+---公共全局变量
+---@type _ENV
 local baseVirtualEnv = {
     _APP_G = _G, --页面全局变量
+    PluginsManager = PluginsManager,
 }
 
+--每一个插件虚拟环境变量访问都能回滚到baseVirtualEnv，但是不能回归到_G
 local virtualEnvMetatable = { __index = baseVirtualEnv }
 
 for index = 1, #virtualEnvCloneList do
