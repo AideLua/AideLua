@@ -1,5 +1,7 @@
 # Aide Lua
 
+**中文** | [English](READNE_en.md)
+
 [![license](https://img.shields.io/github/license/AideLua/AideLua)](LICENSE)
 [![发行版](https://img.shields.io/github/v/tag/AideLua/AideLua?color=C71D23&label=发行版&logo=gitee)](https://gitee.com/AideLua/AideLua/releases)
 
@@ -12,18 +14,15 @@
 
 ![cover](images/ic_cover-aidelua.png)
 
-## 语言 | Language
-
-* 中文
-* [English](READNE_en.md)
+Aide Lua 6.0.0（Edde Code、Edde Lua v6.0.0、Edde Lua Studio） 即将编写，敬请期待！
 
 ## 注意 | Alert
 
 如需使用源代码，请进入 [发行版 (Gitee)](https://gitee.com/AideLua/AideLua/releases/latest) 页面下载。<br>
 If you need to use the source code, please go to the [releases (Github)](https://github.com/AideLua/AideLua/releases/latest) page to download.
 
-请不要在 Github 内直接更改此仓库，因为 Github 的仓库是由 Gitee 镜像过去的。<br>
-Please not to change the repository directly in Github, because Github's repository is mirrored by Gitee。
+<!-- 请不要在 Github 内直接更改此仓库，因为 Github 的仓库是由 Gitee 镜像过去的。<br>
+Please not to change the repository directly in Github, because Github's repository is mirrored by Gitee。 -->
 
 ## 简介
 

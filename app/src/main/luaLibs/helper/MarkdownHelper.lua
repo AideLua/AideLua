@@ -76,6 +76,7 @@ head.appendChild(style);
 ]], nil)
     --适配手机尺寸和utf8
     webView.evaluateJavascript([[
+        // js
 var head = document.head || document.getElementsByTagName('head')[0];
 var viewportMeta = document.createElement('meta');
 viewportMeta.setAttribute('name', 'viewport')
@@ -84,11 +85,13 @@ head.appendChild(viewportMeta);
 var charsetMeta = document.createElement('meta');
 charsetMeta.setAttribute('charset', 'utf-8')
 head.appendChild(charsetMeta);
+//!js
 ]], nil)
 end
 
 function MarkdownHelper.loadContent(webView, content)
     webView.evaluateJavascript([[
+// js
 var converter = new showdown.Converter();
 converter.setOption("tables",true);
 converter.setOption("emoji",true);
@@ -99,6 +102,7 @@ converter.setOption("requireSpaceBeforeHeadingText",true);
 converter.setOption("encodeEmails",true);
 console.log("refreshed");
 document.body.innerHTML = converter.makeHtml(']] .. UnicodeUtil.utf8ToUnicode(vuepressMd2NormalMd(content)) .. [[');
+// !js
 ]], nil)
 end
 
@@ -116,7 +120,7 @@ end
 
 MarkdownHelper.webViewClient = {
     onPageStarted = function(view, url, favicon)
-        if url:find("%.md") or url:find("%.markdown") then
+        if url:find("%.md$") or url:find("%.markdown$") then
             view.stopLoading()
             --加载Showdown
             MarkdownHelper.loadShowdown(view)

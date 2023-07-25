@@ -1,5 +1,7 @@
 # Aide Lua
 
+[中文](README.md) | **English**
+
 [![license](https://img.shields.io/github/license/AideLua/AideLua)](LICENSE)
 [![releases](https://img.shields.io/github/v/tag/AideLua/AideLua?color=C71D23&label=releases&logo=gitee)](https://gitee.com/AideLua/AideLua/releases)
 
@@ -12,16 +14,13 @@
 
 ![cover](images/ic_cover-aidelua.png)
 
-## Language
-
-* [中文](README.md)
-* English
+Aide Lua 6.0.0 (Edde Code, Edde Lua v6.0.0, Edde Lua Studio) To be written soon, stay tuned!
 
 ## Alert
 
 If you need to use the source code, please go to the [releases (Github)](https://github.com/Jesse205/AideLua/releases/latest) page to download.
 
-Please not to change the repository directly in Github, because Github's repository is mirrored by Gitee.
+<!-- Please not to change the repository directly in Github, because Github's repository is mirrored by Gitee. -->
 
 ## Introduction
 
