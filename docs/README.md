@@ -111,16 +111,16 @@ Aide Lua 6.0.0（Edde Code、Edde Lua v6.0.0、Edde Lua Studio） 即将编写�
 
 ## 广告
 
-### MyLuaApp（推荐）（友情推广）
+<!-- ### MyLuaApp（推荐）（友情推广）
 
-<!--有效期：2022.02.26-永久-->
+<!==有效期：2022.02.26-永久==>
 
 开源地址：<https://github.com/dingyi222666/MyLuaApp>
 
-MyLuaApp 是一款轻量，快速的安卓软件， 使用Lua和Java 来混合开发安卓软件。
+MyLuaApp 是一款轻量，快速的安卓软件， 使用Lua和Java 来混合开发安卓软件。 -->
 
 ::: tip
-Aide Lua 这种工作方式终究不是一个好的解决方案。**MyLuaApp 将会取代 Aide Lua！**
+Aide Lua 这种工作方式终究不是一个好的解决方案。**？？？ 将会取代 Aide Lua！**
 :::
 
 ### 更多广告
